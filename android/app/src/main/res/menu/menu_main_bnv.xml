@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/main_ic_home" />
+
+    <item
+        android:id="@+id/menu_study_list"
+        android:icon="@drawable/ic_study_list"
+        android:title="@string/main_ic_study_list" />
+
+    <item
+        android:id="@+id/menu_study_manage"
+        android:icon="@drawable/ic_study_manage"
+        android:title="@string/main_ic_study_manage" />
+    <item
+        android:id="@+id/menu_chat"
+        android:icon="@drawable/ic_chat"
+        android:title="@string/main_ic_chat" />
+
+    <item
+        android:id="@+id/menu_my_page"
+        android:icon="@drawable/ic_my_page"
+        android:title="@string/main_ic_my_page" />
+</menu>
