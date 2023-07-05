@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Team201</string>
+
+    <!--BASE ERROR-->
+    <string name="error_baseFragment">"[ERROR]Binding no initialization"</string>
+
+</resources>
