@@ -3,7 +3,7 @@
     <style name="Base.Theme.Team201" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="android:windowBackground">@color/black01_0D1117</item>
-
+        <item name="android:includeFontPadding">false</item>
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
