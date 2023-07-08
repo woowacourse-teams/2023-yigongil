@@ -12,5 +12,6 @@
     <string name="error_baseFragment">"[ERROR]Binding no initialization"</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home_essential_todo">필수투두</string>
 
 </resources>
