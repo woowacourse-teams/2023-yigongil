@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_rectangle_radius_0dp">
+
+        <ImageView
+            android:id="@+id/iv_study_list_tier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_diamond_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_study_list_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:textAppearance="@style/text_sb14"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@id/iv_study_list_tier"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="자바 스터디 2명 타세요 ~" />
+
+        <TextView
+            android:id="@+id/tv_study_list_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp"
+            android:textAppearance="@style/description_r10"
+            android:textColor="@color/grey02_78808B"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_study_list_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_study_list_title"
+            tools:text="예상시작일 2023.07.02 · 기간 7 week" />
+
+        <ImageView
+            android:id="@+id/iv_study_list_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:src="@drawable/ic_gathering"
+            app:layout_constraintBottom_toBottomOf="@id/tv_study_list_title"
+            app:layout_constraintStart_toEndOf="@id/tv_study_list_title"
+            app:layout_constraintTop_toTopOf="@id/tv_study_list_title" />
+
+        <ImageView
+            android:id="@+id/iv_study_list_people_count_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/ic_people_count"
+            app:layout_constraintBottom_toBottomOf="@id/tv_study_list_people_count"
+            app:layout_constraintEnd_toStartOf="@id/tv_study_list_people_count"
+            app:layout_constraintTop_toTopOf="@id/tv_study_list_people_count" />
+
+        <TextView
+            android:id="@+id/tv_study_list_people_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="12dp"
+            android:textAppearance="@style/text_r12"
+            android:textColor="@color/grey02_78808B"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="3/5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
