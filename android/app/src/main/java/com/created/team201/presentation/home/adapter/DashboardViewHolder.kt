@@ -11,7 +11,6 @@ class DashboardViewHolder(private val binding: ItemHomeBinding) :
 
     fun bind(homeUiModel: HomeUiModel) {
         binding.homeUiModel = homeUiModel
-        binding.tvHomeDate.text = "123123"
     }
 
     companion object {
