@@ -8,10 +8,14 @@
     <string name="main_ic_chat">쪽지</string>
     <string name="main_ic_my_page">마이페이지</string>
 
+    <!--홈 탭-->
+    <string name="home_essential_todo">필수투두</string>
+
     <!--BASE ERROR-->
     <string name="error_baseFragment">"[ERROR]Binding no initialization"</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="home_essential_todo">필수투두</string>
+
 
 </resources>
