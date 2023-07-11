@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -11,11 +12,62 @@
         android:layout_height="match_parent"
         tools:context=".presentation.studyList.StudyListFragment">
 
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_study_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
+            android:layout_height="64dp"
+            android:layout_marginBottom="11dp"
+            android:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/menu_study_list"
+            app:title="@string/study_list_title"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/header_sb15"
+            app:titleTextColor="@color/white" />
+
+        <View
+            android:id="@+id/view_study_list_toolbar_boarder_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black02_181B21"
+            app:layout_constraintTop_toBottomOf="@id/tb_study_list" />
+
+        <Spinner
+            android:id="@+id/spinner_study_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Sort"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_study_list_toolbar_boarder_line" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_study_list_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spinner_study_list" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab_study_list_create_button"
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/green02_E639D353"
+            android:text="@string/study_list_create"
+            android:textAppearance="@style/navi_bar_m10"
+            android:textColor="@color/white"
+            app:icon="@drawable/ic_open_study"
+            app:iconTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
