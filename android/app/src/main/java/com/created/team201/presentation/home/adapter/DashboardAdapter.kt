@@ -3,6 +3,7 @@ package com.created.team201.presentation.home.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.created.team201.presentation.home.adapter.viewholder.DashboardViewHolder
 import com.created.team201.presentation.home.model.HomeUiModel
 
 class DashboardAdapter : RecyclerView.Adapter<DashboardViewHolder>() {
