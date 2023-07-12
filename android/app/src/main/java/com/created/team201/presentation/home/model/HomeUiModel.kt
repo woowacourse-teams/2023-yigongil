@@ -1,8 +1,8 @@
 package com.created.team201.presentation.home.model
 
-import com.created.team201.presentation.home.model.Grass.BOTTOM
-import com.created.team201.presentation.home.model.Grass.MIDDLE
-import com.created.team201.presentation.home.model.Grass.TOP
+import com.created.team201.presentation.home.model.Grass.GrassType.BOTTOM
+import com.created.team201.presentation.home.model.Grass.GrassType.MIDDLE
+import com.created.team201.presentation.home.model.Grass.GrassType.TOP
 
 data class HomeUiModel(
     val studyName: String,
@@ -12,12 +12,12 @@ data class HomeUiModel(
     val necessaryTodo: TodoUiModel,
     val optionalTodos: List<TodoUiModel>,
 ) {
-    private val _grass: MutableList<GrassUiModel> = mutableListOf(
-        GrassUiModel(TOP, false), GrassUiModel(TOP, false), GrassUiModel(TOP, false),
-        GrassUiModel(MIDDLE, false), GrassUiModel(MIDDLE, false), GrassUiModel(MIDDLE, false),
-        GrassUiModel(BOTTOM, false), GrassUiModel(BOTTOM, false), GrassUiModel(BOTTOM, false),
+    private val _grass: MutableList<Grass> = mutableListOf(
+        Grass(TOP, false), Grass(TOP, false), Grass(TOP, false),
+        Grass(MIDDLE, false), Grass(MIDDLE, false), Grass(MIDDLE, false),
+        Grass(BOTTOM, false), Grass(BOTTOM, false), Grass(BOTTOM, false),
     )
-    val grass: List<GrassUiModel>
+    val grass: List<Grass>
         get() {
             convertRateToCount()
             return _grass.toList()

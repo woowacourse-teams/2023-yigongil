@@ -1,7 +1,10 @@
 package com.created.team201.presentation.home.model
 
-enum class Grass(val state: Boolean) {
-    TOP(false),
-    MIDDLE(false),
-    BOTTOM(false),
+data class Grass(
+    val grassType: GrassType,
+    val grassState: Boolean,
+) {
+    enum class GrassType {
+        TOP, MIDDLE, BOTTOM,
+    }
 }
