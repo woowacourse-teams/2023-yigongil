@@ -12,6 +12,7 @@ import com.created.team201.presentation.home.model.TodoUiModel
 class HomeViewModel : ViewModel() {
     private val _userName: MutableLiveData<String> = MutableLiveData()
     val userName: LiveData<String> get() = _userName
+
     private val _userStudies: MutableLiveData<List<HomeUiModel>> = MutableLiveData()
     val userStudies: LiveData<List<HomeUiModel>> get() = _userStudies
 
@@ -43,11 +44,16 @@ class HomeViewModel : ViewModel() {
                 Study(
                     1,
                     "빨리 만들자",
-                    80,
+                    20,
                     5,
                     "2023.01.02",
                     Todo(2, "잔디구현끝내기", true),
-                    listOf(Todo(3, "홈뷰 끝내기", false)),
+                    listOf(
+                        Todo(3, "홈뷰 끝내기", false),
+                        Todo(3, "홈뷰 끝내기", false),
+                        Todo(3, "홈뷰 끝내기", false),
+                        Todo(3, "홈뷰 끝내기", false),
+                    ),
 
                 ),
                 Study(

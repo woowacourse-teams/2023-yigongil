@@ -9,6 +9,7 @@ import com.created.team201.presentation.home.model.Grass
 class HomeGrassViewHolder(
     private val binding: ItemHomeGrassBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
+
     fun bind(grass: Grass) {
         binding.grass = grass
     }

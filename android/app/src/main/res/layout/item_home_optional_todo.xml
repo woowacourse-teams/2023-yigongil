@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
             android:src="@drawable/ic_selector_home_check_btn"
+            app:isSelected="@{todoUiModel.done}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_home_optional_todo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_home_optional_todo" />

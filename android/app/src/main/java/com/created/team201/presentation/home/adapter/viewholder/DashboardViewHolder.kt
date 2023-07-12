@@ -30,6 +30,7 @@ class DashboardViewHolder(private val binding: ItemHomeBinding) :
 
     fun bind(homeUiModel: HomeUiModel) {
         binding.homeUiModel = homeUiModel
+
         optionalTodoAdapter.updateToDoItems(homeUiModel.optionalTodos)
         homeGrassAdapter.updateGrass(homeUiModel.grass)
     }
