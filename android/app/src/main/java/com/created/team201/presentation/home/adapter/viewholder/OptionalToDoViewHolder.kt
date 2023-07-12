@@ -4,13 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.databinding.ItemHomeOptionalTodoBinding
+import com.created.team201.presentation.home.model.TodoUiModel
 
 class OptionalToDoViewHolder(
     private val binding: ItemHomeOptionalTodoBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(todoItem: String) {
-        binding.item = todoItem
+    fun bind(todoUiModel: TodoUiModel) {
+        binding.todoUiModel = todoUiModel
     }
 
     companion object {

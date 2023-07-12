@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.presentation.home.adapter.viewholder.OptionalToDoViewHolder
+import com.created.team201.presentation.home.model.TodoUiModel
 
 class OptionalToDoAdapter : RecyclerView.Adapter<OptionalToDoViewHolder>() {
-    private val items: MutableList<String> = mutableListOf()
+    private val items: MutableList<TodoUiModel> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OptionalToDoViewHolder {
         return OptionalToDoViewHolder(
@@ -25,7 +26,7 @@ class OptionalToDoAdapter : RecyclerView.Adapter<OptionalToDoViewHolder>() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateToDoItems(todoItems: List<String>) {
+    fun updateToDoItems(todoItems: List<TodoUiModel>) {
         items.clear()
         items.addAll(todoItems)
 

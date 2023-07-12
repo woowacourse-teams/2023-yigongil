@@ -2,6 +2,7 @@ package com.created.team201.presentation.home
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import com.created.team201.R
@@ -11,15 +12,27 @@ import com.created.team201.presentation.home.adapter.DashboardAdapter
 import com.created.team201.util.ZoomOutPageTransformer
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
+    private val homeViewModel: HomeViewModel by viewModels()
     private val dashboardAdapter: DashboardAdapter by lazy { DashboardAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initAdapterPopular()
+        initViewModel()
+        initAdapter()
+
+        homeViewModel.userStudies.observe(viewLifecycleOwner) {
+            dashboardAdapter.updateItems(it)
+        }
+        homeViewModel.getUserStudyInfo()
     }
 
-    private fun initAdapterPopular() {
+    private fun initViewModel() {
+        binding.viewModel = homeViewModel
+        binding.lifecycleOwner = this
+    }
+
+    private fun initAdapter() {
         with(binding.vpHome) {
             adapter = dashboardAdapter
             val displayWidth = requireContext().resources.displayMetrics.widthPixels
