@@ -14,4 +14,15 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="home_essential_todo">필수투두</string>
 
+    <!--스터디 개설 뷰-->
+    <string name="icon_text_button_name_people_count">인원 수</string>
+    <string name="icon_text_button_name_start_date">예상시작일</string>
+    <string name="icon_text_button_name_period">스터디기간</string>
+    <string name="icon_text_button_name_cycle">스터디주기</string>
+
+    <string name="createStudy_toolbar_title">스터디 만들기</string>
+    <string name="createStudy_study_hint_name">제목을 입력해주세요.</string>
+    <string name="createStudy_study_hint_introduction">스터디를 소개해주세요.</string>
+    <string name="createStudy_button_created">작성완료</string>
+
 </resources>
