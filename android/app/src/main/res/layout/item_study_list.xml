@@ -5,17 +5,19 @@
 
     <data>
 
+        <variable
+            name="studySummary"
+            type="com.created.team201.presentation.studyList.StudySummaryUiModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_rectangle_radius_0dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/iv_study_list_tier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
             android:src="@drawable/ic_diamond_24"
@@ -28,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
+            android:text="@{studySummary.title}"
             android:textAppearance="@style/text_sb14"
             android:textColor="@color/white"
             app:layout_constraintStart_toEndOf="@id/iv_study_list_tier"
@@ -40,6 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="12dp"
+            android:text="@{@string/study_list_date_period_format(studySummary.date,studySummary.period)}"
             android:textAppearance="@style/description_r10"
             android:textColor="@color/grey02_78808B"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -77,6 +81,7 @@
             android:textColor="@color/grey02_78808B"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:text="@{@string/study_list_member_format(studySummary.currentMember,studySummary.maximumMember)}"
             tools:text="3/5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
