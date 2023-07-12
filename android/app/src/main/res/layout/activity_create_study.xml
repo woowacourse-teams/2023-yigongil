@@ -7,6 +7,10 @@
         <variable
             name="viewModel"
             type="com.created.team201.presentation.createStudy.CreateStudyViewModel" />
+
+        <variable
+            name="activity"
+            type="com.created.team201.presentation.createStudy.CreateStudyActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -82,8 +86,10 @@
                 android:id="@+id/itb_create_study_people_count"
                 name="@{@string/icon_text_button_name_people_count}"
                 icon="@{@drawable/ic_people_capacity}"
+                information="@{viewModel.peopleCount.intValue() == 0 ? null : @string/icon_text_button_formatter_information_people_count(viewModel.peopleCount.intValue())}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{() -> activity.onIconTextButtonClick(@string/createStudy_tag_people_count)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/itb_create_study_start_date"
                 app:layout_constraintHorizontal_chainStyle="spread"
@@ -96,6 +102,7 @@
                 icon="@{@drawable/ic_start_date}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{() -> activity.onIconTextButtonClick(@string/createStudy_tag_start_date)}"
                 app:layout_constraintEnd_toStartOf="@id/itb_create_study_period"
                 app:layout_constraintStart_toEndOf="@id/itb_create_study_people_count"
                 app:layout_constraintTop_toTopOf="@id/itb_create_study_people_count" />
@@ -106,6 +113,7 @@
                 icon="@{@drawable/ic_period}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{() -> activity.onIconTextButtonClick(@string/createStudy_tag_period)}"
                 app:layout_constraintEnd_toStartOf="@id/itb_create_study_cycle"
                 app:layout_constraintStart_toEndOf="@id/itb_create_study_start_date"
                 app:layout_constraintTop_toTopOf="@id/itb_create_study_people_count" />
@@ -116,6 +124,7 @@
                 icon="@{@drawable/ic_cycle}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{() -> activity.onIconTextButtonClick(@string/createStudy_tag_cycle)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/itb_create_study_period"
                 app:layout_constraintTop_toTopOf="@id/itb_create_study_people_count" />

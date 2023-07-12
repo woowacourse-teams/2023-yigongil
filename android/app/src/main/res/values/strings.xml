@@ -19,11 +19,17 @@
     <string name="icon_text_button_name_start_date">예상시작일</string>
     <string name="icon_text_button_name_period">스터디기간</string>
     <string name="icon_text_button_name_cycle">스터디주기</string>
+    <string name="icon_text_button_formatter_information_people_count">%d명</string>
 
     <string name="createStudy_toolbar_title">스터디 만들기</string>
     <string name="createStudy_study_hint_name">제목을 입력해주세요.</string>
     <string name="createStudy_study_hint_introduction">스터디를 소개해주세요.</string>
     <string name="createStudy_button_created">작성완료</string>
+
+    <string name="createStudy_tag_people_count">TAG_CREATE_STUDY_PEOPLE_COUNT</string>
+    <string name="createStudy_tag_start_date">TAG_CREATE_STUDY_START_DATE</string>
+    <string name="createStudy_tag_period">TAG_CREATE_STUDY_PERIOD</string>
+    <string name="createStudy_tag_cycle">TAG_CREATE_STUDY_CYCLE</string>
 
     <!-- 인원 수 선택 커스텀 뷰 -->
     <string name="people_count_picker_text">명</string>

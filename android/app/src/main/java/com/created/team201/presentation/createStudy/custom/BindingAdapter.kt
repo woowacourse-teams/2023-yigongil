@@ -25,6 +25,12 @@ object BindingAdapter {
     }
 
     @JvmStatic
+    @BindingAdapter("value")
+    fun PeopleCountPicker.setValue(value: Int?) {
+        value?.let { setValue(it) }
+    }
+
+    @JvmStatic
     @BindingAdapter("minValue")
     fun PeopleCountPicker.setMinValue(min: Int?) {
         min?.let { setMinValue(it) }

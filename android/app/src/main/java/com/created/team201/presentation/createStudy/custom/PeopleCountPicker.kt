@@ -1,8 +1,6 @@
 package com.created.team201.presentation.createStudy.custom
 
 import android.content.Context
-import android.graphics.Color
-import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -17,13 +15,8 @@ class PeopleCountPicker @JvmOverloads constructor(
         PeopleCountPickerBinding.inflate(LayoutInflater.from(context), this, true)
     }
 
-    val value: Int
-        get() = binding.npCreateStudy.value
-
-    init {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            binding.npCreateStudy.textColor = Color.WHITE
-        }
+    fun setValue(value: Int) {
+        binding.npCreateStudy.value = value
     }
 
     fun setMinValue(min: Int) {
@@ -35,9 +28,6 @@ class PeopleCountPicker @JvmOverloads constructor(
     }
 
     fun setChangeListener(onChangeListener: PickerChangeListener) {
-        binding.npCreateStudy.setOnClickListener {
-            onChangeListener.onChange(value)
-        }
         binding.npCreateStudy.setOnValueChangedListener { _, _, newValue ->
             onChangeListener.onChange(newValue)
         }

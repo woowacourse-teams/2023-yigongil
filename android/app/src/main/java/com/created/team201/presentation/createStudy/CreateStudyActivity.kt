@@ -15,6 +15,7 @@ class CreateStudyActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        binding.activity = this
         initViewModel()
         initActionBar()
     }
@@ -28,6 +29,11 @@ class CreateStudyActivity :
         setSupportActionBar(binding.tbCreateStudy)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
+    }
+
+    fun onIconTextButtonClick(tag: String) {
+        supportFragmentManager.findFragmentByTag(tag)?.let { return }
+        CreateStudyBottomSheetFragment().show(supportFragmentManager, tag)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

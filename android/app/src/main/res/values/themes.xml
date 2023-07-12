@@ -10,6 +10,9 @@
         <item name="android:windowLightStatusBar">false</item>
 
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <!-- 바텀 시트 다이얼로그 스타일 적용 -->
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
     </style>
 
     <style name="Theme.Team201" parent="Base.Theme.Team201" />
@@ -21,4 +24,14 @@
         <item name="android:textSize">26dp</item>
         <item name="android:textColorPrimary">@color/white</item>
     </style>
+
+    <!-- 바텀 시트 다이얼로그 탑 모서리 라운딩 테마  -->
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_bottom_sheet_top_radius_20dp</item>
+    </style>
+
 </resources>
