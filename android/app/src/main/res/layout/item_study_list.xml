@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="tier"
+            type="com.created.team201.presentation.studyList.TierImage" />
+
+        <variable
             name="studySummary"
             type="com.created.team201.presentation.studyList.StudySummaryUiModel" />
     </data>
@@ -22,6 +26,7 @@
             android:layout_marginTop="20dp"
             android:src="@drawable/ic_diamond_24"
             app:layout_constraintStart_toStartOf="parent"
+            app:glideSrc="@{tier.Companion.valueOf(studySummary.tier)}"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
