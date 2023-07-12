@@ -17,6 +17,12 @@ object BindingAdapter {
     }
 
     @JvmStatic
+    @BindingAdapter("isSelected")
+    fun isSelected(view: View, isSelected: Boolean) {
+        view.isSelected = !view.isSelected
+    }
+
+    @JvmStatic
     @BindingAdapter("glideSrc")
     fun glideSrc(imageview: ImageView, image: Int) {
         Glide.with(imageview.context)

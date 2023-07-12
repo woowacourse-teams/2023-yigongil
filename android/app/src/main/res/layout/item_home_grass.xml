@@ -23,6 +23,7 @@
             android:layout_marginEnd="2dp"
             android:layout_marginBottom="2dp"
             app:glideSrc="@{grass.grassType.viewId}"
+            app:isSelected="@{grass.grassState}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
