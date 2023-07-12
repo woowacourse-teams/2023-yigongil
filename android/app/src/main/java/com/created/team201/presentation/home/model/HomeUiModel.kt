@@ -13,9 +13,9 @@ data class HomeUiModel(
     val optionalTodos: List<TodoUiModel>,
 ) {
     private val _grass: MutableList<Grass> = mutableListOf(
-        Grass(TOP, false), Grass(TOP, false), Grass(TOP, false),
-        Grass(MIDDLE, false), Grass(MIDDLE, false), Grass(MIDDLE, false),
         Grass(BOTTOM, false), Grass(BOTTOM, false), Grass(BOTTOM, false),
+        Grass(MIDDLE, false), Grass(MIDDLE, false), Grass(MIDDLE, false),
+        Grass(TOP, false), Grass(TOP, false), Grass(TOP, false),
     )
     val grass: List<Grass>
         get() {
@@ -26,7 +26,7 @@ data class HomeUiModel(
     private fun convertRateToCount() {
         val grassCount = progressRate / RATE_PER_UNIT
 
-        _grass.reversed().subList(FIRST, grassCount).forEachIndexed { index, _ ->
+        _grass.subList(FIRST, grassCount).forEachIndexed { index, _ ->
             _grass[index] = _grass[index].copy(grassState = true)
         }
     }

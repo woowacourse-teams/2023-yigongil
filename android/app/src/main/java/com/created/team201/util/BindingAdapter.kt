@@ -19,7 +19,7 @@ object BindingAdapter {
     @JvmStatic
     @BindingAdapter("isSelected")
     fun isSelected(view: View, isSelected: Boolean) {
-        view.isSelected = !view.isSelected
+        view.isSelected = isSelected
     }
 
     @JvmStatic
