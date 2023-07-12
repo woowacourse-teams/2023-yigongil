@@ -13,4 +13,12 @@
     </style>
 
     <style name="Theme.Team201" parent="Base.Theme.Team201" />
+
+    <!-- 피커 폰트, 구분선, 텍스트 컬러, 사이즈 테마 -->
+    <style name="Theme.Picker" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:colorControlNormal">@color/transparent</item>
+        <item name="android:textSize">26dp</item>
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
 </resources>

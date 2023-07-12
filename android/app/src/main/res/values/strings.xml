@@ -25,4 +25,7 @@
     <string name="createStudy_study_hint_introduction">스터디를 소개해주세요.</string>
     <string name="createStudy_button_created">작성완료</string>
 
+    <!-- 인원 수 선택 커스텀 뷰 -->
+    <string name="people_count_picker_text">명</string>
+
 </resources>
