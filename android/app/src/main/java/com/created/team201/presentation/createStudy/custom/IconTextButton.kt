@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.databinding.BindingAdapter
 import com.created.team201.databinding.IconTextButtonBinding
 
 class IconTextButton @JvmOverloads constructor(
@@ -30,27 +29,5 @@ class IconTextButton @JvmOverloads constructor(
         binding.llIconTextButton.background = null
         binding.tvIconTextButtonInformation.visibility = View.VISIBLE
         binding.tvIconTextButtonInformation.text = information
-    }
-
-    companion object {
-        @JvmStatic
-        @BindingAdapter("icon")
-        fun setIcon(iconTextButton: IconTextButton, icon: Drawable?) {
-            icon?.let { iconTextButton.setIcon(it) }
-        }
-
-        @JvmStatic
-        @BindingAdapter("name")
-        fun setName(iconTextButton: IconTextButton, name: String?) {
-            name?.let { iconTextButton.setName(it) }
-        }
-
-        @JvmStatic
-        @BindingAdapter("information")
-        fun setInformation(iconTextButton: IconTextButton, information: String?) {
-            information?.let {
-                iconTextButton.setInformation(it)
-            }
-        }
     }
 }

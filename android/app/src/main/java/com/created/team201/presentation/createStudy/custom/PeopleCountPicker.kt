@@ -6,7 +6,6 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.databinding.BindingAdapter
 import com.created.team201.databinding.PeopleCountPickerBinding
 
 class PeopleCountPicker @JvmOverloads constructor(
@@ -41,26 +40,6 @@ class PeopleCountPicker @JvmOverloads constructor(
         }
         binding.npCreateStudy.setOnValueChangedListener { _, _, newValue ->
             onChangeListener.onChange(newValue)
-        }
-    }
-
-    companion object {
-        @JvmStatic
-        @BindingAdapter("minValue")
-        fun setMinValue(picker: PeopleCountPicker, min: Int?) {
-            min?.let { picker.setMinValue(it) }
-        }
-
-        @JvmStatic
-        @BindingAdapter("maxValue")
-        fun setMaxValue(picker: PeopleCountPicker, max: Int?) {
-            max?.let { picker.setMaxValue(it) }
-        }
-
-        @JvmStatic
-        @BindingAdapter("changeListener")
-        fun setChangeListener(picker: PeopleCountPicker, onChangeListener: PickerChangeListener?) {
-            onChangeListener?.let { picker.setChangeListener(it) }
         }
     }
 }
