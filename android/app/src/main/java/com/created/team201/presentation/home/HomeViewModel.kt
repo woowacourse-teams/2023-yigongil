@@ -11,9 +11,9 @@ import com.created.team201.presentation.home.model.TodoUiModel
 
 class HomeViewModel : ViewModel() {
     private val _userName: MutableLiveData<String> = MutableLiveData()
-    val userName: LiveData<String> = _userName
+    val userName: LiveData<String> get() = _userName
     private val _userStudies: MutableLiveData<List<HomeUiModel>> = MutableLiveData()
-    val userStudies: LiveData<List<HomeUiModel>> = _userStudies
+    val userStudies: LiveData<List<HomeUiModel>> get() = _userStudies
 
     fun getUserStudyInfo() {
         _userName.value = DUMMY.userName
