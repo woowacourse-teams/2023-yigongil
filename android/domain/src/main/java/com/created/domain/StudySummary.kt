@@ -1,12 +1,12 @@
-package com.created.team201.presentation.studyList
+package com.created.domain
 
-data class StudySummaryUiModel(
+data class StudySummary(
     val id: Long,
     val processingStatus: Int,
     val tier: Int,
     val title: String,
     val date: String,
-    val period: PeriodUiModel,
+    val period: Period,
     val currentMember: Int,
     val maximumMember: Int
 )
