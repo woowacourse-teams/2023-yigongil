@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="studyStatus"
+            type="com.created.team201.presentation.studyList.StudyStatusImage" />
+
+        <variable
             name="tier"
             type="com.created.team201.presentation.studyList.TierImage" />
 
@@ -58,10 +62,11 @@
 
         <ImageView
             android:id="@+id/iv_study_list_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="19dp"
             android:layout_marginStart="4dp"
-            android:src="@drawable/ic_gathering"
+            tools:src="@drawable/ic_gathering"
+            app:glideSrc="@{studyStatus.Companion.valueOf(studySummary.processingStatus)}"
             app:layout_constraintBottom_toBottomOf="@id/tv_study_list_title"
             app:layout_constraintStart_toEndOf="@id/tv_study_list_title"
             app:layout_constraintTop_toTopOf="@id/tv_study_list_title" />
