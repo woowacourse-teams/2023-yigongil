@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.presentation.home.adapter.viewholder.HomeGrassViewHolder
-import com.created.team201.presentation.home.model.HomeUiModel
+import com.created.team201.presentation.home.model.Grass
 
 class HomeGrassAdapter : RecyclerView.Adapter<HomeGrassViewHolder>() {
-    private val items: MutableList<HomeUiModel.Grass> = mutableListOf()
+    private val items: MutableList<Grass> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeGrassViewHolder {
         return HomeGrassViewHolder(
@@ -26,7 +26,7 @@ class HomeGrassAdapter : RecyclerView.Adapter<HomeGrassViewHolder>() {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateGrass(grass: List<HomeUiModel.Grass>) {
+    fun updateGrass(grass: List<Grass>) {
         items.clear()
         items.addAll(grass)
 

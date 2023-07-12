@@ -4,12 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.databinding.ItemHomeGrassBinding
-import com.created.team201.presentation.home.model.HomeUiModel
+import com.created.team201.presentation.home.model.Grass
 
 class HomeGrassViewHolder(
     private val binding: ItemHomeGrassBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(grass: HomeUiModel.Grass) {
+    fun bind(grass: Grass) {
+        binding.grass = grass
     }
 
     companion object {
