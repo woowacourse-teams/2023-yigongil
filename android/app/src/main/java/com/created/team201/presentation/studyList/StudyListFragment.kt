@@ -8,6 +8,7 @@ import com.created.team201.presentation.common.BindingFragment
 
 class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fragment_study_list) {
 
+    private val studyListViewModel: StudyListViewModel by viewModels()
     private lateinit var studyListAdapter: StudyListAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -15,6 +16,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
         setUpToolbar()
         setUpAdapter()
+        setUpStudyListObserve()
 
     private fun setUpToolbar() {
         binding.tbStudyList.setOnMenuItemClickListener {
@@ -32,6 +34,12 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private fun setUpAdapter() {
         studyListAdapter = StudyListAdapter()
         binding.rvStudyListList.adapter = studyListAdapter
+    }
+
+    private fun setUpStudyListObserve() {
+        studyListViewModel.studySummaries.observe(viewLifecycleOwner) {
+            studyListAdapter.submitList(it)
+        }
     }
     }
 }
