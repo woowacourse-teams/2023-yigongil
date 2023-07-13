@@ -14,4 +14,11 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="home_essential_todo">필수투두</string>
 
+    <!--스터디 상세보기 뷰-->
+    <string name="study_detail_study_people">스터디원</string>
+    <string name="item_study_detail_study_success_rate">스터디 성공률 %d%%</string>
+
+    <!--커스텀 프로필 이미지 뷰-->
+    <string name="custom_profile_image_content_description">프로필 이미지</string>
+
 </resources>
