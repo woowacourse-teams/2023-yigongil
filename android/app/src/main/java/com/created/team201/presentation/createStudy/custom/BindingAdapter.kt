@@ -8,4 +8,10 @@ object BindingAdapter {
     fun PeopleCountPicker.setChangeListener(onChangeListener: PickerChangeListener?) {
         onChangeListener?.let { setChangeListener(it) }
     }
+
+    @JvmStatic
+    @BindingAdapter("changeListener")
+    fun Calendar.setOnDateChangedListener(onChangeListener: CalendarChangeListener?) {
+        onChangeListener?.let { setOnDateChangedListener(it) }
+    }
 }

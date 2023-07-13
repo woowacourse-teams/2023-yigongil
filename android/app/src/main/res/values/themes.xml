@@ -34,4 +34,11 @@
         <item name="android:background">@drawable/bg_bottom_sheet_top_radius_20dp</item>
     </style>
 
+    <!-- 캘린더뷰 폰트, 컬러 테마 -->
+    <style name="CalendarTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
+        <item name="android:textAppearance">@style/text_sb14</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/mcv_text_date_dark</item>
+    </style>
+
 </resources>

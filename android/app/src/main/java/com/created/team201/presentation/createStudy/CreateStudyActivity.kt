@@ -7,6 +7,7 @@ import com.created.team201.R
 import com.created.team201.databinding.ActivityCreateStudyBinding
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.createStudy.bottomSheet.PeopleCountBottomSheetFragment
+import com.created.team201.presentation.createStudy.bottomSheet.StartDateBottomSheetFragment
 
 class CreateStudyActivity :
     BindingActivity<ActivityCreateStudyBinding>(R.layout.activity_create_study) {
@@ -44,6 +45,10 @@ class CreateStudyActivity :
             }
 
             getString(R.string.createStudy_tag_start_date) -> {
+                StartDateBottomSheetFragment().show(
+                    supportFragmentManager,
+                    tag,
+                )
             }
 
             getString(R.string.createStudy_tag_period) -> {

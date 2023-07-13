@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/calendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="40dp"
+        android:paddingVertical="20dp"
+        app:mcv_dateTextAppearance="@style/CalendarTextAppearance"
+        app:mcv_headerTextAppearance="@style/CalendarTextAppearance"
+        app:mcv_leftArrowMask="@drawable/ic_calendar_left_arrow"
+        app:mcv_rightArrowMask="@drawable/ic_calendar_right_arrow"
+        app:mcv_selectionColor="@color/grey02_78808B"
+        app:mcv_showOtherDates="out_of_range"
+        app:mcv_weekDayTextAppearance="@style/CalendarTextAppearance" />
+
+</layout>

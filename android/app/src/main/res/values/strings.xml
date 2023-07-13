@@ -34,4 +34,7 @@
     <!-- 인원 수 선택 커스텀 뷰 -->
     <string name="people_count_picker_text">명</string>
 
+    <!-- 캘린더 선택 커스텀 뷰-->
+    <string name="calendar_formatter_information_date">yyyy.MM.dd</string>
+
 </resources>
