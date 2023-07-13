@@ -8,7 +8,15 @@ import com.created.team201.presentation.common.BindingFragment
 
 class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fragment_study_list) {
 
+    private lateinit var studyListAdapter: StudyListAdapter
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpAdapter()
+
+    private fun setUpAdapter() {
+        studyListAdapter = StudyListAdapter()
+        binding.rvStudyListList.adapter = studyListAdapter
+    }
     }
 }
