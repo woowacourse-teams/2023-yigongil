@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -10,14 +11,6 @@
         <variable
             name="changeListener"
             type="com.created.team201.presentation.createStudy.custom.PickerChangeListener" />
-
-        <variable
-            name="minValue"
-            type="Integer" />
-
-        <variable
-            name="maxValue"
-            type="Integer" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,9 +43,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_create_study_people_count"
-            app:maxValue="@{maxValue}"
-            app:minValue="@{minValue}"
+            app:maxValue="@{8}"
+            app:minValue="@{2}"
             app:value="@{viewModel.peopleCount}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
