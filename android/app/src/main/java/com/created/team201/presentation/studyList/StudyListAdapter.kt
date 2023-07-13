@@ -11,7 +11,7 @@ class StudyListAdapter : ListAdapter<StudySummaryUiModel, StudyListViewHolder>(S
     }
 
     override fun onBindViewHolder(holder: StudyListViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), StudySummaryBackground.of(position, itemCount))
     }
 
     companion object {
