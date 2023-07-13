@@ -12,7 +12,22 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setUpToolbar()
         setUpAdapter()
+
+    private fun setUpToolbar() {
+        binding.tbStudyList.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu_study_list_search -> {
+                    // 스터디 검색 뷰로 이동
+                    true
+                }
+
+                else -> false
+            }
+        }
+    }
 
     private fun setUpAdapter() {
         studyListAdapter = StudyListAdapter()
