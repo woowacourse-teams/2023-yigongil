@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PeopleCountPicker">
+        <attr name="value" format="integer" />
+        <attr name="minValue" format="integer" />
+        <attr name="maxValue" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="IconTextButton">
+        <attr name="iconResource" format="dimension" />
+        <attr name="buttonName" format="string" />
+        <attr name="information" format="string" />
+    </declare-styleable>
+</resources>
