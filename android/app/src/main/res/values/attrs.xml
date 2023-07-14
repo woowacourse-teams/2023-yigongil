@@ -6,6 +6,16 @@
         <attr name="maxValue" format="integer" />
     </declare-styleable>
 
+    <declare-styleable name="MultiPicker">
+        <attr name="leftValue" format="integer" />
+        <attr name="rightValue" format="integer" />
+        <attr name="leftMinValue" format="integer" />
+        <attr name="leftMaxValue" format="integer" />
+        <attr name="rightMinValue" format="integer" />
+        <attr name="rightMaxValue" format="integer" />
+        <attr name="rightDisplayNames" format="reference" />
+    </declare-styleable>
+
     <declare-styleable name="IconTextButton">
         <attr name="iconResource" format="dimension" />
         <attr name="buttonName" format="string" />

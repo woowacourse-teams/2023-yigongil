@@ -37,4 +37,13 @@
     <!-- 캘린더 선택 커스텀 뷰-->
     <string name="calendar_formatter_information_date">yyyy.MM.dd</string>
 
+    <!-- 스터디 기간 선택 뷰 -->
+    <string name="period_button_name_cancel">취소</string>
+    <string name="period_button_name_save">저장</string>
+
+    <!-- 멀티 피커 커스텀 뷰 -->
+    <string name="multiPicker_display_name_day">일</string>
+    <string name="multiPicker_display_name_week">주</string>
+    <string name="multiPicker_formatter_information">%d %s</string>
+
 </resources>

@@ -8,4 +8,5 @@ class CreateStudyViewModel : ViewModel() {
     val introduction = MutableLiveData<String>()
     val peopleCount = MutableLiveData<Int>()
     val startDate = MutableLiveData<String>()
+    val period = MutableLiveData<String>()
 }
