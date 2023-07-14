@@ -13,7 +13,7 @@ class HomeViewModel : ViewModel() {
     private val _userName: MutableLiveData<String> = MutableLiveData()
     val userName: LiveData<String> get() = _userName
 
-    private val _userStudies: MutableLiveData<List<HomeUiModel>> = MutableLiveData()
+    private val _userStudies: MutableLiveData<List<HomeUiModel>> = MutableLiveData(listOf())
     val userStudies: LiveData<List<HomeUiModel>> get() = _userStudies
 
     fun getUserStudyInfo() {
@@ -21,18 +21,35 @@ class HomeViewModel : ViewModel() {
         _userStudies.value = DUMMY.studies.map { it.toUiModel() }
     }
 
-    fun temp() {
-        // 스터디 네임, 투두 아이디, 투두 여부 3개 줘야함
+    fun patchTodo(id: Int, isDone: Boolean) {
+        // request: studyId, todoId, roundId, isDone
+        // if(status == 200)
 
-        _userStudies.value = userStudies.value?.map {
-            it.copy(studyName = "1234")
+        val studies = userStudies.value ?: throw IllegalArgumentException()
+
+        when (studies.any { it.necessaryTodo.todoId == id }) {
+            true -> updateNecessaryTodoCheck(studies, id, isDone)
+            false -> updateOptionalTodoCheck(studies, id, isDone)
         }
     }
 
-    fun update(id: Int, isDone: Boolean) {
+    private fun updateNecessaryTodoCheck(studies: List<HomeUiModel>, id: Int, isDone: Boolean) {
+        _userStudies.value = studies.map { homeUiModel ->
+            homeUiModel.takeIf { it.necessaryTodo.todoId != id } ?: homeUiModel.copy(
+                necessaryTodo = homeUiModel.necessaryTodo.copy(isDone = isDone),
+            )
+        }
+    }
 
-
-
+    private fun updateOptionalTodoCheck(studies: List<HomeUiModel>, id: Int, isDone: Boolean) {
+        _userStudies.value = studies.map { homeUiModel ->
+            homeUiModel.takeIf { todoUiModel -> !todoUiModel.optionalTodos.any { it.todoId == id } }
+                ?: homeUiModel.copy(
+                    optionalTodos = homeUiModel.optionalTodos.map {
+                        it.takeUnless { it.todoId == id } ?: it.copy(isDone = isDone)
+                    },
+                )
+        }
     }
 
     private fun Study.toUiModel(): HomeUiModel =
@@ -64,9 +81,9 @@ class HomeViewModel : ViewModel() {
                     Todo(2, "잔디구현끝내기", true),
                     listOf(
                         Todo(3, "홈뷰 끝내기", false),
-                        Todo(3, "홈뷰 끝내기", false),
-                        Todo(3, "홈뷰 끝내기", false),
-                        Todo(3, "홈뷰 끝내기", false),
+                        Todo(4, "홈뷰 끝내기2", false),
+                        Todo(5, "홈뷰 끝내기3", false),
+                        Todo(6, "홈뷰 끝내기4", false),
                     ),
 
                 ),

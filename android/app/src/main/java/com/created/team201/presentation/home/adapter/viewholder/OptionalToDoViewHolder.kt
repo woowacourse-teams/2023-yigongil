@@ -12,6 +12,10 @@ class OptionalToDoViewHolder(
     private val binding: ItemHomeOptionalTodoBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    init {
+        binding.onClick = onClick
+    }
+
     fun bind(todoUiModel: TodoUiModel) {
         binding.todoUiModel = todoUiModel
     }

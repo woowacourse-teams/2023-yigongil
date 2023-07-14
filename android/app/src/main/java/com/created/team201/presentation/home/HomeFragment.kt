@@ -16,6 +16,17 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         CustomViewPager(binding, requireContext())
     }
 
+    private fun implementClickListener() = object : HomeClickListener {
+        override fun clickOnTodo(id: Int, isDone: Boolean) {
+            Log.d("123123", "123123")
+            homeViewModel.patchTodo(id, !isDone)
+        }
+
+        override fun clickOnStudyCard() {
+            // startActivity
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -24,23 +35,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         observeUserStudies()
 
         homeViewModel.getUserStudyInfo()
-        homeViewModel.userStudies.observe(viewLifecycleOwner) {
-            Log.d("123123", it.toString())
-        }
-
-        binding.ivHomeLogo.setOnClickListener {
-            homeViewModel.temp()
-        }
-    }
-
-    private fun implementClickListener() = object : HomeClickListener {
-        override fun clickOnTodo(id: Int, isDone: Boolean) {
-            homeViewModel.update(id, isDone)
-        }
-
-        override fun clickOnStudyCard() {
-            Log.d("123123", "123123stary")
-        }
     }
 
     private fun initViewModel() {
@@ -55,6 +49,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
     private fun observeUserStudies() {
         homeViewModel.userStudies.observe(viewLifecycleOwner) { homeUiModel ->
+            Log.d("123123", "123123")
             dashboardAdapter.updateItems(homeUiModel)
         }
     }
