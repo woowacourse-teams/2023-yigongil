@@ -2,6 +2,10 @@ package com.created.team201.presentation.studyList
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.R
 import com.created.team201.databinding.FragmentStudyListBinding
 import com.created.team201.presentation.common.BindingFragment
@@ -16,7 +20,9 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
         setUpToolbar()
         setUpAdapter()
+        setUpScrollListener()
         setUpStudyListObserve()
+    }
 
     private fun setUpToolbar() {
         binding.tbStudyList.setOnMenuItemClickListener {
@@ -36,10 +42,22 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         binding.rvStudyListList.adapter = studyListAdapter
     }
 
+    private fun setUpScrollListener() {
+        val onScrollListener = object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    binding.fabStudyListCreateButton.visibility = VISIBLE
+                } else {
+                    binding.fabStudyListCreateButton.visibility = INVISIBLE
+                }
+            }
+        }
+        binding.rvStudyListList.addOnScrollListener(onScrollListener)
+    }
+
     private fun setUpStudyListObserve() {
         studyListViewModel.studySummaries.observe(viewLifecycleOwner) {
             studyListAdapter.submitList(it)
         }
-    }
     }
 }
