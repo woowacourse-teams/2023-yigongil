@@ -4,14 +4,18 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.created.team201.presentation.home.HomeClickListener
 import com.created.team201.presentation.home.adapter.viewholder.DashboardViewHolder
 import com.created.team201.presentation.home.model.HomeUiModel
 
-class DashboardAdapter : RecyclerView.Adapter<DashboardViewHolder>() {
+class DashboardAdapter(
+    private val onClick: HomeClickListener,
+) : RecyclerView.Adapter<DashboardViewHolder>() {
     private val items: MutableList<HomeUiModel> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DashboardViewHolder {
         return DashboardViewHolder(
+            onClick,
             DashboardViewHolder.getView(
                 parent,
                 LayoutInflater.from(parent.context),

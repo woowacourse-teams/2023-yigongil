@@ -4,16 +4,20 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.databinding.ItemHomeBinding
+import com.created.team201.presentation.home.HomeClickListener
 import com.created.team201.presentation.home.adapter.HomeGrassAdapter
 import com.created.team201.presentation.home.adapter.OptionalToDoAdapter
 import com.created.team201.presentation.home.model.HomeUiModel
 
-class DashboardViewHolder(private val binding: ItemHomeBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-    private val optionalTodoAdapter: OptionalToDoAdapter by lazy { OptionalToDoAdapter() }
+class DashboardViewHolder(
+    onClick: HomeClickListener,
+    private val binding: ItemHomeBinding,
+) : RecyclerView.ViewHolder(binding.root) {
+    private val optionalTodoAdapter: OptionalToDoAdapter by lazy { OptionalToDoAdapter(onClick) }
     private val homeGrassAdapter: HomeGrassAdapter by lazy { HomeGrassAdapter() }
 
     init {
+        binding.onClick = onClick
         attachOptionalTodoAdapter()
         attachHomeGrassAdapter()
     }

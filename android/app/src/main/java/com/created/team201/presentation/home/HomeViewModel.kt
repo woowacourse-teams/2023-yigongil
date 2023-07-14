@@ -21,6 +21,20 @@ class HomeViewModel : ViewModel() {
         _userStudies.value = DUMMY.studies.map { it.toUiModel() }
     }
 
+    fun temp() {
+        // 스터디 네임, 투두 아이디, 투두 여부 3개 줘야함
+
+        _userStudies.value = userStudies.value?.map {
+            it.copy(studyName = "1234")
+        }
+    }
+
+    fun update(id: Int, isDone: Boolean) {
+
+
+
+    }
+
     private fun Study.toUiModel(): HomeUiModel =
         HomeUiModel(
             studyName = this.studyName,

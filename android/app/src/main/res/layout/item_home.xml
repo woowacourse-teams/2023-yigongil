@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="onClick"
+            type="com.created.team201.presentation.home.HomeClickListener" />
+
+        <variable
             name="homeUiModel"
             type="com.created.team201.presentation.home.model.HomeUiModel" />
 
@@ -14,7 +18,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_rectangle_radius_10dp">
+        android:background="@drawable/bg_rectangle_radius_10dp"
+        android:onClick="@{() -> onClick.clickOnStudyCard()}">
 
         <TextView
             android:id="@+id/tv_home_study_title"
@@ -118,6 +123,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
+                android:onClick="@{() -> onClick.clickOnTodo(homeUiModel.necessaryTodo.todoId,homeUiModel.necessaryTodo.isDone)}"
                 android:src="@drawable/ic_selector_home_check_btn"
                 app:isSelected="@{homeUiModel.necessaryTodo.done}"
                 app:layout_constraintBottom_toBottomOf="parent"
