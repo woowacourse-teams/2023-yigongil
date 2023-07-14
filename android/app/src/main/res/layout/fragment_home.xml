@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.created.team201.presentation.home.HomeViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,14 +16,13 @@
         android:layout_height="match_parent"
         tools:context=".presentation.home.HomeFragment">
 
-        <!-- TODO: Update blank fragment layout -->
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/iv_home_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="44dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_home_logo" />
@@ -29,17 +32,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
+            android:text="@{@string/home_welcome_phrase(viewModel.userName)}"
             android:textAppearance="@style/title_b24"
             android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            tools:text="98대장세훈님\n오늘 잔디는 심으셨나요?" />
+            app:layout_constraintStart_toStartOf="@+id/iv_home_logo"
+            app:layout_constraintTop_toBottomOf="@+id/iv_home_logo" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_home"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="36dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_home_title" />
 
