@@ -3,6 +3,7 @@ package com.created.team201.presentation.createStudy
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.fragment.app.commit
 import com.created.team201.R
 import com.created.team201.databinding.ActivityCreateStudyBinding
 import com.created.team201.presentation.common.BindingActivity
@@ -16,6 +17,10 @@ class CreateStudyActivity :
 
     private val viewModel: CreateStudyViewModel by viewModels()
 
+    private val dates: List<String> by lazy {
+        resources.getStringArray(R.array.multiPickerDisplayNames).toList()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -28,6 +33,7 @@ class CreateStudyActivity :
     private fun initViewModel() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        binding.displayNames = dates
     }
 
     private fun initActionBar() {
@@ -43,8 +49,16 @@ class CreateStudyActivity :
     }
 
     fun onIconTextButtonClick(tag: String) {
-        supportFragmentManager.findFragmentByTag(tag)?.let { return }
+        removeAllFragment()
         createBottomSheetFragment(tag)?.show(supportFragmentManager, tag)
+    }
+
+    private fun removeAllFragment() {
+        supportFragmentManager.fragments.forEach {
+            supportFragmentManager.commit {
+                remove(it)
+            }
+        }
     }
 
     private fun createBottomSheetFragment(tag: String): BottomSheetDialogFragment? {

@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="java.util.List" />
+
         <variable
             name="viewModel"
             type="com.created.team201.presentation.createStudy.CreateStudyViewModel" />
@@ -11,6 +13,10 @@
         <variable
             name="activity"
             type="com.created.team201.presentation.createStudy.CreateStudyActivity" />
+
+        <variable
+            name="displayNames"
+            type="List&lt;Object>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -117,7 +123,7 @@
                 android:onClick="@{() -> activity.onIconTextButtonClick(@string/createStudy_tag_period)}"
                 app:buttonName="@string/icon_text_button_name_period"
                 app:iconResource="@drawable/ic_period"
-                app:information="@{viewModel.period.empty ? null : viewModel.period}"
+                app:information="@{viewModel.period == null ? null : @string/multiPicker_formatter_information(viewModel.period.date, displayNames[viewModel.period.type])}"
                 app:layout_constraintBottom_toBottomOf="@id/itb_create_study_start_date"
                 app:layout_constraintEnd_toStartOf="@id/itb_create_study_cycle"
                 app:layout_constraintStart_toEndOf="@id/itb_create_study_start_date"

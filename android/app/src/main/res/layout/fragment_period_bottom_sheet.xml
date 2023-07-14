@@ -11,6 +11,10 @@
         <variable
             name="changeListener"
             type="com.created.team201.presentation.createStudy.custom.MultiPickerChangeListener" />
+
+        <variable
+            name="bottomSheetFragment"
+            type="com.created.team201.presentation.createStudy.bottomSheet.PeriodBottomSheetFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -56,6 +60,7 @@
             android:layout_marginHorizontal="18dp"
             android:layout_marginTop="38dp"
             android:background="@color/green01_4039D353"
+            android:onClick="@{() -> bottomSheetFragment.dismiss()}"
             android:paddingVertical="10dp"
             android:text="@string/period_button_name_cancel"
             android:textAlignment="center"
@@ -72,6 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
             android:background="@color/green02_E639D353"
+            android:onClick="@{() -> bottomSheetFragment.onButtonClick()}"
             android:paddingVertical="10dp"
             android:text="@string/period_button_name_save"
             android:textAlignment="center"

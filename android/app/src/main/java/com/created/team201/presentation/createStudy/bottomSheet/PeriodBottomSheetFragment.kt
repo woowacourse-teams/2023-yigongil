@@ -8,6 +8,7 @@ import com.created.team201.databinding.FragmentPeriodBottomSheetBinding
 import com.created.team201.presentation.common.BindingBottomSheetFragment
 import com.created.team201.presentation.createStudy.CreateStudyViewModel
 import com.created.team201.presentation.createStudy.custom.MultiPickerChangeListener
+import com.created.team201.presentation.createStudy.model.PeriodUiModel
 
 class PeriodBottomSheetFragment : BindingBottomSheetFragment<FragmentPeriodBottomSheetBinding>(
     R.layout.fragment_period_bottom_sheet,
@@ -18,16 +19,12 @@ class PeriodBottomSheetFragment : BindingBottomSheetFragment<FragmentPeriodBotto
         resources.getIntArray(R.array.multiPickerMaxNumbers)
     }
 
-    private val dates: Array<String> by lazy {
-        resources.getStringArray(R.array.multiPickerDisplayNames)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.viewModel = viewModel
+        binding.bottomSheetFragment = this
         setChangeListener()
-        setButtonListener()
     }
 
     private fun setChangeListener() {
@@ -41,16 +38,9 @@ class PeriodBottomSheetFragment : BindingBottomSheetFragment<FragmentPeriodBotto
         }
     }
 
-    private fun setButtonListener() {
-        binding.tvPeriodBottomSheetBtnCancel.setOnClickListener { dismiss() }
-        binding.tvPeriodBottomSheetBtnSave.setOnClickListener {
-            viewModel.period.value =
-                getString(
-                    R.string.multiPicker_formatter_information,
-                    binding.mpPeriod.leftValue,
-                    dates[binding.mpPeriod.rightValue],
-                )
-            dismiss()
-        }
+    fun onButtonClick() {
+        viewModel.period.value =
+            PeriodUiModel(binding.mpPeriod.leftValue, binding.mpPeriod.rightValue)
+        dismiss()
     }
 }
