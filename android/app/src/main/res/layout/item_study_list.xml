@@ -30,8 +30,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
             android:src="@drawable/ic_diamond_24"
-            app:layout_constraintStart_toStartOf="parent"
             app:glideSrc="@{tier.Companion.valueOf(studySummary.tier)}"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="12dp"
-            android:text="@{@string/study_list_date_period_format(studySummary.date,studySummary.period)}"
+            android:text="@{@string/study_list_date_period_format(studySummary.date,studySummary.period.toString())}"
             android:textAppearance="@style/description_r10"
             android:textColor="@color/grey02_78808B"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -66,11 +66,11 @@
             android:layout_width="40dp"
             android:layout_height="19dp"
             android:layout_marginStart="4dp"
-            tools:src="@drawable/ic_gathering"
             app:glideSrc="@{studyStatus.Companion.valueOf(studySummary.processingStatus)}"
             app:layout_constraintBottom_toBottomOf="@id/tv_study_list_title"
             app:layout_constraintStart_toEndOf="@id/tv_study_list_title"
-            app:layout_constraintTop_toTopOf="@id/tv_study_list_title" />
+            app:layout_constraintTop_toTopOf="@id/tv_study_list_title"
+            tools:src="@drawable/ic_gathering" />
 
         <ImageView
             android:id="@+id/iv_study_list_people_count_icon"
@@ -88,11 +88,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="12dp"
+            android:text="@{@string/study_list_member_format(studySummary.currentMember,studySummary.maximumMember)}"
             android:textAppearance="@style/text_r12"
             android:textColor="@color/grey02_78808B"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:text="@{@string/study_list_member_format(studySummary.currentMember,studySummary.maximumMember)}"
             tools:text="3/5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
