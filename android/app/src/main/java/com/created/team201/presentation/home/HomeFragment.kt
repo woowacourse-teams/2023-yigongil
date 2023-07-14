@@ -1,7 +1,6 @@
 package com.created.team201.presentation.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.created.team201.R
@@ -18,12 +17,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
     private fun implementClickListener() = object : HomeClickListener {
         override fun clickOnTodo(id: Int, isDone: Boolean) {
-            Log.d("123123", "123123")
             homeViewModel.patchTodo(id, !isDone)
         }
 
         override fun clickOnStudyCard() {
             // startActivity
+            // intent : studyId, roundId
         }
     }
 
@@ -49,7 +48,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
     private fun observeUserStudies() {
         homeViewModel.userStudies.observe(viewLifecycleOwner) { homeUiModel ->
-            Log.d("123123", "123123")
             dashboardAdapter.updateItems(homeUiModel)
         }
     }

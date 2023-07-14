@@ -17,11 +17,15 @@ class HomeViewModel : ViewModel() {
     val userStudies: LiveData<List<HomeUiModel>> get() = _userStudies
 
     fun getUserStudyInfo() {
+        // network
+        // if(status == 200)
+
         _userName.value = DUMMY.userName
         _userStudies.value = DUMMY.studies.map { it.toUiModel() }
     }
 
     fun patchTodo(id: Int, isDone: Boolean) {
+        // network
         // request: studyId, todoId, roundId, isDone
         // if(status == 200)
 
@@ -75,7 +79,7 @@ class HomeViewModel : ViewModel() {
                 Study(
                     1,
                     "빨리 만들자",
-                    20,
+                    70,
                     5,
                     "2023.01.02",
                     Todo(2, "잔디구현끝내기", true),
@@ -90,7 +94,7 @@ class HomeViewModel : ViewModel() {
                 Study(
                     2,
                     "빨리 만들자고",
-                    87,
+                    27,
                     9,
                     "2023.07.02",
                     Todo(2, "선택 투두 끝내기", true),
