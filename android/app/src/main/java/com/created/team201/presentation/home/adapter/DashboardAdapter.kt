@@ -6,12 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.presentation.home.HomeClickListener
 import com.created.team201.presentation.home.adapter.viewholder.DashboardViewHolder
-import com.created.team201.presentation.home.model.HomeUiModel
+import com.created.team201.presentation.home.model.StudyUiModel
 
 class DashboardAdapter(
     private val onClick: HomeClickListener,
 ) : RecyclerView.Adapter<DashboardViewHolder>() {
-    private val items: MutableList<HomeUiModel> = mutableListOf()
+    private val items: MutableList<StudyUiModel> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DashboardViewHolder {
         return DashboardViewHolder(
@@ -30,7 +30,7 @@ class DashboardAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateItems(studyInfo: List<HomeUiModel>) {
+    fun updateItems(studyInfo: List<StudyUiModel>) {
         items.clear()
         items.addAll(studyInfo)
 

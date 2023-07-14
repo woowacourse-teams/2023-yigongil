@@ -10,8 +10,8 @@
             type="com.created.team201.presentation.home.HomeClickListener" />
 
         <variable
-            name="homeUiModel"
-            type="com.created.team201.presentation.home.model.HomeUiModel" />
+            name="studyUiModel"
+            type="com.created.team201.presentation.home.model.StudyUiModel" />
 
     </data>
 
@@ -28,7 +28,7 @@
             android:layout_marginStart="68dp"
             android:layout_marginTop="40dp"
             android:layout_marginEnd="68dp"
-            android:text="@{homeUiModel.studyName}"
+            android:text="@{studyUiModel.studyName}"
             android:textAppearance="@style/study_title_b22"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="@{@string/home_progress_rate(homeUiModel.progressRate)}"
+            android:text="@{@string/home_progress_rate(studyUiModel.progressRate)}"
             android:textAppearance="@style/description_r10"
             android:textColor="@color/grey02_78808B"
             app:layout_constraintEnd_toEndOf="@+id/rv_home_grass"
@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="@{@string/home_date(homeUiModel.leftDays, homeUiModel.nextDate)}"
+            android:text="@{@string/home_date(studyUiModel.leftDays, studyUiModel.nextDate)}"
             android:textAppearance="@style/text_sb14"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@+id/tv_home_progress"
@@ -110,7 +110,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="@{homeUiModel.necessaryTodo.content}"
+                android:text="@{studyUiModel.necessaryTodo.content}"
                 android:textAppearance="@style/text_sb10"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -123,9 +123,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
-                android:onClick="@{() -> onClick.clickOnTodo(homeUiModel.necessaryTodo.todoId,homeUiModel.necessaryTodo.isDone)}"
+                android:onClick="@{() -> onClick.clickOnTodo(studyUiModel.necessaryTodo.todoId,studyUiModel.necessaryTodo.isDone)}"
                 android:src="@drawable/ic_selector_home_check_btn"
-                app:isSelected="@{homeUiModel.necessaryTodo.done}"
+                app:isSelected="@{studyUiModel.necessaryTodo.done}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

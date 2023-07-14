@@ -47,8 +47,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     }
 
     private fun observeUserStudies() {
-        homeViewModel.userStudies.observe(viewLifecycleOwner) { homeUiModel ->
-            dashboardAdapter.updateItems(homeUiModel)
+        homeViewModel.userStudies.observe(viewLifecycleOwner) { studyUiModel ->
+            dashboardAdapter.updateItems(studyUiModel)
         }
     }
 }

@@ -7,7 +7,7 @@ import com.created.team201.databinding.ItemHomeBinding
 import com.created.team201.presentation.home.HomeClickListener
 import com.created.team201.presentation.home.adapter.HomeGrassAdapter
 import com.created.team201.presentation.home.adapter.OptionalToDoAdapter
-import com.created.team201.presentation.home.model.HomeUiModel
+import com.created.team201.presentation.home.model.StudyUiModel
 
 class DashboardViewHolder(
     onClick: HomeClickListener,
@@ -32,11 +32,11 @@ class DashboardViewHolder(
         binding.rvHomeGrass.setHasFixedSize(true)
     }
 
-    fun bind(homeUiModel: HomeUiModel) {
-        binding.homeUiModel = homeUiModel
+    fun bind(studyUiModel: StudyUiModel) {
+        binding.studyUiModel = studyUiModel
 
-        optionalTodoAdapter.updateToDoItems(homeUiModel.optionalTodos)
-        homeGrassAdapter.updateGrass(homeUiModel.grass)
+        optionalTodoAdapter.updateToDoItems(studyUiModel.optionalTodos)
+        homeGrassAdapter.updateGrass(studyUiModel.grass)
     }
 
     companion object {

@@ -6,15 +6,15 @@ import androidx.lifecycle.ViewModel
 import com.created.domain.model.Study
 import com.created.domain.model.Todo
 import com.created.domain.model.UserInfo
-import com.created.team201.presentation.home.model.HomeUiModel
+import com.created.team201.presentation.home.model.StudyUiModel
 import com.created.team201.presentation.home.model.TodoUiModel
 
 class HomeViewModel : ViewModel() {
     private val _userName: MutableLiveData<String> = MutableLiveData()
     val userName: LiveData<String> get() = _userName
 
-    private val _userStudies: MutableLiveData<List<HomeUiModel>> = MutableLiveData(listOf())
-    val userStudies: LiveData<List<HomeUiModel>> get() = _userStudies
+    private val _userStudies: MutableLiveData<List<StudyUiModel>> = MutableLiveData()
+    val userStudies: LiveData<List<StudyUiModel>> get() = _userStudies
 
     fun getUserStudyInfo() {
         // network
@@ -37,27 +37,27 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    private fun updateNecessaryTodoCheck(studies: List<HomeUiModel>, id: Int, isDone: Boolean) {
-        _userStudies.value = studies.map { homeUiModel ->
-            homeUiModel.takeIf { it.necessaryTodo.todoId != id } ?: homeUiModel.copy(
-                necessaryTodo = homeUiModel.necessaryTodo.copy(isDone = isDone),
+    private fun updateNecessaryTodoCheck(studies: List<StudyUiModel>, id: Int, isDone: Boolean) {
+        _userStudies.value = studies.map { studyUiModel ->
+            studyUiModel.takeIf { it.necessaryTodo.todoId != id } ?: studyUiModel.copy(
+                necessaryTodo = studyUiModel.necessaryTodo.copy(isDone = isDone),
             )
         }
     }
 
-    private fun updateOptionalTodoCheck(studies: List<HomeUiModel>, id: Int, isDone: Boolean) {
-        _userStudies.value = studies.map { homeUiModel ->
-            homeUiModel.takeIf { todoUiModel -> !todoUiModel.optionalTodos.any { it.todoId == id } }
-                ?: homeUiModel.copy(
-                    optionalTodos = homeUiModel.optionalTodos.map {
+    private fun updateOptionalTodoCheck(studies: List<StudyUiModel>, id: Int, isDone: Boolean) {
+        _userStudies.value = studies.map { studyUiModel ->
+            studyUiModel.takeIf { todoUiModel -> !todoUiModel.optionalTodos.any { it.todoId == id } }
+                ?: studyUiModel.copy(
+                    optionalTodos = studyUiModel.optionalTodos.map {
                         it.takeUnless { it.todoId == id } ?: it.copy(isDone = isDone)
                     },
                 )
         }
     }
 
-    private fun Study.toUiModel(): HomeUiModel =
-        HomeUiModel(
+    private fun Study.toUiModel(): StudyUiModel =
+        StudyUiModel(
             studyName = this.studyName,
             progressRate = this.progressRate,
             leftDays = this.leftDays,
