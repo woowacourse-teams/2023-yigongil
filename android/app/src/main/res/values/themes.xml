@@ -10,7 +10,35 @@
         <item name="android:windowLightStatusBar">false</item>
 
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <!-- 바텀 시트 다이얼로그 스타일 적용 -->
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
     </style>
 
     <style name="Theme.Team201" parent="Base.Theme.Team201" />
+
+    <!-- 피커 폰트, 구분선, 텍스트 컬러, 사이즈 테마 -->
+    <style name="Theme.Picker" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:colorControlNormal">@color/transparent</item>
+        <item name="android:textSize">26dp</item>
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
+
+    <!-- 바텀 시트 다이얼로그 탑 모서리 라운딩 테마  -->
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_bottom_sheet_top_radius_20dp</item>
+    </style>
+
+    <!-- 캘린더뷰 폰트, 컬러 테마 -->
+    <style name="CalendarTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
+        <item name="android:textAppearance">@style/text_sb14</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/mcv_text_date_dark</item>
+    </style>
+
 </resources>

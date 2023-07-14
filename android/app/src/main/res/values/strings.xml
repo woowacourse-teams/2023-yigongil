@@ -21,4 +21,36 @@
     <!--커스텀 프로필 이미지 뷰-->
     <string name="custom_profile_image_content_description">프로필 이미지</string>
 
+    <!--스터디 개설 뷰-->
+    <string name="icon_text_button_name_people_count">인원 수</string>
+    <string name="icon_text_button_name_start_date">예상시작일</string>
+    <string name="icon_text_button_name_period">스터디기간</string>
+    <string name="icon_text_button_name_cycle">스터디주기</string>
+    <string name="icon_text_button_formatter_information_people_count">%d명</string>
+
+    <string name="createStudy_toolbar_title">스터디 만들기</string>
+    <string name="createStudy_study_hint_name">제목을 입력해주세요.</string>
+    <string name="createStudy_study_hint_introduction">스터디를 소개해주세요.</string>
+    <string name="createStudy_button_created">작성완료</string>
+
+    <string name="createStudy_tag_people_count">TAG_CREATE_STUDY_PEOPLE_COUNT</string>
+    <string name="createStudy_tag_start_date">TAG_CREATE_STUDY_START_DATE</string>
+    <string name="createStudy_tag_period">TAG_CREATE_STUDY_PERIOD</string>
+    <string name="createStudy_tag_cycle">TAG_CREATE_STUDY_CYCLE</string>
+
+    <!-- 인원 수 선택 커스텀 뷰 -->
+    <string name="people_count_picker_text">명</string>
+
+    <!-- 캘린더 선택 커스텀 뷰-->
+    <string name="calendar_formatter_information_date">yyyy.MM.dd</string>
+
+    <!-- 스터디 기간 선택 뷰 -->
+    <string name="period_button_name_cancel">취소</string>
+    <string name="period_button_name_save">저장</string>
+
+    <!-- 멀티 피커 커스텀 뷰 -->
+    <string name="multiPicker_display_name_day">일</string>
+    <string name="multiPicker_display_name_week">주</string>
+    <string name="multiPicker_formatter_information">%d %s</string>
+
 </resources>

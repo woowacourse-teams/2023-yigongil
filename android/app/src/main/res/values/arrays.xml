@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="multiPickerMaxNumbers">
+        <item>56</item>
+        <item>8</item>
+    </integer-array>
+
+    <string-array name="multiPickerDisplayNames">
+        <item>@string/multiPicker_display_name_day</item>
+        <item>@string/multiPicker_display_name_week</item>
+    </string-array>
+</resources>
