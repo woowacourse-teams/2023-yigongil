@@ -7,7 +7,6 @@ import com.created.team201.R
 import com.created.team201.databinding.FragmentStartDateBottomSheetBinding
 import com.created.team201.presentation.common.BindingBottomSheetFragment
 import com.created.team201.presentation.createStudy.CreateStudyViewModel
-import com.created.team201.presentation.createStudy.custom.CalendarChangeListener
 
 class StartDateBottomSheetFragment :
     BindingBottomSheetFragment<FragmentStartDateBottomSheetBinding>(
@@ -18,14 +17,11 @@ class StartDateBottomSheetFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setChangeListener()
+        binding.bottomSheetFragment = this
     }
 
-    private fun setChangeListener() {
-        binding.changeListener = object : CalendarChangeListener {
-            override fun onChange(date: String) {
-                viewModel.startDate.value = date
-            }
-        }
+    fun onSaveButtonClick() {
+        viewModel.startDate.value = binding.calendarCreateStudyStartDate.value
+        dismiss()
     }
 }

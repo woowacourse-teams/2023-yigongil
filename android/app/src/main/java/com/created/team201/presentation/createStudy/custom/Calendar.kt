@@ -22,6 +22,10 @@ class Calendar @JvmOverloads constructor(
         CalendarBinding.inflate(LayoutInflater.from(context), this, true)
     }
 
+    val value: String
+        get() = binding.calendar.selectedDate?.date?.format(DateTimeFormatter.ofPattern(dateFormat))
+            ?: ""
+
     private var maximumMonthRange: Long = 1
     private val maximumDate: LocalDate by lazy {
         LocalDate.now().plusMonths(maximumMonthRange)
@@ -56,11 +60,5 @@ class Calendar @JvmOverloads constructor(
             SundayDecorator(maximumDate),
             TodayDecorator(context.getColor(R.color.green05_3AD353)),
         )
-    }
-
-    fun setOnDateChangedListener(listener: CalendarChangeListener) {
-        binding.calendar.setOnDateChangedListener { _, date, _ ->
-            listener.onChange(date.date.format(DateTimeFormatter.ofPattern(dateFormat)))
-        }
     }
 }

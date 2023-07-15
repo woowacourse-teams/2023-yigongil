@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="changeListener"
-            type="com.created.team201.presentation.createStudy.custom.CalendarChangeListener" />
+            name="bottomSheetFragment"
+            type="com.created.team201.presentation.createStudy.bottomSheet.StartDateBottomSheetFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,12 +14,13 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_bottom_sheet_top_radius_20dp"
         android:backgroundTint="@color/black02_181B21"
+        android:padding="16dp"
         app:behavior_draggable="false"
         app:behavior_hideable="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
-            android:id="@+id/view_create_study_people_count"
+            android:id="@+id/view_create_study_start_date"
             android:layout_width="0dp"
             android:layout_height="5dp"
             android:layout_marginTop="20dp"
@@ -31,15 +32,50 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.created.team201.presentation.createStudy.custom.Calendar
-            changeListener="@{changeListener}"
+            android:id="@+id/calendar_create_study_start_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_create_study_people_count"
+            app:layout_constraintTop_toBottomOf="@id/view_create_study_start_date"
             app:maximumMonthRange="3" />
+
+
+        <TextView
+            android:id="@+id/tv_start_date_bottom_sheet_btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="18dp"
+            android:layout_marginTop="18dp"
+            android:background="@color/green01_4039D353"
+            android:onClick="@{() -> bottomSheetFragment.dismiss()}"
+            android:paddingVertical="10dp"
+            android:text="@string/bottomSheetFragment_button_name_cancel"
+            android:textAlignment="center"
+            android:textAppearance="@style/button_sb16"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_start_date_bottom_sheet_btn_save"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/calendar_create_study_start_date" />
+
+        <TextView
+            android:id="@+id/tv_start_date_bottom_sheet_btn_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="18dp"
+            android:background="@color/green02_E639D353"
+            android:onClick="@{() -> bottomSheetFragment.onSaveButtonClick()}"
+            android:paddingVertical="10dp"
+            android:text="@string/bottomSheetFragment_button_name_save"
+            android:textAlignment="center"
+            android:textAppearance="@style/button_sb16"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/tv_start_date_bottom_sheet_btn_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_start_date_bottom_sheet_btn_cancel"
+            app:layout_constraintTop_toTopOf="@id/tv_start_date_bottom_sheet_btn_cancel" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
