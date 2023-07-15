@@ -5,14 +5,11 @@ data class Period(
     val type: Int,
 ) {
     fun getPeriodDate(type: Int): Int {
-        if (this.type == type && this.type == TYPE_DAY) {
+        if (this.type == type) {
             return date
         }
-        if (this.type == TYPE_DAY && this.type == TYPE_WEEK) {
+        if (type == TYPE_DAY && this.type == TYPE_WEEK) {
             return date * WEEK_DAYS
-        }
-        if (this.type == type && this.type == TYPE_WEEK) {
-            return date
         }
         return date / WEEK_DAYS
     }
