@@ -14,7 +14,7 @@
 
         <variable
             name="bottomSheetFragment"
-            type="com.created.team201.presentation.createStudy.bottomSheet.PeriodBottomSheetFragment" />
+            type="com.created.team201.presentation.createStudy.bottomSheet.CycleBottomSheetFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +28,7 @@
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
-            android:id="@+id/view_create_study_period"
+            android:id="@+id/view_create_study_cycle"
             android:layout_width="0dp"
             android:layout_height="5dp"
             android:background="@drawable/bg_rectangle_radius_5dp"
@@ -39,14 +39,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.created.team201.presentation.createStudy.custom.MultiPicker
-            android:id="@+id/mp_period"
+            android:id="@+id/mp_cycle"
             changeListener="@{changeListener}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_create_study_period"
+            app:layout_constraintTop_toBottomOf="@id/view_create_study_cycle"
             app:leftMaxValue="56"
             app:leftMinValue="1"
             app:rightDisplayNames="@array/multiPickerDisplayNames"
@@ -54,7 +54,7 @@
             app:rightMinValue="0" />
 
         <TextView
-            android:id="@+id/tv_period_bottom_sheet_btn_cancel"
+            android:id="@+id/tv_cycle_bottom_sheet_btn_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
@@ -67,12 +67,12 @@
             android:textAppearance="@style/button_sb16"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_period_bottom_sheet_btn_save"
+            app:layout_constraintEnd_toStartOf="@id/tv_cycle_bottom_sheet_btn_save"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mp_period" />
+            app:layout_constraintTop_toBottomOf="@id/mp_cycle" />
 
         <TextView
-            android:id="@+id/tv_period_bottom_sheet_btn_save"
+            android:id="@+id/tv_cycle_bottom_sheet_btn_save"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
@@ -83,10 +83,10 @@
             android:textAlignment="center"
             android:textAppearance="@style/button_sb16"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@id/tv_period_bottom_sheet_btn_cancel"
+            app:layout_constraintBottom_toBottomOf="@id/tv_cycle_bottom_sheet_btn_cancel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_period_bottom_sheet_btn_cancel"
-            app:layout_constraintTop_toTopOf="@id/tv_period_bottom_sheet_btn_cancel" />
+            app:layout_constraintStart_toEndOf="@id/tv_cycle_bottom_sheet_btn_cancel"
+            app:layout_constraintTop_toTopOf="@id/tv_cycle_bottom_sheet_btn_cancel" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

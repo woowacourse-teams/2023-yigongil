@@ -7,6 +7,7 @@ import androidx.fragment.app.commit
 import com.created.team201.R
 import com.created.team201.databinding.ActivityCreateStudyBinding
 import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.createStudy.bottomSheet.CycleBottomSheetFragment
 import com.created.team201.presentation.createStudy.bottomSheet.PeopleCountBottomSheetFragment
 import com.created.team201.presentation.createStudy.bottomSheet.PeriodBottomSheetFragment
 import com.created.team201.presentation.createStudy.bottomSheet.StartDateBottomSheetFragment
@@ -76,7 +77,11 @@ class CreateStudyActivity :
             }
 
             getString(R.string.createStudy_tag_cycle) -> {
-                null
+                if (viewModel.period.value == null) {
+                    null
+                } else {
+                    CycleBottomSheetFragment()
+                }
             }
 
             else -> {

@@ -38,15 +38,15 @@
     <string name="createStudy_tag_period">TAG_CREATE_STUDY_PERIOD</string>
     <string name="createStudy_tag_cycle">TAG_CREATE_STUDY_CYCLE</string>
 
+    <!-- 스터디 개설 - 바텀 다이얼로그 뷰 -->
+    <string name="bottomSheetFragment_button_name_cancel">취소</string>
+    <string name="bottomSheetFragment_button_name_save">저장</string>
+
     <!-- 인원 수 선택 커스텀 뷰 -->
     <string name="people_count_picker_text">명</string>
 
     <!-- 캘린더 선택 커스텀 뷰-->
     <string name="calendar_formatter_information_date">yyyy.MM.dd</string>
-
-    <!-- 스터디 기간 선택 뷰 -->
-    <string name="period_button_name_cancel">취소</string>
-    <string name="period_button_name_save">저장</string>
 
     <!-- 멀티 피커 커스텀 뷰 -->
     <string name="multiPicker_display_name_day">일</string>

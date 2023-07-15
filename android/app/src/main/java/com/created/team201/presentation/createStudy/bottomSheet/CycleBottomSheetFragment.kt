@@ -3,30 +3,29 @@ package com.created.team201.presentation.createStudy.bottomSheet
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import com.created.domain.model.Period.Companion.TYPE_DAY
-import com.created.domain.model.Period.Companion.TYPE_WEEK
 import com.created.team201.R
-import com.created.team201.databinding.FragmentPeriodBottomSheetBinding
+import com.created.team201.databinding.FragmentCycleBottomSheetBinding
 import com.created.team201.presentation.common.BindingBottomSheetFragment
 import com.created.team201.presentation.createStudy.CreateStudyViewModel
 import com.created.team201.presentation.createStudy.custom.MultiPickerChangeListener
 import com.created.team201.presentation.createStudy.model.PeriodUiModel
 
-class PeriodBottomSheetFragment : BindingBottomSheetFragment<FragmentPeriodBottomSheetBinding>(
-    R.layout.fragment_period_bottom_sheet,
-) {
+class CycleBottomSheetFragment :
+    BindingBottomSheetFragment<FragmentCycleBottomSheetBinding>(R.layout.fragment_cycle_bottom_sheet) {
     private val viewModel: CreateStudyViewModel by activityViewModels()
-
-    private val numbers: IntArray by lazy {
-        resources.getIntArray(R.array.multiPickerMaxNumbers)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.viewModel = viewModel
         binding.bottomSheetFragment = this
+        initMultiPicker()
         setChangeListener()
+    }
+
+    private fun initMultiPicker() {
+        binding.mpCycle.setLeftMaxValue(viewModel.getCycleDateMaxValue(binding.mpCycle.rightValue))
+        binding.mpCycle.setRightMaxValue(viewModel.getCycleTypeMaxValue())
     }
 
     private fun setChangeListener() {
@@ -35,18 +34,16 @@ class PeriodBottomSheetFragment : BindingBottomSheetFragment<FragmentPeriodBotto
             }
 
             override fun onRightChange(value: Int) {
-                binding.mpPeriod.setLeftMaxValue(numbers[value])
+                viewModel.cycleMaxDates.value?.let {
+                    binding.mpCycle.setLeftMaxValue(it[binding.mpCycle.rightValue])
+                }
             }
         }
     }
 
     fun onButtonClick() {
-        viewModel.period.value =
-            PeriodUiModel(binding.mpPeriod.leftValue, binding.mpPeriod.rightValue)
-        viewModel.cycleMaxDates.value = arrayOf(
-            viewModel.getCycleDateMaxValue(TYPE_DAY),
-            viewModel.getCycleDateMaxValue(TYPE_WEEK),
-        )
+        viewModel.cycle.value =
+            PeriodUiModel(binding.mpCycle.leftValue, binding.mpCycle.rightValue)
         dismiss()
     }
 }

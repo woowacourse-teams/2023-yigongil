@@ -60,6 +60,10 @@ class MultiPicker @JvmOverloads constructor(
         binding.npMultiPickerLeft.maxValue = max
     }
 
+    fun setRightMaxValue(max: Int) {
+        binding.npMultiPickerRight.maxValue = max
+    }
+
     fun setChangeListener(
         leftOnChangeListener: (Int) -> Unit,
         rightOnChangeListener: (Int) -> Unit,
