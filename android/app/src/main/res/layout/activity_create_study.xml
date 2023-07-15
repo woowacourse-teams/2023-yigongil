@@ -81,9 +81,8 @@
                 android:id="@+id/view_create_study_name_between_button"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_marginVertical="16dp"
+                android:layout_marginTop="16dp"
                 android:background="@color/black03_272C33"
-                app:layout_constraintBottom_toTopOf="@id/itb_create_study_start_date"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_create_study_name" />
@@ -105,6 +104,7 @@
                 android:id="@+id/itb_create_study_start_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:onClick="@{() -> activity.onIconTextButtonClick(@string/createStudy_tag_start_date)}"
                 app:buttonName="@string/icon_text_button_name_start_date"
                 app:iconResource="@drawable/ic_start_date"
