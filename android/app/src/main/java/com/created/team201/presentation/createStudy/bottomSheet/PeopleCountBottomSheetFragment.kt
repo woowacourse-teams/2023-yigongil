@@ -7,7 +7,6 @@ import com.created.team201.R
 import com.created.team201.databinding.FragmentPeopleCountBottomSheetBinding
 import com.created.team201.presentation.common.BindingBottomSheetFragment
 import com.created.team201.presentation.createStudy.CreateStudyViewModel
-import com.created.team201.presentation.createStudy.custom.PickerChangeListener
 
 class PeopleCountBottomSheetFragment :
     BindingBottomSheetFragment<FragmentPeopleCountBottomSheetBinding>(
@@ -19,14 +18,11 @@ class PeopleCountBottomSheetFragment :
         super.onViewCreated(view, savedInstanceState)
 
         binding.viewModel = viewModel
-        setChangeListener()
+        binding.bottomSheetFragment = this
     }
 
-    private fun setChangeListener() {
-        binding.changeListener = object : PickerChangeListener {
-            override fun onChange(value: Int) {
-                viewModel.peopleCount.value = value
-            }
-        }
+    fun onSaveButtonClick() {
+        viewModel.peopleCount.value = binding.peopleCountPickerCreateStudyPeopleCount.value
+        dismiss()
     }
 }

@@ -16,6 +16,14 @@ class PeopleCountPicker @JvmOverloads constructor(
         PeopleCountPickerBinding.inflate(LayoutInflater.from(context), this, true)
     }
 
+    var value: Int = DEFAULT_MIN_VALUE
+        get() = binding.npCreateStudy.value
+        set(value) {
+            if (value == 0) return
+            binding.npCreateStudy.value = value
+            field = value
+        }
+
     init {
         context.theme.obtainStyledAttributes(attrs, R.styleable.PeopleCountPicker, 0, 0).apply {
             runCatching {
@@ -31,23 +39,12 @@ class PeopleCountPicker @JvmOverloads constructor(
         }
     }
 
-    fun setValue(value: Int) {
-        if (value == 0) return
-        binding.npCreateStudy.value = value
-    }
-
     fun setMinValue(min: Int) {
         binding.npCreateStudy.minValue = min
     }
 
     fun setMaxValue(max: Int) {
         binding.npCreateStudy.maxValue = max
-    }
-
-    fun setChangeListener(onChangeListener: PickerChangeListener) {
-        binding.npCreateStudy.setOnValueChangedListener { _, _, newValue ->
-            onChangeListener.onChange(newValue)
-        }
     }
 
     companion object {
