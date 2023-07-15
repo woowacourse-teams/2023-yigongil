@@ -40,7 +40,7 @@ class PeriodBottomSheetFragment : BindingBottomSheetFragment<FragmentPeriodBotto
         }
     }
 
-    fun onButtonClick() {
+    fun onSaveButtonClick() {
         viewModel.period.value =
             PeriodUiModel(binding.mpPeriod.leftValue, binding.mpPeriod.rightValue)
         viewModel.cycleMaxDates.value = arrayOf(

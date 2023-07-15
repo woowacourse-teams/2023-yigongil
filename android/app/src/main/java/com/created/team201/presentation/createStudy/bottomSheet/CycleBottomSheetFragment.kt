@@ -41,7 +41,7 @@ class CycleBottomSheetFragment :
         }
     }
 
-    fun onButtonClick() {
+    fun onSaveButtonClick() {
         viewModel.cycle.value =
             PeriodUiModel(binding.mpCycle.leftValue, binding.mpCycle.rightValue)
         dismiss()
