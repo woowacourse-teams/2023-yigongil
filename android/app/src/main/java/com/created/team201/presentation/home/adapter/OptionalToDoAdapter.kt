@@ -1,17 +1,24 @@
 package com.created.team201.presentation.home.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.created.team201.presentation.home.HomeClickListener
 import com.created.team201.presentation.home.adapter.viewholder.OptionalToDoViewHolder
 import com.created.team201.presentation.home.model.TodoUiModel
 
 class OptionalToDoAdapter(
     private val onClick: HomeClickListener,
-) : RecyclerView.Adapter<OptionalToDoViewHolder>() {
-    private val items: MutableList<TodoUiModel> = mutableListOf()
+) : ListAdapter<TodoUiModel, OptionalToDoViewHolder>(diffCallBack) {
+
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position).todoId.toLong()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OptionalToDoViewHolder {
         return OptionalToDoViewHolder(
@@ -23,17 +30,19 @@ class OptionalToDoAdapter(
         )
     }
 
-    override fun getItemCount(): Int = items.size
-
     override fun onBindViewHolder(holder: OptionalToDoViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(getItem(position))
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateToDoItems(todoItems: List<TodoUiModel>) {
-        items.clear()
-        items.addAll(todoItems)
+    companion object {
+        private val diffCallBack = object : DiffUtil.ItemCallback<TodoUiModel>() {
+            override fun areItemsTheSame(oldItem: TodoUiModel, newItem: TodoUiModel): Boolean {
+                return oldItem.todoId == newItem.todoId
+            }
 
-        notifyDataSetChanged()
+            override fun areContentsTheSame(oldItem: TodoUiModel, newItem: TodoUiModel): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 }

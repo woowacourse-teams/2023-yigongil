@@ -1,14 +1,13 @@
 package com.created.team201.presentation.home.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.created.team201.presentation.home.adapter.viewholder.HomeGrassViewHolder
 import com.created.team201.presentation.home.model.Grass
 
-class HomeGrassAdapter : RecyclerView.Adapter<HomeGrassViewHolder>() {
-    private val items: MutableList<Grass> = mutableListOf()
+class HomeGrassAdapter : ListAdapter<Grass, HomeGrassViewHolder>(diffCallBack) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeGrassViewHolder {
         return HomeGrassViewHolder(
@@ -19,17 +18,19 @@ class HomeGrassAdapter : RecyclerView.Adapter<HomeGrassViewHolder>() {
         )
     }
 
-    override fun getItemCount(): Int = items.size
-
     override fun onBindViewHolder(holder: HomeGrassViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(getItem(position))
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateGrass(grass: List<Grass>) {
-        items.clear()
-        items.addAll(grass)
+    companion object {
+        private val diffCallBack = object : DiffUtil.ItemCallback<Grass>() {
+            override fun areItemsTheSame(oldItem: Grass, newItem: Grass): Boolean {
+                return oldItem.grassState == newItem.grassState
+            }
 
-        notifyDataSetChanged()
+            override fun areContentsTheSame(oldItem: Grass, newItem: Grass): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 }

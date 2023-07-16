@@ -10,7 +10,11 @@ import com.created.team201.presentation.home.adapter.DashboardAdapter
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val homeViewModel: HomeViewModel by viewModels()
-    private val dashboardAdapter: DashboardAdapter by lazy { DashboardAdapter(implementClickListener()) }
+    private val dashboardAdapter: DashboardAdapter by lazy {
+        DashboardAdapter(
+            implementClickListener(),
+        )
+    }
     private val customViewPager: CustomViewPager by lazy {
         CustomViewPager(binding, requireContext())
     }
@@ -48,7 +52,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
     private fun observeUserStudies() {
         homeViewModel.userStudies.observe(viewLifecycleOwner) { studyUiModel ->
-            dashboardAdapter.updateItems(studyUiModel)
+            dashboardAdapter.submitList(studyUiModel)
         }
     }
 }

@@ -1,39 +1,45 @@
 package com.created.team201.presentation.home.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.created.team201.presentation.home.HomeClickListener
 import com.created.team201.presentation.home.adapter.viewholder.DashboardViewHolder
 import com.created.team201.presentation.home.model.StudyUiModel
 
 class DashboardAdapter(
     private val onClick: HomeClickListener,
-) : RecyclerView.Adapter<DashboardViewHolder>() {
-    private val items: MutableList<StudyUiModel> = mutableListOf()
+) : ListAdapter<StudyUiModel, DashboardViewHolder>(diffCallBack) {
+
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position).studyId.toLong()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DashboardViewHolder {
         return DashboardViewHolder(
             onClick,
-            DashboardViewHolder.getView(
-                parent,
-                LayoutInflater.from(parent.context),
-            ),
+            DashboardViewHolder.getView(parent, LayoutInflater.from(parent.context)),
         )
     }
 
-    override fun getItemCount(): Int = items.size
-
     override fun onBindViewHolder(holder: DashboardViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(getItem(position))
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun updateItems(studyInfo: List<StudyUiModel>) {
-        items.clear()
-        items.addAll(studyInfo)
+    companion object {
+        private val diffCallBack = object : DiffUtil.ItemCallback<StudyUiModel>() {
+            override fun areItemsTheSame(oldItem: StudyUiModel, newItem: StudyUiModel): Boolean {
+                return oldItem.studyId == newItem.studyId
+            }
 
-        notifyDataSetChanged()
+            override fun areContentsTheSame(oldItem: StudyUiModel, newItem: StudyUiModel): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 }

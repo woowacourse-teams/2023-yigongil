@@ -35,8 +35,8 @@ class DashboardViewHolder(
     fun bind(studyUiModel: StudyUiModel) {
         binding.studyUiModel = studyUiModel
 
-        optionalTodoAdapter.updateToDoItems(studyUiModel.optionalTodos)
-        homeGrassAdapter.updateGrass(studyUiModel.grass)
+        optionalTodoAdapter.submitList(studyUiModel.optionalTodos)
+        homeGrassAdapter.submitList(studyUiModel.grass)
     }
 
     companion object {
