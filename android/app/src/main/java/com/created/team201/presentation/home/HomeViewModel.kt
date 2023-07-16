@@ -80,7 +80,7 @@ class HomeViewModel : ViewModel() {
                 Study(
                     1,
                     "빨리 만들자",
-                    70,
+                    90,
                     5,
                     "2023.01.02",
                     Todo(2, "잔디구현끝내기", true),
@@ -95,11 +95,11 @@ class HomeViewModel : ViewModel() {
                 Study(
                     2,
                     "빨리 만들자고",
-                    27,
+                    57,
                     9,
                     "2023.07.02",
-                    Todo(2, "선택 투두 끝내기", true),
-                    listOf(Todo(3, "홈뷰 끝내기2", true)),
+                    Todo(7, "선택 투두 끝내기", true),
+                    listOf(Todo(8, "홈뷰 끝내기2", true)),
 
                 ),
             ),
