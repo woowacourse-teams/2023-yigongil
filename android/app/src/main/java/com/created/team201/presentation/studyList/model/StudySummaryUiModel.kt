@@ -1,4 +1,4 @@
-package com.created.team201.presentation.studyList
+package com.created.team201.presentation.studyList.model
 
 data class StudySummaryUiModel(
     val id: Long,
@@ -8,5 +8,5 @@ data class StudySummaryUiModel(
     val date: String,
     val period: PeriodUiModel,
     val currentMember: Int,
-    val maximumMember: Int
+    val maximumMember: Int,
 )

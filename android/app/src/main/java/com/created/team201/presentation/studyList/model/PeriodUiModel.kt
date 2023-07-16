@@ -1,4 +1,4 @@
-package com.created.team201.presentation.studyList
+package com.created.team201.presentation.studyList.model
 
 import com.created.domain.PeriodUnit
 

@@ -7,15 +7,15 @@
 
         <variable
             name="studyStatus"
-            type="com.created.team201.presentation.studyList.StudyStatusImage" />
+            type="com.created.team201.presentation.studyList.model.StudyStatusImage" />
 
         <variable
             name="tier"
-            type="com.created.team201.presentation.studyList.TierImage" />
+            type="com.created.team201.presentation.studyList.model.TierImage" />
 
         <variable
             name="studySummary"
-            type="com.created.team201.presentation.studyList.StudySummaryUiModel" />
+            type="com.created.team201.presentation.studyList.model.StudySummaryUiModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
