@@ -2,6 +2,7 @@ package com.created.team201.presentation.studyList
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import androidx.fragment.app.viewModels
@@ -13,7 +14,9 @@ import com.created.team201.presentation.common.BindingFragment
 class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fragment_study_list) {
 
     private val studyListViewModel: StudyListViewModel by viewModels()
-    private lateinit var studyListAdapter: StudyListAdapter
+    private val studyListAdapter: StudyListAdapter by lazy {
+        StudyListAdapter()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,7 +41,6 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     }
 
     private fun setUpAdapter() {
-        studyListAdapter = StudyListAdapter()
         binding.rvStudyListList.adapter = studyListAdapter
     }
 
@@ -49,6 +51,18 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
                     binding.fabStudyListCreateButton.visibility = VISIBLE
                 } else {
                     binding.fabStudyListCreateButton.visibility = INVISIBLE
+                }
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (!binding.rvStudyListList.canScrollVertically(1) &&
+                    binding.pbStudyListLoad.visibility == GONE
+                ) {
+                    // while (loadPage) binding.pbStudyListLoad.visibility = VISIBLE
+                    // after (loadPage) binding.pbStudyListLoad.visibility = GONE
+                    studyListViewModel.loadPage()
                 }
             }
         }
