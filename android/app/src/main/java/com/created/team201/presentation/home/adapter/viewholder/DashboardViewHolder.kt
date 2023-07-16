@@ -23,13 +23,13 @@ class DashboardViewHolder(
     }
 
     private fun attachOptionalTodoAdapter() {
-        binding.rvHomeOptionalTodoList.adapter = optionalTodoAdapter
         binding.rvHomeOptionalTodoList.setHasFixedSize(true)
+        binding.rvHomeOptionalTodoList.adapter = optionalTodoAdapter
     }
 
     private fun attachHomeGrassAdapter() {
-        binding.rvHomeGrass.adapter = homeGrassAdapter
         binding.rvHomeGrass.setHasFixedSize(true)
+        binding.rvHomeGrass.adapter = homeGrassAdapter
     }
 
     fun bind(studyUiModel: StudyUiModel) {
