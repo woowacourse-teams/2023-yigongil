@@ -26,6 +26,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         setUpToolbar()
         setUpAdapter()
         setUpStudyListObserve()
+        setUpRefreshListener()
         setUpScrollListener()
     }
 
@@ -55,6 +56,14 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         }
     }
 
+    private fun setUpRefreshListener() {
+        binding.srlStudyList.setOnRefreshListener {
+            // 새로 받아온 리스트 주입, 끝난 후 isRefreshing false로 변경
+            // studyListAdapter.submitList()
+            // binding.srlStudyList.isRefreshing = false
+        }
+    }
+
     private fun setUpScrollListener() {
         val onScrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -68,9 +77,12 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
-                if (!binding.rvStudyListList.canScrollVertically(1) &&
-                    binding.pbStudyListLoad.visibility == GONE
-                ) {
+                // 데이터 호출 싱크 맞추기
+                if (binding.srlStudyList.isRefreshing || binding.pbStudyListLoad.visibility == VISIBLE) {
+                    return
+                }
+
+                if (!binding.rvStudyListList.canScrollVertically(1)) {
                     // while (loadPage) binding.pbStudyListLoad.visibility = VISIBLE
                     // after (loadPage) binding.pbStudyListLoad.visibility = GONE
                     studyListViewModel.loadPage()

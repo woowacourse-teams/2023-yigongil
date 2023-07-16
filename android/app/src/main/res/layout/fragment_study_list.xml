@@ -43,31 +43,38 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_study_list_toolbar_boarder_line" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_study_list_list"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srl_study_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="4dp"
             app:layout_constraintBottom_toTopOf="@id/pb_study_list_load"
-            android:layout_marginBottom="8dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spinner_study_list" />
+            app:layout_constraintTop_toBottomOf="@id/spinner_study_list">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_study_list_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <ProgressBar
-            app:layout_constraintTop_toBottomOf="@id/rv_study_list_list"
-            android:indeterminateTint="@color/white"
             android:id="@+id/pb_study_list_load"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:paddingVertical="10dp"
-            android:visibility="gone"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/white"
+            android:paddingVertical="10dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/srl_study_list" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fab_study_list_create_button"
