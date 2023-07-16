@@ -11,12 +11,13 @@ import com.created.team201.R
 import com.created.team201.databinding.FragmentStudyListBinding
 import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.studyList.adapter.StudyListAdapter
+import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 
 class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fragment_study_list) {
 
     private val studyListViewModel: StudyListViewModel by viewModels()
     private val studyListAdapter: StudyListAdapter by lazy {
-        StudyListAdapter()
+        StudyListAdapter(studyListClickListener())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -24,8 +25,8 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
         setUpToolbar()
         setUpAdapter()
-        setUpScrollListener()
         setUpStudyListObserve()
+        setUpScrollListener()
     }
 
     private fun setUpToolbar() {
@@ -43,6 +44,12 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
     private fun setUpAdapter() {
         binding.rvStudyListList.adapter = studyListAdapter
+    }
+
+    private fun setUpStudyListObserve() {
+        studyListViewModel.studySummaries.observe(viewLifecycleOwner) {
+            studyListAdapter.submitList(it)
+        }
     }
 
     private fun setUpScrollListener() {
@@ -70,9 +77,9 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         binding.rvStudyListList.addOnScrollListener(onScrollListener)
     }
 
-    private fun setUpStudyListObserve() {
-        studyListViewModel.studySummaries.observe(viewLifecycleOwner) {
-            studyListAdapter.submitList(it)
+    private fun studyListClickListener() = object : StudyListClickListener {
+        override fun onClickStudySummary(studySummary: StudySummaryUiModel) {
+            // 스터디 상세보기 뷰로 이동
         }
     }
 }

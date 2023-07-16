@@ -3,13 +3,16 @@ package com.created.team201.presentation.studyList.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.created.team201.presentation.studyList.StudyListClickListener
 import com.created.team201.presentation.studyList.model.StudySummaryBackground
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 
-class StudyListAdapter : ListAdapter<StudySummaryUiModel, StudyListViewHolder>(StudyListDiffUtil) {
+class StudyListAdapter(
+    private val studyListClickListener: StudyListClickListener,
+) : ListAdapter<StudySummaryUiModel, StudyListViewHolder>(StudyListDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyListViewHolder {
-        return StudyListViewHolder(parent)
+        return StudyListViewHolder(parent, studyListClickListener)
     }
 
     override fun onBindViewHolder(holder: StudyListViewHolder, position: Int) {
