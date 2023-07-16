@@ -43,7 +43,10 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     }
 
     private fun setUpAdapter() {
-        binding.rvStudyListList.adapter = studyListAdapter
+        binding.rvStudyListList.apply {
+            adapter = studyListAdapter
+            setHasFixedSize(true)
+        }
     }
 
     private fun setUpStudyListObserve() {
