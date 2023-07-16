@@ -24,6 +24,7 @@ class StudyUiModelTest {
     companion object {
         private const val GRASS_RATE_PER = 100 / 9
         private val STUB_DATA = StudyUiModel(
+            1,
             "빨리 만들자",
             0,
             5,

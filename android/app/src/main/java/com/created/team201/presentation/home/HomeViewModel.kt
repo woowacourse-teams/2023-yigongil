@@ -58,6 +58,7 @@ class HomeViewModel : ViewModel() {
 
     private fun Study.toUiModel(): StudyUiModel =
         StudyUiModel(
+            studyId = this.studyId,
             studyName = this.studyName,
             progressRate = this.progressRate,
             leftDays = this.leftDays,
