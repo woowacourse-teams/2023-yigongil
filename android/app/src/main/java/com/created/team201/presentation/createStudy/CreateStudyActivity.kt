@@ -28,7 +28,6 @@ class CreateStudyActivity :
         binding.activity = this
         initViewModel()
         initActionBar()
-        setCreateButtonListener()
     }
 
     private fun initViewModel() {
@@ -43,10 +42,9 @@ class CreateStudyActivity :
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
     }
 
-    private fun setCreateButtonListener() {
-        binding.tvCreateStudyBtnCreate.setOnClickListener {
-            finish()
-        }
+    fun onCreateButtonClick() {
+        viewModel.getCreateStudy()
+        finish()
     }
 
     fun onIconTextButtonClick(tag: String) {
