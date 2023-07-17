@@ -1,4 +1,7 @@
-package com.yigongil.backend.domain;
+package com.yigongil.backend.domain.study;
+
+import com.yigongil.backend.domain.BaseEntity;
+import com.yigongil.backend.domain.round.Round;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

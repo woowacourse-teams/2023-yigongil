@@ -1,4 +1,6 @@
-package com.yigongil.backend.domain;
+package com.yigongil.backend.domain.optionaltodo;
+
+import com.yigongil.backend.domain.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
