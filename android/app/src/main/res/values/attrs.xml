@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="CustomProfileImage">
+        <attr name="glideCircleImageUrl" format="string" />
+        <attr name="successRate" format="integer" />
+        <attr name="tier" format="enum" >
+            <enum name="bronze" value="1"/>
+            <enum name="silver" value="2"/>
+            <enum name="gold" value="3"/>
+            <enum name="platinum" value="4"/>
+            <enum name="diamond" value="5"/>
+        </attr>
+    </declare-styleable>
+
     <declare-styleable name="PeopleCountPicker">
         <attr name="value" format="integer" />
         <attr name="minValue" format="integer" />
