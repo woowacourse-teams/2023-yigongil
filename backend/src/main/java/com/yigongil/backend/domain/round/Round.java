@@ -1,4 +1,8 @@
-package com.yigongil.backend.domain;
+package com.yigongil.backend.domain.round;
+
+import com.yigongil.backend.domain.BaseEntity;
+import com.yigongil.backend.domain.Member.Member;
+import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 
 import java.util.ArrayList;
 import java.util.List;

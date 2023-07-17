@@ -1,4 +1,8 @@
-package com.yigongil.backend.domain;
+package com.yigongil.backend.domain.applicant;
+
+import com.yigongil.backend.domain.BaseEntity;
+import com.yigongil.backend.domain.Member.Member;
+import com.yigongil.backend.domain.study.Study;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

@@ -13,7 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
-abstract class BaseEntity {
+public abstract class BaseEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
