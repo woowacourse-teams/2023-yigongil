@@ -4,7 +4,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.created.team201.presentation.studyList.StudyListClickListener
-import com.created.team201.presentation.studyList.model.StudySummaryBackground
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 
 class StudyListAdapter(
@@ -16,7 +15,7 @@ class StudyListAdapter(
     }
 
     override fun onBindViewHolder(holder: StudyListViewHolder, position: Int) {
-        holder.bind(getItem(position), StudySummaryBackground.of(position, itemCount))
+        holder.bind(getItem(position))
     }
 
     companion object {

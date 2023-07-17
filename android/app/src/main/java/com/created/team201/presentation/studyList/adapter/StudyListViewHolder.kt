@@ -2,7 +2,6 @@ package com.created.team201.presentation.studyList.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.getDrawable
 import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.R
 import com.created.team201.databinding.ItemStudyListBinding
@@ -25,9 +24,8 @@ class StudyListViewHolder(
         }
     }
 
-    fun bind(item: StudySummaryUiModel, resId: Int) {
+    fun bind(item: StudySummaryUiModel) {
         studySummary = item
         binding.studySummary = studySummary
-        binding.clStudyList.background = getDrawable(parent.context, resId)
     }
 }
