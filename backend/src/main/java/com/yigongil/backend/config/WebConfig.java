@@ -15,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
     private final MemberArgumentResolver memberArgumentResolver;
     private final LoginInterceptor loginInterceptor;
 
-    public WebConfig(final MemberArgumentResolver memberArgumentResolver, final LoginInterceptor loginInterceptor) {
+    public WebConfig(MemberArgumentResolver memberArgumentResolver, LoginInterceptor loginInterceptor) {
         this.memberArgumentResolver = memberArgumentResolver;
         this.loginInterceptor = loginInterceptor;
     }
