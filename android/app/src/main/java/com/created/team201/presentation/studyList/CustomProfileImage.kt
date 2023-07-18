@@ -29,20 +29,14 @@ class CustomProfileImage @JvmOverloads constructor(
             .load(image)
             .circleCrop()
             .into(profileImage)
-        invalidate()
-        requestLayout()
     }
 
     fun setSuccessRate(successRate: Int) {
         studySuccessRate.progress = successRate
-        invalidate()
-        requestLayout()
     }
 
     fun setTier(tierName: String) {
         val tier = Tier.of(tierName)
         studySuccessRate.progressTintList = ColorStateList.valueOf(context.getColor(tier.color))
-        invalidate()
-        requestLayout()
     }
 }
