@@ -1,6 +1,7 @@
 package com.yigongil.backend.ui;
 
 import com.yigongil.backend.application.MemberService;
+import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.request.ProfileUpdateRequest;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class MemberController {
     }
 
     @PatchMapping
-    public ResponseEntity<Void> updateProfile(Member member, @RequestBody ProfileUpdateRequest request) {
+    public ResponseEntity<Void> updateProfile(@Authorization Member member, @RequestBody ProfileUpdateRequest request) {
         memberService.updateMember(member, request);
         return ResponseEntity.ok().build();
     }
