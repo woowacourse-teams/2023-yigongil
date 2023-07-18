@@ -26,7 +26,7 @@ public class Member extends BaseEntity {
     private String profileImageUrl;
 
     @Column(nullable = false)
-    private int tier;
+    private Integer tier;
 
     @Embedded
     private Introduction introduction;
@@ -35,8 +35,14 @@ public class Member extends BaseEntity {
     }
 
     @Builder
-    public Member(Long id, String githubId, String nickname, String profileImageUrl, int tier,
-                  String introduction) {
+    public Member(
+            Long id,
+            String githubId,
+            String nickname,
+            String profileImageUrl,
+            Integer tier,
+            String introduction
+    ) {
         this.id = id;
         this.githubId = githubId;
         this.nickname = new Nickname(nickname);
@@ -66,7 +72,7 @@ public class Member extends BaseEntity {
         return profileImageUrl;
     }
 
-    public int getTier() {
+    public Integer getTier() {
         return tier;
     }
 

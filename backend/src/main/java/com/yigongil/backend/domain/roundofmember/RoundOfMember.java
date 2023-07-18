@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import lombok.Builder;
 
 @Entity
 public class RoundOfMember extends BaseEntity {
@@ -34,5 +35,13 @@ public class RoundOfMember extends BaseEntity {
     private List<OptionalTodo> optionalTodos = new ArrayList<>();
 
     protected RoundOfMember() {
+    }
+
+    @Builder
+    public RoundOfMember(Long id, Member member, Boolean isDone, List<OptionalTodo> optionalTodos) {
+        this.id = id;
+        this.member = member;
+        this.isDone = isDone;
+        this.optionalTodos = optionalTodos;
     }
 }
