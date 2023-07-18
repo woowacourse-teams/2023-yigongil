@@ -15,7 +15,7 @@
             android:layout_gravity="center"
             android:indeterminate="false"
             android:max="100"
-            android:progressBackgroundTint="#626362"
+            android:progressBackgroundTint="@color/grey02_78808B"
             android:progressDrawable="@drawable/progress_study_success_rate"
             android:progressTint="@color/green06_7ADC4B" />
 
