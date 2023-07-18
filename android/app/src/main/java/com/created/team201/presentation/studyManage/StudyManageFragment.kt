@@ -9,26 +9,36 @@ import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.studyList.StudyListClickListener
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 import com.created.team201.presentation.studyManage.adapter.StudyManageAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 
 class StudyManageFragment :
     BindingFragment<FragmentStudyManageBinding>(R.layout.fragment_study_manage) {
 
     private val studyManageViewModel: StudyManageViewModel by viewModels()
     private val studyManageAdapter: StudyManageAdapter by lazy {
-        StudyManageAdapter(
-            studyListClickListener(),
-        )
+        StudyManageAdapter(studyListClickListener())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setUpViewPagerAdapter()
+        setUpTabLayoutViewPagerConnection()
         setUpStudyManageObserve()
     }
 
     private fun setUpViewPagerAdapter() {
         binding.vpStudyManage.adapter = studyManageAdapter
+    }
+
+    private fun setUpTabLayoutViewPagerConnection() {
+        val tabTitles = listOf(
+            getString(R.string.study_manage_joined_tab),
+            getString(R.string.study_manage_opened_tab),
+        )
+        TabLayoutMediator(binding.tlStudyManage, binding.vpStudyManage) { tab, position ->
+            tab.text = tabTitles[position]
+        }.attach()
     }
 
     private fun setUpStudyManageObserve() {

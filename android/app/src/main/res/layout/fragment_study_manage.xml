@@ -46,16 +46,6 @@
             app:tabTextAppearance="@style/subtitle_r15"
             app:tabTextColor="@color/grey02_78808B">
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/study_manage_joined_tab" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/study_manage_opened_tab" />
-
         </com.google.android.material.tabs.TabLayout>
 
         <View
