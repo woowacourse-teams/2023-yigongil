@@ -45,21 +45,35 @@
             android:textColor="@color/white"
             app:layout_constraintStart_toEndOf="@id/iv_study_list_tier"
             app:layout_constraintTop_toTopOf="parent"
+            tools:isOver="@{studyStatus.Companion.valueOf(studySummary.processingStatus)}"
             tools:text="자바 스터디 2명 타세요 ~" />
 
         <TextView
-            android:id="@+id/tv_study_list_description"
+            android:id="@+id/tv_study_list_description_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="12dp"
-            android:text="@{@string/study_list_information_format(studyStatus.Companion.dateFormatOf(studySummary.processingStatus), studySummary.date, studySummary.totalRound, studySummary.period.toString())}"
             android:textAppearance="@style/description_r10"
             android:textColor="@color/grey02_78808B"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/tv_study_list_title"
             app:layout_constraintTop_toBottomOf="@id/tv_study_list_title"
-            tools:text="예상시작일 2023.07.02 · 기간 7 week" />
+            tools:isRecruiting="@{studyStatus.Companion.valueOf(studySummary.processingStatus)}"
+            tools:text="시작예정일" />
+
+        <TextView
+            android:id="@+id/tv_study_list_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@{@string/study_list_information_format(studySummary.date, studySummary.totalRound, studySummary.period.toString())}"
+            android:textAppearance="@style/description_r10"
+            android:textColor="@color/grey02_78808B"
+            app:layout_constraintBottom_toBottomOf="@id/tv_study_list_description_header"
+            app:layout_constraintStart_toEndOf="@id/tv_study_list_description_header"
+            app:layout_constraintTop_toTopOf="@id/tv_study_list_description_header"
+            tools:text="2023.07.02 · 기간 7 week" />
 
         <ImageView
             android:id="@+id/iv_study_list_tag"
