@@ -2,13 +2,18 @@ package com.created.team201.presentation.studyManage
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import com.created.team201.R
 import com.created.team201.databinding.FragmentStudyManageBinding
 import com.created.team201.presentation.common.BindingFragment
+import com.created.team201.presentation.studyList.StudyListClickListener
+import com.created.team201.presentation.studyList.model.StudySummaryUiModel
+import com.created.team201.presentation.studyManage.adapter.StudyManageAdapter
 
 class StudyManageFragment :
     BindingFragment<FragmentStudyManageBinding>(R.layout.fragment_study_manage) {
 
+    private val studyManageViewModel: StudyManageViewModel by viewModels()
     private val studyManageAdapter: StudyManageAdapter by lazy {
         StudyManageAdapter(
             studyListClickListener(),
@@ -19,10 +24,17 @@ class StudyManageFragment :
         super.onViewCreated(view, savedInstanceState)
 
         setUpViewPagerAdapter()
+        setUpStudyManageObserve()
     }
 
     private fun setUpViewPagerAdapter() {
         binding.vpStudyManage.adapter = studyManageAdapter
+    }
+
+    private fun setUpStudyManageObserve() {
+        studyManageViewModel.onGoingStudiesUiModel.observe(viewLifecycleOwner) {
+            studyManageAdapter.submitList(it)
+        }
     }
 
     private fun studyListClickListener() = object : StudyListClickListener {
