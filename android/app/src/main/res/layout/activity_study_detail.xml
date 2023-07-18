@@ -22,7 +22,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="스터디 상세보기"
+            app:title="@string/study_detail_app_bar_title"
             app:titleCentered="true"
             app:titleTextAppearance="@style/header_sb15"
             app:titleTextColor="@color/white" />
