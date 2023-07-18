@@ -8,10 +8,6 @@ import com.created.team201.presentation.studyList.uiModel.StudyParticipant
 class StudyParticipantsAdapter :
     ListAdapter<StudyParticipant, StudyPeopleViewHolder>(diffCallBack) {
 
-    init {
-        setHasStableIds(true)
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyPeopleViewHolder {
         return StudyPeopleViewHolder(StudyPeopleViewHolder.getBinding(parent))
     }
