@@ -6,6 +6,7 @@ data class StudySummaryUiModel(
     val tier: Int,
     val title: String,
     val date: String,
+    val totalRound: Int,
     val period: PeriodUiModel,
     val currentMember: Int,
     val maximumMember: Int,
