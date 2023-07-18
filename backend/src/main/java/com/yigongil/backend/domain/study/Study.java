@@ -5,7 +5,6 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.exception.InvalidPeriodUnitException;
 import com.yigongil.backend.utils.DateConverter;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +76,8 @@ public class Study extends BaseEntity {
             LocalDateTime endAt,
             Integer totalRoundCount,
             Integer periodOfRound,
-            Round currentRound
+            Round currentRound,
+            List<Round> rounds
     ) {
         this.id = id;
         this.name = name;
@@ -89,6 +89,7 @@ public class Study extends BaseEntity {
         this.totalRoundCount = totalRoundCount;
         this.periodOfRound = periodOfRound;
         this.currentRound = currentRound;
+        this.rounds = rounds;
     }
 
     public static Study initializeStudyOf(

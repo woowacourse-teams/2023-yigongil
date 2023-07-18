@@ -44,4 +44,20 @@ public class RoundOfMember extends BaseEntity {
         this.isDone = isDone;
         this.optionalTodos = optionalTodos;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public Boolean getDone() {
+        return isDone;
+    }
+
+    public List<OptionalTodo> getOptionalTodos() {
+        return optionalTodos;
+    }
 }
