@@ -27,7 +27,7 @@ class PeopleCountBottomSheetFragment :
     }
 
     fun onSaveButtonClick() {
-        viewModel.peopleCount.value = binding.peopleCountPickerCreateStudyPeopleCount.value
+        viewModel.setPeopleCount(binding.spPeopleCount.value)
         dismiss()
     }
 }

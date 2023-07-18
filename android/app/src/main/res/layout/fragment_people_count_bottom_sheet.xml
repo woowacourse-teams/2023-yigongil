@@ -35,7 +35,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.created.team201.presentation.createStudy.custom.SinglePicker
-            android:id="@+id/people_count_picker_create_study_people_count"
+            android:id="@+id/sp_people_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -64,7 +64,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_people_count_bottom_sheet_btn_save"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/people_count_picker_create_study_people_count" />
+            app:layout_constraintTop_toBottomOf="@id/sp_people_count" />
 
         <TextView
             android:id="@+id/tv_people_count_bottom_sheet_btn_save"

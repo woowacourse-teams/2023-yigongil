@@ -8,7 +8,6 @@ import com.created.team201.databinding.FragmentCycleBottomSheetBinding
 import com.created.team201.presentation.common.BindingBottomSheetFragment
 import com.created.team201.presentation.createStudy.CreateStudyViewModel
 import com.created.team201.presentation.createStudy.custom.MultiPickerChangeListener
-import com.created.team201.presentation.createStudy.model.PeriodUiModel
 
 class CycleBottomSheetFragment :
     BindingBottomSheetFragment<FragmentCycleBottomSheetBinding>(R.layout.fragment_cycle_bottom_sheet) {
@@ -43,8 +42,7 @@ class CycleBottomSheetFragment :
     }
 
     fun onSaveButtonClick() {
-        viewModel.cycle.value =
-            PeriodUiModel(binding.mpCycle.leftValue, binding.mpCycle.rightValue)
+        viewModel.setCycle(binding.mpCycle.leftValue, binding.mpCycle.rightValue)
         dismiss()
     }
 }

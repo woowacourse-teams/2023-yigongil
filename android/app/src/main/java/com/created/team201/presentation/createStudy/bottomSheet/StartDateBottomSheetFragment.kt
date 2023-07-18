@@ -26,7 +26,7 @@ class StartDateBottomSheetFragment :
     }
 
     fun onSaveButtonClick() {
-        viewModel.startDate.value = binding.calendarCreateStudyStartDate.value
+        viewModel.setStartDate(binding.calendarCreateStudyStartDate.value)
         dismiss()
     }
 }
