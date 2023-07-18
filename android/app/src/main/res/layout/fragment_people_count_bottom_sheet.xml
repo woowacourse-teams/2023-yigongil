@@ -34,7 +34,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.created.team201.presentation.createStudy.custom.PeopleCountPicker
+        <com.created.team201.presentation.createStudy.custom.SinglePicker
             android:id="@+id/people_count_picker_create_study_people_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,8 +42,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_create_study_people_count"
-            app:maxValue="@{8}"
-            app:minValue="@{2}"
+            app:maxValue="8"
+            app:minValue="2"
+            app:title="@string/single_picker_text_people_count"
             app:value="@{viewModel.peopleCount}" />
 
         <TextView
