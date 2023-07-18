@@ -9,6 +9,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.util.Optional;
+
 @Component
 public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
@@ -27,14 +29,17 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(final MethodParameter parameter, final ModelAndViewContainer mavContainer,
                                   final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory)
             throws Exception {
-        return memberRepository.save(
+        Optional<Member> member = memberRepository.findById(1L);
+        return member.orElseGet(() -> memberRepository.save(
                 Member.builder()
                         .nickname("김진우")
+                        .participatedStudyCount(1)
+                        .finishedStudyCount(1)
                         .tier(2)
                         .githubId("jwkim")
                         .profileImageUrl("www.123.com")
                         .introduction("자기소개입니다")
                         .build()
-        );
+        ));
     }
 }

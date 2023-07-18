@@ -3,11 +3,14 @@ package com.yigongil.backend.acceptance.steps;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.request.StudyCreateRequest;
+import com.yigongil.backend.response.StudyDetailResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import org.springframework.http.MediaType;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class StudySteps {
 
@@ -47,5 +50,19 @@ public class StudySteps {
     @Then("스터디 목록에서 해당 스터디를 확인할 수 있다.")
     public void 스터디목록에서_해당_스터디를_확인할_수_있다() {
         // TODO: 2023/07/18 스터디 조회 api 작성 후 수정
+    }
+
+    @Then("스터디 상세 조회에서 해당 스터디를 확인할 수 있다.")
+    public void 스터디상세_조회에서_해당_스터디를_확인할_수_있다() {
+        StudyDetailResponse response = RestAssured.given().log().all()
+                .when()
+                .get("/v1/studies/1")
+                .then().log().all()
+                .extract().as(StudyDetailResponse.class);
+
+        assertAll(
+                () -> response.id().equals(1L),
+                () -> response.name()
+        );
     }
 }

@@ -3,8 +3,10 @@ package com.yigongil.backend.domain.round;
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Builder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,9 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import lombok.Builder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Round extends BaseEntity {
@@ -76,5 +77,29 @@ public class Round extends BaseEntity {
             rounds.add(round);
         }
         return rounds;
+    }
+
+    public boolean isFirstRound() {
+        return this.roundNumber == 1;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Integer getRoundNumber() {
+        return roundNumber;
+    }
+
+    public String getNecessaryToDoContent() {
+        return necessaryToDoContent;
+    }
+
+    public Member getMaster() {
+        return master;
+    }
+
+    public List<RoundOfMember> getRoundOfMembers() {
+        return roundOfMembers;
     }
 }
