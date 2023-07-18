@@ -31,16 +31,16 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initViewModel()
+        bindViewModel()
         initAdapter()
         observeUserStudies()
 
         homeViewModel.getUserStudyInfo()
     }
 
-    private fun initViewModel() {
+    private fun bindViewModel() {
         binding.viewModel = homeViewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 
     private fun initAdapter() {
@@ -49,8 +49,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     }
 
     private fun observeUserStudies() {
-        homeViewModel.userStudies.observe(viewLifecycleOwner) { studyUiModel ->
-            dashboardAdapter.submitList(studyUiModel)
+        homeViewModel.userStudies.observe(viewLifecycleOwner) { studyList ->
+            dashboardAdapter.submitList(studyList)
         }
     }
 }
