@@ -121,7 +121,7 @@ public class Round extends BaseEntity {
                 .findAny()
                 .orElseThrow(() -> new NotStudyMemberException("해당 스터디의 멤버만 투두를 추가할 수 있습니다.", member.getGithubId()));
     }
-  
+
     public int calculateAverageTier() {
         double averageTier = roundOfMembers.stream()
                                            .map(RoundOfMember::getMember)
@@ -171,5 +171,9 @@ public class Round extends BaseEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public boolean isFirstRound() {
+        return this.roundNumber == 1;
     }
 }

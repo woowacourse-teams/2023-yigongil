@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.StudyCreateRequest;
+import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -16,6 +17,8 @@ import io.restassured.specification.RequestSpecification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -91,6 +94,20 @@ public class StudySteps {
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
                 () -> assertThat(recruitingStudyResponses).allMatch(isRecruitingPredicate)
+        );
+    }
+
+    @Then("스터디 상세 조회에서 해당 스터디를 확인할 수 있다.")
+    public void 스터디상세_조회에서_해당_스터디를_확인할_수_있다() {
+        StudyDetailResponse response = RestAssured.given().log().all()
+                .when()
+                .get("/v1/studies/1")
+                .then().log().all()
+                .extract().as(StudyDetailResponse.class);
+
+        assertAll(
+                () -> response.id().equals(1L),
+                () -> response.name()
         );
     }
 }
