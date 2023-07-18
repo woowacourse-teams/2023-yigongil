@@ -5,7 +5,7 @@ import com.created.team201.presentation.home.model.Grass.GrassType.MIDDLE
 import com.created.team201.presentation.home.model.Grass.GrassType.TOP
 
 data class StudyUiModel(
-    val studyId: Int,
+    val studyId: Long,
     val studyName: String,
     val progressRate: Int,
     val leftDays: Int,

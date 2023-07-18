@@ -17,7 +17,7 @@ class DashboardAdapter(
     }
 
     override fun getItemId(position: Int): Long {
-        return getItem(position).studyId.toLong()
+        return getItem(position).studyId
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DashboardViewHolder {
