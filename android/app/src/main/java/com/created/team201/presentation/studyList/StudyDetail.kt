@@ -8,7 +8,7 @@ import com.created.team201.databinding.ActivityStudyDetailBinding
 import com.created.team201.presentation.common.BindingActivity
 
 class StudyDetail : BindingActivity<ActivityStudyDetailBinding>(R.layout.activity_study_detail) {
-    private val viewModel: StudyDetailViewModel by viewModels()
+    private val studyDetailViewModel: StudyDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,11 +23,11 @@ class StudyDetail : BindingActivity<ActivityStudyDetailBinding>(R.layout.activit
         val studyPeopleAdapter = StudyParticipantsAdapter()
         binding.rvStudyDetailStudyPeople.setHasFixedSize(true)
         binding.rvStudyDetailStudyPeople.adapter = studyPeopleAdapter
-        studyPeopleAdapter.submitList(viewModel.studyParticipants)
+        studyPeopleAdapter.submitList(studyDetailViewModel.studyParticipants)
     }
 
     private fun initViewModel() {
-        binding.viewModel = viewModel
+        binding.viewModel = studyDetailViewModel
         binding.lifecycleOwner = this
     }
 
