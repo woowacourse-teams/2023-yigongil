@@ -3,8 +3,8 @@ package com.yigongil.backend.domain.roundofmember;
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Builder;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,7 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import lombok.Builder;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class RoundOfMember extends BaseEntity {
@@ -43,5 +44,25 @@ public class RoundOfMember extends BaseEntity {
         this.member = member;
         this.isDone = isDone;
         this.optionalTodos = optionalTodos;
+    }
+
+    public boolean isMemberEquals(Member member) {
+        return this.member.equals(member);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public Boolean getDone() {
+        return isDone;
+    }
+
+    public List<OptionalTodo> getOptionalTodos() {
+        return optionalTodos;
     }
 }

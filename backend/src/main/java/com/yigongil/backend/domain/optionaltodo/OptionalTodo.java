@@ -1,6 +1,7 @@
 package com.yigongil.backend.domain.optionaltodo;
 
 import com.yigongil.backend.domain.BaseEntity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,5 +24,17 @@ public class OptionalTodo extends BaseEntity {
     private boolean isDone;
 
     protected OptionalTodo() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public boolean isDone() {
+        return isDone;
     }
 }
