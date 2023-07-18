@@ -1,6 +1,5 @@
 package com.created.team201.presentation.studyManage.adapter
 
-import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -16,7 +15,6 @@ class StudyManageAdapter(
     }
 
     override fun onBindViewHolder(holder: StudyManageViewHolder, position: Int) {
-        Log.d("hello", getItem(position).studySummariesUiModel.toString())
         holder.bind(getItem(position))
     }
 
