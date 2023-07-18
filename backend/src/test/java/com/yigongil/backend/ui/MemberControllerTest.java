@@ -1,9 +1,10 @@
 package com.yigongil.backend.ui;
 
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.only;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -36,6 +37,7 @@ class MemberControllerTest {
     @MockBean
     private MemberService memberService;
 
+
     @MockBean
     private MemberRepository memberRepository;
 
@@ -43,7 +45,9 @@ class MemberControllerTest {
     void 프로필_정보를_업데이트_한다() throws Exception {
         ProfileUpdateRequest request = new ProfileUpdateRequest("수정된김진우", "수정된자기소개");
 
+
         given(memberRepository.save(any())).willReturn(MemberFixture.김진우.toMember());
+
         willDoNothing().given(memberService).updateMember(MemberFixture.김진우.toMember(), request);
 
         mockMvc.perform(patch("/v1/members")
