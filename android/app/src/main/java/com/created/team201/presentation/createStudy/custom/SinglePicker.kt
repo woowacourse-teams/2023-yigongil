@@ -16,13 +16,8 @@ class SinglePicker @JvmOverloads constructor(
         SinglePickerBinding.inflate(LayoutInflater.from(context), this, true)
     }
 
-    var value: Int = 1
+    val value: Int
         get() = binding.npSinglePicker.value
-        set(value) {
-            if (value == 0) return
-            binding.npSinglePicker.value = value
-            field = value
-        }
 
     init {
         context.theme.obtainStyledAttributes(attrs, R.styleable.SinglePicker, 0, 0).apply {
@@ -38,6 +33,11 @@ class SinglePicker @JvmOverloads constructor(
                 recycle()
             }
         }
+    }
+
+    fun setValue(value: Int) {
+        if (value == 0) return
+        binding.npSinglePicker.value = value
     }
 
     companion object {
