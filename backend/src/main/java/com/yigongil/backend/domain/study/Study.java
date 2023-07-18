@@ -2,10 +2,11 @@ package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.exception.InvalidPeriodUnitException;
+import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.utils.DateConverter;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +78,8 @@ public class Study extends BaseEntity {
             LocalDateTime endAt,
             Integer totalRoundCount,
             Integer periodOfRound,
-            Round currentRound
+            Round currentRound,
+            List<Round> rounds
     ) {
         this.id = id;
         this.name = name;
@@ -89,6 +91,7 @@ public class Study extends BaseEntity {
         this.totalRoundCount = totalRoundCount;
         this.periodOfRound = periodOfRound;
         this.currentRound = currentRound;
+        this.rounds = rounds;
     }
 
     public static Study initializeStudyOf(
@@ -123,6 +126,23 @@ public class Study extends BaseEntity {
             return numericPart * 7;
         }
         throw new InvalidPeriodUnitException("스터디 주기는 일 또는 주 로만 설정할 수 있습니다.", periodOfRound);
+    }
+
+    public Long createNecessaryTodo(Member member, Long roundId, String content) {
+        Round targetRound = findRoundById(roundId);
+        return targetRound.createNecessaryTodo(member, content);
+    }
+
+    public OptionalTodo createOptionalTodo(Member member, Long roundId, String content) {
+        Round targetRound = findRoundById(roundId);
+        return targetRound.createOptionalTodo(member, content);
+    }
+
+    private Round findRoundById(Long roundId) {
+        return rounds.stream()
+                .filter(round -> round.getId().equals(roundId))
+                .findAny()
+                .orElseThrow(() -> new RoundNotFoundException("스터디에 해당 회차가 존재하지 않습니다.", roundId));
     }
 
     public Long getId() {

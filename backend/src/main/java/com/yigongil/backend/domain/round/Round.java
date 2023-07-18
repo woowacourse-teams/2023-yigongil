@@ -2,9 +2,15 @@ package com.yigongil.backend.domain.round;
 
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
+import com.yigongil.backend.exception.InvalidTodoLengthException;
+import com.yigongil.backend.exception.NecessaryTodoAlreadyExistException;
+import com.yigongil.backend.exception.NotStudyMasterException;
+import com.yigongil.backend.exception.NotStudyMemberException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -50,13 +56,14 @@ public class Round extends BaseEntity {
             Long id,
             Integer roundNumber,
             String necessaryToDoContent,
-            Member master
+            Member master,
+            List<RoundOfMember> roundOfMembers
     ) {
         this.id = id;
         this.roundNumber = roundNumber;
         this.necessaryToDoContent = necessaryToDoContent;
         this.master = master;
-
+        this.roundOfMembers = roundOfMembers;
     }
 
     public static List<Round> of(Integer totalRoundCount, Member master) {
@@ -65,6 +72,7 @@ public class Round extends BaseEntity {
             Round round = Round.builder()
                     .roundNumber(i)
                     .master(master)
+                    .roundOfMembers(new ArrayList<>())
                     .build();
 
             RoundOfMember roundOfMember = RoundOfMember.builder()
@@ -76,5 +84,82 @@ public class Round extends BaseEntity {
             rounds.add(round);
         }
         return rounds;
+    }
+
+    public Long createNecessaryTodo(Member member, String content) {
+        validateLength(content);
+        validateMaster(member);
+        if (Objects.nonNull(necessaryToDoContent)) {
+            throw new NecessaryTodoAlreadyExistException("필수 투두가 이미 존재합니다.", necessaryToDoContent);
+        }
+        necessaryToDoContent = content;
+        return id;
+    }
+
+    private void validateMaster(Member member) {
+        if (master.equals(member)) {
+            return;
+        }
+        throw new NotStudyMasterException("스터디 마스터만 필수 투두를 추가할 수 있습니다.", member.getNickname());
+    }
+
+    public OptionalTodo createOptionalTodo(Member member, String content) {
+        validateLength(content);
+        RoundOfMember targetRoundOfMember = roundOfMembers.stream()
+                .filter(roundOfMember -> roundOfMember.getMember().equals(member))
+                .findAny()
+                .orElseThrow(() -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", member.getNickname()));
+
+        return targetRoundOfMember.createOptionalTodo(content);
+    }
+
+    private void validateLength(String content) {
+        if (content.length() > MAX_CONTENT_LENGTH) {
+            throw new InvalidTodoLengthException("투두 길이는 20자까지 가능합니다.", content);
+        }
+    }
+
+    public RoundOfMember findRoundOfMemberBy(Member member) {
+        return roundOfMembers.stream()
+                .filter(roundOfMember -> roundOfMember.getMember().equals(member))
+                .findAny()
+                .orElseThrow(() -> new NotStudyMemberException("해당 스터디의 멤버만 투두를 추가할 수 있습니다.", member.getNickname()));
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Integer getRoundNumber() {
+        return roundNumber;
+    }
+
+    public String getNecessaryToDoContent() {
+        return necessaryToDoContent;
+    }
+
+    public Member getMaster() {
+        return master;
+    }
+
+    public List<RoundOfMember> getRoundOfMembers() {
+        return roundOfMembers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Round round = (Round) o;
+        return id.equals(round.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
