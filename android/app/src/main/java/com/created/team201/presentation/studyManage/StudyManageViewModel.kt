@@ -25,5 +25,23 @@ class StudyManageViewModel : ViewModel() {
         //      return
         // if (load Success)
         //      studies.value = newItems
+        updateStudies()
+    }
+
+    private fun updateStudies() {
+        _onGoingStudies.value = listOf(
+            OnGoingStudiesUiModel(
+                status = PARTICIPATED,
+                studySummariesUiModel = studies.value?.mapNotNull { item ->
+                    item.studySummaryUiModel.takeIf { !item.isMaster }
+                } ?: listOf(),
+            ),
+            OnGoingStudiesUiModel(
+                status = OPENED,
+                studySummariesUiModel = studies.value?.mapNotNull { item ->
+                    item.studySummaryUiModel.takeIf { item.isMaster }
+                } ?: listOf(),
+            ),
+        )
     }
 }
