@@ -21,7 +21,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
-    <!--스터디 개설 뷰-->
+    <!-- 아이콘 텍스트 버튼 커스텀 뷰 -->
     <string name="icon_text_button_name_people_count">인원 수</string>
     <string name="icon_text_button_name_start_date">예상시작일</string>
     <string name="icon_text_button_name_period">스터디기간</string>
@@ -29,6 +29,7 @@
     <string name="icon_text_button_formatter_information_people_count">%d명</string>
     <string name="icon_text_button_formatter_information_period">%d회차</string>
 
+    <!--스터디 개설 뷰-->
     <string name="createStudy_toolbar_title">스터디 만들기</string>
     <string name="createStudy_study_hint_name">제목을 입력해주세요.</string>
     <string name="createStudy_study_hint_introduction">스터디를 소개해주세요.</string>
