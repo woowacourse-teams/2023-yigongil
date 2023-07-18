@@ -14,6 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import lombok.Builder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 public class Round extends BaseEntity {
@@ -25,7 +28,7 @@ public class Round extends BaseEntity {
     private Long id;
 
     @Column(nullable = false)
-    private int roundNumber;
+    private Integer roundNumber;
 
     @Column(length = MAX_CONTENT_LENGTH)
     private String necessaryToDoContent;
@@ -34,10 +37,44 @@ public class Round extends BaseEntity {
     @JoinColumn(name = "master_id", nullable = false)
     private Member master;
 
+    @Cascade(CascadeType.PERSIST)
     @OneToMany
     @JoinColumn(name = "round_id", nullable = false)
     private List<RoundOfMember> roundOfMembers = new ArrayList<>();
 
     protected Round() {
+    }
+
+    @Builder
+    public Round(
+            Long id,
+            Integer roundNumber,
+            String necessaryToDoContent,
+            Member master
+    ) {
+        this.id = id;
+        this.roundNumber = roundNumber;
+        this.necessaryToDoContent = necessaryToDoContent;
+        this.master = master;
+
+    }
+
+    public static List<Round> of(Integer totalRoundCount, Member master) {
+        List<Round> rounds = new ArrayList<>();
+        for (int i = 1; i <= totalRoundCount; i++) {
+            Round round = Round.builder()
+                    .roundNumber(i)
+                    .master(master)
+                    .build();
+
+            RoundOfMember roundOfMember = RoundOfMember.builder()
+                    .member(master)
+                    .isDone(false)
+                    .build();
+            round.roundOfMembers.add(roundOfMember);
+
+            rounds.add(round);
+        }
+        return rounds;
     }
 }

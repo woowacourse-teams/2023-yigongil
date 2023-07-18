@@ -4,7 +4,7 @@ public record StudyCreateRequest(
         String name,
         Integer numberOfMaximumMembers,
         String startAt,
-        String period,
+        Integer totalRoundCount,
         String periodOfRound,
         String introduction
 ) {
