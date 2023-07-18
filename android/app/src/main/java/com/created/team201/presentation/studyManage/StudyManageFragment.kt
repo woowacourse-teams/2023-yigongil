@@ -32,10 +32,7 @@ class StudyManageFragment :
     }
 
     private fun setUpTabLayoutViewPagerConnection() {
-        val tabTitles = listOf(
-            getString(R.string.study_manage_joined_tab),
-            getString(R.string.study_manage_opened_tab),
-        )
+        val tabTitles = resources.getStringArray(R.array.tabLayoutTitles)
         TabLayoutMediator(binding.tlStudyManage, binding.vpStudyManage) { tab, position ->
             tab.text = tabTitles[position]
         }.attach()

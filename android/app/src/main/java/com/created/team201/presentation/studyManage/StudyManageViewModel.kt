@@ -10,7 +10,7 @@ import com.created.team201.presentation.studyManage.model.StudyManageUiModel
 
 class StudyManageViewModel : ViewModel() {
 
-    private var studies: MutableLiveData<List<StudyManageUiModel>> = MutableLiveData()
+    private val studies: MutableLiveData<List<StudyManageUiModel>> = MutableLiveData()
     private var _onGoingStudies: MutableLiveData<List<OnGoingStudiesUiModel>> = MutableLiveData()
     val onGoingStudiesUiModel: LiveData<List<OnGoingStudiesUiModel>>
         get() = _onGoingStudies

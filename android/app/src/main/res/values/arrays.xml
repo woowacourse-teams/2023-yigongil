@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 스터디 관리 탭 -->
+    <string-array name="tabLayoutTitles">
+        <item>@string/study_manage_joined_tab</item>
+        <item>@string/study_manage_opened_tab</item>
+    </string-array>
+</resources>
