@@ -23,13 +23,12 @@ class StudyDetail : BindingActivity<ActivityStudyDetailBinding>(R.layout.activit
         val studyPeopleAdapter = StudyParticipantsAdapter()
         binding.rvStudyDetailStudyPeople.setHasFixedSize(true)
         binding.rvStudyDetailStudyPeople.adapter = studyPeopleAdapter
-        studyPeopleAdapter.submitList(viewModel.studyParticipants.value)
+        studyPeopleAdapter.submitList(viewModel.studyParticipants)
     }
 
     private fun initViewModel() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
-        viewModel.getStudyInformation()
     }
 
     private fun initActionBar() {

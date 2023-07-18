@@ -1,22 +1,12 @@
 package com.created.team201.presentation.studyList
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.created.team201.presentation.studyList.uiModel.StudyParticipant
 import com.created.team201.presentation.studyList.uiModel.StudyUIModel
 
 class StudyDetailViewModel : ViewModel() {
-    private val _study: MutableLiveData<StudyUIModel> = MutableLiveData()
-    val study: LiveData<StudyUIModel> get() = _study
-
-    private val _studyParticipants: MutableLiveData<List<StudyParticipant>> = MutableLiveData()
-    val studyParticipants: LiveData<List<StudyParticipant>> get() = _studyParticipants
-
-    fun getStudyInformation() {
-        _study.value = DUMMY_STUDY
-        _studyParticipants.value = DUMMY_STUDY_PARTICIPANTS
-    }
+    val study: StudyUIModel = DUMMY_STUDY
+    val studyParticipants: List<StudyParticipant> = DUMMY_STUDY_PARTICIPANTS
 
     companion object {
         val DUMMY_STUDY = StudyUIModel(
