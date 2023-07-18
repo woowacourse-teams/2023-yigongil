@@ -2,7 +2,7 @@ package com.created.team201.presentation.createStudy.custom
 
 import androidx.databinding.BindingAdapter
 
-object BindingAdapter {
+object MultiPickerBindingAdapter {
     @JvmStatic
     @BindingAdapter("changeListener")
     fun MultiPicker.setChangeListener(onChangeListener: MultiPickerChangeListener?) {
