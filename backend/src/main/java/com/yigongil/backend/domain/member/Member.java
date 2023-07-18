@@ -98,8 +98,8 @@ public class Member extends BaseEntity {
         return introduction.getIntroduction();
     }
 
-    public int isSameWithMaster(Member member) {
-        if (this.equals(member)) {
+    public int isSameWithMaster(Member master) {
+        if (this.equals(master)) {
             return MASTER_NUMBER;
         }
         return PARTICIPANT_NUMBER;
