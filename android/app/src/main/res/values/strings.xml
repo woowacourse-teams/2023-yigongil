@@ -27,6 +27,7 @@
     <string name="icon_text_button_name_period">스터디기간</string>
     <string name="icon_text_button_name_cycle">스터디주기</string>
     <string name="icon_text_button_formatter_information_people_count">%d명</string>
+    <string name="icon_text_button_formatter_information_period">%d회차</string>
 
     <string name="createStudy_toolbar_title">스터디 만들기</string>
     <string name="createStudy_study_hint_name">제목을 입력해주세요.</string>

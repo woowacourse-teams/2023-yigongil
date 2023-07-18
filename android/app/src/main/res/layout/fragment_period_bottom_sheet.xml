@@ -9,10 +9,6 @@
             type="com.created.team201.presentation.createStudy.CreateStudyViewModel" />
 
         <variable
-            name="changeListener"
-            type="com.created.team201.presentation.createStudy.custom.MultiPickerChangeListener" />
-
-        <variable
             name="bottomSheetFragment"
             type="com.created.team201.presentation.createStudy.bottomSheet.PeriodBottomSheetFragment" />
     </data>
@@ -38,20 +34,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.created.team201.presentation.createStudy.custom.MultiPicker
-            android:id="@+id/mp_period"
-            changeListener="@{changeListener}"
-            android:layout_width="match_parent"
+        <com.created.team201.presentation.createStudy.custom.SinglePicker
+            android:id="@+id/sp_period"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_create_study_period"
-            app:leftMaxValue="56"
-            app:leftMinValue="1"
-            app:rightDisplayNames="@array/multiPickerDisplayNames"
-            app:rightMaxValue="1"
-            app:rightMinValue="0" />
+            app:maxValue="60"
+            app:minValue="1"
+            app:title="@string/single_picker_text_period" />
 
         <TextView
             android:id="@+id/tv_period_bottom_sheet_btn_cancel"
@@ -70,7 +63,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_period_bottom_sheet_btn_save"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mp_period" />
+            app:layout_constraintTop_toBottomOf="@id/sp_period" />
 
         <TextView
             android:id="@+id/tv_period_bottom_sheet_btn_save"

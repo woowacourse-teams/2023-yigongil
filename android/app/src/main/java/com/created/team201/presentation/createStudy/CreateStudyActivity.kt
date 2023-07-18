@@ -75,11 +75,7 @@ class CreateStudyActivity :
             }
 
             getString(R.string.createStudy_tag_cycle) -> {
-                if (viewModel.period.value == null) {
-                    null
-                } else {
-                    CycleBottomSheetFragment()
-                }
+                CycleBottomSheetFragment()
             }
 
             else -> {

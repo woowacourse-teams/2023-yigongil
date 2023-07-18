@@ -110,24 +110,11 @@
                 app:iconResource="@drawable/ic_start_date"
                 app:information="@{viewModel.startDate.toString().empty ? null : viewModel.startDate.toString()}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/itb_create_study_period"
+                app:layout_constraintEnd_toStartOf="@id/itb_create_study_cycle"
                 app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintStart_toEndOf="@id/itb_create_study_people_count"
                 app:layout_constraintTop_toBottomOf="@id/view_create_study_name_between_button"
                 app:layout_constraintVertical_chainStyle="spread" />
-
-            <com.created.team201.presentation.createStudy.custom.IconTextButton
-                android:id="@+id/itb_create_study_period"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> activity.onIconTextButtonClick(@string/createStudy_tag_period)}"
-                app:buttonName="@string/icon_text_button_name_period"
-                app:iconResource="@drawable/ic_period"
-                app:information="@{viewModel.period == null ? null : @string/multiPicker_formatter_information(viewModel.period.date, displayNames[viewModel.period.type])}"
-                app:layout_constraintBottom_toBottomOf="@id/itb_create_study_start_date"
-                app:layout_constraintEnd_toStartOf="@id/itb_create_study_cycle"
-                app:layout_constraintStart_toEndOf="@id/itb_create_study_start_date"
-                app:layout_constraintTop_toTopOf="@id/itb_create_study_start_date" />
 
             <com.created.team201.presentation.createStudy.custom.IconTextButton
                 android:id="@+id/itb_create_study_cycle"
@@ -138,8 +125,21 @@
                 app:iconResource="@drawable/ic_cycle"
                 app:information="@{viewModel.cycle == null ? null : @string/multiPicker_formatter_information(viewModel.cycle.date, displayNames[viewModel.cycle.type])}"
                 app:layout_constraintBottom_toBottomOf="@id/itb_create_study_start_date"
+                app:layout_constraintEnd_toStartOf="@id/itb_create_study_period"
+                app:layout_constraintStart_toEndOf="@id/itb_create_study_start_date"
+                app:layout_constraintTop_toTopOf="@id/itb_create_study_start_date" />
+
+            <com.created.team201.presentation.createStudy.custom.IconTextButton
+                android:id="@+id/itb_create_study_period"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> activity.onIconTextButtonClick(@string/createStudy_tag_period)}"
+                app:buttonName="@string/icon_text_button_name_period"
+                app:iconResource="@drawable/ic_period"
+                app:information="@{viewModel.period == null ? null : @string/icon_text_button_formatter_information_period(viewModel.period)}"
+                app:layout_constraintBottom_toBottomOf="@id/itb_create_study_start_date"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/itb_create_study_period"
+                app:layout_constraintStart_toEndOf="@id/itb_create_study_cycle"
                 app:layout_constraintTop_toTopOf="@id/itb_create_study_start_date" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

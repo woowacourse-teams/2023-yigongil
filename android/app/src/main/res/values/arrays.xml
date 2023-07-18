@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer-array name="multiPickerMaxNumbers">
-        <item>56</item>
-        <item>8</item>
+        <item>14</item>
+        <item>2</item>
     </integer-array>
 
     <string-array name="multiPickerDisplayNames">

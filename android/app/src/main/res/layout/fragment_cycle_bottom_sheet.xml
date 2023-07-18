@@ -47,7 +47,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_create_study_cycle"
-            app:leftMaxValue="56"
+            app:leftMaxValue="14"
             app:leftMinValue="1"
             app:rightDisplayNames="@array/multiPickerDisplayNames"
             app:rightMaxValue="1"

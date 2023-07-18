@@ -14,11 +14,14 @@ class CycleBottomSheetFragment :
     BindingBottomSheetFragment<FragmentCycleBottomSheetBinding>(R.layout.fragment_cycle_bottom_sheet) {
     private val viewModel: CreateStudyViewModel by activityViewModels()
 
+    private val numbers: IntArray by lazy {
+        resources.getIntArray(R.array.multiPickerMaxNumbers)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initBinding()
-        initMultiPicker()
         setChangeListener()
     }
 
@@ -28,20 +31,13 @@ class CycleBottomSheetFragment :
         binding.lifecycleOwner = viewLifecycleOwner
     }
 
-    private fun initMultiPicker() {
-        binding.mpCycle.setLeftMaxValue(viewModel.getCycleDateMaxValue(binding.mpCycle.rightValue))
-        binding.mpCycle.setRightMaxValue(viewModel.getCycleTypeMaxValue())
-    }
-
     private fun setChangeListener() {
         binding.changeListener = object : MultiPickerChangeListener {
             override fun onLeftChange(value: Int) {
             }
 
             override fun onRightChange(value: Int) {
-                viewModel.cycleMaxDates.value?.let {
-                    binding.mpCycle.setLeftMaxValue(it[binding.mpCycle.rightValue])
-                }
+                binding.mpCycle.setLeftMaxValue(numbers[value])
             }
         }
     }
