@@ -10,6 +10,7 @@
 
     <!--홈 탭-->
     <string name="home_essential_todo">필수투두</string>
+    <string name="home_optional_todo">선택투두</string>
     <string name="home_progress_rate">스터디원 필수투두 진행률 %d%%</string>
     <string name="home_date">다음 스터디까지 D - %d(%s)</string>
     <string name="home_welcome_phrase">%s님\n오늘 잔디는 심으셨나요?</string>

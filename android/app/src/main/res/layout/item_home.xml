@@ -137,7 +137,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="선택투두"
+            android:text="@string/home_optional_todo"
             android:textAppearance="@style/description_r10"
             android:textColor="@color/grey02_78808B"
             app:layout_constraintStart_toStartOf="parent"
