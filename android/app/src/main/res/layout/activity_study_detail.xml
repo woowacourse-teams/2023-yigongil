@@ -188,7 +188,8 @@
             app:layout_constraintEnd_toStartOf="@id/btn_study_detail_participate"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:contentDescription="@string/study_detail_dm_button_content_description" />
 
         <TextView
             android:id="@+id/btn_study_detail_participate"
