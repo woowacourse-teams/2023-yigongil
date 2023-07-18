@@ -24,9 +24,14 @@ class PeriodBottomSheetFragment : BindingBottomSheetFragment<FragmentPeriodBotto
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initBinding()
+        setChangeListener()
+    }
+
+    private fun initBinding() {
         binding.viewModel = viewModel
         binding.bottomSheetFragment = this
-        setChangeListener()
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 
     private fun setChangeListener() {

@@ -17,7 +17,12 @@ class StartDateBottomSheetFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initBinding()
+    }
+
+    private fun initBinding() {
         binding.bottomSheetFragment = this
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 
     fun onSaveButtonClick() {

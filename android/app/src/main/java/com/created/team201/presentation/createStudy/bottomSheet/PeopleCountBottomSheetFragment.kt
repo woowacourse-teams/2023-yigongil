@@ -17,8 +17,13 @@ class PeopleCountBottomSheetFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initBinding()
+    }
+
+    private fun initBinding() {
         binding.viewModel = viewModel
         binding.bottomSheetFragment = this
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 
     fun onSaveButtonClick() {

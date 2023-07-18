@@ -17,10 +17,15 @@ class CycleBottomSheetFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.viewModel = viewModel
-        binding.bottomSheetFragment = this
+        initBinding()
         initMultiPicker()
         setChangeListener()
+    }
+
+    private fun initBinding() {
+        binding.viewModel = viewModel
+        binding.bottomSheetFragment = this
+        binding.lifecycleOwner = viewLifecycleOwner
     }
 
     private fun initMultiPicker() {
