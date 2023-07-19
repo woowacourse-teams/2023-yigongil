@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="12dp"
-            android:text="@{@string/study_list_information_format(startDateStringFormat[studyStatus.valueOf(studySummary.processingStatus)].formatIndex, studySummary.date, studySummary.totalRound, studySummary.period.number, periodStringFormat[studySummary.period.unit.index])}"
+            android:text="@{@string/study_list_information_format(startDateStringFormat[studyStatus.Companion.valueOf(studySummary.processingStatus).formatIndex], studySummary.date, studySummary.totalRound, studySummary.period.number, periodStringFormat[studySummary.period.unit.index])}"
             android:textAppearance="@style/description_r10"
             android:textColor="@color/grey02_78808B"
             app:layout_constraintBottom_toBottomOf="parent"
