@@ -20,7 +20,7 @@ class StudyListViewHolder(
 
     init {
         itemView.setOnClickListener {
-            studyListClickListener.onClickStudySummary(studySummary)
+            studyListClickListener.onClickStudySummary(itemId)
         }
     }
 

@@ -101,7 +101,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     }
 
     private fun studyListClickListener() = object : StudyListClickListener {
-        override fun onClickStudySummary(studySummary: StudySummaryUiModel) {
+        override fun onClickStudySummary(id: Long) {
             // 스터디 상세보기 뷰로 이동
         }
     }
