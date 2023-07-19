@@ -1,5 +1,7 @@
 package com.created.team201.presentation.studyDetail
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -53,5 +55,13 @@ class StudyDetailActivity :
             finish()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+        private const val KEY_STUDY_ID = "KEY_STUDY_ID"
+        fun getIntent(context: Context, studyId: Long): Intent =
+            Intent(context, StudyDetailActivity::class.java).apply {
+                putExtra(KEY_STUDY_ID, studyId)
+            }
     }
 }
