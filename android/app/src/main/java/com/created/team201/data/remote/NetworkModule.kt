@@ -7,6 +7,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 
+@OptIn(ExperimentalSerializationApi::class)
 object NetworkModule {
     private const val CONTENT_TYPE = "application/json"
 
@@ -15,4 +16,6 @@ object NetworkModule {
         .baseUrl(TEAM201_BASE_URL)
         .addConverterFactory(Json.asConverterFactory(CONTENT_TYPE.toMediaType()))
         .build()
+
+    inline fun <reified T> create(): T = retrofit.create<T>(T::class.java)
 }
