@@ -1,11 +1,12 @@
 package com.yigongil.backend.domain.member;
 
-import java.util.Optional;
 import org.springframework.data.repository.Repository;
+
+import java.util.Optional;
 
 public interface MemberRepository extends Repository<Member, Long> {
 
-    Optional<Member> findById(Long id);
-
     Member save(Member member);
+
+    Optional<Member> findById(Long id);
 }

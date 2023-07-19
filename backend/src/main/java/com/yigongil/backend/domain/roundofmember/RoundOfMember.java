@@ -50,7 +50,7 @@ public class RoundOfMember extends BaseEntity {
         this.isDone = isDone;
         this.optionalTodos = optionalTodos;
     }
-
+    
     public OptionalTodo createOptionalTodo(String content) {
         if (optionalTodos.size() >= MAXIMUM_TODO_SIZE) {
             throw new TooManyOptionalTodosException("선택 투두는 한 번에 4개까지 설정 가능합니다.", content);
@@ -61,7 +61,7 @@ public class RoundOfMember extends BaseEntity {
         optionalTodos.add(optionalTodo);
         return optionalTodo;
     }
-
+    
     public Long getId() {
         return id;
     }
