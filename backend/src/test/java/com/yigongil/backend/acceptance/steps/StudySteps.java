@@ -1,5 +1,11 @@
 package com.yigongil.backend.acceptance.steps;
 
+import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
+import static java.lang.Long.valueOf;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.domain.study.ProcessingStatus;
@@ -14,19 +20,12 @@ import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
-
-import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
-import static java.lang.Long.valueOf;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 public class StudySteps {
 
@@ -123,7 +122,7 @@ public class StudySteps {
                 .header(HttpHeaders.AUTHORIZATION, token)
                 .when()
                 .get("/v1/studies/" + studyId + "/rounds/" + roundId)
-                .then().extract();
+                .then().log().all().extract();
 
         RoundResponse round = response.as(RoundResponse.class);
 

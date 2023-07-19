@@ -1,9 +1,9 @@
 package com.yigongil.backend.domain.roundofmember;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
-
-import java.util.List;
+import org.springframework.data.repository.query.Param;
 
 public interface RoundOfMemberRepository extends Repository<RoundOfMember, Long> {
 
@@ -12,5 +12,5 @@ public interface RoundOfMemberRepository extends Repository<RoundOfMember, Long>
                     join fetch rm.member
                     where rm in :roundOfMembers
             """)
-    List<RoundOfMember> findRoundOfMembersWithMember(List<RoundOfMember> roundOfMembers);
+    List<RoundOfMember> findRoundOfMembersWithMember(@Param("roundOfMembers") List<RoundOfMember> roundOfMembers);
 }
