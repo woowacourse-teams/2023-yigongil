@@ -8,7 +8,4 @@ import com.created.team201.presentation.common.BindingFragment
 
 class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
 }

@@ -62,7 +62,7 @@ dependencies {
 
     // Kotlinx Serialization
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0'
-    implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0'
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0'
 
     // Okhttp3
     implementation 'com.squareup.okhttp3:okhttp:4.11.0'
@@ -79,4 +79,13 @@ dependencies {
     // ViewPager2
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
 
+    // Swipe Refresh Layout
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    // Material Calendar
+    implementation 'com.github.prolificinteractive:material-calendarview:2.0.0'
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
+
+    // coroutine
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 }

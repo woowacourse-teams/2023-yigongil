@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="studyParticipant"
+            type="com.created.team201.presentation.studyList.uiModel.StudyParticipant" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="6dp"
+        android:background="@drawable/bg_rectangle_radius_5dp">
+
+        <com.created.team201.presentation.studyDetail.CustomProfileImage
+            android:id="@+id/fl_item_study_detail_profile_image"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="16dp"
+            app:borderProgress="@{studyParticipant.successRate}"
+            app:glideCircleImageUrl="@{studyParticipant.profileImageUrl}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tier="@{studyParticipant.tier}" />
+
+        <ImageView
+            android:id="@+id/iv_item_study_detail_master_crown"
+            isVisible="@{studyParticipant.master}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="6dp"
+            android:src="@drawable/ic_crown"
+            app:layout_constraintStart_toEndOf="@id/fl_item_study_detail_profile_image"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_item_study_detail_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@{studyParticipant.name}"
+            android:textAppearance="@style/name_sb12"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@id/fl_item_study_detail_profile_image"
+            app:layout_constraintTop_toBottomOf="@id/iv_item_study_detail_master_crown"
+            tools:text="우아한반달" />
+
+        <TextView
+            android:id="@+id/tv_item_study_detail_study_success_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/item_study_detail_study_success_rate(studyParticipant.successRate)}"
+            android:textAppearance="@style/description_r8"
+            android:textColor="@color/grey02_78808B"
+            app:layout_constraintStart_toStartOf="@id/tv_item_study_detail_user_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_study_detail_user_name"
+            tools:text="스터디 성공률 78%" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

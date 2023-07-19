@@ -18,8 +18,66 @@
     <!--BASE ERROR-->
     <string name="error_baseFragment">"[ERROR]Binding no initialization"</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--스터디 목록 탭-->
+    <string name="study_list_create">스터디 만들기</string>
+    <string name="study_list_search_button_menu">검색</string>
+    <string name="study_list_title">스터디 목록</string>
+    <string name="study_list_information_format">%s · 총 %d회차 · %s(주기)</string>
+    <string name="study_list_member_format">%d/%d</string>
+    <string name="study_list_previous_date">예상시작일</string>
+    <string name="study_list_processing_date">시작일</string>
+    <string name="study_list_item_date_format">일</string>
+    <string name="study_list_item_week_format">주</string>
 
+    <!--스터디 관리 탭-->
+    <string name="study_manage_title">스터디 관리</string>
+    <string name="study_manage_joined_tab">참여한 스터디</string>
+    <string name="study_manage_opened_tab">개설한 스터디</string>
+
+    <!-- 아이콘 텍스트 버튼 커스텀 뷰 -->
+    <string name="icon_text_button_name_people_count">인원 수</string>
+    <string name="icon_text_button_name_start_date">예상시작일</string>
+    <string name="icon_text_button_name_period">스터디기간</string>
+    <string name="icon_text_button_name_cycle">스터디주기</string>
+    <string name="icon_text_button_formatter_information_people_count">%d명</string>
+    <string name="icon_text_button_formatter_information_period">%d회차</string>
+
+    <!--스터디 상세보기 뷰-->
+    <string name="study_detail_app_bar_title">스터디 상세보기</string>
+    <string name="study_detail_study_people">스터디원</string>
+    <string name="study_detail_study_capacity">참여하기(%d/%d)</string>
+    <string name="study_detail_dm_button_content_description">스터디장에게 문의하기</string>
+    <string name="study_detail_study_waiting">스터디장의 수락을 기다리고있어요.</string>
+    <string name="item_study_detail_study_success_rate">스터디 성공률 %d%%</string>
+
+    <!--커스텀 프로필 이미지 뷰-->
+    <string name="custom_profile_image_content_description">프로필 이미지</string>
+
+    <!--스터디 개설 뷰-->
+    <string name="createStudy_toolbar_title">스터디 만들기</string>
+    <string name="createStudy_study_hint_name">제목을 입력해주세요.</string>
+    <string name="createStudy_study_hint_introduction">스터디를 소개해주세요.</string>
+    <string name="createStudy_button_created">작성완료</string>
+
+    <string name="createStudy_tag_people_count">TAG_CREATE_STUDY_PEOPLE_COUNT</string>
+    <string name="createStudy_tag_start_date">TAG_CREATE_STUDY_START_DATE</string>
+    <string name="createStudy_tag_period">TAG_CREATE_STUDY_PERIOD</string>
+    <string name="createStudy_tag_cycle">TAG_CREATE_STUDY_CYCLE</string>
+
+    <!-- 스터디 개설 - 바텀 다이얼로그 뷰 -->
+    <string name="bottomSheetFragment_button_name_cancel">취소</string>
+    <string name="bottomSheetFragment_button_name_save">저장</string>
+
+    <!-- 싱글 피커 커스텀 뷰 -->
+    <string name="single_picker_text_people_count">명</string>
+    <string name="single_picker_text_period">회차</string>
+
+    <!-- 캘린더 선택 커스텀 뷰-->
+    <string name="calendar_formatter_information_date">yyyy.MM.dd</string>
+
+    <!-- 멀티 피커 커스텀 뷰 -->
+    <string name="multiPicker_display_name_day">일</string>
+    <string name="multiPicker_display_name_week">주</string>
+    <string name="multiPicker_formatter_information">%d %s</string>
 
 </resources>
