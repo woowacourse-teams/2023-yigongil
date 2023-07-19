@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.R
 import com.created.team201.databinding.FragmentStudyListBinding
 import com.created.team201.presentation.common.BindingFragment
+import com.created.team201.presentation.createStudy.CreateStudyActivity
+import com.created.team201.presentation.studyDetail.StudyDetailActivity
 import com.created.team201.presentation.studyList.adapter.StudyListAdapter
 
 class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fragment_study_list) {
@@ -28,6 +30,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         setUpStudyListSettings()
         setUpStudyListObserve()
         setUpRefreshListener()
+        setUpCreateStudyListener()
         setUpScrollListener()
     }
 
@@ -71,6 +74,12 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         }
     }
 
+    private fun setUpCreateStudyListener() {
+        binding.fabStudyListCreateButton.setOnClickListener {
+            startActivity(CreateStudyActivity.getIntent(requireContext()))
+        }
+    }
+
     private fun setUpScrollListener() {
         val onScrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -101,7 +110,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
     private fun studyListClickListener() = object : StudyListClickListener {
         override fun onClickStudySummary(id: Long) {
-            // 스터디 상세보기 뷰로 이동
+            startActivity(StudyDetailActivity.getIntent(requireContext(), id))
         }
     }
 }
