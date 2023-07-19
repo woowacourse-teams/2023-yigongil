@@ -104,7 +104,7 @@ public class StudySteps {
                 .extract().as(StudyDetailResponse.class);
 
         assertAll(
-                () -> response.name().equals("자바"),
+                () -> assertThat(response.name()).isEqualTo("자바"),
                 () -> assertThat(response.numberOfMaximumMembers()).isEqualTo(5)
         );
     }

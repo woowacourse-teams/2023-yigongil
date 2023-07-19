@@ -39,7 +39,6 @@ public class StudyService {
         this.studyRepository = studyRepository;
         this.applicantRepository = applicantRepository;
         this.memberRepository = memberRepository;
-
     }
 
     @Transactional

@@ -47,7 +47,8 @@ public class Member extends BaseEntity {
             String profileImageUrl,
             Integer tier,
             String introduction,
-            final Integer participatedStudyCount, final Integer finishedStudyCount) {
+            Integer participatedStudyCount,
+            Integer finishedStudyCount) {
         this.id = id;
         this.githubId = githubId;
         this.nickname = new Nickname(nickname);
