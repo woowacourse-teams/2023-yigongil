@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <integer-array name="multiPickerMaxNumbers">
+        <item>14</item>
+        <item>2</item>
+    </integer-array>
+
+    <string-array name="multiPickerDisplayNames">
+        <item>@string/multiPicker_display_name_day</item>
+        <item>@string/multiPicker_display_name_week</item>
+    </string-array>
 
     <!-- 스터디 목록 탭 -->
     <string-array name="startDateStrings">
