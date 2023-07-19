@@ -79,4 +79,7 @@ dependencies {
     // ViewPager2
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
 
+    // Swipe Refresh Layout
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
 }

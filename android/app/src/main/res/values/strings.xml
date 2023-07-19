@@ -21,5 +21,15 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!--스터디 목록 탭-->
+    <string name="study_list_create">스터디 만들기</string>
+    <string name="study_list_search_button_menu">검색</string>
+    <string name="study_list_title">스터디 목록</string>
+    <string name="study_list_information_format">%s %s · 총 %d회차 · %d %s(주기)</string>
+    <string name="study_list_member_format">%d/%d</string>
+    <string name="study_list_previous_date">예상시작일</string>
+    <string name="study_list_processing_date">시작일</string>
+    <string name="study_list_item_date_format">일</string>
+    <string name="study_list_item_week_format">주</string>
 
 </resources>
