@@ -1,7 +1,7 @@
 package com.created.domain.model
 
 data class Study(
-    val studyId: Long,
+    val studyId: Int,
     val studyName: String,
     val progressRate: Int,
     val leftDays: Int,

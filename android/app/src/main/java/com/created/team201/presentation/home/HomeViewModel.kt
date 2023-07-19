@@ -3,13 +3,17 @@ package com.created.team201.presentation.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.created.domain.model.Study
 import com.created.domain.model.Todo
 import com.created.domain.model.UserInfo
+import com.created.domain.repository.HomeRepository
 import com.created.team201.presentation.home.model.StudyUiModel
 import com.created.team201.presentation.home.model.TodoUiModel
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(
+    private val homeRepository: HomeRepository,
+) : ViewModel() {
     private val _userName: MutableLiveData<String> = MutableLiveData()
     val userName: LiveData<String> get() = _userName
 
@@ -17,11 +21,17 @@ class HomeViewModel : ViewModel() {
     val userStudies: LiveData<List<StudyUiModel>> get() = _userStudies
 
     fun getUserStudyInfo() {
-        // network
-        // if(status == 200)
+        viewModelScope {
+            runCatching {
+                homeRepository.getUserStudies()
+            }.onSuccess {
+                _userName.value = it.userName
+                _userStudies.value = it.studies.map { it.toUiModel() }
 
-        _userName.value = DUMMY.userName
-        _userStudies.value = DUMMY.studies.map { it.toUiModel() }
+//                _userName.value = DUMMY.userName
+//                _userStudies.value = DUMMY.studies.map { it.toUiModel() }
+            }.onFailure { }
+        }
     }
 
     fun patchTodo(id: Int, isDone: Boolean) {
@@ -58,7 +68,7 @@ class HomeViewModel : ViewModel() {
 
     private fun Study.toUiModel(): StudyUiModel =
         StudyUiModel(
-            studyId = this.studyId,
+            studyId = this.studyId.toLong(),
             studyName = this.studyName,
             progressRate = this.progressRate,
             leftDays = this.leftDays,
@@ -76,6 +86,7 @@ class HomeViewModel : ViewModel() {
     companion object {
         private val DUMMY = UserInfo(
             "산군",
+            2,
             listOf(
                 Study(
                     1,
