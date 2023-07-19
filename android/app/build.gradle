@@ -82,4 +82,7 @@ dependencies {
     // Material Calendar
     implementation 'com.github.prolificinteractive:material-calendarview:2.0.0'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.0'
+
+    // Swipe Refresh Layout
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 }
