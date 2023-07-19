@@ -49,10 +49,12 @@ class MultiPicker @JvmOverloads constructor(
     }
 
     fun setLeftValue(leftValue: Int) {
+        if (leftValue == 0) return
         binding.npMultiPickerLeft.value = leftValue
     }
 
     fun setRightValue(rightValue: Int) {
+        if (rightValue == 0) return
         binding.npMultiPickerRight.value = rightValue
     }
 
