@@ -26,6 +26,16 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         cache: gradle
+
+    - name: local properties 생성
+      run: touch local.properties
+      working-directory: ${{ env.working-directory }}
+      
+    - name: local properties 세팅
+      env:
+        BASE_URL: ${{ secrets.BASE_URL }}
+      run: echo "BASE_URL=\"$BASE_URL\"" >> local.properties
+      working-directory: ${{ env.working-directory }}
         
     - name: gradle 캐싱
       uses: actions/cache@v2
