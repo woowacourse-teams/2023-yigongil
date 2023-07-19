@@ -51,13 +51,14 @@ public class Round extends BaseEntity {
             Long id,
             Integer roundNumber,
             String necessaryToDoContent,
-            Member master
+            Member master,
+            List<RoundOfMember> roundOfMembers
     ) {
         this.id = id;
         this.roundNumber = roundNumber;
         this.necessaryToDoContent = necessaryToDoContent;
         this.master = master;
-
+        this.roundOfMembers = roundOfMembers;
     }
 
     public static List<Round> of(Integer totalRoundCount, Member master) {
@@ -79,6 +80,25 @@ public class Round extends BaseEntity {
         return rounds;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public Integer getRoundNumber() {
+        return roundNumber;
+    }
+
+    public String getNecessaryToDoContent() {
+        return necessaryToDoContent;
+    }
+
+    public Member getMaster() {
+        return master;
+    }
+
+    public List<RoundOfMember> getRoundOfMembers() {
+        return roundOfMembers;
+
     public int calculateAverageTier() {
         double averageTier = roundOfMembers.stream()
                                            .map(RoundOfMember::getMember)
@@ -91,5 +111,6 @@ public class Round extends BaseEntity {
 
     public int sizeOfCurrentMembers() {
         return roundOfMembers.size();
+
     }
 }

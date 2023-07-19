@@ -80,8 +80,9 @@ public class Study extends BaseEntity {
             LocalDateTime endAt,
             Integer totalRoundCount,
             Integer periodOfRound,
+            Round currentRound,
+            List<Round> rounds
             PeriodUnit periodUnit,
-            Round currentRound
     ) {
         this.id = id;
         this.name = name;
@@ -94,6 +95,7 @@ public class Study extends BaseEntity {
         this.periodOfRound = periodOfRound;
         this.periodUnit = periodUnit;
         this.currentRound = currentRound;
+        this.rounds = rounds;
     }
 
     public static Study initializeStudyOf(
@@ -122,6 +124,10 @@ public class Study extends BaseEntity {
 
     public Integer calculateAverageTier() {
         return currentRound.calculateAverageTier();
+    }
+
+    public boolean isRecruiting() {
+        return this.processingStatus == ProcessingStatus.RECRUITING;
     }
 
     public Long getId() {
