@@ -11,12 +11,16 @@
             type="com.created.team201.presentation.createStudy.CreateStudyViewModel" />
 
         <variable
-            name="activity"
-            type="com.created.team201.presentation.createStudy.CreateStudyActivity" />
-
-        <variable
             name="displayNames"
             type="List&lt;String>" />
+
+        <variable
+            name="onIconTextButtonClickListener"
+            type="kotlin.jvm.functions.Function1" />
+
+        <variable
+            name="onCreateButtonClickListener"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -91,7 +95,7 @@
                 android:id="@+id/itb_create_study_people_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{() -> activity.onIconTextButtonClick(@string/createStudy_tag_people_count)}"
+                android:onClick="@{() -> onIconTextButtonClickListener.invoke(@string/createStudy_tag_people_count)}"
                 app:buttonName="@string/icon_text_button_name_people_count"
                 app:iconResource="@drawable/ic_people_capacity"
                 app:information="@{viewModel.peopleCount.intValue() == 0 ? null : @string/icon_text_button_formatter_information_people_count(viewModel.peopleCount.intValue())}"
@@ -105,7 +109,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:onClick="@{() -> activity.onIconTextButtonClick(@string/createStudy_tag_start_date)}"
+                android:onClick="@{() -> onIconTextButtonClickListener.invoke(@string/createStudy_tag_start_date)}"
                 app:buttonName="@string/icon_text_button_name_start_date"
                 app:iconResource="@drawable/ic_start_date"
                 app:information="@{viewModel.startDate.toString().empty ? null : viewModel.startDate.toString()}"
@@ -120,7 +124,7 @@
                 android:id="@+id/itb_create_study_cycle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{() -> activity.onIconTextButtonClick(@string/createStudy_tag_cycle)}"
+                android:onClick="@{() -> onIconTextButtonClickListener.invoke(@string/createStudy_tag_cycle)}"
                 app:buttonName="@string/icon_text_button_name_cycle"
                 app:iconResource="@drawable/ic_cycle"
                 app:information="@{viewModel.cycle == null ? null : @string/multiPicker_formatter_information(viewModel.cycle.date, displayNames[viewModel.cycle.type])}"
@@ -133,7 +137,7 @@
                 android:id="@+id/itb_create_study_period"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{() -> activity.onIconTextButtonClick(@string/createStudy_tag_period)}"
+                android:onClick="@{() -> onIconTextButtonClickListener.invoke(@string/createStudy_tag_period)}"
                 app:buttonName="@string/icon_text_button_name_period"
                 app:iconResource="@drawable/ic_period"
                 app:information="@{viewModel.period == null ? null : @string/icon_text_button_formatter_information_period(viewModel.period)}"
@@ -183,7 +187,7 @@
             android:layout_marginBottom="28dp"
             android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
             android:enabled="@{viewModel.isEnableCreateStudy}"
-            android:onClick="@{() -> activity.onCreateButtonClick()}"
+            android:onClick="@{() -> onCreateButtonClickListener.invoke()}"
             android:paddingVertical="14dp"
             android:text="@string/createStudy_button_created"
             android:textAlignment="center"

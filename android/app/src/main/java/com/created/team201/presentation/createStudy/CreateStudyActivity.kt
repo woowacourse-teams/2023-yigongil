@@ -25,15 +25,16 @@ class CreateStudyActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.activity = this
-        initViewModel()
+        initBinding()
         initActionBar()
     }
 
-    private fun initViewModel() {
+    private fun initBinding() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
         binding.displayNames = dates
+        binding.onIconTextButtonClickListener = ::onIconTextButtonClick
+        binding.onCreateButtonClickListener = ::onCreateButtonClick
     }
 
     private fun initActionBar() {
@@ -42,12 +43,12 @@ class CreateStudyActivity :
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
     }
 
-    fun onCreateButtonClick() {
+    private fun onCreateButtonClick() {
         viewModel.getCreateStudy()
         finish()
     }
 
-    fun onIconTextButtonClick(tag: String) {
+    private fun onIconTextButtonClick(tag: String) {
         removeAllFragment()
         createBottomSheetFragment(tag)?.show(supportFragmentManager, tag)
     }
