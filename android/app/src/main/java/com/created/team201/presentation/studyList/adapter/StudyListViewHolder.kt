@@ -19,13 +19,15 @@ class StudyListViewHolder(
     private lateinit var studySummary: StudySummaryUiModel
 
     init {
-        itemView.setOnClickListener {
-            studyListClickListener.onClickStudySummary(studySummary)
-        }
+        binding.studyListClickListener = studyListClickListener
     }
 
     fun bind(item: StudySummaryUiModel) {
         studySummary = item
         binding.studySummary = studySummary
+        binding.periodStringFormat =
+            parent.context.resources.getStringArray(R.array.periodUnitStrings).toList()
+        binding.startDateStringFormat =
+            parent.context.resources.getStringArray(R.array.startDateStrings).toList()
     }
 }

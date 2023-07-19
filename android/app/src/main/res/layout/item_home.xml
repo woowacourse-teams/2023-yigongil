@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="onClick"
+            type="com.created.team201.presentation.home.HomeClickListener" />
+
+        <variable
+            name="studyUiModel"
+            type="com.created.team201.presentation.home.model.StudyUiModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_rectangle_radius_10dp"
+        android:onClick="@{() -> onClick.clickOnStudyCard()}">
+
+        <TextView
+            android:id="@+id/tv_home_study_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="68dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="68dp"
+            android:text="@{studyUiModel.studyName}"
+            android:textAppearance="@style/study_title_b22"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="자두타 스터디" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_home_grass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="84dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="84dp"
+            android:orientation="horizontal"
+            android:rotation="270"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_home_study_title"
+            app:spanCount="3"
+            tools:itemCount="9"
+            tools:listitem="@layout/item_home_grass" />
+
+        <TextView
+            android:id="@+id/tv_home_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@{@string/home_progress_rate(studyUiModel.progressRate)}"
+            android:textAppearance="@style/description_r10"
+            android:textColor="@color/grey02_78808B"
+            app:layout_constraintEnd_toEndOf="@id/rv_home_grass"
+            app:layout_constraintStart_toStartOf="@id/rv_home_grass"
+            app:layout_constraintTop_toBottomOf="@id/rv_home_grass"
+            tools:text="스터디원 필수투두 진행률 80%" />
+
+        <TextView
+            android:id="@+id/tv_home_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@{@string/home_date(studyUiModel.leftDays, studyUiModel.nextDate)}"
+            android:textAppearance="@style/text_sb14"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/tv_home_progress"
+            app:layout_constraintStart_toStartOf="@id/tv_home_progress"
+            app:layout_constraintTop_toBottomOf="@id/tv_home_progress"
+            tools:text="다음 스터디까지 D - 33(2023.07.02)" />
+
+        <TextView
+            android:id="@+id/tv_home_essential"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:text="@string/home_essential_todo"
+            android:textAppearance="@style/description_r10"
+            android:textColor="@color/grey02_78808B"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_home_date" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_home_essential"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_home_essential">
+
+            <TextView
+                android:id="@+id/tv_home_essential_todo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@{studyUiModel.necessaryTodo.content}"
+                android:textAppearance="@style/text_sb10"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="2장 읽어오기" />
+
+            <ImageView
+                android:id="@+id/iv_home_essential_check_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:onClick="@{() -> onClick.clickOnTodo(studyUiModel.necessaryTodo.todoId,studyUiModel.necessaryTodo.isDone)}"
+                android:src="@drawable/ic_selector_home_check_btn"
+                app:isSelected="@{studyUiModel.necessaryTodo.done}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_home_optional"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/home_optional_todo"
+            android:textAppearance="@style/description_r10"
+            android:textColor="@color/grey02_78808B"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_home_essential" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_home_optional_todo_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            android:orientation="vertical"
+            android:paddingVertical="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_home_optional"
+            tools:itemCount="4"
+            tools:listitem="@layout/item_home_optional_todo" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

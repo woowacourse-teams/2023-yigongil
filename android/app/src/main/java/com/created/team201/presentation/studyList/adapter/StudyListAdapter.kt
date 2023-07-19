@@ -14,12 +14,15 @@ class StudyListAdapter(
         setHasStableIds(true)
     }
 
+    override fun getItemId(position: Int): Long =
+        getItem(position).id
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyListViewHolder {
         return StudyListViewHolder(parent, studyListClickListener)
     }
 
     override fun onBindViewHolder(holder: StudyListViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(currentList[position])
     }
 
     companion object {

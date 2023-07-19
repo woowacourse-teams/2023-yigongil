@@ -1,6 +1,6 @@
 package com.created.team201.data.remote
 
-import com.created.team201.BuildConfig
+import com.created.team201.BuildConfig.TEAM201_BASE_URL
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -12,7 +12,7 @@ object NetworkModule {
 
     @ExperimentalSerializationApi
     val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(BuildConfig.TEAM201_BASE_URL)
+        .baseUrl(TEAM201_BASE_URL)
         .addConverterFactory(Json.asConverterFactory(CONTENT_TYPE.toMediaType()))
         .build()
 }
