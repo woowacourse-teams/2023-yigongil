@@ -2,12 +2,14 @@ package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.round.Round;
+import com.yigongil.backend.exception.InvalidPeriodUnitException;
+import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.utils.DateConverter;
-import lombok.Builder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,9 +21,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Builder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 public class Study extends BaseEntity {
@@ -81,8 +83,8 @@ public class Study extends BaseEntity {
             Integer totalRoundCount,
             Integer periodOfRound,
             Round currentRound,
-            List<Round> rounds
-            PeriodUnit periodUnit,
+            List<Round> rounds,
+            PeriodUnit periodUnit
     ) {
         this.id = id;
         this.name = name;
@@ -128,6 +130,24 @@ public class Study extends BaseEntity {
 
     public boolean isRecruiting() {
         return this.processingStatus == ProcessingStatus.RECRUITING;
+    }
+
+    public Long createNecessaryTodo(Member author, Long roundId, String content) {
+        Round targetRound = findRoundById(roundId);
+        targetRound.createNecessaryTodo(author, content);
+        return targetRound.getId();
+    }
+
+    public OptionalTodo createOptionalTodo(Member author, Long roundId, String content) {
+        Round targetRound = findRoundById(roundId);
+        return targetRound.createOptionalTodo(author, content);
+    }
+
+    private Round findRoundById(Long roundId) {
+        return rounds.stream()
+                .filter(round -> round.getId().equals(roundId))
+                .findAny()
+                .orElseThrow(() -> new RoundNotFoundException("스터디에 해당 회차가 존재하지 않습니다.", roundId));
     }
 
     public Long getId() {

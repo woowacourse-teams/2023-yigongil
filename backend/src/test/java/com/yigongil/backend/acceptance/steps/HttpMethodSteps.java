@@ -3,6 +3,7 @@ package com.yigongil.backend.acceptance.steps;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
+import org.springframework.http.HttpHeaders;
 
 public class HttpMethodSteps {
 
@@ -26,9 +27,14 @@ public class HttpMethodSteps {
     public void post_요청(String url) {
         RequestSpecification requestSpecification = sharedContext.getRequestSpecification();
 
-        RestAssured.given()
+        final String location = RestAssured.given()
                 .spec(requestSpecification)
-                .when()
-                .post(url);
+                .when().log().all()
+                .post(url)
+                .then()
+                .extract()
+                .header(HttpHeaders.LOCATION);
+
+        sharedContext.setResultId(Long.parseLong(location.substring(location.lastIndexOf("/") + 1)));
     }
 }
