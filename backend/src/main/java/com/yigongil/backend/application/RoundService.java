@@ -6,6 +6,7 @@ import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.roundofmember.RoundOfMemberRepository;
+import com.yigongil.backend.exception.InvalidMemberInRoundException;
 import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.response.MemberOfRoundResponse;
 import com.yigongil.backend.response.RoundResponse;
@@ -34,8 +35,7 @@ public class RoundService {
         RoundOfMember roundByMember = roundOfMembers.stream()
                 .filter(roundOfMember -> roundOfMember.isMemberEquals(member))
                 .findAny()
-                .orElseThrow();
-        //TODO: expception 머지 된후 수정
+                .orElseThrow(() -> new InvalidMemberInRoundException("해당 스터디에 존재하지 않는 회원입니다.", member.getId()));
 
         List<OptionalTodo> optionalTodos = roundByMember.getOptionalTodos();
 
