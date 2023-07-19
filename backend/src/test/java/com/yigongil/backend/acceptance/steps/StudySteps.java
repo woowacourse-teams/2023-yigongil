@@ -27,6 +27,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import java.util.List;
+import java.util.function.Predicate;
+
+import static io.restassured.RestAssured.when;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 public class StudySteps {
 
     private final ObjectMapper objectMapper;
@@ -37,8 +44,9 @@ public class StudySteps {
         this.sharedContext = sharedContext;
     }
 
-    @Given("{string}, {string}, {string}, {string}, {string}, {string}를 입력한다.")
-    public void 스터디_정보를_입력한다(
+    @Given("{string}가 {string}, {string}, {string}, {string}, {string}, {string}로 스터디를 개설한다.")
+    public void 스터디를_개설한다(
+            String masterGithubId,
             String name,
             String numberOfMaximumMembers,
             String startAt,
@@ -54,29 +62,34 @@ public class StudySteps {
                 periodOfRound,
                 introduction
         );
+        String memberId = (String) sharedContext.getParameter(masterGithubId);
 
-        String token = sharedContext.getToken();
+        String location = RestAssured.given()
+                                     .log()
+                                     .all()
+                                     .header(HttpHeaders.AUTHORIZATION, memberId)
+                                     .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                     .body(objectMapper.writeValueAsString(request))
+                                     .when()
+                                     .post("/v1/studies")
+                                     .then()
+                                     .log()
+                                     .all()
+                                     .extract()
+                                     .header(HttpHeaders.LOCATION);
 
-        RequestSpecification requestSpecification = RestAssured.given().log().all()
-                .header(HttpHeaders.AUTHORIZATION, token)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(objectMapper.writeValueAsString(request));
+        String studyId = location.substring(location.lastIndexOf("/") + 1);
 
-        sharedContext.setRequestSpecification(requestSpecification);
+        sharedContext.setParameter(name, studyId);
     }
 
-    @Then("스터디 목록에서 해당 스터디를 확인할 수 있다.")
-    public void 스터디_목록에서_해당_스터디를_확인할_수_있다() {
-        // TODO: 2023/07/18 스터디 조회 api 작성 후 수정
-    }
-
-    @When("모집 중인 스터디 {string} 페이지를 요청한다.")
-    public void 모집_중인_스터디를_요청한다(String page) {
-        ExtractableResponse<Response> response = when().get("/v1/studies/recruiting?page=" + page)
-                .then()
-                .log()
-                .all()
-                .extract();
+    @When("모집 중인 스터디 탭을 클릭한다.")
+    public void 모집_중인_스터디를_요청한다() {
+        ExtractableResponse<Response> response = when().get("/v1/studies/recruiting?page=0")
+                                                       .then()
+                                                       .log()
+                                                       .all()
+                                                       .extract();
 
         sharedContext.setResponse(response);
     }
@@ -86,7 +99,7 @@ public class StudySteps {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
         List<RecruitingStudyResponse> recruitingStudyResponses = response.jsonPath()
-                .getList(".", RecruitingStudyResponse.class);
+                                                                         .getList(".", RecruitingStudyResponse.class);
         Predicate<RecruitingStudyResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
 
         assertAll(
@@ -95,20 +108,46 @@ public class StudySteps {
         );
     }
 
-    @Then("스터디 상세 조회에서 해당 스터디를 확인할 수 있다.")
+    @When("{string}가 스터디 상세 조회에서 이름이 {string}인 스터디를 조회한다.")
+    public void 스터디_조회(String memberGithubId, String studyName) {
+        ExtractableResponse<Response> response = RestAssured.given()
+                                                            .log()
+                                                            .all()
+                                                            .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(memberGithubId))
+                                                            .when()
+                                                            .get("/v1/studies/" + sharedContext.getParameter(studyName))
+                                                            .then()
+                                                            .log()
+                                                            .all()
+                                                            .extract();
+
+        sharedContext.setResponse(response);
+    }
+
+    @Then("스터디 상세조회가 입력한 대로 되어있다.")
     public void 스터디상세_조회에서_해당_스터디를_확인할_수_있다() {
-        Long id = sharedContext.getResultId();
-        String token = sharedContext.getToken();
-        StudyDetailResponse response = RestAssured.given().log().all()
-                .header(HttpHeaders.AUTHORIZATION, token)
-                .when()
-                .get("/v1/studies/" + id)
-                .then().log().all()
-                .extract().as(StudyDetailResponse.class);
+        StudyDetailResponse response = sharedContext.getResponse()
+                                                    .as(StudyDetailResponse.class);
 
         assertAll(
                 () -> assertThat(response.name()).isEqualTo("자바"),
                 () -> assertThat(response.numberOfMaximumMembers()).isEqualTo(5)
+        );
+    }
+
+    @Then("모집 중인 스터디를 {int}개 중 {int}개를 확인할 수 있다.")
+    public void 모집_중인_스터디를_확인할수_있다(int totalCount, int acceptedCount) {
+        ExtractableResponse<Response> response = sharedContext.getResponse();
+
+        List<RecruitingStudyResponse> recruitingStudyResponses = response.jsonPath()
+                                                                         .getList(".", RecruitingStudyResponse.class);
+
+        Predicate<RecruitingStudyResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
+
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(recruitingStudyResponses).allMatch(isRecruitingPredicate),
+                () -> assertThat(recruitingStudyResponses).hasSize(acceptedCount)
         );
     }
 

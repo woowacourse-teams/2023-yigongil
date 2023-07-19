@@ -6,6 +6,9 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Component
 @ScenarioScope
 public class SharedContext {
@@ -15,6 +18,7 @@ public class SharedContext {
     private Long roundId;
     private ExtractableResponse<Response> response;
     private String token;
+    private Map<String, Object> parameters = new HashMap<>();
 
     public RequestSpecification getRequestSpecification() {
         return requestSpecification;
@@ -36,6 +40,10 @@ public class SharedContext {
         return token;
     }
 
+    public Object getParameter(String key) {
+        return parameters.get(key);
+    }
+
     public void setRequestSpecification(RequestSpecification requestSpecification) {
         this.requestSpecification = requestSpecification;
     }
@@ -50,6 +58,10 @@ public class SharedContext {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public void setParameter(String key, Object value) {
+        parameters.put(key, value);
     }
 
     public void setRoundId(Long roundId) {

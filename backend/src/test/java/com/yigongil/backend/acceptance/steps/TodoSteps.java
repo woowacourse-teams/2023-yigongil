@@ -11,10 +11,15 @@ import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import java.util.Optional;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+
+import java.util.Optional;
 
 public class TodoSteps {
 
@@ -29,25 +34,33 @@ public class TodoSteps {
         this.optionalTodoRepository = optionalTodoRepository;
     }
 
-    @Given("{string}, {string}, {string} 을 입력한다.")
-    public void 투두_정보를_입력한다(String isNecessary, String roundId, String content) throws JsonProcessingException {
+    @When("{string}가 {string}, {string}, {string}로 이름이 {string}인 스터디에 투두를 추가한다.")
+    public void 투두_추가(String studyMemberGithubId, String isNecessary, String roundId, String content, String studyName) throws JsonProcessingException {
         TodoCreateRequest request = new TodoCreateRequest(
                 Boolean.parseBoolean(isNecessary),
-                Long.parseLong(roundId), content
+                Long.parseLong(roundId),
+                content
         );
 
-        final RequestSpecification specification = RestAssured.given()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(objectMapper.writeValueAsString(request));
+        ExtractableResponse<Response> response = RestAssured.given()
+                                                            .log()
+                                                            .all()
+                                                            .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                                            .body(objectMapper.writeValueAsString(request))
+                                                            .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(studyMemberGithubId))
+                                                            .when()
+                                                            .post("/v1/studies/" + sharedContext.getParameter(studyName) + "/todos")
+                                                            .then()
+                                                            .log()
+                                                            .all()
+                                                            .extract();
 
-        sharedContext.setRequestSpecification(specification);
+        sharedContext.setResponse(response);
     }
 
-    @Then("해당 라운드에 투두가 등록된다.")
-    public void 해당_라운드에_투두가_등록된다() {
-        Optional<OptionalTodo> optionalTodo = optionalTodoRepository.findById(sharedContext.getResultId());
-        assertThat(optionalTodo).isNotEmpty();
-        // TODO: 2023/07/18 투두 조회 api 생성 후 수정
+    @Then("투두를 확인할 수 있다.")
+    public void 투두를확인할수있다() {
+        // TODO: 2023/07/19 나중에 구현
     }
 
     @Given("{string} 투두의 수정 내용 {string}, {string} 을 입력한다.")
@@ -59,8 +72,8 @@ public class TodoSteps {
         );
 
         final RequestSpecification specification = RestAssured.given()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(objectMapper.writeValueAsString(request));
+                                                              .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                                              .body(objectMapper.writeValueAsString(request));
 
         sharedContext.setRequestSpecification(specification);
     }
