@@ -59,12 +59,12 @@ public class StudySteps {
     }
 
     @Then("스터디 목록에서 해당 스터디를 확인할 수 있다.")
-    public void 스터디목록에서_해당_스터디를_확인할_수_있다() {
+    public void 스터디_목록에서_해당_스터디를_확인할_수_있다() {
         // TODO: 2023/07/18 스터디 조회 api 작성 후 수정
     }
 
     @When("모집 중인 스터디 {string} 페이지를 요청한다.")
-    public void 모집중인스터디를요청한다(String page) {
+    public void 모집_중인_스터디를_요청한다(String page) {
         final ExtractableResponse<Response> response = when().get("/v1/studies/recruiting?page=" + page)
                                                              .then()
                                                              .log()
@@ -75,7 +75,7 @@ public class StudySteps {
     }
 
     @Then("모집 중인 스터디를 확인할 수 있다.")
-    public void 모집중인스터디를확인할수있다() {
+    public void 모집_중인_스터디를_확인할_수_있다() {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
         List<RecruitingStudyResponse> recruitingStudyResponses = response.body()
