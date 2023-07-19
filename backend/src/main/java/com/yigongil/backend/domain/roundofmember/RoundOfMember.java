@@ -63,6 +63,9 @@ public class RoundOfMember extends BaseEntity {
         return optionalTodo;
     }
 
+    public void updateNecessaryTodoIsDone(Boolean isDone) {
+        this.isDone = isDone;
+
     public boolean isMemberEquals(Member member) {
         return this.member.equals(member);
     }

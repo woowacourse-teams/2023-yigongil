@@ -35,6 +35,14 @@ public class OptionalTodo extends BaseEntity {
         this.isDone = isDone;
     }
 
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    public void updateIsDone(Boolean isDone) {
+        this.isDone = isDone;
+    }
+
     public Long getId() {
         return id;
     }
