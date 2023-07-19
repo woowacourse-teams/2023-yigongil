@@ -1,5 +1,5 @@
 package com.created.domain
 
-enum class PeriodUnit {
-    DAY, WEEK
+enum class PeriodUnit(val index: Int) {
+    DAY(0), WEEK(1)
 }

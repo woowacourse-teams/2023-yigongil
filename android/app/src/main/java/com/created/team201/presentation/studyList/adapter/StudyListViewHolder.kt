@@ -9,7 +9,7 @@ import com.created.team201.presentation.studyList.StudyListClickListener
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 
 class StudyListViewHolder(
-    parent: ViewGroup,
+    private val parent: ViewGroup,
     studyListClickListener: StudyListClickListener,
 ) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_study_list, parent, false),
@@ -27,5 +27,9 @@ class StudyListViewHolder(
     fun bind(item: StudySummaryUiModel) {
         studySummary = item
         binding.studySummary = studySummary
+        binding.periodStringFormat =
+            parent.context.resources.getStringArray(R.array.periodUnitStrings).toList()
+        binding.startDateStringFormat =
+            parent.context.resources.getStringArray(R.array.startDateStrings).toList()
     }
 }
