@@ -4,6 +4,7 @@ import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.Study;
+import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.StudyMemberAlreadyExistException;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,6 +36,7 @@ public class Applicant extends BaseEntity {
     @Builder
     public Applicant(Long id, Member member, Study study) {
         validateStudyMemberAlreadyExist(member, study);
+        validateStudyProcessingStatus(study);
         this.id = id;
         this.member = member;
         this.study = study;
@@ -47,6 +49,13 @@ public class Applicant extends BaseEntity {
 
         if (isAlreadyMember) {
             throw new StudyMemberAlreadyExistException("이미 스터디의 구성원입니다.", String.valueOf(member.getId()));
+        }
+    }
+
+    private void validateStudyProcessingStatus(Study study) throws InvalidProcessingStatusException {
+        if (!study.isRecruiting()) {
+            String processingStatus = study.getProcessingStatus().name();
+            throw new InvalidProcessingStatusException("지원한 스터디는 현재 모집 중인 상태가 아닙니다.", processingStatus);
         }
     }
 }

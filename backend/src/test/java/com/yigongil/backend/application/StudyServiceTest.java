@@ -37,7 +37,8 @@ class StudyServiceTest {
             Long nonExistStudyId = 100L;
             given(studyRepository.findById(nonExistStudyId)).willReturn(Optional.empty());
 
-            // when, then
+            // when
+            // then
             assertThatThrownBy(() -> studyService.apply(member, nonExistStudyId))
                     .isInstanceOf(IllegalArgumentException.class);
         }
@@ -45,12 +46,13 @@ class StudyServiceTest {
         @Test
         void 이미_지원한_스터디에_다시_지원하면_예외가_발생한다() {
             // given
-            Member member = MemberFixture.김진우.toMember();
+            Member member = MemberFixture.폰노이만.toMember();
             Study study = StudyFixture.자바_스터디.toStudy();
             given(studyRepository.findById(any())).willReturn(Optional.of(study));
             given(applicantRepository.existsByMemberAndStudy(member, study)).willReturn(true);
 
-            // when, then
+            // when
+            // then
             assertThatThrownBy(() -> studyService.apply(member, study.getId()))
                     .isInstanceOf(ApplicantAlreadyExistException.class);
         }

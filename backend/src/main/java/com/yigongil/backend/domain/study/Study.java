@@ -126,6 +126,10 @@ public class Study extends BaseEntity {
         throw new InvalidPeriodUnitException("스터디 주기는 일 또는 주 로만 설정할 수 있습니다.", periodOfRound);
     }
 
+    public boolean isRecruiting() {
+        return this.processingStatus == ProcessingStatus.RECRUITING;
+    }
+
     public Long getId() {
         return id;
     }

@@ -7,7 +7,8 @@ import java.util.List;
 
 public enum StudyFixture {
 
-    자바_스터디(1L, LocalDateTime.now(), "자바", "스터디소개", 3, ProcessingStatus.PROCESSING, 3, 4)
+    자바_스터디(1L, LocalDateTime.now(), "자바", "스터디소개", 3, ProcessingStatus.PROCESSING, 3, 4),
+    자바_스터디_모집중(1L, LocalDateTime.now(), "자바", "스터디소개", 3, ProcessingStatus.RECRUITING, 3, 4),
     ;
 
     private final Long id;
