@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- 스터디 목록 탭 -->
+    <string-array name="startDateStrings">
+        <item>@string/study_list_previous_date</item>
+        <item>@string/study_list_processing_date</item>
+    </string-array>
+
+    <string-array name="periodUnitStrings">
+        <item>@string/study_list_item_date_format</item>
+        <item>@string/study_list_item_week_format</item>
+    </string-array>
+
     <integer-array name="multiPickerMaxNumbers">
         <item>56</item>
         <item>8</item>
