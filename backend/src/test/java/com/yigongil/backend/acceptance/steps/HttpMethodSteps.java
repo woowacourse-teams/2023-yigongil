@@ -5,6 +5,8 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import org.springframework.http.HttpHeaders;
 
+import java.util.Objects;
+
 public class HttpMethodSteps {
 
     private final SharedContext sharedContext;
@@ -35,6 +37,9 @@ public class HttpMethodSteps {
                 .extract()
                 .header(HttpHeaders.LOCATION);
 
+        if (Objects.isNull(location)) {
+            return;
+        }
         sharedContext.setResultId(Long.parseLong(location.substring(location.lastIndexOf("/") + 1)));
     }
 }

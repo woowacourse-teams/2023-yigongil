@@ -2,15 +2,14 @@ package com.yigongil.backend.acceptance.steps;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
-import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.StudyCreateRequest;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -21,7 +20,6 @@ import org.springframework.http.MediaType;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -56,12 +54,12 @@ public class StudySteps {
                 introduction
         );
 
-        Member member = memberRepository.save(MemberFixture.김진우.toMemberWithoutId());
+        String token = sharedContext.getToken();
 
         RequestSpecification requestSpecification = RestAssured.given().log().all()
-                .header(HttpHeaders.AUTHORIZATION, member.getId())
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(objectMapper.writeValueAsString(request));
+                                                               .header(HttpHeaders.AUTHORIZATION, token)
+                                                               .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                                               .body(objectMapper.writeValueAsString(request));
 
         sharedContext.setRequestSpecification(requestSpecification);
     }
@@ -73,7 +71,7 @@ public class StudySteps {
 
     @When("모집 중인 스터디 {string} 페이지를 요청한다.")
     public void 모집_중인_스터디를_요청한다(String page) {
-        final ExtractableResponse<Response> response = when().get("/v1/studies/recruiting?page=" + page)
+        ExtractableResponse<Response> response = when().get("/v1/studies/recruiting?page=" + page)
                                                              .then()
                                                              .log()
                                                              .all()
@@ -86,9 +84,8 @@ public class StudySteps {
     public void 모집_중인_스터디를_확인할_수_있다() {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
-        List<RecruitingStudyResponse> recruitingStudyResponses = response.body()
-                                                                         .jsonPath()
-                                                                         .get();
+        List<RecruitingStudyResponse> recruitingStudyResponses = response.jsonPath()
+                                                                         .getList(".", RecruitingStudyResponse.class);
         Predicate<RecruitingStudyResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
 
         assertAll(
