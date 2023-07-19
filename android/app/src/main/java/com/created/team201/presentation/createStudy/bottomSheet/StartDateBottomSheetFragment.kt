@@ -21,11 +21,12 @@ class StartDateBottomSheetFragment :
     }
 
     private fun initBinding() {
-        binding.bottomSheetFragment = this
+        binding.onCancelClickListener = { dismiss() }
+        binding.onSaveClickListener = ::onSaveButtonClick
         binding.lifecycleOwner = viewLifecycleOwner
     }
 
-    fun onSaveButtonClick() {
+    private fun onSaveButtonClick() {
         viewModel.setStartDate(binding.calendarCreateStudyStartDate.value)
         dismiss()
     }

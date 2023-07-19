@@ -26,7 +26,8 @@ class CycleBottomSheetFragment :
 
     private fun initBinding() {
         binding.viewModel = viewModel
-        binding.bottomSheetFragment = this
+        binding.onCancelClickListener = { dismiss() }
+        binding.onSaveClickListener = ::onSaveButtonClick
         binding.lifecycleOwner = viewLifecycleOwner
     }
 

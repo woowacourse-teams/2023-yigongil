@@ -9,8 +9,12 @@
             type="com.created.team201.presentation.createStudy.CreateStudyViewModel" />
 
         <variable
-            name="bottomSheetFragment"
-            type="com.created.team201.presentation.createStudy.bottomSheet.PeriodBottomSheetFragment" />
+            name="onCancelClickListener"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onSaveClickListener"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,7 +59,7 @@
             android:layout_marginTop="38dp"
             android:background="@drawable/bg_rectangle_only_radius_10dp"
             android:backgroundTint="@color/green01_4039D353"
-            android:onClick="@{() -> bottomSheetFragment.dismiss()}"
+            android:onClick="@{() -> onCancelClickListener.invoke()}"
             android:paddingVertical="10dp"
             android:text="@string/bottomSheetFragment_button_name_cancel"
             android:textAlignment="center"
@@ -73,7 +77,7 @@
             android:layout_marginHorizontal="18dp"
             android:background="@drawable/bg_rectangle_only_radius_10dp"
             android:backgroundTint="@color/green02_E639D353"
-            android:onClick="@{() -> bottomSheetFragment.onSaveButtonClick()}"
+            android:onClick="@{() -> onSaveClickListener.invoke()}"
             android:paddingVertical="10dp"
             android:text="@string/bottomSheetFragment_button_name_save"
             android:textAlignment="center"
