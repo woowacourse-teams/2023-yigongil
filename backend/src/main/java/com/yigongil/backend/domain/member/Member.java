@@ -1,14 +1,15 @@
 package com.yigongil.backend.domain.member;
 
 import com.yigongil.backend.domain.BaseEntity;
-import java.util.Objects;
+import lombok.Builder;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import lombok.Builder;
+import java.util.Objects;
 
 @Entity
 public class Member extends BaseEntity {
