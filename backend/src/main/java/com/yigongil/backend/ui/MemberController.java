@@ -32,7 +32,6 @@ public class MemberController {
 
     @PostMapping
     public ResponseEntity<Void> createMember(@RequestBody MemberJoinRequest request) {
-        System.out.println("MemberController.createMember");
         Long id = memberService.joinMember(request);
         return ResponseEntity.created(URI.create("/v1/members/" + id)).build();
     }
