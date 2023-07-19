@@ -4,7 +4,7 @@ import com.yigongil.backend.domain.member.Member;
 
 import java.util.List;
 
-public record RecruitingStudyMemberResponse(
+public record StudyMemberResponse(
         Long id,
         Integer tier,
         String nickname,
@@ -12,8 +12,8 @@ public record RecruitingStudyMemberResponse(
         String profileImage
 ) {
 
-    public static RecruitingStudyMemberResponse from(Member member) {
-        return new RecruitingStudyMemberResponse(
+    public static StudyMemberResponse from(Member member) {
+        return new StudyMemberResponse(
                 member.getId(),
                 member.getTier(),
                 member.getNickname(),
@@ -22,9 +22,9 @@ public record RecruitingStudyMemberResponse(
         );
     }
 
-    public static List<RecruitingStudyMemberResponse> from(List<Member> members) {
+    public static List<StudyMemberResponse> from(List<Member> members) {
         return members.stream()
-                .map(RecruitingStudyMemberResponse::from)
+                .map(StudyMemberResponse::from)
                 .toList();
     }
 }

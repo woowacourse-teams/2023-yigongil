@@ -19,7 +19,7 @@ public record StudyDetailResponse(
         Integer periodOfRound,
         Integer currentRound,
         String introduction,
-        List<RecruitingStudyMemberResponse> members,
+        List<StudyMemberResponse> members,
         List<RoundNumberResponse> rounds
 ) {
 
@@ -36,7 +36,7 @@ public record StudyDetailResponse(
                 study.getPeriodOfRound(),
                 study.getCurrentRound().getRoundNumber(),
                 study.getIntroduction(),
-                RecruitingStudyMemberResponse.from(members),
+                StudyMemberResponse.from(members),
                 RoundNumberResponse.from(rounds)
         );
     }
