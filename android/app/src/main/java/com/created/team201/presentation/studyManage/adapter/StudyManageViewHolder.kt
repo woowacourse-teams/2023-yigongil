@@ -37,6 +37,7 @@ class StudyManageViewHolder(
         binding.rvStudyManageList.apply {
             adapter = studyListAdapter
             addItemDecoration(dividerItemDecoration)
+            setHasFixedSize(true)
         }
     }
 
