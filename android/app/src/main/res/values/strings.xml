@@ -18,9 +18,6 @@
     <!--BASE ERROR-->
     <string name="error_baseFragment">"[ERROR]Binding no initialization"</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <!--스터디 목록 탭-->
     <string name="study_list_create">스터디 만들기</string>
     <string name="study_list_search_button_menu">검색</string>
@@ -39,6 +36,17 @@
     <string name="icon_text_button_name_cycle">스터디주기</string>
     <string name="icon_text_button_formatter_information_people_count">%d명</string>
     <string name="icon_text_button_formatter_information_period">%d회차</string>
+
+    <!--스터디 상세보기 뷰-->
+    <string name="study_detail_app_bar_title">스터디 상세보기</string>
+    <string name="study_detail_study_people">스터디원</string>
+    <string name="study_detail_study_capacity">참여하기(%d/%d)</string>
+    <string name="study_detail_dm_button_content_description">스터디장에게 문의하기</string>
+    <string name="study_detail_study_waiting">스터디장의 수락을 기다리고있어요.</string>
+    <string name="item_study_detail_study_success_rate">스터디 성공률 %d%%</string>
+
+    <!--커스텀 프로필 이미지 뷰-->
+    <string name="custom_profile_image_content_description">프로필 이미지</string>
 
     <!--스터디 개설 뷰-->
     <string name="createStudy_toolbar_title">스터디 만들기</string>

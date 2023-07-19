@@ -20,5 +20,12 @@
 
     <color name="grey01_C5C5C5">#C5C5C5</color>
     <color name="grey02_78808B">#78808B</color>
+    
+    <!--Tier Color-->
+    <color name="bronze_FBBA8B">#FBBA8B</color>
+    <color name="silver_CFD5DE">#CFD5DE</color>
+    <color name="gold_F3E199">#F3E199</color>
+    <color name="platinum_71FFDD">#71FFDD</color>
+    <color name="diamond_9ABFF6">#9ABFF6</color>
 
 </resources>
