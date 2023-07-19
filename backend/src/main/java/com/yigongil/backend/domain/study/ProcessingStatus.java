@@ -11,4 +11,8 @@ public enum ProcessingStatus {
     ProcessingStatus(int code) {
         this.code = code;
     }
+
+    public int getCode() {
+        return code;
+    }
 }

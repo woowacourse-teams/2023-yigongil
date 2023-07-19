@@ -2,13 +2,14 @@ package com.yigongil.backend.domain.member;
 
 import com.yigongil.backend.exception.InvalidNicknameLengthException;
 import com.yigongil.backend.exception.InvalidNicknamePatternException;
-import java.util.Objects;
-import java.util.regex.Pattern;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 @Embeddable
-class Nickname {
+public class Nickname {
 
     private static final int MINIMUM_NICKNAME_LENGTH = 2;
     private static final int MAXIMUM_NICKNAME_LENGTH = 8;

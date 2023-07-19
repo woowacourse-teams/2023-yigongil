@@ -17,4 +17,10 @@ public class DateConverter {
         LocalDate ld = LocalDate.parse(dateString, formatter);
         return LocalDateTime.of(ld, LocalTime.MIDNIGHT);
     }
+
+    public static String toStringFormat(LocalDateTime localDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+
+        return localDateTime.format(formatter);
+    }
 }

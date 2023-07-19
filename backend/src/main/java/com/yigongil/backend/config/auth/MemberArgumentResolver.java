@@ -28,10 +28,12 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Object resolveArgument(final MethodParameter parameter, final ModelAndViewContainer mavContainer,
-                                  final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory)
-            throws Exception {
-
+    public Object resolveArgument(
+            MethodParameter parameter,
+            ModelAndViewContainer mavContainer,
+            NativeWebRequest webRequest,
+            WebDataBinderFactory binderFactory
+    ) throws Exception {
         Long memberId = Long.valueOf(webRequest.getNativeRequest(HttpServletRequest.class).getHeader(HttpHeaders.AUTHORIZATION));
 
         return memberRepository.findById(memberId).get();
