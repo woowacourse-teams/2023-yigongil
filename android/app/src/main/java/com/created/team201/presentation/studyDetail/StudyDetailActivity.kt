@@ -1,4 +1,4 @@
-package com.created.team201.presentation.studyList
+package com.created.team201.presentation.studyDetail
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import com.created.team201.R
 import com.created.team201.databinding.ActivityStudyDetailBinding
 import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.studyDetail.adapter.StudyParticipantsAdapter
 
 class StudyDetailActivity :
     BindingActivity<ActivityStudyDetailBinding>(R.layout.activity_study_detail) {

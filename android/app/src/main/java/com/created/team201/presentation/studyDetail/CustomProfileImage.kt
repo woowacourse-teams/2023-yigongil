@@ -1,4 +1,4 @@
-package com.created.team201.presentation.studyList
+package com.created.team201.presentation.studyDetail
 
 import android.content.Context
 import android.content.res.ColorStateList

@@ -1,4 +1,4 @@
-package com.created.team201.presentation.studyList
+package com.created.team201.presentation.studyDetail.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

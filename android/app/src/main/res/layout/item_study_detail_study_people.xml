@@ -16,7 +16,7 @@
         android:layout_margin="6dp"
         android:background="@drawable/bg_rectangle_radius_5dp">
 
-        <com.created.team201.presentation.studyList.CustomProfileImage
+        <com.created.team201.presentation.studyDetail.CustomProfileImage
             android:id="@+id/fl_item_study_detail_profile_image"
             android:layout_width="42dp"
             android:layout_height="42dp"

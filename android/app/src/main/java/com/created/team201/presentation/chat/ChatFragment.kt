@@ -8,7 +8,4 @@ import com.created.team201.presentation.common.BindingFragment
 
 class ChatFragment : BindingFragment<FragmentChatBinding>(R.layout.fragment_chat) {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
 }
