@@ -8,6 +8,8 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.created.team201.R
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 abstract class BindingBottomSheetFragment<B : ViewDataBinding>(
@@ -21,6 +23,10 @@ abstract class BindingBottomSheetFragment<B : ViewDataBinding>(
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+        dialog?.let {
+            val behavior = (it as BottomSheetDialog).behavior
+            behavior.state = STATE_EXPANDED
+        }
         _binding = DataBindingUtil.inflate(inflater, layoutResId, container, false)
         return binding.root
     }
