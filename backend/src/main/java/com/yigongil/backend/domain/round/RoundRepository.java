@@ -1,9 +1,9 @@
 package com.yigongil.backend.domain.round;
 
+import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
-
-import java.util.Optional;
+import org.springframework.data.repository.query.Param;
 
 public interface RoundRepository extends Repository<Round, Long> {
 
@@ -14,5 +14,5 @@ public interface RoundRepository extends Repository<Round, Long> {
                     join fetch r.roundOfMembers
                     where r.id = :roundId
             """)
-    Optional<Round> findRoundByIdWithRoundsOfMember(Long roundId);
+    Optional<Round> findRoundByIdWithRoundsOfMember(@Param("roundId") Long roundId);
 }
