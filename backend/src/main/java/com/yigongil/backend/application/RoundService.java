@@ -27,7 +27,7 @@ public class RoundService {
 
     public RoundResponse findRoundDetail(Member member, Long roundId) {
         Round round = roundRepository.findRoundByIdWithRoundsOfMember(roundId)
-                .orElseThrow(RoundNotFoundException::new);
+                .orElseThrow(() -> new RoundNotFoundException("해당 회차를 찾을 수 없습니다", roundId));
 
         List<RoundOfMember> roundOfMembers = roundOfMemberRepository.findRoundOfMembersWithMember(round.getRoundOfMembers());
 
@@ -42,6 +42,7 @@ public class RoundService {
         return new RoundResponse(
                 roundId,
                 round.getMaster().getId(),
+                member.isSameWithMaster(round.getMaster()),
                 TodoResponse.fromNecessaryTodo(roundByMember, round),
                 TodoResponse.fromOptionalTodo(optionalTodos),
                 MemberOfRoundResponse.from(roundOfMembers)

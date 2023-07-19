@@ -1,6 +1,7 @@
 package com.yigongil.backend.ui;
 
 import com.yigongil.backend.application.RoundService;
+import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.response.RoundResponse;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class RoundController {
 
     @GetMapping
     public ResponseEntity<RoundResponse> viewRoundDetail(
-            Member member,
+            @Authorization Member member,
             @PathVariable Long studyId,
             @PathVariable Long roundId
     ) {

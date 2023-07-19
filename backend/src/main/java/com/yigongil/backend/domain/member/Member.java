@@ -14,6 +14,9 @@ import java.util.Objects;
 @Entity
 public class Member extends BaseEntity {
 
+    private static final int MASTER_NUMBER = 0;
+    private static final int PARTICIPANT_NUMBER = 1;
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -93,6 +96,13 @@ public class Member extends BaseEntity {
 
     public String getIntroduction() {
         return introduction.getIntroduction();
+    }
+
+    public int isSameWithMaster(Member member) {
+        if (this.equals(member)) {
+            return MASTER_NUMBER;
+        }
+        return PARTICIPANT_NUMBER;
     }
 
     @Override
