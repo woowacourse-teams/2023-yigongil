@@ -55,7 +55,7 @@ public class StudyService {
         );
 
         return studyRepository.save(study)
-                              .getId();
+                .getId();
     }
 
     @Transactional(readOnly = true)
@@ -64,8 +64,8 @@ public class StudyService {
         Page<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.RECRUITING, pageable);
 
         return studies.get()
-                      .map(RecruitingStudyResponse::from)
-                      .toList();
+                .map(RecruitingStudyResponse::from)
+                .toList();
     }
 
     @Transactional
@@ -91,8 +91,8 @@ public class StudyService {
 
     @Transactional(readOnly = true)
     public StudyDetailResponse findStudyDetailByStudyId(Long studyId) {
-        Study study = studyRepository.findById(studyId)
-                .orElseThrow(StudyNotFoundException::new);
+        Study study = studyRepository.findByIdWithRound(studyId)
+                .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
         List<Round> rounds = study.getRounds();
         Round firstRound = rounds.stream()
                 .filter(Round::isFirstRound)

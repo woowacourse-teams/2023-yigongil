@@ -31,7 +31,7 @@ public record StudyDetailResponse(
                 firstRound.getRoundOfMembers().size(),
                 study.getNumberOfMaximumMembers(),
                 firstRound.getMaster().getId(),
-                DateConverter.localDateTimeToString(study.getStartAt()),
+                DateConverter.toStringFormat(study.getStartAt()),
                 study.getTotalRoundCount(),
                 study.getPeriodOfRound(),
                 study.getCurrentRound().getRoundNumber(),

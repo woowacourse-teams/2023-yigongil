@@ -2,11 +2,10 @@ package com.yigongil.backend.acceptance.steps;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.StudyCreateRequest;
-import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
+import com.yigongil.backend.response.StudyDetailResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -17,8 +16,6 @@ import io.restassured.specification.RequestSpecification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -31,12 +28,10 @@ public class StudySteps {
 
     private final ObjectMapper objectMapper;
     private final SharedContext sharedContext;
-    private final MemberRepository memberRepository;
 
-    public StudySteps(ObjectMapper objectMapper, SharedContext sharedContext, MemberRepository memberRepository) {
+    public StudySteps(ObjectMapper objectMapper, SharedContext sharedContext) {
         this.objectMapper = objectMapper;
         this.sharedContext = sharedContext;
-        this.memberRepository = memberRepository;
     }
 
     @Given("{string}, {string}, {string}, {string}, {string}, {string}를 입력한다.")
@@ -60,9 +55,9 @@ public class StudySteps {
         String token = sharedContext.getToken();
 
         RequestSpecification requestSpecification = RestAssured.given().log().all()
-                                                               .header(HttpHeaders.AUTHORIZATION, token)
-                                                               .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                                               .body(objectMapper.writeValueAsString(request));
+                .header(HttpHeaders.AUTHORIZATION, token)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(objectMapper.writeValueAsString(request));
 
         sharedContext.setRequestSpecification(requestSpecification);
     }
@@ -75,10 +70,10 @@ public class StudySteps {
     @When("모집 중인 스터디 {string} 페이지를 요청한다.")
     public void 모집_중인_스터디를_요청한다(String page) {
         ExtractableResponse<Response> response = when().get("/v1/studies/recruiting?page=" + page)
-                                                             .then()
-                                                             .log()
-                                                             .all()
-                                                             .extract();
+                .then()
+                .log()
+                .all()
+                .extract();
 
         sharedContext.setResponse(response);
     }
@@ -88,7 +83,7 @@ public class StudySteps {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
         List<RecruitingStudyResponse> recruitingStudyResponses = response.jsonPath()
-                                                                         .getList(".", RecruitingStudyResponse.class);
+                .getList(".", RecruitingStudyResponse.class);
         Predicate<RecruitingStudyResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
 
         assertAll(
@@ -99,15 +94,18 @@ public class StudySteps {
 
     @Then("스터디 상세 조회에서 해당 스터디를 확인할 수 있다.")
     public void 스터디상세_조회에서_해당_스터디를_확인할_수_있다() {
+        Long id = sharedContext.getResultId();
+        String token = sharedContext.getToken();
         StudyDetailResponse response = RestAssured.given().log().all()
+                .header(HttpHeaders.AUTHORIZATION, token)
                 .when()
-                .get("/v1/studies/1")
+                .get("/v1/studies/" + id)
                 .then().log().all()
                 .extract().as(StudyDetailResponse.class);
 
         assertAll(
-                () -> response.id().equals(1L),
-                () -> response.name()
+                () -> response.name().equals("자바"),
+                () -> assertThat(response.numberOfMaximumMembers()).isEqualTo(5)
         );
     }
 }

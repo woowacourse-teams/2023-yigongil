@@ -19,6 +19,9 @@ public class Nickname {
     private String nickname;
 
     public Nickname(String nickname) {
+        if (Objects.isNull(nickname)) {
+            nickname = "guest" + (int) (Math.random() * 999);
+        }
         validate(nickname);
         this.nickname = nickname;
     }
@@ -28,9 +31,6 @@ public class Nickname {
     }
 
     private void validate(String nickname) {
-        if (Objects.isNull(nickname)) {
-            return;
-        }
         validateLength(nickname);
         validatePattern(nickname);
     }
