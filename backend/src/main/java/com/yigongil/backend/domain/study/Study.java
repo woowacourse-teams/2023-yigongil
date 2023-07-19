@@ -4,7 +4,7 @@ import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.round.Round;
-import com.yigongil.backend.exception.InvalidPeriodUnitException;
+import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.utils.DateConverter;
 import java.time.LocalDateTime;
@@ -143,7 +143,24 @@ public class Study extends BaseEntity {
         return targetRound.createOptionalTodo(author, content);
     }
 
-    private Round findRoundById(Long roundId) {
+    public void updateNecessaryTodoContent(Long todoId, String content) {
+        Round round = findRoundById(todoId);
+        round.updateNecessaryTodoContent(content);
+    }
+
+    public void completeNecessaryTodo(Member member, Long todoId) {
+        Round round = findRoundById(todoId);
+        RoundOfMember roundOfMemberBy = round.findRoundOfMemberBy(member);
+        roundOfMemberBy.completeNecessaryTodo();
+    }
+
+    public void resetNecessaryTodo(Member member, Long todoId) {
+        final Round round = findRoundById(todoId);
+        final RoundOfMember roundOfMemberBy = round.findRoundOfMemberBy(member);
+        roundOfMemberBy.resetNecessaryTodo();
+    }
+
+    public Round findRoundById(Long roundId) {
         return rounds.stream()
                 .filter(round -> round.getId().equals(roundId))
                 .findAny()

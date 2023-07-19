@@ -3,6 +3,8 @@ package com.yigongil.backend.domain.roundofmember;
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
+import com.yigongil.backend.exception.TodoAlreadyDoneException;
+import com.yigongil.backend.exception.TodoNotDoneYetException;
 import com.yigongil.backend.exception.TooManyOptionalTodosException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +52,7 @@ public class RoundOfMember extends BaseEntity {
         this.isDone = isDone;
         this.optionalTodos = optionalTodos;
     }
-    
+
     public OptionalTodo createOptionalTodo(String content) {
         if (optionalTodos.size() >= MAXIMUM_TODO_SIZE) {
             throw new TooManyOptionalTodosException("선택 투두는 한 번에 4개까지 설정 가능합니다.", content);
@@ -61,7 +63,21 @@ public class RoundOfMember extends BaseEntity {
         optionalTodos.add(optionalTodo);
         return optionalTodo;
     }
-    
+
+    public void completeNecessaryTodo() {
+        if (isDone) {
+            throw new TodoAlreadyDoneException("해당 투두는 이미 완료되었습니다.", String.valueOf(id));
+        }
+        isDone = true;
+    }
+
+    public void resetNecessaryTodo() {
+        if (isDone) {
+            isDone = false;
+        }
+        throw new TodoNotDoneYetException("투두가 아직 완료되지 않았습니다.", String.valueOf(id));
+    }
+
     public Long getId() {
         return id;
     }

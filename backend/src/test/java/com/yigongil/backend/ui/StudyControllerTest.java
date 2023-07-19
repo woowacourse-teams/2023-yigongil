@@ -2,7 +2,11 @@ package com.yigongil.backend.ui;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -15,6 +19,7 @@ import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.request.StudyCreateRequest;
 import com.yigongil.backend.request.TodoCreateRequest;
+import com.yigongil.backend.request.TodoUpdateRequest;
 import java.util.Optional;
 import org.apache.http.HttpHeaders;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +50,8 @@ class StudyControllerTest {
 
     @BeforeEach
     void setUp() {
-        given(memberRepository.findById(anyLong())).willReturn(Optional.of(MemberFixture.김진우.toMember()));    }
+        given(memberRepository.findById(anyLong())).willReturn(Optional.of(MemberFixture.김진우.toMember()));
+    }
 
     @Test
     void 프로필_정보를_업데이트_한다() throws Exception {
@@ -57,7 +63,6 @@ class StudyControllerTest {
                 "1w",
                 "안녕"
         );
-
 
         willReturn(1L).given(studyService).create(MemberFixture.김진우.toMember(), request);
 
@@ -74,7 +79,7 @@ class StudyControllerTest {
     void 투두를_생성한다() throws Exception {
         TodoCreateRequest request = new TodoCreateRequest(true, 1L, "첫 투두");
 
-        willReturn(1L).given(todoService).create(MemberFixture.김진우.toMember(),1L, request);
+        willReturn(1L).given(todoService).create(MemberFixture.김진우.toMember(), 1L, request);
 
         mockMvc.perform(post("/v1/studies/1/todos")
                         .header(HttpHeaders.AUTHORIZATION, "1")
@@ -83,5 +88,21 @@ class StudyControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().string(HttpHeaders.LOCATION, "/v1/studies/1/todos/1"));
+    }
+
+    @Test
+    void 투두를_업데이트한다() throws Exception {
+        TodoUpdateRequest request = new TodoUpdateRequest(false, true, "수정");
+
+        willDoNothing().given(todoService).update(MemberFixture.김진우.toMember(), 1L, 1L, request);
+
+        mockMvc.perform(patch("/v1/studies/1/todos/1")
+                        .header(HttpHeaders.AUTHORIZATION, "1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andDo(print())
+                .andExpect(status().isNoContent());
+
+        verify(todoService, only()).update(MemberFixture.김진우.toMember(), 1L, 1L, request);
     }
 }
