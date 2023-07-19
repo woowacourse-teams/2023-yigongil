@@ -7,7 +7,6 @@ import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 
 class StudyListViewModel : ViewModel() {
 
-    private var pageIndex: Int = 0
     private val _studySummaries = MutableLiveData<List<StudySummaryUiModel>>()
     val studySummaries: LiveData<List<StudySummaryUiModel>>
         get() = _studySummaries
@@ -22,7 +21,7 @@ class StudyListViewModel : ViewModel() {
         //      return
         // if (load Success)
         //      val newItems = _studySummaries.value?.toMutableList()
-        //      newItems?.addAll(server data)
+        //      newItems?.addAll(server data -> pageIndex)
         //      _studySummaries.value = newItems?.toList()
         //      pageIndex++
     }
