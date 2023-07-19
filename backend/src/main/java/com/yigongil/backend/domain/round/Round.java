@@ -77,9 +77,9 @@ public class Round extends BaseEntity {
                     .build();
 
             RoundOfMember roundOfMember = RoundOfMember.builder()
-                                                       .member(master)
-                                                       .isDone(false)
-                                                       .build();
+                    .member(master)
+                    .isDone(false)
+                    .build();
             round.roundOfMembers.add(roundOfMember);
 
             rounds.add(round);
@@ -124,10 +124,10 @@ public class Round extends BaseEntity {
 
     public int calculateAverageTier() {
         double averageTier = roundOfMembers.stream()
-                                           .map(RoundOfMember::getMember)
-                                           .mapToInt(Member::getTier)
-                                           .average()
-                                           .orElseThrow(IllegalStateException::new);
+                .map(RoundOfMember::getMember)
+                .mapToInt(Member::getTier)
+                .average()
+                .orElseThrow(IllegalStateException::new);
 
         return (int) Math.round(averageTier);
     }
@@ -171,9 +171,5 @@ public class Round extends BaseEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    public boolean isFirstRound() {
-        return this.roundNumber == 1;
     }
 }

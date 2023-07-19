@@ -94,12 +94,10 @@ public class StudyService {
         Study study = studyRepository.findByIdWithRound(studyId)
                 .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
         List<Round> rounds = study.getRounds();
-        Round firstRound = rounds.stream()
-                .filter(Round::isFirstRound)
-                .findAny().orElseThrow();
+        Round currentRound = study.getCurrentRound();
 
-        List<Member> members = memberRepository.findMembersByRoundId(firstRound.getId());
+        List<Member> members = memberRepository.findMembersByRoundId(currentRound.getId());
 
-        return StudyDetailResponse.of(study, rounds, firstRound, members);
+        return StudyDetailResponse.of(study, rounds, currentRound, members);
     }
 }
