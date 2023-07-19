@@ -2,19 +2,20 @@ package com.yigongil.backend.domain.member;
 
 import com.yigongil.backend.exception.InvalidNicknameLengthException;
 import com.yigongil.backend.exception.InvalidNicknamePatternException;
-import java.util.Objects;
-import java.util.regex.Pattern;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 @Embeddable
-class Nickname {
+public class Nickname {
 
     private static final int MINIMUM_NICKNAME_LENGTH = 2;
     private static final int MAXIMUM_NICKNAME_LENGTH = 8;
     private static final Pattern NICKNAME_PATTERN = Pattern.compile("^[가-힣a-zA-Z0-9_]+$");
 
-    @Column(nullable = false, unique = true, length = MAXIMUM_NICKNAME_LENGTH)
+    @Column(unique = true, length = MAXIMUM_NICKNAME_LENGTH)
     private String nickname;
 
     public Nickname(String nickname) {
@@ -27,6 +28,9 @@ class Nickname {
     }
 
     private void validate(String nickname) {
+        if (Objects.isNull(nickname)) {
+            return;
+        }
         validateLength(nickname);
         validatePattern(nickname);
     }

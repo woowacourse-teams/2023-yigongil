@@ -3,8 +3,10 @@ package com.yigongil.backend.domain.round;
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Builder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,9 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import lombok.Builder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Round extends BaseEntity {
@@ -64,14 +65,14 @@ public class Round extends BaseEntity {
         List<Round> rounds = new ArrayList<>();
         for (int i = 1; i <= totalRoundCount; i++) {
             Round round = Round.builder()
-                    .roundNumber(i)
-                    .master(master)
-                    .build();
+                               .roundNumber(i)
+                               .master(master)
+                               .build();
 
             RoundOfMember roundOfMember = RoundOfMember.builder()
-                    .member(master)
-                    .isDone(false)
-                    .build();
+                                                       .member(master)
+                                                       .isDone(false)
+                                                       .build();
             round.roundOfMembers.add(roundOfMember);
 
             rounds.add(round);
@@ -97,5 +98,19 @@ public class Round extends BaseEntity {
 
     public List<RoundOfMember> getRoundOfMembers() {
         return roundOfMembers;
+
+    public int calculateAverageTier() {
+        double averageTier = roundOfMembers.stream()
+                                           .map(RoundOfMember::getMember)
+                                           .mapToInt(Member::getTier)
+                                           .average()
+                                           .orElseThrow(IllegalStateException::new);
+
+        return (int) Math.round(averageTier);
+    }
+
+    public int sizeOfCurrentMembers() {
+        return roundOfMembers.size();
+
     }
 }

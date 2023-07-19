@@ -3,11 +3,11 @@ package com.yigongil.backend.domain.study;
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
-import com.yigongil.backend.exception.InvalidPeriodUnitException;
 import com.yigongil.backend.utils.DateConverter;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Builder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,9 +19,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import lombok.Builder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Study extends BaseEntity {
@@ -54,6 +54,10 @@ public class Study extends BaseEntity {
     @Column(nullable = false)
     private Integer periodOfRound;
 
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private PeriodUnit periodUnit;
+
     @OneToOne(fetch = FetchType.LAZY)
     private Round currentRound;
 
@@ -78,6 +82,7 @@ public class Study extends BaseEntity {
             Integer periodOfRound,
             Round currentRound,
             List<Round> rounds
+            PeriodUnit periodUnit,
     ) {
         this.id = id;
         this.name = name;
@@ -88,6 +93,7 @@ public class Study extends BaseEntity {
         this.endAt = endAt;
         this.totalRoundCount = totalRoundCount;
         this.periodOfRound = periodOfRound;
+        this.periodUnit = periodUnit;
         this.currentRound = currentRound;
         this.rounds = rounds;
     }
@@ -106,7 +112,8 @@ public class Study extends BaseEntity {
                 .numberOfMaximumMembers(numberOfMaximumMembers)
                 .startAt(DateConverter.toLocalDateTime(startAt))
                 .totalRoundCount(totalRoundCount)
-                .periodOfRound(convertRoundStringToDays(periodOfRound))
+                .periodOfRound(PeriodUnit.getPeriodNumber(periodOfRound))
+                .periodUnit(PeriodUnit.getPeriodUnit(periodOfRound))
                 .introduction(introduction)
                 .processingStatus(ProcessingStatus.RECRUITING)
                 .build();
@@ -115,15 +122,8 @@ public class Study extends BaseEntity {
         return study;
     }
 
-    private static int convertRoundStringToDays(String periodOfRound) {
-        int numericPart = Integer.parseInt(periodOfRound.substring(0, periodOfRound.length() - 1));
-        if (periodOfRound.toLowerCase().endsWith("d")) {
-            return numericPart;
-        }
-        if (periodOfRound.toLowerCase().endsWith("w")) {
-            return numericPart * 7;
-        }
-        throw new InvalidPeriodUnitException("스터디 주기는 일 또는 주 로만 설정할 수 있습니다.", periodOfRound);
+    public Integer calculateAverageTier() {
+        return currentRound.calculateAverageTier();
     }
 
     public boolean isRecruiting() {
@@ -164,6 +164,10 @@ public class Study extends BaseEntity {
 
     public Integer getPeriodOfRound() {
         return periodOfRound;
+    }
+
+    public PeriodUnit getPeriodUnit() {
+        return periodUnit;
     }
 
     public Round getCurrentRound() {
