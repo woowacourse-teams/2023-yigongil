@@ -14,6 +14,9 @@ import java.util.Objects;
 @Entity
 public class Member extends BaseEntity {
 
+    private static final int MASTER_NUMBER = 0;
+    private static final int PARTICIPANT_NUMBER = 1;
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -32,6 +35,10 @@ public class Member extends BaseEntity {
     @Embedded
     private Introduction introduction;
 
+    private Integer participatedStudyCount;
+
+    private Integer finishedStudyCount;
+
     protected Member() {
     }
 
@@ -42,19 +49,29 @@ public class Member extends BaseEntity {
             String nickname,
             String profileImageUrl,
             Integer tier,
-            String introduction
-    ) {
+            String introduction,
+            Integer participatedStudyCount,
+            Integer finishedStudyCount) {
         this.id = id;
         this.githubId = githubId;
         this.nickname = new Nickname(nickname);
         this.profileImageUrl = profileImageUrl;
         this.tier = tier;
         this.introduction = new Introduction(introduction);
+        this.participatedStudyCount = participatedStudyCount;
+        this.finishedStudyCount = finishedStudyCount;
     }
 
     public void updateProfile(String nickname, String introduction) {
         this.nickname = new Nickname(nickname);
         this.introduction = new Introduction(introduction);
+    }
+
+    public Integer calculateSuccessRate() {
+        if (Objects.isNull(finishedStudyCount) || Objects.isNull(participatedStudyCount)) {
+            return 0;
+        }
+        return finishedStudyCount * 100 / participatedStudyCount;
     }
 
     public Long getId() {
@@ -79,6 +96,13 @@ public class Member extends BaseEntity {
 
     public String getIntroduction() {
         return introduction.getIntroduction();
+    }
+
+    public int isSameWithMaster(Member master) {
+        if (this.equals(master)) {
+            return MASTER_NUMBER;
+        }
+        return PARTICIPANT_NUMBER;
     }
 
     @Override

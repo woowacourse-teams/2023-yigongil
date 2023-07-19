@@ -4,8 +4,10 @@ import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.exception.TooManyOptionalTodosException;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Builder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,9 +17,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import lombok.Builder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class RoundOfMember extends BaseEntity {
@@ -64,6 +65,9 @@ public class RoundOfMember extends BaseEntity {
 
     public void updateNecessaryTodoIsDone(Boolean isDone) {
         this.isDone = isDone;
+
+    public boolean isMemberEquals(Member member) {
+        return this.member.equals(member);
     }
 
     public Long getId() {

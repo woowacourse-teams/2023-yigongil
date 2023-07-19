@@ -8,8 +8,7 @@ import com.yigongil.backend.request.StudyCreateRequest;
 import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
 import com.yigongil.backend.response.RecruitingStudyResponse;
-import java.net.URI;
-import java.util.List;
+import com.yigongil.backend.response.StudyDetailResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,6 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
+import java.util.List;
 
 @RequestMapping("/v1/studies")
 @RestController
@@ -62,6 +64,13 @@ public class StudyController {
     public ResponseEntity<Void> applyStudy(@Authorization Member member, @PathVariable Long studyId) {
         studyService.apply(member, studyId);
         return ResponseEntity.noContent().build();
+    }
+
+    @RequestMapping("/{id}")
+    @GetMapping
+    public ResponseEntity<StudyDetailResponse> viewStudyDetail(@Authorization Member member, @PathVariable Long id) {
+        StudyDetailResponse response = studyService.findStudyDetailByStudyId(id);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/recruiting")

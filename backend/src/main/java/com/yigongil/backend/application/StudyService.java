@@ -3,12 +3,16 @@ package com.yigongil.backend.application;
 import com.yigongil.backend.domain.applicant.Applicant;
 import com.yigongil.backend.domain.applicant.ApplicantRepository;
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.member.MemberRepository;
+import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.exception.ApplicantAlreadyExistException;
+import com.yigongil.backend.exception.StudyNotFoundException;
 import com.yigongil.backend.request.StudyCreateRequest;
 import com.yigongil.backend.response.RecruitingStudyResponse;
+import com.yigongil.backend.response.StudyDetailResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,10 +29,16 @@ public class StudyService {
 
     private final StudyRepository studyRepository;
     private final ApplicantRepository applicantRepository;
+    private final MemberRepository memberRepository;
 
-    public StudyService(StudyRepository studyRepository, ApplicantRepository applicantRepository) {
+    public StudyService(
+            StudyRepository studyRepository,
+            ApplicantRepository applicantRepository,
+            MemberRepository memberRepository
+    ) {
         this.studyRepository = studyRepository;
         this.applicantRepository = applicantRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Transactional
@@ -44,7 +54,7 @@ public class StudyService {
         );
 
         return studyRepository.save(study)
-                              .getId();
+                .getId();
     }
 
     @Transactional(readOnly = true)
@@ -53,8 +63,8 @@ public class StudyService {
         Page<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.RECRUITING, pageable);
 
         return studies.get()
-                      .map(RecruitingStudyResponse::from)
-                      .toList();
+                .map(RecruitingStudyResponse::from)
+                .toList();
     }
 
     @Transactional
@@ -76,5 +86,17 @@ public class StudyService {
         if (isApplicantAlreadyExists) {
             throw new ApplicantAlreadyExistException("이미 스터디에 신청한 멤버입니다.", String.valueOf(member.getId()));
         }
+    }
+
+    @Transactional(readOnly = true)
+    public StudyDetailResponse findStudyDetailByStudyId(Long studyId) {
+        Study study = studyRepository.findByIdWithRound(studyId)
+                .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
+        List<Round> rounds = study.getRounds();
+        Round currentRound = study.getCurrentRound();
+
+        List<Member> members = memberRepository.findMembersByRoundId(currentRound.getId());
+
+        return StudyDetailResponse.of(study, rounds, currentRound, members);
     }
 }
