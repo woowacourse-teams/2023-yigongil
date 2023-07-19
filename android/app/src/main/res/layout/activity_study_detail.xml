@@ -8,12 +8,16 @@
         <variable
             name="viewModel"
             type="com.created.team201.presentation.studyList.StudyDetailViewModel" />
+
+        <variable
+            name="activity"
+            type="com.created.team201.presentation.studyList.StudyDetailActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.studyList.StudyDetail">
+        tools:context=".presentation.studyList.StudyDetailActivity">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_study_detail_app_bar"
@@ -165,13 +169,29 @@
             android:orientation="vertical"
             android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintBottom_toTopOf="@id/btn_study_detail_participate"
+            app:layout_constraintBottom_toTopOf="@id/btn_study_detail_waiting"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_study_detail_study_people_title"
             app:spanCount="2"
             tools:itemCount="4"
             tools:listitem="@layout/item_study_detail_study_people" />
+
+        <TextView
+            android:id="@+id/btn_study_detail_waiting"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/bg_rectangle_radius_10dp_green01"
+            android:gravity="center"
+            android:text="@string/study_detail_study_waiting"
+            android:textAppearance="@style/button_sb18"
+            android:textColor="@color/grey02_78808B"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
             android:id="@+id/btn_study_detail_dm"
@@ -182,14 +202,14 @@
             android:layout_marginBottom="32dp"
             android:background="@drawable/btn_rectangle_radius_10dp"
             android:clickable="true"
+            android:contentDescription="@string/study_detail_dm_button_content_description"
             android:padding="16dp"
             android:src="@drawable/ic_dm"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_study_detail_participate"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            android:contentDescription="@string/study_detail_dm_button_content_description" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/btn_study_detail_participate"
@@ -200,6 +220,7 @@
             android:background="@drawable/btn_rectangle_radius_10dp"
             android:clickable="true"
             android:gravity="center"
+            android:onClick="@{() -> activity.onParticipateButtonClick()}"
             android:text="@{@string/study_detail_study_capacity(viewModel.study.applicantCount, viewModel.study.peopleCount)}"
             android:textAppearance="@style/button_sb18"
             android:textColor="@color/white"

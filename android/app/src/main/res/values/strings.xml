@@ -19,6 +19,7 @@
     <string name="study_detail_study_people">스터디원</string>
     <string name="study_detail_study_capacity">참여하기(%d/%d)</string>
     <string name="study_detail_dm_button_content_description">스터디장에게 문의하기</string>
+    <string name="study_detail_study_waiting">스터디장의 수락을 기다리고있어요.</string>
     <string name="item_study_detail_study_success_rate">스터디 성공률 %d%%</string>
 
     <!--커스텀 프로필 이미지 뷰-->

@@ -8,6 +8,10 @@ class StudyDetailViewModel : ViewModel() {
     val study: StudyUIModel = DUMMY_STUDY
     val studyParticipants: List<StudyParticipant> = DUMMY_STUDY_PARTICIPANTS
 
+    fun participateStudy() {
+        // 서버통신 로직
+    }
+
     companion object {
         val DUMMY_STUDY = StudyUIModel(
             title = "두 달 동안 자바 스터디 빡세게 하실 분 구합니다~!!",
