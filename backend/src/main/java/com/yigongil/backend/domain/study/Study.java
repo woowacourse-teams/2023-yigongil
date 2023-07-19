@@ -148,16 +148,10 @@ public class Study extends BaseEntity {
         round.updateNecessaryTodoContent(content);
     }
 
-    public void completeNecessaryTodo(Member member, Long todoId) {
+    public void updateNecessaryTodoIsDone(Member member, Long todoId, Boolean isDone) {
         Round round = findRoundById(todoId);
         RoundOfMember roundOfMemberBy = round.findRoundOfMemberBy(member);
-        roundOfMemberBy.completeNecessaryTodo();
-    }
-
-    public void resetNecessaryTodo(Member member, Long todoId) {
-        final Round round = findRoundById(todoId);
-        final RoundOfMember roundOfMemberBy = round.findRoundOfMemberBy(member);
-        roundOfMemberBy.resetNecessaryTodo();
+        roundOfMemberBy.updateNecessaryTodoIsDone(isDone);
     }
 
     public Round findRoundById(Long roundId) {

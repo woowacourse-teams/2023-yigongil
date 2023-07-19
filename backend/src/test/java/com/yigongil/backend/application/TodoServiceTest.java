@@ -99,7 +99,7 @@ class TodoServiceTest {
             willReturn(Optional.of(study)).given(studyRepository).findById(1L);
 
             Round roundById = study.findRoundById(round.getId());
-            final TodoUpdateRequest request = new TodoUpdateRequest(true, true, "hey");
+            TodoUpdateRequest request = new TodoUpdateRequest(true, true, "hey");
             study.createNecessaryTodo(member, roundById.getId(), "기존 투두");
 
             //when
@@ -137,7 +137,7 @@ class TodoServiceTest {
                     .findRoundOfMemberBy(member)
                     .getOptionalTodos()
                     .add(todo);
-            final TodoUpdateRequest request = new TodoUpdateRequest(false, true, "수정된 내용");
+            TodoUpdateRequest request = new TodoUpdateRequest(false, true, "수정된 내용");
 
             //when
             todoService.update(member, study.getId(), todo.getId(), request);

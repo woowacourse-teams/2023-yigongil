@@ -1,8 +1,6 @@
 package com.yigongil.backend.domain.optionaltodo;
 
 import com.yigongil.backend.domain.BaseEntity;
-import com.yigongil.backend.exception.TodoNotDoneYetException;
-import com.yigongil.backend.exception.TodoNotFoundException;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -40,18 +38,8 @@ public class OptionalTodo extends BaseEntity {
         this.content = content;
     }
 
-    public void complete() {
-        if (isDone) {
-            throw new TodoNotFoundException("해당 투두는 이미 완료되었습니다.", String.valueOf(id));
-        }
-        isDone = true;
-    }
-
-    public void reset() {
-        if (isDone) {
-            isDone = false;
-        }
-        throw new TodoNotDoneYetException("투두가 아직 완료되지 않았습니다.", String.valueOf(id));
+    public void updateIsDone(Boolean isDone) {
+        this.isDone = isDone;
     }
 
     public Long getId() {

@@ -55,11 +55,7 @@ public class TodoService {
             study.updateNecessaryTodoContent(todoId, request.content());
         }
         if (Objects.nonNull(request.isDone())) {
-            if (request.isDone()) {
-                study.completeNecessaryTodo(member, todoId);
-                return;
-            }
-            study.resetNecessaryTodo(member, todoId);
+            study.updateNecessaryTodoIsDone(member, todoId, request.isDone());
         }
     }
 
@@ -74,11 +70,7 @@ public class TodoService {
             todo.updateContent(request.content());
         }
         if (Objects.nonNull(request.isDone())) {
-            if (request.isDone()) {
-                todo.complete();
-                return;
-            }
-            todo.reset();
+            todo.updateIsDone(request.isDone());
         }
     }
 
