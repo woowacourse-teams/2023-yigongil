@@ -22,7 +22,7 @@ class StudyListAdapter(
     }
 
     override fun onBindViewHolder(holder: StudyListViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(currentList[position])
     }
 
     companion object {
