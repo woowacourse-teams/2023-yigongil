@@ -5,7 +5,10 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.LinearLayout.VERTICAL
+import android.widget.TextView
+import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.ContextCompat.getDrawable
+import androidx.databinding.BindingAdapter
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +16,7 @@ import com.created.team201.R
 import com.created.team201.databinding.FragmentStudyListBinding
 import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.studyList.adapter.StudyListAdapter
+import com.created.team201.presentation.studyList.model.StudyStatus
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 
 class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fragment_study_list) {
@@ -103,6 +107,34 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private fun studyListClickListener() = object : StudyListClickListener {
         override fun onClickStudySummary(studySummary: StudySummaryUiModel) {
             // 스터디 상세보기 뷰로 이동
+        }
+    }
+
+    companion object {
+        @JvmStatic
+        @BindingAdapter("isOver")
+        fun isOver(textView: TextView, status: StudyStatus) {
+            textView.setTextColor(
+                when (status) {
+                    StudyStatus.END -> getColor(
+                        textView.context,
+                        R.color.grey02_78808B,
+                    )
+
+                    else -> getColor(textView.context, R.color.white)
+                },
+            )
+        }
+
+        @JvmStatic
+        @BindingAdapter("isRecruiting")
+        fun isRecruiting(textView: TextView, status: StudyStatus) {
+            textView.setText(
+                when (status) {
+                    StudyStatus.RECRUITING -> R.string.study_list_processing_date
+                    else -> R.string.study_list_previous_date
+                },
+            )
         }
     }
 }

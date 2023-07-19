@@ -3,7 +3,7 @@ package com.created.team201.presentation.studyList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
+import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 
 class StudyListViewModel : ViewModel() {
 

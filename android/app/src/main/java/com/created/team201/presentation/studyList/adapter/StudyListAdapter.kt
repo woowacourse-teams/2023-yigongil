@@ -10,6 +10,13 @@ class StudyListAdapter(
     private val studyListClickListener: StudyListClickListener,
 ) : ListAdapter<StudySummaryUiModel, StudyListViewHolder>(StudyListDiffUtil) {
 
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long =
+        getItem(position).id
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyListViewHolder {
         return StudyListViewHolder(parent, studyListClickListener)
     }

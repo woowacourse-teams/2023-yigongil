@@ -9,7 +9,7 @@ import com.created.team201.presentation.studyList.StudyListClickListener
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 
 class StudyListViewHolder(
-    private val parent: ViewGroup,
+    parent: ViewGroup,
     studyListClickListener: StudyListClickListener,
 ) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.item_study_list, parent, false),

@@ -8,8 +8,8 @@ data class PeriodUiModel(
 ) {
     override fun toString(): String {
         return when (unit) {
-            PeriodUnit.DAY -> "$number day"
-            PeriodUnit.WEEK -> "$number week"
+            PeriodUnit.DAY -> "$number 일"
+            PeriodUnit.WEEK -> "$number 주"
         }
     }
 }
