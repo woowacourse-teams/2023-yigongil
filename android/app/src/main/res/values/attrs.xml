@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SinglePicker">
+        <attr name="title" format="string" />
+        <attr name="value" format="integer" />
+        <attr name="minValue" format="integer" />
+        <attr name="maxValue" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomProfileImage">
+        <attr name="glideCircleImageUrl" format="string" />
+        <attr name="borderProgress" format="integer" />
+        <attr name="tier" format="enum">
+            <enum name="bronze" value="1" />
+            <enum name="silver" value="2" />
+            <enum name="gold" value="3" />
+            <enum name="platinum" value="4" />
+            <enum name="diamond" value="5" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="MultiPicker">
+        <attr name="leftValue" format="integer" />
+        <attr name="rightValue" format="integer" />
+        <attr name="leftMinValue" format="integer" />
+        <attr name="leftMaxValue" format="integer" />
+        <attr name="rightMinValue" format="integer" />
+        <attr name="rightMaxValue" format="integer" />
+        <attr name="rightDisplayNames" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="IconTextButton">
+        <attr name="iconResource" format="dimension" />
+        <attr name="buttonName" format="string" />
+        <attr name="information" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="Calendar">
+        <attr name="maximumMonthRange" format="integer" />
+    </declare-styleable>
+</resources>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/ll_icon_text_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_rectangle_radius_5dp"
+        android:orientation="vertical"
+        android:paddingVertical="8dp">
+
+        <ImageView
+            android:id="@+id/iv_icon_text_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:importantForAccessibility="no"
+            android:paddingHorizontal="16dp"
+            tools:src="@drawable/ic_people_capacity" />
+
+        <TextView
+            android:id="@+id/tv_icon_text_button_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:textAppearance="@style/description_r8"
+            android:textColor="@color/grey02_78808B"
+            tools:text="@string/icon_text_button_name_people_count" />
+
+        <TextView
+            android:id="@+id/tv_icon_text_button_information"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dp"
+            android:textAppearance="@style/study_info_sb12"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            tools:text="6명" />
+
+    </LinearLayout>
+
+</layout>
