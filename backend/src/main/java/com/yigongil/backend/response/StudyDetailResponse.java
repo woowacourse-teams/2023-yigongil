@@ -23,14 +23,14 @@ public record StudyDetailResponse(
         List<RoundNumberResponse> rounds
 ) {
 
-    public static StudyDetailResponse of(Study study, List<Round> rounds, Round firstRound, List<Member> members) {
+    public static StudyDetailResponse of(Study study, List<Round> rounds, Round currentRound, List<Member> members) {
         return new StudyDetailResponse(
                 study.getId(),
                 study.getProcessingStatus().getCode(),
                 study.getName(),
-                firstRound.getRoundOfMembers().size(),
+                currentRound.getRoundOfMembers().size(),
                 study.getNumberOfMaximumMembers(),
-                firstRound.getMaster().getId(),
+                currentRound.getMaster().getId(),
                 DateConverter.localDateTimeToString(study.getStartAt()),
                 study.getTotalRoundCount(),
                 study.getPeriodOfRound(),

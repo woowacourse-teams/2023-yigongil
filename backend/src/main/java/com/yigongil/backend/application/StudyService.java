@@ -43,12 +43,10 @@ public class StudyService {
         Study study = studyRepository.findById(studyId)
                 .orElseThrow(StudyNotFoundException::new);
         List<Round> rounds = study.getRounds();
-        Round firstRound = rounds.stream()
-                .filter(Round::isFirstRound)
-                .findAny().orElseThrow();
+        Round currentRound = study.getCurrentRound();
 
-        List<Member> members = memberRepository.findMembersByRoundId(firstRound.getId());
+        List<Member> members = memberRepository.findMembersByRoundId(currentRound.getId());
 
-        return StudyDetailResponse.of(study, rounds, firstRound, members);
+        return StudyDetailResponse.of(study, rounds, currentRound, members);
     }
 }

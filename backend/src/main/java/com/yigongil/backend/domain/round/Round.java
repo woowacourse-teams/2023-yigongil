@@ -79,10 +79,6 @@ public class Round extends BaseEntity {
         return rounds;
     }
 
-    public boolean isFirstRound() {
-        return this.roundNumber == 1;
-    }
-
     public Long getId() {
         return id;
     }
