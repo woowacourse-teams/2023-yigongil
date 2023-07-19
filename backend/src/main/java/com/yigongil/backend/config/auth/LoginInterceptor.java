@@ -3,6 +3,7 @@ package com.yigongil.backend.config.auth;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -21,6 +22,9 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if (!request.getMethod().equalsIgnoreCase(HttpMethod.GET.toString())) {
+            return true;
+        }
         String id = request.getHeader(HttpHeaders.AUTHORIZATION);
         Optional<Member> member = memberRepository.findById(Long.valueOf(id));
         return member.isPresent();
