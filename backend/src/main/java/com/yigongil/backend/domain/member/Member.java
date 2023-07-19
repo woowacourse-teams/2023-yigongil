@@ -51,7 +51,8 @@ public class Member extends BaseEntity {
             Integer tier,
             String introduction,
             Integer participatedStudyCount,
-            Integer finishedStudyCount) {
+            Integer finishedStudyCount
+    ) {
         this.id = id;
         this.githubId = githubId;
         this.nickname = new Nickname(nickname);

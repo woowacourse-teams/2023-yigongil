@@ -9,6 +9,7 @@ import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
+import com.yigongil.backend.response.StudyMemberResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -66,8 +67,7 @@ public class StudyController {
         return ResponseEntity.noContent().build();
     }
 
-    @RequestMapping("/{id}")
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<StudyDetailResponse> viewStudyDetail(@Authorization Member member, @PathVariable Long id) {
         StudyDetailResponse response = studyService.findStudyDetailByStudyId(id);
         return ResponseEntity.ok(response);
@@ -77,6 +77,12 @@ public class StudyController {
     public ResponseEntity<List<RecruitingStudyResponse>> readRecruitingStudies(int page) {
         List<RecruitingStudyResponse> response = studyService.findRecruitingStudies(page);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}/applicants")
+    public ResponseEntity<List<StudyMemberResponse>> readApplicantOfStudy(@PathVariable Long id, @Authorization Member master) {
+        List<StudyMemberResponse> applicants = studyService.findApplicantsOfStudy(id, master);
+        return ResponseEntity.ok(applicants);
     }
 }
 

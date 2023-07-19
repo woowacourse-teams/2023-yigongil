@@ -95,11 +95,11 @@ public class Round extends BaseEntity {
         necessaryToDoContent = content;
     }
 
-    private void validateMaster(Member member) {
+    public void validateMaster(Member member) {
         if (master.equals(member)) {
             return;
         }
-        throw new NotStudyMasterException("스터디 마스터만 필수 투두를 추가할 수 있습니다.", member.getNickname());
+        throw new NotStudyMasterException("스터디 마스터가 아니라 권한이 없습니다 ", member.getNickname());
     }
 
     public OptionalTodo createOptionalTodo(Member author, String content) {

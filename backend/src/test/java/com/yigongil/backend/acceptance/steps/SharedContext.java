@@ -63,8 +63,4 @@ public class SharedContext {
     public void setParameter(String key, Object value) {
         parameters.put(key, value);
     }
-
-    public void setRoundId(Long roundId) {
-        this.roundId = roundId;
-    }
 }

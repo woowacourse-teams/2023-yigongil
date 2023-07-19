@@ -6,6 +6,8 @@ import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.StudyMemberAlreadyExistException;
+import lombok.Builder;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import lombok.Builder;
 
 @Entity
 public class Applicant extends BaseEntity {
@@ -57,5 +58,9 @@ public class Applicant extends BaseEntity {
             String processingStatus = study.getProcessingStatus().name();
             throw new InvalidProcessingStatusException("지원한 스터디는 현재 모집 중인 상태가 아닙니다.", processingStatus);
         }
+    }
+
+    public Member getMember() {
+        return member;
     }
 }
