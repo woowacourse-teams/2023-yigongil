@@ -26,7 +26,7 @@ class PeriodBottomSheetFragment : BindingBottomSheetFragment<FragmentPeriodBotto
         binding.lifecycleOwner = viewLifecycleOwner
     }
 
-    fun onSaveButtonClick() {
+    private fun onSaveButtonClick() {
         viewModel.setPeriod(binding.spPeriod.value)
         dismiss()
     }

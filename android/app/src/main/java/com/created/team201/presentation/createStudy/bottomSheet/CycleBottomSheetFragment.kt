@@ -42,7 +42,7 @@ class CycleBottomSheetFragment :
         }
     }
 
-    fun onSaveButtonClick() {
+    private fun onSaveButtonClick() {
         viewModel.setCycle(binding.mpCycle.leftValue, binding.mpCycle.rightValue)
         dismiss()
     }
