@@ -13,7 +13,6 @@ import com.created.team201.R
 import com.created.team201.databinding.FragmentStudyListBinding
 import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.studyList.adapter.StudyListAdapter
-import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 
 class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fragment_study_list) {
 

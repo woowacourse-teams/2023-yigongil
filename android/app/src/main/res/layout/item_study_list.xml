@@ -26,12 +26,19 @@
         <variable
             name="studySummary"
             type="com.created.team201.presentation.studyList.model.StudySummaryUiModel" />
+
+        <variable
+            name="studyListClickListener"
+            type="com.created.team201.presentation.studyList.StudyListClickListener" />
+
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_study_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> studyListClickListener.onClickStudySummary(studySummary.id)}">
 
         <ImageView
             android:id="@+id/iv_study_list_tier"

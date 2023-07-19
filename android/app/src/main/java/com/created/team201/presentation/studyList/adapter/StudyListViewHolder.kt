@@ -19,9 +19,7 @@ class StudyListViewHolder(
     private lateinit var studySummary: StudySummaryUiModel
 
     init {
-        itemView.setOnClickListener {
-            studyListClickListener.onClickStudySummary(itemId)
-        }
+        binding.studyListClickListener = studyListClickListener
     }
 
     fun bind(item: StudySummaryUiModel) {
