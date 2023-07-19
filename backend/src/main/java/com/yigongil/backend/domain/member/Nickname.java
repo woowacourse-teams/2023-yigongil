@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 @Embeddable
-class Nickname {
+public class Nickname {
 
     private static final int MINIMUM_NICKNAME_LENGTH = 2;
     private static final int MAXIMUM_NICKNAME_LENGTH = 8;
