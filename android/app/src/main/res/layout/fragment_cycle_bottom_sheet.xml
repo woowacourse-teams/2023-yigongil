@@ -9,6 +9,10 @@
             type="com.created.team201.presentation.createStudy.CreateStudyViewModel" />
 
         <variable
+            name="changeListener"
+            type="com.created.team201.presentation.createStudy.custom.MultiPickerChangeListener" />
+
+        <variable
             name="onCancelClickListener"
             type="kotlin.jvm.functions.Function0" />
 
@@ -28,7 +32,7 @@
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
-            android:id="@+id/view_create_study_people_count"
+            android:id="@+id/view_create_study_cycle"
             android:layout_width="0dp"
             android:layout_height="5dp"
             android:background="@drawable/bg_rectangle_radius_5dp"
@@ -38,21 +42,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.created.team201.presentation.createStudy.custom.SinglePicker
-            android:id="@+id/sp_people_count"
-            android:layout_width="wrap_content"
+        <com.created.team201.presentation.createStudy.custom.MultiPicker
+            android:id="@+id/mp_cycle"
+            changeListener="@{changeListener}"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_create_study_people_count"
-            app:maxValue="8"
-            app:minValue="2"
-            app:title="@string/single_picker_text_people_count"
-            app:value="@{viewModel.peopleCount}" />
+            app:layout_constraintTop_toBottomOf="@id/view_create_study_cycle"
+            app:leftMaxValue="14"
+            app:leftMinValue="1"
+            app:leftValue="@{viewModel.cycle.date}"
+            app:rightDisplayNames="@array/multiPickerDisplayNames"
+            app:rightMaxValue="1"
+            app:rightMinValue="0"
+            app:rightValue="@{viewModel.cycle.type}" />
 
         <TextView
-            android:id="@+id/tv_people_count_bottom_sheet_btn_cancel"
+            android:id="@+id/tv_cycle_bottom_sheet_btn_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
@@ -66,12 +74,12 @@
             android:textAppearance="@style/button_sb16"
             android:textColor="@color/white01_66FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_people_count_bottom_sheet_btn_save"
+            app:layout_constraintEnd_toStartOf="@id/tv_cycle_bottom_sheet_btn_save"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sp_people_count" />
+            app:layout_constraintTop_toBottomOf="@id/mp_cycle" />
 
         <TextView
-            android:id="@+id/tv_people_count_bottom_sheet_btn_save"
+            android:id="@+id/tv_cycle_bottom_sheet_btn_save"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
@@ -83,10 +91,10 @@
             android:textAlignment="center"
             android:textAppearance="@style/button_sb16"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@id/tv_people_count_bottom_sheet_btn_cancel"
+            app:layout_constraintBottom_toBottomOf="@id/tv_cycle_bottom_sheet_btn_cancel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_people_count_bottom_sheet_btn_cancel"
-            app:layout_constraintTop_toTopOf="@id/tv_people_count_bottom_sheet_btn_cancel" />
+            app:layout_constraintStart_toEndOf="@id/tv_cycle_bottom_sheet_btn_cancel"
+            app:layout_constraintTop_toTopOf="@id/tv_cycle_bottom_sheet_btn_cancel" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

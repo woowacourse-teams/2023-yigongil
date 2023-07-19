@@ -5,6 +5,8 @@
     <color name="transparent">#00000000</color>
 
     <!--Custom Color-->
+    <color name="white01_66FFFFFF">#66FFFFFF</color>
+
     <color name="green01_4039D353">#4039D353</color>
     <color name="green02_E639D353">#E639D353</color>
     <color name="green03_016D32">#016D32</color>

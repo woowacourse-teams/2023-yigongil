@@ -9,8 +9,12 @@
             type="com.created.team201.presentation.createStudy.CreateStudyViewModel" />
 
         <variable
-            name="changeListener"
-            type="com.created.team201.presentation.createStudy.custom.MultiPickerChangeListener" />
+            name="onCancelClickListener"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onSaveClickListener"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,20 +38,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.created.team201.presentation.createStudy.custom.MultiPicker
-            android:id="@+id/mp_period"
-            changeListener="@{changeListener}"
-            android:layout_width="match_parent"
+        <com.created.team201.presentation.createStudy.custom.SinglePicker
+            android:id="@+id/sp_period"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_create_study_period"
-            app:leftMaxValue="56"
-            app:leftMinValue="1"
-            app:rightDisplayNames="@array/multiPickerDisplayNames"
-            app:rightMaxValue="1"
-            app:rightMinValue="0" />
+            app:maxValue="60"
+            app:minValue="1"
+            app:title="@string/single_picker_text_period"
+            app:value="@{viewModel.period}" />
 
         <TextView
             android:id="@+id/tv_period_bottom_sheet_btn_cancel"
@@ -55,25 +57,29 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
             android:layout_marginTop="38dp"
-            android:background="@color/green01_4039D353"
+            android:background="@drawable/bg_rectangle_only_radius_10dp"
+            android:backgroundTint="@color/green01_4039D353"
+            android:onClick="@{() -> onCancelClickListener.invoke()}"
             android:paddingVertical="10dp"
-            android:text="@string/period_button_name_cancel"
+            android:text="@string/bottomSheetFragment_button_name_cancel"
             android:textAlignment="center"
             android:textAppearance="@style/button_sb16"
-            android:textColor="@color/white"
+            android:textColor="@color/white01_66FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_period_bottom_sheet_btn_save"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mp_period" />
+            app:layout_constraintTop_toBottomOf="@id/sp_period" />
 
         <TextView
             android:id="@+id/tv_period_bottom_sheet_btn_save"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
-            android:background="@color/green02_E639D353"
+            android:background="@drawable/bg_rectangle_only_radius_10dp"
+            android:backgroundTint="@color/green02_E639D353"
+            android:onClick="@{() -> onSaveClickListener.invoke()}"
             android:paddingVertical="10dp"
-            android:text="@string/period_button_name_save"
+            android:text="@string/bottomSheetFragment_button_name_save"
             android:textAlignment="center"
             android:textAppearance="@style/button_sb16"
             android:textColor="@color/white"

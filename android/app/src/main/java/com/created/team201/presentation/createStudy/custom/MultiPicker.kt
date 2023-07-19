@@ -16,19 +16,11 @@ class MultiPicker @JvmOverloads constructor(
         MultiPickerBinding.inflate(LayoutInflater.from(context), this, true)
     }
 
-    var leftValue: Int = 1
+    val leftValue: Int
         get() = binding.npMultiPickerLeft.value
-        set(value) {
-            binding.npMultiPickerLeft.value = value
-            field = value
-        }
 
-    var rightValue: Int = 0
+    val rightValue: Int
         get() = binding.npMultiPickerRight.value
-        set(value) {
-            binding.npMultiPickerRight.value = value
-            field = value
-        }
 
     init {
         binding
@@ -54,6 +46,16 @@ class MultiPicker @JvmOverloads constructor(
                 recycle()
             }
         }
+    }
+
+    fun setLeftValue(leftValue: Int) {
+        if (leftValue == 0) return
+        binding.npMultiPickerLeft.value = leftValue
+    }
+
+    fun setRightValue(rightValue: Int) {
+        if (rightValue == 0) return
+        binding.npMultiPickerRight.value = rightValue
     }
 
     fun setLeftMaxValue(max: Int) {

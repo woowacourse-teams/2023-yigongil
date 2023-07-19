@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="SinglePicker">
+        <attr name="title" format="string" />
+        <attr name="value" format="integer" />
+        <attr name="minValue" format="integer" />
+        <attr name="maxValue" format="integer" />
+    </declare-styleable>
+
     <declare-styleable name="CustomProfileImage">
         <attr name="glideCircleImageUrl" format="string" />
         <attr name="borderProgress" format="integer" />
@@ -10,12 +17,6 @@
             <enum name="platinum" value="4" />
             <enum name="diamond" value="5" />
         </attr>
-    </declare-styleable>
-
-    <declare-styleable name="PeopleCountPicker">
-        <attr name="value" format="integer" />
-        <attr name="minValue" format="integer" />
-        <attr name="maxValue" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="MultiPicker">

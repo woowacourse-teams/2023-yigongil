@@ -3,9 +3,11 @@ package com.created.team201.presentation.createStudy
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.fragment.app.commit
 import com.created.team201.R
 import com.created.team201.databinding.ActivityCreateStudyBinding
 import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.createStudy.bottomSheet.CycleBottomSheetFragment
 import com.created.team201.presentation.createStudy.bottomSheet.PeopleCountBottomSheetFragment
 import com.created.team201.presentation.createStudy.bottomSheet.PeriodBottomSheetFragment
 import com.created.team201.presentation.createStudy.bottomSheet.StartDateBottomSheetFragment
@@ -16,18 +18,23 @@ class CreateStudyActivity :
 
     private val viewModel: CreateStudyViewModel by viewModels()
 
+    private val dates: List<String> by lazy {
+        resources.getStringArray(R.array.multiPickerDisplayNames).toList()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding.activity = this
-        initViewModel()
+        initBinding()
         initActionBar()
-        setCreateButtonListener()
     }
 
-    private fun initViewModel() {
+    private fun initBinding() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        binding.displayNames = dates
+        binding.onIconTextButtonClickListener = ::onIconTextButtonClick
+        binding.onCreateButtonClickListener = ::onCreateButtonClick
     }
 
     private fun initActionBar() {
@@ -36,15 +43,22 @@ class CreateStudyActivity :
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
     }
 
-    private fun setCreateButtonListener() {
-        binding.tvCreateStudyBtnCreate.setOnClickListener {
-            finish()
-        }
+    private fun onCreateButtonClick() {
+        viewModel.getCreateStudy()
+        finish()
     }
 
-    fun onIconTextButtonClick(tag: String) {
-        supportFragmentManager.findFragmentByTag(tag)?.let { return }
+    private fun onIconTextButtonClick(tag: String) {
+        removeAllFragment()
         createBottomSheetFragment(tag)?.show(supportFragmentManager, tag)
+    }
+
+    private fun removeAllFragment() {
+        supportFragmentManager.fragments.forEach {
+            supportFragmentManager.commit {
+                remove(it)
+            }
+        }
     }
 
     private fun createBottomSheetFragment(tag: String): BottomSheetDialogFragment? {
@@ -62,7 +76,7 @@ class CreateStudyActivity :
             }
 
             getString(R.string.createStudy_tag_cycle) -> {
-                null
+                CycleBottomSheetFragment()
             }
 
             else -> {

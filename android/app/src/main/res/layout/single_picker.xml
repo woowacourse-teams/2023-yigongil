@@ -7,7 +7,7 @@
         android:layout_height="wrap_content">
 
         <NumberPicker
-            android:id="@+id/np_create_study"
+            android:id="@+id/np_single_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:descendantFocusability="blocksDescendants"
@@ -18,14 +18,15 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/tv_single_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/people_count_picker_text"
             android:textAppearance="@style/picker_r22"
             android:textColor="@color/grey02_78808B"
-            app:layout_constraintBottom_toBottomOf="@id/np_create_study"
-            app:layout_constraintStart_toEndOf="@id/np_create_study"
-            app:layout_constraintTop_toTopOf="@id/np_create_study" />
+            app:layout_constraintBottom_toBottomOf="@id/np_single_picker"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/np_single_picker"
+            app:layout_constraintTop_toTopOf="@id/np_single_picker" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
