@@ -16,7 +16,7 @@
 
         <variable
             name="displayNames"
-            type="List&lt;Object>" />
+            type="List&lt;String>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
