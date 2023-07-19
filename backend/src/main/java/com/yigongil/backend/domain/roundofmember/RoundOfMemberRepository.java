@@ -9,6 +9,7 @@ public interface RoundOfMemberRepository extends Repository<RoundOfMember, Long>
 
     @Query("""
                     select distinct rm from RoundOfMember rm
+                    join fetch rm.member
                     where rm in :roundOfMembers
             """)
     List<RoundOfMember> findRoundOfMembersWithMember(List<RoundOfMember> roundOfMembers);
