@@ -7,6 +7,7 @@ import com.created.team201.R
 import com.created.team201.databinding.FragmentHomeBinding
 import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.home.adapter.DashboardAdapter
+import com.created.team201.presentation.studyDetail.StudyDetailActivity
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val homeViewModel: HomeViewModel by viewModels()
@@ -23,9 +24,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         }
 
         override fun clickOnStudyCard() {
-            // startActivity
-            // intent : studyId, roundId
+            navigateToStartDetail()
         }
+    }
+
+    private fun navigateToStartDetail() {
+        startActivity(StudyDetailActivity.getIntent(requireContext(), 0))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

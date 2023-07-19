@@ -10,6 +10,12 @@
         <item>@string/multiPicker_display_name_week</item>
     </string-array>
 
+    <!-- 스터디 관리 탭 -->
+    <string-array name="tabLayoutTitles">
+        <item>@string/study_manage_joined_tab</item>
+        <item>@string/study_manage_opened_tab</item>
+    </string-array>
+
     <!-- 스터디 목록 탭 -->
     <string-array name="startDateStrings">
         <item>@string/study_list_previous_date</item>
@@ -20,4 +26,5 @@
         <item>@string/study_list_item_date_format</item>
         <item>@string/study_list_item_week_format</item>
     </string-array>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.created.team201.presentation.studyList
+package com.created.team201.presentation.studyDetail.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil

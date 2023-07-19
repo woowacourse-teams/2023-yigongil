@@ -1,4 +1,4 @@
-package com.created.team201.presentation.studyList
+package com.created.team201.presentation.studyDetail
 
 import androidx.lifecycle.ViewModel
 import com.created.team201.presentation.studyList.uiModel.StudyParticipant

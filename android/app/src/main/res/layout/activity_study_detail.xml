@@ -7,17 +7,17 @@
 
         <variable
             name="viewModel"
-            type="com.created.team201.presentation.studyList.StudyDetailViewModel" />
+            type="com.created.team201.presentation.studyDetail.StudyDetailViewModel" />
 
         <variable
             name="activity"
-            type="com.created.team201.presentation.studyList.StudyDetailActivity" />
+            type="com.created.team201.presentation.studyDetail.StudyDetailActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.studyList.StudyDetailActivity">
+        tools:context=".presentation.studyDetail.StudyDetailActivity">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/tb_study_detail_app_bar"
