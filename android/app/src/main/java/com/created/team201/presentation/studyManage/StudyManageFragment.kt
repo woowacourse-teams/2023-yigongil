@@ -7,7 +7,6 @@ import com.created.team201.R
 import com.created.team201.databinding.FragmentStudyManageBinding
 import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.studyList.StudyListClickListener
-import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 import com.created.team201.presentation.studyManage.adapter.StudyManageAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -45,7 +44,7 @@ class StudyManageFragment :
     }
 
     private fun studyListClickListener() = object : StudyListClickListener {
-        override fun onClickStudySummary(studySummary: StudySummaryUiModel) {
+        override fun onClickStudySummary(id: Long) {
             // 스터디 상세보기 뷰로 이동
             // 참여한인지, 개설한인지 구분
         }
