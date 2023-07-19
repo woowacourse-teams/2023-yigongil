@@ -86,14 +86,13 @@ public class Round extends BaseEntity {
         return rounds;
     }
 
-    public Long createNecessaryTodo(Member member, String content) {
+    public void createNecessaryTodo(Member author, String content) {
         validateLength(content);
-        validateMaster(member);
+        validateMaster(author);
         if (Objects.nonNull(necessaryToDoContent)) {
             throw new NecessaryTodoAlreadyExistException("필수 투두가 이미 존재합니다.", necessaryToDoContent);
         }
         necessaryToDoContent = content;
-        return id;
     }
 
     private void validateMaster(Member member) {
@@ -103,13 +102,9 @@ public class Round extends BaseEntity {
         throw new NotStudyMasterException("스터디 마스터만 필수 투두를 추가할 수 있습니다.", member.getNickname());
     }
 
-    public OptionalTodo createOptionalTodo(Member member, String content) {
+    public OptionalTodo createOptionalTodo(Member author, String content) {
         validateLength(content);
-        RoundOfMember targetRoundOfMember = roundOfMembers.stream()
-                .filter(roundOfMember -> roundOfMember.getMember().equals(member))
-                .findAny()
-                .orElseThrow(() -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", member.getNickname()));
-
+        RoundOfMember targetRoundOfMember = findRoundOfMemberBy(author);
         return targetRoundOfMember.createOptionalTodo(content);
     }
 

@@ -128,14 +128,15 @@ public class Study extends BaseEntity {
         throw new InvalidPeriodUnitException("스터디 주기는 일 또는 주 로만 설정할 수 있습니다.", periodOfRound);
     }
 
-    public Long createNecessaryTodo(Member member, Long roundId, String content) {
+    public Long createNecessaryTodo(Member author, Long roundId, String content) {
         Round targetRound = findRoundById(roundId);
-        return targetRound.createNecessaryTodo(member, content);
+        targetRound.createNecessaryTodo(author, content);
+        return targetRound.getId();
     }
 
-    public OptionalTodo createOptionalTodo(Member member, Long roundId, String content) {
+    public OptionalTodo createOptionalTodo(Member author, Long roundId, String content) {
         Round targetRound = findRoundById(roundId);
-        return targetRound.createOptionalTodo(member, content);
+        return targetRound.createOptionalTodo(author, content);
     }
 
     private Round findRoundById(Long roundId) {

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.yigongil.backend.exception.TooManyOptionalTodosException;
 import com.yigongil.backend.fixture.RoundOfMemberFixture;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
 
 class RoundOfMemberTest {
@@ -29,14 +30,14 @@ class RoundOfMemberTest {
     void 선택_투두가_최대_갯수보다_많으면_예외를_던진다() {
         //given
         RoundOfMember roundOfMember = RoundOfMemberFixture.김진우_라운드_삼.toRoundOfMember();
-
-        //when
         for (int i = 0; i < 4; i++) {
-        roundOfMember.createOptionalTodo("선택 투두");
+            roundOfMember.createOptionalTodo("선택 투두");
         }
 
+        //when
+        ThrowingCallable throwable = () -> roundOfMember.createOptionalTodo("예외 터짐");
+
         //then
-        assertThatThrownBy(() -> roundOfMember.createOptionalTodo("예외 터짐"))
-                .isInstanceOf(TooManyOptionalTodosException.class);
+        assertThatThrownBy(throwable).isInstanceOf(TooManyOptionalTodosException.class);
     }
 }

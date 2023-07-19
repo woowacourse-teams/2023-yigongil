@@ -23,8 +23,8 @@ public class TodoService {
 
     @Transactional
     public Long create(Member member, Long studyId, TodoCreateRequest request) {
-        Study study = studyRepository.findById(studyId).
-                orElseThrow(() -> new StudyNotFoundException("해당 스터디가 존재하지 않습니다.", studyId));
+        Study study = studyRepository.findById(studyId)
+                .orElseThrow(() -> new StudyNotFoundException("해당 스터디가 존재하지 않습니다.", studyId));
         if (request.isNecessary()) {
             return study.createNecessaryTodo(member, request.roundId(), request.content());
         }

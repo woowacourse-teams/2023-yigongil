@@ -7,5 +7,5 @@ public interface OptionalTodoRepository extends Repository<OptionalTodo, Long> {
 
     Optional<OptionalTodo> findById(Long id);
 
-    Optional<OptionalTodo> save(OptionalTodo optionalTodo);
+    OptionalTodo save(OptionalTodo optionalTodo);
 }

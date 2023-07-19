@@ -77,6 +77,7 @@ class StudyControllerTest {
         willReturn(1L).given(todoService).create(MemberFixture.김진우.toMember(),1L, request);
 
         mockMvc.perform(post("/v1/studies/1/todos")
+                        .header(HttpHeaders.AUTHORIZATION, "1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andDo(print())
