@@ -3,6 +3,8 @@ name: Android TEST CI
 on:
   pull_request:
     branches: [ "develop" ]
+    paths:
+      - "android/**"
     
 permissions:
   checks: write
