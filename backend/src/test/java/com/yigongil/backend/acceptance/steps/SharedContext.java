@@ -13,6 +13,7 @@ public class SharedContext {
     private RequestSpecification requestSpecification;
     private Long resultId;
     private ExtractableResponse<Response> response;
+    private String token;
 
     public RequestSpecification getRequestSpecification() {
         return requestSpecification;
@@ -26,6 +27,10 @@ public class SharedContext {
         return response;
     }
 
+    public String getToken() {
+        return token;
+    }
+
     public void setRequestSpecification(RequestSpecification requestSpecification) {
         this.requestSpecification = requestSpecification;
     }
@@ -36,5 +41,9 @@ public class SharedContext {
 
     public void setResponse(ExtractableResponse<Response> response) {
         this.response = response;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

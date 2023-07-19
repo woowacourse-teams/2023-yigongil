@@ -8,9 +8,10 @@ import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NecessaryTodoAlreadyExistException;
 import com.yigongil.backend.exception.NotStudyMasterException;
 import com.yigongil.backend.exception.NotStudyMemberException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import lombok.Builder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,9 +21,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import lombok.Builder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Round extends BaseEntity {
@@ -118,7 +119,7 @@ public class Round extends BaseEntity {
         return roundOfMembers.stream()
                 .filter(roundOfMember -> roundOfMember.getMember().equals(member))
                 .findAny()
-                .orElseThrow(() -> new NotStudyMemberException("해당 스터디의 멤버만 투두를 추가할 수 있습니다.", member.getNickname()));
+                .orElseThrow(() -> new NotStudyMemberException("해당 스터디의 멤버만 투두를 추가할 수 있습니다.", member.getGithubId()));
     }
   
     public int calculateAverageTier() {
