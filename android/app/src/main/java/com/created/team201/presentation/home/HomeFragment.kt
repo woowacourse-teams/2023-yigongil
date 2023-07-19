@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.created.team201.R
-import com.created.team201.data.remote.NetworkModule
 import com.created.team201.databinding.FragmentHomeBinding
 import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.home.adapter.DashboardAdapter
@@ -40,10 +39,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         initAdapter()
         observeUserStudies()
 
-        NetworkModule.homeService
-        // 풀 받기
-        // 코루틴 의존성 추가
-        // 서비스객체 생성 어떻게 할 것 인지
         // 뷰모델 팩토리 어떻게 할 것 인지
 
         homeViewModel.getUserStudyInfo()

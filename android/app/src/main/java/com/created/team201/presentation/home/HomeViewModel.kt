@@ -10,6 +10,7 @@ import com.created.domain.model.UserInfo
 import com.created.domain.repository.HomeRepository
 import com.created.team201.presentation.home.model.StudyUiModel
 import com.created.team201.presentation.home.model.TodoUiModel
+import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val homeRepository: HomeRepository,
@@ -21,7 +22,7 @@ class HomeViewModel(
     val userStudies: LiveData<List<StudyUiModel>> get() = _userStudies
 
     fun getUserStudyInfo() {
-        viewModelScope {
+        viewModelScope.launch {
             runCatching {
                 homeRepository.getUserStudies()
             }.onSuccess {

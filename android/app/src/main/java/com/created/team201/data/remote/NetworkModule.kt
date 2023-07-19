@@ -1,7 +1,6 @@
 package com.created.team201.data.remote
 
 import com.created.team201.BuildConfig.TEAM201_BASE_URL
-import com.created.team201.data.remote.api.HomeService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -18,5 +17,5 @@ object NetworkModule {
         .addConverterFactory(Json.asConverterFactory(CONTENT_TYPE.toMediaType()))
         .build()
 
-    val homeService: HomeService by lazy { retrofit.create(HomeService::class.java) }
+    inline fun <reified T> create(): T = retrofit.create<T>(T::class.java)
 }
