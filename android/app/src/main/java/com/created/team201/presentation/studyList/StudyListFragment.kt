@@ -2,8 +2,6 @@ package com.created.team201.presentation.studyList
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.LinearLayout.VERTICAL
 import androidx.core.content.ContextCompat.getDrawable
@@ -33,7 +31,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
         setUpToolbar()
         setUpStudyListSettings()
-        setUpStudyListObserve()
+        setUpDataObserve()
         setUpRefreshListener()
         setUpCreateStudyListener()
         setUpScrollListener()
@@ -65,7 +63,9 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         }
     }
 
-    private fun setUpStudyListObserve() {
+    private fun setUpDataObserve() {
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.studyListViewModel = studyListViewModel
         studyListViewModel.studySummaries.observe(viewLifecycleOwner) {
             studyListAdapter.submitList(it)
         }
@@ -89,11 +89,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private fun setUpScrollListener() {
         val onScrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    binding.fabStudyListCreateButton.visibility = VISIBLE
-                } else {
-                    binding.fabStudyListCreateButton.visibility = INVISIBLE
-                }
+                studyListViewModel.updateScrollState(newState)
             }
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -104,12 +100,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
                 }
 
                 if (!binding.rvStudyListList.canScrollVertically(1)) {
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        binding.pbStudyListLoad.visibility = VISIBLE
-                        studyListViewModel.loadPage()
-                        binding.pbStudyListLoad.visibility = GONE
-                    }
-                    studyListViewModel.loadPage()
+                    studyListViewModel.loadNextPage()
                 }
             }
         }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.recyclerview.widget.RecyclerView
 import com.created.domain.Page
 import com.created.domain.Period
 import com.created.domain.StudySummary
@@ -26,21 +27,29 @@ class StudyListViewModel(
     private val _studySummaries = MutableLiveData<List<StudySummaryUiModel>>()
     val studySummaries: LiveData<List<StudySummaryUiModel>>
         get() = _studySummaries
+    private val _scrollState = MutableLiveData(true)
+    val scrollState: LiveData<Boolean>
+        get() = _scrollState
+    private val _loadingState = MutableLiveData(false)
+    val loadingState: LiveData<Boolean>
+        get() = _loadingState
 
     init {
         _studySummaries.value = listOf()
         loadPage()
     }
 
-    fun loadPage() {
+    private fun loadPage() {
         viewModelScope.launch {
             runCatching {
                 studyListRepository.getStudyList(page.index)
             }.onSuccess {
-                val newItems = _studySummaries.value?.toMutableList()
-                newItems?.addAll(it.toUiModel())
-                _studySummaries.value = newItems?.toList()
-                page++
+                if (it.isNotEmpty()) {
+                    val newItems = _studySummaries.value?.toMutableList()
+                    newItems?.addAll(it.toUiModel())
+                    _studySummaries.value = newItems?.toList()
+                    page++
+                }
             }.onFailure {
             }
         }
@@ -50,6 +59,21 @@ class StudyListViewModel(
         page = Page(0)
         _studySummaries.value = listOf()
         loadPage()
+    }
+
+    fun loadNextPage() {
+        viewModelScope.launch {
+            _loadingState.value = true
+            loadPage()
+            _loadingState.value = false
+        }
+    }
+
+    fun updateScrollState(state: Int) {
+        _scrollState.value = when (state) {
+            RecyclerView.SCROLL_STATE_IDLE -> true
+            else -> false
+        }
     }
 
     private fun List<StudySummary>.toUiModel(): List<StudySummaryUiModel> =
