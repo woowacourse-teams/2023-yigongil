@@ -43,7 +43,9 @@ class StudyManageViewModel(
                 studies.value = studyManageRepository.getMyStudies().toUiModel()
             }.onSuccess {
                 updateStudies()
-            }.onFailure { }
+            }.onFailure {
+                studies.value = listOf()
+            }
         }
     }
 
