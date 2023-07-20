@@ -13,7 +13,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 class StudyManageFragment :
     BindingFragment<FragmentStudyManageBinding>(R.layout.fragment_study_manage) {
 
-    private val studyManageViewModel: StudyManageViewModel by viewModels()
+    private val studyManageViewModel: StudyManageViewModel by viewModels {
+        StudyManageViewModel.Factory
+    }
     private val studyManageAdapter: StudyManageAdapter by lazy {
         StudyManageAdapter(studyListClickListener())
     }
