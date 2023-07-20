@@ -64,4 +64,9 @@ class CustomProfileImage @JvmOverloads constructor(
         val tier = Tier.of(tierName)
         borderProgress.progressTintList = ColorStateList.valueOf(context.getColor(tier.color))
     }
+
+    fun setTier(tierNumber: Int) {
+        val tier = Tier.of(tierNumber)
+        borderProgress.progressTintList = ColorStateList.valueOf(context.getColor(tier.color))
+    }
 }
