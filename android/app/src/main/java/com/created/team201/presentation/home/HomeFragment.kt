@@ -23,13 +23,13 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
             homeViewModel.updateTodo(id, !isDone)
         }
 
-        override fun clickOnStudyCard() {
-            navigateToStartDetail()
+        override fun clickOnStudyCard(studyId: Long) {
+            navigateToStudyDetailActivity(studyId)
         }
     }
 
-    private fun navigateToStartDetail() {
-        startActivity(StudyDetailActivity.getIntent(requireContext(), 0))
+    private fun navigateToStudyDetailActivity(studyId: Long) {
+        startActivity(StudyDetailActivity.getIntent(requireContext(), studyId))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,8 +38,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         bindViewModel()
         initAdapter()
         observeUserStudies()
-
-        // 뷰모델 팩토리 어떻게 할 것 인지
 
         homeViewModel.updateUserStudies()
     }

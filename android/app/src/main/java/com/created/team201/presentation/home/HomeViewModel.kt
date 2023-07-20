@@ -34,19 +34,18 @@ class HomeViewModel(
     }
 
     fun updateUserStudies() {
-        _userName.value = DUMMY.userName
         _userStudies.value = DUMMY.studies.map { it.toUiModel() }
 
-//        viewModelScope.launch {
-//            runCatching {
-//                homeRepository.getUserStudies()
-//            }.onSuccess { result ->
-//                _userName.value = result.userName
+        viewModelScope.launch {
+            runCatching {
+                homeRepository.getUserStudies()
+            }.onSuccess { result ->
+                _userName.value = result.userName
 //                _userStudies.value = result.studies.map { it.toUiModel() }
-//            }.onFailure {
-//                Log.d("123123", "123123")
-//            }
-//        }
+            }.onFailure {
+                Log.d("123123", "123123")
+            }
+        }
     }
 
     fun updateTodo(todoId: Int, isDone: Boolean) {
@@ -55,14 +54,14 @@ class HomeViewModel(
         val study: StudyUiModel
         val todo: TodoUiModel
 
-        when {
-            isNecessary -> {
+        when (isNecessary) {
+            true -> {
                 updateNecessaryTodoCheck(studies, todoId, isDone)
                 study = studies.find { it.necessaryTodo.todoId == todoId }!!
                 todo = study.necessaryTodo
             }
 
-            else -> {
+            false -> {
                 updateOptionalTodoCheck(studies, todoId, isDone)
                 study = studies.find { it.optionalTodos.any { it.todoId == todoId } }!!
                 todo = study.optionalTodos.find { it.todoId == todoId }!!
