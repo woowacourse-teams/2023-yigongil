@@ -3,14 +3,18 @@ package com.created.team201.presentation.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.model.Study
 import com.created.domain.model.Todo
 import com.created.domain.model.UserInfo
 import com.created.domain.repository.HomeRepository
+import com.created.team201.data.datasource.remote.HomeDataSourceImpl
+import com.created.team201.data.remote.NetworkServiceModule
+import com.created.team201.data.repository.HomeRepositoryImpl
 import com.created.team201.presentation.home.model.StudyUiModel
 import com.created.team201.presentation.home.model.TodoUiModel
-import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val homeRepository: HomeRepository,
@@ -21,18 +25,24 @@ class HomeViewModel(
     private val _userStudies: MutableLiveData<List<StudyUiModel>> = MutableLiveData()
     val userStudies: LiveData<List<StudyUiModel>> get() = _userStudies
 
-    fun getUserStudyInfo() {
-        viewModelScope.launch {
-            runCatching {
-                homeRepository.getUserStudies()
-            }.onSuccess {
-                _userName.value = it.userName
-                _userStudies.value = it.studies.map { it.toUiModel() }
+    init {
+        updateUserStudies()
+    }
 
-//                _userName.value = DUMMY.userName
-//                _userStudies.value = DUMMY.studies.map { it.toUiModel() }
-            }.onFailure { }
-        }
+    fun updateUserStudies() {
+        _userName.value = DUMMY.userName
+        _userStudies.value = DUMMY.studies.map { it.toUiModel() }
+
+//        viewModelScope.launch {
+//            runCatching {
+//                homeRepository.getUserStudies()
+//            }.onSuccess { result ->
+//                _userName.value = result.userName
+//                _userStudies.value = result.studies.map { it.toUiModel() }
+//            }.onFailure {
+//                Log.d("123123", "123123")
+//            }
+//        }
     }
 
     fun patchTodo(id: Int, isDone: Boolean) {
@@ -85,6 +95,16 @@ class HomeViewModel(
     )
 
     companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                HomeViewModel(
+                    homeRepository = HomeRepositoryImpl(
+                        HomeDataSourceImpl(NetworkServiceModule.homeService),
+                    ),
+                )
+            }
+        }
+
         private val DUMMY = UserInfo(
             "산군",
             2,

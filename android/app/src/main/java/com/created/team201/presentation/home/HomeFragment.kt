@@ -10,7 +10,7 @@ import com.created.team201.presentation.home.adapter.DashboardAdapter
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
-    private val homeViewModel: HomeViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels { HomeViewModel.Factory }
     private val dashboardAdapter: DashboardAdapter by lazy {
         DashboardAdapter(implementClickListener())
     }
@@ -41,7 +41,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
         // 뷰모델 팩토리 어떻게 할 것 인지
 
-        homeViewModel.getUserStudyInfo()
+        homeViewModel.updateUserStudies()
     }
 
     private fun bindViewModel() {
