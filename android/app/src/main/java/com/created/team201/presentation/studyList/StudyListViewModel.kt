@@ -48,6 +48,7 @@ class StudyListViewModel(
 
     fun refreshPage() {
         page = Page(0)
+        _studySummaries.value = listOf()
         loadPage()
     }
 
