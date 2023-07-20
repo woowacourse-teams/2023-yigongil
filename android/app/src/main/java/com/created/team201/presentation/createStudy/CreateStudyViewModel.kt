@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.model.CreateStudy
 import com.created.domain.model.Period
 import com.created.domain.repository.CreateStudyRepository
@@ -21,8 +23,13 @@ import kotlinx.coroutines.launch
 class CreateStudyViewModel(
     private val createStudyRepository: CreateStudyRepository,
 ) : ViewModel() {
-    private val name: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
-    private val introduction: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
+    private val _name: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
+    val name: NonNullLiveData<String>
+        get() = _name
+
+    private val _introduction: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
+    val introduction: NonNullLiveData<String>
+        get() = _introduction
 
     private val _peopleCount: NonNullMutableLiveData<Int> = NonNullMutableLiveData(0)
     val peopleCount: NonNullLiveData<Int>
@@ -55,11 +62,11 @@ class CreateStudyViewModel(
         get() = _isSuccessCreateStudy
 
     fun setName(name: String) {
-        this.name.value = name
+        _name.value = name
     }
 
     fun setIntroduction(introduction: String) {
-        this.introduction.value = introduction
+        _introduction.value = introduction
     }
 
     fun setPeopleCount(peopleCount: Int) {
@@ -124,15 +131,14 @@ class CreateStudyViewModel(
     }
 
     companion object {
-        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
                 val repository = CreateStudyRepositoryImpl(
                     CreateStudyRemoteDataSourceImpl(
                         NetworkServiceModule.createStudyService,
                     ),
                 )
-                return CreateStudyViewModel(repository) as T
+                CreateStudyViewModel(repository)
             }
         }
     }
