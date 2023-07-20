@@ -167,7 +167,7 @@ public class Study extends BaseEntity {
         currentRound.validateMaster(candidate);
     }
 
-    public RoundOfMember findCurrentRoundOfMemberOwn(Member member) {
+    public RoundOfMember findCurrentRoundOfMemberBy(Member member) {
         return currentRound.findRoundOfMemberBy(member);
     }
 
