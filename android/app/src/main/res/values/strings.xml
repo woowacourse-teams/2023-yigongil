@@ -64,6 +64,9 @@
     <string name="createStudy_tag_period">TAG_CREATE_STUDY_PERIOD</string>
     <string name="createStudy_tag_cycle">TAG_CREATE_STUDY_CYCLE</string>
 
+    <string name="createStudy_toast_success">스터디 개설에 성공했습니다</string>
+    <string name="createStudy_toast_fail">스터디 개설에 실패했습니다</string>
+
     <!-- 스터디 개설 - 바텀 다이얼로그 뷰 -->
     <string name="bottomSheetFragment_button_name_cancel">취소</string>
     <string name="bottomSheetFragment_button_name_save">저장</string>

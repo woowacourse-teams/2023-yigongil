@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.fragment.app.commit
 import com.created.team201.R
@@ -18,7 +19,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class CreateStudyActivity :
     BindingActivity<ActivityCreateStudyBinding>(R.layout.activity_create_study) {
 
-    private val viewModel: CreateStudyViewModel by viewModels()
+    private val viewModel: CreateStudyViewModel by viewModels { CreateStudyViewModel.Factory }
 
     private val dates: List<String> by lazy {
         resources.getStringArray(R.array.multiPickerDisplayNames).toList()
@@ -46,9 +47,22 @@ class CreateStudyActivity :
     }
 
     private fun onCreateButtonClick() {
-        viewModel.getCreateStudy()
-        finish()
+        viewModel.createStudy()
+        showCreateStudyResultToast()
     }
+
+    private fun showCreateStudyResultToast() {
+        viewModel.isSuccessCreateStudy.observe(this) {
+            when (it) {
+                true -> showToast(getString(R.string.createStudy_toast_success))
+                false -> showToast(getString(R.string.createStudy_toast_fail))
+            }
+            finish()
+        }
+    }
+
+    private fun showToast(message: String) =
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
     private fun onIconTextButtonClick(tag: String) {
         removeAllFragment()
