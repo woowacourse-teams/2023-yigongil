@@ -169,6 +169,10 @@ public class Round extends BaseEntity {
         return roundOfMembers;
     }
 
+    public LocalDateTime getStartAt() {
+        return startAt;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
