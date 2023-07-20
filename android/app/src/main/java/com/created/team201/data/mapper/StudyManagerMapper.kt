@@ -20,5 +20,8 @@ fun StudyManageResponseDto.toDomain(): StudyManage =
         maximumMember,
     )
 
+fun List<StudyManageResponseDto>.toDomain(): List<StudyManage> =
+    this.map { it.toDomain() }
+
 private fun String.toPeriod(): Period =
     Period(Character.getNumericValue(this.first()), PeriodUnit.valueOf(this.last()))
