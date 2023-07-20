@@ -1,36 +1,61 @@
 package com.yigongil.backend.acceptance.steps;
 
-import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.member.MemberRepository;
-import com.yigongil.backend.fixture.MemberFixture;
+import com.yigongil.backend.response.StudyMemberResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import io.restassured.RestAssured;
-import io.restassured.specification.RequestSpecification;
+import io.cucumber.java.en.When;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import org.springframework.http.HttpHeaders;
+
+import java.util.List;
+
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ApplySteps {
 
     private final SharedContext sharedContext;
-    private final MemberRepository memberRepository;
 
-    public ApplySteps(SharedContext sharedContext, MemberRepository memberRepository) {
+    public ApplySteps(SharedContext sharedContext) {
         this.sharedContext = sharedContext;
-        this.memberRepository = memberRepository;
     }
 
-    @Given("스터디 지원자 정보를 입력한다.")
-    public void 회원정보_스터디정보_입력() {
-        Member member = memberRepository.save(MemberFixture.폰노이만.toMemberWithoutId());
-
-        RequestSpecification requestSpecification = RestAssured.given().log().all()
-                .header(HttpHeaders.AUTHORIZATION, member.getId());
-
-        sharedContext.setRequestSpecification(requestSpecification);
+    @Given("깃허브 아이디가 {string}인 멤버가 이름이 {string}스터디에 신청할 수 있다.")
+    public void 스터디_신청(String githubId, String studyName) {
+        String memberId = (String) sharedContext.getParameter(githubId);
+        given().log()
+               .all()
+               .header(HttpHeaders.AUTHORIZATION, memberId)
+               .when()
+               .post("/v1/studies/" + sharedContext.getParameter(studyName) + "/applicants")
+               .then()
+               .log()
+               .all();
     }
 
-    @Then("Member가 Study에 참여 신청을 한다.")
-    public void 참여_신청() {
-        // TODO: 2023/07/18 스터디 지원자 조회 API 생성 후 구현 예정
+    @When("{string}가 이름이 {string}인 스터디의 신청자를 조회한다.")
+    public void 스터디_신청자_조회(String masterGithubId, String studyName) {
+        ExtractableResponse<Response> response = given().log()
+                                                        .all()
+                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(masterGithubId))
+                                                        .when()
+                                                        .get("/v1/studies/" + sharedContext.getParameter(studyName) + "/applicants")
+                                                        .then()
+                                                        .log()
+                                                        .all()
+                                                        .extract();
+
+        sharedContext.setResponse(response);
+    }
+
+    @Then("스터디의 신청자는 {int}명이다.")
+    public void 신청자_확인(int applicantsCount) {
+        ExtractableResponse<Response> response = sharedContext.getResponse();
+
+        List<StudyMemberResponse> studyMemberResponses = response.jsonPath()
+                                                                 .getList(".", StudyMemberResponse.class);
+
+        assertThat(studyMemberResponses).hasSize(applicantsCount);
     }
 }

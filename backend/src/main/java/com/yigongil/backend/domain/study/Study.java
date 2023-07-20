@@ -161,6 +161,10 @@ public class Study extends BaseEntity {
                 .orElseThrow(() -> new RoundNotFoundException("스터디에 해당 회차가 존재하지 않습니다.", roundId));
     }
 
+    public void validateMaster(Member candidate) {
+        currentRound.validateMaster(candidate);
+    }
+
     public Long getId() {
         return id;
     }

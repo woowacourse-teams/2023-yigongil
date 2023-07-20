@@ -13,6 +13,7 @@ import com.yigongil.backend.exception.StudyNotFoundException;
 import com.yigongil.backend.request.StudyCreateRequest;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
+import com.yigongil.backend.response.StudyMemberResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -54,7 +55,7 @@ public class StudyService {
         );
 
         return studyRepository.save(study)
-                .getId();
+                              .getId();
     }
 
     @Transactional(readOnly = true)
@@ -63,21 +64,21 @@ public class StudyService {
         Page<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.RECRUITING, pageable);
 
         return studies.get()
-                .map(RecruitingStudyResponse::from)
-                .toList();
+                      .map(RecruitingStudyResponse::from)
+                      .toList();
     }
 
     @Transactional
     public void apply(Member member, Long studyId) {
         Study study = studyRepository.findById(studyId)
-                .orElseThrow(() -> new IllegalArgumentException("스터디가 존재하지 않습니다."));
+                                     .orElseThrow(() -> new IllegalArgumentException("스터디가 존재하지 않습니다."));
         // TODO: 2023/07/18 pull 받은 뒤 StudyNotFoundException 던지는 것으로 수정
 
         validateApplicantAlreadyExist(member, study);
         Applicant applicant = Applicant.builder()
-                .study(study)
-                .member(member)
-                .build();
+                                       .study(study)
+                                       .member(member)
+                                       .build();
         applicantRepository.save(applicant);
     }
 
@@ -90,13 +91,29 @@ public class StudyService {
 
     @Transactional(readOnly = true)
     public StudyDetailResponse findStudyDetailByStudyId(Long studyId) {
-        Study study = studyRepository.findByIdWithRound(studyId)
-                .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
+        Study study = findStudyById(studyId);
         List<Round> rounds = study.getRounds();
         Round currentRound = study.getCurrentRound();
 
         List<Member> members = memberRepository.findMembersByRoundId(currentRound.getId());
 
         return StudyDetailResponse.of(study, rounds, currentRound, members);
+    }
+
+    public List<StudyMemberResponse> findApplicantsOfStudy(Long studyId, Member master) {
+        Study study = findStudyById(studyId);
+        study.validateMaster(master);
+
+        List<Applicant> applicants = applicantRepository.findAllByStudy(study);
+
+        return applicants.stream()
+                         .map(Applicant::getMember)
+                         .map(StudyMemberResponse::from)
+                         .toList();
+    }
+
+    private Study findStudyById(Long studyId) {
+        return studyRepository.findByIdWithRound(studyId)
+                              .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
     }
 }
