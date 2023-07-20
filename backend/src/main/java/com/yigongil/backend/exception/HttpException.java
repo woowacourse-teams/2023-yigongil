@@ -14,11 +14,19 @@ public abstract class HttpException extends RuntimeException {
         this.input = input;
     }
 
+    public String getMessageWithInput() {
+        return message + ": " + input;
+    }
+
     public HttpStatus getHttpStatus() {
         return httpStatus;
     }
 
     public String getMessage() {
         return message;
+    }
+
+    public String getInput() {
+        return input;
     }
 }
