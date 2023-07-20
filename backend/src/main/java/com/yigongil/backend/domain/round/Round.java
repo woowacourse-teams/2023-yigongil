@@ -145,8 +145,8 @@ public class Round extends BaseEntity {
         necessaryToDoContent = content;
     }
 
-    public void updateStartAt(LocalDateTime startAt) {
-        this.endAt = startAt;
+    public void updateEndAt(LocalDateTime endAt) {
+        this.endAt = endAt;
     }
 
     public Long getId() {

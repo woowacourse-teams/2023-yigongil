@@ -92,7 +92,7 @@ public class RoundService {
         LocalDateTime date = LocalDateTime.of(studyStartAt.toLocalDate(), LocalTime.MIN);
         for (Round round : rounds) {
             date = date.plusDays(period);
-            round.updateStartAt(date);
+            round.updateEndAt(date);
         }
     }
 }
