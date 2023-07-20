@@ -7,6 +7,7 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.request.StudyCreateRequest;
 import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
+import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
@@ -94,15 +95,21 @@ public class StudyController {
     }
 
     @GetMapping("/recruiting")
-    public ResponseEntity<List<RecruitingStudyResponse>> readRecruitingStudies(int page) {
+    public ResponseEntity<List<RecruitingStudyResponse>> findRecruitingStudies(int page) {
         List<RecruitingStudyResponse> response = studyService.findRecruitingStudies(page);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}/applicants")
-    public ResponseEntity<List<StudyMemberResponse>> readApplicantOfStudy(@PathVariable Long id, @Authorization Member master) {
+    public ResponseEntity<List<StudyMemberResponse>> findApplicantOfStudy(@PathVariable Long id, @Authorization Member master) {
         List<StudyMemberResponse> applicants = studyService.findApplicantsOfStudy(id, master);
         return ResponseEntity.ok(applicants);
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<MyStudyResponse>> findMyStudies(@Authorization Member member) {
+        List<MyStudyResponse> myStudies = studyService.findMyStudies(member);
+        return ResponseEntity.ok(myStudies);
     }
 }
 

@@ -45,8 +45,9 @@ public class Applicant extends BaseEntity {
 
     private void validateStudyMemberAlreadyExist(Member member, Study study) {
         Round currentRound = study.getCurrentRound();
-        boolean isAlreadyMember = currentRound.getRoundOfMembers().stream()
-                .anyMatch(roundOfMember -> roundOfMember.getMember().equals(member));
+        boolean isAlreadyMember = currentRound.getRoundOfMembers()
+                                              .stream()
+                                              .anyMatch(roundOfMember -> roundOfMember.getMember().equals(member));
 
         if (isAlreadyMember) {
             throw new StudyMemberAlreadyExistException("이미 스터디의 구성원입니다.", String.valueOf(member.getId()));
@@ -55,7 +56,8 @@ public class Applicant extends BaseEntity {
 
     private void validateStudyProcessingStatus(Study study) throws InvalidProcessingStatusException {
         if (!study.isRecruiting()) {
-            String processingStatus = study.getProcessingStatus().name();
+            String processingStatus = study.getProcessingStatus()
+                                           .name();
             throw new InvalidProcessingStatusException("지원한 스터디는 현재 모집 중인 상태가 아닙니다.", processingStatus);
         }
     }

@@ -6,6 +6,7 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.ProcessingStatus;
+import com.yigongil.backend.domain.study.Role;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.domain.studymember.StudyMember;
@@ -14,9 +15,11 @@ import com.yigongil.backend.exception.ApplicantAlreadyExistException;
 import com.yigongil.backend.exception.ApplicantNotFoundException;
 import com.yigongil.backend.exception.StudyNotFoundException;
 import com.yigongil.backend.request.StudyCreateRequest;
+import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
+import com.yigongil.backend.utils.DateConverter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -60,7 +63,7 @@ public class StudyService {
         );
 
         return studyRepository.save(study)
-                .getId();
+                              .getId();
     }
 
     @Transactional(readOnly = true)
@@ -69,8 +72,8 @@ public class StudyService {
         Page<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.RECRUITING, pageable);
 
         return studies.get()
-                .map(RecruitingStudyResponse::from)
-                .toList();
+                      .map(RecruitingStudyResponse::from)
+                      .toList();
     }
 
     @Transactional
@@ -123,9 +126,9 @@ public class StudyService {
         List<Applicant> applicants = applicantRepository.findAllByStudy(study);
 
         return applicants.stream()
-                .map(Applicant::getMember)
-                .map(StudyMemberResponse::from)
-                .toList();
+                         .map(Applicant::getMember)
+                         .map(StudyMemberResponse::from)
+                         .toList();
     }
 
     private Applicant findApplicantByMemberIdAndStudyId(Long memberId, Long studyId) {
@@ -134,8 +137,36 @@ public class StudyService {
     }
 
     private Study findStudyById(Long studyId) {
-        return studyRepository.findById(studyId)
-                .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
+        return studyRepository.findByIdWithRound(studyId)
+                              .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
     }
 
+    @Transactional(readOnly = true)
+    public List<MyStudyResponse> findMyStudies(Member member) {
+        List<Study> studies = studyRepository.findStartedStudiesByMember(member);
+        return studies.stream()
+                      .map(study -> new MyStudyResponse(
+                              study.getId(),
+                              study.getProcessingStatus().getCode(),
+                              calculateRole(study, member).getCode(),
+                              study.getName(),
+                              study.calculateAverageTier(),
+                              DateConverter.toStringFormat(study.getStartAt()),
+                              study.getTotalRoundCount(),
+                              study.getPeriodUnit().toStringFormat(study.getPeriodOfRound()),
+                              study.getCurrentRound().getRoundOfMembers().size(),
+                              study.getNumberOfMaximumMembers()
+                      ))
+                      .toList();
+    }
+
+    private Role calculateRole(Study study, Member member) {
+        List<StudyMemberResponse> applicantsOfStudy = findApplicantsOfStudy(study.getId(), study.getCurrentRound().getMaster());
+        boolean isApplicant = applicantsOfStudy.stream()
+                                           .anyMatch(studyMemberResponse -> studyMemberResponse.id().equals(member.getId()));
+        if (isApplicant) {
+            return Role.APPLICANT;
+        }
+        return study.calculateRoleOfStartedStudy(member);
+    }
 }
