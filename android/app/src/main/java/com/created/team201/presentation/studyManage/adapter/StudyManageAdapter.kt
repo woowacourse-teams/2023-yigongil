@@ -4,11 +4,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.created.team201.presentation.studyList.StudyListClickListener
-import com.created.team201.presentation.studyManage.model.OnGoingStudiesUiModel
+import com.created.team201.presentation.studyManage.model.MyStudiesUiModel
 
 class StudyManageAdapter(
     private val studyListClickListener: StudyListClickListener,
-) : ListAdapter<OnGoingStudiesUiModel, StudyManageViewHolder>(StudyManageDiffUtil) {
+) : ListAdapter<MyStudiesUiModel, StudyManageViewHolder>(StudyManageDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyManageViewHolder {
         return StudyManageViewHolder(parent, studyListClickListener)
@@ -19,16 +19,16 @@ class StudyManageAdapter(
     }
 
     companion object {
-        private val StudyManageDiffUtil = object : DiffUtil.ItemCallback<OnGoingStudiesUiModel>() {
+        private val StudyManageDiffUtil = object : DiffUtil.ItemCallback<MyStudiesUiModel>() {
             override fun areItemsTheSame(
-                oldItem: OnGoingStudiesUiModel,
-                newItem: OnGoingStudiesUiModel,
+                oldItem: MyStudiesUiModel,
+                newItem: MyStudiesUiModel,
             ): Boolean =
                 oldItem.status == newItem.status
 
             override fun areContentsTheSame(
-                oldItem: OnGoingStudiesUiModel,
-                newItem: OnGoingStudiesUiModel,
+                oldItem: MyStudiesUiModel,
+                newItem: MyStudiesUiModel,
             ): Boolean =
                 oldItem == newItem
         }

@@ -40,7 +40,7 @@ class StudyManageFragment :
     }
 
     private fun setUpStudyManageObserve() {
-        studyManageViewModel.onGoingStudiesUiModel.observe(viewLifecycleOwner) {
+        studyManageViewModel.myStudiesUiModel.observe(viewLifecycleOwner) {
             studyManageAdapter.submitList(it)
         }
     }

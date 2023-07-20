@@ -1,16 +1,8 @@
 package com.created.domain.model
 
-import com.created.domain.Period
+import com.created.domain.StudySummary
 
 data class StudyManage(
-    val id: Long,
-    val processingStatus: Int,
-    val tier: Int,
+    val studySummary: StudySummary,
     val role: Role,
-    val title: String,
-    val date: String,
-    val totalRound: Int,
-    val period: Period,
-    val currentMember: Int,
-    val maximumMember: Int,
 )
