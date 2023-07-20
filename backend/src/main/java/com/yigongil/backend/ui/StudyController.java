@@ -61,9 +61,20 @@ public class StudyController {
         return ResponseEntity.noContent().build();
     }
 
+
     @PostMapping("/{studyId}/applicants")
     public ResponseEntity<Void> applyStudy(@Authorization Member member, @PathVariable Long studyId) {
         studyService.apply(member, studyId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{studyId}/applicants/{memberId}")
+    public ResponseEntity<Void> permitApplicant(
+            @Authorization Member master,
+            @PathVariable Long studyId,
+            @PathVariable Long memberId
+    ) {
+        studyService.permitApplicant(master, studyId, memberId);
         return ResponseEntity.noContent().build();
     }
 
