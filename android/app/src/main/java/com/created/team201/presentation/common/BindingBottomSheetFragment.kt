@@ -26,6 +26,7 @@ abstract class BindingBottomSheetFragment<B : ViewDataBinding>(
         dialog?.let {
             val behavior = (it as BottomSheetDialog).behavior
             behavior.state = STATE_EXPANDED
+            it.setCanceledOnTouchOutside(false)
         }
         _binding = DataBindingUtil.inflate(inflater, layoutResId, container, false)
         return binding.root
