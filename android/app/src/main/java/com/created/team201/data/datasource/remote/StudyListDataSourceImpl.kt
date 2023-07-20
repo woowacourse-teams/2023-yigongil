@@ -6,7 +6,7 @@ import com.created.team201.data.remote.response.StudySummaryResponseDto
 class StudyListDataSourceImpl(
     private val studyListService: StudyListService,
 ) : StudyListDataSource {
-    override suspend fun getStudyList(): List<StudySummaryResponseDto> {
-        return studyListService.getStudyList()
+    override suspend fun getStudyList(page: Int): List<StudySummaryResponseDto> {
+        return studyListService.getStudyList(page)
     }
 }

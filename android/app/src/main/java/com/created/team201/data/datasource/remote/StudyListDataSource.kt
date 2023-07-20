@@ -4,5 +4,5 @@ import com.created.team201.data.remote.response.StudySummaryResponseDto
 
 interface StudyListDataSource {
 
-    suspend fun getStudyList(): List<StudySummaryResponseDto>
+    suspend fun getStudyList(page: Int): List<StudySummaryResponseDto>
 }

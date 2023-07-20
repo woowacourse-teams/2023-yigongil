@@ -9,7 +9,7 @@ class StudyListRepositoryImpl(
     private val studyListDataSource: StudyListDataSource,
 ) : StudyListRepository {
 
-    override suspend fun getStudyList(): List<StudySummary> {
-        return studyListDataSource.getStudyList().toDomain()
+    override suspend fun getStudyList(page: Int): List<StudySummary> {
+        return studyListDataSource.getStudyList(page).toDomain()
     }
 }
