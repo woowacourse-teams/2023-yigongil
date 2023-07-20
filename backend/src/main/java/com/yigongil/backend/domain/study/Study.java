@@ -5,11 +5,13 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
+import com.yigongil.backend.domain.roundofmember.RoundOfMembers;
 import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.utils.DateConverter;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Builder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -21,9 +23,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import lombok.Builder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Study extends BaseEntity {
@@ -163,6 +165,14 @@ public class Study extends BaseEntity {
 
     public void validateMaster(Member candidate) {
         currentRound.validateMaster(candidate);
+    }
+
+    public RoundOfMember findCurrentRoundOfMemberOwn(Member member) {
+        return currentRound.findRoundOfMemberBy(member);
+    }
+
+    public RoundOfMembers findCurrentRoundOfMembers() {
+        return new RoundOfMembers(currentRound.getRoundOfMembers());
     }
 
     public Long getId() {

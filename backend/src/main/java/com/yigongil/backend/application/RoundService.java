@@ -6,8 +6,11 @@ import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.roundofmember.RoundOfMemberRepository;
+import com.yigongil.backend.domain.study.Study;
+import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.exception.InvalidMemberInRoundException;
 import com.yigongil.backend.exception.RoundNotFoundException;
+import com.yigongil.backend.response.HomeResponse;
 import com.yigongil.backend.response.MemberOfRoundResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.TodoResponse;
@@ -20,10 +23,12 @@ public class RoundService {
 
     private final RoundRepository roundRepository;
     private final RoundOfMemberRepository roundOfMemberRepository;
+    private final StudyRepository studyRepository;
 
-    public RoundService(RoundRepository roundRepository, RoundOfMemberRepository roundOfMemberRepository) {
+    public RoundService(RoundRepository roundRepository, RoundOfMemberRepository roundOfMemberRepository, StudyRepository studyRepository) {
         this.roundRepository = roundRepository;
         this.roundOfMemberRepository = roundOfMemberRepository;
+        this.studyRepository = studyRepository;
     }
 
     public RoundResponse findRoundDetail(Member member, Long roundId) {
@@ -47,5 +52,11 @@ public class RoundService {
                 TodoResponse.fromOptionalTodo(optionalTodos),
                 MemberOfRoundResponse.from(roundOfMembers)
         );
+    }
+
+    public HomeResponse findCurrentRoundOfStudies(Member member) {
+        List<Study> studies = studyRepository.findByMember(member);
+
+        return HomeResponse.of(member, studies);
     }
 }

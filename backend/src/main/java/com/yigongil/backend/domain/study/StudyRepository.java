@@ -1,11 +1,14 @@
 package com.yigongil.backend.domain.study;
 
-import java.util.Optional;
+import com.yigongil.backend.domain.member.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface StudyRepository extends Repository<Study, Long> {
 
@@ -19,4 +22,15 @@ public interface StudyRepository extends Repository<Study, Long> {
             select distinct s from Study s join fetch s.rounds rs where s.id = :id
             """)
     Optional<Study> findByIdWithRound(@Param("id") Long id);
+    Optional<Study> findByIdWithRound(Long id);
+
+    @Query("""
+                select distinct s from Study s
+                join StudyMember sm
+                on s = sm.study
+                join fetch s.currentRound
+                where sm.member = :member
+                and s.processingStatus = 'PROCESSING'
+            """)
+    List<Study> findByMember(Member member);
 }
