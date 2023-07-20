@@ -17,9 +17,14 @@ import com.yigongil.backend.response.MemberOfRoundResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.TodoResponse;
 import com.yigongil.backend.response.UpcomingStudyResponse;
+import com.yigongil.backend.utils.DateConverter;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -67,14 +72,17 @@ public class RoundService {
             RoundOfMember currentRoundOfMemberOwn = study.findCurrentRoundOfMemberBy(member);
             RoundOfMembers currentRoundOfMembers = study.findCurrentRoundOfMembers();
 
+            LocalDateTime endAt = currentRound.getEndAt();
+            int leftDays = (int) ChronoUnit.DAYS.between(endAt, LocalDateTime.now());
+
             upcomingStudyResponses.add(
                     new UpcomingStudyResponse(
                             study.getId(),
                             study.getName(),
                             currentRound.getId(),
                             TodoResponse.fromNecessaryTodo(currentRoundOfMemberOwn, currentRound),
-                            5,
-                            "2023.07.26",
+                            leftDays,
+                            DateConverter.toStringFormat(endAt),
                             currentRoundOfMembers.calculateMembersProgress(),
                             TodoResponse.fromOptionalTodo(currentRoundOfMemberOwn.getOptionalTodos())
                     )
@@ -82,5 +90,15 @@ public class RoundService {
         }
 
         return HomeResponse.of(member, studies, upcomingStudyResponses);
+    }
+
+    // TODO: 2023/07/20 study 시작기능에서 호출해서 사용
+    public void updateRoundsStartAt(List<Round> rounds, LocalDateTime studyStartAt, int period) {
+        rounds.sort(Comparator.comparing(Round::getRoundNumber));
+        LocalDateTime date = LocalDateTime.of(studyStartAt.toLocalDate(), LocalTime.MIN);
+        for (Round round : rounds) {
+            date = date.plusDays(period);
+            round.updateEndAt(date);
+        }
     }
 }
