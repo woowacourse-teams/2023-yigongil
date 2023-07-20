@@ -1,5 +1,7 @@
 package com.created.domain.model
 
+import com.created.domain.Period
+
 data class StudyManage(
     val id: Long,
     val processingStatus: Int,
@@ -8,7 +10,7 @@ data class StudyManage(
     val title: String,
     val date: String,
     val totalRound: Int,
-    val period: String,
+    val period: Period,
     val currentMember: Int,
     val maximumMember: Int,
 )
