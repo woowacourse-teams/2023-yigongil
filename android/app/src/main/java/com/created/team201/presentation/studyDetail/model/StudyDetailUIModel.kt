@@ -1,6 +1,6 @@
 package com.created.team201.presentation.studyList.uiModel
 
-data class StudyUIModel(
+data class StudyDetailUIModel(
     val title: String,
     val introduction: String,
     val peopleCount: Int,

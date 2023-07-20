@@ -7,7 +7,7 @@
 
         <variable
             name="studyParticipant"
-            type="com.created.team201.presentation.studyList.uiModel.StudyParticipant" />
+            type="com.created.team201.presentation.studyDetail.model.StudyParticipant" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

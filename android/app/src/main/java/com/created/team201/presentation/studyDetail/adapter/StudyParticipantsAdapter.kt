@@ -3,7 +3,7 @@ package com.created.team201.presentation.studyDetail.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.created.team201.presentation.studyList.uiModel.StudyParticipant
+import com.created.team201.presentation.studyDetail.model.StudyParticipant
 
 class StudyParticipantsAdapter :
     ListAdapter<StudyParticipant, StudyPeopleViewHolder>(diffCallBack) {
