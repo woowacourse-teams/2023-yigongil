@@ -18,7 +18,10 @@ import com.yigongil.backend.response.TodoResponse;
 import com.yigongil.backend.response.UpcomingStudyResponse;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -81,5 +84,15 @@ public class RoundService {
         }
 
         return HomeResponse.of(member, studies, upcomingStudyResponses);
+    }
+
+    // TODO: 2023/07/20 study 시작기능에서 호출해서 사용
+    public void updateRoundsStartAt(List<Round> rounds, LocalDateTime studyStartAt, int period) {
+        rounds.sort(Comparator.comparing(Round::getRoundNumber));
+        LocalDateTime date = LocalDateTime.of(studyStartAt.toLocalDate(), LocalTime.MIN);
+        for (Round round : rounds) {
+            round.updateStartAt(date);
+            date = date.plusDays(period);
+        }
     }
 }
