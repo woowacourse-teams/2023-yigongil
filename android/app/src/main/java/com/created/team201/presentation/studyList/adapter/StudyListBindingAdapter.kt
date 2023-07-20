@@ -1,5 +1,8 @@
 package com.created.team201.presentation.studyList.adapter
 
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
@@ -24,13 +27,11 @@ object StudyListBindingAdapter {
     }
 
     @JvmStatic
-    @BindingAdapter("isRecruiting")
-    fun isRecruiting(textView: TextView, status: StudyStatus) {
-        textView.setText(
-            when (status) {
-                StudyStatus.RECRUITING -> R.string.study_list_processing_date
-                else -> R.string.study_list_previous_date
-            },
-        )
+    @BindingAdapter("isLoading")
+    fun isLoading(progressBar: ProgressBar, isVisible: Boolean) {
+        progressBar.visibility = when (isVisible) {
+            true -> VISIBLE
+            false -> GONE
+        }
     }
 }
