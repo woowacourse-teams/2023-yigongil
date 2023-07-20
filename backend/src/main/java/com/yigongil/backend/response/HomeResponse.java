@@ -11,11 +11,11 @@ public record HomeResponse(
         List<UpcomingStudyResponse> studies
 ) {
 
-    public static HomeResponse of(Member member, List<Study> studies) {
+    public static HomeResponse of(Member member, List<Study> studies, List<UpcomingStudyResponse> upcomingStudyResponses) {
         return new HomeResponse(
                 member.getId(),
                 member.getNickname(),
-                UpcomingStudyResponse.of(member, studies)
+                upcomingStudyResponses
         );
     }
 }
