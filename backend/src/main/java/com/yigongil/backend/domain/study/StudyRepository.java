@@ -31,7 +31,7 @@ public interface StudyRepository extends Repository<Study, Long> {
                 where sm.member = :member
                 and s.processingStatus = :processingStatus
             """)
-    List<Study> findByMemberAndProcessingStatus(Member member, ProcessingStatus processingStatus);
+    List<Study> findByMemberAndProcessingStatus(@Param("member") Member member, @Param("processingStatus") ProcessingStatus processingStatus);
 
     @Query("""
                 select distinct s from Study s
@@ -39,6 +39,6 @@ public interface StudyRepository extends Repository<Study, Long> {
                 on s = sm.study
                 where sm.member = :member
             """)
-    List<Study> findStartedStudiesByMember(Member member);
+    List<Study> findStartedStudiesByMember(@Param("member") Member member);
 
 }

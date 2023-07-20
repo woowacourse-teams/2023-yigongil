@@ -62,8 +62,16 @@ public class StudyService {
                 member
         );
 
-        return studyRepository.save(study)
-                              .getId();
+        studyRepository.save(study);
+
+        StudyMember studyMember = StudyMember.builder()
+                                             .study(study)
+                                             .member(member)
+                                             .build();
+
+        studyMemberRepository.save(studyMember);
+
+        return study.getId();
     }
 
     @Transactional(readOnly = true)
@@ -82,9 +90,9 @@ public class StudyService {
 
         validateApplicantAlreadyExist(member, study);
         Applicant applicant = Applicant.builder()
-                .study(study)
-                .member(member)
-                .build();
+                                       .study(study)
+                                       .member(member)
+                                       .build();
         applicantRepository.save(applicant);
     }
 
@@ -96,14 +104,16 @@ public class StudyService {
     }
 
     @Transactional(readOnly = true)
-    public StudyDetailResponse findStudyDetailByStudyId(Long studyId) {
-        Study study = findStudyById(studyId);
+    public StudyDetailResponse findStudyDetailByStudyId(Member member, Long studyId) {
+        Study study = studyRepository.findByIdWithRound(studyId)
+                .orElseThrow(() -> new StudyNotFoundException("해당 스터디가 존재하지 않습니다", studyId));
+
         List<Round> rounds = study.getRounds();
         Round currentRound = study.getCurrentRound();
 
         List<Member> members = memberRepository.findMembersByRoundId(currentRound.getId());
 
-        return StudyDetailResponse.of(study, rounds, currentRound, members);
+        return StudyDetailResponse.of(study, rounds, calculateRole(study, member), currentRound, members);
     }
 
     @Transactional
@@ -133,11 +143,11 @@ public class StudyService {
 
     private Applicant findApplicantByMemberIdAndStudyId(Long memberId, Long studyId) {
         return applicantRepository.findByMemberIdAndStudyId(memberId, studyId)
-                .orElseThrow(() -> new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId));
+                                  .orElseThrow(() -> new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId));
     }
 
     private Study findStudyById(Long studyId) {
-        return studyRepository.findByIdWithRound(studyId)
+        return studyRepository.findById(studyId)
                               .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
     }
 
@@ -147,23 +157,29 @@ public class StudyService {
         return studies.stream()
                       .map(study -> new MyStudyResponse(
                               study.getId(),
-                              study.getProcessingStatus().getCode(),
+                              study.getProcessingStatus()
+                                   .getCode(),
                               calculateRole(study, member).getCode(),
                               study.getName(),
                               study.calculateAverageTier(),
                               DateConverter.toStringFormat(study.getStartAt()),
                               study.getTotalRoundCount(),
-                              study.getPeriodUnit().toStringFormat(study.getPeriodOfRound()),
-                              study.getCurrentRound().getRoundOfMembers().size(),
+                              study.getPeriodUnit()
+                                   .toStringFormat(study.getPeriodOfRound()),
+                              study.getCurrentRound()
+                                   .getRoundOfMembers()
+                                   .size(),
                               study.getNumberOfMaximumMembers()
                       ))
                       .toList();
     }
 
     private Role calculateRole(Study study, Member member) {
-        List<StudyMemberResponse> applicantsOfStudy = findApplicantsOfStudy(study.getId(), study.getCurrentRound().getMaster());
+        List<StudyMemberResponse> applicantsOfStudy = findApplicantsOfStudy(study.getId(), study.getCurrentRound()
+                                                                                                .getMaster());
         boolean isApplicant = applicantsOfStudy.stream()
-                                           .anyMatch(studyMemberResponse -> studyMemberResponse.id().equals(member.getId()));
+                                               .anyMatch(studyMemberResponse -> studyMemberResponse.id()
+                                                                                                   .equals(member.getId()));
         if (isApplicant) {
             return Role.APPLICANT;
         }

@@ -11,8 +11,6 @@ import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
-import java.net.URI;
-import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +20,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
+import java.util.List;
 
 @RequestMapping("/v1/studies")
 @RestController
@@ -90,7 +91,7 @@ public class StudyController {
 
     @GetMapping("/{id}")
     public ResponseEntity<StudyDetailResponse> viewStudyDetail(@Authorization Member member, @PathVariable Long id) {
-        StudyDetailResponse response = studyService.findStudyDetailByStudyId(id);
+        StudyDetailResponse response = studyService.findStudyDetailByStudyId(member, id);
         return ResponseEntity.ok(response);
     }
 

@@ -9,9 +9,10 @@ import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NecessaryTodoAlreadyExistException;
 import com.yigongil.backend.exception.NotStudyMasterException;
 import com.yigongil.backend.exception.NotStudyMemberException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import lombok.Builder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,9 +22,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import lombok.Builder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Round extends BaseEntity {
@@ -97,7 +98,7 @@ public class Round extends BaseEntity {
     }
 
     public void validateMaster(Member member) {
-        if (master.equals(member)) {
+        if (master.getId().equals(member.getId())) {
             return;
         }
         throw new NotStudyMasterException("스터디 마스터가 아니라 권한이 없습니다 ", member.getNickname());
