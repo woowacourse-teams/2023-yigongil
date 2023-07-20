@@ -1,16 +1,11 @@
 package com.yigongil.backend.acceptance.steps;
 
-import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
-import static java.lang.Long.valueOf;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.StudyCreateRequest;
 import com.yigongil.backend.response.RecruitingStudyResponse;
+import com.yigongil.backend.response.RoundNumberResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import io.cucumber.java.en.Given;
@@ -19,17 +14,15 @@ import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
+import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -151,44 +144,51 @@ public class StudySteps {
         );
     }
 
-    @Then("스터디의 회차를 조회할 수 있다.")
-    public void 스터디의_회차를_조회할_수_있다() {
-        String token = sharedContext.getToken();
-        Long roundId = sharedContext.getRoundId();
-        Long studyId = sharedContext.getResultId();
-
-        ExtractableResponse<Response> response = given()
-                .header(HttpHeaders.AUTHORIZATION, token)
-                .when()
-                .get("/v1/studies/" + studyId + "/rounds/" + roundId)
-                .then().log().all().extract();
-
-        RoundResponse round = response.as(RoundResponse.class);
+    @Then("스터디 장이 {string}이고 해당 회차 인것을 확인할 수 있다.")
+    public void 스터디의_회차를_조회할_수_있다(String masterGithubId) {
+        RoundResponse round = sharedContext.getResponse()
+                                           .as(RoundResponse.class);
 
         assertAll(
-                () -> assertThat(round.masterId()).isEqualTo(valueOf(token)),
-                () -> assertThat(round.id()).isEqualTo(roundId)
+                () -> assertThat(round.masterId()).isEqualTo(Long.valueOf((String) sharedContext.getParameter(masterGithubId))),
+                () -> assertThat(round.id()).isEqualTo(sharedContext.getParameter("roundId"))
         );
     }
 
-    @When("스터디의 {string} 회차를 찾는다.")
-    public void 스터디의_회차를_찾는다(String roundNumber) {
-        String token = sharedContext.getToken();
-        Long id = sharedContext.getResultId();
+    @When("{string}가 이름이 {string}인 스터디의 {int} 회차를 찾는다.")
+    public void 스터디_회차_조회(String memberGithubId, String studyName, int roundNumber) {
+        String  memberId = (String) sharedContext.getParameter(memberGithubId);
+        String  studyId = (String) sharedContext.getParameter(studyName);
+
+        StudyDetailResponse studyDetailResponse = given()
+                .header(HttpHeaders.AUTHORIZATION, memberId)
+                .when()
+                .get("/v1/studies/" + studyId)
+                .then()
+                .log()
+                .all()
+                .extract()
+                .as(StudyDetailResponse.class);
+
+
+        Long roundId = studyDetailResponse.rounds()
+                                          .stream()
+                                          .filter(round -> Objects.equals(round.number(), roundNumber))
+                                          .findFirst()
+                                          .map(RoundNumberResponse::id)
+                                          .get();
+
+        sharedContext.setParameter("roundId", roundId);
 
         ExtractableResponse<Response> response = given()
-                .header(HttpHeaders.AUTHORIZATION, token)
+                .header(HttpHeaders.AUTHORIZATION, memberId)
                 .when()
-                .get("/v1/studies/" + id)
-                .then().extract();
+                .get("/v1/studies/" + studyId + "/rounds/" + roundId)
+                .then()
+                .log()
+                .all()
+                .extract();
 
-        StudyDetailResponse studyDetailResponse = response.as(StudyDetailResponse.class);
-
-        Long roundId = studyDetailResponse.rounds().stream()
-                .filter(it -> Objects.equals(it.number(), Integer.valueOf(roundNumber)))
-                .findFirst().get()
-                .id();
-
-        sharedContext.setRoundId(roundId);
+        sharedContext.setResponse(response);
     }
 }
