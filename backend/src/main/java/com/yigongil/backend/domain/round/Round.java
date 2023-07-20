@@ -45,7 +45,7 @@ public class Round extends BaseEntity {
     @JoinColumn(name = "master_id", nullable = false)
     private Member master;
 
-    private LocalDateTime startAt;
+    private LocalDateTime endAt;
 
     @Cascade(CascadeType.PERSIST)
     @OneToMany
@@ -61,14 +61,14 @@ public class Round extends BaseEntity {
             Integer roundNumber,
             String necessaryToDoContent,
             Member master,
-            LocalDateTime startAt,
+            LocalDateTime endAt,
             List<RoundOfMember> roundOfMembers
     ) {
         this.id = id;
         this.roundNumber = roundNumber;
         this.necessaryToDoContent = necessaryToDoContent;
         this.master = master;
-        this.startAt = startAt;
+        this.endAt = endAt;
         this.roundOfMembers = roundOfMembers;
     }
 
@@ -146,7 +146,7 @@ public class Round extends BaseEntity {
     }
 
     public void updateStartAt(LocalDateTime startAt) {
-        this.startAt = startAt;
+        this.endAt = startAt;
     }
 
     public Long getId() {
@@ -169,8 +169,8 @@ public class Round extends BaseEntity {
         return roundOfMembers;
     }
 
-    public LocalDateTime getStartAt() {
-        return startAt;
+    public LocalDateTime getEndAt() {
+        return endAt;
     }
 
     @Override

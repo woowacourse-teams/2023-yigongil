@@ -91,8 +91,8 @@ public class RoundService {
         rounds.sort(Comparator.comparing(Round::getRoundNumber));
         LocalDateTime date = LocalDateTime.of(studyStartAt.toLocalDate(), LocalTime.MIN);
         for (Round round : rounds) {
-            round.updateStartAt(date);
             date = date.plusDays(period);
+            round.updateStartAt(date);
         }
     }
 }
