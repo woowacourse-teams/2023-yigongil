@@ -22,7 +22,6 @@ public interface StudyRepository extends Repository<Study, Long> {
             select distinct s from Study s join fetch s.rounds rs where s.id = :id
             """)
     Optional<Study> findByIdWithRound(@Param("id") Long id);
-    Optional<Study> findByIdWithRound(Long id);
 
     @Query("""
                 select distinct s from Study s
