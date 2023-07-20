@@ -46,6 +46,11 @@ class StudyListViewModel(
         }
     }
 
+    fun refreshPage() {
+        page = Page(0)
+        loadPage()
+    }
+
     private fun List<StudySummary>.toUiModel(): List<StudySummaryUiModel> =
         this.map { it.toUiModel() }
 
