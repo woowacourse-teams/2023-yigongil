@@ -1,9 +1,11 @@
 package com.created.team201.presentation.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.model.Study
@@ -11,10 +13,12 @@ import com.created.domain.model.Todo
 import com.created.domain.model.UserInfo
 import com.created.domain.repository.HomeRepository
 import com.created.team201.data.datasource.remote.HomeDataSourceImpl
+import com.created.team201.data.mapper.toDomain
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.HomeRepositoryImpl
 import com.created.team201.presentation.home.model.StudyUiModel
 import com.created.team201.presentation.home.model.TodoUiModel
+import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val homeRepository: HomeRepository,
@@ -45,16 +49,38 @@ class HomeViewModel(
 //        }
     }
 
-    fun patchTodo(id: Int, isDone: Boolean) {
-        // network
-        // request: studyId, todoId, roundId, isDone
-        // if(status == 200)
-
+    fun updateTodo(todoId: Int, isDone: Boolean) {
         val studies = userStudies.value ?: throw IllegalArgumentException()
+        val isNecessary = studies.any { it.necessaryTodo.todoId == todoId }
+        val study: StudyUiModel
+        val todo: TodoUiModel
 
-        when (studies.any { it.necessaryTodo.todoId == id }) {
-            true -> updateNecessaryTodoCheck(studies, id, isDone)
-            false -> updateOptionalTodoCheck(studies, id, isDone)
+        when {
+            isNecessary -> {
+                updateNecessaryTodoCheck(studies, todoId, isDone)
+                study = studies.find { it.necessaryTodo.todoId == todoId }!!
+                todo = study.necessaryTodo
+            }
+
+            else -> {
+                updateOptionalTodoCheck(studies, todoId, isDone)
+                study = studies.find { it.optionalTodos.any { it.todoId == todoId } }!!
+                todo = study.optionalTodos.find { it.todoId == todoId }!!
+            }
+        }
+
+        patchTodo(todo, study, isNecessary)
+    }
+
+    private fun patchTodo(todo: TodoUiModel, study: StudyUiModel, isNecessary: Boolean) {
+        viewModelScope.launch {
+            runCatching {
+                homeRepository.patchTodo(todo.toDomain(), study.studyId, isNecessary)
+            }.onSuccess { result ->
+                Log.d("123123", "1231555555523")
+            }.onFailure {
+                Log.d("123123", it.message.toString())
+            }
         }
     }
 
@@ -110,7 +136,7 @@ class HomeViewModel(
             2,
             listOf(
                 Study(
-                    1,
+                    2,
                     "빨리 만들자",
                     90,
                     5,
