@@ -69,6 +69,19 @@ public class TodoSteps {
         sharedContext.setResponse(response);
     }
 
+    @When("{string}가 {string} 이름의 스터디에서 등록한 투두를 삭제한다.")
+    public void 투두를_삭제한다(String githubId, String studyName) throws JsonProcessingException {
+        ExtractableResponse<Response> response = RestAssured.given()
+                .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(githubId))
+                .when()
+                .delete("/v1/studies/" + sharedContext.getParameter(studyName) + "/todos/" + sharedContext.getParameter(
+                        "todoId"))
+                .then()
+                .extract();
+
+        sharedContext.setResponse(response);
+    }
+
     @Then("투두를 확인할 수 있다.")
     public void 투두를확인할수있다() {
         // TODO: 2023/07/19 나중에 구현

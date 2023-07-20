@@ -3,8 +3,10 @@ package com.yigongil.backend.application;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodoRepository;
+import com.yigongil.backend.domain.roundofmember.RoundOfMemberRepository;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
+import com.yigongil.backend.exception.NotTodoOwnerException;
 import com.yigongil.backend.exception.StudyNotFoundException;
 import com.yigongil.backend.exception.TodoNotFoundException;
 import com.yigongil.backend.request.TodoCreateRequest;
@@ -20,12 +22,17 @@ public class TodoService {
     private final EntityManager entityManager;
     private final StudyRepository studyRepository;
     private final OptionalTodoRepository optionalTodoRepository;
+    private final RoundOfMemberRepository roundOfMemberRepository;
 
-    public TodoService(EntityManager entityManager, StudyRepository studyRepository,
-                       OptionalTodoRepository optionalTodoRepository) {
+    public TodoService(
+            EntityManager entityManager,
+            StudyRepository studyRepository,
+            OptionalTodoRepository optionalTodoRepository,
+            RoundOfMemberRepository roundOfMemberRepository) {
         this.entityManager = entityManager;
         this.studyRepository = studyRepository;
         this.optionalTodoRepository = optionalTodoRepository;
+        this.roundOfMemberRepository = roundOfMemberRepository;
     }
 
     @Transactional
@@ -72,6 +79,16 @@ public class TodoService {
         if (Objects.nonNull(request.isDone())) {
             todo.updateIsDone(request.isDone());
         }
+    }
+
+    @Transactional
+    public void delete(Member member, Long studyId, Long todoId) {
+        final OptionalTodo todo = findOptionalTodoById(todoId);
+        if (roundOfMemberRepository.existsByOptionalTodosAndMember(todo, member)) {
+            optionalTodoRepository.deleteById(todoId);
+            return;
+        }
+        throw new NotTodoOwnerException("투두 작성자가 아닙니다.", String.valueOf(member.getId()));
     }
 
     private OptionalTodo findOptionalTodoById(Long todoId) {

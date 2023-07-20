@@ -8,4 +8,6 @@ public interface OptionalTodoRepository extends Repository<OptionalTodo, Long> {
     Optional<OptionalTodo> findById(Long id);
 
     OptionalTodo save(OptionalTodo optionalTodo);
+
+    void deleteById(Long id);
 }
