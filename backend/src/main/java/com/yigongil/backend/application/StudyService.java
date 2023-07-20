@@ -8,7 +8,10 @@ import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
+import com.yigongil.backend.domain.studymember.StudyMember;
+import com.yigongil.backend.domain.studymember.StudyMemberRepository;
 import com.yigongil.backend.exception.ApplicantAlreadyExistException;
+import com.yigongil.backend.exception.ApplicantNotFoundException;
 import com.yigongil.backend.exception.StudyNotFoundException;
 import com.yigongil.backend.request.StudyCreateRequest;
 import com.yigongil.backend.response.RecruitingStudyResponse;
@@ -31,15 +34,17 @@ public class StudyService {
     private final StudyRepository studyRepository;
     private final ApplicantRepository applicantRepository;
     private final MemberRepository memberRepository;
+    private final StudyMemberRepository studyMemberRepository;
 
     public StudyService(
             StudyRepository studyRepository,
             ApplicantRepository applicantRepository,
-            MemberRepository memberRepository
-    ) {
+            MemberRepository memberRepository,
+            StudyMemberRepository studyMemberRepository) {
         this.studyRepository = studyRepository;
         this.applicantRepository = applicantRepository;
         this.memberRepository = memberRepository;
+        this.studyMemberRepository = studyMemberRepository;
     }
 
     @Transactional
@@ -55,7 +60,7 @@ public class StudyService {
         );
 
         return studyRepository.save(study)
-                              .getId();
+                .getId();
     }
 
     @Transactional(readOnly = true)
@@ -64,21 +69,19 @@ public class StudyService {
         Page<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.RECRUITING, pageable);
 
         return studies.get()
-                      .map(RecruitingStudyResponse::from)
-                      .toList();
+                .map(RecruitingStudyResponse::from)
+                .toList();
     }
 
     @Transactional
     public void apply(Member member, Long studyId) {
-        Study study = studyRepository.findById(studyId)
-                                     .orElseThrow(() -> new IllegalArgumentException("스터디가 존재하지 않습니다."));
-        // TODO: 2023/07/18 pull 받은 뒤 StudyNotFoundException 던지는 것으로 수정
+        Study study = findStudyById(studyId);
 
         validateApplicantAlreadyExist(member, study);
         Applicant applicant = Applicant.builder()
-                                       .study(study)
-                                       .member(member)
-                                       .build();
+                .study(study)
+                .member(member)
+                .build();
         applicantRepository.save(applicant);
     }
 
@@ -100,6 +103,19 @@ public class StudyService {
         return StudyDetailResponse.of(study, rounds, currentRound, members);
     }
 
+    @Transactional
+    public void permitApplicant(Member master, Long studyId, Long memberId) {
+        Applicant applicant = findApplicantByMemberIdAndStudyId(memberId, studyId);
+        Study study = findStudyById(studyId);
+        study.validateMaster(master);
+
+        applicant.participate(study);
+
+        studyMemberRepository.save(StudyMember.from(applicant));
+        applicantRepository.delete(applicant);
+    }
+
+    @Transactional(readOnly = true)
     public List<StudyMemberResponse> findApplicantsOfStudy(Long studyId, Member master) {
         Study study = findStudyById(studyId);
         study.validateMaster(master);
@@ -107,13 +123,19 @@ public class StudyService {
         List<Applicant> applicants = applicantRepository.findAllByStudy(study);
 
         return applicants.stream()
-                         .map(Applicant::getMember)
-                         .map(StudyMemberResponse::from)
-                         .toList();
+                .map(Applicant::getMember)
+                .map(StudyMemberResponse::from)
+                .toList();
+    }
+
+    private Applicant findApplicantByMemberIdAndStudyId(Long memberId, Long studyId) {
+        return applicantRepository.findByMemberIdAndStudyId(memberId, studyId)
+                .orElseThrow(() -> new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId));
     }
 
     private Study findStudyById(Long studyId) {
-        return studyRepository.findByIdWithRound(studyId)
-                              .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
+        return studyRepository.findById(studyId)
+                .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
     }
+
 }

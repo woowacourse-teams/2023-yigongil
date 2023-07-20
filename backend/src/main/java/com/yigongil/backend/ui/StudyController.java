@@ -77,6 +77,16 @@ public class StudyController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/{studyId}/applicants/{memberId}")
+    public ResponseEntity<Void> permitApplicant(
+            @Authorization Member master,
+            @PathVariable Long studyId,
+            @PathVariable Long memberId
+    ) {
+        studyService.permitApplicant(master, studyId, memberId);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<StudyDetailResponse> viewStudyDetail(@Authorization Member member, @PathVariable Long id) {
         StudyDetailResponse response = studyService.findStudyDetailByStudyId(id);

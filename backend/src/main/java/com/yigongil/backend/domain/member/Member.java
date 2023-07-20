@@ -1,15 +1,16 @@
 package com.yigongil.backend.domain.member;
 
 import com.yigongil.backend.domain.BaseEntity;
-import lombok.Builder;
-
+import com.yigongil.backend.domain.study.Study;
+import com.yigongil.backend.exception.NotStudyMasterException;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Objects;
+import lombok.Builder;
 
 @Entity
 public class Member extends BaseEntity {
@@ -73,6 +74,12 @@ public class Member extends BaseEntity {
             return 0;
         }
         return finishedStudyCount * 100 / participatedStudyCount;
+    }
+
+    public void validateMasterOf(Study study) {
+        if (!study.getMaster().equals(this)) {
+            throw new NotStudyMasterException("해당 스터디의 스터디장이 아닙니다.", getNickname());
+        }
     }
 
     public Long getId() {

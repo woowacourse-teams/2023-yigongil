@@ -5,9 +5,8 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
+import com.yigongil.backend.exception.NotStudyApplicantException;
 import com.yigongil.backend.exception.StudyMemberAlreadyExistException;
-import lombok.Builder;
-
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import lombok.Builder;
 
 @Entity
 public class Applicant extends BaseEntity {
@@ -60,7 +60,26 @@ public class Applicant extends BaseEntity {
         }
     }
 
+    public void participate(Study study) {
+        checkStudy(study);
+        study.addMember(this.member);
+    }
+
+    private void checkStudy(Study study) {
+        if (!this.study.equals(study)) {
+            throw new NotStudyApplicantException("해당 스터디에 지원한 신청자가 아닙니다.", id);
+        }
+    }
+
+    public Long getId() {
+        return id;
+    }
+
     public Member getMember() {
         return member;
+    }
+
+    public Study getStudy() {
+        return study;
     }
 }
