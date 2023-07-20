@@ -175,6 +175,10 @@ public class Study extends BaseEntity {
         return new RoundOfMembers(currentRound.getRoundOfMembers());
     }
 
+    public String findPeriodOfRoundToString() {
+        return periodUnit.toStringFormat(periodOfRound);
+    }
+
     public Long getId() {
         return id;
     }

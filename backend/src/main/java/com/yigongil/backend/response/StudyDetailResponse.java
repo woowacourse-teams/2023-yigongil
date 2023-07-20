@@ -16,14 +16,19 @@ public record StudyDetailResponse(
         Long studyMasterId,
         String startAt,
         Integer totalRoundCount,
-        Integer periodOfRound,
+        String periodOfRound,
         Integer currentRound,
         String introduction,
         List<StudyMemberResponse> members,
         List<RoundNumberResponse> rounds
 ) {
 
-    public static StudyDetailResponse of(Study study, List<Round> rounds, Round currentRound, List<Member> members) {
+    public static StudyDetailResponse of(
+            Study study,
+            List<Round> rounds,
+            Round currentRound,
+            List<Member> members
+    ) {
         return new StudyDetailResponse(
                 study.getId(),
                 study.getProcessingStatus().getCode(),
@@ -33,7 +38,7 @@ public record StudyDetailResponse(
                 currentRound.getMaster().getId(),
                 DateConverter.toStringFormat(study.getStartAt()),
                 study.getTotalRoundCount(),
-                study.getPeriodOfRound(),
+                study.findPeriodOfRoundToString(),
                 study.getCurrentRound().getRoundNumber(),
                 study.getIntroduction(),
                 StudyMemberResponse.from(members),
