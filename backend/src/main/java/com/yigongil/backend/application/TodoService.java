@@ -83,7 +83,7 @@ public class TodoService {
 
     @Transactional
     public void delete(Member member, Long studyId, Long todoId) {
-        final OptionalTodo todo = findOptionalTodoById(todoId);
+        OptionalTodo todo = findOptionalTodoById(todoId);
         if (roundOfMemberRepository.existsByOptionalTodosAndMember(todo, member)) {
             optionalTodoRepository.deleteById(todoId);
             return;
