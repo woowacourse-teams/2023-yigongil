@@ -8,9 +8,10 @@ import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NecessaryTodoAlreadyExistException;
 import com.yigongil.backend.exception.NotStudyMasterException;
 import com.yigongil.backend.exception.NotStudyMemberException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import lombok.Builder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,9 +21,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import lombok.Builder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Round extends BaseEntity {
@@ -43,6 +45,8 @@ public class Round extends BaseEntity {
     @JoinColumn(name = "master_id", nullable = false)
     private Member master;
 
+    private LocalDateTime endAt;
+
     @Cascade(CascadeType.PERSIST)
     @OneToMany
     @JoinColumn(name = "round_id", nullable = false)
@@ -57,12 +61,14 @@ public class Round extends BaseEntity {
             Integer roundNumber,
             String necessaryToDoContent,
             Member master,
+            LocalDateTime endAt,
             List<RoundOfMember> roundOfMembers
     ) {
         this.id = id;
         this.roundNumber = roundNumber;
         this.necessaryToDoContent = necessaryToDoContent;
         this.master = master;
+        this.endAt = endAt;
         this.roundOfMembers = roundOfMembers;
     }
 
@@ -148,6 +154,10 @@ public class Round extends BaseEntity {
         necessaryToDoContent = content;
     }
 
+    public void updateEndAt(LocalDateTime endAt) {
+        this.endAt = endAt;
+    }
+
     public Long getId() {
         return id;
     }
@@ -166,6 +176,10 @@ public class Round extends BaseEntity {
 
     public List<RoundOfMember> getRoundOfMembers() {
         return roundOfMembers;
+    }
+
+    public LocalDateTime getEndAt() {
+        return endAt;
     }
 
     @Override
