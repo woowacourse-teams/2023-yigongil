@@ -69,7 +69,6 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private fun setUpRefreshListener() {
         binding.srlStudyList.setOnRefreshListener {
             // 새로 받아온 리스트 주입, 끝난 후 isRefreshing false로 변경
-            // studyListAdapter.submitList()
             // binding.srlStudyList.isRefreshing = false
         }
     }
