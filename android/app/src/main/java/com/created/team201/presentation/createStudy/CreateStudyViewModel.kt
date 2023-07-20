@@ -62,7 +62,7 @@ class CreateStudyViewModel(
         get() = _isSuccessCreateStudy
 
     fun setName(name: String) {
-        _name.value = name
+        _name.value = name.replace("\n", "")
     }
 
     fun setIntroduction(introduction: String) {
