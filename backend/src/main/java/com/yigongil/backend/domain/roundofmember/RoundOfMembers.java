@@ -22,8 +22,7 @@ public class RoundOfMembers {
 
     public int calculateMembersProgress() {
         long count = roundOfMembers.stream()
-                .map(RoundOfMember::getDone)
-                .filter(it -> it)
+                .filter(it -> it.getDone()) 
                 .count();
 
         return (int) (count * 100 / roundOfMembers.size());
