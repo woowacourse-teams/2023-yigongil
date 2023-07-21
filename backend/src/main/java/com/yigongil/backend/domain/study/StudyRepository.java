@@ -39,6 +39,5 @@ public interface StudyRepository extends Repository<Study, Long> {
                 on s = sm.study
                 where sm.member = :member
             """)
-    List<Study> findStartedStudiesByMember(@Param("member") Member member);
-
+    List<Study> findStudiesOfMember(@Param("member") Member member);
 }

@@ -153,7 +153,7 @@ public class StudyService {
 
     @Transactional(readOnly = true)
     public List<MyStudyResponse> findMyStudies(Member member) {
-        List<Study> studies = studyRepository.findStartedStudiesByMember(member);
+        List<Study> studies = studyRepository.findStudiesOfMember(member);
         return studies.stream()
                       .map(study -> new MyStudyResponse(
                               study.getId(),
@@ -175,14 +175,15 @@ public class StudyService {
     }
 
     private Role calculateRole(Study study, Member member) {
-        List<StudyMemberResponse> applicantsOfStudy = findApplicantsOfStudy(study.getId(), study.getCurrentRound()
-                                                                                                .getMaster());
-        boolean isApplicant = applicantsOfStudy.stream()
-                                               .anyMatch(studyMemberResponse -> studyMemberResponse.id()
-                                                                                                   .equals(member.getId()));
-        if (isApplicant) {
+        if (isApplicant(study, member)) {
             return Role.APPLICANT;
         }
         return study.calculateRoleOfStartedStudy(member);
+    }
+
+    private boolean isApplicant(Study study, Member member) {
+        return applicantRepository.findAllByStudy(study)
+                                  .stream()
+                                  .anyMatch(applicant -> applicant.getId().equals(member.getId()));
     }
 }
