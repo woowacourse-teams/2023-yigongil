@@ -93,7 +93,7 @@ public class RoundService {
     }
 
     // TODO: 2023/07/20 study 시작기능에서 호출해서 사용
-    public void updateRoundsStartAt(List<Round> rounds, LocalDateTime studyStartAt, int period) {
+    public void updateRoundsEndAt(List<Round> rounds, LocalDateTime studyStartAt, int period) {
         rounds.sort(Comparator.comparing(Round::getRoundNumber));
         LocalDateTime date = LocalDateTime.of(studyStartAt.toLocalDate(), LocalTime.MIN);
         for (Round round : rounds) {

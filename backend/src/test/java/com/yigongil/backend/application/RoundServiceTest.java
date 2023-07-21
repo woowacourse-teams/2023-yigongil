@@ -30,13 +30,13 @@ class RoundServiceTest {
         List<Round> rounds = new ArrayList<>(List.of(round1, round2, round3, round));
         LocalDateTime time = LocalDateTime.of(2023, 7, 20, 3, 2, 3);
 
-        roundService.updateRoundsStartAt(rounds, time, 3);
+        roundService.updateRoundsEndAt(rounds, time, 3);
 
         assertAll(
-                () -> assertThat(toStringFormat(round.getStartAt())).isEqualTo("2023.07.20"),
-                () -> assertThat(toStringFormat(round2.getStartAt())).isEqualTo("2023.07.23"),
-                () -> assertThat(toStringFormat(round3.getStartAt())).isEqualTo("2023.07.26"),
-                () -> assertThat(toStringFormat(round1.getStartAt())).isEqualTo("2023.07.29")
+                () -> assertThat(toStringFormat(round.getEndAt())).isEqualTo("2023.07.23"),
+                () -> assertThat(toStringFormat(round2.getEndAt())).isEqualTo("2023.07.26"),
+                () -> assertThat(toStringFormat(round3.getEndAt())).isEqualTo("2023.07.29"),
+                () -> assertThat(toStringFormat(round1.getEndAt())).isEqualTo("2023.08.01")
 
         );
     }
