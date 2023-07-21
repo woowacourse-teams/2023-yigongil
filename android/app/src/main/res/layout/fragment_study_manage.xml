@@ -34,7 +34,7 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tl_study_manage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="52dp"
             android:backgroundTint="@color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,9 +44,7 @@
             app:tabRippleColor="@color/transparent"
             app:tabSelectedTextColor="@color/white"
             app:tabTextAppearance="@style/subtitle_r15"
-            app:tabTextColor="@color/grey02_78808B">
-
-        </com.google.android.material.tabs.TabLayout>
+            app:tabTextColor="@color/grey02_78808B" />
 
         <View
             android:id="@+id/view_study_manage_tab_border_line"

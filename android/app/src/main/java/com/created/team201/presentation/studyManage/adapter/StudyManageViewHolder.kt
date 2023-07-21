@@ -11,7 +11,7 @@ import com.created.team201.R
 import com.created.team201.databinding.ItemStudyManageBinding
 import com.created.team201.presentation.studyList.StudyListClickListener
 import com.created.team201.presentation.studyList.adapter.StudyListAdapter
-import com.created.team201.presentation.studyManage.model.OnGoingStudiesUiModel
+import com.created.team201.presentation.studyManage.model.MyStudiesUiModel
 
 class StudyManageViewHolder(
     private val parent: ViewGroup,
@@ -41,7 +41,7 @@ class StudyManageViewHolder(
         }
     }
 
-    fun bind(item: OnGoingStudiesUiModel) {
+    fun bind(item: MyStudiesUiModel) {
         Log.d("hello", item.studySummariesUiModel.toString())
         studyListAdapter.submitList(item.studySummariesUiModel)
     }

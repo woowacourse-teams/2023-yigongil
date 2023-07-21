@@ -2,11 +2,11 @@ package com.created.team201.presentation.studyList
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.LinearLayout.VERTICAL
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.R
@@ -15,10 +15,13 @@ import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.createStudy.CreateStudyActivity
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
 import com.created.team201.presentation.studyList.adapter.StudyListAdapter
+import kotlinx.coroutines.launch
 
 class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fragment_study_list) {
 
-    private val studyListViewModel: StudyListViewModel by viewModels()
+    private val studyListViewModel: StudyListViewModel by viewModels() {
+        StudyListViewModel.Factory
+    }
     private val studyListAdapter: StudyListAdapter by lazy {
         StudyListAdapter(studyListClickListener())
     }
@@ -28,7 +31,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
         setUpToolbar()
         setUpStudyListSettings()
-        setUpStudyListObserve()
+        setUpDataObserve()
         setUpRefreshListener()
         setUpCreateStudyListener()
         setUpScrollListener()
@@ -60,7 +63,9 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         }
     }
 
-    private fun setUpStudyListObserve() {
+    private fun setUpDataObserve() {
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.studyListViewModel = studyListViewModel
         studyListViewModel.studySummaries.observe(viewLifecycleOwner) {
             studyListAdapter.submitList(it)
         }
@@ -68,9 +73,10 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
     private fun setUpRefreshListener() {
         binding.srlStudyList.setOnRefreshListener {
-            // 새로 받아온 리스트 주입, 끝난 후 isRefreshing false로 변경
-            // studyListAdapter.submitList()
-            // binding.srlStudyList.isRefreshing = false
+            viewLifecycleOwner.lifecycleScope.launch {
+                studyListViewModel.refreshPage()
+                binding.srlStudyList.isRefreshing = false
+            }
         }
     }
 
@@ -83,25 +89,18 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private fun setUpScrollListener() {
         val onScrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    binding.fabStudyListCreateButton.visibility = VISIBLE
-                } else {
-                    binding.fabStudyListCreateButton.visibility = INVISIBLE
-                }
+                studyListViewModel.updateScrollState(newState)
             }
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
-                // 데이터 호출 싱크 맞추기
                 if (binding.srlStudyList.isRefreshing || binding.pbStudyListLoad.visibility == VISIBLE) {
                     return
                 }
 
                 if (!binding.rvStudyListList.canScrollVertically(1)) {
-                    // while (loadPage) binding.pbStudyListLoad.visibility = VISIBLE
-                    // after (loadPage) binding.pbStudyListLoad.visibility = GONE
-                    studyListViewModel.loadPage()
+                    studyListViewModel.loadNextPage()
                 }
             }
         }
