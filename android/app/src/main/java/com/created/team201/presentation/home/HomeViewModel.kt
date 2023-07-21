@@ -43,7 +43,7 @@ class HomeViewModel(
                 _userName.value = result.userName
 //                _userStudies.value = result.studies.map { it.toUiModel() }
             }.onFailure {
-                Log.d("123123", "123123")
+                Log.d("123123", it.message.toString())
             }
         }
     }
@@ -76,9 +76,9 @@ class HomeViewModel(
             runCatching {
                 homeRepository.patchTodo(todo.toDomain(), study.studyId, isNecessary)
             }.onSuccess { result ->
-                Log.d("123123", "1231555555523")
+                Log.d("투두 통신 성공", "투두 통신 성공")
             }.onFailure {
-                Log.d("123123", it.message.toString())
+                Log.d("투두 에러", it.message.toString())
             }
         }
     }
