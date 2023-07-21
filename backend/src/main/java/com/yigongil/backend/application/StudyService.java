@@ -187,6 +187,7 @@ public class StudyService {
                                   .anyMatch(applicant -> applicant.getId().equals(member.getId()));
     }
 
+    @Transactional
     public void deleteApplicant(Member member, Long studyId) {
         Applicant applicant = findApplicantByMemberIdAndStudyId(member.getId(), studyId);
         applicantRepository.delete(applicant);
