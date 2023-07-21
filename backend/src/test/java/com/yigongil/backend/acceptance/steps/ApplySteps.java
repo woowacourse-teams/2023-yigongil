@@ -85,4 +85,17 @@ public class ApplySteps {
 
         assertThat(studyMembers).anyMatch(member -> member.id().equals(Long.valueOf(memberId)));
     }
+
+
+    @When("{string}이 {string} 스터디 신청을 취소한다.")
+    public void 스터디_신청_취소(String applicantName, String studyName) {
+        ExtractableResponse<Response> response = given().log().all()
+                .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(applicantName))
+                .when()
+                .delete("/v1/studies/{studyId}/applicants", sharedContext.getParameter(studyName))
+                .then().log().all()
+                .extract();
+
+        sharedContext.setResponse(response);
+    }
 }

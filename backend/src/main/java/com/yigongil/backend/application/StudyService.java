@@ -186,4 +186,9 @@ public class StudyService {
                                   .stream()
                                   .anyMatch(applicant -> applicant.getId().equals(member.getId()));
     }
+
+    public void deleteApplicant(Member member, Long studyId) {
+        Applicant applicant = findApplicantByMemberIdAndStudyId(member.getId(), studyId);
+        applicantRepository.delete(applicant);
+    }
 }
