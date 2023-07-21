@@ -2,6 +2,7 @@ package com.yigongil.backend.response;
 
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
+import com.yigongil.backend.domain.study.Role;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.utils.DateConverter;
 
@@ -14,6 +15,7 @@ public record StudyDetailResponse(
         Integer numberOfCurrentMembers,
         Integer numberOfMaximumMembers,
         Long studyMasterId,
+        Integer role,
         String startAt,
         Integer totalRoundCount,
         String periodOfRound,
@@ -26,6 +28,7 @@ public record StudyDetailResponse(
     public static StudyDetailResponse of(
             Study study,
             List<Round> rounds,
+            Role role,
             Round currentRound,
             List<Member> members
     ) {
@@ -36,6 +39,7 @@ public record StudyDetailResponse(
                 currentRound.getRoundOfMembers().size(),
                 study.getNumberOfMaximumMembers(),
                 currentRound.getMaster().getId(),
+                role.getCode(),
                 DateConverter.toStringFormat(study.getStartAt()),
                 study.getTotalRoundCount(),
                 study.findPeriodOfRoundToString(),

@@ -29,7 +29,15 @@ public interface StudyRepository extends Repository<Study, Long> {
                 on s = sm.study
                 join fetch s.currentRound
                 where sm.member = :member
-                and s.processingStatus = 'PROCESSING'
+                and s.processingStatus = :processingStatus
             """)
-    List<Study> findByMember(Member member);
+    List<Study> findByMemberAndProcessingStatus(@Param("member") Member member, @Param("processingStatus") ProcessingStatus processingStatus);
+
+    @Query("""
+                select distinct s from Study s
+                join StudyMember sm
+                on s = sm.study
+                where sm.member = :member
+            """)
+    List<Study> findStudiesOfMember(@Param("member") Member member);
 }

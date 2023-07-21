@@ -6,12 +6,13 @@ import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.roundofmember.RoundOfMembers;
+import com.yigongil.backend.exception.InvalidMemberSizeException;
+import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.utils.DateConverter;
-import lombok.Builder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -23,9 +24,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Builder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 public class Study extends BaseEntity {
@@ -112,15 +113,15 @@ public class Study extends BaseEntity {
             Member master
     ) {
         Study study = Study.builder()
-                .name(name)
-                .numberOfMaximumMembers(numberOfMaximumMembers)
-                .startAt(DateConverter.toLocalDateTime(startAt))
-                .totalRoundCount(totalRoundCount)
-                .periodOfRound(PeriodUnit.getPeriodNumber(periodOfRound))
-                .periodUnit(PeriodUnit.getPeriodUnit(periodOfRound))
-                .introduction(introduction)
-                .processingStatus(ProcessingStatus.RECRUITING)
-                .build();
+                           .name(name)
+                           .numberOfMaximumMembers(numberOfMaximumMembers)
+                           .startAt(DateConverter.toLocalDateTime(startAt))
+                           .totalRoundCount(totalRoundCount)
+                           .periodOfRound(PeriodUnit.getPeriodNumber(periodOfRound))
+                           .periodUnit(PeriodUnit.getPeriodUnit(periodOfRound))
+                           .introduction(introduction)
+                           .processingStatus(ProcessingStatus.RECRUITING)
+                           .build();
         study.rounds = Round.of(totalRoundCount, master);
         study.currentRound = study.rounds.get(0);
         return study;
@@ -128,10 +129,6 @@ public class Study extends BaseEntity {
 
     public Integer calculateAverageTier() {
         return currentRound.calculateAverageTier();
-    }
-
-    public boolean isRecruiting() {
-        return this.processingStatus == ProcessingStatus.RECRUITING;
     }
 
     public Long createNecessaryTodo(Member author, Long roundId, String content) {
@@ -163,6 +160,32 @@ public class Study extends BaseEntity {
                 .orElseThrow(() -> new RoundNotFoundException("스터디에 해당 회차가 존재하지 않습니다.", roundId));
     }
 
+    public void addMember(Member member) {
+        validateStudyProcessingStatus();
+        validateMemberSize();
+        this.currentRound.addMember(member);
+    }
+
+    private void validateStudyProcessingStatus() {
+        if (!isRecruiting()) {
+            throw new InvalidProcessingStatusException("모집 중인 스터디가 아니기 때문에 신청을 수락할 수 없습니다.", processingStatus.name());
+        }
+    }
+
+    public boolean isRecruiting() {
+        return this.processingStatus == ProcessingStatus.RECRUITING;
+    }
+
+    private void validateMemberSize() {
+        if (sizeOfCurrentMembers() >= numberOfMaximumMembers) {
+            throw new InvalidMemberSizeException("스터디 정원이 가득 찼습니다.", numberOfMaximumMembers);
+        }
+    }
+
+    private int sizeOfCurrentMembers() {
+        return currentRound.sizeOfCurrentMembers();
+    }
+
     public void validateMaster(Member candidate) {
         currentRound.validateMaster(candidate);
     }
@@ -175,8 +198,16 @@ public class Study extends BaseEntity {
         return new RoundOfMembers(currentRound.getRoundOfMembers());
     }
 
+    public Member getMaster() {
+        return currentRound.getMaster();
+    }
+
     public String findPeriodOfRoundToString() {
         return periodUnit.toStringFormat(periodOfRound);
+    }
+
+    public Role calculateRoleOfStartedStudy(Member member) {
+        return currentRound.calculateRole(member);
     }
 
     public Long getId() {

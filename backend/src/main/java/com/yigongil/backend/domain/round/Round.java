@@ -4,13 +4,15 @@ import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
+import com.yigongil.backend.domain.study.Role;
 import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NecessaryTodoAlreadyExistException;
 import com.yigongil.backend.exception.NotStudyMasterException;
 import com.yigongil.backend.exception.NotStudyMemberException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import lombok.Builder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,9 +22,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import lombok.Builder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Round extends BaseEntity {
@@ -43,6 +46,8 @@ public class Round extends BaseEntity {
     @JoinColumn(name = "master_id", nullable = false)
     private Member master;
 
+    private LocalDateTime endAt;
+
     @Cascade(CascadeType.PERSIST)
     @OneToMany
     @JoinColumn(name = "round_id", nullable = false)
@@ -57,12 +62,14 @@ public class Round extends BaseEntity {
             Integer roundNumber,
             String necessaryToDoContent,
             Member master,
+            LocalDateTime endAt,
             List<RoundOfMember> roundOfMembers
     ) {
         this.id = id;
         this.roundNumber = roundNumber;
         this.necessaryToDoContent = necessaryToDoContent;
         this.master = master;
+        this.endAt = endAt;
         this.roundOfMembers = roundOfMembers;
     }
 
@@ -96,7 +103,7 @@ public class Round extends BaseEntity {
     }
 
     public void validateMaster(Member member) {
-        if (master.equals(member)) {
+        if (master.getId().equals(member.getId())) {
             return;
         }
         throw new NotStudyMasterException("스터디 마스터가 아니라 권한이 없습니다 ", member.getNickname());
@@ -131,12 +138,37 @@ public class Round extends BaseEntity {
         return (int) Math.round(averageTier);
     }
 
+    public void addMember(Member member) {
+        RoundOfMember roundOfMember = RoundOfMember.builder()
+                .member(member)
+                .isDone(false)
+                .build();
+
+        roundOfMembers.add(roundOfMember);
+    }
+
     public int sizeOfCurrentMembers() {
         return roundOfMembers.size();
     }
 
     public void updateNecessaryTodoContent(String content) {
         necessaryToDoContent = content;
+    }
+
+    public Role calculateRole(Member member) {
+        if (master.equals(member)) {
+            return Role.MASTER;
+        }
+        boolean isMember = roundOfMembers.stream()
+                                        .anyMatch(roundOfMember -> roundOfMember.isMemberEquals(member));
+        if (isMember) {
+            return Role.STUDY_MEMBER;
+        }
+        return Role.NO_ROLE;
+    }
+
+    public void updateEndAt(LocalDateTime endAt) {
+        this.endAt = endAt;
     }
 
     public Long getId() {
@@ -157,6 +189,10 @@ public class Round extends BaseEntity {
 
     public List<RoundOfMember> getRoundOfMembers() {
         return roundOfMembers;
+    }
+
+    public LocalDateTime getEndAt() {
+        return endAt;
     }
 
     @Override
