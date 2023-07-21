@@ -113,15 +113,15 @@ public class Study extends BaseEntity {
             Member master
     ) {
         Study study = Study.builder()
-                .name(name)
-                .numberOfMaximumMembers(numberOfMaximumMembers)
-                .startAt(DateConverter.toLocalDateTime(startAt))
-                .totalRoundCount(totalRoundCount)
-                .periodOfRound(PeriodUnit.getPeriodNumber(periodOfRound))
-                .periodUnit(PeriodUnit.getPeriodUnit(periodOfRound))
-                .introduction(introduction)
-                .processingStatus(ProcessingStatus.RECRUITING)
-                .build();
+                           .name(name)
+                           .numberOfMaximumMembers(numberOfMaximumMembers)
+                           .startAt(DateConverter.toLocalDateTime(startAt))
+                           .totalRoundCount(totalRoundCount)
+                           .periodOfRound(PeriodUnit.getPeriodNumber(periodOfRound))
+                           .periodUnit(PeriodUnit.getPeriodUnit(periodOfRound))
+                           .introduction(introduction)
+                           .processingStatus(ProcessingStatus.RECRUITING)
+                           .build();
         study.rounds = Round.of(totalRoundCount, master);
         study.currentRound = study.rounds.get(0);
         return study;
@@ -201,9 +201,13 @@ public class Study extends BaseEntity {
     public Member getMaster() {
         return currentRound.getMaster();
     }
-  
+
     public String findPeriodOfRoundToString() {
         return periodUnit.toStringFormat(periodOfRound);
+    }
+
+    public Role calculateRoleOfStartedStudy(Member member) {
+        return currentRound.calculateRole(member);
     }
 
     public Long getId() {

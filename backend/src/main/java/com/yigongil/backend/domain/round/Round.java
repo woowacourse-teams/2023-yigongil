@@ -4,6 +4,7 @@ import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
+import com.yigongil.backend.domain.study.Role;
 import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NecessaryTodoAlreadyExistException;
 import com.yigongil.backend.exception.NotStudyMasterException;
@@ -102,7 +103,7 @@ public class Round extends BaseEntity {
     }
 
     public void validateMaster(Member member) {
-        if (master.equals(member)) {
+        if (master.getId().equals(member.getId())) {
             return;
         }
         throw new NotStudyMasterException("스터디 마스터가 아니라 권한이 없습니다 ", member.getNickname());
@@ -152,6 +153,18 @@ public class Round extends BaseEntity {
 
     public void updateNecessaryTodoContent(String content) {
         necessaryToDoContent = content;
+    }
+
+    public Role calculateRole(Member member) {
+        if (master.equals(member)) {
+            return Role.MASTER;
+        }
+        boolean isMember = roundOfMembers.stream()
+                                        .anyMatch(roundOfMember -> roundOfMember.isMemberEquals(member));
+        if (isMember) {
+            return Role.STUDY_MEMBER;
+        }
+        return Role.NO_ROLE;
     }
 
     public void updateEndAt(LocalDateTime endAt) {

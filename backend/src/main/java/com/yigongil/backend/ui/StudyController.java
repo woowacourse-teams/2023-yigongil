@@ -7,11 +7,10 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.request.StudyCreateRequest;
 import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
+import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
-import java.net.URI;
-import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +20,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
+import java.util.List;
 
 @RequestMapping("/v1/studies")
 @RestController
@@ -89,20 +91,26 @@ public class StudyController {
 
     @GetMapping("/{id}")
     public ResponseEntity<StudyDetailResponse> viewStudyDetail(@Authorization Member member, @PathVariable Long id) {
-        StudyDetailResponse response = studyService.findStudyDetailByStudyId(id);
+        StudyDetailResponse response = studyService.findStudyDetailByStudyId(member, id);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/recruiting")
-    public ResponseEntity<List<RecruitingStudyResponse>> readRecruitingStudies(int page) {
+    public ResponseEntity<List<RecruitingStudyResponse>> findRecruitingStudies(int page) {
         List<RecruitingStudyResponse> response = studyService.findRecruitingStudies(page);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}/applicants")
-    public ResponseEntity<List<StudyMemberResponse>> readApplicantOfStudy(@PathVariable Long id, @Authorization Member master) {
+    public ResponseEntity<List<StudyMemberResponse>> findApplicantOfStudy(@PathVariable Long id, @Authorization Member master) {
         List<StudyMemberResponse> applicants = studyService.findApplicantsOfStudy(id, master);
         return ResponseEntity.ok(applicants);
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<List<MyStudyResponse>> findMyStudies(@Authorization Member member) {
+        List<MyStudyResponse> myStudies = studyService.findMyStudies(member);
+        return ResponseEntity.ok(myStudies);
     }
 }
 

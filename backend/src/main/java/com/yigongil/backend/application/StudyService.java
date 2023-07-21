@@ -6,6 +6,7 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.ProcessingStatus;
+import com.yigongil.backend.domain.study.Role;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.domain.studymember.StudyMember;
@@ -14,9 +15,11 @@ import com.yigongil.backend.exception.ApplicantAlreadyExistException;
 import com.yigongil.backend.exception.ApplicantNotFoundException;
 import com.yigongil.backend.exception.StudyNotFoundException;
 import com.yigongil.backend.request.StudyCreateRequest;
+import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
+import com.yigongil.backend.utils.DateConverter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -59,8 +62,16 @@ public class StudyService {
                 member
         );
 
-        return studyRepository.save(study)
-                .getId();
+        studyRepository.save(study);
+
+        StudyMember studyMember = StudyMember.builder()
+                                             .study(study)
+                                             .member(member)
+                                             .build();
+
+        studyMemberRepository.save(studyMember);
+
+        return study.getId();
     }
 
     @Transactional(readOnly = true)
@@ -69,8 +80,8 @@ public class StudyService {
         Page<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.RECRUITING, pageable);
 
         return studies.get()
-                .map(RecruitingStudyResponse::from)
-                .toList();
+                      .map(RecruitingStudyResponse::from)
+                      .toList();
     }
 
     @Transactional
@@ -79,9 +90,9 @@ public class StudyService {
 
         validateApplicantAlreadyExist(member, study);
         Applicant applicant = Applicant.builder()
-                .study(study)
-                .member(member)
-                .build();
+                                       .study(study)
+                                       .member(member)
+                                       .build();
         applicantRepository.save(applicant);
     }
 
@@ -93,14 +104,16 @@ public class StudyService {
     }
 
     @Transactional(readOnly = true)
-    public StudyDetailResponse findStudyDetailByStudyId(Long studyId) {
-        Study study = findStudyById(studyId);
+    public StudyDetailResponse findStudyDetailByStudyId(Member member, Long studyId) {
+        Study study = studyRepository.findByIdWithRound(studyId)
+                .orElseThrow(() -> new StudyNotFoundException("해당 스터디가 존재하지 않습니다", studyId));
+
         List<Round> rounds = study.getRounds();
         Round currentRound = study.getCurrentRound();
 
         List<Member> members = memberRepository.findMembersByRoundId(currentRound.getId());
 
-        return StudyDetailResponse.of(study, rounds, currentRound, members);
+        return StudyDetailResponse.of(study, rounds, calculateRole(study, member), currentRound, members);
     }
 
     @Transactional
@@ -123,19 +136,54 @@ public class StudyService {
         List<Applicant> applicants = applicantRepository.findAllByStudy(study);
 
         return applicants.stream()
-                .map(Applicant::getMember)
-                .map(StudyMemberResponse::from)
-                .toList();
+                         .map(Applicant::getMember)
+                         .map(StudyMemberResponse::from)
+                         .toList();
     }
 
     private Applicant findApplicantByMemberIdAndStudyId(Long memberId, Long studyId) {
         return applicantRepository.findByMemberIdAndStudyId(memberId, studyId)
-                .orElseThrow(() -> new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId));
+                                  .orElseThrow(() -> new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId));
     }
 
     private Study findStudyById(Long studyId) {
         return studyRepository.findById(studyId)
-                .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
+                              .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
     }
 
+    @Transactional(readOnly = true)
+    public List<MyStudyResponse> findMyStudies(Member member) {
+        List<Study> studies = studyRepository.findStudiesOfMember(member);
+        return studies.stream()
+                      .map(study -> new MyStudyResponse(
+                              study.getId(),
+                              study.getProcessingStatus()
+                                   .getCode(),
+                              calculateRole(study, member).getCode(),
+                              study.getName(),
+                              study.calculateAverageTier(),
+                              DateConverter.toStringFormat(study.getStartAt()),
+                              study.getTotalRoundCount(),
+                              study.getPeriodUnit()
+                                   .toStringFormat(study.getPeriodOfRound()),
+                              study.getCurrentRound()
+                                   .getRoundOfMembers()
+                                   .size(),
+                              study.getNumberOfMaximumMembers()
+                      ))
+                      .toList();
+    }
+
+    private Role calculateRole(Study study, Member member) {
+        if (isApplicant(study, member)) {
+            return Role.APPLICANT;
+        }
+        return study.calculateRoleOfStartedStudy(member);
+    }
+
+    private boolean isApplicant(Study study, Member member) {
+        return applicantRepository.findAllByStudy(study)
+                                  .stream()
+                                  .anyMatch(applicant -> applicant.getId().equals(member.getId()));
+    }
 }

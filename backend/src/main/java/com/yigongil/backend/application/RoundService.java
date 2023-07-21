@@ -7,6 +7,7 @@ import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.roundofmember.RoundOfMemberRepository;
 import com.yigongil.backend.domain.roundofmember.RoundOfMembers;
+import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.exception.InvalidMemberInRoundException;
@@ -63,7 +64,7 @@ public class RoundService {
     }
 
     public HomeResponse findCurrentRoundOfStudies(Member member) {
-        List<Study> studies = studyRepository.findByMember(member);
+        List<Study> studies = studyRepository.findByMemberAndProcessingStatus(member, ProcessingStatus.PROCESSING);
         List<UpcomingStudyResponse> upcomingStudyResponses = new ArrayList<>();
 
         for (Study study : studies) {
