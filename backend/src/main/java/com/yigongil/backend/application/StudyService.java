@@ -1,6 +1,5 @@
 package com.yigongil.backend.application;
 
-import com.yigongil.backend.domain.applicant.Applicant;
 import com.yigongil.backend.domain.applicant.ApplicantRepository;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
@@ -13,6 +12,7 @@ import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
 import com.yigongil.backend.exception.ApplicantAlreadyExistException;
 import com.yigongil.backend.exception.ApplicantNotFoundException;
+import com.yigongil.backend.exception.InvalidStudyMemberException;
 import com.yigongil.backend.exception.StudyNotFoundException;
 import com.yigongil.backend.request.StudyCreateRequest;
 import com.yigongil.backend.response.MyStudyResponse;
@@ -90,17 +90,20 @@ public class StudyService {
         Study study = findStudyById(studyId);
 
         validateApplicantAlreadyExist(member, study);
-        Applicant applicant = Applicant.builder()
-                .study(study)
-                .member(member)
-                .build();
-        applicantRepository.save(applicant);
+
+        studyMemberRepository.save(
+                StudyMember.builder()
+                        .study(study)
+                        .member(member)
+                        .role(Role.APPLICANT)
+                        .build()
+        );
     }
 
     private void validateApplicantAlreadyExist(Member member, Study study) {
-        boolean isApplicantAlreadyExists = applicantRepository.existsByMemberAndStudy(member, study);
-        if (isApplicantAlreadyExists) {
-            throw new ApplicantAlreadyExistException("이미 스터디에 신청한 멤버입니다.", String.valueOf(member.getId()));
+        boolean cannotApply = studyMemberRepository.existsByStudyAndMember(study, member);
+        if (cannotApply) {
+            throw new ApplicantAlreadyExistException("스터디에 신청할 수 없는 멤버입니다.", String.valueOf(member.getId()));
         }
     }
 
@@ -112,39 +115,45 @@ public class StudyService {
         List<Round> rounds = study.getRounds();
         Round currentRound = study.getCurrentRound();
 
-        List<Member> members = memberRepository.findMembersByRoundId(currentRound.getId());
+        List<Member> members = studyMemberRepository.findAllByStudyIdAndRole(studyId, Role.STUDY_MEMBER).stream()
+                .map(StudyMember::getMember)
+                .toList();
 
-        return StudyDetailResponse.of(study, rounds, calculateRole(study, member), currentRound, members);
+        StudyMember studyMember = studyMemberRepository.findByStudyIdAndMemberId(studyId, member.getId())
+                .orElseThrow(() -> new InvalidStudyMemberException("해당 스터디에 멤버가 존재하지 않습니다.", String.valueOf(studyId)));
+
+        return StudyDetailResponse.of(study, rounds, studyMember.getRole(), currentRound, members);
     }
 
     @Transactional
     public void permitApplicant(Member master, Long studyId, Long memberId) {
-        Applicant applicant = findApplicantByMemberIdAndStudyId(memberId, studyId);
+        StudyMember studyMember = findApplicantByMemberIdAndStudyId(memberId, studyId);
         Study study = findStudyById(studyId);
+
         study.validateMaster(master);
 
-        applicant.participate(study);
-
-        studyMemberRepository.save(StudyMember.from(applicant));
-        applicantRepository.delete(applicant);
+        studyMember.participate();
     }
 
     @Transactional(readOnly = true)
     public List<StudyMemberResponse> findApplicantsOfStudy(Long studyId, Member master) {
         Study study = findStudyById(studyId);
         study.validateMaster(master);
+        List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRole(studyId, Role.APPLICANT);
 
-        List<Applicant> applicants = applicantRepository.findAllByStudy(study);
-
-        return applicants.stream()
-                .map(Applicant::getMember)
+        return studyMembers.stream()
+                .map(StudyMember::getMember)
                 .map(StudyMemberResponse::from)
                 .toList();
     }
 
-    private Applicant findApplicantByMemberIdAndStudyId(Long memberId, Long studyId) {
-        return applicantRepository.findByMemberIdAndStudyId(memberId, studyId)
+    private StudyMember findApplicantByMemberIdAndStudyId(Long memberId, Long studyId) {
+        StudyMember studyMember = studyMemberRepository.findByStudyIdAndMemberId(studyId, memberId)
                 .orElseThrow(() -> new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId));
+        if (studyMember.isNotApplicant()) {
+            throw new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId);
+        }
+        return studyMember;
     }
 
     private Study findStudyById(Long studyId) {
@@ -155,12 +164,15 @@ public class StudyService {
     @Transactional(readOnly = true)
     public List<MyStudyResponse> findMyStudies(Member member) {
         List<Study> studies = studyRepository.findStudiesOfMember(member);
+
         return studies.stream()
                 .map(study -> new MyStudyResponse(
                         study.getId(),
                         study.getProcessingStatus()
                                 .getCode(),
-                        calculateRole(study, member).getCode(),
+                        studyMemberRepository.findByStudyIdAndMemberId(study.getId(), member.getId()).get()
+                                .getRole()
+                                .getCode(),
                         study.getName(),
                         study.calculateAverageTier(),
                         DateConverter.toStringFormat(study.getStartAt()),
@@ -173,13 +185,6 @@ public class StudyService {
                         study.getNumberOfMaximumMembers()
                 ))
                 .toList();
-    }
-
-    private Role calculateRole(Study study, Member member) {
-        if (isApplicant(study, member)) {
-            return Role.APPLICANT;
-        }
-        return study.calculateRoleOfStartedStudy(member);
     }
 
     private boolean isApplicant(Study study, Member member) {

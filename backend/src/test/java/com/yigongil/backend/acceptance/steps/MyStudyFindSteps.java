@@ -29,36 +29,36 @@ public class MyStudyFindSteps {
         Object memberId = sharedContext.getParameter(githubId);
 
         ExtractableResponse<Response> response = given().log()
-                                                        .all()
-                                                        .header(HttpHeaders.AUTHORIZATION, memberId)
-                                                        .when()
-                                                        .get("/v1/studies/my")
-                                                        .then().log().all()
-                                                        .extract();
+                .all()
+                .header(HttpHeaders.AUTHORIZATION, memberId)
+                .when()
+                .get("/v1/studies/my")
+                .then().log().all()
+                .extract();
         sharedContext.setResponse(response);
     }
 
     @Then("역할이 개설자인 스터디 {int}개 참여자인 스터디 {int}개 지원자인 스터디 {int}개가 표시된다.")
     public void 내_스터디_역할_검증(int masterRoleCount, int studyMemberRoleCount, int applicantRoleCount) {
         List<MyStudyResponse> myStudies = sharedContext.getResponse()
-                                                       .jsonPath()
-                                                       .getList(".", MyStudyResponse.class);
+                .jsonPath()
+                .getList(".", MyStudyResponse.class);
 
         int actualMasterRoleCount = (int) myStudies.stream()
-                                                   .filter(myStudyResponse -> myStudyResponse.role() == 0)
-                                                   .count();
+                .filter(myStudyResponse -> myStudyResponse.role() == 0)
+                .count();
 
         int actualStudyMemberRoleCount = (int) myStudies.stream()
-                                                        .filter(myStudyResponse -> myStudyResponse.role() == 1)
-                                                        .count();
+                .filter(myStudyResponse -> myStudyResponse.role() == 1)
+                .count();
 
         int actualApplicantRoleCount = (int) myStudies.stream()
-                                                      .filter(myStudyResponse -> myStudyResponse.role() == 2)
-                                                      .count();
+                .filter(myStudyResponse -> myStudyResponse.role() == 2)
+                .count();
 
         int actualNoRoleCount = (int) myStudies.stream()
-                                               .filter(myStudyResponse -> myStudyResponse.role() == 2)
-                                               .count();
+                .filter(myStudyResponse -> myStudyResponse.role() == 3)
+                .count();
 
         assertAll(
                 () -> assertThat(actualMasterRoleCount).isEqualTo(masterRoleCount),
@@ -71,20 +71,20 @@ public class MyStudyFindSteps {
     @Then("모집 중인 스터디 {int}개 진행 중인 스터디 {int}개 종료된 스터디 {int}개가 표시된다.")
     public void 스터디_상태_검증(int recruitingStudyCount, int processingStudyCount, int endedStudyCount) {
         List<MyStudyResponse> myStudies = sharedContext.getResponse()
-                                                       .jsonPath()
-                                                       .getList(".", MyStudyResponse.class);
+                .jsonPath()
+                .getList(".", MyStudyResponse.class);
 
         int actualRecruitingStudyCount = (int) myStudies.stream()
-                                                        .filter(myStudyResponse -> myStudyResponse.processingStatus() == 0)
-                                                        .count();
+                .filter(myStudyResponse -> myStudyResponse.processingStatus() == 0)
+                .count();
 
         int actualProcessingStudyCount = (int) myStudies.stream()
-                                                        .filter(myStudyResponse -> myStudyResponse.processingStatus() == 1)
-                                                        .count();
+                .filter(myStudyResponse -> myStudyResponse.processingStatus() == 1)
+                .count();
 
         int actualEndedStudyCount = (int) myStudies.stream()
-                                                   .filter(myStudyResponse -> myStudyResponse.processingStatus() == 2)
-                                                   .count();
+                .filter(myStudyResponse -> myStudyResponse.processingStatus() == 2)
+                .count();
 
         assertAll(
                 () -> assertThat(actualRecruitingStudyCount).isEqualTo(recruitingStudyCount),

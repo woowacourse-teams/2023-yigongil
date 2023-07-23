@@ -54,6 +54,14 @@ public class StudyMember extends BaseEntity {
                 .build();
     }
 
+    public boolean isNotApplicant() {
+        return role != Role.APPLICANT;
+    }
+
+    public void participate() {
+        this.role = Role.STUDY_MEMBER;
+    }
+
     public Long getId() {
         return id;
     }
