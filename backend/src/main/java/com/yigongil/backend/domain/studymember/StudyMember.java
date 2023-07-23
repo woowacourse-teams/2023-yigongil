@@ -3,15 +3,19 @@ package com.yigongil.backend.domain.studymember;
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.applicant.Applicant;
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.study.Role;
 import com.yigongil.backend.domain.study.Study;
+import lombok.Builder;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import lombok.Builder;
 
 @Entity
 public class StudyMember extends BaseEntity {
@@ -28,14 +32,19 @@ public class StudyMember extends BaseEntity {
     @JoinColumn(nullable = false)
     private Study study;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     protected StudyMember() {
     }
 
     @Builder
-    public StudyMember(Long id, Member member, Study study) {
+    public StudyMember(Long id, Member member, Study study, Role role) {
         this.id = id;
         this.member = member;
         this.study = study;
+        this.role = role;
     }
 
     public static StudyMember from(Applicant applicant) {
@@ -55,5 +64,9 @@ public class StudyMember extends BaseEntity {
 
     public Study getStudy() {
         return study;
+    }
+
+    public Role getRole() {
+        return role;
     }
 }
