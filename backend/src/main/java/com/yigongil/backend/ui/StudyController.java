@@ -97,7 +97,6 @@ public class StudyController {
 
     @GetMapping("/{id}")
     public ResponseEntity<StudyDetailResponse> viewStudyDetail(@Authorization Member member, @PathVariable Long id) {
-
         StudyDetailResponse response = studyService.findStudyDetailByStudyId(member, id);
         return ResponseEntity.ok(response);
     }
