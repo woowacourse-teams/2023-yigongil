@@ -89,6 +89,12 @@ public class StudyController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/{studyId}/applicants")
+    public ResponseEntity<Void> deleteApplicant(@Authorization Member member, @PathVariable Long studyId) {
+        studyService.deleteApplicant(member, studyId);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<StudyDetailResponse> viewStudyDetail(@Authorization Member member, @PathVariable Long id) {
         StudyDetailResponse response = studyService.findStudyDetailByStudyId(member, id);

@@ -141,11 +141,6 @@ public class StudyService {
                          .toList();
     }
 
-    private Applicant findApplicantByMemberIdAndStudyId(Long memberId, Long studyId) {
-        return applicantRepository.findByMemberIdAndStudyId(memberId, studyId)
-                                  .orElseThrow(() -> new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId));
-    }
-
     private Study findStudyById(Long studyId) {
         return studyRepository.findById(studyId)
                               .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
@@ -185,5 +180,16 @@ public class StudyService {
         return applicantRepository.findAllByStudy(study)
                                   .stream()
                                   .anyMatch(applicant -> applicant.getId().equals(member.getId()));
+    }
+
+    @Transactional
+    public void deleteApplicant(Member member, Long studyId) {
+        Applicant applicant = findApplicantByMemberIdAndStudyId(member.getId(), studyId);
+        applicantRepository.delete(applicant);
+    }
+
+    private Applicant findApplicantByMemberIdAndStudyId(Long memberId, Long studyId) {
+        return applicantRepository.findByMemberIdAndStudyId(memberId, studyId)
+                .orElseThrow(() -> new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId));
     }
 }
