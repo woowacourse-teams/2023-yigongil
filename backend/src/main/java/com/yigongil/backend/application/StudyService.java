@@ -65,9 +65,10 @@ public class StudyService {
         studyRepository.save(study);
 
         StudyMember studyMember = StudyMember.builder()
-                                             .study(study)
-                                             .member(member)
-                                             .build();
+                .study(study)
+                .member(member)
+                .role(Role.MASTER)
+                .build();
 
         studyMemberRepository.save(studyMember);
 
@@ -80,8 +81,8 @@ public class StudyService {
         Page<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.RECRUITING, pageable);
 
         return studies.get()
-                      .map(RecruitingStudyResponse::from)
-                      .toList();
+                .map(RecruitingStudyResponse::from)
+                .toList();
     }
 
     @Transactional
@@ -90,9 +91,9 @@ public class StudyService {
 
         validateApplicantAlreadyExist(member, study);
         Applicant applicant = Applicant.builder()
-                                       .study(study)
-                                       .member(member)
-                                       .build();
+                .study(study)
+                .member(member)
+                .build();
         applicantRepository.save(applicant);
     }
 
@@ -136,37 +137,42 @@ public class StudyService {
         List<Applicant> applicants = applicantRepository.findAllByStudy(study);
 
         return applicants.stream()
-                         .map(Applicant::getMember)
-                         .map(StudyMemberResponse::from)
-                         .toList();
+                .map(Applicant::getMember)
+                .map(StudyMemberResponse::from)
+                .toList();
+    }
+
+    private Applicant findApplicantByMemberIdAndStudyId(Long memberId, Long studyId) {
+        return applicantRepository.findByMemberIdAndStudyId(memberId, studyId)
+                .orElseThrow(() -> new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId));
     }
 
     private Study findStudyById(Long studyId) {
         return studyRepository.findById(studyId)
-                              .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
+                .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
     }
 
     @Transactional(readOnly = true)
     public List<MyStudyResponse> findMyStudies(Member member) {
         List<Study> studies = studyRepository.findStudiesOfMember(member);
         return studies.stream()
-                      .map(study -> new MyStudyResponse(
-                              study.getId(),
-                              study.getProcessingStatus()
-                                   .getCode(),
-                              calculateRole(study, member).getCode(),
-                              study.getName(),
-                              study.calculateAverageTier(),
-                              DateConverter.toStringFormat(study.getStartAt()),
-                              study.getTotalRoundCount(),
-                              study.getPeriodUnit()
-                                   .toStringFormat(study.getPeriodOfRound()),
-                              study.getCurrentRound()
-                                   .getRoundOfMembers()
-                                   .size(),
-                              study.getNumberOfMaximumMembers()
-                      ))
-                      .toList();
+                .map(study -> new MyStudyResponse(
+                        study.getId(),
+                        study.getProcessingStatus()
+                                .getCode(),
+                        calculateRole(study, member).getCode(),
+                        study.getName(),
+                        study.calculateAverageTier(),
+                        DateConverter.toStringFormat(study.getStartAt()),
+                        study.getTotalRoundCount(),
+                        study.getPeriodUnit()
+                                .toStringFormat(study.getPeriodOfRound()),
+                        study.getCurrentRound()
+                                .getRoundOfMembers()
+                                .size(),
+                        study.getNumberOfMaximumMembers()
+                ))
+                .toList();
     }
 
     private Role calculateRole(Study study, Member member) {
@@ -178,8 +184,8 @@ public class StudyService {
 
     private boolean isApplicant(Study study, Member member) {
         return applicantRepository.findAllByStudy(study)
-                                  .stream()
-                                  .anyMatch(applicant -> applicant.getId().equals(member.getId()));
+                .stream()
+                .anyMatch(applicant -> applicant.getId().equals(member.getId()));
     }
 
     @Transactional
