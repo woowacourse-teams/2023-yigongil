@@ -1,7 +1,6 @@
 package com.yigongil.backend.domain.studymember;
 
 import com.yigongil.backend.domain.BaseEntity;
-import com.yigongil.backend.domain.applicant.Applicant;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.Role;
 import com.yigongil.backend.domain.study.Study;
@@ -45,13 +44,6 @@ public class StudyMember extends BaseEntity {
         this.member = member;
         this.study = study;
         this.role = role;
-    }
-
-    public static StudyMember from(Applicant applicant) {
-        return StudyMember.builder()
-                .member(applicant.getMember())
-                .study(applicant.getStudy())
-                .build();
     }
 
     public boolean isNotApplicant() {

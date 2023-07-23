@@ -1,8 +1,6 @@
 package com.yigongil.backend.application;
 
-import com.yigongil.backend.domain.applicant.ApplicantRepository;
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Role;
@@ -35,18 +33,12 @@ import static com.yigongil.backend.domain.study.PageStrategy.CREATED_AT_DESC;
 public class StudyService {
 
     private final StudyRepository studyRepository;
-    private final ApplicantRepository applicantRepository;
-    private final MemberRepository memberRepository;
     private final StudyMemberRepository studyMemberRepository;
 
     public StudyService(
             StudyRepository studyRepository,
-            ApplicantRepository applicantRepository,
-            MemberRepository memberRepository,
             StudyMemberRepository studyMemberRepository) {
         this.studyRepository = studyRepository;
-        this.applicantRepository = applicantRepository;
-        this.memberRepository = memberRepository;
         this.studyMemberRepository = studyMemberRepository;
     }
 
@@ -187,20 +179,9 @@ public class StudyService {
                 .toList();
     }
 
-    private boolean isApplicant(Study study, Member member) {
-        return applicantRepository.findAllByStudy(study)
-                .stream()
-                .anyMatch(applicant -> applicant.getId().equals(member.getId()));
-    }
-
     @Transactional
     public void deleteApplicant(Member member, Long studyId) {
-        Applicant applicant = findApplicantByMemberIdAndStudyId(member.getId(), studyId);
-        applicantRepository.delete(applicant);
-    }
-
-    private Applicant findApplicantByMemberIdAndStudyId(Long memberId, Long studyId) {
-        return applicantRepository.findByMemberIdAndStudyId(memberId, studyId)
-                .orElseThrow(() -> new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId));
+        StudyMember applicant = findApplicantByMemberIdAndStudyId(member.getId(), studyId);
+        studyMemberRepository.delete(applicant);
     }
 }

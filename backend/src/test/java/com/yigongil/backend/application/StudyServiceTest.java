@@ -1,8 +1,6 @@
 package com.yigongil.backend.application;
 
-import com.yigongil.backend.domain.applicant.ApplicantRepository;
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
@@ -28,14 +26,10 @@ import static org.mockito.Mockito.mock;
 class StudyServiceTest {
 
     private final StudyRepository studyRepository = mock(StudyRepository.class);
-    private final ApplicantRepository applicantRepository = mock(ApplicantRepository.class);
-    private final MemberRepository memberRepository = mock(MemberRepository.class);
     private final StudyMemberRepository studyMemberRepository = mock(StudyMemberRepository.class);
 
     private final StudyService studyService = new StudyService(
             studyRepository,
-            applicantRepository,
-            memberRepository,
             studyMemberRepository
     );
 

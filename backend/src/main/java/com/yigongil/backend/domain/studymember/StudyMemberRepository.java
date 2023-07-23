@@ -19,4 +19,6 @@ public interface StudyMemberRepository extends Repository<StudyMember, Long> {
     List<StudyMember> findAllByStudyIdAndRole(Long studyId, Role role);
 
     boolean existsByStudyAndMember(Study study, Member member);
+
+    void delete(StudyMember studyMember);
 }
