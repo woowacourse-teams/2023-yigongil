@@ -124,6 +124,7 @@ public class StudyService {
 
         study.validateMaster(master);
 
+        study.addMember(studyMember.getMember());
         studyMember.participate();
     }
 
