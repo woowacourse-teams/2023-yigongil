@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: local
   config:
     import: classpath:yigongil-private/application-dev.yml
   jpa:
