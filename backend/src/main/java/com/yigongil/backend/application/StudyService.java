@@ -149,9 +149,6 @@ public class StudyService {
     @Transactional(readOnly = true)
     public List<MyStudyResponse> findMyStudies(Member member) {
         List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndRoleNot(member.getId(), Role.APPLICANT);
-        List<Study> studies = studyMembers.stream()
-                .map(StudyMember::getStudy)
-                .toList();
 
         List<MyStudyResponse> response = new ArrayList<>();
         for (StudyMember studyMember : studyMembers) {
