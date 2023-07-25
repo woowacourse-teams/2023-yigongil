@@ -3,10 +3,10 @@ package com.created.team201.presentation.studyDetail.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.created.team201.presentation.studyDetail.model.StudyMember
+import com.created.team201.presentation.studyDetail.model.StudyMemberUIModel
 
 class StudyParticipantsAdapter :
-    ListAdapter<StudyMember, StudyPeopleViewHolder>(diffCallBack) {
+    ListAdapter<StudyMemberUIModel, StudyPeopleViewHolder>(diffCallBack) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyPeopleViewHolder {
         return StudyPeopleViewHolder(StudyPeopleViewHolder.getBinding(parent))
@@ -17,15 +17,15 @@ class StudyParticipantsAdapter :
     }
 
     companion object {
-        private val diffCallBack = object : DiffUtil.ItemCallback<StudyMember>() {
+        private val diffCallBack = object : DiffUtil.ItemCallback<StudyMemberUIModel>() {
             override fun areItemsTheSame(
-                oldItem: StudyMember,
-                newItem: StudyMember,
+                oldItem: StudyMemberUIModel,
+                newItem: StudyMemberUIModel,
             ): Boolean = oldItem.name == newItem.name
 
             override fun areContentsTheSame(
-                oldItem: StudyMember,
-                newItem: StudyMember,
+                oldItem: StudyMemberUIModel,
+                newItem: StudyMemberUIModel,
             ): Boolean = oldItem == newItem
         }
     }

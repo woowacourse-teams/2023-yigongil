@@ -1,7 +1,8 @@
 package com.created.team201.presentation.studyDetail.model
 
-data class StudyMember(
+data class StudyMemberUIModel(
     val isMaster: Boolean,
+    val isApplicant: Boolean,
     val profileImageUrl: String,
     val name: String,
     val successRate: Int,

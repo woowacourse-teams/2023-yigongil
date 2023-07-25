@@ -1,6 +1,7 @@
-package com.created.team201.presentation.studyList.uiModel
+package com.created.team201.presentation.studyDetail.model
 
 data class StudyDetailUIModel(
+    val isMaster: Boolean,
     val title: String,
     val introduction: String,
     val peopleCount: Int,
@@ -8,4 +9,5 @@ data class StudyDetailUIModel(
     val period: String,
     val cycle: String,
     val applicantCount: Int,
+    val studyMembers: List<StudyMemberUIModel>,
 )
