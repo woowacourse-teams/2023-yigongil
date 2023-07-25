@@ -16,7 +16,7 @@ data class StudyDetailResponseDto(
     @SerialName("numberOfMaximumMembers")
     val numberOfMaximumMembers: Int,
     @SerialName("studyMasterId")
-    val studyMasterId: Int,
+    val studyMasterId: Long,
     @SerialName("role")
     val role: Int,
     @SerialName("startAt")
