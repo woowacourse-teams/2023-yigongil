@@ -83,4 +83,11 @@
     <string name="multiPicker_display_name_week">주</string>
     <string name="multiPicker_formatter_information">%d %s</string>
 
+    <!-- 마이페이지 뷰 -->
+    <string name="myPage_menu_title_setting">설정</string>
+    <string name="myPage_toolbar_title">마이페이지</string>
+    <string name="myPage_button_modify_profile">프로필 수정</string>
+    <string name="myPage_study_success_rate_title">스터디 성공률</string>
+    <string name="myPage_todo_success_rate_title">필수투두 완료횟수</string>
+
 </resources>
