@@ -13,7 +13,12 @@ import com.created.team201.presentation.studyDetail.adapter.StudyParticipantsAda
 
 class StudyDetailActivity :
     BindingActivity<ActivityStudyDetailBinding>(R.layout.activity_study_detail) {
-    private val studyDetailViewModel: StudyDetailViewModel by viewModels()
+    private val studyDetailViewModel: StudyDetailViewModel by viewModels { StudyDetailViewModel.Factory }
+
+    private val userId: Long = TEMP_USER_ID
+    private val studyId: Long by lazy { intent.getLongExtra(KEY_STUDY_ID, 0) }
+
+    private val studyPeopleAdapter by lazy { StudyParticipantsAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,13 +27,8 @@ class StudyDetailActivity :
         initViewModel()
         initActionBar()
         initStudyParticipantsList()
-    }
-
-    private fun initStudyParticipantsList() {
-        val studyPeopleAdapter = StudyParticipantsAdapter()
-        binding.rvStudyDetailStudyPeople.setHasFixedSize(true)
-        binding.rvStudyDetailStudyPeople.adapter = studyPeopleAdapter
-        studyPeopleAdapter.submitList(studyDetailViewModel.studyParticipants)
+        initStudyDetailInformation()
+        observeStudyDetailParticipants()
     }
 
     private fun initViewModel() {
@@ -43,11 +43,24 @@ class StudyDetailActivity :
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
     }
 
+    private fun initStudyParticipantsList() {
+        binding.rvStudyDetailStudyPeople.setHasFixedSize(true)
+        binding.rvStudyDetailStudyPeople.adapter = studyPeopleAdapter
+    }
+
+    private fun initStudyDetailInformation() {
+        studyDetailViewModel.fetchStudyDetail(userId, studyId)
+    }
+
     fun onParticipateButtonClick() {
-        studyDetailViewModel.participateStudy()
+        studyDetailViewModel.participateStudy(studyId)
         binding.btnStudyDetailDm.visibility = View.GONE
         binding.btnStudyDetailParticipate.visibility = View.GONE
         binding.btnStudyDetailWaiting.visibility = View.VISIBLE
+    }
+
+    fun onStartStudyButtonClick() {
+        studyDetailViewModel.startStudy(studyId)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -57,7 +70,14 @@ class StudyDetailActivity :
         return super.onOptionsItemSelected(item)
     }
 
+    private fun observeStudyDetailParticipants() {
+        studyDetailViewModel.studyParticipants.observe(this) { studyList ->
+            studyPeopleAdapter.submitList(studyList)
+        }
+    }
+
     companion object {
+        private const val TEMP_USER_ID = 1L
         private const val KEY_STUDY_ID = "KEY_STUDY_ID"
         fun getIntent(context: Context, studyId: Long): Intent =
             Intent(context, StudyDetailActivity::class.java).apply {

@@ -7,7 +7,7 @@
 
         <variable
             name="studyMember"
-            type="com.created.team201.presentation.studyDetail.model.StudyMember" />
+            type="com.created.team201.presentation.studyDetail.model.StudyMemberUIModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -62,6 +62,35 @@
             app:layout_constraintStart_toStartOf="@id/tv_item_study_detail_user_name"
             app:layout_constraintTop_toBottomOf="@id/tv_item_study_detail_user_name"
             tools:text="스터디 성공률 78%" />
+
+        <TextView
+            android:id="@+id/tv_item_study_detail_waiting_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/item_study_detail_accept_await"
+            android:textAppearance="@style/accept_sb9"
+            android:textColor="@color/white"
+            app:isGone="@{!studyMember.isApplicant}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/fl_item_study_detail_profile_image"
+            app:layout_constraintTop_toBottomOf="@id/fl_item_study_detail_profile_image" />
+
+        <TextView
+            android:id="@+id/btn_item_study_detail_accept"
+            android:layout_width="40dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            android:gravity="center"
+            android:text="@string/item_study_button_accept"
+            android:textAppearance="@style/accept_sb9"
+            android:textColor="@color/white"
+            app:isGone="@{!studyMember.isApplicant}"
+            app:layout_constraintBottom_toBottomOf="@id/tv_item_study_detail_waiting_description"
+            app:layout_constraintStart_toEndOf="@id/tv_item_study_detail_waiting_description"
+            app:layout_constraintTop_toTopOf="@id/tv_item_study_detail_waiting_description" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
