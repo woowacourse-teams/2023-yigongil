@@ -44,8 +44,10 @@
 
     <!--스터디 상세보기 뷰-->
     <string name="study_detail_app_bar_title">스터디 상세보기</string>
+    <string name="study_detail_app_bar_study_master_title">개설한 스터디 관리하기</string>
     <string name="study_detail_study_people">스터디원</string>
     <string name="study_detail_study_capacity">참여하기(%d/%d)</string>
+    <string name="study_detail_button_start_study">시작하기(%d/%d)</string>
     <string name="study_detail_dm_button_content_description">스터디장에게 문의하기</string>
     <string name="study_detail_study_waiting">스터디장의 수락을 기다리고있어요.</string>
     <string name="item_study_detail_study_success_rate">스터디 성공률 %d%%</string>
@@ -82,5 +84,7 @@
     <string name="multiPicker_display_name_day">일</string>
     <string name="multiPicker_display_name_week">주</string>
     <string name="multiPicker_formatter_information">%d %s</string>
+    <string name="item_study_detail_accept_await">승낙을 기다리고 있어요.</string>
+    <string name="item_study_button_accept">수락</string>
 
 </resources>
