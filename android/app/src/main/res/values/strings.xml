@@ -83,4 +83,10 @@
     <string name="multiPicker_display_name_week">주</string>
     <string name="multiPicker_formatter_information">%d %s</string>
 
+    <!-- 프로필 뷰 -->
+    <string name="profile_report_button_menu">신고</string>
+    <string name="profile_title">프로필</string>
+    <string name="profile_study_success_rate">스터디 성공률</string>
+    <string name="profile_todo_success_rate">필수투두 완료횟수</string>
+
 </resources>
