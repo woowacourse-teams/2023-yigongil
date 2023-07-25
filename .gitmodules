@@ -1,0 +1,6 @@
+[submodule "backend/yigongil-private"]
+	path = backend/yigongil-private
+	url = https://github.com/yujamint/yigongil-private.git
+[submodule "backend/src/main/resources/yigongil-private"]
+	path = backend/src/main/resources/yigongil-private
+	url = https://github.com/yujamint/yigongil-private.git
