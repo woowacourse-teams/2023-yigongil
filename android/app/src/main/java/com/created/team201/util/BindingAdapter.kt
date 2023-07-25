@@ -17,6 +17,15 @@ object BindingAdapter {
     }
 
     @JvmStatic
+    @BindingAdapter("isGone")
+    fun isGone(view: View, isGone: Boolean) {
+        when (isGone) {
+            true -> view.visibility = View.GONE
+            false -> view.visibility = View.VISIBLE
+        }
+    }
+
+    @JvmStatic
     @BindingAdapter("isSelected")
     fun isSelected(view: View, isSelected: Boolean) {
         view.isSelected = isSelected
