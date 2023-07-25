@@ -29,7 +29,7 @@ fun MemberResponseDto.toDomain(): Member = Member(
     tier = this.tier,
     nickname = this.nickname,
     successRate = this.successRate,
-    profileImage = this.profileImage,
+    profileImage = this.profileImage ?: "",
 )
 
 fun RoundResponseDto.toDomain(): Round = Round(
