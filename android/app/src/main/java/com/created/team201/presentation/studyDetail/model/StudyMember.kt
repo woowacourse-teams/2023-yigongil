@@ -1,6 +1,6 @@
 package com.created.team201.presentation.studyDetail.model
 
-data class StudyParticipant(
+data class StudyMember(
     val isMaster: Boolean,
     val profileImageUrl: String,
     val name: String,
