@@ -24,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.yigongil.backend.domain.study.PageStrategy.CREATED_AT_DESC;
@@ -93,7 +94,7 @@ public class StudyService {
     }
 
     private void validateApplicantAlreadyExist(Member member, Study study) {
-        boolean cannotApply = studyMemberRepository.existsByStudyAndMember(study, member);
+        boolean cannotApply = studyMemberRepository.existsByStudyIdAndMemberId(study.getId(), member.getId());
         if (cannotApply) {
             throw new ApplicantAlreadyExistException("스터디에 신청할 수 없는 멤버입니다.", String.valueOf(member.getId()));
         }
@@ -107,7 +108,7 @@ public class StudyService {
         List<Round> rounds = study.getRounds();
         Round currentRound = study.getCurrentRound();
 
-        List<Member> members = studyMemberRepository.findAllByStudyIdAndRole(studyId, Role.STUDY_MEMBER).stream()
+        List<Member> members = studyMemberRepository.findAllByStudyIdAndRoleNot(studyId, Role.APPLICANT).stream()
                 .map(StudyMember::getMember)
                 .toList();
 
@@ -120,7 +121,7 @@ public class StudyService {
     @Transactional
     public void permitApplicant(Member master, Long studyId, Long memberId) {
         StudyMember studyMember = findApplicantByMemberIdAndStudyId(memberId, studyId);
-        Study study = findStudyById(studyId);
+        Study study = studyMember.getStudy();
 
         study.validateMaster(master);
 
@@ -140,15 +141,6 @@ public class StudyService {
                 .toList();
     }
 
-    private StudyMember findApplicantByMemberIdAndStudyId(Long memberId, Long studyId) {
-        StudyMember studyMember = studyMemberRepository.findByStudyIdAndMemberId(studyId, memberId)
-                .orElseThrow(() -> new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId));
-        if (studyMember.isNotApplicant()) {
-            throw new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId);
-        }
-        return studyMember;
-    }
-
     private Study findStudyById(Long studyId) {
         return studyRepository.findById(studyId)
                 .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
@@ -156,33 +148,49 @@ public class StudyService {
 
     @Transactional(readOnly = true)
     public List<MyStudyResponse> findMyStudies(Member member) {
-        List<Study> studies = studyRepository.findStudiesOfMember(member);
-
-        return studies.stream()
-                .map(study -> new MyStudyResponse(
-                        study.getId(),
-                        study.getProcessingStatus()
-                                .getCode(),
-                        studyMemberRepository.findByStudyIdAndMemberId(study.getId(), member.getId()).get()
-                                .getRole()
-                                .getCode(),
-                        study.getName(),
-                        study.calculateAverageTier(),
-                        DateConverter.toStringFormat(study.getStartAt()),
-                        study.getTotalRoundCount(),
-                        study.getPeriodUnit()
-                                .toStringFormat(study.getPeriodOfRound()),
-                        study.getCurrentRound()
-                                .getRoundOfMembers()
-                                .size(),
-                        study.getNumberOfMaximumMembers()
-                ))
+        List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndRoleNot(member.getId(), Role.APPLICANT);
+        List<Study> studies = studyMembers.stream()
+                .map(StudyMember::getStudy)
                 .toList();
+
+        List<MyStudyResponse> response = new ArrayList<>();
+        for (StudyMember studyMember : studyMembers) {
+            Study study = studyMember.getStudy();
+            response.add(
+                    new MyStudyResponse(
+                            study.getId(),
+                            study.getProcessingStatus()
+                                    .getCode(),
+                            studyMember.getRole()
+                                    .getCode(),
+                            study.getName(),
+                            study.calculateAverageTier(),
+                            DateConverter.toStringFormat(study.getStartAt()),
+                            study.getTotalRoundCount(),
+                            study.getPeriodUnit()
+                                    .toStringFormat(study.getPeriodOfRound()),
+                            study.getCurrentRound()
+                                    .getRoundOfMembers()
+                                    .size(),
+                            study.getNumberOfMaximumMembers()
+                    )
+            );
+        }
+        return response;
     }
 
     @Transactional
     public void deleteApplicant(Member member, Long studyId) {
         StudyMember applicant = findApplicantByMemberIdAndStudyId(member.getId(), studyId);
         studyMemberRepository.delete(applicant);
+    }
+
+    private StudyMember findApplicantByMemberIdAndStudyId(Long memberId, Long studyId) {
+        StudyMember studyMember = studyMemberRepository.findByStudyIdAndMemberId(studyId, memberId)
+                .orElseThrow(() -> new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId));
+        if (studyMember.isNotApplicant()) {
+            throw new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId);
+        }
+        return studyMember;
     }
 }

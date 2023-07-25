@@ -55,7 +55,7 @@ class StudyServiceTest {
             Member member = MemberFixture.폰노이만.toMember();
             Study study = StudyFixture.자바_스터디.toStudy();
             given(studyRepository.findById(any())).willReturn(Optional.of(study));
-            given(studyMemberRepository.existsByStudyAndMember(study, member)).willReturn(true);
+            given(studyMemberRepository.existsByStudyIdAndMemberId(study.getId(), member.getId())).willReturn(true);
 
             // when
             // then

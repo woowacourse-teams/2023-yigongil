@@ -1,6 +1,7 @@
 package com.yigongil.backend.acceptance.steps;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yigongil.backend.domain.study.Role;
 import com.yigongil.backend.response.MyStudyResponse;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -45,19 +46,19 @@ public class MyStudyFindSteps {
                 .getList(".", MyStudyResponse.class);
 
         int actualMasterRoleCount = (int) myStudies.stream()
-                .filter(myStudyResponse -> myStudyResponse.role() == 0)
+                .filter(myStudyResponse -> myStudyResponse.role() == Role.MASTER.getCode())
                 .count();
 
         int actualStudyMemberRoleCount = (int) myStudies.stream()
-                .filter(myStudyResponse -> myStudyResponse.role() == 1)
+                .filter(myStudyResponse -> myStudyResponse.role() == Role.STUDY_MEMBER.getCode())
                 .count();
 
         int actualApplicantRoleCount = (int) myStudies.stream()
-                .filter(myStudyResponse -> myStudyResponse.role() == 2)
+                .filter(myStudyResponse -> myStudyResponse.role() == Role.APPLICANT.getCode())
                 .count();
 
         int actualNoRoleCount = (int) myStudies.stream()
-                .filter(myStudyResponse -> myStudyResponse.role() == 3)
+                .filter(myStudyResponse -> myStudyResponse.role() == Role.NO_ROLE.getCode())
                 .count();
 
         assertAll(
