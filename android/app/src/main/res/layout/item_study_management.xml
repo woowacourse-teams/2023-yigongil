@@ -47,26 +47,29 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="4dp"
             android:background="@drawable/bg_rectangle_radius_5dp"
-            android:paddingHorizontal="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_item_study_management_essential_todo">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_marginStart="16dp"
+                android:gravity="center_vertical"
                 android:textAppearance="@style/text_r14"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iv_item_study_management_essential_todo_check_button"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="블로그에 정리하기" />
 
             <ImageView
+                android:id="@+id/iv_item_study_management_essential_todo_check_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/item_study_management_todo_description"
+                android:padding="12dp"
                 android:src="@drawable/ic_selector_home_check_btn"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -104,13 +107,14 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="4dp"
-            tools:itemCount="3"
-            android:padding="12dp"
-            tools:listitem="@layout/item_study_management_optional_todos"
             android:background="@drawable/bg_rectangle_radius_5dp"
+            android:padding="2dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_item_study_management_optional_todo" />
+            app:layout_constraintTop_toBottomOf="@id/tv_item_study_management_optional_todo"
+            tools:itemCount="3"
+            tools:listitem="@layout/item_study_management_optional_todos" />
 
         <TextView
             android:id="@+id/tv_item_study_management_study_member"
