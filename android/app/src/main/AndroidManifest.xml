@@ -19,6 +19,9 @@
             android:name=".presentation.login.LoginActivity"
             android:exported="false" />
         <activity
+            android:name=".presentation.studyManagement.StudyManagementActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.studyDetail.StudyDetailActivity"
             android:exported="false" />
         <activity
