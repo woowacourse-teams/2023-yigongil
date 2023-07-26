@@ -16,6 +16,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.studyManagement.StudyManagementActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.splash.SplashActivity"
             android:exported="false" />
         <activity
@@ -33,6 +36,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".presentation.createStudy.CreateStudyActivity"
             android:exported="false" />

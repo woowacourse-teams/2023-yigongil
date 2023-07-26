@@ -15,6 +15,7 @@
     <color name="green06_7ADC4B">#7ADC4B</color>
     <color name="green07_0E4429">#0E4429</color>
     <color name="green08_A2FF86">#A2FF86</color>
+    <color name="green09_799E82">#799E82</color>
 
     <color name="black01_0D1117">#0D1117</color>
     <color name="black02_181B21">#181B21</color>
@@ -24,7 +25,8 @@
     <color name="grey02_78808B">#78808B</color>
     <color name="grey03_595959">#595959</color>
     <color name="grey04_989DA5">#989DA5</color>
-    
+    <color name="grey05_C3BCBC">#C3BCBC</color>
+
     <!--Tier Color-->
     <color name="bronze_FBBA8B">#FBBA8B</color>
     <color name="silver_CFD5DE">#CFD5DE</color>

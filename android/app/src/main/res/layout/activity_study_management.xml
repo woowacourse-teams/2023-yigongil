@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="isParticipant"
+            type="java.lang.Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.studyManagement.StudyManagementActivity">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_study_management"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/menu_study_management"
+            app:title="@{isParticipant? @string/study_management_app_bar_title_is_study_participant : @string/study_management_app_bar_title_is_study_master}"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/header_sb15"
+            app:titleTextColor="@color/white"
+            tools:title="참여한 스터디 관리하기" />
+
+        <View
+            android:id="@+id/view_study_management_tool_bar_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/black03_272C33"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_study_management" />
+
+        <ImageView
+            android:id="@+id/iv_study_management_previous_button"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="26dp"
+            android:contentDescription="@string/study_management_previous_button_description"
+            android:src="@drawable/ic_arrow_prev_active"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_study_management_round"
+            app:layout_constraintEnd_toStartOf="@+id/tv_study_management_round"
+            app:layout_constraintTop_toTopOf="@+id/tv_study_management_round" />
+
+        <TextView
+            android:id="@+id/tv_study_management_round"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:text="@string/study_management_round"
+            android:textAppearance="@style/subtitle_r15"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_study_management_tool_bar_divider"
+            tools:text="1회차" />
+
+
+        <ImageView
+            android:id="@+id/iv_study_management_next_button"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="26dp"
+            android:contentDescription="@string/study_management_next_button_description"
+            android:src="@drawable/ic_arrow_next_active"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_study_management_round"
+            app:layout_constraintStart_toEndOf="@+id/tv_study_management_round"
+            app:layout_constraintTop_toTopOf="@+id/tv_study_management_round" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_study_management"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_study_management_end_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_study_management_previous_button" />
+
+        <TextView
+            android:id="@+id/tv_study_management_end_button"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/bg_rectangle_radius_10dp_green01"
+            android:gravity="center"
+            android:text="@{isParticipant? @string/study_management_end_button_is_study_participant : @string/study_management_end_button_is_study_master}"
+            android:textAppearance="@style/button_sb18"
+            android:textColor="@color/green09_799E82"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="그만두기" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="isMaster"
+            type="java.lang.Boolean" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_item_study_management_essential_todo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/study_management_essential_todo"
+            android:textAppearance="@style/text_r14"
+            android:textColor="@color/grey02_78808B"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_item_study_management_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/study_management_edit_todo"
+            android:textAppearance="@style/text_r12"
+            android:textColor="@color/white"
+            app:drawableStartCompat="@drawable/ic_edit_12"
+            app:isVisible="@{isMaster}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_item_study_management_essential_todo" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_item_study_management_essential_todo_box"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_study_management_essential_todo">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:gravity="center_vertical"
+                android:textAppearance="@style/text_r14"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iv_item_study_management_essential_todo_check_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="블로그에 정리하기" />
+
+            <ImageView
+                android:id="@+id/iv_item_study_management_essential_todo_check_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/item_study_management_todo_description"
+                android:padding="12dp"
+                android:src="@drawable/ic_selector_home_check_btn"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_item_study_management_optional_todo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="36dp"
+            android:text="@string/study_management_optional_todo"
+            android:textAppearance="@style/text_r14"
+            android:textColor="@color/grey02_78808B"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_item_study_management_essential_todo_box" />
+
+        <TextView
+            android:id="@+id/tv_study_management_add_optional_todo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/study_management_add_todo"
+            android:textAppearance="@style/text_r12"
+            android:textColor="@color/white"
+            app:drawableStartCompat="@drawable/ic_add_personal_todo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_item_study_management_optional_todo" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_item_study_management_optional_todos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            android:orientation="vertical"
+            android:padding="2dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_study_management_optional_todo"
+            tools:itemCount="3"
+            tools:listitem="@layout/item_study_management_optional_todos" />
+
+        <TextView
+            android:id="@+id/tv_item_study_management_study_member"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="36dp"
+            android:text="@string/study_management_study_member"
+            android:textAppearance="@style/text_r12"
+            android:textColor="@color/grey02_78808B"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_item_study_management_optional_todos" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_item_study_management_study_member"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="4dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_study_management_study_member"
+            app:spanCount="2"
+            tools:itemCount="8"
+            tools:listitem="@layout/item_study_management_study_member" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
