@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -7,7 +9,156 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_my_page"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black01_0D1117"
+            android:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/myPage_toolbar_title"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/header_sb15"
+            app:titleTextColor="@color/white" />
+
+        <View
+            android:id="@+id/view_my_page_toolbar_border_line"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/black02_181B21"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_my_page" />
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_my_page_toolbar_border_line">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/iv_my_page_profile"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="34dp"
+                    android:padding="2dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/circleImageView"
+                    app:strokeColor="@color/grey02_78808B"
+                    app:strokeWidth="1dp"
+                    tools:src="@drawable/ic_launcher_foreground" />
+
+                <TextView
+                    android:id="@+id/tv_my_page_profile_nickname"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="12dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/name_sb18"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iv_my_page_profile"
+                    app:layout_constraintTop_toTopOf="@id/iv_my_page_profile"
+                    tools:text="나는 김진우다" />
+
+                <TextView
+                    android:id="@+id/tv_my_page_profile_id"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/text_r12"
+                    android:textColor="@color/grey02_78808B"
+                    app:layout_constraintEnd_toEndOf="@id/tv_my_page_profile_nickname"
+                    app:layout_constraintStart_toStartOf="@id/tv_my_page_profile_nickname"
+                    app:layout_constraintTop_toBottomOf="@id/tv_my_page_profile_nickname"
+                    tools:text="jwkim1234" />
+
+                <TextView
+                    android:id="@+id/tv_my_page_btn_modify_profile"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_rectangle_only_radius_10dp"
+                    android:backgroundTint="@color/green01_4039D353"
+                    android:paddingVertical="14dp"
+                    android:text="@string/myPage_button_modify_profile"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/button_sb16"
+                    android:textColor="@color/white01_66FFFFFF"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_my_page_profile" />
+
+                <include
+                    android:id="@+id/layout_my_page_study_success_rate"
+                    layout="@layout/layout_user_study_result_information"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="52dp"
+                    app:icon="@{@drawable/ic_suceess_rate}"
+                    app:layout_constraintEnd_toStartOf="@id/view_my_page_success_rate_border_line"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_my_page_btn_modify_profile"
+                    app:title="@{@string/myPage_study_success_rate_title}" />
+
+                <View
+                    android:id="@+id/view_my_page_success_rate_border_line"
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:background="@color/black03_272C33"
+                    app:layout_constraintBottom_toBottomOf="@id/layout_my_page_study_success_rate"
+                    app:layout_constraintDimensionRatio="H,0.1:5"
+                    app:layout_constraintEnd_toStartOf="@id/layout_my_page_todo_success_rate"
+                    app:layout_constraintStart_toEndOf="@id/layout_my_page_study_success_rate"
+                    app:layout_constraintTop_toTopOf="@id/layout_my_page_study_success_rate" />
+
+                <include
+                    android:id="@+id/layout_my_page_todo_success_rate"
+                    layout="@layout/layout_user_study_result_information"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:icon="@{@drawable/ic_todo_count}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/view_my_page_success_rate_border_line"
+                    app:layout_constraintTop_toTopOf="@id/layout_my_page_study_success_rate"
+                    app:title="@{@string/myPage_todo_success_rate_title}" />
+
+                <TextView
+                    android:id="@+id/tv_my_page_profile_introduction"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="44dp"
+                    android:background="@drawable/bg_rectangle_only_radius_10dp"
+                    android:backgroundTint="@color/black02_181B21"
+                    android:padding="16dp"
+                    android:textAppearance="@style/text_r14"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/layout_my_page_study_success_rate" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>
