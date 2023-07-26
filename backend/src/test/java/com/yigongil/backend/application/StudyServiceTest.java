@@ -1,13 +1,6 @@
 package com.yigongil.backend.application;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.BDDMockito.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-
-import com.yigongil.backend.domain.applicant.ApplicantRepository;
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
@@ -15,26 +8,28 @@ import com.yigongil.backend.exception.ApplicantAlreadyExistException;
 import com.yigongil.backend.exception.StudyNotFoundException;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.fixture.StudyFixture;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @DisplayName("StudyService 클래스의 ")
 class StudyServiceTest {
 
     private final StudyRepository studyRepository = mock(StudyRepository.class);
-    private final ApplicantRepository applicantRepository = mock(ApplicantRepository.class);
-    private final MemberRepository memberRepository = mock(MemberRepository.class);
     private final StudyMemberRepository studyMemberRepository = mock(StudyMemberRepository.class);
 
     private final StudyService studyService = new StudyService(
             studyRepository,
-            applicantRepository,
-            memberRepository,
             studyMemberRepository
     );
 
@@ -60,7 +55,7 @@ class StudyServiceTest {
             Member member = MemberFixture.폰노이만.toMember();
             Study study = StudyFixture.자바_스터디.toStudy();
             given(studyRepository.findById(any())).willReturn(Optional.of(study));
-            given(applicantRepository.existsByMemberAndStudy(member, study)).willReturn(true);
+            given(studyMemberRepository.existsByStudyIdAndMemberId(study.getId(), member.getId())).willReturn(true);
 
             // when
             // then
