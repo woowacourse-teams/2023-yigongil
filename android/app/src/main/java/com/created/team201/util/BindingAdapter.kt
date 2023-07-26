@@ -29,4 +29,14 @@ object BindingAdapter {
             .load(image)
             .into(imageview)
     }
+
+    @JvmStatic
+    @BindingAdapter("glideSrcUrl")
+    fun glideSrcUrl(imageview: ImageView, imageUrl: String?) {
+        imageUrl?.let {
+            Glide.with(imageview.context)
+                .load(it)
+                .into(imageview)
+        }
+    }
 }

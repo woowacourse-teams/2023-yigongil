@@ -23,8 +23,7 @@ fun StudyManageResponseDto.toDomain(): StudyManage =
         Role.valueOf(role),
     )
 
-fun List<StudyManageResponseDto>.toDomain(): List<StudyManage> =
-    this.map { it.toDomain() }
+fun List<StudyManageResponseDto>.toDomain(): List<StudyManage> = map { it.toDomain() }
 
 private fun String.toPeriod(): Period =
-    Period(Character.getNumericValue(this.first()), PeriodUnit.valueOf(this.last()))
+    Period(Character.getNumericValue(first()), PeriodUnit.valueOf(last()))
