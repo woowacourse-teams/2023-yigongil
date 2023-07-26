@@ -2,8 +2,8 @@ package com.yigongil.backend.response;
 
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
-import com.yigongil.backend.domain.study.Role;
 import com.yigongil.backend.domain.study.Study;
+import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.utils.DateConverter;
 
 import java.util.List;

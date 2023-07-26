@@ -2,7 +2,6 @@ package com.yigongil.backend.domain.studymember;
 
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.study.Role;
 import com.yigongil.backend.domain.study.Study;
 import lombok.Builder;
 
@@ -35,15 +34,20 @@ public class StudyMember extends BaseEntity {
     @Column(nullable = false)
     private Role role;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StudyResult studyResult;
+
     protected StudyMember() {
     }
 
     @Builder
-    public StudyMember(Long id, Member member, Study study, Role role) {
+    public StudyMember(Long id, Member member, Study study, Role role, StudyResult studyResult) {
         this.id = id;
         this.member = member;
         this.study = study;
         this.role = role;
+        this.studyResult = studyResult;
     }
 
     public boolean isNotApplicant() {
@@ -68,5 +72,9 @@ public class StudyMember extends BaseEntity {
 
     public Role getRole() {
         return role;
+    }
+
+    public StudyResult getStudyResult() {
+        return studyResult;
     }
 }

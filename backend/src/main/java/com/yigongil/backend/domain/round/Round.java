@@ -4,7 +4,7 @@ import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
-import com.yigongil.backend.domain.study.Role;
+import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NecessaryTodoAlreadyExistException;
 import com.yigongil.backend.exception.NotStudyMasterException;
@@ -160,7 +160,7 @@ public class Round extends BaseEntity {
             return Role.MASTER;
         }
         boolean isMember = roundOfMembers.stream()
-                                        .anyMatch(roundOfMember -> roundOfMember.isMemberEquals(member));
+                .anyMatch(roundOfMember -> roundOfMember.isMemberEquals(member));
         if (isMember) {
             return Role.STUDY_MEMBER;
         }

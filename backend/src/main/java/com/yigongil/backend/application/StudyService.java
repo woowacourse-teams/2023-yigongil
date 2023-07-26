@@ -3,11 +3,12 @@ package com.yigongil.backend.application;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.ProcessingStatus;
-import com.yigongil.backend.domain.study.Role;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
+import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
+import com.yigongil.backend.domain.studymember.StudyResult;
 import com.yigongil.backend.exception.ApplicantAlreadyExistException;
 import com.yigongil.backend.exception.ApplicantNotFoundException;
 import com.yigongil.backend.exception.InvalidStudyMemberException;
@@ -61,6 +62,7 @@ public class StudyService {
                 .study(study)
                 .member(member)
                 .role(Role.MASTER)
+                .studyResult(StudyResult.NONE)
                 .build();
 
         studyMemberRepository.save(studyMember);
@@ -89,6 +91,7 @@ public class StudyService {
                         .study(study)
                         .member(member)
                         .role(Role.APPLICANT)
+                        .studyResult(StudyResult.NONE)
                         .build()
         );
     }
@@ -108,11 +111,11 @@ public class StudyService {
         List<Round> rounds = study.getRounds();
         Round currentRound = study.getCurrentRound();
 
-        List<Member> members = studyMemberRepository.findAllByStudyIdAndRoleNot(studyId, Role.APPLICANT).stream()
+        List<Member> members = studyMemberRepository.findAllByStudyIdAndParticipatingAndNotEnd(studyId).stream()
                 .map(StudyMember::getMember)
                 .toList();
 
-        StudyMember studyMember = studyMemberRepository.findByStudyIdAndMemberId(studyId, member.getId())
+        StudyMember studyMember = studyMemberRepository.findByStudyIdAndMemberIdAndParticipatingAndNotEnd(studyId, member.getId())
                 .orElseThrow(() -> new InvalidStudyMemberException("해당 스터디에 멤버가 존재하지 않습니다.", String.valueOf(studyId)));
 
         return StudyDetailResponse.of(study, rounds, studyMember.getRole(), currentRound, members);
@@ -148,7 +151,7 @@ public class StudyService {
 
     @Transactional(readOnly = true)
     public List<MyStudyResponse> findMyStudies(Member member) {
-        List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndRoleNot(member.getId(), Role.APPLICANT);
+        List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndParticipatingAndNotEnd(member.getId());
 
         List<MyStudyResponse> response = new ArrayList<>();
         for (StudyMember studyMember : studyMembers) {
@@ -183,7 +186,7 @@ public class StudyService {
     }
 
     private StudyMember findApplicantByMemberIdAndStudyId(Long memberId, Long studyId) {
-        StudyMember studyMember = studyMemberRepository.findByStudyIdAndMemberId(studyId, memberId)
+        StudyMember studyMember = studyMemberRepository.findByStudyIdAndMemberIdAndParticipatingAndNotEnd(studyId, memberId)
                 .orElseThrow(() -> new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId));
         if (studyMember.isNotApplicant()) {
             throw new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId);

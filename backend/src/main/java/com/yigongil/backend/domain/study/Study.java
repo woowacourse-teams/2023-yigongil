@@ -6,13 +6,15 @@ import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.roundofmember.RoundOfMembers;
+import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.utils.DateConverter;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Builder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -24,9 +26,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import lombok.Builder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Study extends BaseEntity {
@@ -113,15 +115,15 @@ public class Study extends BaseEntity {
             Member master
     ) {
         Study study = Study.builder()
-                           .name(name)
-                           .numberOfMaximumMembers(numberOfMaximumMembers)
-                           .startAt(DateConverter.toLocalDateTime(startAt))
-                           .totalRoundCount(totalRoundCount)
-                           .periodOfRound(PeriodUnit.getPeriodNumber(periodOfRound))
-                           .periodUnit(PeriodUnit.getPeriodUnit(periodOfRound))
-                           .introduction(introduction)
-                           .processingStatus(ProcessingStatus.RECRUITING)
-                           .build();
+                .name(name)
+                .numberOfMaximumMembers(numberOfMaximumMembers)
+                .startAt(DateConverter.toLocalDateTime(startAt))
+                .totalRoundCount(totalRoundCount)
+                .periodOfRound(PeriodUnit.getPeriodNumber(periodOfRound))
+                .periodUnit(PeriodUnit.getPeriodUnit(periodOfRound))
+                .introduction(introduction)
+                .processingStatus(ProcessingStatus.RECRUITING)
+                .build();
         study.rounds = Round.of(totalRoundCount, master);
         study.currentRound = study.rounds.get(0);
         return study;

@@ -1,7 +1,7 @@
 package com.yigongil.backend.acceptance.steps;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yigongil.backend.domain.study.Role;
+import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.response.MyStudyResponse;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
