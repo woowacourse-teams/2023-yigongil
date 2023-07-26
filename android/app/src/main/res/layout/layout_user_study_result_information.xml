@@ -29,7 +29,7 @@
             android:layout_gravity="center_horizontal"
             android:importantForAccessibility="no"
             android:src="@{icon}"
-            tools:src="@drawable/ic_suceess_rate" />
+            tools:src="@drawable/ic_success_rate" />
 
         <TextView
             android:id="@+id/tv_user_study_result_information_title"
