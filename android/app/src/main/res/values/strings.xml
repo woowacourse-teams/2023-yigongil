@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Team201</string>
 
+    <!--로그인 뷰-->
+    <string name="login_guide">로그인 후 이용이 가능합니다.</string>
+    <string name="github_guide">깃허브로 시작하기</string>
+
     <!--메인 뷰-->
     <string name="main_ic_home">홈</string>
     <string name="main_ic_study_list">스터디목록</string>
@@ -82,5 +86,6 @@
     <string name="multiPicker_display_name_day">일</string>
     <string name="multiPicker_display_name_week">주</string>
     <string name="multiPicker_formatter_information">%d %s</string>
+
 
 </resources>
