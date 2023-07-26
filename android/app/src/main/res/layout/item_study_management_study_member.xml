@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:text="@{isToDoDone? @string/item_study_management_todo_done : @string/item_study_management_todo_undone}"
             android:textAppearance="@style/description_r8"
-            android:textColor="@color/grey03_C3BCBC"
+            android:textColor="@color/grey05_C3BCBC"
             app:layout_constraintStart_toStartOf="@id/tv_item_study_detail_user_name"
             app:layout_constraintTop_toBottomOf="@id/tv_item_study_detail_user_name"
             tools:text="필수투두를 완료했어요!" />
