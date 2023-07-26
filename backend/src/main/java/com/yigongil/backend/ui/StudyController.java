@@ -118,5 +118,12 @@ public class StudyController {
         List<MyStudyResponse> myStudies = studyService.findMyStudies(member);
         return ResponseEntity.ok(myStudies);
     }
+
+    @PatchMapping("/{id}/start")
+    public ResponseEntity<Void> startStudy(@Authorization Member member, @PathVariable Long id) {
+        studyService.startStudy(member, id);
+
+        return ResponseEntity.ok().build();
+    }
 }
 

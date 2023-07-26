@@ -1,5 +1,6 @@
 package com.yigongil.backend.application;
 
+import com.yigongil.backend.application.studyevent.StudyStartedEvent;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.ProcessingStatus;
@@ -18,6 +19,7 @@ import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.utils.DateConverter;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,12 +37,14 @@ public class StudyService {
 
     private final StudyRepository studyRepository;
     private final StudyMemberRepository studyMemberRepository;
+    private final ApplicationEventPublisher publisher;
 
     public StudyService(
             StudyRepository studyRepository,
-            StudyMemberRepository studyMemberRepository) {
+            StudyMemberRepository studyMemberRepository, ApplicationEventPublisher publisher) {
         this.studyRepository = studyRepository;
         this.studyMemberRepository = studyMemberRepository;
+        this.publisher = publisher;
     }
 
     @Transactional
@@ -141,11 +145,6 @@ public class StudyService {
                 .toList();
     }
 
-    private Study findStudyById(Long studyId) {
-        return studyRepository.findById(studyId)
-                .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
-    }
-
     @Transactional(readOnly = true)
     public List<MyStudyResponse> findMyStudies(Member member) {
         List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndRoleNot(member.getId(), Role.APPLICANT);
@@ -189,5 +188,19 @@ public class StudyService {
             throw new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId);
         }
         return studyMember;
+    }
+
+    @Transactional
+    public void startStudy(Member member, Long studyId) {
+        Study study = findStudyById(studyId);
+        study.validateMaster(member);
+
+        study.startStudy();
+        publisher.publishEvent(new StudyStartedEvent(study));
+    }
+
+    private Study findStudyById(Long studyId) {
+        return studyRepository.findById(studyId)
+                .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
     }
 }

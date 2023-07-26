@@ -19,6 +19,7 @@ import com.yigongil.backend.response.TodoResponse;
 import com.yigongil.backend.response.UpcomingStudyResponse;
 import com.yigongil.backend.utils.DateConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@Transactional
 @Service
 public class RoundService {
 
@@ -63,6 +65,7 @@ public class RoundService {
         );
     }
 
+    @Transactional
     public HomeResponse findCurrentRoundOfStudies(Member member) {
         List<Study> studies = studyRepository.findByMemberAndProcessingStatus(member, ProcessingStatus.PROCESSING);
         List<UpcomingStudyResponse> upcomingStudyResponses = new ArrayList<>();
@@ -93,6 +96,7 @@ public class RoundService {
     }
 
     // TODO: 2023/07/20 study 시작기능에서 호출해서 사용
+    @Transactional
     public void updateRoundsEndAt(List<Round> rounds, LocalDateTime studyStartAt, int period) {
         rounds.sort(Comparator.comparing(Round::getRoundNumber));
         LocalDateTime date = LocalDateTime.of(studyStartAt.toLocalDate(), LocalTime.MIN);
