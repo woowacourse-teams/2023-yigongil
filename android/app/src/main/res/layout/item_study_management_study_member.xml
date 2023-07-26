@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="isToDoDone"
+            type="java.lang.Boolean" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="6dp"
+        android:background="@drawable/bg_rectangle_radius_5dp">
+
+        <com.created.team201.presentation.studyDetail.CustomProfileImage
+            android:id="@+id/fl_item_study_detail_profile_image"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="16dp"
+            app:borderProgress="@{isToDoDone? 100 : 0}"
+            app:glideCircleImageUrl="https://opgg-com-image.akamaized.net/attach/images/20200321020018.373875.jpg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_item_study_detail_master_crown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="6dp"
+            android:src="@drawable/ic_crown"
+            app:isVisible="true"
+            app:layout_constraintStart_toEndOf="@id/fl_item_study_detail_profile_image"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/item_study_management_study_master_image_description" />
+
+        <TextView
+            android:id="@+id/tv_item_study_detail_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textAppearance="@style/name_sb12"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@id/fl_item_study_detail_profile_image"
+            app:layout_constraintTop_toBottomOf="@id/iv_item_study_detail_master_crown"
+            tools:text="우아한반달" />
+
+        <TextView
+            android:id="@+id/tv_item_study_detail_study_success_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{isToDoDone? @string/item_study_management_todo_done : @string/item_study_management_todo_undone}"
+            android:textAppearance="@style/description_r8"
+            android:textColor="@color/grey03_C3BCBC"
+            app:layout_constraintStart_toStartOf="@id/tv_item_study_detail_user_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_study_detail_user_name"
+            tools:text="필수투두를 완료했어요!" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
