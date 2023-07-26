@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.yigongil.backend.domain.study.PageStrategy.CREATED_AT_DESC;
 
@@ -111,14 +112,12 @@ public class StudyService {
         List<Round> rounds = study.getRounds();
         Round currentRound = study.getCurrentRound();
 
-        List<Member> members = studyMemberRepository.findAllByStudyIdAndParticipatingAndNotEnd(studyId).stream()
-                .map(StudyMember::getMember)
-                .toList();
+        List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndParticipatingAndNotEnd(studyId);
 
         StudyMember studyMember = studyMemberRepository.findByStudyIdAndMemberIdAndParticipatingAndNotEnd(studyId, member.getId())
                 .orElseThrow(() -> new InvalidStudyMemberException("해당 스터디에 멤버가 존재하지 않습니다.", String.valueOf(studyId)));
 
-        return StudyDetailResponse.of(study, rounds, studyMember.getRole(), currentRound, members);
+        return StudyDetailResponse.of(study, rounds, studyMember.getRole(), currentRound, createStudyMemberResponses(studyMembers));
     }
 
     @Transactional
@@ -138,10 +137,34 @@ public class StudyService {
         study.validateMaster(master);
         List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRole(studyId, Role.APPLICANT);
 
-        return studyMembers.stream()
-                .map(StudyMember::getMember)
-                .map(StudyMemberResponse::from)
-                .toList();
+        return createStudyMemberResponses(studyMembers);
+    }
+
+    private List<StudyMemberResponse> createStudyMemberResponses(List<StudyMember> studyMembers) {
+        List<StudyMemberResponse> response = new ArrayList<>();
+        for (StudyMember studyMember : studyMembers) {
+            StudyMemberResponse studyMemberResponse = createStudyMemberResponse(studyMember);
+            response.add(studyMemberResponse);
+        }
+        return response;
+    }
+
+    private StudyMemberResponse createStudyMemberResponse(StudyMember studyMember) {
+        Member member = studyMember.getMember();
+        Long success = studyMemberRepository.countByMemberIdAndStudyResult(member.getId(), StudyResult.SUCCESS);
+        Long fail = studyMemberRepository.countByMemberIdAndStudyResult(member.getId(), StudyResult.FAIL);
+        int successRate = 0;
+        if (Objects.nonNull(success) && Objects.nonNull(fail) && success + fail != 0) {
+            successRate = (int) (success * 100 / success + fail);
+        }
+
+        return new StudyMemberResponse(
+                member.getId(),
+                member.getTier(),
+                member.getNickname(),
+                successRate,
+                member.getProfileImageUrl()
+        );
     }
 
     private Study findStudyById(Long studyId) {

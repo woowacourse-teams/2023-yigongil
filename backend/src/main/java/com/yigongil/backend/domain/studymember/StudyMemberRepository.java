@@ -48,4 +48,6 @@ public interface StudyMemberRepository extends Repository<StudyMember, Long> {
             and sm.studyResult = 'NONE'
             """)
     List<StudyMember> findAllByMemberIdAndParticipatingAndNotEnd(Long memberId);
+
+    Long countByMemberIdAndStudyResult(Long memberId, StudyResult studyResult);
 }
