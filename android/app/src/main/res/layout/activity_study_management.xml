@@ -22,6 +22,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/menu_study_management"
             app:title="@{isParticipant? @string/study_management_app_bar_title_is_study_participant : @string/study_management_app_bar_title_is_study_master}"
             app:titleCentered="true"
             app:titleTextAppearance="@style/header_sb15"
