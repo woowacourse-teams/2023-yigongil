@@ -34,11 +34,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
             android:layout_marginTop="6dp"
+            android:contentDescription="@string/item_study_management_study_master_image_description"
             android:src="@drawable/ic_crown"
-            app:isVisible="true"
+            app:isVisible="@{true}"
             app:layout_constraintStart_toEndOf="@id/fl_item_study_detail_profile_image"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/item_study_management_study_master_image_description" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_item_study_detail_user_name"
