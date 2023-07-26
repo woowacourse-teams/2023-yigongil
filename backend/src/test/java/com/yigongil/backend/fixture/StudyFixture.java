@@ -7,6 +7,10 @@ import com.yigongil.backend.domain.study.Study;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.yigongil.backend.fixture.RoundFixture.아이디_사_투두없는_라운드;
+import static com.yigongil.backend.fixture.RoundFixture.아이디_삼_투두없는_라운드;
+import static com.yigongil.backend.fixture.RoundFixture.아이디_오_투두없는_라운드;
+
 public enum StudyFixture {
 
     자바_스터디(1L, LocalDateTime.now(), "자바", "스터디소개", 3, PeriodUnit.DAY, ProcessingStatus.PROCESSING, 3, 4),
@@ -47,8 +51,8 @@ public enum StudyFixture {
                 .totalRoundCount(totalRoundCount)
                 .periodUnit(periodUnit)
                 .numberOfMaximumMembers(numberOfMaximumMember)
-                .rounds(List.of(RoundFixture.아이디_삼_투두없는_라운드.toRound()))
-                .currentRound(RoundFixture.아이디_삼_투두없는_라운드.toRound())
+                .rounds(List.of(아이디_삼_투두없는_라운드.toRound(), 아이디_사_투두없는_라운드.toRound(), 아이디_오_투두없는_라운드.toRound()))
+                .currentRound(아이디_삼_투두없는_라운드.toRound())
                 .build();
     }
 }

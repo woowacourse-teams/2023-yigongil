@@ -20,6 +20,8 @@ public interface StudyRepository extends Repository<Study, Long> {
 
     Page<Study> findAllByProcessingStatus(ProcessingStatus processingStatus, Pageable pageable);
 
+    List<Study> findByProcessingStatus(ProcessingStatus processingStatus);
+
     @Query("""
             select distinct s from Study s join fetch s.rounds rs where s.id = :id
             """)

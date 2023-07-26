@@ -27,9 +27,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 public class Study extends BaseEntity {
@@ -200,6 +202,24 @@ public class Study extends BaseEntity {
 
     public RoundOfMembers findCurrentRoundOfMembers() {
         return new RoundOfMembers(currentRound.getRoundOfMembers());
+    }
+
+    public boolean isCurrentRoundEndAt(LocalDate today) {
+        return currentRound.isEndAt(today);
+    }
+
+    public void updateToNextRound() {
+        final int nextRoundNumber = currentRound.getRoundNumber() + 1;
+        final Optional<Round> nextRound = rounds.stream()
+                                                .filter(round -> round.getRoundNumber() == nextRoundNumber)
+                                                .findFirst();
+
+        if (nextRound.isPresent()) {
+            this.currentRound = nextRound.get();
+            return;
+        }
+
+        this.processingStatus = ProcessingStatus.END;
     }
 
     public void startStudy() {

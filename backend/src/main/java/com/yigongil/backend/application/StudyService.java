@@ -26,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -173,7 +174,7 @@ public class StudyService {
         }
         return successRate;
     }
-  
+
     @Transactional(readOnly = true)
     public List<MyStudyResponse> findMyStudies(Member member) {
         List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndParticipatingAndNotEnd(member.getId());
@@ -217,6 +218,15 @@ public class StudyService {
             throw new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId);
         }
         return studyMember;
+    }
+
+    @Transactional
+    public void proceedRound() {
+        List<Study> studies = studyRepository.findByProcessingStatus(ProcessingStatus.PROCESSING);
+
+        studies.stream()
+               .filter(study -> study.isCurrentRoundEndAt(LocalDate.now()))
+               .forEach(Study::updateToNextRound);
     }
 
     @Transactional
