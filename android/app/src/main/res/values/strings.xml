@@ -82,7 +82,7 @@
     <string name="multiPicker_display_name_day">일</string>
     <string name="multiPicker_display_name_week">주</string>
     <string name="multiPicker_formatter_information">%d %s</string>
-    
+
     <!-- 마이페이지 뷰 -->
     <string name="myPage_menu_title_setting">설정</string>
     <string name="myPage_toolbar_title">마이페이지</string>
