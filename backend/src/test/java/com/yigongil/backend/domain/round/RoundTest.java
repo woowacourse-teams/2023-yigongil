@@ -116,4 +116,17 @@ class RoundTest {
                     .isInstanceOf(NotStudyMemberException.class);
         }
     }
+
+    @Test
+    void 멤버의_필수_투두_완료여부를_반환한다() {
+        //given
+        Round round = RoundFixture.아이디_삼_투두없는_라운드.toRoundWithContent("이번 필수 투두");
+        Member master = round.getMaster();
+
+        //when
+        round.updateNecessaryTodoIsDone(master, true);
+
+        //then
+        assertThat(round.isNecessaryToDoDone(master)).isTrue();
+    }
 }

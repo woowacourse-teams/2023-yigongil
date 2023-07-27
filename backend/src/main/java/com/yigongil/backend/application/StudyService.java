@@ -164,7 +164,7 @@ public class StudyService {
         );
     }
 
-    private int calculateSuccessRate(Member member) {
+    public int calculateSuccessRate(Member member) {
         Long success = studyMemberRepository.countByMemberIdAndStudyResult(member.getId(), StudyResult.SUCCESS);
         Long fail = studyMemberRepository.countByMemberIdAndStudyResult(member.getId(), StudyResult.FAIL);
         int successRate = 0;

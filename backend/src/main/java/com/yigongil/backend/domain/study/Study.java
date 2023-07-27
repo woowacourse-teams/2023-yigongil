@@ -7,15 +7,13 @@ import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.roundofmember.RoundOfMembers;
 import com.yigongil.backend.exception.CannotStartException;
-import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.utils.DateConverter;
-import lombok.Builder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -27,9 +25,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.Builder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 public class Study extends BaseEntity {
@@ -151,10 +149,9 @@ public class Study extends BaseEntity {
         round.updateNecessaryTodoContent(content);
     }
 
-    public void updateNecessaryTodoIsDone(Member author, Long todoId, Boolean isDone) {
+    public void updateNecessaryTodoIsDone(Member member, Long todoId, Boolean isDone) {
         Round round = findRoundById(todoId);
-        RoundOfMember roundOfMemberBy = round.findRoundOfMemberBy(author);
-        roundOfMemberBy.updateNecessaryTodoIsDone(isDone);
+        round.updateNecessaryTodoIsDone(member, isDone);
     }
 
     public Round findRoundById(Long roundId) {

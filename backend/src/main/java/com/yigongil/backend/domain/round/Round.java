@@ -121,13 +121,6 @@ public class Round extends BaseEntity {
         }
     }
 
-    public RoundOfMember findRoundOfMemberBy(Member member) {
-        return roundOfMembers.stream()
-                .filter(roundOfMember -> roundOfMember.getMember().equals(member))
-                .findAny()
-                .orElseThrow(() -> new NotStudyMemberException("해당 스터디의 멤버만 투두를 추가할 수 있습니다.", member.getGithubId()));
-    }
-
     public int calculateAverageTier() {
         double averageTier = roundOfMembers.stream()
                 .map(RoundOfMember::getMember)
@@ -149,6 +142,21 @@ public class Round extends BaseEntity {
 
     public int sizeOfCurrentMembers() {
         return roundOfMembers.size();
+    }
+
+    public void updateNecessaryTodoIsDone(Member member, Boolean isDone) {
+        findRoundOfMemberBy(member).updateNecessaryTodoIsDone(isDone);
+    }
+
+    public boolean isNecessaryToDoDone(Member member) {
+        return findRoundOfMemberBy(member).getDone();
+    }
+
+    public RoundOfMember findRoundOfMemberBy(Member member) {
+        return roundOfMembers.stream()
+                .filter(roundOfMember -> roundOfMember.getMember().equals(member))
+                .findAny()
+                .orElseThrow(() -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", member.getGithubId()));
     }
 
     public void updateNecessaryTodoContent(String content) {
