@@ -11,15 +11,8 @@ public interface StudyMemberRepository extends Repository<StudyMember, Long> {
 
     StudyMember save(StudyMember studyMember);
 
-    @Query("""
-            select sm from StudyMember sm
-            join fetch sm.member
-            join fetch sm.study
-            where sm.studyResult = 'NONE'
-            and sm.member.id = :memberId
-            and sm.study.id = :studyId
-            """)
-    Optional<StudyMember> findByStudyIdAndMemberIdAndParticipatingAndNotEnd(Long studyId, Long memberId);
+    @EntityGraph(attributePaths = {"member", "study"})
+    Optional<StudyMember> findByStudyIdAndMemberId(Long studyId, Long memberId);
 
     @EntityGraph(attributePaths = "member")
     List<StudyMember> findAllByStudyIdAndRole(Long studyId, Role role);
@@ -38,7 +31,6 @@ public interface StudyMemberRepository extends Repository<StudyMember, Long> {
 
     void delete(StudyMember studyMember);
 
-    @EntityGraph(attributePaths = "study")
     @Query("""
             select sm from StudyMember sm
             join fetch sm.study

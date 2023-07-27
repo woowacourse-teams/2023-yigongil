@@ -114,10 +114,12 @@ public class StudyService {
 
         List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndParticipatingAndNotEnd(studyId);
 
-        StudyMember studyMember = studyMemberRepository.findByStudyIdAndMemberIdAndParticipatingAndNotEnd(studyId, member.getId())
+        StudyMember viewer = studyMembers.stream()
+                .filter(studyMember -> studyMember.getMember().equals(member))
+                .findAny()
                 .orElseThrow(() -> new InvalidStudyMemberException("해당 스터디에 멤버가 존재하지 않습니다.", String.valueOf(studyId)));
 
-        return StudyDetailResponse.of(study, rounds, studyMember.getRole(), currentRound, createStudyMemberResponses(studyMembers));
+        return StudyDetailResponse.of(study, rounds, viewer.getRole(), currentRound, createStudyMemberResponses(studyMembers));
     }
 
     @Transactional
@@ -141,22 +143,14 @@ public class StudyService {
     }
 
     private List<StudyMemberResponse> createStudyMemberResponses(List<StudyMember> studyMembers) {
-        List<StudyMemberResponse> response = new ArrayList<>();
-        for (StudyMember studyMember : studyMembers) {
-            StudyMemberResponse studyMemberResponse = createStudyMemberResponse(studyMember);
-            response.add(studyMemberResponse);
-        }
-        return response;
+        return studyMembers.stream()
+                .map(this::createStudyMemberResponse)
+                .toList();
     }
 
     private StudyMemberResponse createStudyMemberResponse(StudyMember studyMember) {
         Member member = studyMember.getMember();
-        Long success = studyMemberRepository.countByMemberIdAndStudyResult(member.getId(), StudyResult.SUCCESS);
-        Long fail = studyMemberRepository.countByMemberIdAndStudyResult(member.getId(), StudyResult.FAIL);
-        int successRate = 0;
-        if (Objects.nonNull(success) && Objects.nonNull(fail) && success + fail != 0) {
-            successRate = (int) (success * 100 / success + fail);
-        }
+        int successRate = calculateSuccessRate(member);
 
         return new StudyMemberResponse(
                 member.getId(),
@@ -165,6 +159,16 @@ public class StudyService {
                 successRate,
                 member.getProfileImageUrl()
         );
+    }
+
+    private int calculateSuccessRate(Member member) {
+        Long success = studyMemberRepository.countByMemberIdAndStudyResult(member.getId(), StudyResult.SUCCESS);
+        Long fail = studyMemberRepository.countByMemberIdAndStudyResult(member.getId(), StudyResult.FAIL);
+        int successRate = 0;
+        if (Objects.nonNull(success) && Objects.nonNull(fail) && success + fail != 0) {
+            successRate = (int) (success * 100 / success + fail);
+        }
+        return successRate;
     }
 
     private Study findStudyById(Long studyId) {
@@ -209,7 +213,7 @@ public class StudyService {
     }
 
     private StudyMember findApplicantByMemberIdAndStudyId(Long memberId, Long studyId) {
-        StudyMember studyMember = studyMemberRepository.findByStudyIdAndMemberIdAndParticipatingAndNotEnd(studyId, memberId)
+        StudyMember studyMember = studyMemberRepository.findByStudyIdAndMemberId(studyId, memberId)
                 .orElseThrow(() -> new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId));
         if (studyMember.isNotApplicant()) {
             throw new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId);
