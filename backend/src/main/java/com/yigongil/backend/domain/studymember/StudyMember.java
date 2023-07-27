@@ -54,6 +54,14 @@ public class StudyMember extends BaseEntity {
         return role != Role.APPLICANT;
     }
 
+    public boolean isStudyEnd() {
+        return !studyResult.equals(StudyResult.NONE);
+    }
+
+    public boolean isSuccess() {
+        return studyResult.equals(StudyResult.SUCCESS);
+    }
+
     public void participate() {
         this.role = Role.STUDY_MEMBER;
     }

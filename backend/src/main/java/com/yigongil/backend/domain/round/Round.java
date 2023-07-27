@@ -154,7 +154,7 @@ public class Round extends BaseEntity {
 
     public RoundOfMember findRoundOfMemberBy(Member member) {
         return roundOfMembers.stream()
-                .filter(roundOfMember -> roundOfMember.getMember().equals(member))
+                .filter(roundOfMember -> roundOfMember.isMemberEquals(member))
                 .findAny()
                 .orElseThrow(() -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", member.getGithubId()));
     }

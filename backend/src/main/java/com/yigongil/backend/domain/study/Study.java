@@ -183,7 +183,7 @@ public class Study extends BaseEntity {
         }
     }
 
-    private int sizeOfCurrentMembers() {
+    public int sizeOfCurrentMembers() {
         return currentRound.sizeOfCurrentMembers();
     }
 
