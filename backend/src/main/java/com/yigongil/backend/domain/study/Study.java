@@ -225,10 +225,6 @@ public class Study extends BaseEntity {
         return periodUnit.toStringFormat(periodOfRound);
     }
 
-    public Role calculateRoleOfStartedStudy(Member member) {
-        return currentRound.calculateRole(member);
-    }
-
     public Long getId() {
         return id;
     }

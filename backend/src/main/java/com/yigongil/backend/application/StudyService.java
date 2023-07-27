@@ -152,6 +152,7 @@ public class StudyService {
                 .toList();
     }
 
+
     private StudyMemberResponse createStudyMemberResponse(StudyMember studyMember) {
         Member member = studyMember.getMember();
         int successRate = calculateSuccessRate(member);
@@ -174,12 +175,7 @@ public class StudyService {
         }
         return successRate;
     }
-
-    private Study findStudyById(Long studyId) {
-        return studyRepository.findById(studyId)
-                .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
-    }
-
+  
     @Transactional(readOnly = true)
     public List<MyStudyResponse> findMyStudies(Member member) {
         List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndParticipatingAndNotEnd(member.getId());
@@ -232,5 +228,10 @@ public class StudyService {
 
         study.startStudy();
         publisher.publishEvent(new StudyStartedEvent(study));
+    }
+
+    private Study findStudyById(Long studyId) {
+        return studyRepository.findById(studyId)
+                .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
     }
 }
