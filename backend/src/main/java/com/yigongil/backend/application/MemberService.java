@@ -22,8 +22,11 @@ public class MemberService {
     private final StudyMemberRepository studyMemberRepository;
     private final StudyService studyService;
 
-    public MemberService(MemberRepository memberRepository, StudyMemberRepository studyMemberRepository,
-                         StudyService studyService) {
+    public MemberService(
+            MemberRepository memberRepository,
+            StudyMemberRepository studyMemberRepository,
+            StudyService studyService
+    ) {
         this.memberRepository = memberRepository;
         this.studyMemberRepository = studyMemberRepository;
         this.studyService = studyService;
