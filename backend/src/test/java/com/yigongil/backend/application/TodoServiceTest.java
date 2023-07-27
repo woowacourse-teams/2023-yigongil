@@ -53,7 +53,7 @@ class TodoServiceTest {
     void setUp() {
         member = MemberFixture.김진우.toMember();
         round = RoundFixture.아이디_삼_투두없는_라운드.toRound();
-        study = StudyFixture.자바_스터디.toStudy();
+        study = StudyFixture.자바_스터디_진행중.toStudy();
         todo = OptionalTodo.builder()
                 .id(1L)
                 .content("투두").build();
