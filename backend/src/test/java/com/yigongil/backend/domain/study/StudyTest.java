@@ -1,12 +1,14 @@
 package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.domain.round.Round;
+import com.yigongil.backend.fixture.StudyFixture;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 
 import static com.yigongil.backend.fixture.StudyFixture.자바_스터디;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class StudyTest {
 
@@ -19,6 +21,9 @@ class StudyTest {
                 () -> assertThat(study1.calculateStudyPeriod()).isEqualTo(21),
                 () -> assertThat(study2.calculateStudyPeriod()).isEqualTo(3)
         );
+    }
+
+    @Test
     void 스터디를_다음_라운드로_넘기면_현재_라운드가_다음_라운드로_변한다() {
         // given
         Study study = 자바_스터디.toStudy();
