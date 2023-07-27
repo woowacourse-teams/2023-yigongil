@@ -95,7 +95,6 @@ public class RoundService {
         return HomeResponse.of(member, studies, upcomingStudyResponses);
     }
 
-    // TODO: 2023/07/20 study 시작기능에서 호출해서 사용
     @Transactional
     public void updateRoundsEndAt(List<Round> rounds, LocalDateTime studyStartAt, int period) {
         rounds.sort(Comparator.comparing(Round::getRoundNumber));

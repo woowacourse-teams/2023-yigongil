@@ -1,6 +1,8 @@
 package com.yigongil.backend.application;
 
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.round.RoundRepository;
+import com.yigongil.backend.domain.roundofmember.RoundOfMemberRepository;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
@@ -29,11 +31,19 @@ class StudyServiceTest {
     private final StudyRepository studyRepository = mock(StudyRepository.class);
     private final StudyMemberRepository studyMemberRepository = mock(StudyMemberRepository.class);
     private final ApplicationEventPublisher publisher = mock(ApplicationEventPublisher.class);
+    private final RoundRepository roundRepository = mock(RoundRepository.class);
+    private final RoundOfMemberRepository roundOfMemberRepository = mock(RoundOfMemberRepository.class);
 
     private final StudyService studyService = new StudyService(
             studyRepository,
             studyMemberRepository,
             publisher);
+
+    private final RoundService roundService = new RoundService(
+            roundRepository,
+            roundOfMemberRepository,
+            studyRepository
+    );
 
     @Nested
     class 스터디_지원자_유효성_검사 {

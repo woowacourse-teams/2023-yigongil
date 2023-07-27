@@ -208,7 +208,12 @@ public class Study extends BaseEntity {
         if (sizeOfCurrentMembers() == ONE_MEMBER) {
             throw new CannotStartException("시작할 수 없는 상태입니다.", id);
         }
+        this.startAt = LocalDateTime.now();
         this.processingStatus = ProcessingStatus.PROCESSING;
+    }
+
+    public int calculateStudyPeriod() {
+        return periodOfRound * periodUnit.getUnitNumber();
     }
 
     public Member getMaster() {
@@ -217,10 +222,6 @@ public class Study extends BaseEntity {
 
     public String findPeriodOfRoundToString() {
         return periodUnit.toStringFormat(periodOfRound);
-    }
-
-    public Role calculateRoleOfStartedStudy(Member member) {
-        return currentRound.calculateRole(member);
     }
 
     public Long getId() {

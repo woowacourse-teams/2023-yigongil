@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-import java.time.LocalDateTime;
-
 @Component
 public class StudyEventListener {
 
@@ -22,8 +20,8 @@ public class StudyEventListener {
         Study study = event.getStudy();
         roundservice.updateRoundsEndAt(
                 study.getRounds(),
-                LocalDateTime.now(),
-                study.getPeriodOfRound() * study.getPeriodUnit().getUnitNumber()
+                study.getStartAt(),
+                study.calculateStudyPeriod()
         );
     }
 }
