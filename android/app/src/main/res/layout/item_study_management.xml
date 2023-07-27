@@ -5,9 +5,11 @@
 
     <data>
 
+        <import type="com.created.domain.model.Role" />
+
         <variable
-            name="isMaster"
-            type="java.lang.Boolean" />
+            name="studyManagement"
+            type="com.created.team201.presentation.studyManagement.model.StudyRoundDetailUiModel" />
 
     </data>
 
@@ -36,7 +38,7 @@
             android:textAppearance="@style/text_r12"
             android:textColor="@color/white"
             app:drawableStartCompat="@drawable/ic_edit_12"
-            app:isVisible="@{isMaster}"
+            app:isVisible="@{Role.Companion.isMaster(studyManagement.role)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_item_study_management_essential_todo" />
 
@@ -52,10 +54,12 @@
             app:layout_constraintTop_toBottomOf="@id/tv_item_study_management_essential_todo">
 
             <TextView
+                android:id="@+id/tv_item_study_management_essential_todo_content"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:gravity="center_vertical"
+                android:text="@{studyManagement.necessaryTodo.content}"
                 android:textAppearance="@style/text_r14"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"

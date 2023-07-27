@@ -9,5 +9,7 @@ enum class Role(val index: Int) {
                 role.index == index
             } ?: throw IllegalAccessException("해당 역할을 찾을 수 없습니다.")
         }
+
+        fun isMaster(role: Role): Boolean = role == MASTER
     }
 }

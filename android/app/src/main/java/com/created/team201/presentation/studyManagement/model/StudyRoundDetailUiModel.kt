@@ -5,7 +5,7 @@ import com.created.team201.presentation.home.model.TodoUiModel
 
 data class StudyRoundDetailUiModel(
     val id: Long,
-    val masterId: Int,
+    val masterId: Long,
     val role: Role,
     val necessaryTodo: TodoUiModel,
     val optionalTodos: List<TodoUiModel>,
