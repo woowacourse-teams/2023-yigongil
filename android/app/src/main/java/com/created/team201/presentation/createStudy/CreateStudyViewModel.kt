@@ -62,6 +62,16 @@ class CreateStudyViewModel(
     val isSuccessCreateStudy: LiveData<Boolean>
         get() = _isSuccessCreateStudy
 
+    val study: CreateStudyUiModel
+        get() = CreateStudyUiModel(
+            name.value,
+            peopleCount.value,
+            startDate.value,
+            period.value,
+            cycle.value,
+            introduction.value,
+        )
+
     fun setName(name: String) {
         _name.value = name.replace("\n", "")
     }
@@ -87,24 +97,14 @@ class CreateStudyViewModel(
         _period.value = period
     }
 
-    private fun getCreateStudy(): CreateStudyUiModel = CreateStudyUiModel(
-        name.value,
-        peopleCount.value,
-        startDate.value,
-        period.value,
-        cycle.value,
-        introduction.value,
-    )
-
-    fun createStudy() {
+    fun createStudy(study: CreateStudyUiModel) {
         viewModelScope.launch {
-            runCatching {
-                createStudyRepository.createStudy(getCreateStudy().toDomain())
-            }.onSuccess {
-                _isSuccessCreateStudy.value = true
-            }.onFailure {
-                _isSuccessCreateStudy.value = false
-            }
+            createStudyRepository.createStudy(study.toDomain())
+                .onSuccess {
+                    _isSuccessCreateStudy.value = true
+                }.onFailure {
+                    _isSuccessCreateStudy.value = false
+                }
         }
     }
 

@@ -26,6 +26,7 @@ class CreateStudyActivity :
 
         initBinding()
         initActionBar()
+        setObserveCreateStudyResult()
     }
 
     private fun initBinding() {
@@ -33,7 +34,6 @@ class CreateStudyActivity :
         binding.viewModel = viewModel
         binding.displayNames = resources.getStringArray(R.array.multiPickerDisplayNames).toList()
         binding.onIconTextButtonClickListener = ::onIconTextButtonClick
-        binding.onCreateButtonClickListener = ::onCreateButtonClick
     }
 
     private fun initActionBar() {
@@ -42,12 +42,7 @@ class CreateStudyActivity :
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
     }
 
-    private fun onCreateButtonClick() {
-        viewModel.createStudy()
-        showCreateStudyResultToast()
-    }
-
-    private fun showCreateStudyResultToast() {
+    private fun setObserveCreateStudyResult() {
         viewModel.isSuccessCreateStudy.observe(this) {
             when (it) {
                 true -> showToast(getString(R.string.createStudy_toast_success))

@@ -17,10 +17,6 @@
         <variable
             name="onIconTextButtonClickListener"
             type="kotlin.jvm.functions.Function1" />
-
-        <variable
-            name="onCreateButtonClickListener"
-            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -189,7 +185,7 @@
             android:layout_marginBottom="28dp"
             android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
             android:enabled="@{viewModel.isEnableCreateStudy}"
-            android:onClick="@{() -> onCreateButtonClickListener.invoke()}"
+            android:onClick="@{() -> viewModel.createStudy(viewModel.study)}"
             android:paddingVertical="14dp"
             android:text="@string/createStudy_button_created"
             android:textAlignment="center"
