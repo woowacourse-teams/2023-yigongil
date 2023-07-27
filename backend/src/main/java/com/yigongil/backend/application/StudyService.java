@@ -12,7 +12,6 @@ import com.yigongil.backend.domain.studymember.StudyMemberRepository;
 import com.yigongil.backend.domain.studymember.StudyResult;
 import com.yigongil.backend.exception.ApplicantAlreadyExistException;
 import com.yigongil.backend.exception.ApplicantNotFoundException;
-import com.yigongil.backend.exception.InvalidStudyMemberException;
 import com.yigongil.backend.exception.StudyNotFoundException;
 import com.yigongil.backend.request.StudyCreateRequest;
 import com.yigongil.backend.response.MyStudyResponse;
@@ -118,12 +117,11 @@ public class StudyService {
 
         List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndParticipatingAndNotEnd(studyId);
 
-        StudyMember viewer = studyMembers.stream()
-                .filter(studyMember -> studyMember.getMember().equals(member))
-                .findAny()
-                .orElseThrow(() -> new InvalidStudyMemberException("해당 스터디에 멤버가 존재하지 않습니다.", String.valueOf(studyId)));
+        Role role = studyMemberRepository.findByStudyIdAndMemberId(studyId, member.getId())
+                .map(StudyMember::getRole)
+                .orElse(Role.NO_ROLE);
 
-        return StudyDetailResponse.of(study, rounds, viewer.getRole(), currentRound, createStudyMemberResponses(studyMembers));
+        return StudyDetailResponse.of(study, rounds, role, currentRound, createStudyMemberResponses(studyMembers));
     }
 
     @Transactional

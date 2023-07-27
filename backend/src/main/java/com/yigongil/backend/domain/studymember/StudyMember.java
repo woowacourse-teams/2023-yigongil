@@ -58,6 +58,10 @@ public class StudyMember extends BaseEntity {
         this.role = Role.STUDY_MEMBER;
     }
 
+    public boolean equalsMember(Member member) {
+        return this.member.equals(member);
+    }
+
     public Long getId() {
         return id;
     }
