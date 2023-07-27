@@ -56,7 +56,7 @@ class StudyServiceTest {
         void 이미_지원한_스터디에_다시_지원하면_예외가_발생한다() {
             // given
             Member member = MemberFixture.폰노이만.toMember();
-            Study study = StudyFixture.자바_스터디.toStudy();
+            Study study = StudyFixture.자바_스터디_진행중.toStudy();
             given(studyRepository.findById(any())).willReturn(Optional.of(study));
             given(studyMemberRepository.existsByStudyIdAndMemberId(study.getId(), member.getId())).willReturn(true);
 

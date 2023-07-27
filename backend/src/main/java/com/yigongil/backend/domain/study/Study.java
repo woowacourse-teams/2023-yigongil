@@ -7,7 +7,6 @@ import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.roundofmember.RoundOfMembers;
 import com.yigongil.backend.exception.CannotStartException;
-import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.RoundNotFoundException;
@@ -15,7 +14,6 @@ import com.yigongil.backend.utils.DateConverter;
 import lombok.Builder;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -169,7 +167,10 @@ public class Study extends BaseEntity {
     public void addMember(Member member) {
         validateStudyProcessingStatus();
         validateMemberSize();
-        this.currentRound.addMember(member);
+
+        for (Round round : rounds) {
+            round.addMember(member);
+        }
     }
 
     private void validateStudyProcessingStatus() {

@@ -1,6 +1,7 @@
 package com.yigongil.backend.fixture;
 
 import com.yigongil.backend.domain.study.PeriodUnit;
+import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 
@@ -13,8 +14,9 @@ import static com.yigongil.backend.fixture.RoundFixture.아이디_오_투두없�
 
 public enum StudyFixture {
 
-    자바_스터디(1L, LocalDateTime.now(), "자바", "스터디소개", 3, PeriodUnit.DAY, ProcessingStatus.PROCESSING, 3, 4),
+    자바_스터디_진행중(1L, LocalDateTime.now(), "자바", "스터디소개", 3, PeriodUnit.DAY, ProcessingStatus.PROCESSING, 3, 4),
     자바_스터디_모집중(1L, LocalDateTime.now(), "자바", "스터디소개", 3, PeriodUnit.WEEK, ProcessingStatus.RECRUITING, 3, 4),
+    자바_스터디_모집중_정원_1(1L, LocalDateTime.now(), "자바", "스터디소개", 3, PeriodUnit.DAY, ProcessingStatus.RECRUITING, 3, 1),
     ;
 
     private final Long id;
@@ -41,6 +43,7 @@ public enum StudyFixture {
     }
 
     public Study toStudy() {
+        Round round = RoundFixture.아이디_삼_투두없는_라운드.toRound();
         return Study.builder()
                 .id(id)
                 .startAt(startAt)
@@ -51,8 +54,8 @@ public enum StudyFixture {
                 .totalRoundCount(totalRoundCount)
                 .periodUnit(periodUnit)
                 .numberOfMaximumMembers(numberOfMaximumMember)
-                .rounds(List.of(아이디_삼_투두없는_라운드.toRound(), 아이디_사_투두없는_라운드.toRound(), 아이디_오_투두없는_라운드.toRound()))
-                .currentRound(아이디_삼_투두없는_라운드.toRound())
+                .rounds(List.of(round))
+                .currentRound(round)
                 .build();
     }
 }
