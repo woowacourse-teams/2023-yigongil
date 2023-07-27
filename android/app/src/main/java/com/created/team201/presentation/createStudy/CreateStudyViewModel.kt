@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.model.CreateStudy
 import com.created.domain.model.Period
+import com.created.domain.model.PeriodUnit
 import com.created.domain.repository.CreateStudyRepository
 import com.created.team201.data.datasource.remote.CreateStudyRemoteDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
@@ -44,7 +45,7 @@ class CreateStudyViewModel(
         get() = _period
 
     private val _cycle: NonNullMutableLiveData<PeriodUiModel> =
-        NonNullMutableLiveData(PeriodUiModel(0, 0))
+        NonNullMutableLiveData(PeriodUiModel(0, PeriodUnit.DAY))
     val cycle: NonNullLiveData<PeriodUiModel>
         get() = _cycle
 
@@ -78,7 +79,7 @@ class CreateStudyViewModel(
     }
 
     fun setCycle(date: Int, type: Int) {
-        val cycle = PeriodUiModel(date, type)
+        val cycle = PeriodUiModel(date, PeriodUnit.valueOf(type))
         _cycle.value = cycle
     }
 
@@ -113,7 +114,7 @@ class CreateStudyViewModel(
     private fun CreateStudyUiModel.toDomain(): CreateStudy =
         CreateStudy(name, peopleCount, startDate, period, cycle.toDomain(), introduction)
 
-    private fun PeriodUiModel.toDomain(): Period = Period(date, type)
+    private fun PeriodUiModel.toDomain(): Period = Period(date, unit)
 
     private fun String.isNotEmpty(): Boolean = isEmpty().not()
 

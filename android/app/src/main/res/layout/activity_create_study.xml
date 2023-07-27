@@ -128,7 +128,7 @@
                 android:onClick="@{() -> onIconTextButtonClickListener.invoke(@string/createStudy_tag_cycle)}"
                 app:buttonName="@string/icon_text_button_name_cycle"
                 app:iconResource="@drawable/ic_cycle"
-                app:information="@{viewModel.cycle.date == 0 ? null : @string/multiPicker_formatter_information(viewModel.cycle.date, displayNames[viewModel.cycle.type])}"
+                app:information="@{viewModel.cycle.date == 0 ? null : @string/multiPicker_formatter_information(viewModel.cycle.date, displayNames[viewModel.cycle.unit.type])}"
                 app:layout_constraintBottom_toBottomOf="@id/itb_create_study_start_date"
                 app:layout_constraintEnd_toStartOf="@id/itb_create_study_period"
                 app:layout_constraintStart_toEndOf="@id/itb_create_study_start_date"
