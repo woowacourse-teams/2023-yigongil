@@ -48,7 +48,7 @@ class HomeViewModel(
         }
     }
 
-    fun updateTodo(todoId: Int, isDone: Boolean) {
+    fun updateTodo(todoId: Long, isDone: Boolean) {
         val studies = userStudies.value ?: throw IllegalArgumentException()
         val isNecessary = studies.any { it.necessaryTodo.todoId == todoId }
         val study: StudyUiModel
@@ -83,7 +83,7 @@ class HomeViewModel(
         }
     }
 
-    private fun updateNecessaryTodoCheck(studies: List<StudyUiModel>, id: Int, isDone: Boolean) {
+    private fun updateNecessaryTodoCheck(studies: List<StudyUiModel>, id: Long, isDone: Boolean) {
         _userStudies.value = studies.map { studyUiModel ->
             studyUiModel.takeIf { it.necessaryTodo.todoId != id } ?: studyUiModel.copy(
                 necessaryTodo = studyUiModel.necessaryTodo.copy(isDone = isDone),
@@ -91,7 +91,7 @@ class HomeViewModel(
         }
     }
 
-    private fun updateOptionalTodoCheck(studies: List<StudyUiModel>, id: Int, isDone: Boolean) {
+    private fun updateOptionalTodoCheck(studies: List<StudyUiModel>, id: Long, isDone: Boolean) {
         _userStudies.value = studies.map { studyUiModel ->
             studyUiModel.takeIf { todoUiModel -> !todoUiModel.optionalTodos.any { it.todoId == id } }
                 ?: studyUiModel.copy(

@@ -5,7 +5,9 @@
 
     <data>
 
-        <import type="com.created.domain.model.Role" />
+        <variable
+            name="role"
+            type="com.created.domain.model.Role"/>
 
         <variable
             name="studyManagement"
@@ -38,7 +40,7 @@
             android:textAppearance="@style/text_r12"
             android:textColor="@color/white"
             app:drawableStartCompat="@drawable/ic_edit_12"
-            app:isVisible="@{Role.Companion.isMaster(studyManagement.role)}"
+            app:isVisible="@{role.Companion.isMaster(studyManagement.role)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_item_study_management_essential_todo" />
 
