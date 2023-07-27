@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.StudyCreateRequest;
+import com.yigongil.backend.response.HomeResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.RoundNumberResponse;
 import com.yigongil.backend.response.RoundResponse;
@@ -58,18 +59,18 @@ public class StudySteps {
         String memberId = (String) sharedContext.getParameter(masterGithubId);
 
         String location = RestAssured.given()
-                                     .log()
-                                     .all()
-                                     .header(HttpHeaders.AUTHORIZATION, memberId)
-                                     .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                     .body(objectMapper.writeValueAsString(request))
-                                     .when()
-                                     .post("/v1/studies")
-                                     .then()
-                                     .log()
-                                     .all()
-                                     .extract()
-                                     .header(HttpHeaders.LOCATION);
+                .log()
+                .all()
+                .header(HttpHeaders.AUTHORIZATION, memberId)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .body(objectMapper.writeValueAsString(request))
+                .when()
+                .post("/v1/studies")
+                .then()
+                .log()
+                .all()
+                .extract()
+                .header(HttpHeaders.LOCATION);
 
         String studyId = location.substring(location.lastIndexOf("/") + 1);
 
@@ -79,10 +80,10 @@ public class StudySteps {
     @When("모집 중인 스터디 탭을 클릭한다.")
     public void 모집_중인_스터디를_요청한다() {
         ExtractableResponse<Response> response = when().get("/v1/studies/recruiting?page=0")
-                                                       .then()
-                                                       .log()
-                                                       .all()
-                                                       .extract();
+                .then()
+                .log()
+                .all()
+                .extract();
 
         sharedContext.setResponse(response);
     }
@@ -92,7 +93,7 @@ public class StudySteps {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
         List<RecruitingStudyResponse> recruitingStudyResponses = response.jsonPath()
-                                                                         .getList(".", RecruitingStudyResponse.class);
+                .getList(".", RecruitingStudyResponse.class);
         Predicate<RecruitingStudyResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
 
         assertAll(
@@ -104,15 +105,15 @@ public class StudySteps {
     @When("{string}가 스터디 상세 조회에서 이름이 {string}인 스터디를 조회한다.")
     public void 스터디_조회(String memberGithubId, String studyName) {
         ExtractableResponse<Response> response = RestAssured.given()
-                                                            .log()
-                                                            .all()
-                                                            .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(memberGithubId))
-                                                            .when()
-                                                            .get("/v1/studies/" + sharedContext.getParameter(studyName))
-                                                            .then()
-                                                            .log()
-                                                            .all()
-                                                            .extract();
+                .log()
+                .all()
+                .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(memberGithubId))
+                .when()
+                .get("/v1/studies/" + sharedContext.getParameter(studyName))
+                .then()
+                .log()
+                .all()
+                .extract();
 
         sharedContext.setResponse(response);
     }
@@ -120,7 +121,7 @@ public class StudySteps {
     @Then("스터디 상세조회가 입력한 대로 되어있다.")
     public void 스터디상세_조회에서_해당_스터디를_확인할_수_있다() {
         StudyDetailResponse response = sharedContext.getResponse()
-                                                    .as(StudyDetailResponse.class);
+                .as(StudyDetailResponse.class);
 
         assertAll(
                 () -> assertThat(response.name()).isEqualTo("자바"),
@@ -133,7 +134,7 @@ public class StudySteps {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
         List<RecruitingStudyResponse> recruitingStudyResponses = response.jsonPath()
-                                                                         .getList(".", RecruitingStudyResponse.class);
+                .getList(".", RecruitingStudyResponse.class);
 
         Predicate<RecruitingStudyResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
 
@@ -147,7 +148,7 @@ public class StudySteps {
     @Then("스터디 장이 {string}이고 해당 회차 인것을 확인할 수 있다.")
     public void 스터디의_회차를_조회할_수_있다(String masterGithubId) {
         RoundResponse round = sharedContext.getResponse()
-                                           .as(RoundResponse.class);
+                .as(RoundResponse.class);
 
         assertAll(
                 () -> assertThat(round.masterId()).isEqualTo(Long.valueOf((String) sharedContext.getParameter(masterGithubId))),
@@ -157,8 +158,8 @@ public class StudySteps {
 
     @When("{string}가 이름이 {string}인 스터디의 {int} 회차를 찾는다.")
     public void 스터디_회차_조회(String memberGithubId, String studyName, int roundNumber) {
-        String  memberId = (String) sharedContext.getParameter(memberGithubId);
-        String  studyId = (String) sharedContext.getParameter(studyName);
+        String memberId = (String) sharedContext.getParameter(memberGithubId);
+        String studyId = (String) sharedContext.getParameter(studyName);
 
         StudyDetailResponse studyDetailResponse = given()
                 .header(HttpHeaders.AUTHORIZATION, memberId)
@@ -172,11 +173,11 @@ public class StudySteps {
 
 
         Long roundId = studyDetailResponse.rounds()
-                                          .stream()
-                                          .filter(round -> Objects.equals(round.number(), roundNumber))
-                                          .findFirst()
-                                          .map(RoundNumberResponse::id)
-                                          .get();
+                .stream()
+                .filter(round -> Objects.equals(round.number(), roundNumber))
+                .findFirst()
+                .map(RoundNumberResponse::id)
+                .get();
 
         sharedContext.setParameter("roundId", roundId);
 
@@ -190,5 +191,40 @@ public class StudySteps {
                 .extract();
 
         sharedContext.setResponse(response);
+    }
+
+    @Given("{string}가 이름이 {string}인 스터디를 시작한다.")
+    public void 스터디시작(String memberGithubId, String studyName) {
+        String memberId = (String) sharedContext.getParameter(memberGithubId);
+        String studyId = (String) sharedContext.getParameter(studyName);
+
+        given().log().all()
+                .header(HttpHeaders.AUTHORIZATION, memberId)
+                .when()
+                .patch("/v1/studies/" + studyId + "/start")
+                .then().log().all();
+    }
+
+    @When("{string}가 홈화면을 조회한다.")
+    public void 현재_회차를_조회한다(String githubId) {
+        String memberId = (String) sharedContext.getParameter(githubId);
+
+        ExtractableResponse<Response> response = given().log().all()
+                .header(HttpHeaders.AUTHORIZATION, memberId)
+                .when()
+                .get("/v1/home/")
+                .then().log().all()
+                .extract();
+
+        sharedContext.setResponse(response);
+    }
+
+    @Then("스터디의 남은 날짜가 null이 아니다.")
+    public void 스터디_회차_업데이트_검증() {
+        ExtractableResponse<Response> response = sharedContext.getResponse();
+
+        HomeResponse homeResponse = response.as(HomeResponse.class);
+
+        assertThat(homeResponse.studies().get(0).nextDate()).isNotNull();
     }
 }

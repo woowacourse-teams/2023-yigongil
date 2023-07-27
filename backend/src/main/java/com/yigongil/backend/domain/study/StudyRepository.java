@@ -3,6 +3,7 @@ package com.yigongil.backend.domain.study;
 import com.yigongil.backend.domain.member.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
@@ -14,6 +15,7 @@ public interface StudyRepository extends Repository<Study, Long> {
 
     Study save(Study study);
 
+    @EntityGraph(attributePaths = {"currentRound", "rounds"})
     Optional<Study> findById(Long studyId);
 
     Page<Study> findAllByProcessingStatus(ProcessingStatus processingStatus, Pageable pageable);
