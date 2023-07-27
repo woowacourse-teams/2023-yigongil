@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@Transactional
 @Service
 public class RoundService {
 
@@ -36,12 +35,17 @@ public class RoundService {
     private final RoundOfMemberRepository roundOfMemberRepository;
     private final StudyRepository studyRepository;
 
-    public RoundService(RoundRepository roundRepository, RoundOfMemberRepository roundOfMemberRepository, StudyRepository studyRepository) {
+    public RoundService(
+            RoundRepository roundRepository,
+            RoundOfMemberRepository roundOfMemberRepository,
+            StudyRepository studyRepository
+    ) {
         this.roundRepository = roundRepository;
         this.roundOfMemberRepository = roundOfMemberRepository;
         this.studyRepository = studyRepository;
     }
 
+    @Transactional
     public RoundResponse findRoundDetail(Member member, Long roundId) {
         Round round = roundRepository.findRoundByIdWithRoundsOfMember(roundId)
                 .orElseThrow(() -> new RoundNotFoundException("해당 회차를 찾을 수 없습니다", roundId));
@@ -65,7 +69,7 @@ public class RoundService {
         );
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public HomeResponse findCurrentRoundOfStudies(Member member) {
         List<Study> studies = studyRepository.findByMemberAndProcessingStatus(member, ProcessingStatus.PROCESSING);
         List<UpcomingStudyResponse> upcomingStudyResponses = new ArrayList<>();
