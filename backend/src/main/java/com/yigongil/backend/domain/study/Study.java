@@ -7,6 +7,7 @@ import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.roundofmember.RoundOfMembers;
 import com.yigongil.backend.exception.CannotStartException;
+import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.RoundNotFoundException;

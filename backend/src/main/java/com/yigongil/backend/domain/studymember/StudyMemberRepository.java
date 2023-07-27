@@ -1,7 +1,7 @@
 package com.yigongil.backend.domain.studymember;
 
-import com.yigongil.backend.domain.study.Role;
 import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 
 import java.util.List;
@@ -17,13 +17,29 @@ public interface StudyMemberRepository extends Repository<StudyMember, Long> {
     @EntityGraph(attributePaths = "member")
     List<StudyMember> findAllByStudyIdAndRole(Long studyId, Role role);
 
-    @EntityGraph(attributePaths = "member")
-    List<StudyMember> findAllByStudyIdAndRoleNot(Long studyId, Role role);
+    @Query("""
+                select sm from StudyMember sm
+                join fetch sm.member
+                where sm.study.id = :studyId
+                and (sm.role = 'MASTER'
+                or sm.role = 'STUDY_MEMBER')
+                and sm.studyResult = 'NONE'
+            """)
+    List<StudyMember> findAllByStudyIdAndParticipatingAndNotEnd(Long studyId);
 
     boolean existsByStudyIdAndMemberId(Long studyId, Long memberId);
 
     void delete(StudyMember studyMember);
 
-    @EntityGraph(attributePaths = "study")
-    List<StudyMember> findAllByMemberIdAndRoleNot(Long id, Role role);
+    @Query("""
+            select sm from StudyMember sm
+            join fetch sm.study
+            where sm.member.id = :memberId
+            and (sm.role = 'MASTER'
+            or sm.role = 'STUDY_MEMBER')
+            and sm.studyResult = 'NONE'
+            """)
+    List<StudyMember> findAllByMemberIdAndParticipatingAndNotEnd(Long memberId);
+
+    Long countByMemberIdAndStudyResult(Long memberId, StudyResult studyResult);
 }

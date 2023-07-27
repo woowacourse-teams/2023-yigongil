@@ -1,9 +1,8 @@
 package com.yigongil.backend.response;
 
-import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
-import com.yigongil.backend.domain.study.Role;
 import com.yigongil.backend.domain.study.Study;
+import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.utils.DateConverter;
 
 import java.util.List;
@@ -30,7 +29,7 @@ public record StudyDetailResponse(
             List<Round> rounds,
             Role role,
             Round currentRound,
-            List<Member> members
+            List<StudyMemberResponse> studyMemberResponses
     ) {
         return new StudyDetailResponse(
                 study.getId(),
@@ -45,7 +44,7 @@ public record StudyDetailResponse(
                 study.findPeriodOfRoundToString(),
                 study.getCurrentRound().getRoundNumber(),
                 study.getIntroduction(),
-                StudyMemberResponse.from(members),
+                studyMemberResponses,
                 RoundNumberResponse.from(rounds)
         );
     }
