@@ -21,10 +21,6 @@ class CreateStudyActivity :
 
     private val viewModel: CreateStudyViewModel by viewModels { CreateStudyViewModel.Factory }
 
-    private val dates: List<String> by lazy {
-        resources.getStringArray(R.array.multiPickerDisplayNames).toList()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -35,7 +31,7 @@ class CreateStudyActivity :
     private fun initBinding() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        binding.displayNames = dates
+        binding.displayNames = resources.getStringArray(R.array.multiPickerDisplayNames).toList()
         binding.onIconTextButtonClickListener = ::onIconTextButtonClick
         binding.onCreateButtonClickListener = ::onCreateButtonClick
     }
