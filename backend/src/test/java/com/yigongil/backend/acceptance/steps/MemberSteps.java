@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.request.MemberJoinRequest;
 import com.yigongil.backend.request.ProfileUpdateRequest;
-import com.yigongil.backend.response.MemberResponse;
+import com.yigongil.backend.response.ProfileResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -70,12 +70,12 @@ public class MemberSteps {
 
     @Then("{string}가 변경된 정보 닉네임 {string}과 간단 소개{string}를 확인할 수 있다.")
     public void profile_확인(String githubId, String nickname, String introduction) {
-        MemberResponse response = RestAssured.given()
+        ProfileResponse response = RestAssured.given()
                 .when()
                 .get("/v1/members/" + sharedContext.getParameter(githubId))
                 .then()
                 .extract()
-                .as(MemberResponse.class);
+                .as(ProfileResponse.class);
 
         assertAll(
                 () -> assertThat(response.nickname()).isEqualTo(nickname),

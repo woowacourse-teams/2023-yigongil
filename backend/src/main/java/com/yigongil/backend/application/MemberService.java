@@ -8,7 +8,7 @@ import com.yigongil.backend.domain.studymember.StudyMemberRepository;
 import com.yigongil.backend.exception.MemberNotFoundException;
 import com.yigongil.backend.request.MemberJoinRequest;
 import com.yigongil.backend.request.ProfileUpdateRequest;
-import com.yigongil.backend.response.MemberResponse;
+import com.yigongil.backend.response.ProfileResponse;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -29,11 +29,11 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public MemberResponse findById(Long id) {
+    public ProfileResponse findById(Long id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException("해당 멤버가 존재하지 않습니다.", String.valueOf(id)));
 
-        return new MemberResponse(
+        return new ProfileResponse(
                 member.getId(),
                 member.getNickname(),
                 member.getGithubId(),

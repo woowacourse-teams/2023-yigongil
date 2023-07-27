@@ -19,7 +19,7 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.request.ProfileUpdateRequest;
-import com.yigongil.backend.response.MemberResponse;
+import com.yigongil.backend.response.ProfileResponse;
 import java.util.Collections;
 import java.util.Optional;
 import org.apache.http.HttpHeaders;
@@ -52,7 +52,7 @@ class MemberControllerTest {
         Member member = MemberFixture.김진우.toMember();
         given(memberRepository.findById(1L)).willReturn(Optional.of(member));
         given(memberService.findById(1L)).willReturn(
-                new MemberResponse(
+                new ProfileResponse(
                         member.getId(),
                         member.getNickname(),
                         member.getGithubId(),
