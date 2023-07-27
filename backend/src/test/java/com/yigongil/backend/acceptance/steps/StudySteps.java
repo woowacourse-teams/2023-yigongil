@@ -156,6 +156,8 @@ public class StudySteps {
         );
     }
 
+
+
     @When("{string}가 이름이 {string}인 스터디의 {int} 회차를 찾는다.")
     public void 스터디_회차_조회(String memberGithubId, String studyName, int roundNumber) {
         String memberId = (String) sharedContext.getParameter(memberGithubId);

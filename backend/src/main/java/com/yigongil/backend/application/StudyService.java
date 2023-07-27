@@ -221,16 +221,18 @@ public class StudyService {
     }
 
     @Transactional
-    public void proceedRound() {
+    public void proceedRound(LocalDate now) {
+        System.out.println("StudyService.proceedRound");
         List<Study> studies = studyRepository.findByProcessingStatus(ProcessingStatus.PROCESSING);
 
         studies.stream()
-               .filter(study -> study.isCurrentRoundEndAt(LocalDate.now()))
+               .filter(study -> study.isCurrentRoundEndAt(now))
                .forEach(Study::updateToNextRound);
     }
 
     @Transactional
     public void startStudy(Member member, Long studyId) {
+        System.out.println("StudyService.startStudy");
         Study study = findStudyById(studyId);
         study.validateMaster(member);
 
