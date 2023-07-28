@@ -8,7 +8,6 @@ import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.fixture.StudyFixture;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
-import static com.yigongil.backend.fixture.StudyFixture.자바_스터디;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -29,7 +28,7 @@ class StudyTest {
     @Test
     void 스터디를_다음_라운드로_넘기면_현재_라운드가_다음_라운드로_변한다() {
         // given
-        Study study = 자바_스터디.toStudy();
+        Study study = StudyFixture.자바_스터디_진행중.toStudy();
         Round currentRound = study.getCurrentRound();
 
         // when
@@ -43,7 +42,7 @@ class StudyTest {
     @Test
     void 마지막_라운드에서_라운드를_넘기면_스터디가_종료된다() {
         // given
-        Study study = 자바_스터디.toStudy();
+        Study study = StudyFixture.자바_스터디_모집중.toStudy();
         study.updateToNextRound();
         study.updateToNextRound();
 
@@ -57,7 +56,7 @@ class StudyTest {
     @Test
     void 스터디의_현재_라운드가_종료되는_날이면_true를_반환한다() {
         // given
-        Study study = 자바_스터디.toStudy();
+        Study study = StudyFixture.자바_스터디_진행중.toStudy();
         Round currentRound = study.getCurrentRound();
         LocalDateTime endAt = currentRound.getEndAt();
 
@@ -71,7 +70,7 @@ class StudyTest {
     @Test
     void 스터디의_현재_라운드가_종료되는_날이_아니면_false를_반환한다() {
         // given
-        Study study = 자바_스터디.toStudy();
+        Study study = StudyFixture.자바_스터디_진행중.toStudy();
         Round currentRound = study.getCurrentRound();
         LocalDateTime endAt = currentRound.getEndAt();
 
