@@ -8,6 +8,6 @@ data class StudyRoundDetailUiModel(
     val masterId: Long,
     val role: Role,
     val necessaryTodo: TodoUiModel,
-    val optionalTodos: List<TodoUiModel>,
+    val optionalTodos: List<OptionalTodoUiModel>,
     val studyMembers: List<StudyMemberUiModel>,
 )
