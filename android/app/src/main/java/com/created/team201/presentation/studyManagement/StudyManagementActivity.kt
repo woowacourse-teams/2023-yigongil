@@ -16,7 +16,7 @@ class StudyManagementActivity :
 
     private val studyManagementViewModel by viewModels<StudyManagementViewModel>()
     private val studyManagementAdapter: StudyManagementAdapter by lazy {
-        StudyManagementAdapter(todoClickListener)
+        StudyManagementAdapter(todoClickListener, memberClickListener)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +54,12 @@ class StudyManagementActivity :
         override fun clickOnTodo(id: Long, isDone: Boolean) {
             val currentItemId = binding.vpStudyManagement.currentItem
             studyManagementViewModel.updateTodo(currentItemId, id, !isDone)
+        }
+    }
+
+    private val memberClickListener = object : StudyMemberClickListener {
+        override fun onClickMember(id: Long) {
+            // 프로필 페이지로 이동
         }
     }
 

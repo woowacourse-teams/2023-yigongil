@@ -4,13 +4,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.created.team201.presentation.common.TodoClickListener
+import com.created.team201.presentation.studyManagement.StudyMemberClickListener
 import com.created.team201.presentation.studyManagement.model.StudyRoundDetailUiModel
 
-class StudyManagementAdapter(todoClickListener: TodoClickListener) :
+class StudyManagementAdapter(
+    private val todoClickListener: TodoClickListener,
+    private val studyMemberClickListener: StudyMemberClickListener,
+) :
     ListAdapter<StudyRoundDetailUiModel, StudyManagementViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyManagementViewHolder {
-        return StudyManagementViewHolder(StudyManagementViewHolder.getBinding(parent))
+        return StudyManagementViewHolder(
+            StudyManagementViewHolder.getBinding(parent),
+            studyMemberClickListener,
+        )
     }
 
     override fun onBindViewHolder(holder: StudyManagementViewHolder, position: Int) {
