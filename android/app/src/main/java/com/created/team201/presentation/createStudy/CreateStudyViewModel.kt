@@ -19,6 +19,7 @@ import com.created.team201.presentation.createStudy.model.CreateStudyUiModel
 import com.created.team201.presentation.createStudy.model.PeriodUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CreateStudyViewModel(
@@ -98,7 +99,7 @@ class CreateStudyViewModel(
     }
 
     fun createStudy(study: CreateStudyUiModel) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             createStudyRepository.createStudy(study.toDomain())
                 .onSuccess {
                     _isSuccessCreateStudy.value = true
