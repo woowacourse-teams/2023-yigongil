@@ -164,7 +164,10 @@ public class Study extends BaseEntity {
     public void addMember(Member member) {
         validateStudyProcessingStatus();
         validateMemberSize();
-        this.currentRound.addMember(member);
+
+        for (Round round : rounds) {
+            round.addMember(member);
+        }
     }
 
     private void validateStudyProcessingStatus() {
