@@ -1,16 +1,14 @@
 package com.yigongil.backend.fixture;
 
-import com.yigongil.backend.domain.study.PeriodUnit;
+import static com.yigongil.backend.fixture.RoundFixture.아이디_사_투두없는_라운드;
+import static com.yigongil.backend.fixture.RoundFixture.아이디_오_투두없는_라운드;
+
 import com.yigongil.backend.domain.round.Round;
+import com.yigongil.backend.domain.study.PeriodUnit;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
-
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static com.yigongil.backend.fixture.RoundFixture.아이디_사_투두없는_라운드;
-import static com.yigongil.backend.fixture.RoundFixture.아이디_삼_투두없는_라운드;
-import static com.yigongil.backend.fixture.RoundFixture.아이디_오_투두없는_라운드;
 
 public enum StudyFixture {
 
@@ -54,7 +52,7 @@ public enum StudyFixture {
                 .totalRoundCount(totalRoundCount)
                 .periodUnit(periodUnit)
                 .numberOfMaximumMembers(numberOfMaximumMember)
-                .rounds(List.of(round))
+                .rounds(List.of(round, 아이디_사_투두없는_라운드.toRound(), 아이디_오_투두없는_라운드.toRound()))
                 .currentRound(round)
                 .build();
     }

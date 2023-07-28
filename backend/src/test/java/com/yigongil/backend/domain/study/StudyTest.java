@@ -1,16 +1,17 @@
 package com.yigongil.backend.domain.study;
 
-import com.yigongil.backend.domain.round.Round;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.fixture.StudyFixture;
-import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import org.junit.jupiter.api.Test;
 
 class StudyTest {
 
