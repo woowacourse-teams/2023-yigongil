@@ -2,7 +2,6 @@ package com.yigongil.backend.response;
 
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.Study;
-
 import java.util.List;
 
 public record HomeResponse(

@@ -21,10 +21,10 @@ public enum RoundOfMemberFixture {
 
     public RoundOfMember toRoundOfMember() {
         return RoundOfMember.builder()
-                .id(id)
-                .member(member)
-                .optionalTodos(new ArrayList<>())
-                .isDone(isDone)
-                .build();
+                            .id(id)
+                            .member(member)
+                            .optionalTodos(new ArrayList<>())
+                            .isDone(isDone)
+                            .build();
     }
 }

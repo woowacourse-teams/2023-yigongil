@@ -1,5 +1,8 @@
 package com.yigongil.backend.domain.studymember;
 
+import lombok.Getter;
+
+@Getter
 public enum Role {
 
     MASTER(0),
@@ -12,9 +15,5 @@ public enum Role {
 
     Role(int code) {
         this.code = code;
-    }
-
-    public int getCode() {
-        return code;
     }
 }

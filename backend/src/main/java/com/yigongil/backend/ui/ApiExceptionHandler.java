@@ -14,13 +14,13 @@ public class ApiExceptionHandler {
     public ResponseEntity<String> handleHttpException(HttpException e) {
         log.error("예외 발생: " + e);
         return ResponseEntity.status(e.getHttpStatus())
-                .body(e.getMessageWithInput());
+                             .body(e.getMessageWithInput());
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception e) {
         log.error("예상치 못한 예외 발생: " + e);
         return ResponseEntity.internalServerError()
-                .body("서버 에러 발생");
+                             .body("서버 에러 발생");
     }
 }

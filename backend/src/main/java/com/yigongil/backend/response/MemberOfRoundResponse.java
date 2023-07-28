@@ -2,7 +2,6 @@ package com.yigongil.backend.response;
 
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
-
 import java.util.List;
 
 public record MemberOfRoundResponse(
@@ -18,13 +17,13 @@ public record MemberOfRoundResponse(
                 member.getId(),
                 member.getNickname(),
                 member.getProfileImageUrl(),
-                roundOfMember.getDone()
+                roundOfMember.isDone()
         );
     }
 
     public static List<MemberOfRoundResponse> from(List<RoundOfMember> roundOfMembers) {
         return roundOfMembers.stream()
-                .map(MemberOfRoundResponse::from)
-                .toList();
+                             .map(MemberOfRoundResponse::from)
+                             .toList();
     }
 }

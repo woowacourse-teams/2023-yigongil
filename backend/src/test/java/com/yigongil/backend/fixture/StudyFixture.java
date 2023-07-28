@@ -28,7 +28,7 @@ public enum StudyFixture {
     private final Integer numberOfMaximumMember;
 
     StudyFixture(Long id, LocalDateTime startAt, String name, String introduction, Integer periodOfRound,
-                 PeriodUnit periodUnit, ProcessingStatus processingStatus, Integer totalRoundCount, Integer numberOfMaximumMember) {
+            PeriodUnit periodUnit, ProcessingStatus processingStatus, Integer totalRoundCount, Integer numberOfMaximumMember) {
         this.id = id;
         this.startAt = startAt;
         this.name = name;
@@ -43,17 +43,17 @@ public enum StudyFixture {
     public Study toStudy() {
         Round round = RoundFixture.아이디_삼_투두없는_라운드.toRound();
         return Study.builder()
-                .id(id)
-                .startAt(startAt)
-                .name(name)
-                .introduction(introduction)
-                .periodOfRound(periodOfRound)
-                .processingStatus(processingStatus)
-                .totalRoundCount(totalRoundCount)
-                .periodUnit(periodUnit)
-                .numberOfMaximumMembers(numberOfMaximumMember)
-                .rounds(List.of(round, 아이디_사_투두없는_라운드.toRound(), 아이디_오_투두없는_라운드.toRound()))
-                .currentRound(round)
-                .build();
+                    .id(id)
+                    .startAt(startAt)
+                    .name(name)
+                    .introduction(introduction)
+                    .periodOfRound(periodOfRound)
+                    .processingStatus(processingStatus)
+                    .totalRoundCount(totalRoundCount)
+                    .periodUnit(periodUnit)
+                    .numberOfMaximumMembers(numberOfMaximumMember)
+                    .rounds(List.of(round, 아이디_사_투두없는_라운드.toRound(), 아이디_오_투두없는_라운드.toRound()))
+                    .currentRound(round)
+                    .build();
     }
 }

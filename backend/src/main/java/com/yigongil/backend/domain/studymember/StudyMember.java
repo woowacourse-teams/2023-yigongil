@@ -3,8 +3,6 @@ package com.yigongil.backend.domain.studymember;
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.Study;
-import lombok.Builder;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,7 +12,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 @Entity
 public class StudyMember extends BaseEntity {
 
@@ -59,7 +60,7 @@ public class StudyMember extends BaseEntity {
     }
 
     public boolean isSuccess() {
-       return this.studyResult == StudyResult.SUCCESS;
+        return this.studyResult == StudyResult.SUCCESS;
     }
 
     public void participate() {
@@ -68,25 +69,5 @@ public class StudyMember extends BaseEntity {
 
     public boolean equalsMember(Member member) {
         return this.member.equals(member);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Member getMember() {
-        return member;
-    }
-
-    public Study getStudy() {
-        return study;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public StudyResult getStudyResult() {
-        return studyResult;
     }
 }

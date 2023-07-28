@@ -7,4 +7,5 @@ public record StudyMemberResponse(
         Double successRate,
         String profileImage
 ) {
+
 }

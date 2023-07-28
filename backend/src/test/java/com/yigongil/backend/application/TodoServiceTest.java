@@ -55,8 +55,8 @@ class TodoServiceTest {
         round = RoundFixture.아이디_삼_투두없는_라운드.toRound();
         study = StudyFixture.자바_스터디_진행중.toStudy();
         todo = OptionalTodo.builder()
-                .id(1L)
-                .content("투두").build();
+                           .id(1L)
+                           .content("투두").build();
     }
 
     @Nested
@@ -107,8 +107,10 @@ class TodoServiceTest {
 
             //then
             assertAll(
-                    () -> assertThat(roundById.getNecessaryToDoContent()).isEqualTo(request.content()),
-                    () -> assertThat(roundById.findRoundOfMemberBy(member).getDone()).isEqualTo(request.isDone())
+                    () -> assertThat(roundById.getNecessaryToDoContent()).isEqualTo(
+                            request.content()),
+                    () -> assertThat(roundById.findRoundOfMemberBy(member).isDone()).isEqualTo(
+                            request.isDone())
             );
         }
     }
@@ -134,9 +136,9 @@ class TodoServiceTest {
             willReturn(Optional.of(todo)).given(optionalTodoRepository).findById(1L);
 
             study.findRoundById(round.getId())
-                    .findRoundOfMemberBy(member)
-                    .getOptionalTodos()
-                    .add(todo);
+                 .findRoundOfMemberBy(member)
+                 .getOptionalTodos()
+                 .add(todo);
             TodoUpdateRequest request = new TodoUpdateRequest(false, true, "수정된 내용");
 
             //when

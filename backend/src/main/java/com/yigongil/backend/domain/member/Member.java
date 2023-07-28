@@ -1,16 +1,17 @@
 package com.yigongil.backend.domain.member;
 
 import com.yigongil.backend.domain.BaseEntity;
-import lombok.Builder;
-
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Objects;
+import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 @Entity
 public class Member extends BaseEntity {
 
@@ -60,24 +61,8 @@ public class Member extends BaseEntity {
         this.introduction = new Introduction(introduction);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getGithubId() {
-        return githubId;
-    }
-
     public String getNickname() {
         return nickname.getNickname();
-    }
-
-    public String getProfileImageUrl() {
-        return profileImageUrl;
-    }
-
-    public Integer getTier() {
-        return tier;
     }
 
     public String getIntroduction() {

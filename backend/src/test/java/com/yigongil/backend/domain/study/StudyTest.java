@@ -81,7 +81,7 @@ class StudyTest {
         // then
         assertThat(actual).isFalse();
     }
-  
+
     @Test
     void 스터디에_Member를_추가한다() {
         // given

@@ -17,7 +17,6 @@ import com.yigongil.backend.response.StudyDetailResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.List;
@@ -57,19 +56,15 @@ public class StudySteps {
         );
         String memberId = (String) sharedContext.getParameter(masterGithubId);
 
-        String location = RestAssured.given()
-                .log()
-                .all()
-                .header(HttpHeaders.AUTHORIZATION, memberId)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(objectMapper.writeValueAsString(request))
-                .when()
-                .post("/v1/studies")
-                .then()
-                .log()
-                .all()
-                .extract()
-                .header(HttpHeaders.LOCATION);
+        String location = given().log().all()
+                                 .header(HttpHeaders.AUTHORIZATION, memberId)
+                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                 .body(objectMapper.writeValueAsString(request))
+                                 .when()
+                                 .post("/v1/studies")
+                                 .then().log().all()
+                                 .extract()
+                                 .header(HttpHeaders.LOCATION);
 
         String studyId = location.substring(location.lastIndexOf("/") + 1);
 
@@ -79,10 +74,8 @@ public class StudySteps {
     @When("모집 중인 스터디 탭을 클릭한다.")
     public void 모집_중인_스터디를_요청한다() {
         ExtractableResponse<Response> response = when().get("/v1/studies/recruiting?page=0")
-                .then()
-                .log()
-                .all()
-                .extract();
+                                                       .then().log().all()
+                                                       .extract();
 
         sharedContext.setResponse(response);
     }
@@ -92,7 +85,7 @@ public class StudySteps {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
         List<RecruitingStudyResponse> recruitingStudyResponses = response.jsonPath()
-                .getList(".", RecruitingStudyResponse.class);
+                                                                         .getList(".", RecruitingStudyResponse.class);
         Predicate<RecruitingStudyResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
 
         assertAll(
@@ -103,16 +96,12 @@ public class StudySteps {
 
     @When("{string}가 스터디 상세 조회에서 이름이 {string}인 스터디를 조회한다.")
     public void 스터디_조회(String memberGithubId, String studyName) {
-        ExtractableResponse<Response> response = RestAssured.given()
-                .log()
-                .all()
-                .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(memberGithubId))
-                .when()
-                .get("/v1/studies/" + sharedContext.getParameter(studyName))
-                .then()
-                .log()
-                .all()
-                .extract();
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(memberGithubId))
+                                                        .when()
+                                                        .get("/v1/studies/" + sharedContext.getParameter(studyName))
+                                                        .then().log().all()
+                                                        .extract();
 
         sharedContext.setResponse(response);
     }
@@ -120,7 +109,7 @@ public class StudySteps {
     @Then("스터디 상세조회가 입력한 대로 되어있다.")
     public void 스터디상세_조회에서_해당_스터디를_확인할_수_있다() {
         StudyDetailResponse response = sharedContext.getResponse()
-                .as(StudyDetailResponse.class);
+                                                    .as(StudyDetailResponse.class);
 
         assertAll(
                 () -> assertThat(response.name()).isEqualTo("자바"),
@@ -133,7 +122,7 @@ public class StudySteps {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
         List<RecruitingStudyResponse> recruitingStudyResponses = response.jsonPath()
-                .getList(".", RecruitingStudyResponse.class);
+                                                                         .getList(".", RecruitingStudyResponse.class);
 
         Predicate<RecruitingStudyResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
 
@@ -147,7 +136,7 @@ public class StudySteps {
     @Then("스터디 장이 {string}이고 해당 회차 인것을 확인할 수 있다.")
     public void 스터디의_회차를_조회할_수_있다(String masterGithubId) {
         RoundResponse round = sharedContext.getResponse()
-                .as(RoundResponse.class);
+                                           .as(RoundResponse.class);
 
         assertAll(
                 () -> assertThat(round.masterId()).isEqualTo(Long.valueOf((String) sharedContext.getParameter(masterGithubId))),
@@ -156,29 +145,25 @@ public class StudySteps {
     }
 
 
-
     @When("{string}가 이름이 {string}인 스터디의 {int} 회차를 찾는다.")
     public void 스터디_회차_조회(String memberGithubId, String studyName, int roundNumber) {
         String memberId = (String) sharedContext.getParameter(memberGithubId);
         String studyId = (String) sharedContext.getParameter(studyName);
 
-        StudyDetailResponse studyDetailResponse = given()
-                .header(HttpHeaders.AUTHORIZATION, memberId)
-                .when()
-                .get("/v1/studies/" + studyId)
-                .then()
-                .log()
-                .all()
-                .extract()
-                .as(StudyDetailResponse.class);
-
+        StudyDetailResponse studyDetailResponse = given().log().all()
+                                                         .header(HttpHeaders.AUTHORIZATION, memberId)
+                                                         .when()
+                                                         .get("/v1/studies/" + studyId)
+                                                         .then().log().all()
+                                                         .extract()
+                                                         .as(StudyDetailResponse.class);
 
         Long roundId = studyDetailResponse.rounds()
-                .stream()
-                .filter(round -> Objects.equals(round.number(), roundNumber))
-                .findFirst()
-                .map(RoundNumberResponse::id)
-                .get();
+                                          .stream()
+                                          .filter(round -> Objects.equals(round.number(), roundNumber))
+                                          .findFirst()
+                                          .map(RoundNumberResponse::id)
+                                          .get();
 
         sharedContext.setParameter("roundId", roundId);
 
@@ -186,9 +171,7 @@ public class StudySteps {
                 .header(HttpHeaders.AUTHORIZATION, memberId)
                 .when()
                 .get("/v1/studies/" + studyId + "/rounds/" + roundId)
-                .then()
-                .log()
-                .all()
+                .then().log().all()
                 .extract();
 
         sharedContext.setResponse(response);
@@ -200,10 +183,10 @@ public class StudySteps {
         String studyId = (String) sharedContext.getParameter(studyName);
 
         given().log().all()
-                .header(HttpHeaders.AUTHORIZATION, memberId)
-                .when()
-                .patch("/v1/studies/" + studyId + "/start")
-                .then().log().all();
+               .header(HttpHeaders.AUTHORIZATION, memberId)
+               .when()
+               .patch("/v1/studies/" + studyId + "/start")
+               .then().log().all();
 
         sharedContext.setParameter("currentRoundNumber", 1);
     }
@@ -213,11 +196,11 @@ public class StudySteps {
         String memberId = (String) sharedContext.getParameter(githubId);
 
         ExtractableResponse<Response> response = given().log().all()
-                .header(HttpHeaders.AUTHORIZATION, memberId)
-                .when()
-                .get("/v1/home/")
-                .then().log().all()
-                .extract();
+                                                        .header(HttpHeaders.AUTHORIZATION, memberId)
+                                                        .when()
+                                                        .get("/v1/home/")
+                                                        .then().log().all()
+                                                        .extract();
 
         sharedContext.setResponse(response);
     }

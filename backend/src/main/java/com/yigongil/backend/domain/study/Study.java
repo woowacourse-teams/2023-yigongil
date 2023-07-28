@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -29,9 +28,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import lombok.Builder;
+import lombok.Getter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+@Getter
 @Entity
 public class Study extends BaseEntity {
 
@@ -118,15 +119,15 @@ public class Study extends BaseEntity {
             Member master
     ) {
         Study study = Study.builder()
-                .name(name)
-                .numberOfMaximumMembers(numberOfMaximumMembers)
-                .startAt(DateConverter.toLocalDateTime(startAt))
-                .totalRoundCount(totalRoundCount)
-                .periodOfRound(PeriodUnit.getPeriodNumber(periodOfRound))
-                .periodUnit(PeriodUnit.getPeriodUnit(periodOfRound))
-                .introduction(introduction)
-                .processingStatus(ProcessingStatus.RECRUITING)
-                .build();
+                           .name(name)
+                           .numberOfMaximumMembers(numberOfMaximumMembers)
+                           .startAt(DateConverter.toLocalDateTime(startAt))
+                           .totalRoundCount(totalRoundCount)
+                           .periodOfRound(PeriodUnit.getPeriodNumber(periodOfRound))
+                           .periodUnit(PeriodUnit.getPeriodUnit(periodOfRound))
+                           .introduction(introduction)
+                           .processingStatus(ProcessingStatus.RECRUITING)
+                           .build();
         study.rounds = Round.of(totalRoundCount, master);
         study.currentRound = study.rounds.get(0);
         return study;
@@ -159,9 +160,10 @@ public class Study extends BaseEntity {
 
     public Round findRoundById(Long roundId) {
         return rounds.stream()
-                .filter(round -> round.getId().equals(roundId))
-                .findAny()
-                .orElseThrow(() -> new RoundNotFoundException("스터디에 해당 회차가 존재하지 않습니다.", roundId));
+                     .filter(round -> round.getId().equals(roundId))
+                     .findAny()
+                     .orElseThrow(
+                             () -> new RoundNotFoundException("스터디에 해당 회차가 존재하지 않습니다.", roundId));
     }
 
     public void addMember(Member member) {
@@ -175,7 +177,8 @@ public class Study extends BaseEntity {
 
     private void validateStudyProcessingStatus() {
         if (!isRecruiting()) {
-            throw new InvalidProcessingStatusException("모집 중인 스터디가 아니기 때문에 신청을 수락할 수 없습니다.", processingStatus.name());
+            throw new InvalidProcessingStatusException("모집 중인 스터디가 아니기 때문에 신청을 수락할 수 없습니다.",
+                    processingStatus.name());
         }
     }
 
@@ -212,8 +215,9 @@ public class Study extends BaseEntity {
     public void updateToNextRound() {
         int nextRoundNumber = currentRound.getRoundNumber() + 1;
         Optional<Round> nextRound = rounds.stream()
-                                                .filter(round -> round.getRoundNumber() == nextRoundNumber)
-                                                .findFirst();
+                                          .filter(round -> round.getRoundNumber()
+                                                  == nextRoundNumber)
+                                          .findFirst();
 
         nextRound.ifPresentOrElse(this::updateCurrentRound, this::finishStudy);
     }
@@ -241,59 +245,11 @@ public class Study extends BaseEntity {
         return periodOfRound * periodUnit.getUnitNumber();
     }
 
-    public Member getMaster() {
-        return currentRound.getMaster();
-    }
-
     public String findPeriodOfRoundToString() {
         return periodUnit.toStringFormat(periodOfRound);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getIntroduction() {
-        return introduction;
-    }
-
-    public Integer getNumberOfMaximumMembers() {
-        return numberOfMaximumMembers;
-    }
-
-    public ProcessingStatus getProcessingStatus() {
-        return processingStatus;
-    }
-
-    public LocalDateTime getStartAt() {
-        return startAt;
-    }
-
-    public LocalDateTime getEndAt() {
-        return endAt;
-    }
-
-    public Integer getTotalRoundCount() {
-        return totalRoundCount;
-    }
-
-    public Integer getPeriodOfRound() {
-        return periodOfRound;
-    }
-
-    public PeriodUnit getPeriodUnit() {
-        return periodUnit;
-    }
-
-    public Round getCurrentRound() {
-        return currentRound;
-    }
-
-    public List<Round> getRounds() {
-        return rounds;
+    public Member getMaster() {
+        return currentRound.getMaster();
     }
 }

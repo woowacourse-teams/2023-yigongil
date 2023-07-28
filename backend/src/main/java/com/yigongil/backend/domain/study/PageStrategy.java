@@ -1,7 +1,9 @@
 package com.yigongil.backend.domain.study;
 
+import lombok.Getter;
 import org.springframework.data.domain.Sort;
 
+@Getter
 public enum PageStrategy {
 
     CREATED_AT_DESC(Constants.PAGE_SIZE, Sort.by("createdAt").descending());
@@ -14,15 +16,8 @@ public enum PageStrategy {
         this.sort = sort;
     }
 
-    public int getSize() {
-        return size;
-    }
-
-    public Sort getSort() {
-        return sort;
-    }
-
     public static class Constants {
+
         public static final int PAGE_SIZE = 1;
     }
 }

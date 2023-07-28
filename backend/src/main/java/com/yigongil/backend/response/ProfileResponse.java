@@ -14,4 +14,5 @@ public record ProfileResponse(
         String introduction,
         List<FinishedStudyResponse> finishedStudies
 ) {
+
 }

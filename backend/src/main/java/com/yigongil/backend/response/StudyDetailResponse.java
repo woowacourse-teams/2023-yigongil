@@ -4,7 +4,6 @@ import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.utils.DateConverter;
-
 import java.util.List;
 
 public record StudyDetailResponse(

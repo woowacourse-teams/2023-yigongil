@@ -35,13 +35,15 @@ public class MemberService {
     @Transactional(readOnly = true)
     public ProfileResponse findById(Long id) {
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new MemberNotFoundException("해당 멤버가 존재하지 않습니다.", String.valueOf(id)));
+                                        .orElseThrow(() -> new MemberNotFoundException(
+                                                "해당 멤버가 존재하지 않습니다.", String.valueOf(id)));
 
-        List<FinishedStudyResponse> finishedStudyResponses = studyMemberRepository.findAllByMemberId(member.getId())
-                .stream()
-                .filter(StudyMember::isStudyEnd)
-                .map(this::createFinishedStudyResponse)
-                .toList();
+        List<FinishedStudyResponse> finishedStudyResponses =
+                studyMemberRepository.findAllByMemberId(member.getId())
+                                     .stream()
+                                     .filter(StudyMember::isStudyEnd)
+                                     .map(this::createFinishedStudyResponse)
+                                     .toList();
 
         return new ProfileResponse(
                 member.getId(),
@@ -74,14 +76,14 @@ public class MemberService {
 
     private int calculateNumberOfSuccessRounds(Member member) {
         List<Study> studies = studyMemberRepository.findAllByMemberId(member.getId()).stream()
-                .map(StudyMember::getStudy)
-                .toList();
+                                                   .map(StudyMember::getStudy)
+                                                   .toList();
 
         return (int) studies.stream()
-                .map(Study::getRounds)
-                .flatMap(List::stream)
-                .filter(round -> round.isNecessaryToDoDone(member))
-                .count();
+                            .map(Study::getRounds)
+                            .flatMap(List::stream)
+                            .filter(round -> round.isNecessaryToDoDone(member))
+                            .count();
     }
 
     @Transactional
@@ -93,9 +95,9 @@ public class MemberService {
     public Long join(MemberJoinRequest request) {
         Member member = memberRepository.save(
                 Member.builder()
-                        .githubId(request.githubId())
-                        .tier(1)
-                        .build()
+                      .githubId(request.githubId())
+                      .tier(1)
+                      .build()
         );
 
         return member.getId();

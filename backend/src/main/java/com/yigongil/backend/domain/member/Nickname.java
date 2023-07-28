@@ -2,11 +2,10 @@ package com.yigongil.backend.domain.member;
 
 import com.yigongil.backend.exception.InvalidNicknameLengthException;
 import com.yigongil.backend.exception.InvalidNicknamePatternException;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 @Embeddable
 public class Nickname {
