@@ -8,7 +8,6 @@ import androidx.activity.viewModels
 import com.created.team201.R
 import com.created.team201.databinding.ActivityStudyManagementBinding
 import com.created.team201.presentation.common.BindingActivity
-import com.created.team201.presentation.common.TodoClickListener
 import com.created.team201.presentation.studyManagement.adapter.StudyManagementAdapter
 
 class StudyManagementActivity :
@@ -16,7 +15,7 @@ class StudyManagementActivity :
 
     private val studyManagementViewModel by viewModels<StudyManagementViewModel>()
     private val studyManagementAdapter: StudyManagementAdapter by lazy {
-        StudyManagementAdapter(todoClickListener, memberClickListener)
+        StudyManagementAdapter(studyManagementClickListener, memberClickListener)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,10 +49,14 @@ class StudyManagementActivity :
         }
     }
 
-    private val todoClickListener = object : TodoClickListener {
+    private val studyManagementClickListener = object : StudyManagementClickListener {
         override fun clickOnTodo(id: Long, isDone: Boolean) {
             val currentItemId = binding.vpStudyManagement.currentItem
             studyManagementViewModel.updateTodo(currentItemId, id, !isDone)
+        }
+
+        override fun onClickAddTodo(todoContent: String) {
+            studyManagementViewModel.addOptionalTodo(todoContent)
         }
     }
 

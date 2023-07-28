@@ -14,6 +14,8 @@ class StudyManagementViewModel : ViewModel() {
         get() = _studyRounds
 
     fun getStudyRounds(studyId: Long, currentRoundId: Long) {
+        // to do : studyMaster id,와 비교해서 member에 isMaster 넣어줘야함
+        _studyRounds.value = dummy
         getRounds(studyId)
         // getStudyRoundDetail() 여러번
         // _studyRounds.value = listOf()
@@ -42,8 +44,8 @@ class StudyManagementViewModel : ViewModel() {
 
             false -> {
                 updateOptionalTodoCheck(studyDetails, todoId, isDone)
-                study = studyDetails.find { it.optionalTodos.any { it.todoId == todoId } }!!
-                todo = study.optionalTodos.find { it.todoId == todoId }!!
+                study = studyDetails.find { it.optionalTodos.any { it.todo.todoId == todoId } }!!
+                todo = study.optionalTodos.find { it.todo.todoId == todoId }!!.todo
             }
         }
 
@@ -72,12 +74,19 @@ class StudyManagementViewModel : ViewModel() {
         isDone: Boolean,
     ) {
         _studyRounds.value = studyDetails.map { studyDetailUiModel ->
-            studyDetailUiModel.takeIf { todoUiModel -> !todoUiModel.optionalTodos.any { it.todoId == id } }
+            studyDetailUiModel.takeIf { todoUiModel -> !todoUiModel.optionalTodos.any { it.todo.todoId == id } }
                 ?: studyDetailUiModel.copy(
                     optionalTodos = studyDetailUiModel.optionalTodos.map {
-                        it.takeUnless { it.todoId == id } ?: it.copy(isDone = isDone)
+                        it.takeUnless { it.todo.todoId == id }
+                            ?: it.copy(it.todo.copy(isDone = isDone))
                     },
                 )
         }
+    }
+
+    fun addOptionalTodo(todoContent: String) {
+        //  뷰모델 내부에서 optional to do 추가
+
+        // 서버 통신
     }
 }
