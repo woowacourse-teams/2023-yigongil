@@ -10,12 +10,8 @@ import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.fixture.StudyFixture;
-
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 class StudyTest {
 
