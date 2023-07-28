@@ -1,4 +1,4 @@
-package com.yigongil.backend.domain.study;
+package com.yigongil.backend.domain.studymember;
 
 public enum Role {
 

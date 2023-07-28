@@ -19,6 +19,7 @@ import com.yigongil.backend.response.TodoResponse;
 import com.yigongil.backend.response.UpcomingStudyResponse;
 import com.yigongil.backend.utils.DateConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -34,12 +35,17 @@ public class RoundService {
     private final RoundOfMemberRepository roundOfMemberRepository;
     private final StudyRepository studyRepository;
 
-    public RoundService(RoundRepository roundRepository, RoundOfMemberRepository roundOfMemberRepository, StudyRepository studyRepository) {
+    public RoundService(
+            RoundRepository roundRepository,
+            RoundOfMemberRepository roundOfMemberRepository,
+            StudyRepository studyRepository
+    ) {
         this.roundRepository = roundRepository;
         this.roundOfMemberRepository = roundOfMemberRepository;
         this.studyRepository = studyRepository;
     }
 
+    @Transactional
     public RoundResponse findRoundDetail(Member member, Long roundId) {
         Round round = roundRepository.findRoundByIdWithRoundsOfMember(roundId)
                 .orElseThrow(() -> new RoundNotFoundException("해당 회차를 찾을 수 없습니다", roundId));
@@ -63,6 +69,7 @@ public class RoundService {
         );
     }
 
+    @Transactional(readOnly = true)
     public HomeResponse findCurrentRoundOfStudies(Member member) {
         List<Study> studies = studyRepository.findByMemberAndProcessingStatus(member, ProcessingStatus.PROCESSING);
         List<UpcomingStudyResponse> upcomingStudyResponses = new ArrayList<>();
@@ -73,7 +80,7 @@ public class RoundService {
             RoundOfMembers currentRoundOfMembers = study.findCurrentRoundOfMembers();
 
             LocalDateTime endAt = currentRound.getEndAt();
-            int leftDays = (int) ChronoUnit.DAYS.between(endAt, LocalDateTime.now());
+            int leftDays = (int) ChronoUnit.DAYS.between(LocalDateTime.now(), endAt) + 1;
 
             upcomingStudyResponses.add(
                     new UpcomingStudyResponse(
@@ -92,7 +99,7 @@ public class RoundService {
         return HomeResponse.of(member, studies, upcomingStudyResponses);
     }
 
-    // TODO: 2023/07/20 study 시작기능에서 호출해서 사용
+    @Transactional
     public void updateRoundsEndAt(List<Round> rounds, LocalDateTime studyStartAt, int period) {
         rounds.sort(Comparator.comparing(Round::getRoundNumber));
         LocalDateTime date = LocalDateTime.of(studyStartAt.toLocalDate(), LocalTime.MIN);

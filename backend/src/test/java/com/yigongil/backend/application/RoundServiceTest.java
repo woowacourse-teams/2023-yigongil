@@ -37,7 +37,6 @@ class RoundServiceTest {
                 () -> assertThat(toStringFormat(round2.getEndAt())).isEqualTo("2023.07.26"),
                 () -> assertThat(toStringFormat(round3.getEndAt())).isEqualTo("2023.07.29"),
                 () -> assertThat(toStringFormat(round1.getEndAt())).isEqualTo("2023.08.01")
-
         );
     }
 }
