@@ -89,4 +89,7 @@ dependencies {
 
     // coroutine
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+
+    // browser
+    implementation 'androidx.browser:browser:1.5.0'
 }
