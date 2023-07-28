@@ -10,6 +10,8 @@ public interface MemberRepository extends Repository<Member, Long> {
 
     Optional<Member> findById(Long id);
 
+    Optional<Member> findByGithubId(String githubId);
+
     Member save(Member member);
 
     @Query("""
