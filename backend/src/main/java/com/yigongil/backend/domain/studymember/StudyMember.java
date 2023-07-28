@@ -55,11 +55,11 @@ public class StudyMember extends BaseEntity {
     }
 
     public boolean isStudyEnd() {
-        return !studyResult.equals(StudyResult.NONE);
+        return this.studyResult != StudyResult.NONE;
     }
 
     public boolean isSuccess() {
-        return studyResult.equals(StudyResult.SUCCESS);
+       return this.studyResult == StudyResult.SUCCESS;
     }
 
     public void participate() {
