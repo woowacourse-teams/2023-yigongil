@@ -2,7 +2,6 @@ package com.yigongil.backend.domain.roundofmember;
 
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.exception.InvalidMemberInRoundException;
-
 import java.util.List;
 
 public class RoundOfMembers {
@@ -15,15 +14,16 @@ public class RoundOfMembers {
 
     public RoundOfMember findByMember(Member member) {
         return roundOfMembers.stream()
-                .filter(roundOfMember -> roundOfMember.isMemberEquals(member))
-                .findFirst()
-                .orElseThrow(() -> new InvalidMemberInRoundException("해당 라운드에 멤버가 존재하지 않습니다.", member.getId()));
+                             .filter(roundOfMember -> roundOfMember.isMemberEquals(member))
+                             .findFirst()
+                             .orElseThrow(() -> new InvalidMemberInRoundException(
+                                     "해당 라운드에 멤버가 존재하지 않습니다.", member.getId()));
     }
 
     public int calculateMembersProgress() {
         long count = roundOfMembers.stream()
-                .filter(it -> it.getDone()) 
-                .count();
+                                   .filter(RoundOfMember::isDone)
+                                   .count();
 
         return (int) (count * 100 / roundOfMembers.size());
     }

@@ -1,5 +1,8 @@
 package com.yigongil.backend.domain.study;
 
+import lombok.Getter;
+
+@Getter
 public enum ProcessingStatus {
     RECRUITING(0),
     PROCESSING(1),
@@ -10,9 +13,5 @@ public enum ProcessingStatus {
 
     ProcessingStatus(int code) {
         this.code = code;
-    }
-
-    public int getCode() {
-        return code;
     }
 }

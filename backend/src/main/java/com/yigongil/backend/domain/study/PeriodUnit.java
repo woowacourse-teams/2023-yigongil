@@ -1,10 +1,11 @@
 package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.exception.InvalidPeriodUnitException;
-
 import java.util.Arrays;
 import java.util.regex.Pattern;
+import lombok.Getter;
 
+@Getter
 public enum PeriodUnit {
 
     DAY("d", 1),
@@ -29,9 +30,10 @@ public enum PeriodUnit {
     public static PeriodUnit getPeriodUnit(String input) {
         validateFormat(input);
         return Arrays.stream(values())
-                .filter(periodUnit -> periodUnit.code.equalsIgnoreCase(input.substring(input.length() - 1)))
-                .findAny()
-                .orElseThrow(() -> new InvalidPeriodUnitException("잘못된 기간 입력입니다.", input));
+                     .filter(periodUnit -> periodUnit.code.equalsIgnoreCase(
+                             input.substring(input.length() - 1)))
+                     .findAny()
+                     .orElseThrow(() -> new InvalidPeriodUnitException("잘못된 기간 입력입니다.", input));
     }
 
     private static void validateFormat(String input) {
@@ -42,13 +44,5 @@ public enum PeriodUnit {
 
     public String toStringFormat(Integer periodOfRound) {
         return periodOfRound + code;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public Integer getUnitNumber() {
-        return unitNumber;
     }
 }

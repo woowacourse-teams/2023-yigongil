@@ -12,4 +12,5 @@ public record UpcomingStudyResponse(
         Integer memberNecessaryTodoProgressRate,
         List<TodoResponse> optionalTodos
 ) {
+
 }

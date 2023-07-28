@@ -8,4 +8,5 @@ public record StudyCreateRequest(
         String periodOfRound,
         String introduction
 ) {
+
 }

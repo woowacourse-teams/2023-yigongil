@@ -12,4 +12,5 @@ public record MyStudyResponse(
         Integer numberOfCurrentMembers,
         Integer numberOfMaximumMembers
 ) {
+
 }

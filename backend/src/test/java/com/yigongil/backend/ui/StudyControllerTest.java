@@ -67,12 +67,12 @@ class StudyControllerTest {
         willReturn(1L).given(studyService).create(MemberFixture.김진우.toMember(), request);
 
         mockMvc.perform(post("/v1/studies")
-                        .header(HttpHeaders.AUTHORIZATION, "1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(header().string(HttpHeaders.LOCATION, "/v1/studies/1"));
+                       .header(HttpHeaders.AUTHORIZATION, "1")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(request)))
+               .andDo(print())
+               .andExpect(status().isCreated())
+               .andExpect(header().string(HttpHeaders.LOCATION, "/v1/studies/1"));
     }
 
     @Test
@@ -82,12 +82,12 @@ class StudyControllerTest {
         willReturn(1L).given(todoService).create(MemberFixture.김진우.toMember(), 1L, request);
 
         mockMvc.perform(post("/v1/studies/1/todos")
-                        .header(HttpHeaders.AUTHORIZATION, "1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(header().string(HttpHeaders.LOCATION, "/v1/studies/1/todos/1"));
+                       .header(HttpHeaders.AUTHORIZATION, "1")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(request)))
+               .andDo(print())
+               .andExpect(status().isCreated())
+               .andExpect(header().string(HttpHeaders.LOCATION, "/v1/studies/1/todos/1"));
     }
 
     @Test
@@ -97,11 +97,11 @@ class StudyControllerTest {
         willDoNothing().given(todoService).update(MemberFixture.김진우.toMember(), 1L, 1L, request);
 
         mockMvc.perform(patch("/v1/studies/1/todos/1")
-                        .header(HttpHeaders.AUTHORIZATION, "1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andDo(print())
-                .andExpect(status().isNoContent());
+                       .header(HttpHeaders.AUTHORIZATION, "1")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(request)))
+               .andDo(print())
+               .andExpect(status().isNoContent());
 
         verify(todoService, only()).update(MemberFixture.김진우.toMember(), 1L, 1L, request);
     }

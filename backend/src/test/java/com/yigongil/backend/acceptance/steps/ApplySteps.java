@@ -1,5 +1,8 @@
 package com.yigongil.backend.acceptance.steps;
 
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import io.cucumber.java.en.Given;
@@ -7,12 +10,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import org.springframework.http.HttpHeaders;
-
 import java.util.List;
-
-import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
+import org.springframework.http.HttpHeaders;
 
 public class ApplySteps {
 
@@ -26,26 +25,27 @@ public class ApplySteps {
     public void 스터디_신청(String githubId, String studyName) {
         String memberId = (String) sharedContext.getParameter(githubId);
         given().log()
-                .all()
-                .header(HttpHeaders.AUTHORIZATION, memberId)
-                .when()
-                .post("/v1/studies/" + sharedContext.getParameter(studyName) + "/applicants")
-                .then()
-                .log()
-                .all();
+               .all()
+               .header(HttpHeaders.AUTHORIZATION, memberId)
+               .when()
+               .post("/v1/studies/" + sharedContext.getParameter(studyName) + "/applicants")
+               .then()
+               .log()
+               .all();
     }
 
     @When("{string}가 이름이 {string}인 스터디의 신청자를 조회한다.")
     public void 스터디_신청자_조회(String masterGithubId, String studyName) {
-        ExtractableResponse<Response> response = given().log()
-                .all()
-                .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(masterGithubId))
-                .when()
-                .get("/v1/studies/" + sharedContext.getParameter(studyName) + "/applicants")
-                .then()
-                .log()
-                .all()
-                .extract();
+        ExtractableResponse<Response> response =
+                given().log()
+                       .all()
+                       .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(masterGithubId))
+                       .when()
+                       .get("/v1/studies/" + sharedContext.getParameter(studyName) + "/applicants")
+                       .then()
+                       .log()
+                       .all()
+                       .extract();
 
         sharedContext.setResponse(response);
     }
@@ -55,7 +55,7 @@ public class ApplySteps {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
         List<StudyMemberResponse> studyMemberResponses = response.jsonPath()
-                .getList(".", StudyMemberResponse.class);
+                                                                 .getList(".", StudyMemberResponse.class);
 
         assertThat(studyMemberResponses).hasSize(applicantsCount);
     }
@@ -65,13 +65,14 @@ public class ApplySteps {
         Object studyId = sharedContext.getParameter(studyName);
         Object memberId = sharedContext.getParameter(memberName);
 
-        ExtractableResponse<Response> response = given().log().all()
-                .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(masterName))
-                .when()
-                .patch("/v1/studies/{studyId}/applicants/{memberId}", studyId, memberId)
-                .then()
-                .log().all()
-                .extract();
+        ExtractableResponse<Response> response =
+                given().log().all()
+                       .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(masterName))
+                       .when()
+                       .patch("/v1/studies/{studyId}/applicants/{memberId}", studyId, memberId)
+                       .then()
+                       .log().all()
+                       .extract();
 
         sharedContext.setResponse(response);
     }
@@ -81,7 +82,7 @@ public class ApplySteps {
         String memberId = String.valueOf(sharedContext.getParameter(memberName));
 
         StudyDetailResponse response = sharedContext.getResponse()
-                .as(StudyDetailResponse.class);
+                                                    .as(StudyDetailResponse.class);
         List<StudyMemberResponse> studyMembers = response.members();
 
         assertThat(studyMembers).anyMatch(member -> member.id().equals(Long.valueOf(memberId)));
@@ -90,12 +91,13 @@ public class ApplySteps {
 
     @When("{string}이 {string} 스터디 신청을 취소한다.")
     public void 스터디_신청_취소(String applicantName, String studyName) {
-        ExtractableResponse<Response> response = given().log().all()
-                .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(applicantName))
-                .when()
-                .delete("/v1/studies/{studyId}/applicants", sharedContext.getParameter(studyName))
-                .then().log().all()
-                .extract();
+        ExtractableResponse<Response> response =
+                given().log().all()
+                       .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(applicantName))
+                       .when()
+                       .delete("/v1/studies/{studyId}/applicants", sharedContext.getParameter(studyName))
+                       .then().log().all()
+                       .extract();
 
         sharedContext.setResponse(response);
     }

@@ -1,7 +1,6 @@
 package com.yigongil.backend.response;
 
 import com.yigongil.backend.domain.round.Round;
-
 import java.util.List;
 
 public record RoundNumberResponse(
@@ -15,7 +14,7 @@ public record RoundNumberResponse(
 
     public static List<RoundNumberResponse> from(List<Round> rounds) {
         return rounds.stream()
-                .map(RoundNumberResponse::from)
-                .toList();
+                     .map(RoundNumberResponse::from)
+                     .toList();
     }
 }

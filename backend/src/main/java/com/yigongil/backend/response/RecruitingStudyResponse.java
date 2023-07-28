@@ -14,6 +14,7 @@ public record RecruitingStudyResponse(
         Integer numberOfCurrentMembers,
         Integer numberOfMaximumMembers
 ) {
+
     public static RecruitingStudyResponse from(Study study) {
         return new RecruitingStudyResponse(
                 study.getId(),

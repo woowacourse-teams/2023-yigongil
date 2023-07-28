@@ -4,4 +4,5 @@ public record ProfileUpdateRequest(
         String nickname,
         String introduction
 ) {
+
 }

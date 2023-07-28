@@ -1,12 +1,13 @@
 package com.yigongil.backend.acceptance.steps;
 
+import static io.restassured.RestAssured.given;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.springframework.http.HttpHeaders;
@@ -30,19 +31,15 @@ public class TodoSteps {
                 content
         );
 
-        String locationHeader = RestAssured.given()
-                                           .log()
-                                           .all()
-                                           .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                           .body(objectMapper.writeValueAsString(request))
-                                           .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(studyMemberGithubId))
-                                           .when()
-                                           .post("/v1/studies/" + sharedContext.getParameter(studyName) + "/todos")
-                                           .then()
-                                           .log()
-                                           .all()
-                                           .extract()
-                                           .header(HttpHeaders.LOCATION);
+        String locationHeader = given().log().all()
+                                       .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                       .body(objectMapper.writeValueAsString(request))
+                                       .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(studyMemberGithubId))
+                                       .when()
+                                       .post("/v1/studies/" + sharedContext.getParameter(studyName) + "/todos")
+                                       .then().log().all()
+                                       .extract()
+                                       .header(HttpHeaders.LOCATION);
 
         sharedContext.setParameter("todoId", locationHeader.substring(locationHeader.lastIndexOf("/") + 1));
     }
@@ -55,29 +52,27 @@ public class TodoSteps {
                 content
         );
 
-        ExtractableResponse<Response> response = RestAssured.given()
-                                                            .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                                            .body(objectMapper.writeValueAsString(request))
-                                                            .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(githubId))
-                                                            .when()
-                                                            .patch("/v1/studies/" + sharedContext.getParameter(studyName) + "/todos/" + sharedContext.getParameter("todoId"))
-                                                            .then()
-                                                            .log()
-                                                            .all()
-                                                            .extract();
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                                        .body(objectMapper.writeValueAsString(request))
+                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(githubId))
+                                                        .when()
+                                                        .patch("/v1/studies/" + sharedContext.getParameter(studyName) + "/todos/" + sharedContext.getParameter("todoId"))
+                                                        .then().log().all()
+                                                        .extract();
 
         sharedContext.setResponse(response);
     }
 
     @When("{string}가 {string} 이름의 스터디에서 등록한 투두를 삭제한다.")
     public void 투두를_삭제한다(String githubId, String studyName) throws JsonProcessingException {
-        ExtractableResponse<Response> response = RestAssured.given()
-                .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(githubId))
-                .when()
-                .delete("/v1/studies/" + sharedContext.getParameter(studyName) + "/todos/" + sharedContext.getParameter(
-                        "todoId"))
-                .then()
-                .extract();
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(githubId))
+                                                        .when()
+                                                        .delete("/v1/studies/" + sharedContext.getParameter(studyName) + "/todos/" + sharedContext.getParameter(
+                                                                "todoId"))
+                                                        .then().log().all()
+                                                        .extract();
 
         sharedContext.setResponse(response);
     }

@@ -28,7 +28,8 @@ public class TodoService {
             EntityManager entityManager,
             StudyRepository studyRepository,
             OptionalTodoRepository optionalTodoRepository,
-            RoundOfMemberRepository roundOfMemberRepository) {
+            RoundOfMemberRepository roundOfMemberRepository
+    ) {
         this.entityManager = entityManager;
         this.studyRepository = studyRepository;
         this.optionalTodoRepository = optionalTodoRepository;
@@ -68,7 +69,7 @@ public class TodoService {
 
     private Study findStudyById(Long studyId) {
         return studyRepository.findById(studyId)
-                .orElseThrow(() -> new StudyNotFoundException("해당 스터디가 존재하지 않습니다.", studyId));
+                              .orElseThrow(() -> new StudyNotFoundException("해당 스터디가 존재하지 않습니다.", studyId));
     }
 
     private void updateOptionalTodo(Long todoId, TodoUpdateRequest request) {
@@ -93,6 +94,6 @@ public class TodoService {
 
     private OptionalTodo findOptionalTodoById(Long todoId) {
         return optionalTodoRepository.findById(todoId)
-                .orElseThrow(() -> new TodoNotFoundException("해당 투두가 존재하지 않습니다.", String.valueOf(todoId)));
+                                     .orElseThrow(() -> new TodoNotFoundException("해당 투두가 존재하지 않습니다.", String.valueOf(todoId)));
     }
 }

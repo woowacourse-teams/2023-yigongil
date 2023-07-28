@@ -67,10 +67,10 @@ class MemberControllerTest {
         );
 
         mockMvc.perform(get("/v1/members/1"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.nickname").value(member.getNickname()))
-                .andExpect(jsonPath("$.githubId").value(member.getGithubId()));
+               .andDo(print())
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.nickname").value(member.getNickname()))
+               .andExpect(jsonPath("$.githubId").value(member.getGithubId()));
     }
 
     @Test
@@ -82,11 +82,11 @@ class MemberControllerTest {
         given(memberRepository.findById(1L)).willReturn(Optional.of(MemberFixture.김진우.toMember()));
 
         mockMvc.perform(patch("/v1/members")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(HttpHeaders.AUTHORIZATION, "1")
-                        .content(objectMapper.writeValueAsString(request)))
-                .andDo(print())
-                .andExpect(status().isOk());
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .header(HttpHeaders.AUTHORIZATION, "1")
+                       .content(objectMapper.writeValueAsString(request)))
+               .andDo(print())
+               .andExpect(status().isOk());
 
         verify(memberService, only()).update(MemberFixture.김진우.toMember(), request);
     }
