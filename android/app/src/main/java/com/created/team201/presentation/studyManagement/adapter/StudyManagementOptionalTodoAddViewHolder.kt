@@ -11,7 +11,6 @@ class StudyManagementOptionalTodoAddViewHolder(
 ) : StudyOptionalTodoViewHolder(binding) {
 
     override fun bind(optionalTodoUiModel: OptionalTodoUiModel) {
-        TODO("Not yet implemented")
     }
 
     companion object {

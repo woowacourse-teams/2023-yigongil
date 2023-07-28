@@ -84,9 +84,11 @@ class StudyManagementViewModel : ViewModel() {
         }
     }
 
-    fun addOptionalTodo(todoContent: String) {
-        //  뷰모델 내부에서 optional to do 추가
+    fun addOptionalTodo(studyId: Long, currentPage: Int, todoContent: String) {
+        val currentStudy = studyRounds.value?.get(currentPage)
 
-        // 서버 통신
+        // 서버 통신 -> 투두 추가
+
+        // 서버 통신 -> 다시 받아서 갈아끼워줘야함
     }
 }

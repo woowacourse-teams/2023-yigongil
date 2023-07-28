@@ -43,7 +43,6 @@ class StudyManagementViewHolder(
 
         binding.rvItemStudyManagementOptionalTodos.apply {
             adapter = studyManagementOptionalTodoAdapter
-            setHasFixedSize(true)
         }
     }
 

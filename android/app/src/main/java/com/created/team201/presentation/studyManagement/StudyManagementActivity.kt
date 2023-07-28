@@ -56,7 +56,9 @@ class StudyManagementActivity :
         }
 
         override fun onClickAddTodo(todoContent: String) {
-            studyManagementViewModel.addOptionalTodo(todoContent)
+            val currentPage = binding.vpStudyManagement.currentItem
+            val studyId = intent.getLongExtra(KEY_STUDY_ID, KEY_ERROR)
+            studyManagementViewModel.addOptionalTodo(studyId, currentPage, todoContent)
         }
     }
 

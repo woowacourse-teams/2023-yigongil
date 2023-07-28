@@ -8,6 +8,7 @@
         <variable
             name="optionalTodo"
             type="com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
