@@ -24,7 +24,7 @@ class StudyManagementViewHolder(
     }
 
     init {
-        initStudyManagementStudyMember()
+        initStudyManagementAdapter()
         setClickAddTodo()
     }
 
@@ -34,16 +34,9 @@ class StudyManagementViewHolder(
         }
     }
 
-    private fun initStudyManagementStudyMember() {
-        binding.rvItemStudyManagementStudyMember.apply {
-            adapter = studyManagementMemberAdapter
-            itemAnimator = null
-            setHasFixedSize(true)
-        }
-
-        binding.rvItemStudyManagementOptionalTodos.apply {
-            adapter = studyManagementOptionalTodoAdapter
-        }
+    private fun initStudyManagementAdapter() {
+        binding.rvItemStudyManagementStudyMember.adapter = studyManagementMemberAdapter
+        binding.rvItemStudyManagementOptionalTodos.adapter = studyManagementOptionalTodoAdapter
     }
 
     // viewmodel에서 서버로부터 데이터를 가져오고 옵셔널 투두를 서브밋 리스트 해주는 과정
