@@ -17,7 +17,15 @@ class StudyManagementViewHolder(
     }
 
     init {
-        binding.rvItemStudyManagementStudyMember.adapter = studyManagementMemberAdapter
+        initStudyManagementStudyMember()
+    }
+
+    private fun initStudyManagementStudyMember() {
+        binding.rvItemStudyManagementStudyMember.apply {
+            adapter = studyManagementMemberAdapter
+            itemAnimator = null
+            setHasFixedSize(true)
+        }
     }
 
     fun bind(studyManagementUIModel: StudyRoundDetailUiModel) {

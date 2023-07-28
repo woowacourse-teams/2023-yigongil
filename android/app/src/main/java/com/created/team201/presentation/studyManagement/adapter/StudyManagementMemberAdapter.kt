@@ -11,6 +11,14 @@ class StudyManagementMemberAdapter(
 ) :
     ListAdapter<StudyMemberUiModel, StudyManagementMemberViewHolder>(diffCallback) {
 
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position).id
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
