@@ -11,9 +11,12 @@ import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.utils.DateConverter;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -200,6 +203,27 @@ public class Study extends BaseEntity {
 
     public RoundOfMembers findCurrentRoundOfMembers() {
         return new RoundOfMembers(currentRound.getRoundOfMembers());
+    }
+
+    public boolean isCurrentRoundEndAt(LocalDate today) {
+        return currentRound.isEndAt(today);
+    }
+
+    public void updateToNextRound() {
+        int nextRoundNumber = currentRound.getRoundNumber() + 1;
+        Optional<Round> nextRound = rounds.stream()
+                                                .filter(round -> round.getRoundNumber() == nextRoundNumber)
+                                                .findFirst();
+
+        nextRound.ifPresentOrElse(this::updateCurrentRound, this::finishStudy);
+    }
+
+    private void updateCurrentRound(Round upcomingRound) {
+        this.currentRound = upcomingRound;
+    }
+
+    private void finishStudy() {
+        this.processingStatus = ProcessingStatus.END;
     }
 
     public void startStudy() {

@@ -80,7 +80,7 @@ public class RoundService {
             RoundOfMembers currentRoundOfMembers = study.findCurrentRoundOfMembers();
 
             LocalDateTime endAt = currentRound.getEndAt();
-            int leftDays = (int) ChronoUnit.DAYS.between(endAt, LocalDateTime.now());
+            int leftDays = (int) ChronoUnit.DAYS.between(LocalDateTime.now(), endAt) + 1;
 
             upcomingStudyResponses.add(
                     new UpcomingStudyResponse(

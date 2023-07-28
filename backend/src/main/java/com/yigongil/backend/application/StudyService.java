@@ -21,8 +21,12 @@ import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.utils.DateConverter;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -214,6 +218,15 @@ public class StudyService {
             throw new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId);
         }
         return studyMember;
+    }
+
+    @Transactional
+    public void proceedRound(LocalDate today) {
+        List<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.PROCESSING);
+
+        studies.stream()
+               .filter(study -> study.isCurrentRoundEndAt(today))
+               .forEach(Study::updateToNextRound);
     }
 
     @Transactional

@@ -22,7 +22,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -163,6 +165,11 @@ public class Round extends BaseEntity {
         necessaryToDoContent = content;
     }
 
+    public boolean isEndAt(LocalDate today) {
+        LocalDate endAtDate = endAt.toLocalDate();
+        return endAtDate.equals(today);
+    }
+
     public Role calculateRole(Member member) {
         if (master.equals(member)) {
             return Role.MASTER;
@@ -176,7 +183,7 @@ public class Round extends BaseEntity {
     }
 
     public void updateEndAt(LocalDateTime endAt) {
-        this.endAt = endAt;
+        this.endAt = LocalDateTime.of(endAt.toLocalDate(), LocalTime.MIN);
     }
 
     public Long getId() {

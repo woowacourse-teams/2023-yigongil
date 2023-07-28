@@ -13,3 +13,7 @@ logging:
   level:
     org.hibernate.type: trace
     org.hibernate.sql: debug
+
+schedules:
+  round-update: 0 0 0 * * *
+
