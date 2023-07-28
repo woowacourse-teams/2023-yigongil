@@ -23,7 +23,7 @@ public record RecruitingStudyResponse(
                 DateConverter.toStringFormat(study.getStartAt()),
                 study.getTotalRoundCount(),
                 study.getPeriodUnit().toStringFormat(study.getPeriodOfRound()),
-                study.getCurrentRound().sizeOfCurrentMembers(),
+                study.sizeOfCurrentMembers(),
                 study.getNumberOfMaximumMembers()
         );
     }

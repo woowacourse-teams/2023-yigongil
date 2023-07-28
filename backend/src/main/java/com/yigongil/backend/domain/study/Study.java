@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -151,10 +152,9 @@ public class Study extends BaseEntity {
         round.updateNecessaryTodoContent(content);
     }
 
-    public void updateNecessaryTodoIsDone(Member author, Long todoId, Boolean isDone) {
+    public void updateNecessaryTodoIsDone(Member member, Long todoId, Boolean isDone) {
         Round round = findRoundById(todoId);
-        RoundOfMember roundOfMemberBy = round.findRoundOfMemberBy(author);
-        roundOfMemberBy.updateNecessaryTodoIsDone(isDone);
+        round.updateNecessaryTodoIsDone(member, isDone);
     }
 
     public Round findRoundById(Long roundId) {
@@ -189,7 +189,7 @@ public class Study extends BaseEntity {
         }
     }
 
-    private int sizeOfCurrentMembers() {
+    public int sizeOfCurrentMembers() {
         return currentRound.sizeOfCurrentMembers();
     }
 

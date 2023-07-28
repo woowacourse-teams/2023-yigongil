@@ -21,10 +21,12 @@ import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.utils.DateConverter;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -153,30 +155,29 @@ public class StudyService {
 
     private StudyMemberResponse createStudyMemberResponse(StudyMember studyMember) {
         Member member = studyMember.getMember();
-        int successRate = calculateSuccessRate(member);
 
         return new StudyMemberResponse(
                 member.getId(),
                 member.getTier(),
                 member.getNickname(),
-                successRate,
+                calculateSuccessRate(member),
                 member.getProfileImageUrl()
         );
     }
 
-    private int calculateSuccessRate(Member member) {
+    public double calculateSuccessRate(Member member) {
         Long success = studyMemberRepository.countByMemberIdAndStudyResult(member.getId(), StudyResult.SUCCESS);
         Long fail = studyMemberRepository.countByMemberIdAndStudyResult(member.getId(), StudyResult.FAIL);
-        int successRate = 0;
-        if (Objects.nonNull(success) && Objects.nonNull(fail) && success + fail != 0) {
-            successRate = (int) (success * 100 / success + fail);
+        if (success + fail == 0) {
+            return 0;
         }
-        return successRate;
+        return ((double) (success * 100) / success + fail);
     }
 
     @Transactional(readOnly = true)
     public List<MyStudyResponse> findMyStudies(Member member) {
-        List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndParticipatingAndNotEnd(member.getId());
+        List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndParticipatingAndNotEnd(
+                member.getId());
 
         List<MyStudyResponse> response = new ArrayList<>();
         for (StudyMember studyMember : studyMembers) {
