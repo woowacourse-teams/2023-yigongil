@@ -11,9 +11,11 @@ import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.utils.DateConverter;
-import lombok.Builder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -25,11 +27,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import lombok.Builder;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
 public class Study extends BaseEntity {
@@ -210,16 +210,19 @@ public class Study extends BaseEntity {
     }
 
     public void updateToNextRound() {
-        final int nextRoundNumber = currentRound.getRoundNumber() + 1;
-        final Optional<Round> nextRound = rounds.stream()
+        int nextRoundNumber = currentRound.getRoundNumber() + 1;
+        Optional<Round> nextRound = rounds.stream()
                                                 .filter(round -> round.getRoundNumber() == nextRoundNumber)
                                                 .findFirst();
 
-        if (nextRound.isPresent()) {
-            this.currentRound = nextRound.get();
-            return;
-        }
+        nextRound.ifPresentOrElse(this::updateCurrentRound, this::finishStudy);
+    }
 
+    private void updateCurrentRound(Round upcomingRound) {
+        this.currentRound = upcomingRound;
+    }
+
+    private void finishStudy() {
         this.processingStatus = ProcessingStatus.END;
     }
 

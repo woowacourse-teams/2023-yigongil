@@ -1,5 +1,10 @@
 package com.yigongil.backend.acceptance.steps;
 
+import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.domain.study.ProcessingStatus;
@@ -15,18 +20,12 @@ import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
-
-import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 public class StudySteps {
 
@@ -205,6 +204,8 @@ public class StudySteps {
                 .when()
                 .patch("/v1/studies/" + studyId + "/start")
                 .then().log().all();
+
+        sharedContext.setParameter("currentRoundNumber", 1);
     }
 
     @When("{string}가 홈화면을 조회한다.")

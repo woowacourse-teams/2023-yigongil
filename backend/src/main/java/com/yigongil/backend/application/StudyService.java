@@ -1,5 +1,7 @@
 package com.yigongil.backend.application;
 
+import static com.yigongil.backend.domain.study.PageStrategy.CREATED_AT_DESC;
+
 import com.yigongil.backend.application.studyevent.StudyStartedEvent;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
@@ -19,19 +21,16 @@ import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.utils.DateConverter;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import static com.yigongil.backend.domain.study.PageStrategy.CREATED_AT_DESC;
 
 @Transactional
 @Service
@@ -221,18 +220,16 @@ public class StudyService {
     }
 
     @Transactional
-    public void proceedRound(LocalDate now) {
-        System.out.println("StudyService.proceedRound");
-        List<Study> studies = studyRepository.findByProcessingStatus(ProcessingStatus.PROCESSING);
+    public void proceedRound(LocalDate today) {
+        List<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.PROCESSING);
 
         studies.stream()
-               .filter(study -> study.isCurrentRoundEndAt(now))
+               .filter(study -> study.isCurrentRoundEndAt(today))
                .forEach(Study::updateToNextRound);
     }
 
     @Transactional
     public void startStudy(Member member, Long studyId) {
-        System.out.println("StudyService.startStudy");
         Study study = findStudyById(studyId);
         study.validateMaster(member);
 
