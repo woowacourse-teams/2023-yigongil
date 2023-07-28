@@ -9,17 +9,23 @@ import com.created.team201.R
 import com.created.team201.databinding.ActivityStudyManagementBinding
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.common.TodoClickListener
+import com.created.team201.presentation.studyManagement.adapter.StudyManagementAdapter
 
 class StudyManagementActivity :
     BindingActivity<ActivityStudyManagementBinding>(R.layout.activity_study_management) {
 
     private val studyManagementViewModel by viewModels<StudyManagementViewModel>()
+    private val studyManagementAdapter: StudyManagementAdapter by lazy {
+        StudyManagementAdapter(todoClickListener)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initActionBar()
         initStudyRounds()
+        initAdapter()
+        observeStudyManagement()
     }
 
     private fun initActionBar() {
@@ -32,6 +38,16 @@ class StudyManagementActivity :
         val studyId = intent.getLongExtra(KEY_STUDY_ID, KEY_ERROR)
         val roundId = intent.getLongExtra(KEY_ROUND_ID, KEY_ERROR)
         studyManagementViewModel.getStudyRounds(studyId, roundId)
+    }
+
+    private fun initAdapter() {
+        binding.vpStudyManagement.adapter = studyManagementAdapter
+    }
+
+    private fun observeStudyManagement() {
+        studyManagementViewModel.studyRounds.observe(this) { studyRoundDetails ->
+            studyManagementAdapter.submitList(studyRoundDetails)
+        }
     }
 
     private val todoClickListener = object : TodoClickListener {
