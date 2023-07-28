@@ -4,7 +4,7 @@ public record StudyMemberResponse(
         Long id,
         Integer tier,
         String nickname,
-        Integer successRate,
+        Double successRate,
         String profileImage
 ) {
 }

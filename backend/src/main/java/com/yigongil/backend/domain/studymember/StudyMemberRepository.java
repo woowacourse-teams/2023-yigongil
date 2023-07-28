@@ -6,6 +6,7 @@ import org.springframework.data.repository.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.repository.query.Param;
 
 public interface StudyMemberRepository extends Repository<StudyMember, Long> {
 
@@ -17,6 +18,9 @@ public interface StudyMemberRepository extends Repository<StudyMember, Long> {
     @EntityGraph(attributePaths = "member")
     List<StudyMember> findAllByStudyIdAndRole(Long studyId, Role role);
 
+    @EntityGraph(attributePaths = "study")
+    List<StudyMember> findAllByMemberId(Long memberId);
+
     @Query("""
                 select sm from StudyMember sm
                 join fetch sm.member
@@ -25,7 +29,7 @@ public interface StudyMemberRepository extends Repository<StudyMember, Long> {
                 or sm.role = 'STUDY_MEMBER')
                 and sm.studyResult = 'NONE'
             """)
-    List<StudyMember> findAllByStudyIdAndParticipatingAndNotEnd(Long studyId);
+    List<StudyMember> findAllByStudyIdAndParticipatingAndNotEnd(@Param("studyId") Long studyId);
 
     boolean existsByStudyIdAndMemberId(Long studyId, Long memberId);
 
@@ -39,7 +43,7 @@ public interface StudyMemberRepository extends Repository<StudyMember, Long> {
             or sm.role = 'STUDY_MEMBER')
             and sm.studyResult = 'NONE'
             """)
-    List<StudyMember> findAllByMemberIdAndParticipatingAndNotEnd(Long memberId);
+    List<StudyMember> findAllByMemberIdAndParticipatingAndNotEnd(@Param("memberId") Long memberId);
 
     Long countByMemberIdAndStudyResult(Long memberId, StudyResult studyResult);
 }

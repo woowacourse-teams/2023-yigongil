@@ -1,8 +1,6 @@
 package com.yigongil.backend.response;
 
-import java.util.List;
-
-public record MemberResponse(
+public record MyProfileResponse(
         Long id,
         String nickname,
         String githubId,
@@ -11,7 +9,6 @@ public record MemberResponse(
         Integer successfulRoundCount,
         Integer tierProgress,
         Integer tier,
-        String introduction,
-        List<FinishedStudyResponse> finishedStudies
+        String introduction
 ) {
 }

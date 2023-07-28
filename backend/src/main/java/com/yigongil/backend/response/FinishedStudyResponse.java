@@ -5,7 +5,8 @@ public record FinishedStudyResponse(
         String name,
         Integer averageTier,
         String startAt,
-        String period,
+        Integer totalRoundCount,
+        String periodOfRound,
         Integer numberOfCurrentMembers,
         Integer numberOfMaximumMembers,
         Boolean isSucceed
