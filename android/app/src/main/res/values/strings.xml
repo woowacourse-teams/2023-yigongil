@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Team201</string>
 
+    <!--로그인 뷰-->
+    <string name="login_guide">로그인 후 이용이 가능합니다.</string>
+    <string name="github_guide">깃허브로 시작하기</string>
+
     <!--메인 뷰-->
     <string name="main_ic_home">홈</string>
     <string name="main_ic_study_list">스터디목록</string>
@@ -22,7 +26,7 @@
     <string name="study_list_create">스터디 만들기</string>
     <string name="study_list_search_button_menu">검색</string>
     <string name="study_list_title">스터디 목록</string>
-    <string name="study_list_information_format">%s · 총 %d회차 · %s(주기)</string>
+    <string name="study_list_information_format">%s %s · 총 %d회차 · %d %s(주기)</string>
     <string name="study_list_member_format">%d/%d</string>
     <string name="study_list_previous_date">예상시작일</string>
     <string name="study_list_processing_date">시작일</string>
@@ -51,6 +55,25 @@
     <string name="study_detail_dm_button_content_description">스터디장에게 문의하기</string>
     <string name="study_detail_study_waiting">스터디장의 수락을 기다리고있어요.</string>
     <string name="item_study_detail_study_success_rate">스터디 성공률 %d%%</string>
+
+    <!--스터디 관리하기 뷰-->
+    <string name="study_management_app_bar_title_is_study_participant">참여한 스터디 관리하기</string>
+    <string name="study_management_app_bar_title_is_study_master">개설한 스터디 관리하기</string>
+    <string name="study_management_essential_todo">필수투두</string>
+    <string name="study_management_optional_todo">선택투두</string>
+    <string name="study_management_study_member">스터디원</string>
+    <string name="study_management_edit_todo"> 수정하기</string>
+    <string name="study_management_add_todo"> 추가하기</string>
+    <string name="study_management_round">%d회차</string>
+    <string name="study_management_end_button_is_study_participant">그만두기</string>
+    <string name="study_management_end_button_is_study_master">종료하기</string>
+    <string name="study_management_previous_button_description">이전 스터디 회차</string>
+    <string name="study_management_next_button_description">다음 스터디 회차</string>
+    <string name="item_study_management_todo_description">투두 체크박스</string>
+    <string name="item_study_management_todo_done">필수투두를 완료했어요!</string>
+    <string name="item_study_management_todo_undone">필수투두를 하고있어요!</string>
+    <string name="item_study_management_study_master_image_description">스터디장</string>
+    <string name="item_study_management_optional_todo_button">투두 체크박스</string>
 
     <!--커스텀 프로필 이미지 뷰-->
     <string name="custom_profile_image_content_description">프로필 이미지</string>
@@ -86,5 +109,19 @@
     <string name="multiPicker_formatter_information">%d %s</string>
     <string name="item_study_detail_accept_await">승낙을 기다리고 있어요.</string>
     <string name="item_study_button_accept">수락</string>
+
+    <!-- 마이페이지 뷰 -->
+    <string name="myPage_menu_title_setting">설정</string>
+    <string name="myPage_toolbar_title">마이페이지</string>
+    <string name="myPage_button_modify_profile">프로필 수정</string>
+    <string name="myPage_study_success_rate_title">스터디 성공률</string>
+    <string name="myPage_todo_success_rate_title">필수투두 완료횟수</string>
+
+    <!-- 프로필 뷰 -->
+    <string name="profile_report_button_menu">신고</string>
+    <string name="profile_title">프로필</string>
+    <string name="profile_study_success_rate">스터디 성공률</string>
+    <string name="profile_todo_success_rate">필수투두 완료횟수</string>
+
 
 </resources>

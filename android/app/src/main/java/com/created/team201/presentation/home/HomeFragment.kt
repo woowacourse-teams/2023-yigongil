@@ -10,7 +10,7 @@ import com.created.team201.presentation.home.adapter.DashboardAdapter
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
-    private val homeViewModel: HomeViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels { HomeViewModel.Factory }
     private val dashboardAdapter: DashboardAdapter by lazy {
         DashboardAdapter(implementClickListener())
     }
@@ -20,16 +20,16 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
     private fun implementClickListener() = object : HomeClickListener {
         override fun clickOnTodo(id: Int, isDone: Boolean) {
-            homeViewModel.patchTodo(id, !isDone)
+            homeViewModel.updateTodo(id, !isDone)
         }
 
-        override fun clickOnStudyCard() {
-            navigateToStartDetail()
+        override fun clickOnStudyCard(studyId: Long) {
+            navigateToStudyDetailActivity(studyId)
         }
     }
 
-    private fun navigateToStartDetail() {
-        startActivity(StudyDetailActivity.getIntent(requireContext(), 0))
+    private fun navigateToStudyDetailActivity(studyId: Long) {
+        startActivity(StudyDetailActivity.getIntent(requireContext(), studyId))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,9 +39,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         initAdapter()
         observeUserStudies()
 
-        // 뷰모델 팩토리 어떻게 할 것 인지
-
-        homeViewModel.getUserStudyInfo()
+        homeViewModel.updateUserStudies()
     }
 
     private fun bindViewModel() {

@@ -6,7 +6,8 @@ data class StudySummary(
     val tier: Int,
     val title: String,
     val date: String,
+    val totalRound: Int,
     val period: Period,
     val currentMember: Int,
-    val maximumMember: Int
+    val maximumMember: Int,
 )

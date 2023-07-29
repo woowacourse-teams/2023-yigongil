@@ -4,5 +4,5 @@ interface HomeClickListener {
 
     fun clickOnTodo(id: Int, isDone: Boolean)
 
-    fun clickOnStudyCard()
+    fun clickOnStudyCard(studyId: Long)
 }

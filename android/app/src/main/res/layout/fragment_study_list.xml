@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="studyListViewModel"
+            type="com.created.team201.presentation.studyList.StudyListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -72,7 +75,7 @@
             android:layout_height="wrap_content"
             android:indeterminateTint="@color/white"
             android:paddingVertical="10dp"
-            android:visibility="gone"
+            app:isLoading="@{studyListViewModel.loadingState}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -90,6 +93,7 @@
             android:textColor="@color/white"
             app:icon="@drawable/ic_open_study"
             app:iconTint="@color/white"
+            app:isVisible="@{studyListViewModel.scrollState}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

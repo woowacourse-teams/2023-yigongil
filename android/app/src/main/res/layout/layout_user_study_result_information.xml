@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="icon"
+            type="android.graphics.drawable.Drawable" />
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="result"
+            type="String" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_user_study_result_information"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:importantForAccessibility="no"
+            android:src="@{icon}"
+            tools:src="@drawable/ic_success_rate" />
+
+        <TextView
+            android:id="@+id/tv_user_study_result_information_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{title}"
+            android:textAlignment="center"
+            android:textAppearance="@style/text_m16"
+            android:textColor="@color/white"
+            tools:text="스터디 성공률" />
+
+        <TextView
+            android:id="@+id/tv_user_study_result_information_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@{result}"
+            android:textAlignment="center"
+            android:textAppearance="@style/title_b20"
+            android:textColor="@color/green08_A2FF86"
+            tools:text="70.2%" />
+
+    </LinearLayout>
+
+</layout>

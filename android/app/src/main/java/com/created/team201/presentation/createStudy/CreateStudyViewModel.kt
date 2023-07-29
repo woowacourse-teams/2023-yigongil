@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.model.CreateStudy
 import com.created.domain.model.Period
 import com.created.domain.repository.CreateStudyRepository
@@ -14,28 +16,36 @@ import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.CreateStudyRepositoryImpl
 import com.created.team201.presentation.createStudy.model.CreateStudyUiModel
 import com.created.team201.presentation.createStudy.model.PeriodUiModel
+import com.created.team201.util.NonNullLiveData
+import com.created.team201.util.NonNullMutableLiveData
 import kotlinx.coroutines.launch
 
 class CreateStudyViewModel(
     private val createStudyRepository: CreateStudyRepository,
 ) : ViewModel() {
-    private val name: MutableLiveData<String> = MutableLiveData<String>()
-    private val introduction: MutableLiveData<String> = MutableLiveData<String>()
+    private val _name: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
+    val name: NonNullLiveData<String>
+        get() = _name
 
-    private val _peopleCount: MutableLiveData<Int> = MutableLiveData<Int>()
-    val peopleCount: LiveData<Int>
+    private val _introduction: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
+    val introduction: NonNullLiveData<String>
+        get() = _introduction
+
+    private val _peopleCount: NonNullMutableLiveData<Int> = NonNullMutableLiveData(0)
+    val peopleCount: NonNullLiveData<Int>
         get() = _peopleCount
 
-    private val _startDate: MutableLiveData<String> = MutableLiveData<String>()
-    val startDate: LiveData<String>
+    private val _startDate: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
+    val startDate: NonNullLiveData<String>
         get() = _startDate
 
-    private val _period: MutableLiveData<Int> = MutableLiveData<Int>()
-    val period: LiveData<Int>
+    private val _period: NonNullMutableLiveData<Int> = NonNullMutableLiveData(0)
+    val period: NonNullLiveData<Int>
         get() = _period
 
-    private val _cycle: MutableLiveData<PeriodUiModel> = MutableLiveData<PeriodUiModel>()
-    val cycle: LiveData<PeriodUiModel>
+    private val _cycle: NonNullMutableLiveData<PeriodUiModel> =
+        NonNullMutableLiveData(PeriodUiModel(0, 0))
+    val cycle: NonNullLiveData<PeriodUiModel>
         get() = _cycle
 
     private val _isEnableCreateStudy: MediatorLiveData<Boolean> =
@@ -44,7 +54,6 @@ class CreateStudyViewModel(
                 isInitializeCreateStudyInformation()
             }
         }
-
     val isEnableCreateStudy: LiveData<Boolean>
         get() = _isEnableCreateStudy
 
@@ -53,11 +62,11 @@ class CreateStudyViewModel(
         get() = _isSuccessCreateStudy
 
     fun setName(name: String) {
-        this.name.value = name
+        _name.value = name.replace("\n", "")
     }
 
     fun setIntroduction(introduction: String) {
-        this.introduction.value = introduction
+        _introduction.value = introduction
     }
 
     fun setPeopleCount(peopleCount: Int) {
@@ -78,12 +87,12 @@ class CreateStudyViewModel(
     }
 
     private fun getCreateStudy(): CreateStudyUiModel = CreateStudyUiModel(
-        name.value!!,
-        peopleCount.value!!,
-        startDate.value!!,
-        period.value!!,
-        cycle.value!!,
-        introduction.value!!,
+        name.value,
+        peopleCount.value,
+        startDate.value,
+        period.value,
+        cycle.value,
+        introduction.value,
     )
 
     fun createStudy() {
@@ -98,13 +107,17 @@ class CreateStudyViewModel(
         }
     }
 
+    private fun isInitializeCreateStudyInformation(): Boolean =
+        name.value.isNotEmpty() && peopleCount.value.isNotZero() && startDate.value.isNotEmpty() && period.value.isNotZero() && cycle.value.date.isNotZero() && introduction.value.isNotEmpty()
+
     private fun CreateStudyUiModel.toDomain(): CreateStudy =
         CreateStudy(name, peopleCount, startDate, period, cycle.toDomain(), introduction)
 
     private fun PeriodUiModel.toDomain(): Period = Period(date, type)
 
-    private fun isInitializeCreateStudyInformation(): Boolean =
-        name.isInitialized && peopleCount.isInitialized && startDate.isInitialized && period.isInitialized && cycle.isInitialized && introduction.isInitialized
+    private fun String.isNotEmpty(): Boolean = isEmpty().not()
+
+    private fun Int.isNotZero(): Boolean = this != 0
 
     private fun <T> MediatorLiveData<T>.addSourceList(
         vararg liveDataArgument: LiveData<*>,
@@ -118,15 +131,14 @@ class CreateStudyViewModel(
     }
 
     companion object {
-        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
                 val repository = CreateStudyRepositoryImpl(
                     CreateStudyRemoteDataSourceImpl(
                         NetworkServiceModule.createStudyService,
                     ),
                 )
-                return CreateStudyViewModel(repository) as T
+                CreateStudyViewModel(repository)
             }
         }
     }
