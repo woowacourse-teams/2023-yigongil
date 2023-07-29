@@ -17,13 +17,31 @@
         tools:targetApi="31">
         <activity
             android:name=".util.CustomTabLauncherActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="http://13.209.2.215:8080/callback"
+                    android:scheme="http" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".presentation.studyManagement.StudyManagementActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.splash.SplashActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".presentation.login.LoginActivity"
             android:exported="false" />
@@ -32,13 +50,8 @@
             android:exported="false" />
         <activity
             android:name=".presentation.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="true" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".presentation.createStudy.CreateStudyActivity"
             android:exported="false" />

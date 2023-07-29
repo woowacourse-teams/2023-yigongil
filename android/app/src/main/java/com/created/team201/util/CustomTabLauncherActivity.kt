@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.os.ResultReceiver
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
 class CustomTabLauncherActivity : AppCompatActivity() {
@@ -42,6 +43,8 @@ class CustomTabLauncherActivity : AppCompatActivity() {
                     .appendPath("authorize")
                     .appendQueryParameter("client_id", intent.data.toString())
                     .build()
+
+            Log.d("123123", fullUri.toString())
         }
     }
 
@@ -52,6 +55,7 @@ class CustomTabLauncherActivity : AppCompatActivity() {
             customTabsOpened = true
 
             if (this::fullUri.isInitialized) {
+                Log.d("1231234", this::fullUri.isInitialized.toString())
                 GitHubCustomTabsClient.open(this, fullUri)
                 return
             }
@@ -85,8 +89,8 @@ class CustomTabLauncherActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val GIT_CLIENT_KEY = "GIT_CLIENT_KEY"
-        private const val GIT_CODE_KEY = "GIT_CODE_KEY"
-        private const val CUSTOM_TABS_OPENED = "CUSTOM_TABS_OPENED"
+        const val GIT_CLIENT_KEY = "GIT_CLIENT_KEY"
+        const val GIT_CODE_KEY = "GIT_CODE_KEY"
+        const val CUSTOM_TABS_OPENED = "CUSTOM_TABS_OPENED"
     }
 }
