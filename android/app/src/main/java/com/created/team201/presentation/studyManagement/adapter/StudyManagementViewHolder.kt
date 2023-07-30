@@ -18,7 +18,6 @@ class StudyManagementViewHolder(
     private val studyManagementMemberAdapter: StudyManagementMemberAdapter by lazy {
         StudyManagementMemberAdapter(studyMemberClickListener)
     }
-
     private val studyManagementOptionalTodoAdapter: StudyManagementOptionalTodoAdapter by lazy {
         StudyManagementOptionalTodoAdapter(studyManagementClickListener)
     }
@@ -35,12 +34,11 @@ class StudyManagementViewHolder(
     }
 
     private fun initStudyManagementAdapter() {
+        binding.onClick = studyManagementClickListener
         binding.rvItemStudyManagementStudyMember.adapter = studyManagementMemberAdapter
         binding.rvItemStudyManagementOptionalTodos.adapter = studyManagementOptionalTodoAdapter
     }
 
-    // viewmodel에서 서버로부터 데이터를 가져오고 옵셔널 투두를 서브밋 리스트 해주는 과정
-    // 에딧 텍스트 클릭리스너를 연결 해줘야함
     fun bind(studyManagementUIModel: StudyRoundDetailUiModel) {
         binding.studyManagement = studyManagementUIModel
         studyManagementMemberAdapter.submitList(studyManagementUIModel.studyMembers)

@@ -7,11 +7,15 @@
 
         <variable
             name="role"
-            type="com.created.domain.model.Role"/>
+            type="com.created.domain.model.Role" />
 
         <variable
             name="studyManagement"
             type="com.created.team201.presentation.studyManagement.model.StudyRoundDetailUiModel" />
+
+        <variable
+            name="onClick"
+            type="com.created.team201.presentation.studyManagement.StudyManagementClickListener" />
 
     </data>
 
@@ -75,8 +79,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/item_study_management_todo_description"
+                android:onClick="@{()->onClick.clickOnTodo(studyManagement.necessaryTodo.todoId,studyManagement.necessaryTodo.done)}"
                 android:padding="12dp"
                 android:src="@drawable/ic_selector_home_check_btn"
+                app:isSelected="@{studyManagement.necessaryTodo.done}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

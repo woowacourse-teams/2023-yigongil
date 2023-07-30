@@ -14,7 +14,7 @@ class StudyManagementOptionalTodoAdapter(private val studyManagementClickListene
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StudyOptionalTodoViewHolder {
         return when (viewType) {
             1 -> StudyManagementOptionalTodoAddViewHolder.from(parent, studyManagementClickListener)
-            else -> StudyManagementOptionalTodoViewHolder.from(parent)
+            else -> StudyManagementOptionalTodoViewHolder.from(parent, studyManagementClickListener)
         }
     }
 
