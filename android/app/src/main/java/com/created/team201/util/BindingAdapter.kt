@@ -29,4 +29,10 @@ object BindingAdapter {
             .load(image)
             .into(imageview)
     }
+
+    @JvmStatic
+    @BindingAdapter("isEnabled")
+    fun isEnabled(view: View, isEnabled: Boolean) {
+        view.isEnabled = isEnabled
+    }
 }

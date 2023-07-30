@@ -1,6 +1,7 @@
 package com.created.team201.presentation.studyManagement
 
 import com.created.domain.model.Role
+import com.created.domain.model.Round
 import com.created.team201.presentation.home.model.TodoUiModel
 import com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel
 import com.created.team201.presentation.studyManagement.model.StudyMemberUiModel
@@ -55,4 +56,10 @@ val dummy: List<StudyRoundDetailUiModel> = listOf(
             StudyMemberUiModel(4L, false, "링링", "", true),
         ),
     ),
+)
+
+val roundDummy = listOf(
+    Round(1L, 1),
+    Round(2L, 2),
+    Round(3L, 3),
 )

@@ -44,7 +44,7 @@
             android:layout_height="20dp"
             android:layout_marginEnd="26dp"
             android:contentDescription="@string/study_management_previous_button_description"
-            android:src="@drawable/ic_arrow_prev_active"
+            android:src="@drawable/ic_selector_previous_button"
             app:layout_constraintBottom_toBottomOf="@+id/tv_study_management_round"
             app:layout_constraintEnd_toStartOf="@+id/tv_study_management_round"
             app:layout_constraintTop_toTopOf="@+id/tv_study_management_round" />
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
-            android:text="@string/study_management_round"
+            android:text="@{@string/study_management_round(viewModel.currentRound)}"
             android:textAppearance="@style/subtitle_r15"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +69,7 @@
             android:layout_height="20dp"
             android:layout_marginStart="26dp"
             android:contentDescription="@string/study_management_next_button_description"
-            android:src="@drawable/ic_arrow_next_active"
+            android:src="@drawable/ic_selector_next_button"
             app:layout_constraintBottom_toBottomOf="@+id/tv_study_management_round"
             app:layout_constraintStart_toEndOf="@+id/tv_study_management_round"
             app:layout_constraintTop_toTopOf="@+id/tv_study_management_round" />

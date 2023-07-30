@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.viewpager2.widget.ViewPager2
 import com.created.team201.R
 import com.created.team201.databinding.ActivityStudyManagementBinding
 import com.created.team201.presentation.common.BindingActivity
@@ -23,8 +24,10 @@ class StudyManagementActivity :
 
         initViewModel()
         initActionBar()
+        initStudyInformation()
         initStudyRounds()
         initAdapter()
+        initPageButtonClickListener()
         observeStudyManagement()
     }
 
@@ -38,6 +41,10 @@ class StudyManagementActivity :
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
+    }
+
+    private fun initStudyInformation() {
+        studyManagementViewModel.fetchStudyInformation()
     }
 
     private fun initStudyRounds() {
@@ -54,6 +61,23 @@ class StudyManagementActivity :
         studyManagementViewModel.studyRounds.observe(this) { studyRoundDetails ->
             studyManagementAdapter.submitList(studyRoundDetails)
         }
+        binding.vpStudyManagement.registerOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+
+                    studyManagementViewModel.updateCurrentPage(position)
+                    setPageChangeButtonEnabled()
+                }
+            },
+        )
+    }
+
+    private fun setPageChangeButtonEnabled() {
+        binding.ivStudyManagementPreviousButton.isEnabled =
+            studyManagementViewModel.currentRound.value != 1
+        binding.ivStudyManagementNextButton.isEnabled =
+            studyManagementViewModel.currentRound.value != studyManagementViewModel.studyInformation.totalRoundCount
     }
 
     private val studyManagementClickListener = object : StudyManagementClickListener {
@@ -72,6 +96,20 @@ class StudyManagementActivity :
     private val memberClickListener = object : StudyMemberClickListener {
         override fun onClickMember(id: Long) {
             // 프로필 페이지로 이동
+        }
+    }
+
+    private fun initPageButtonClickListener() {
+        binding.ivStudyManagementPreviousButton.setOnClickListener {
+            val page = (binding.vpStudyManagement.currentItem - 1).coerceAtLeast(0)
+            binding.vpStudyManagement.setCurrentItem(page, true)
+            studyManagementViewModel.fetchRoundDetail(page)
+        }
+        binding.ivStudyManagementNextButton.setOnClickListener {
+            val page =
+                (binding.vpStudyManagement.currentItem + 1).coerceAtMost(studyManagementAdapter.itemCount - 1)
+            binding.vpStudyManagement.setCurrentItem(page, true)
+            studyManagementViewModel.fetchRoundDetail(page)
         }
     }
 

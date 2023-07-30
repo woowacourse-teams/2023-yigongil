@@ -3,8 +3,10 @@ package com.created.team201.presentation.studyManagement
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.created.domain.model.Role
 import com.created.domain.model.Round
 import com.created.team201.presentation.home.model.TodoUiModel
+import com.created.team201.presentation.studyManagement.model.StudyManagementInformationUiModel
 import com.created.team201.presentation.studyManagement.model.StudyRoundDetailUiModel
 
 class StudyManagementViewModel : ViewModel() {
@@ -15,8 +17,21 @@ class StudyManagementViewModel : ViewModel() {
     private val _state: MutableLiveData<StudyManagementState> =
         MutableLiveData(StudyManagementState.Member)
     val state: LiveData<StudyManagementState> get() = _state
+    private val _currentRound: MutableLiveData<Int> = MutableLiveData(0)
+    val currentRound: LiveData<Int> get() = _currentRound
+    lateinit var studyInformation: StudyManagementInformationUiModel
+
+    fun fetchStudyInformation() {
+        // dummy
+        studyInformation = StudyManagementInformationUiModel(
+            "자바 스터디", 1, 3, Role.MASTER, "2022.03.04", 3, "3d", 2, "설명입니다.",
+        )
+        // 여기서 서버 호출해서 다 가지고 있게 하자 ~
+    }
 
     fun getStudyRounds(studyId: Long, currentRoundId: Long) {
+        // current Round 초기화
+        _currentRound.value = studyInformation.currentRound
         // to do : studyMaster id,와 비교해서 member에 isMaster 넣어줘야함
         _studyRounds.value = dummy
         _state.value = StudyManagementState.Member // Role을 통해 현재 무슨 역할인지 분기처리
@@ -26,11 +41,31 @@ class StudyManagementViewModel : ViewModel() {
     }
 
     private fun getRounds(studyId: Long) {
-        rounds.value = listOf()
+        rounds.value = roundDummy
     }
 
     private fun getStudyRoundDetail(studyId: Long, roundId: Long) {
         // 서버 통신으로 round 정보 가져옴
+    }
+
+    fun updateCurrentPage(pageIndex: Int) {
+        val rounds = rounds.value ?: listOf()
+        val studyRounds = studyRounds.value ?: listOf()
+
+        val round = rounds.find {
+            it.id == studyRounds[pageIndex].id
+        } ?: throw IllegalStateException("해당 스터디 없음")
+
+        _currentRound.value = round.number
+    }
+
+    fun fetchRoundDetail(pageIndex: Int) {
+        // currentRoundId 갱신
+        updateCurrentPage(pageIndex)
+        // getStudyRoundDetail
+        // 서버 통신
+        // 인덱스 0일때는 앞에거...
+        // 인덱스 마지막일때는.. 뒤에거..
     }
 
     fun updateTodo(currentItemId: Int, todoId: Long, isDone: Boolean) {
