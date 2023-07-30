@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="isParticipant"
-            type="java.lang.Boolean" />
+            name="viewModel"
+            type="com.created.team201.presentation.studyManagement.StudyManagementViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +23,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:menu="@menu/menu_study_management"
-            app:title="@{isParticipant? @string/study_management_app_bar_title_is_study_participant : @string/study_management_app_bar_title_is_study_master}"
+            app:title="@{viewModel.state.title}"
             app:titleCentered="true"
             app:titleTextAppearance="@style/header_sb15"
             app:titleTextColor="@color/white"
@@ -92,7 +92,7 @@
             android:layout_marginBottom="32dp"
             android:background="@drawable/bg_rectangle_radius_10dp_green01"
             android:gravity="center"
-            android:text="@{isParticipant? @string/study_management_end_button_is_study_participant : @string/study_management_end_button_is_study_master}"
+            android:text="@{viewModel.state.buttonText}"
             android:textAppearance="@style/button_sb18"
             android:textColor="@color/green09_799E82"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -12,10 +12,14 @@ class StudyManagementViewModel : ViewModel() {
     private val _studyRounds: MutableLiveData<List<StudyRoundDetailUiModel>> = MutableLiveData()
     val studyRounds: LiveData<List<StudyRoundDetailUiModel>>
         get() = _studyRounds
+    private val _state: MutableLiveData<StudyManagementState> =
+        MutableLiveData(StudyManagementState.Member)
+    val state: LiveData<StudyManagementState> get() = _state
 
     fun getStudyRounds(studyId: Long, currentRoundId: Long) {
         // to do : studyMaster id,와 비교해서 member에 isMaster 넣어줘야함
         _studyRounds.value = dummy
+        _state.value = StudyManagementState.Member // Role을 통해 현재 무슨 역할인지 분기처리
         getRounds(studyId)
         // getStudyRoundDetail() 여러번
         // _studyRounds.value = listOf()

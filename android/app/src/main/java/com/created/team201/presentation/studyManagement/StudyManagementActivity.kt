@@ -21,14 +21,21 @@ class StudyManagementActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        initViewModel()
         initActionBar()
         initStudyRounds()
         initAdapter()
         observeStudyManagement()
     }
 
+    private fun initViewModel() {
+        binding.viewModel = studyManagementViewModel
+        binding.lifecycleOwner = this
+    }
+
     private fun initActionBar() {
         setSupportActionBar(binding.tbStudyManagement)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
     }
