@@ -7,7 +7,9 @@ import com.created.team201.data.datasource.remote.CreateStudyRemoteDataSource
 class CreateStudyRepositoryImpl(
     private val createStudyRemoteDataSource: CreateStudyRemoteDataSource,
 ) : CreateStudyRepository {
-    override suspend fun createStudy(createStudy: CreateStudy) {
-        createStudyRemoteDataSource.createStudy(createStudy)
+    override suspend fun createStudy(createStudy: CreateStudy): Result<Unit> {
+        return runCatching {
+            createStudyRemoteDataSource.createStudy(createStudy)
+        }
     }
 }

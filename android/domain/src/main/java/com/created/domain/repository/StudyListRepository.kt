@@ -1,6 +1,6 @@
 package com.created.domain.repository
 
-import com.created.domain.StudySummary
+import com.created.domain.model.StudySummary
 
 interface StudyListRepository {
 
