@@ -1,8 +1,8 @@
 package com.created.team201.data.mapper
 
-import com.created.domain.Period
-import com.created.domain.PeriodUnit
-import com.created.domain.StudySummary
+import com.created.domain.model.Period
+import com.created.domain.model.PeriodUnit
+import com.created.domain.model.StudySummary
 import com.created.team201.data.remote.response.StudySummaryResponseDto
 import java.lang.Character.getNumericValue
 

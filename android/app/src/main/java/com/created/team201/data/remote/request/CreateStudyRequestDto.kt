@@ -23,9 +23,9 @@ data class CreateStudyRequestDto(
         private const val TYPE_DAY = 0
         private const val TYPE_WEEK = 1
         fun getPeriodString(period: Period): String =
-            when (period.type) {
+            when (period.unit.type) {
                 TYPE_DAY -> "${period.date}d"
-                TYPE_WEEK -> "${period.type}w"
+                TYPE_WEEK -> "${period.date}w"
                 else -> throw IllegalArgumentException("존재하지 않는 형식의 타입입니다.")
             }
     }

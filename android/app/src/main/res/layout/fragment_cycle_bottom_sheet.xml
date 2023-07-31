@@ -57,7 +57,7 @@
             app:rightDisplayNames="@array/multiPickerDisplayNames"
             app:rightMaxValue="1"
             app:rightMinValue="0"
-            app:rightValue="@{viewModel.cycle.type}" />
+            app:rightValue="@{viewModel.cycle.unit.type}" />
 
         <TextView
             android:id="@+id/tv_cycle_bottom_sheet_btn_cancel"

@@ -21,23 +21,19 @@ class CreateStudyActivity :
 
     private val viewModel: CreateStudyViewModel by viewModels { CreateStudyViewModel.Factory }
 
-    private val dates: List<String> by lazy {
-        resources.getStringArray(R.array.multiPickerDisplayNames).toList()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initBinding()
         initActionBar()
+        setObserveCreateStudyResult()
     }
 
     private fun initBinding() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        binding.displayNames = dates
+        binding.displayNames = resources.getStringArray(R.array.multiPickerDisplayNames).toList()
         binding.onIconTextButtonClickListener = ::onIconTextButtonClick
-        binding.onCreateButtonClickListener = ::onCreateButtonClick
     }
 
     private fun initActionBar() {
@@ -46,12 +42,7 @@ class CreateStudyActivity :
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
     }
 
-    private fun onCreateButtonClick() {
-        viewModel.createStudy()
-        showCreateStudyResultToast()
-    }
-
-    private fun showCreateStudyResultToast() {
+    private fun setObserveCreateStudyResult() {
         viewModel.isSuccessCreateStudy.observe(this) {
             when (it) {
                 true -> showToast(getString(R.string.createStudy_toast_success))

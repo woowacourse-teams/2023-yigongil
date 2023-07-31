@@ -1,4 +1,4 @@
-package com.created.domain
+package com.created.domain.model
 
 data class StudySummary(
     val id: Long,
