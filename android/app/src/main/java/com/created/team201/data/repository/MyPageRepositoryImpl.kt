@@ -8,7 +8,8 @@ import com.created.team201.data.mapper.toDomain
 class MyPageRepositoryImpl(
     private val myPageDataSource: MyPageDataSource,
 ) : MyPageRepository {
-    override suspend fun getMyPage(): Profile {
-        return myPageDataSource.getMyPage().toDomain()
-    }
+    override suspend fun getMyPage(): Result<Profile> =
+        runCatching {
+            myPageDataSource.getMyPage().toDomain()
+        }
 }

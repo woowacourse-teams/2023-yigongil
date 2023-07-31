@@ -28,12 +28,10 @@ class MyPageViewModel(
 
     private fun updateProfile() {
         viewModelScope.launch {
-            runCatching {
-                myPageRepository.getMyPage()
-            }.onSuccess {
-                _profile.value = it.toUiModel()
-            }.onFailure {
-            }
+            myPageRepository.getMyPage()
+                .onSuccess {
+                    _profile.value = it.toUiModel()
+                }.onFailure { }
         }
     }
 
