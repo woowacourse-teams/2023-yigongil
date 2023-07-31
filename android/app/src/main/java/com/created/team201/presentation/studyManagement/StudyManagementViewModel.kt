@@ -69,9 +69,8 @@ class StudyManagementViewModel : ViewModel() {
     }
 
     fun updateTodo(currentItemId: Int, todoId: Long, isDone: Boolean) {
-        val studyDetails = studyRounds.value ?: throw IllegalStateException()
-        val currentStudy = studyRounds.value?.get(currentItemId) ?: throw IllegalStateException()
-        val isNecessary = currentStudy.necessaryTodo.todoId == todoId
+        val studyDetails = studyRounds.value ?: listOf()
+        val isNecessary = studyRounds.value?.get(currentItemId)?.necessaryTodo?.todoId == todoId
         val study: StudyRoundDetailUiModel
         val todo: TodoUiModel
         when (isNecessary) {
