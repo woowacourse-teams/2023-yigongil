@@ -1,6 +1,7 @@
 spring:
   config:
     import: classpath:/yigongil-private/application-dev.yml
+
   profiles:
     active: local
 
@@ -31,4 +32,14 @@ logging:
 
 schedules:
   round-update: 0 0 0 * * *
+
+oauth2:
+  github:
+    client:
+      id: github-client-id
+      secret: github-secret
+      github-login-uri: https://github.com/login/oauth/authorize
+    provider:
+      token-uri: http://localhost:8080/fakeToken
+      user-info-uri: http://localhost:8080/fakeInfo
 
