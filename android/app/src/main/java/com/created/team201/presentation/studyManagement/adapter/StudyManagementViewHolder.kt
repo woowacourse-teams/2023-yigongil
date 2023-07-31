@@ -29,6 +29,10 @@ class StudyManagementViewHolder(
 
     private fun setClickAddTodo() {
         binding.tvStudyManagementAddOptionalTodo.setOnClickListener {
+            studyManagementClickListener.onClickAddOptionalTodo(studyManagementOptionalTodoAdapter.itemCount)
+            if (studyManagementOptionalTodoAdapter.currentList.last().viewType == OptionalTodoViewType.ADD.viewType || studyManagementOptionalTodoAdapter.itemCount >= 4) {
+                return@setOnClickListener
+            }
             studyManagementOptionalTodoAdapter.submitList(studyManagementOptionalTodoAdapter.currentList + OptionalTodoUiModel.ADD_TODO)
         }
     }

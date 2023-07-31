@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.created.domain.model.PageIndex
@@ -92,6 +93,16 @@ class StudyManagementActivity :
             val studyId = intent.getLongExtra(KEY_STUDY_ID, KEY_ERROR)
             studyManagementViewModel.addOptionalTodo(studyId, currentPage, todoContent)
         }
+
+        override fun onClickAddOptionalTodo(optionalTodoCount: Int) {
+            if (optionalTodoCount >= MAXIMUM_OPTIONAL_TODO_COUNT) {
+                Toast.makeText(
+                    this@StudyManagementActivity,
+                    getString(R.string.study_management_not_allowed_add_optional_todo),
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+        }
     }
 
     private val memberClickListener = object : StudyMemberClickListener {
@@ -123,6 +134,7 @@ class StudyManagementActivity :
 
     companion object {
         private const val FIRST_ROUND = 1
+        private const val MAXIMUM_OPTIONAL_TODO_COUNT = 4
         private const val KEY_ERROR = 0L
         private const val KEY_STUDY_ID = "KEY_STUDY_ID"
         private const val KEY_ROUND_ID = "KEY_ROUND_ID"

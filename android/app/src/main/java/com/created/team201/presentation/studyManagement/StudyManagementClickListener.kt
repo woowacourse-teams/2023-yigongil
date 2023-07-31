@@ -7,4 +7,6 @@ interface StudyManagementClickListener : TodoClickListener {
     override fun clickOnTodo(id: Long, isDone: Boolean)
 
     fun onClickAddTodo(todoContent: String)
+
+    fun onClickAddOptionalTodo(optionalTodoCount: Int)
 }
