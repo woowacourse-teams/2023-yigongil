@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 
 class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fragment_study_list) {
 
-    private val studyListViewModel: StudyListViewModel by viewModels() {
+    private val studyListViewModel: StudyListViewModel by viewModels {
         StudyListViewModel.Factory
     }
     private val studyListAdapter: StudyListAdapter by lazy {

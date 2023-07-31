@@ -3,7 +3,9 @@
 
     <!--로그인 뷰-->
     <string name="login_guide">로그인 후 이용이 가능합니다.</string>
-    <string name="github_guide">깃허브로 시작하기</string>
+    <string name="login_github_guide">깃허브로 시작하기</string>
+    <string name="login_fail_message">로그인에 실패하였습니다.</string>
+
 
     <!--메인 뷰-->
     <string name="main_ic_home">홈</string>
