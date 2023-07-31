@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.viewpager2.widget.ViewPager2
+import com.created.domain.model.PageIndex
 import com.created.team201.R
 import com.created.team201.databinding.ActivityStudyManagementBinding
 import com.created.team201.presentation.common.BindingActivity
@@ -75,7 +76,7 @@ class StudyManagementActivity :
 
     private fun setPageChangeButtonEnabled() {
         binding.ivStudyManagementPreviousButton.isEnabled =
-            studyManagementViewModel.currentRound.value != 1
+            studyManagementViewModel.currentRound.value != FIRST_ROUND
         binding.ivStudyManagementNextButton.isEnabled =
             studyManagementViewModel.currentRound.value != studyManagementViewModel.studyInformation.totalRoundCount
     }
@@ -101,15 +102,15 @@ class StudyManagementActivity :
 
     private fun initPageButtonClickListener() {
         binding.ivStudyManagementPreviousButton.setOnClickListener {
-            val page = (binding.vpStudyManagement.currentItem - 1).coerceAtLeast(0)
-            binding.vpStudyManagement.setCurrentItem(page, true)
-            studyManagementViewModel.fetchRoundDetail(page)
+            val page = PageIndex(binding.vpStudyManagement.currentItem).decrease()
+            binding.vpStudyManagement.setCurrentItem(page.number, true)
+            studyManagementViewModel.fetchRoundDetail(page.number)
         }
         binding.ivStudyManagementNextButton.setOnClickListener {
             val page =
-                (binding.vpStudyManagement.currentItem + 1).coerceAtMost(studyManagementAdapter.itemCount - 1)
-            binding.vpStudyManagement.setCurrentItem(page, true)
-            studyManagementViewModel.fetchRoundDetail(page)
+                PageIndex(binding.vpStudyManagement.currentItem).increase(studyManagementAdapter.itemCount - 1)
+            binding.vpStudyManagement.setCurrentItem(page.number, true)
+            studyManagementViewModel.fetchRoundDetail(page.number)
         }
     }
 
@@ -121,6 +122,7 @@ class StudyManagementActivity :
     }
 
     companion object {
+        private const val FIRST_ROUND = 1
         private const val KEY_ERROR = 0L
         private const val KEY_STUDY_ID = "KEY_STUDY_ID"
         private const val KEY_ROUND_ID = "KEY_ROUND_ID"
