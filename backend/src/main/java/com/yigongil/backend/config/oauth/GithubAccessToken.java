@@ -1,9 +1,11 @@
 package com.yigongil.backend.config.oauth;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public record GithubAccessToken(
-        String accessToken,
+        @JsonProperty("access_token") String accessToken,
         String scope,
-        String tokenType
+        @JsonProperty("token_type") String tokenType
 ) {
 
 }

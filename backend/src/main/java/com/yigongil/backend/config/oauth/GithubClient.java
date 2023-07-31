@@ -11,15 +11,15 @@ public class GithubClient {
 
     private final String id;
     private final String secret;
-    private final String redirectUrl;
+    private final String loginUri;
 
     public GithubClient(
             @Value("${oauth2.github.client.id}") String id,
             @Value("${oauth2.github.client.secret}") String secret,
-            @Value("${oauth2.github.client.redirect-url}") String redirectUrl
+            @Value("${oauth2.github.client.github-login-uri}") String loginUri
     ) {
         this.id = id;
         this.secret = secret;
-        this.redirectUrl = redirectUrl;
+        this.loginUri = loginUri;
     }
 }

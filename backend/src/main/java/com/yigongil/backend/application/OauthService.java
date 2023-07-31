@@ -15,9 +15,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class OauthService {
+
+    private static final String TOKEN_PREFIX = "Bearer ";
 
     private final GithubProvider githubProvider;
     private final GithubClient githubClient;
@@ -29,43 +32,61 @@ public class OauthService {
         this.memberRepository = memberRepository;
     }
 
-    public Long login(String authCode) {
+    public URI getGithubRedirectUrl() {
+        return UriComponentsBuilder.fromUriString(githubClient.getLoginUri())
+                                   .queryParam("client_id", githubClient.getId())
+                                   .build()
+                                   .toUri();
+    }
+
+    public Long login(String code) {
+        GithubAccessToken accessToken = requestAccessToken(code);
+
+        GithubProfileResponse profileResponse = requestGithubProfile(accessToken);
+
+        Optional<Member> member = memberRepository.findByGithubId(profileResponse.githubId());
+
+        return member.orElseGet(
+                () -> memberRepository.save(
+                        Member.builder()
+                              .githubId(profileResponse.githubId())
+                              .profileImageUrl(profileResponse.profileImageUrl())
+                              .tier(1)
+                              .build()
+                )
+        ).getId();
+    }
+
+    private GithubAccessToken requestAccessToken(String code) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
         GithubTokenRequest githubTokenRequest = new GithubTokenRequest(
                 githubClient.getId(),
                 githubClient.getSecret(),
-                authCode,
-                githubClient.getRedirectUrl()
+                code
         );
         HttpEntity<GithubTokenRequest> httpEntity = new HttpEntity<>(githubTokenRequest, httpHeaders);
-        GithubAccessToken accessToken = restTemplate.exchange(
-                URI.create(githubProvider.getTokenUrl()),
+        return restTemplate.exchange(
+                githubProvider.getTokenUrl(),
                 HttpMethod.POST,
                 httpEntity,
                 GithubAccessToken.class
         ).getBody();
+    }
 
-        HttpHeaders httpHeaders2 = new HttpHeaders();
-        httpHeaders2.add(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken.accessToken());
+    private GithubProfileResponse requestGithubProfile(GithubAccessToken accessToken) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(HttpHeaders.AUTHORIZATION, TOKEN_PREFIX + accessToken.accessToken());
 
-        HttpEntity<Void> httpEntity2 = new HttpEntity<>(httpHeaders2);
+        HttpEntity<Void> httpEntity = new HttpEntity<>(httpHeaders);
 
-        GithubProfileResponse profileResponse = restTemplate.exchange(
+        return restTemplate.exchange(
                 githubProvider.getUserInfoUrl(),
                 HttpMethod.GET,
-                httpEntity2,
+                httpEntity,
                 GithubProfileResponse.class
         ).getBody();
-
-        Optional<Member> member = memberRepository.findByGithubId(profileResponse.githubId());
-
-        return member.orElseGet(
-                () -> memberRepository.save(Member.builder()
-                                                  .githubId(profileResponse.githubId())
-                                                  .profileImageUrl(profileResponse.profileImageUrl())
-                                                  .build())
-        ).getId();
     }
 }
