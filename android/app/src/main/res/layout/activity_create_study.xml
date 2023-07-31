@@ -17,10 +17,6 @@
         <variable
             name="onIconTextButtonClickListener"
             type="kotlin.jvm.functions.Function1" />
-
-        <variable
-            name="onCreateButtonClickListener"
-            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -128,7 +124,7 @@
                 android:onClick="@{() -> onIconTextButtonClickListener.invoke(@string/createStudy_tag_cycle)}"
                 app:buttonName="@string/icon_text_button_name_cycle"
                 app:iconResource="@drawable/ic_cycle"
-                app:information="@{viewModel.cycle.date == 0 ? null : @string/multiPicker_formatter_information(viewModel.cycle.date, displayNames[viewModel.cycle.type])}"
+                app:information="@{viewModel.cycle.date == 0 ? null : @string/multiPicker_formatter_information(viewModel.cycle.date, displayNames[viewModel.cycle.unit.type])}"
                 app:layout_constraintBottom_toBottomOf="@id/itb_create_study_start_date"
                 app:layout_constraintEnd_toStartOf="@id/itb_create_study_period"
                 app:layout_constraintStart_toEndOf="@id/itb_create_study_start_date"
@@ -189,7 +185,7 @@
             android:layout_marginBottom="28dp"
             android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
             android:enabled="@{viewModel.isEnableCreateStudy}"
-            android:onClick="@{() -> onCreateButtonClickListener.invoke()}"
+            android:onClick="@{() -> viewModel.createStudy(viewModel.study)}"
             android:paddingVertical="14dp"
             android:text="@string/createStudy_button_created"
             android:textAlignment="center"

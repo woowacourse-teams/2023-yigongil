@@ -7,10 +7,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.created.domain.Period
-import com.created.domain.StudySummary
+import com.created.domain.model.Period
 import com.created.domain.model.Role.MASTER
 import com.created.domain.model.StudyManage
+import com.created.domain.model.StudySummary
 import com.created.domain.repository.StudyManageRepository
 import com.created.team201.data.datasource.remote.StudyManageDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
@@ -86,7 +86,7 @@ class StudyManageViewModel(
         )
 
     private fun Period.toUiModel(): PeriodUiModel =
-        PeriodUiModel(number, unit)
+        PeriodUiModel(date, unit)
 
     private fun List<StudyManage>.toUiModel(): List<StudyManageUiModel> =
         this.map { it.toUiModel() }
