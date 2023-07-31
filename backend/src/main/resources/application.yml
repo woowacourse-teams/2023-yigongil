@@ -2,9 +2,15 @@ spring:
   config:
     import: classpath:/yigongil-private/application-dev.yml
 
+  profiles:
+    active: local
+
 ---
 
 spring:
+  config:
+    activate:
+      on-profile: local
   datasource:
     url: jdbc:h2:mem:~/testdb;MODE=MySQL
     driver-class-name: org.h2.Driver
