@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.os.ResultReceiver
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 
 class CustomTabLauncherActivity : AppCompatActivity() {
@@ -35,16 +34,16 @@ class CustomTabLauncherActivity : AppCompatActivity() {
     private fun loadData(intent: Intent) {
         runCatching {
             resultReceiver =
-                intent.extras?.getParcelableCompat<ResultReceiver>(GIT_CODE_KEY) as ResultReceiver
+                intent.getBundleExtra("KEY")
+                    ?.getParcelableCompat<ResultReceiver>(GIT_CODE_KEY) as ResultReceiver
+
             fullUri =
                 Uri.Builder().scheme("https").authority("github.com")
                     .appendPath("login")
                     .appendPath("oauth")
                     .appendPath("authorize")
-                    .appendQueryParameter("client_id", intent.data.toString())
+                    .appendQueryParameter("client_id", "7ee7c6df8f4a75a4d508")
                     .build()
-
-            Log.d("123123", fullUri.toString())
         }
     }
 
@@ -55,7 +54,6 @@ class CustomTabLauncherActivity : AppCompatActivity() {
             customTabsOpened = true
 
             if (this::fullUri.isInitialized) {
-                Log.d("1231234", this::fullUri.isInitialized.toString())
                 GitHubCustomTabsClient.open(this, fullUri)
                 return
             }

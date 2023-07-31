@@ -26,8 +26,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="http://13.209.2.215:8080/callback"
-                    android:scheme="http" />
+                    android:host="login"
+                    android:scheme="example" />
             </intent-filter>
         </activity>
         <activity
