@@ -12,7 +12,7 @@ data class MemberResponseDto(
     @SerialName("nickname")
     val nickname: String,
     @SerialName("successRate")
-    val successRate: Int,
+    val successRate: Double,
     @SerialName("profileImage")
     val profileImage: String?,
 )

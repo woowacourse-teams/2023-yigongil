@@ -28,7 +28,7 @@ fun MemberResponseDto.toDomain(): Member = Member(
     id = this.id,
     tier = this.tier,
     nickname = this.nickname,
-    successRate = this.successRate,
+    successRate = this.successRate.toInt(),
     profileImage = this.profileImage ?: "",
 )
 
