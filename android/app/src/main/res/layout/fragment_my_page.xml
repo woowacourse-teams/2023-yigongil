@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.created.team201.presentation.myPage.MyPageViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,6 +23,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/menu_my_page"
             app:title="@string/myPage_toolbar_title"
             app:titleCentered="true"
             app:titleTextAppearance="@style/header_sb15"
@@ -48,6 +52,7 @@
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/iv_my_page_profile"
+                    glideSrcUrl="@{viewModel.profile.profileImageUrl}"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_marginStart="34dp"
@@ -68,6 +73,7 @@
                     android:layout_marginTop="12dp"
                     android:ellipsize="end"
                     android:maxLines="1"
+                    android:text="@{viewModel.profile.nickname}"
                     android:textAppearance="@style/name_sb18"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -82,6 +88,7 @@
                     android:layout_marginTop="4dp"
                     android:ellipsize="end"
                     android:maxLines="1"
+                    android:text="@{viewModel.profile.githubId}"
                     android:textAppearance="@style/text_r12"
                     android:textColor="@color/grey02_78808B"
                     app:layout_constraintEnd_toEndOf="@id/tv_my_page_profile_nickname"
@@ -116,6 +123,7 @@
                     app:layout_constraintEnd_toStartOf="@id/view_my_page_success_rate_border_line"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_my_page_btn_modify_profile"
+                    app:result="@{@string/profile_success_rate_format(viewModel.profile.successRate)}"
                     app:title="@{@string/myPage_study_success_rate_title}" />
 
                 <View
@@ -138,6 +146,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/view_my_page_success_rate_border_line"
                     app:layout_constraintTop_toTopOf="@id/layout_my_page_study_success_rate"
+                    app:result="@{@string/profile_todo_success_rate_format(viewModel.profile.successfulRoundCount)}"
                     app:title="@{@string/myPage_todo_success_rate_title}" />
 
                 <TextView
@@ -147,6 +156,7 @@
                     android:layout_marginTop="44dp"
                     android:background="@drawable/bg_rectangle_radius_5dp"
                     android:padding="16dp"
+                    android:text="@{viewModel.profile.introduction}"
                     android:textAppearance="@style/text_r14"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
