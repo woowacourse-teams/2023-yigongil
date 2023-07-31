@@ -19,8 +19,7 @@ fun StudySummaryResponseDto.toDomain(): StudySummary =
         maximumMember,
     )
 
-fun List<StudySummaryResponseDto>.toDomain(): List<StudySummary> =
-    this.map { it.toDomain() }
+fun List<StudySummaryResponseDto>.toDomain(): List<StudySummary> = map { it.toDomain() }
 
 private fun String.toPeriod(): Period =
-    Period(getNumericValue(this.first()), PeriodUnit.valueOf(this.last()))
+    Period(getNumericValue(first()), PeriodUnit.valueOf(last()))
