@@ -1,6 +1,7 @@
 package com.yigongil.backend.ui;
 
 import com.yigongil.backend.application.OauthService;
+import com.yigongil.backend.response.TokenResponse;
 import java.net.URI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +27,9 @@ public class LoginController {
     }
 
     @GetMapping("/github/tokens")
-    public ResponseEntity<Long> createMemberToken(@RequestParam String code) {
-        Long id = oauthService.login(code);
-        return ResponseEntity.ok(id);
+    public ResponseEntity<TokenResponse> createMemberToken(@RequestParam String code) {
+        TokenResponse response = oauthService.login(code);
+        return ResponseEntity.ok(response);
     }
 }
 

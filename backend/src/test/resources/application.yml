@@ -37,3 +37,7 @@ oauth2:
     provider:
       token-uri: http://localhost:8080/fakeToken
       user-info-uri: http://localhost:8080/fakeInfo
+
+jwt:
+  expiration: 5
+  key: qkljwnqdjnqjkdnqdwkdkm31i4j1dasksmdasdsadsasdafef113
