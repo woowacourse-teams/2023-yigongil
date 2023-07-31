@@ -36,16 +36,6 @@ jobs:
         BASE_URL: ${{ secrets.BASE_URL }}
       run: echo "BASE_URL=\"$BASE_URL\"" >> local.properties
       working-directory: ${{ env.working-directory }}
-        
-    - name: gradle 캐싱
-      uses: actions/cache@v2
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
@@ -62,10 +52,4 @@ jobs:
         junit_files: |
           ${{ env.working-directory }}/app/build/test-results/*Debug*/*.xml
           ${{ env.working-directory }}/domain/build/test-results/test/*.xml
-       
-    - name: gradle 캐시 제거
-      if: always()
-      run: |
-        rm -f ~/.gradle/caches/modules-2/modules-2.lock
-        rm -f ~/.gradle/caches/modules-2/gc.properties
 

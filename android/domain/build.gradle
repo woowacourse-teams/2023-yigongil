@@ -23,4 +23,7 @@ tasks {
     test {
         useJUnitPlatform()
     }
+    ktlint {
+        verbose.set(true)
+    }
 }
