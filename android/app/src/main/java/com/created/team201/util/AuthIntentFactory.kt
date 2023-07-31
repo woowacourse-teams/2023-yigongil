@@ -2,28 +2,27 @@ package com.created.team201.util
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.os.ResultReceiver
 
 object AuthIntentFactory {
-
-    private const val KEY = "KEY"
+    const val CUSTOM_TABS_OPENED = "CUSTOM_TABS_OPENED"
+    const val BUNDLE_KEY = "BUNDLE_KEY"
+    const val GIT_URL_KEY = "GIT_URL"
+    const val RECEIVER_KEY = "RECEIVER_KEY"
+    const val GIT_OAUTH_TOKEN_KEY = "GIT_OAUTH_TOKEN_KEY"
 
     fun gitHubLogin(
         context: Context,
-        uri: Uri,
+        url: String,
         resultReceiver: ResultReceiver,
     ): Intent =
         Intent(context, CustomTabLauncherActivity::class.java)
             .putExtra(
-                KEY,
+                BUNDLE_KEY,
                 Bundle().apply {
-                    putParcelable(GIT_CODE_KEY, resultReceiver)
+                    putParcelable(RECEIVER_KEY, resultReceiver)
+                    putString(GIT_URL_KEY, url)
                 },
             )
 }
-
-const val GIT_CLIENT_KEY = "GIT_CLIENT_KEY"
-const val GIT_CODE_KEY = "GIT_CODE_KEY"
-const val CUSTOM_TABS_OPENED = "CUSTOM_TABS_OPENED"

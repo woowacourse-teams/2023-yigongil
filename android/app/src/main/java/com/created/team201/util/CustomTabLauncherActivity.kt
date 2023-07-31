@@ -8,9 +8,13 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.os.ResultReceiver
 import androidx.appcompat.app.AppCompatActivity
+import com.created.team201.util.AuthIntentFactory.BUNDLE_KEY
+import com.created.team201.util.AuthIntentFactory.CUSTOM_TABS_OPENED
+import com.created.team201.util.AuthIntentFactory.GIT_OAUTH_TOKEN_KEY
+import com.created.team201.util.AuthIntentFactory.GIT_URL_KEY
+import com.created.team201.util.AuthIntentFactory.RECEIVER_KEY
 
 class CustomTabLauncherActivity : AppCompatActivity() {
-
     private lateinit var fullUri: Uri
     private lateinit var resultReceiver: ResultReceiver
     private var customTabsOpened = false
@@ -32,18 +36,9 @@ class CustomTabLauncherActivity : AppCompatActivity() {
     }
 
     private fun loadData(intent: Intent) {
-        runCatching {
-            resultReceiver =
-                intent.getBundleExtra("KEY")
-                    ?.getParcelableCompat<ResultReceiver>(GIT_CODE_KEY) as ResultReceiver
-
-            fullUri =
-                Uri.Builder().scheme("https").authority("github.com")
-                    .appendPath("login")
-                    .appendPath("oauth")
-                    .appendPath("authorize")
-                    .appendQueryParameter("client_id", "7ee7c6df8f4a75a4d508")
-                    .build()
+        intent.getBundleExtra(BUNDLE_KEY)?.apply {
+            resultReceiver = getParcelableCompat<ResultReceiver>(RECEIVER_KEY) as ResultReceiver
+            fullUri = Uri.parse(getString(GIT_URL_KEY))
         }
     }
 
@@ -53,28 +48,25 @@ class CustomTabLauncherActivity : AppCompatActivity() {
         if (!customTabsOpened) {
             customTabsOpened = true
 
-            if (this::fullUri.isInitialized) {
-                GitHubCustomTabsClient.open(this, fullUri)
-                return
-            }
-            return
+            if (::fullUri.isInitialized) GitHubCustomTabsClient.open(this, fullUri)
         }
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        setIntent(intent)
 
+        setIntent(intent)
         intent?.data?.let { sendOK(it) }
     }
 
     private fun sendOK(uri: Uri) {
-        if (this::resultReceiver.isInitialized) {
+        if (::resultReceiver.isInitialized) {
             resultReceiver.send(
                 Activity.RESULT_OK,
-                Bundle().apply { putParcelable(GIT_CODE_KEY, uri) },
+                Bundle().apply { putParcelable(GIT_OAUTH_TOKEN_KEY, uri) },
             )
         }
+
         finish()
     }
 
@@ -84,11 +76,5 @@ class CustomTabLauncherActivity : AppCompatActivity() {
         } else {
             getParcelable(key) as? T
         }
-    }
-
-    companion object {
-        const val GIT_CLIENT_KEY = "GIT_CLIENT_KEY"
-        const val GIT_CODE_KEY = "GIT_CODE_KEY"
-        const val CUSTOM_TABS_OPENED = "CUSTOM_TABS_OPENED"
     }
 }

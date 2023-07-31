@@ -1,6 +1,5 @@
 package com.created.team201.presentation.login
 
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -15,7 +14,7 @@ import com.created.team201.presentation.login.LoginViewModel.State.FAIL
 import com.created.team201.presentation.login.LoginViewModel.State.IDLE
 import com.created.team201.presentation.login.LoginViewModel.State.SUCCESS
 import com.created.team201.util.AuthIntentFactory
-import com.created.team201.util.GIT_CLIENT_KEY
+import com.created.team201.util.AuthIntentFactory.GIT_OAUTH_TOKEN_KEY
 
 class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_login) {
     private val loginViewModel by viewModels<LoginViewModel> { LoginViewModel.Factory }
@@ -49,7 +48,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
 
     private fun setClickEventOnLoginButton() {
         binding.clLoginBtn.setOnClickListener {
-            val redirectUrl: String = loginViewModel.getRedirectUrl() ?: return@setOnClickListener
+            val redirectUrl: String = loginViewModel.getRedirectUrl()
 
             navigateToLoginWebView(redirectUrl)
         }
@@ -57,7 +56,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
 
     private fun navigateToLoginWebView(redirectUrl: String) {
         startActivity(
-            AuthIntentFactory.gitHubLogin(this, Uri.parse(redirectUrl), getResult()),
+            AuthIntentFactory.gitHubLogin(this, redirectUrl, getResult()),
         )
         finish()
     }
@@ -66,8 +65,8 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
         override fun onReceiveResult(resultCode: Int, resultData: Bundle) {
             super.onReceiveResult(resultCode, resultData)
 
-            val oauthToken = resultData.getString(GIT_CLIENT_KEY, "")
-            // 추후 수정
+            val oauthToken =
+                resultData.getString(GIT_OAUTH_TOKEN_KEY) ?: throw IllegalArgumentException()
 
             loginViewModel.postLogin(oauthToken)
         }
