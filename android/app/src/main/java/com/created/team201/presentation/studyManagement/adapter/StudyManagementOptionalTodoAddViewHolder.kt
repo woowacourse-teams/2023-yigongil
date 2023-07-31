@@ -4,14 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.created.team201.databinding.ItemStudyManagementOptionalTodoAddBinding
 import com.created.team201.presentation.studyManagement.StudyManagementClickListener
-import com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel
 
 class StudyManagementOptionalTodoAddViewHolder(
     binding: ItemStudyManagementOptionalTodoAddBinding,
 ) : StudyOptionalTodoViewHolder(binding) {
-
-    override fun bind(optionalTodoUiModel: OptionalTodoUiModel) {
-    }
 
     companion object {
         fun from(

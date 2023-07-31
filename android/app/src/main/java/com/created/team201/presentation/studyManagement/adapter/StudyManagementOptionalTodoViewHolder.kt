@@ -10,7 +10,7 @@ class StudyManagementOptionalTodoViewHolder private constructor(
     binding: ItemStudyManagementOptionalTodosBinding,
 ) : StudyOptionalTodoViewHolder(binding) {
 
-    override fun bind(optionalTodoUiModel: OptionalTodoUiModel) {
+    fun bind(optionalTodoUiModel: OptionalTodoUiModel) {
         (binding as ItemStudyManagementOptionalTodosBinding).optionalTodo = optionalTodoUiModel
     }
 

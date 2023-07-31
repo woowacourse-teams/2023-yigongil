@@ -22,7 +22,7 @@ class StudyManagementOptionalTodoAdapter(private val studyManagementClickListene
 
     override fun onBindViewHolder(holder: StudyOptionalTodoViewHolder, position: Int) {
         when (OptionalTodoViewType.valueOf(getItemViewType(position))) {
-            ADD -> (holder as StudyManagementOptionalTodoAddViewHolder).bind(getItem(position))
+            ADD -> Unit
             DISPLAY -> (holder as StudyManagementOptionalTodoViewHolder).bind(getItem(position))
         }
     }
