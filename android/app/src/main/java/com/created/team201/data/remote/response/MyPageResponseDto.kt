@@ -10,11 +10,11 @@ data class MyPageResponseDto(
     @SerialName("id")
     val id: Int,
     @SerialName("introduction")
-    val introduction: String,
+    val introduction: String?,
     @SerialName("nickname")
     val nickname: String,
     @SerialName("profileImageUrl")
-    val profileImageUrl: String,
+    val profileImageUrl: String?,
     @SerialName("successRate")
     val successRate: Double,
     @SerialName("successfulRoundCount")
