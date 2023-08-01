@@ -8,9 +8,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.RecyclerView
-import com.created.domain.Page
-import com.created.domain.Period
-import com.created.domain.StudySummary
+import com.created.domain.model.Page
+import com.created.domain.model.Period
+import com.created.domain.model.StudySummary
 import com.created.domain.repository.StudyListRepository
 import com.created.team201.data.datasource.remote.StudyListDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
@@ -93,7 +93,7 @@ class StudyListViewModel(
         )
 
     private fun Period.toUiModel(): PeriodUiModel =
-        PeriodUiModel(number, unit)
+        PeriodUiModel(date, unit)
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {

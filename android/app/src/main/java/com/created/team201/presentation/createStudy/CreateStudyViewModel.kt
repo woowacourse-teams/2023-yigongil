@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.model.CreateStudy
 import com.created.domain.model.Period
+import com.created.domain.model.PeriodUnit
 import com.created.domain.repository.CreateStudyRepository
 import com.created.team201.data.datasource.remote.CreateStudyRemoteDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
@@ -18,6 +19,7 @@ import com.created.team201.presentation.createStudy.model.CreateStudyUiModel
 import com.created.team201.presentation.createStudy.model.PeriodUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CreateStudyViewModel(
@@ -44,7 +46,7 @@ class CreateStudyViewModel(
         get() = _period
 
     private val _cycle: NonNullMutableLiveData<PeriodUiModel> =
-        NonNullMutableLiveData(PeriodUiModel(0, 0))
+        NonNullMutableLiveData(PeriodUiModel(0, PeriodUnit.DAY))
     val cycle: NonNullLiveData<PeriodUiModel>
         get() = _cycle
 
@@ -60,6 +62,16 @@ class CreateStudyViewModel(
     private val _isSuccessCreateStudy: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     val isSuccessCreateStudy: LiveData<Boolean>
         get() = _isSuccessCreateStudy
+
+    val study: CreateStudyUiModel
+        get() = CreateStudyUiModel(
+            name.value,
+            peopleCount.value,
+            startDate.value,
+            period.value,
+            cycle.value,
+            introduction.value,
+        )
 
     fun setName(name: String) {
         _name.value = name.replace("\n", "")
@@ -78,7 +90,7 @@ class CreateStudyViewModel(
     }
 
     fun setCycle(date: Int, type: Int) {
-        val cycle = PeriodUiModel(date, type)
+        val cycle = PeriodUiModel(date, PeriodUnit.valueOf(type))
         _cycle.value = cycle
     }
 
@@ -86,24 +98,14 @@ class CreateStudyViewModel(
         _period.value = period
     }
 
-    private fun getCreateStudy(): CreateStudyUiModel = CreateStudyUiModel(
-        name.value,
-        peopleCount.value,
-        startDate.value,
-        period.value,
-        cycle.value,
-        introduction.value,
-    )
-
-    fun createStudy() {
-        viewModelScope.launch {
-            runCatching {
-                createStudyRepository.createStudy(getCreateStudy().toDomain())
-            }.onSuccess {
-                _isSuccessCreateStudy.value = true
-            }.onFailure {
-                _isSuccessCreateStudy.value = false
-            }
+    fun createStudy(study: CreateStudyUiModel) {
+        viewModelScope.launch(Dispatchers.IO) {
+            createStudyRepository.createStudy(study.toDomain())
+                .onSuccess {
+                    _isSuccessCreateStudy.value = true
+                }.onFailure {
+                    _isSuccessCreateStudy.value = false
+                }
         }
     }
 
@@ -113,7 +115,7 @@ class CreateStudyViewModel(
     private fun CreateStudyUiModel.toDomain(): CreateStudy =
         CreateStudy(name, peopleCount, startDate, period, cycle.toDomain(), introduction)
 
-    private fun PeriodUiModel.toDomain(): Period = Period(date, type)
+    private fun PeriodUiModel.toDomain(): Period = Period(date, unit)
 
     private fun String.isNotEmpty(): Boolean = isEmpty().not()
 
