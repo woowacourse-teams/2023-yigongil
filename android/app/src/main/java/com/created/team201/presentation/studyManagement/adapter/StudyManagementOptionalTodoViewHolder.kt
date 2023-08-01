@@ -8,7 +8,12 @@ import com.created.team201.presentation.studyManagement.model.OptionalTodoUiMode
 
 class StudyManagementOptionalTodoViewHolder private constructor(
     binding: ItemStudyManagementOptionalTodosBinding,
-) : StudyOptionalTodoViewHolder(binding) {
+    studyManagementClickListener: StudyManagementClickListener,
+) : StudyOptionalTodoViewHolder(binding, studyManagementClickListener) {
+
+    init {
+        binding.onClick = studyManagementClickListener
+    }
 
     fun bind(optionalTodoUiModel: OptionalTodoUiModel) {
         (binding as ItemStudyManagementOptionalTodosBinding).optionalTodo = optionalTodoUiModel
@@ -21,8 +26,7 @@ class StudyManagementOptionalTodoViewHolder private constructor(
         ): StudyManagementOptionalTodoViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemStudyManagementOptionalTodosBinding.inflate(inflater, parent, false)
-            binding.onClick = studyManagementClickListener
-            return StudyManagementOptionalTodoViewHolder(binding)
+            return StudyManagementOptionalTodoViewHolder(binding, studyManagementClickListener)
         }
     }
 }

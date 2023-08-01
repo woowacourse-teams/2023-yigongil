@@ -7,7 +7,14 @@ import com.created.team201.presentation.studyManagement.StudyManagementClickList
 
 class StudyManagementOptionalTodoAddViewHolder(
     binding: ItemStudyManagementOptionalTodoAddBinding,
-) : StudyOptionalTodoViewHolder(binding) {
+    studyManagementClickListener: StudyManagementClickListener,
+) : StudyOptionalTodoViewHolder(binding, studyManagementClickListener) {
+
+    init {
+        binding.tvItemStudyManagementOptionalTodoAddButton.setOnClickListener {
+            studyManagementClickListener.onClickAddTodo(binding.etItemStudyManagementOptionalTodo.text.toString())
+        }
+    }
 
     companion object {
         fun from(
@@ -16,10 +23,7 @@ class StudyManagementOptionalTodoAddViewHolder(
         ): StudyManagementOptionalTodoAddViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val binding = ItemStudyManagementOptionalTodoAddBinding.inflate(inflater, parent, false)
-            binding.tvItemStudyManagementOptionalTodoAddButton.setOnClickListener {
-                studyManagementClickListener.onClickAddTodo(binding.etItemStudyManagementOptionalTodo.text.toString())
-            }
-            return StudyManagementOptionalTodoAddViewHolder(binding)
+            return StudyManagementOptionalTodoAddViewHolder(binding, studyManagementClickListener)
         }
     }
 }
