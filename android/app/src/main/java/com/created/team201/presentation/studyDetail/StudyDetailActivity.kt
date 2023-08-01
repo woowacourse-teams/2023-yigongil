@@ -76,7 +76,22 @@ class StudyDetailActivity :
         }
     }
 
+    fun convertPeriodOfCountFormat(periodOfCount: String?): String {
+        if (periodOfCount?.last() == DAY_CHARACTER) {
+            return getString(
+                R.string.study_detail_period_of_count_day,
+                periodOfCount.dropLast(STRING_LAST_INDEX).toInt(),
+            )
+        }
+        return getString(
+            R.string.study_detail_period_of_count_week,
+            periodOfCount?.dropLast(STRING_LAST_INDEX)?.toInt(),
+        )
+    }
+
     companion object {
+        private const val DAY_CHARACTER = 'd'
+        private const val STRING_LAST_INDEX = 1
         private const val TEMP_USER_ID = 1L
         private const val KEY_STUDY_ID = "KEY_STUDY_ID"
         fun getIntent(context: Context, studyId: Long): Intent =
