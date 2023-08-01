@@ -7,7 +7,7 @@ data class FinishedStudy(
     val name: String,
     val numberOfCurrentMembers: Int,
     val numberOfMaximumMembers: Int,
-    val periodOfRound: String,
+    val periodOfRound: Period,
     val startAt: String,
     val totalRoundCount: Int,
 )

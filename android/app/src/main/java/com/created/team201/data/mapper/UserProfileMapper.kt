@@ -1,6 +1,8 @@
 package com.created.team201.data.mapper
 
 import com.created.domain.model.FinishedStudy
+import com.created.domain.model.Period
+import com.created.domain.model.PeriodUnit
 import com.created.domain.model.Profile
 import com.created.domain.model.UserProfile
 import com.created.team201.data.remote.response.FinishedStudyResponseDto
@@ -28,7 +30,11 @@ fun FinishedStudyResponseDto.toDomain(): FinishedStudy = FinishedStudy(
     name = name,
     numberOfCurrentMembers = numberOfCurrentMembers,
     numberOfMaximumMembers = numberOfMaximumMembers,
-    periodOfRound = periodOfRound,
+    periodOfRound = periodOfRound.toPeriod(),
     startAt = startAt,
     totalRoundCount = totalRoundCount,
 )
+
+private fun String.toPeriod(): Period =
+    Period(Character.getNumericValue(first()), PeriodUnit.valueOf(last()))
+
