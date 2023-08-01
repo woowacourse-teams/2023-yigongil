@@ -6,10 +6,6 @@
     <data>
 
         <variable
-            name="role"
-            type="com.created.domain.model.Role" />
-
-        <variable
             name="studyManagement"
             type="com.created.team201.presentation.studyManagement.model.StudyRoundDetailUiModel" />
 
@@ -44,7 +40,7 @@
             android:textAppearance="@style/text_r12"
             android:textColor="@color/white"
             app:drawableStartCompat="@drawable/ic_edit_12"
-            app:isVisible="@{role.Companion.isMaster(studyManagement.role)}"
+            app:isVisible="@{studyManagement.isMaster()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_item_study_management_essential_todo" />
 
@@ -104,12 +100,11 @@
             android:id="@+id/tv_study_management_add_optional_todo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:text="@string/study_management_add_todo"
             android:textAppearance="@style/text_r12"
             android:textColor="@color/white"
-            app:drawableStartCompat="@drawable/ic_add_personal_todo"
+            app:drawableStartCompat="@drawable/ic_add_todo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_item_study_management_optional_todo" />
 

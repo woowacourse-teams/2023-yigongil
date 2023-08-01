@@ -10,4 +10,7 @@ data class StudyRoundDetailUiModel(
     val necessaryTodo: TodoUiModel,
     val optionalTodos: List<OptionalTodoUiModel>,
     val studyMembers: List<StudyMemberUiModel>,
-)
+) {
+
+    fun isMaster(): Boolean = role == Role.MASTER
+}
