@@ -14,7 +14,7 @@ data class ProfileResponseDto(
     @SerialName("nickname")
     val nickname: String,
     @SerialName("profileImageUrl")
-    val profileImageUrl: String,
+    val profileImageUrl: String?,
     @SerialName("successRate")
     val successRate: Double,
     @SerialName("successfulRoundCount")
