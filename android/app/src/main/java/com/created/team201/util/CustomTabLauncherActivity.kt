@@ -1,6 +1,7 @@
 package com.created.team201.util
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -8,11 +9,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.os.ResultReceiver
 import androidx.appcompat.app.AppCompatActivity
-import com.created.team201.util.AuthIntentFactory.BUNDLE_KEY
-import com.created.team201.util.AuthIntentFactory.CUSTOM_TABS_OPENED
-import com.created.team201.util.AuthIntentFactory.GIT_OAUTH_TOKEN_KEY
-import com.created.team201.util.AuthIntentFactory.GIT_URL_KEY
-import com.created.team201.util.AuthIntentFactory.RECEIVER_KEY
 
 class CustomTabLauncherActivity : AppCompatActivity() {
     private lateinit var fullUri: Uri
@@ -75,6 +71,29 @@ class CustomTabLauncherActivity : AppCompatActivity() {
             getParcelable(key, T::class.java)
         } else {
             getParcelable(key) as? T
+        }
+    }
+
+    companion object {
+        private const val CUSTOM_TABS_OPENED = "CUSTOM_TABS_OPENED"
+
+        internal const val GIT_OAUTH_TOKEN_KEY = "GIT_OAUTH_TOKEN_KEY"
+        private const val BUNDLE_KEY = "BUNDLE_KEY"
+        private const val GIT_URL_KEY = "GIT_URL"
+        private const val RECEIVER_KEY = "RECEIVER_KEY"
+
+        fun getIntent(
+            context: Context,
+            url: String,
+            resultReceiver: ResultReceiver,
+        ): Intent = Intent(context, CustomTabLauncherActivity::class.java).apply {
+            putExtra(
+                BUNDLE_KEY,
+                Bundle().apply {
+                    putParcelable(RECEIVER_KEY, resultReceiver)
+                    putString(GIT_URL_KEY, url)
+                },
+            )
         }
     }
 }

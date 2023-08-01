@@ -13,8 +13,8 @@ import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.login.LoginViewModel.State.FAIL
 import com.created.team201.presentation.login.LoginViewModel.State.IDLE
 import com.created.team201.presentation.login.LoginViewModel.State.SUCCESS
-import com.created.team201.util.AuthIntentFactory
-import com.created.team201.util.AuthIntentFactory.GIT_OAUTH_TOKEN_KEY
+import com.created.team201.util.CustomTabLauncherActivity
+import com.created.team201.util.CustomTabLauncherActivity.Companion.GIT_OAUTH_TOKEN_KEY
 
 class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_login) {
     private val loginViewModel by viewModels<LoginViewModel> { LoginViewModel.Factory }
@@ -56,7 +56,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
 
     private fun navigateToLoginWebView(redirectUrl: String) {
         startActivity(
-            AuthIntentFactory.gitHubLogin(this, redirectUrl, getResult()),
+            CustomTabLauncherActivity.getIntent(this, redirectUrl, getResult()),
         )
         finish()
     }
