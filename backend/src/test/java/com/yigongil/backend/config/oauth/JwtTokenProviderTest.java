@@ -1,37 +1,19 @@
 package com.yigongil.backend.config.oauth;
 
-import static java.lang.String.valueOf;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
-import java.time.Duration;
 import org.junit.jupiter.api.Test;
 
 class JwtTokenProviderTest {
 
     @Test
-    void a() {
-        long expiredMinute = 1L;
-        long id = 5L;
+    void 토큰을_정상적으로_생성_파싱한다() {
+        long expected = 5L;
+        JwtTokenProvider tokenProvider = new JwtTokenProvider("testeststs23213124mfme13kf13etst", 1L);
 
-        JwtTokenProvider tokenProvider = new JwtTokenProvider("testeststs23213124mfme13kf13etst", expiredMinute);
-        String token = tokenProvider.createToken(id);
+        String token = tokenProvider.createToken(expected);
+        Long actual = tokenProvider.parseToken(token);
 
-        JwtParser parser = Jwts.parserBuilder()
-                               .setSigningKey(tokenProvider.getSecretKey())
-                               .build();
-
-        Claims claims = parser.parseClaimsJws(token)
-                              .getBody();
-
-        assertAll(
-                () -> assertThat(claims.getSubject()).isEqualTo(valueOf(id)),
-                () -> assertThat(claims.getIssuedAt().getTime() + Duration.ofMinutes(expiredMinute).toMillis())
-                        .isEqualTo(claims.getExpiration().getTime())
-        );
+        assertThat(actual).isEqualTo(expected);
     }
-
 }

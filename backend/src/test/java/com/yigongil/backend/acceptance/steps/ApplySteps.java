@@ -3,6 +3,7 @@ package com.yigongil.backend.acceptance.steps;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.yigongil.backend.config.oauth.JwtTokenProvider;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import io.cucumber.java.en.Given;
@@ -16,9 +17,11 @@ import org.springframework.http.HttpHeaders;
 public class ApplySteps {
 
     private final SharedContext sharedContext;
+    private final JwtTokenProvider tokenProvider;
 
-    public ApplySteps(SharedContext sharedContext) {
+    public ApplySteps(SharedContext sharedContext, JwtTokenProvider tokenProvider) {
         this.sharedContext = sharedContext;
+        this.tokenProvider = tokenProvider;
     }
 
     @Given("깃허브 아이디가 {string}인 멤버가 이름이 {string}스터디에 신청할 수 있다.")
@@ -69,7 +72,7 @@ public class ApplySteps {
                 given().log().all()
                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(masterName))
                        .when()
-                       .patch("/v1/studies/{studyId}/applicants/{memberId}", studyId, memberId)
+                       .patch("/v1/studies/{studyId}/applicants/{memberId}", studyId, tokenProvider.parseToken((String) memberId))
                        .then()
                        .log().all()
                        .extract();
@@ -79,13 +82,13 @@ public class ApplySteps {
 
     @Then("{string}는 {string} 스터디의 스터디원으로 추가되어 있다.")
     public void 스터디원_추가_완료(String memberName, String studyName) {
-        String memberId = String.valueOf(sharedContext.getParameter(memberName));
+        String token = String.valueOf(sharedContext.getParameter(memberName));
 
         StudyDetailResponse response = sharedContext.getResponse()
                                                     .as(StudyDetailResponse.class);
         List<StudyMemberResponse> studyMembers = response.members();
 
-        assertThat(studyMembers).anyMatch(member -> member.id().equals(Long.valueOf(memberId)));
+        assertThat(studyMembers).anyMatch(member -> member.id().equals(tokenProvider.parseToken(token)));
     }
 
 

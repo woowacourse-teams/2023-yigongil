@@ -61,7 +61,6 @@ public class OauthService {
         ).getId();
 
         return new TokenResponse(jwtTokenProvider.createToken(id));
-
     }
 
     private GithubAccessToken requestAccessToken(String code) {

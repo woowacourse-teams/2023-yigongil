@@ -1,5 +1,6 @@
 package com.yigongil.backend.config.oauth;
 
+import com.yigongil.backend.exception.InvalidTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
@@ -38,18 +39,16 @@ public class JwtTokenProvider {
     }
 
     public Long parseToken(String token) {
-        if (token.startsWith(SCHEME)) {
-            String credentials = token.substring(SCHEME.length());
-            JwtParser parser = Jwts.parserBuilder()
-                                   .setSigningKey(secretKey)
-                                   .build();
-            Claims claims = parser.parseClaimsJws(credentials)
-                                .getBody();
-
-            if (claims.getExpiration().before(Date.from(Instant.now()))) {
-                throw new
-            }
-            return Long.parseLong(claims.getSubject());
+        if (!token.startsWith(SCHEME)) {
+            throw new InvalidTokenException("유효하지 않은 토큰 타입입니다. 입력된 token: ", token);
         }
+        String credentials = token.substring(SCHEME.length());
+        JwtParser parser = Jwts.parserBuilder()
+                               .setSigningKey(secretKey)
+                               .build();
+        Claims claims = parser.parseClaimsJws(credentials)
+                              .getBody();
+
+        return Long.parseLong(claims.getSubject());
     }
 }
