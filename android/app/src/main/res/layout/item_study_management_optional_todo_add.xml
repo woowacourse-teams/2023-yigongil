@@ -18,17 +18,25 @@
             android:id="@+id/et_item_study_management_optional_todo"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:background="@color/transparent"
+            android:hint="@string/item_study_management_add_todo_hint"
+            android:maxLength="20"
+            android:singleLine="true"
+            android:textAppearance="@style/text_r14"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey04_989DA5"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_item_study_management_optional_todo_add_button"
+            app:layout_constraintEnd_toStartOf="@id/iv_item_study_management_optional_todo_add_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_item_study_management_optional_todo_add_button"
-            android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:background="@drawable/bg_rectangle_radius_10dp_green01"
-            android:text="추가"
+        <ImageView
+            android:id="@+id/iv_item_study_management_optional_todo_add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:src="@drawable/ic_add_todo_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

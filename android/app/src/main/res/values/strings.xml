@@ -69,11 +69,14 @@
     <string name="study_management_next_button_description">다음 스터디 회차</string>
     <string name="study_management_information_button_menu">스터디 정보</string>
     <string name="study_management_not_allowed_add_optional_todo">더이상 선택투두를 추가할 수 없습니다.</string>
+    <string name="study_management_not_allowed_empty_content">투두를 입력해 주세요.</string>
     <string name="item_study_management_todo_description">투두 체크박스</string>
     <string name="item_study_management_todo_done">필수투두를 완료했어요!</string>
     <string name="item_study_management_todo_undone">필수투두를 하고있어요!</string>
     <string name="item_study_management_study_master_image_description">스터디장</string>
     <string name="item_study_management_optional_todo_button">투두 체크박스</string>
+    <string name="item_study_management_add_todo_button_text">추가</string>
+    <string name="item_study_management_add_todo_hint">투두를 추가해주세요</string>
 
     <!--커스텀 프로필 이미지 뷰-->
     <string name="custom_profile_image_content_description">프로필 이미지</string>

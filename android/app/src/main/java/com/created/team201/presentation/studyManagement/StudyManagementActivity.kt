@@ -89,6 +89,10 @@ class StudyManagementActivity :
         }
 
         override fun onClickAddTodo(todoContent: String) {
+            if (todoContent.isEmpty()) {
+                toastEmptyTodoInput()
+                return
+            }
             val currentPage = binding.vpStudyManagement.currentItem
             val studyId = intent.getLongExtra(KEY_STUDY_ID, KEY_ERROR)
             studyManagementViewModel.addOptionalTodo(studyId, currentPage, todoContent)
@@ -103,6 +107,14 @@ class StudyManagementActivity :
                 ).show()
             }
         }
+    }
+
+    private fun toastEmptyTodoInput() {
+        Toast.makeText(
+            this@StudyManagementActivity,
+            getString(R.string.study_management_not_allowed_empty_content),
+            Toast.LENGTH_SHORT,
+        ).show()
     }
 
     private val memberClickListener = object : StudyMemberClickListener {

@@ -11,7 +11,7 @@ class StudyManagementOptionalTodoAddViewHolder(
 ) : StudyOptionalTodoViewHolder(binding, studyManagementClickListener) {
 
     init {
-        binding.tvItemStudyManagementOptionalTodoAddButton.setOnClickListener {
+        binding.ivItemStudyManagementOptionalTodoAddButton.setOnClickListener {
             studyManagementClickListener.onClickAddTodo(binding.etItemStudyManagementOptionalTodo.text.toString())
         }
     }
