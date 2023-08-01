@@ -4,15 +4,16 @@ import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
-import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NecessaryTodoAlreadyExistException;
 import com.yigongil.backend.exception.NotStudyMasterException;
 import com.yigongil.backend.exception.NotStudyMemberException;
-import lombok.Builder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,13 +23,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import lombok.Builder;
+import lombok.Getter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
+@Getter
 @Entity
 public class Round extends BaseEntity {
 
@@ -79,15 +79,15 @@ public class Round extends BaseEntity {
         List<Round> rounds = new ArrayList<>();
         for (int i = 1; i <= totalRoundCount; i++) {
             Round round = Round.builder()
-                    .roundNumber(i)
-                    .master(master)
-                    .roundOfMembers(new ArrayList<>())
-                    .build();
+                               .roundNumber(i)
+                               .master(master)
+                               .roundOfMembers(new ArrayList<>())
+                               .build();
 
             RoundOfMember roundOfMember = RoundOfMember.builder()
-                    .member(master)
-                    .isDone(false)
-                    .build();
+                                                       .member(master)
+                                                       .isDone(false)
+                                                       .build();
             round.roundOfMembers.add(roundOfMember);
 
             rounds.add(round);
@@ -125,19 +125,19 @@ public class Round extends BaseEntity {
 
     public int calculateAverageTier() {
         double averageTier = roundOfMembers.stream()
-                .map(RoundOfMember::getMember)
-                .mapToInt(Member::getTier)
-                .average()
-                .orElseThrow(IllegalStateException::new);
+                                           .map(RoundOfMember::getMember)
+                                           .mapToInt(Member::getTier)
+                                           .average()
+                                           .orElseThrow(IllegalStateException::new);
 
         return (int) Math.round(averageTier);
     }
 
     public void addMember(Member member) {
         RoundOfMember roundOfMember = RoundOfMember.builder()
-                .member(member)
-                .isDone(false)
-                .build();
+                                                   .member(member)
+                                                   .isDone(false)
+                                                   .build();
 
         roundOfMembers.add(roundOfMember);
     }
@@ -151,14 +151,15 @@ public class Round extends BaseEntity {
     }
 
     public boolean isNecessaryToDoDone(Member member) {
-        return findRoundOfMemberBy(member).getDone();
+        return findRoundOfMemberBy(member).isDone();
     }
 
     public RoundOfMember findRoundOfMemberBy(Member member) {
         return roundOfMembers.stream()
-                .filter(roundOfMember -> roundOfMember.isMemberEquals(member))
-                .findAny()
-                .orElseThrow(() -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", member.getGithubId()));
+                             .filter(roundOfMember -> roundOfMember.isMemberEquals(member))
+                             .findAny()
+                             .orElseThrow(() -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.",
+                                     member.getGithubId()));
     }
 
     public void updateNecessaryTodoContent(String content) {
@@ -170,44 +171,8 @@ public class Round extends BaseEntity {
         return endAtDate.equals(today);
     }
 
-    public Role calculateRole(Member member) {
-        if (master.equals(member)) {
-            return Role.MASTER;
-        }
-        boolean isMember = roundOfMembers.stream()
-                .anyMatch(roundOfMember -> roundOfMember.isMemberEquals(member));
-        if (isMember) {
-            return Role.STUDY_MEMBER;
-        }
-        return Role.NO_ROLE;
-    }
-
     public void updateEndAt(LocalDateTime endAt) {
         this.endAt = LocalDateTime.of(endAt.toLocalDate(), LocalTime.MIN);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Integer getRoundNumber() {
-        return roundNumber;
-    }
-
-    public String getNecessaryToDoContent() {
-        return necessaryToDoContent;
-    }
-
-    public Member getMaster() {
-        return master;
-    }
-
-    public List<RoundOfMember> getRoundOfMembers() {
-        return roundOfMembers;
-    }
-
-    public LocalDateTime getEndAt() {
-        return endAt;
     }
 
     @Override

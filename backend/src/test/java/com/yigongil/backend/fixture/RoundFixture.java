@@ -34,22 +34,22 @@ public enum RoundFixture {
 
     public Round toRound() {
         return Round.builder()
-                .id(id)
-                .necessaryToDoContent(content)
-                .roundNumber(roundNumber)
-                .master(master)
-                .endAt(LocalDateTime.now())
-                .roundOfMembers(new ArrayList<>(List.of(RoundOfMemberFixture.김진우_라운드_삼.toRoundOfMember())))
-                .build();
+                    .id(id)
+                    .necessaryToDoContent(content)
+                    .roundNumber(roundNumber)
+                    .master(master)
+                    .endAt(LocalDateTime.now())
+                    .roundOfMembers(new ArrayList<>(List.of(RoundOfMemberFixture.김진우_라운드_삼.toRoundOfMember())))
+                    .build();
     }
 
     public Round toRoundWithContent(String content) {
         return Round.builder()
-                .id(id)
-                .necessaryToDoContent(content)
-                .roundNumber(roundNumber)
-                .master(master)
-                .roundOfMembers(new ArrayList<>(List.of(RoundOfMemberFixture.김진우_라운드_삼.toRoundOfMember())))
-                .build();
+                    .id(id)
+                    .necessaryToDoContent(content)
+                    .roundNumber(roundNumber)
+                    .master(master)
+                    .roundOfMembers(new ArrayList<>(List.of(RoundOfMemberFixture.김진우_라운드_삼.toRoundOfMember())))
+                    .build();
     }
 }

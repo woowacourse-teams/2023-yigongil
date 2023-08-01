@@ -1,32 +1,32 @@
 package com.yigongil.backend.config.auth;
 
-import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.member.MemberRepository;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerInterceptor;
-
+import com.yigongil.backend.config.oauth.JwtTokenProvider;
+import com.yigongil.backend.exception.InvalidTokenException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
 
-    private MemberRepository memberRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthContext authContext;
 
-    public LoginInterceptor(final MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
+    public LoginInterceptor(JwtTokenProvider jwtTokenProvider, AuthContext authContext) {
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.authContext = authContext;
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (!request.getMethod().equalsIgnoreCase(HttpMethod.GET.toString())) {
-            return true;
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (authHeader == null) {
+            throw new InvalidTokenException("인증 정보가 없습니다. 입력된 token: ", null);
         }
-        String id = request.getHeader(HttpHeaders.AUTHORIZATION);
-        Optional<Member> member = memberRepository.findById(Long.valueOf(id));
-        return member.isPresent();
+        Long memberId = jwtTokenProvider.parseToken(authHeader);
+        authContext.setMemberId(memberId);
+        return true;
     }
 }

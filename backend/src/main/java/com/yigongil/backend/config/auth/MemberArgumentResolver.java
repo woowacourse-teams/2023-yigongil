@@ -3,22 +3,21 @@ package com.yigongil.backend.config.auth;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Component
 public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final MemberRepository memberRepository;
+    private final AuthContext authContext;
 
-    public MemberArgumentResolver(MemberRepository memberRepository) {
+    public MemberArgumentResolver(MemberRepository memberRepository, AuthContext authContext) {
         this.memberRepository = memberRepository;
+        this.authContext = authContext;
     }
 
     @Override
@@ -27,15 +26,15 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
                 && parameter.hasParameterAnnotation(Authorization.class);
     }
 
+    // TODO: 2023/08/01 서비스에서 도메인 객체를 반환할 때 리팩토링 드가자~
     @Override
     public Object resolveArgument(
             MethodParameter parameter,
             ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest,
             WebDataBinderFactory binderFactory
-    ) throws Exception {
-        Long memberId = Long.valueOf(webRequest.getNativeRequest(HttpServletRequest.class).getHeader(HttpHeaders.AUTHORIZATION));
-
-        return memberRepository.findById(memberId).get();
+    ) {
+        return memberRepository.findById(authContext.getMemberId())
+                               .orElseThrow(IllegalArgumentException::new);
     }
 }

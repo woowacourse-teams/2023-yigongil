@@ -11,4 +11,5 @@ public record FinishedStudyResponse(
         Integer numberOfMaximumMembers,
         Boolean isSucceed
 ) {
+
 }

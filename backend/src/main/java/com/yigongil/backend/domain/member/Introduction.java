@@ -1,10 +1,9 @@
 package com.yigongil.backend.domain.member;
 
 import com.yigongil.backend.exception.InvalidIntroductionLengthException;
-
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.util.Objects;
 
 @Embeddable
 class Introduction {

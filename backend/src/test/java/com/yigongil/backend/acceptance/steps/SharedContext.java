@@ -3,10 +3,9 @@ package com.yigongil.backend.acceptance.steps;
 import io.cucumber.spring.ScenarioScope;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import org.springframework.stereotype.Component;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.stereotype.Component;
 
 @Component
 @ScenarioScope

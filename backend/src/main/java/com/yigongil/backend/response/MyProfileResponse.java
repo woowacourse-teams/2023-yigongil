@@ -11,4 +11,5 @@ public record MyProfileResponse(
         Integer tier,
         String introduction
 ) {
+
 }

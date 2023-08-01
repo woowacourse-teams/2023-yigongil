@@ -7,6 +7,7 @@ import com.yigongil.backend.request.MemberJoinRequest;
 import com.yigongil.backend.request.ProfileUpdateRequest;
 import com.yigongil.backend.response.MyProfileResponse;
 import com.yigongil.backend.response.ProfileResponse;
+import java.net.URI;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.net.URI;
 
 @RequestMapping("/v1/members")
 @RestController

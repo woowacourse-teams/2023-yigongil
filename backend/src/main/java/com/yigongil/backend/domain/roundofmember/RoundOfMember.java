@@ -16,9 +16,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import lombok.Builder;
+import lombok.Getter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+@Getter
 @Entity
 public class RoundOfMember extends BaseEntity {
 
@@ -33,7 +35,7 @@ public class RoundOfMember extends BaseEntity {
     private Member member;
 
     @Column(nullable = false)
-    private Boolean isDone;
+    private boolean isDone;
 
     @Cascade(CascadeType.PERSIST)
     @OneToMany
@@ -44,7 +46,7 @@ public class RoundOfMember extends BaseEntity {
     }
 
     @Builder
-    public RoundOfMember(Long id, Member member, Boolean isDone, List<OptionalTodo> optionalTodos) {
+    public RoundOfMember(Long id, Member member, boolean isDone, List<OptionalTodo> optionalTodos) {
         this.id = id;
         this.member = member;
         this.isDone = isDone;
@@ -56,33 +58,17 @@ public class RoundOfMember extends BaseEntity {
             throw new TooManyOptionalTodosException("선택 투두는 한 번에 4개까지 설정 가능합니다.", content);
         }
         OptionalTodo optionalTodo = OptionalTodo.builder()
-                .content(content)
-                .build();
+                                                .content(content)
+                                                .build();
         optionalTodos.add(optionalTodo);
         return optionalTodo;
     }
 
-    public void updateNecessaryTodoIsDone(Boolean isDone) {
+    public void updateNecessaryTodoIsDone(boolean isDone) {
         this.isDone = isDone;
     }
 
     public boolean isMemberEquals(Member member) {
         return this.member.equals(member);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Member getMember() {
-        return member;
-    }
-
-    public Boolean getDone() {
-        return isDone;
-    }
-
-    public List<OptionalTodo> getOptionalTodos() {
-        return optionalTodos;
     }
 }

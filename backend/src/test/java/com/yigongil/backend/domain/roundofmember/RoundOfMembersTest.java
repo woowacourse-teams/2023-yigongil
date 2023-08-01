@@ -1,11 +1,10 @@
 package com.yigongil.backend.domain.roundofmember;
 
-import com.yigongil.backend.fixture.RoundOfMemberFixture;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
+
+import com.yigongil.backend.fixture.RoundOfMemberFixture;
+import java.util.List;
+import org.junit.jupiter.api.Test;
 
 class RoundOfMembersTest {
 

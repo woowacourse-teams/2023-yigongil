@@ -1,4 +1,13 @@
 spring:
+  profiles:
+    active: test
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
   datasource:
     url: jdbc:h2:mem:~/test;MODE=MySQL
     username: sa
@@ -18,3 +27,17 @@ logging:
 
 schedules:
   round-update: 0/2 * * * * ?
+
+oauth2:
+  github:
+    client:
+      id: github-client-id
+      secret: github-secret
+      github-login-uri: https://github.com/login/oauth/authorize
+    provider:
+      token-uri: http://localhost:8080/fakeToken
+      user-info-uri: http://localhost:8080/fakeInfo
+
+jwt:
+  expiration: 5
+  key: qkljwnqdjnqjkdnqdwkdkm31i4j1dasksmdasdsadsasdafef113

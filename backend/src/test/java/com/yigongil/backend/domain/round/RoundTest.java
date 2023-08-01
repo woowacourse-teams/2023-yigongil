@@ -39,10 +39,10 @@ class RoundTest {
             //given
             Round round = RoundFixture.아이디_삼_투두없는_라운드.toRound();
             final Member another = Member.builder()
-                    .id(3L)
-                    .introduction("소개")
-                    .nickname("일반_유저")
-                    .build();
+                                         .id(3L)
+                                         .introduction("소개")
+                                         .nickname("일반_유저")
+                                         .build();
 
             //when
             final ThrowingCallable throwable = () -> round.createNecessaryTodo(another, "필수 투두");
@@ -93,8 +93,8 @@ class RoundTest {
             assertAll(
                     () -> assertThat(optionalTodos).hasSize(1),
                     () -> assertThat(optionalTodos.get(0)).usingRecursiveComparison()
-                            .ignoringFields("id")
-                            .isEqualTo(actual)
+                                                          .ignoringFields("id")
+                                                          .isEqualTo(actual)
             );
         }
 
@@ -103,10 +103,10 @@ class RoundTest {
             //given
             Round round = RoundFixture.아이디_삼_투두없는_라운드.toRound();
             Member stranger = Member.builder()
-                    .id(3L)
-                    .nickname("예외_유저")
-                    .introduction("소")
-                    .build();
+                                    .id(3L)
+                                    .nickname("예외_유저")
+                                    .introduction("소")
+                                    .build();
 
             //when
             ThrowingCallable throwable = () -> round.createOptionalTodo(stranger, "선택 투두");

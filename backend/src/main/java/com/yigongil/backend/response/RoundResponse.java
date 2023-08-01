@@ -10,4 +10,5 @@ public record RoundResponse(
         List<TodoResponse> optionalTodos,
         List<MemberOfRoundResponse> members
 ) {
+
 }

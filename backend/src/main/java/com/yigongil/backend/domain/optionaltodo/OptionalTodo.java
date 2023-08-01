@@ -2,14 +2,15 @@ package com.yigongil.backend.domain.optionaltodo;
 
 import com.yigongil.backend.domain.BaseEntity;
 import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 @Entity
 public class OptionalTodo extends BaseEntity {
 
@@ -41,18 +42,6 @@ public class OptionalTodo extends BaseEntity {
 
     public void updateIsDone(Boolean isDone) {
         this.isDone = isDone;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public boolean isDone() {
-        return isDone;
     }
 
     @Override

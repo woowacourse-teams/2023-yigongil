@@ -21,12 +21,9 @@ import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.utils.DateConverter;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,7 +41,9 @@ public class StudyService {
 
     public StudyService(
             StudyRepository studyRepository,
-            StudyMemberRepository studyMemberRepository, ApplicationEventPublisher publisher) {
+            StudyMemberRepository studyMemberRepository,
+            ApplicationEventPublisher publisher
+    ) {
         this.studyRepository = studyRepository;
         this.studyMemberRepository = studyMemberRepository;
         this.publisher = publisher;
@@ -65,11 +64,11 @@ public class StudyService {
         studyRepository.save(study);
 
         StudyMember studyMember = StudyMember.builder()
-                .study(study)
-                .member(member)
-                .role(Role.MASTER)
-                .studyResult(StudyResult.NONE)
-                .build();
+                                             .study(study)
+                                             .member(member)
+                                             .role(Role.MASTER)
+                                             .studyResult(StudyResult.NONE)
+                                             .build();
 
         studyMemberRepository.save(studyMember);
 
@@ -82,8 +81,8 @@ public class StudyService {
         Page<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.RECRUITING, pageable);
 
         return studies.get()
-                .map(RecruitingStudyResponse::from)
-                .toList();
+                      .map(RecruitingStudyResponse::from)
+                      .toList();
     }
 
     @Transactional
@@ -94,11 +93,11 @@ public class StudyService {
 
         studyMemberRepository.save(
                 StudyMember.builder()
-                        .study(study)
-                        .member(member)
-                        .role(Role.APPLICANT)
-                        .studyResult(StudyResult.NONE)
-                        .build()
+                           .study(study)
+                           .member(member)
+                           .role(Role.APPLICANT)
+                           .studyResult(StudyResult.NONE)
+                           .build()
         );
     }
 
@@ -112,7 +111,7 @@ public class StudyService {
     @Transactional(readOnly = true)
     public StudyDetailResponse findStudyDetailByStudyId(Member member, Long studyId) {
         Study study = studyRepository.findByIdWithRound(studyId)
-                .orElseThrow(() -> new StudyNotFoundException("해당 스터디가 존재하지 않습니다", studyId));
+                                     .orElseThrow(() -> new StudyNotFoundException("해당 스터디가 존재하지 않습니다", studyId));
 
         List<Round> rounds = study.getRounds();
         Round currentRound = study.getCurrentRound();
@@ -120,8 +119,8 @@ public class StudyService {
         List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndParticipatingAndNotEnd(studyId);
 
         Role role = studyMemberRepository.findByStudyIdAndMemberId(studyId, member.getId())
-                .map(StudyMember::getRole)
-                .orElse(Role.NO_ROLE);
+                                         .map(StudyMember::getRole)
+                                         .orElse(Role.NO_ROLE);
 
         return StudyDetailResponse.of(study, rounds, role, currentRound, createStudyMemberResponses(studyMembers));
     }
@@ -148,8 +147,8 @@ public class StudyService {
 
     private List<StudyMemberResponse> createStudyMemberResponses(List<StudyMember> studyMembers) {
         return studyMembers.stream()
-                .map(this::createStudyMemberResponse)
-                .toList();
+                           .map(this::createStudyMemberResponse)
+                           .toList();
     }
 
 
@@ -176,8 +175,7 @@ public class StudyService {
 
     @Transactional(readOnly = true)
     public List<MyStudyResponse> findMyStudies(Member member) {
-        List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndParticipatingAndNotEnd(
-                member.getId());
+        List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndParticipatingAndNotEnd(member.getId());
 
         List<MyStudyResponse> response = new ArrayList<>();
         for (StudyMember studyMember : studyMembers) {
@@ -186,18 +184,18 @@ public class StudyService {
                     new MyStudyResponse(
                             study.getId(),
                             study.getProcessingStatus()
-                                    .getCode(),
+                                 .getCode(),
                             studyMember.getRole()
-                                    .getCode(),
+                                       .getCode(),
                             study.getName(),
                             study.calculateAverageTier(),
                             DateConverter.toStringFormat(study.getStartAt()),
                             study.getTotalRoundCount(),
                             study.getPeriodUnit()
-                                    .toStringFormat(study.getPeriodOfRound()),
+                                 .toStringFormat(study.getPeriodOfRound()),
                             study.getCurrentRound()
-                                    .getRoundOfMembers()
-                                    .size(),
+                                 .getRoundOfMembers()
+                                 .size(),
                             study.getNumberOfMaximumMembers()
                     )
             );
@@ -212,7 +210,8 @@ public class StudyService {
     }
 
     private StudyMember findApplicantByMemberIdAndStudyId(Long memberId, Long studyId) {
-        StudyMember studyMember = studyMemberRepository.findByStudyIdAndMemberId(studyId, memberId)
+        StudyMember studyMember = studyMemberRepository
+                .findByStudyIdAndMemberId(studyId, memberId)
                 .orElseThrow(() -> new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId));
         if (studyMember.isNotApplicant()) {
             throw new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId);
@@ -240,6 +239,6 @@ public class StudyService {
 
     private Study findStudyById(Long studyId) {
         return studyRepository.findById(studyId)
-                .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
+                              .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
     }
 }

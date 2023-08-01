@@ -16,7 +16,7 @@ public enum MemberFixture {
     private final String introduction;
 
     MemberFixture(Long id, String githubId, String nickname, String profileImageUrl, Integer tier,
-                  String introduction) {
+            String introduction) {
         this.id = id;
         this.githubId = githubId;
         this.nickname = nickname;
@@ -27,22 +27,22 @@ public enum MemberFixture {
 
     public Member toMember() {
         return Member.builder()
-                .id(id)
-                .githubId(githubId)
-                .nickname(nickname)
-                .profileImageUrl(profileImageUrl)
-                .tier(tier)
-                .introduction(introduction)
-                .build();
+                     .id(id)
+                     .githubId(githubId)
+                     .nickname(nickname)
+                     .profileImageUrl(profileImageUrl)
+                     .tier(tier)
+                     .introduction(introduction)
+                     .build();
     }
 
     public Member toMemberWithoutId() {
         return Member.builder()
-                .githubId(githubId)
-                .nickname(nickname)
-                .profileImageUrl(profileImageUrl)
-                .tier(tier)
-                .introduction(introduction)
-                .build();
+                     .githubId(githubId)
+                     .nickname(nickname)
+                     .profileImageUrl(profileImageUrl)
+                     .tier(tier)
+                     .introduction(introduction)
+                     .build();
     }
 }

@@ -25,9 +25,9 @@ class MemberTest {
             //given
             //when
             ThrowingCallable throwable = () -> Member.builder()
-                    .nickname(input)
-                    .introduction("적절한 자기소개")
-                    .build();
+                                                     .nickname(input)
+                                                     .introduction("적절한 자기소개")
+                                                     .build();
 
             //then
             assertThatThrownBy(throwable).isInstanceOf(InvalidNicknameLengthException.class);
@@ -39,9 +39,9 @@ class MemberTest {
             //given
             //when
             ThrowingCallable throwable = () -> Member.builder()
-                    .nickname(input)
-                    .introduction("적절한 자기소개")
-                    .build();
+                                                     .nickname(input)
+                                                     .introduction("적절한 자기소개")
+                                                     .build();
 
             //then
             assertThatThrownBy(throwable).isInstanceOf(InvalidNicknamePatternException.class);
@@ -53,9 +53,9 @@ class MemberTest {
             //given
             //when
             final ThrowingSupplier<Member> supplier = () -> Member.builder()
-                    .nickname(input)
-                    .introduction("적절한 자기소개")
-                    .build();
+                                                                  .nickname(input)
+                                                                  .introduction("적절한 자기소개")
+                                                                  .build();
 
             //then
             assertDoesNotThrow(supplier);
@@ -71,9 +71,9 @@ class MemberTest {
             //given
             //when
             ThrowingCallable throwable = () -> Member.builder()
-                    .nickname("적절한닉네임")
-                    .introduction(input.repeat(repeatCount))
-                    .build();
+                                                     .nickname("적절한닉네임")
+                                                     .introduction(input.repeat(repeatCount))
+                                                     .build();
 
             //then
             assertThatThrownBy(throwable).isInstanceOf(InvalidIntroductionLengthException.class);
@@ -84,9 +84,9 @@ class MemberTest {
             //given
             //when
             ThrowingCallable throwable = () -> Member.builder()
-                    .nickname("적절한닉네임")
-                    .introduction("  ")
-                    .build();
+                                                     .nickname("적절한닉네임")
+                                                     .introduction("  ")
+                                                     .build();
 
             //then
             assertThatThrownBy(throwable).isInstanceOf(InvalidIntroductionLengthException.class);
@@ -98,9 +98,9 @@ class MemberTest {
             //given
             //when
             final ThrowingSupplier<Member> supplier = () -> Member.builder()
-                    .nickname("적절한닉네임")
-                    .introduction(input.repeat(repeatCount))
-                    .build();
+                                                                  .nickname("적절한닉네임")
+                                                                  .introduction(input.repeat(repeatCount))
+                                                                  .build();
 
             //then
             assertDoesNotThrow(supplier);

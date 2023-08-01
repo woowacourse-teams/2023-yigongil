@@ -18,15 +18,14 @@ import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.TodoResponse;
 import com.yigongil.backend.response.UpcomingStudyResponse;
 import com.yigongil.backend.utils.DateConverter;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RoundService {
@@ -48,14 +47,16 @@ public class RoundService {
     @Transactional
     public RoundResponse findRoundDetail(Member member, Long roundId) {
         Round round = roundRepository.findRoundByIdWithRoundsOfMember(roundId)
-                .orElseThrow(() -> new RoundNotFoundException("해당 회차를 찾을 수 없습니다", roundId));
+                                     .orElseThrow(() -> new RoundNotFoundException("해당 회차를 찾을 수 없습니다", roundId));
 
-        List<RoundOfMember> roundOfMembers = roundOfMemberRepository.findRoundOfMembersWithMember(round.getRoundOfMembers());
+        List<RoundOfMember> roundOfMembers =
+                roundOfMemberRepository.findRoundOfMembersWithMember(round.getRoundOfMembers());
 
-        RoundOfMember roundByMember = roundOfMembers.stream()
-                .filter(roundOfMember -> roundOfMember.isMemberEquals(member))
-                .findAny()
-                .orElseThrow(() -> new InvalidMemberInRoundException("해당 스터디에 존재하지 않는 회원입니다.", member.getId()));
+        RoundOfMember roundByMember =
+                roundOfMembers.stream()
+                              .filter(roundOfMember -> roundOfMember.isMemberEquals(member))
+                              .findAny()
+                              .orElseThrow(() -> new InvalidMemberInRoundException("해당 스터디에 존재하지 않는 회원입니다.", member.getId()));
 
         List<OptionalTodo> optionalTodos = roundByMember.getOptionalTodos();
 
