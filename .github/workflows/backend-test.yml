@@ -1,0 +1,53 @@
+name: backend-test-on-pull-request
+on:
+  pull_request:
+    branches: [BE/develop, BE/release]
+    types: [opened, synchronize, reopened]
+      
+
+defaults:
+  run:
+    working-directory: backend
+    
+permissions:
+  checks: write
+  pull-requests: write
+  
+jobs:
+  backend-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 체크아웃
+      uses: actions/checkout@v3
+    
+    - name: JDK17 설치
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Gradle에 권한부여
+      run: chmod +x gradlew
+      
+    - name: Test 실행
+      run: ./gradlew clean build
+      
+    - name: Test 결과를 PR에 코멘트로 등록
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        files: '**/build/test-results/test/TEST-*.xml'
+  
+    - name: 테스트 실패 slack 알림
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        author_name: 백엔드 빌드 실패 알림
+        fields: repo, message, commit, author, action, eventName, ref, workflow, job, took
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: failure()
+        
+        
