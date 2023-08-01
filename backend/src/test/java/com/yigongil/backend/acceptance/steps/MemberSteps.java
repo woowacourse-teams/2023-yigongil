@@ -6,9 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yigongil.backend.request.MemberJoinRequest;
+import com.yigongil.backend.config.oauth.JwtTokenProvider;
 import com.yigongil.backend.request.ProfileUpdateRequest;
 import com.yigongil.backend.response.ProfileResponse;
+import com.yigongil.backend.response.TokenResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -21,27 +22,25 @@ public class MemberSteps {
 
     private final ObjectMapper objectMapper;
     private final SharedContext sharedContext;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public MemberSteps(ObjectMapper objectMapper, SharedContext sharedContext) {
+    public MemberSteps(ObjectMapper objectMapper, SharedContext sharedContext, JwtTokenProvider jwtTokenProvider) {
         this.objectMapper = objectMapper;
         this.sharedContext = sharedContext;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Given("{string}의 깃허브 아이디로 회원가입을 한다.")
     public void 깃허브_아이디로_회원가입을_한다(String githubId) throws JsonProcessingException {
-        MemberJoinRequest request = new MemberJoinRequest(githubId);
+        TokenResponse tokenResponse = given().log().all()
+                                             .when()
+                                             .get("/v1/login/fake/tokens?githubId=" + githubId)
+                                             .then().log().all()
+                                             .extract()
+                                             .as(TokenResponse.class);
 
-        String locationHeader = given().log().all()
-                                       .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                       .body(objectMapper.writeValueAsString(request))
-                                       .when()
-                                       .post("/v1/members")
-                                       .then().log().all()
-                                       .extract()
-                                       .header(HttpHeaders.LOCATION);
-
-        String memberId = locationHeader.substring(locationHeader.lastIndexOf("/") + 1);
-        sharedContext.setParameter(githubId, memberId);
+        String accessToken = tokenResponse.accessToken();
+        sharedContext.setParameter(githubId, accessToken);
     }
 
     @When("{string}가 닉네임 {string}과 간단 소개{string}으로 수정한다.")
@@ -64,7 +63,7 @@ public class MemberSteps {
     public void profile_확인(String githubId, String nickname, String introduction) {
         ProfileResponse response = given()
                 .when()
-                .get("/v1/members/" + sharedContext.getParameter(githubId))
+                .get("/v1/members/" + jwtTokenProvider.parseToken((String) sharedContext.getParameter(githubId)))
                 .then()
                 .extract()
                 .as(ProfileResponse.class);

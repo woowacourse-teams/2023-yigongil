@@ -5,8 +5,10 @@ import com.yigongil.backend.config.oauth.GithubClient;
 import com.yigongil.backend.config.oauth.GithubProfileResponse;
 import com.yigongil.backend.config.oauth.GithubProvider;
 import com.yigongil.backend.config.oauth.GithubTokenRequest;
+import com.yigongil.backend.config.oauth.JwtTokenProvider;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
+import com.yigongil.backend.response.TokenResponse;
 import java.net.URI;
 import java.util.Optional;
 import org.springframework.http.HttpEntity;
@@ -25,11 +27,13 @@ public class OauthService {
     private final GithubProvider githubProvider;
     private final GithubClient githubClient;
     private final MemberRepository memberRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public OauthService(GithubProvider githubProvider, GithubClient githubClient, MemberRepository memberRepository) {
+    public OauthService(GithubProvider githubProvider, GithubClient githubClient, MemberRepository memberRepository, JwtTokenProvider jwtTokenProvider) {
         this.githubProvider = githubProvider;
         this.githubClient = githubClient;
         this.memberRepository = memberRepository;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     public URI getGithubRedirectUrl() {
@@ -39,14 +43,14 @@ public class OauthService {
                                    .toUri();
     }
 
-    public Long login(String code) {
+    public TokenResponse login(String code) {
         GithubAccessToken accessToken = requestAccessToken(code);
 
         GithubProfileResponse profileResponse = requestGithubProfile(accessToken);
 
         Optional<Member> member = memberRepository.findByGithubId(profileResponse.githubId());
 
-        return member.orElseGet(
+        Long id = member.orElseGet(
                 () -> memberRepository.save(
                         Member.builder()
                               .githubId(profileResponse.githubId())
@@ -55,6 +59,8 @@ public class OauthService {
                               .build()
                 )
         ).getId();
+
+        return new TokenResponse(jwtTokenProvider.createToken(id));
     }
 
     private GithubAccessToken requestAccessToken(String code) {

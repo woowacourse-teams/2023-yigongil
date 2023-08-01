@@ -15,6 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.application.MemberService;
 import com.yigongil.backend.config.WebConfig;
+import com.yigongil.backend.config.auth.AuthContext;
+import com.yigongil.backend.config.oauth.JwtTokenProvider;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.fixture.MemberFixture;
@@ -46,6 +48,12 @@ class MemberControllerTest {
 
     @MockBean
     private MemberRepository memberRepository;
+
+    @MockBean
+    private AuthContext authContext;
+
+    @MockBean
+    private JwtTokenProvider tokenProvider;
 
     @Test
     void 프로필_정보를_조회한다() throws Exception {
@@ -79,11 +87,13 @@ class MemberControllerTest {
 
         willDoNothing().given(memberService).update(any(), any());
 
+        given(tokenProvider.parseToken(any())).willReturn(1L);
         given(memberRepository.findById(1L)).willReturn(Optional.of(MemberFixture.김진우.toMember()));
+        given(authContext.getMemberId()).willReturn(1L);
 
         mockMvc.perform(patch("/v1/members")
                        .contentType(MediaType.APPLICATION_JSON)
-                       .header(HttpHeaders.AUTHORIZATION, "1")
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer 1")
                        .content(objectMapper.writeValueAsString(request)))
                .andDo(print())
                .andExpect(status().isOk());

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yigongil.backend.config.oauth.JwtTokenProvider;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.StudyCreateRequest;
 import com.yigongil.backend.response.HomeResponse;
@@ -30,10 +31,12 @@ public class StudySteps {
 
     private final ObjectMapper objectMapper;
     private final SharedContext sharedContext;
+    private final JwtTokenProvider tokenProvider;
 
-    public StudySteps(ObjectMapper objectMapper, SharedContext sharedContext) {
+    public StudySteps(ObjectMapper objectMapper, SharedContext sharedContext, JwtTokenProvider tokenProvider) {
         this.objectMapper = objectMapper;
         this.sharedContext = sharedContext;
+        this.tokenProvider = tokenProvider;
     }
 
     @Given("{string}가 {string}, {string}, {string}, {string}, {string}, {string}로 스터디를 개설한다.")
@@ -139,7 +142,7 @@ public class StudySteps {
                                            .as(RoundResponse.class);
 
         assertAll(
-                () -> assertThat(round.masterId()).isEqualTo(Long.valueOf((String) sharedContext.getParameter(masterGithubId))),
+                () -> assertThat(round.masterId()).isEqualTo(tokenProvider.parseToken((String) sharedContext.getParameter(masterGithubId))),
                 () -> assertThat(round.id()).isEqualTo(sharedContext.getParameter("roundId"))
         );
     }
