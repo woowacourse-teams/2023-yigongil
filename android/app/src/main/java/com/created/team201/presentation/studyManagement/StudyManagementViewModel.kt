@@ -3,6 +3,7 @@ package com.created.team201.presentation.studyManagement
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.created.domain.model.PageIndex
 import com.created.domain.model.Role
 import com.created.domain.model.Round
 import com.created.team201.presentation.home.model.TodoUiModel
@@ -48,18 +49,18 @@ class StudyManagementViewModel : ViewModel() {
         // 서버 통신으로 round 정보 가져옴
     }
 
-    fun updateCurrentPage(pageIndex: Int) {
+    fun updateCurrentPage(pageIndex: PageIndex) {
         val rounds = rounds.value ?: listOf()
         val studyRounds = studyRounds.value ?: listOf()
 
         val round = rounds.find {
-            it.id == studyRounds[pageIndex].id
+            it.id == studyRounds[pageIndex.number].id
         } ?: throw IllegalStateException("해당 스터디 없음")
 
         _currentRound.value = round.number
     }
 
-    fun fetchRoundDetail(pageIndex: Int) {
+    fun fetchRoundDetail(pageIndex: PageIndex) {
         // currentRoundId 갱신
         updateCurrentPage(pageIndex)
         // getStudyRoundDetail

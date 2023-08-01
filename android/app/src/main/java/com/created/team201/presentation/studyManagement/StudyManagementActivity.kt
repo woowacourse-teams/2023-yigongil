@@ -68,7 +68,7 @@ class StudyManagementActivity :
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
 
-                    studyManagementViewModel.updateCurrentPage(position)
+                    studyManagementViewModel.updateCurrentPage(PageIndex(position))
                     setPageChangeButtonEnabled()
                 }
             },
@@ -115,13 +115,13 @@ class StudyManagementActivity :
         binding.ivStudyManagementPreviousButton.setOnClickListener {
             val page = PageIndex(binding.vpStudyManagement.currentItem).decrease()
             binding.vpStudyManagement.setCurrentItem(page.number, true)
-            studyManagementViewModel.fetchRoundDetail(page.number)
+            studyManagementViewModel.fetchRoundDetail(page)
         }
         binding.ivStudyManagementNextButton.setOnClickListener {
             val page =
                 PageIndex(binding.vpStudyManagement.currentItem).increase(studyManagementAdapter.itemCount - 1)
             binding.vpStudyManagement.setCurrentItem(page.number, true)
-            studyManagementViewModel.fetchRoundDetail(page.number)
+            studyManagementViewModel.fetchRoundDetail(page)
         }
     }
 
