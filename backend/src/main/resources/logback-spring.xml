@@ -1,25 +1,35 @@
 <configuration>
     <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>
     <property name="LOG_PATTERN"
-              value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
+      value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
 
     <!--  프로덕션 외의 환경 -->
-    <springProfile name="!dev">
+    <springProfile name="local, test, default">
         <include resource="console-appender.xml"/>
 
         <root level="INFO">
-            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="CONSOLE"/>
         </root>
     </springProfile>
 
     <!-- 프로덕션 환경 -->
     <springProfile name="dev">
-        <include resource="file-appender.xml"/>
+        <include resource="dev-file-appender.xml"/>
 
         <root level="INFO">
-            <appender-ref ref="FILE-ERROR" />
-            <appender-ref ref="FILE-WARN" />
-            <appender-ref ref="FILE-INFO" />
+            <appender-ref ref="FILE-ERROR"/>
+            <appender-ref ref="FILE-WARN"/>
+            <appender-ref ref="FILE-INFO"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="prod">
+        <include resource="prod-file-appender.xml"/>
+
+        <root level="INFO">
+            <appender-ref ref="FILE-ERROR"/>
+            <appender-ref ref="FILE-WARN"/>
+            <appender-ref ref="FILE-INFO"/>
         </root>
     </springProfile>
 
