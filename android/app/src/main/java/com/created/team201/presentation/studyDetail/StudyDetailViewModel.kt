@@ -111,7 +111,7 @@ class StudyDetailViewModel(
             isApplicant = isApplicant,
             profileImageUrl = this.profileImage,
             name = this.nickname,
-            successRate = this.successRate,
+            successRate = this.successRate.toInt(),
             tier = this.tier,
         )
 

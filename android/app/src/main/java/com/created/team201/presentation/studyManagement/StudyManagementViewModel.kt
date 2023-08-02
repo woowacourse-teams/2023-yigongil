@@ -1,5 +1,6 @@
 package com.created.team201.presentation.studyManagement
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -51,6 +52,8 @@ class StudyManagementViewModel(
                 studyInformation = it.toUiModel()
                 rounds.value = it.rounds.map { round: Round -> round.toUiModel() }
                 initStudyRounds(studyId, currentRoundId)
+            }.onFailure {
+                Log.e("ERROR", it.message.toString())
             }
         }
     }
