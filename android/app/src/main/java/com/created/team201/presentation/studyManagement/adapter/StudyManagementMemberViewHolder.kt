@@ -20,11 +20,14 @@ class StudyManagementMemberViewHolder(
     fun bind(item: StudyMemberUiModel) {
         binding.studyMember = item
         binding.tvItemStudyManagementStudyMemberEssentialTodoDone.text =
-            if (item.isDone) {
-                binding.root.context.getString(R.string.item_study_management_todo_done)
-            } else {
-                binding.root.context.getString(R.string.item_study_management_todo_undone)
-            }
+            getIsDoneDescription(item.isDone)
+    }
+
+    private fun getIsDoneDescription(isDone: Boolean): String {
+        if (isDone) {
+            return binding.root.context.getString(R.string.item_study_management_todo_done)
+        }
+        return binding.root.context.getString(R.string.item_study_management_todo_undone)
     }
 
     companion object {
