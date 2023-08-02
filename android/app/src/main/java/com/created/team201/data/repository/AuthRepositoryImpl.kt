@@ -11,7 +11,9 @@ class AuthRepositoryImpl(
 
     override suspend fun signUp(token: String): Result<Unit> {
         return runCatching {
-            val token = authDataSource.getTokens(token)
+            val userAccessToken = authDataSource.getTokens(token).accessToken
+
+            tokenDataSource.setAccessToken(userAccessToken)
         }
     }
 }
