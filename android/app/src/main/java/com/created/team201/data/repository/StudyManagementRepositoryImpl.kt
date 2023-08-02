@@ -28,7 +28,18 @@ class StudyManagementRepositoryImpl(
         )
     }
 
-    override suspend fun createTodo(studyId: Long, createTodo: CreateTodo) {
-        studyManagementDataSource.createTodo(studyId, createTodo.toRequestBody())
+    override suspend fun createTodo(studyId: Long, createTodo: CreateTodo): Result<Long> {
+        return runCatching {
+            val responseHeader =
+                studyManagementDataSource.createTodo(studyId, createTodo.toRequestBody()).headers()
+
+            responseHeader[KEY_LOCATION]?.split(KEY_SLASH)?.last()?.toLong()
+                ?: throw IllegalStateException("헤더를 찾을 수 없습니다.")
+        }
+    }
+
+    companion object {
+        private const val KEY_LOCATION = "Location"
+        private const val KEY_SLASH = "/"
     }
 }

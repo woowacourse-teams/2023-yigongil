@@ -4,6 +4,7 @@ import com.created.team201.data.remote.request.TodoCreateRequestDto
 import com.created.team201.data.remote.request.TodoRequestDto
 import com.created.team201.data.remote.response.RoundDetailResponseDto
 import com.created.team201.data.remote.response.StudyDetailResponseDto
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -33,5 +34,5 @@ interface StudyManagementService {
     suspend fun createTodo(
         @Path("studyId") studyId: Long,
         @Body todoCreateRequestDto: TodoCreateRequestDto,
-    )
+    ): Response<Unit>
 }
