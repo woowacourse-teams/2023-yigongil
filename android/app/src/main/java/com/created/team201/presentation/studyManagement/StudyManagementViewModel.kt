@@ -53,7 +53,7 @@ class StudyManagementViewModel(
                 rounds.value = it.rounds.map { round: Round -> round.toUiModel() }
                 initStudyRounds(studyId, currentRoundId)
             }.onFailure {
-                Log.e("ERROR", it.message.toString())
+                Log.e(LOG_ERROR, it.message.toString())
             }
         }
     }
@@ -63,10 +63,13 @@ class StudyManagementViewModel(
         _state.value = StudyManagementState.Member
 
         viewModelScope.launch {
-            getStudyRoundDetail(studyId, currentRoundId).onSuccess {
-                _studyRounds.value = listOf(it.toUiModel())
-                fetchRoundDetail(studyId, PageIndex())
-            }
+            getStudyRoundDetail(studyId, currentRoundId)
+                .onSuccess {
+                    _studyRounds.value = listOf(it.toUiModel())
+                    fetchRoundDetail(studyId, PageIndex())
+                }.onFailure {
+                    Log.e(LOG_ERROR, it.message.toString())
+                }
         }
     }
 
@@ -96,9 +99,12 @@ class StudyManagementViewModel(
         studyRounds: List<StudyRoundDetailUiModel>,
     ) {
         viewModelScope.launch {
-            getStudyRoundDetail(studyId, roundId).onSuccess {
-                _studyRounds.value = listOf(it.toUiModel()) + studyRounds
-            }
+            getStudyRoundDetail(studyId, roundId)
+                .onSuccess {
+                    _studyRounds.value = listOf(it.toUiModel()) + studyRounds
+                }.onFailure {
+                    Log.e(LOG_ERROR, it.message.toString())
+                }
         }
     }
 
@@ -108,9 +114,12 @@ class StudyManagementViewModel(
         studyRounds: List<StudyRoundDetailUiModel>,
     ) {
         viewModelScope.launch {
-            getStudyRoundDetail(studyId, roundId).onSuccess {
-                _studyRounds.value = studyRounds + it.toUiModel()
-            }
+            getStudyRoundDetail(studyId, roundId)
+                .onSuccess {
+                    _studyRounds.value = studyRounds + it.toUiModel()
+                }.onFailure {
+                    Log.e(LOG_ERROR, it.message.toString())
+                }
         }
     }
 
@@ -171,6 +180,8 @@ class StudyManagementViewModel(
                     todo = todo.toDomain(),
                     isNecessary = isNecessary,
                 )
+            }.onFailure {
+                Log.e(LOG_ERROR, it.message.toString())
             }
         }
     }
@@ -219,6 +230,8 @@ class StudyManagementViewModel(
                     studyRoundDetailUiModel.takeIf { it.id != studyId } ?: newStudy
                 }
                 _studyRounds.value = updatedStudyRounds
+            }.onFailure {
+                Log.e(LOG_ERROR, it.message.toString())
             }
         }
     }
@@ -288,6 +301,7 @@ class StudyManagementViewModel(
     companion object {
         private const val DEFAULT_TODO_ID = 0L
         private const val ONE_PAGE = 1
+        private const val LOG_ERROR = "ERROR"
 
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
