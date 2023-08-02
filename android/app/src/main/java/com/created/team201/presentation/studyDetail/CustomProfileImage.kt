@@ -10,7 +10,7 @@ import android.widget.ProgressBar
 import com.bumptech.glide.Glide
 import com.created.team201.R
 import com.created.team201.databinding.CustomProfileImageBinding
-import com.created.team201.presentation.studyList.uiModel.Tier
+import com.created.team201.presentation.studyDetail.model.Tier
 
 class CustomProfileImage @JvmOverloads constructor(
     context: Context,
@@ -62,6 +62,11 @@ class CustomProfileImage @JvmOverloads constructor(
 
     fun setTier(tierName: String) {
         val tier = Tier.of(tierName)
+        borderProgress.progressTintList = ColorStateList.valueOf(context.getColor(tier.color))
+    }
+
+    fun setTier(tierNumber: Int) {
+        val tier = Tier.of(tierNumber)
         borderProgress.progressTintList = ColorStateList.valueOf(context.getColor(tier.color))
     }
 }

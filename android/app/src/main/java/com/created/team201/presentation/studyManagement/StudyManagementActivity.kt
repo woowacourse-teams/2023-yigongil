@@ -16,10 +16,12 @@ import com.created.team201.presentation.studyManagement.adapter.StudyManagementA
 class StudyManagementActivity :
     BindingActivity<ActivityStudyManagementBinding>(R.layout.activity_study_management) {
 
-    private val studyManagementViewModel by viewModels<StudyManagementViewModel>()
+    private val studyManagementViewModel: StudyManagementViewModel by viewModels { StudyManagementViewModel.Factory }
     private val studyManagementAdapter: StudyManagementAdapter by lazy {
         StudyManagementAdapter(studyManagementClickListener, memberClickListener)
     }
+    private val studyId: Long by lazy { intent.getLongExtra(KEY_STUDY_ID, KEY_ERROR) }
+    private val roundId: Long by lazy { intent.getLongExtra(KEY_ROUND_ID, KEY_ERROR) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,12 +48,10 @@ class StudyManagementActivity :
     }
 
     private fun initStudyInformation() {
-        studyManagementViewModel.fetchStudyInformation()
+        studyManagementViewModel.fetchStudyInformation(studyId)
     }
 
     private fun initStudyRounds() {
-        val studyId = intent.getLongExtra(KEY_STUDY_ID, KEY_ERROR)
-        val roundId = intent.getLongExtra(KEY_ROUND_ID, KEY_ERROR)
         studyManagementViewModel.getStudyRounds(studyId, roundId)
     }
 
@@ -85,7 +85,7 @@ class StudyManagementActivity :
     private val studyManagementClickListener = object : StudyManagementClickListener {
         override fun clickOnTodo(id: Long, isDone: Boolean) {
             val currentItemId = binding.vpStudyManagement.currentItem
-            studyManagementViewModel.updateTodo(currentItemId, id, !isDone)
+            studyManagementViewModel.updateTodo(currentItemId, id, !isDone, studyId)
         }
 
         override fun onClickAddTodo(todoContent: String) {
@@ -127,13 +127,13 @@ class StudyManagementActivity :
         binding.ivStudyManagementPreviousButton.setOnClickListener {
             val page = PageIndex(binding.vpStudyManagement.currentItem).decrease()
             binding.vpStudyManagement.setCurrentItem(page.number, true)
-            studyManagementViewModel.fetchRoundDetail(page)
+            studyManagementViewModel.fetchRoundDetail(studyId, page)
         }
         binding.ivStudyManagementNextButton.setOnClickListener {
             val page =
                 PageIndex(binding.vpStudyManagement.currentItem).increase(studyManagementAdapter.itemCount - 1)
             binding.vpStudyManagement.setCurrentItem(page.number, true)
-            studyManagementViewModel.fetchRoundDetail(page)
+            studyManagementViewModel.fetchRoundDetail(studyId, page)
         }
     }
 
