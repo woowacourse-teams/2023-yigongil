@@ -4,12 +4,13 @@ data class PageIndex(
     val number: Int,
 ) {
     fun increase(maxPage: Int): PageIndex =
-        PageIndex(number.coerceAtMost(maxPage))
+        PageIndex((number + ONE_PAGE).coerceAtMost(maxPage))
 
     fun decrease(): PageIndex =
-        PageIndex(number.coerceAtLeast(MIN_VIEW_PAGER_INDEX))
+        PageIndex((number - ONE_PAGE).coerceAtLeast(MIN_VIEW_PAGER_INDEX))
 
     companion object {
+        private const val ONE_PAGE = 1
         private const val MIN_VIEW_PAGER_INDEX = 0
     }
 }
