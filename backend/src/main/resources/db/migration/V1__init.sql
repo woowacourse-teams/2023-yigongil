@@ -18,7 +18,7 @@ create table optional_todo
     updated_at         timestamp,
     content            varchar(20) not null,
     is_done            boolean     not null,
-    round_of_member_id bigint not null,
+    round_of_member_id bigint,
     primary key (id)
 );
 
@@ -60,7 +60,7 @@ create table study
     processing_status         varchar(255) not null,
     start_at                  timestamp    not null,
     total_round_count         integer      not null,
-    current_round_id          bigint not null ,
+    current_round_id          bigint,
     primary key (id)
 );
 
