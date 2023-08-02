@@ -12,4 +12,6 @@ interface StudyDetailRepository {
     suspend fun participateStudy(studyId: Long)
 
     suspend fun startStudy(studyId: Long)
+
+    suspend fun acceptApplicant(studyId: Long, memberId: Long)
 }

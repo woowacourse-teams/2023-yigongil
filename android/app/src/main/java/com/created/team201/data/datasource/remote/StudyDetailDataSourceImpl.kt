@@ -22,4 +22,8 @@ class StudyDetailDataSourceImpl(
     override suspend fun startStudy(studyId: Long) {
         studyDetailService.startStudy(studyId)
     }
+
+    override suspend fun acceptApplicant(studyId: Long, memberId: Long) {
+        studyDetailService.acceptApplicant(studyId, memberId)
+    }
 }

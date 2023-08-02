@@ -27,4 +27,10 @@ interface StudyDetailService {
     suspend fun startStudy(
         @Path("studyId") studyId: Long,
     )
+
+    @PATCH("/v1/studies/{studyId}/applicants/{memberId}")
+    suspend fun acceptApplicant(
+        @Path("studyId") studyId: Long,
+        @Path("memberId") memberId: Long,
+    )
 }
