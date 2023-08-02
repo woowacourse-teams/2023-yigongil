@@ -8,10 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import androidx.test.core.app.ApplicationProvider
 import com.created.domain.repository.AuthRepository
+import com.created.team201.application.Team201App
 import com.created.team201.data.datasource.local.TokenDataSourceImpl
-import com.created.team201.data.datasource.local.TokenStorage
 import com.created.team201.data.datasource.remote.login.AuthDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.AuthRepositoryImpl
@@ -44,11 +43,6 @@ class LoginViewModel(
     }
 
     companion object {
-
-        fun createTokenStorage(
-            tokenStorage: TokenStorage,
-        ): TokenStorage = tokenStorage
-
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 LoginViewModel(
@@ -56,9 +50,7 @@ class LoginViewModel(
                         AuthDataSourceImpl(
                             NetworkServiceModule.authService,
                         ),
-                        TokenDataSourceImpl(
-                            TokenStorage.getInstance(context = ApplicationProvider.getApplicationContext()),
-                        ),
+                        TokenDataSourceImpl(Team201App.provideTokenStorage()),
                     ),
                 )
             }

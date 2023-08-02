@@ -10,6 +10,16 @@ class Team201App : Application() {
         instance = this
     }
 
+    override fun onCreate() {
+        super.onCreate()
+
+        initTokenStorage()
+    }
+
+    private fun initTokenStorage() {
+        TokenStorage.getInstance(this)
+    }
+
     companion object {
         private var instance: Team201App? = null
 
