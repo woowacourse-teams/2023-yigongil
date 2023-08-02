@@ -1,4 +1,4 @@
-package com.created.team201.presentation.studyList.uiModel
+package com.created.team201.presentation.studyDetail.model
 
 import androidx.annotation.ColorRes
 import com.created.team201.R

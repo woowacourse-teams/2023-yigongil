@@ -10,13 +10,7 @@
     <declare-styleable name="CustomProfileImage">
         <attr name="glideCircleImageUrl" format="string" />
         <attr name="borderProgress" format="integer" />
-        <attr name="tier" format="enum">
-            <enum name="bronze" value="1" />
-            <enum name="silver" value="2" />
-            <enum name="gold" value="3" />
-            <enum name="platinum" value="4" />
-            <enum name="diamond" value="5" />
-        </attr>
+        <attr name="tier" format="integer"/>
     </declare-styleable>
 
     <declare-styleable name="MultiPicker">
