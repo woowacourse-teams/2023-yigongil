@@ -1,7 +1,8 @@
 spring:
   config:
-    import: classpath:/yigongil-private/application-dev.yml
-
+    import:
+      - classpath:/yigongil-private/application-dev.yml
+      - classpath:/yigongil-private/application-prod.yml
   profiles:
     active: local
 
@@ -24,6 +25,8 @@ spring:
   h2:
     console:
       enabled: true
+  flyway:
+    enabled: false
 
 logging:
   level:
@@ -46,4 +49,3 @@ oauth2:
 jwt:
   expiration: 60
   key: qkljwnqdjnqjkdnqdwkdkm31i4j1dasksmd
-
