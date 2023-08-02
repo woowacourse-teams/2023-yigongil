@@ -29,7 +29,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
     private fun observeLoginState() {
         loginViewModel.loginState.observe(this) { loginState ->
             when (loginState) {
-                SUCCESS -> navigateToHome()
+                SUCCESS -> navigateToMain()
                 FAIL -> Toast.makeText(
                     this,
                     getString(R.string.login_fail_message),
@@ -41,7 +41,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
         }
     }
 
-    private fun navigateToHome() {
+    private fun navigateToMain() {
         startActivity(MainActivity.getIntent(this))
         finish()
     }
@@ -55,9 +55,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
     }
 
     private fun navigateToLoginWebView(redirectUrl: String) {
-        startActivity(
-            CustomTabLauncherActivity.getIntent(this, redirectUrl, getResult()),
-        )
+        startActivity(CustomTabLauncherActivity.getIntent(this, redirectUrl, getResult()))
         finish()
     }
 
@@ -65,8 +63,8 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
         override fun onReceiveResult(resultCode: Int, resultData: Bundle) {
             super.onReceiveResult(resultCode, resultData)
 
-            val oauthToken =
-                resultData.getString(GIT_OAUTH_TOKEN_KEY) ?: throw IllegalArgumentException()
+            val oauthToken = resultData.getString(GIT_OAUTH_TOKEN_KEY)
+                ?: throw IllegalArgumentException()
 
             loginViewModel.postLogin(oauthToken)
         }

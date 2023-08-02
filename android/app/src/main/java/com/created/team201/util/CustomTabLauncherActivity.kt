@@ -75,9 +75,9 @@ class CustomTabLauncherActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val CUSTOM_TABS_OPENED = "CUSTOM_TABS_OPENED"
-
         internal const val GIT_OAUTH_TOKEN_KEY = "GIT_OAUTH_TOKEN_KEY"
+
+        private const val CUSTOM_TABS_OPENED = "CUSTOM_TABS_OPENED"
         private const val BUNDLE_KEY = "BUNDLE_KEY"
         private const val GIT_URL_KEY = "GIT_URL"
         private const val RECEIVER_KEY = "RECEIVER_KEY"

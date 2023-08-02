@@ -24,7 +24,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
+                <!--https://github.com/login/oauth/authorize?client_id=002374d6d5c4feab3c9c-->
                 <data
                     android:host="login"
                     android:scheme="example" />
@@ -38,12 +38,6 @@
             android:exported="false" />
         <activity
             android:name=".presentation.login.LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".presentation.studyDetail.StudyDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".presentation.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,6 +45,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".presentation.studyDetail.StudyDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.MainActivity"
+            android:exported="true" />
+
 
         <activity
             android:name=".presentation.createStudy.CreateStudyActivity"
