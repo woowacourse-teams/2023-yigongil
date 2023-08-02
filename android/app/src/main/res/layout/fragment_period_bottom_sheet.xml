@@ -48,7 +48,7 @@
             app:layout_constraintTop_toBottomOf="@id/view_create_study_period"
             app:maxValue="60"
             app:minValue="1"
-            app:title="@string/single_picker_text_period"
+            app:singlePickerTitle="@string/single_picker_text_period"
             app:value="@{viewModel.period}" />
 
         <TextView

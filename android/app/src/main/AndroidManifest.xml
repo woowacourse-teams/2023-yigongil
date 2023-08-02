@@ -32,7 +32,8 @@
         </activity>
         <activity
             android:name=".presentation.studyManagement.StudyManagementActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".presentation.splash.SplashActivity"
             android:exported="false" />

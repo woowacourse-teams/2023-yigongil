@@ -19,7 +19,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     }
 
     private fun implementClickListener() = object : HomeClickListener {
-        override fun clickOnTodo(id: Int, isDone: Boolean) {
+        override fun clickOnTodo(id: Long, isDone: Boolean) {
             homeViewModel.updateTodo(id, !isDone)
         }
 

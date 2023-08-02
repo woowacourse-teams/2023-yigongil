@@ -5,6 +5,6 @@
     <item
         android:id="@+id/menu_study_management_information"
         android:icon="@drawable/ic_info"
-        android:title="@string/study_list_search_button_menu"
+        android:title="@string/study_management_information_button_menu"
         app:showAsAction="ifRoom" />
 </menu>

@@ -7,5 +7,5 @@ interface HomeDataSource {
 
     suspend fun getUserStudies(): UserStudiesResponseDto
 
-    suspend fun patchTodo(studyId: Int, todoId: Int, todoRequestDto: TodoRequestDto)
+    suspend fun patchTodo(studyId: Int, todoId: Long, todoRequestDto: TodoRequestDto)
 }

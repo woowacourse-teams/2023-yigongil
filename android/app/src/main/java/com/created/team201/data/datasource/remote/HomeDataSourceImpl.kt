@@ -11,7 +11,7 @@ class HomeDataSourceImpl(
         return homeService.getUserStudies()
     }
 
-    override suspend fun patchTodo(studyId: Int, todoId: Int, todoRequestDto: TodoRequestDto) {
+    override suspend fun patchTodo(studyId: Int, todoId: Long, todoRequestDto: TodoRequestDto) {
         homeService.patchTodo(
             studyId = studyId,
             todoId = todoId,
