@@ -85,39 +85,39 @@ alter table member
 alter table optional_todo
     add constraint FKjnishr4h1qlmtna5q0a2b40dd
         foreign key (round_of_member_id)
-            references round_of_member;
+            references round_of_member(id);
 
 alter table round
     add constraint FKou20hom4iifhu8hqd4msvwsq0
         foreign key (master_id)
-            references member;
+            references member(id);
 
 alter table round
     add constraint FK41ah5maxtjcdgiohmdr2s9fai
         foreign key (study_id)
-            references study;
+            references study(id);
 
 alter table round_of_member
     add constraint FKmcjff70sqtklcu6oxrbrgr9c1
         foreign key (member_id)
-            references member;
+            references member(id);
 
 alter table round_of_member
     add constraint FK7io91u1fjsmn88fjpe6ky3mc0
         foreign key (round_id)
-            references round;
+            references round(id);
 
 alter table study
     add constraint FK67dn3mpd4083de7434r7k5xa9
         foreign key (current_round_id)
-            references round;
+            references round(id);
 
 alter table study_member
     add constraint FKf2jvkah9v99o0ujl7ilpshptk
         foreign key (member_id)
-            references member;
+            references member(id);
 
 alter table study_member
     add constraint FKxu4jds4ab0mfyrvdxsu60iut
         foreign key (study_id)
-            references study;
+            references study(id);
