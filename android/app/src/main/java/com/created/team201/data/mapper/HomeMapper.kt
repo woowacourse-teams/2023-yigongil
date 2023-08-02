@@ -12,7 +12,7 @@ import com.created.team201.presentation.home.model.TodoUiModel
 fun Todo.toRequestBody(isNecessary: Boolean): TodoRequestDto = TodoRequestDto(
     isNecessary = isNecessary,
     isDone = isDone,
-    content = content,
+    content = content!!,
 )
 
 fun TodoUiModel.toDomain(): Todo = Todo(

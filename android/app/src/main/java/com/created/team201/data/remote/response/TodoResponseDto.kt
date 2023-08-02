@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TodoResponseDto(
     @SerialName("content")
-    val content: String,
+    val content: String?,
     @SerialName("id")
     val id: Long,
     @SerialName("isDone")
