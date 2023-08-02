@@ -26,7 +26,7 @@ class LoginViewModel(
 
     fun signUp(token: String) {
         viewModelScope.launch {
-            authRepository.signUp(token)
+            authRepository.requestSignUp(token)
                 .onSuccess {
                     _signUpState.value = SUCCESS
                 }.onFailure {

@@ -9,11 +9,17 @@ class AuthRepositoryImpl(
     private val tokenDataSource: TokenDataSource,
 ) : AuthRepository {
 
-    override suspend fun signUp(token: String): Result<Unit> {
+    override suspend fun requestSignUp(token: String): Result<Unit> {
         return runCatching {
             val userAccessToken = authDataSource.getTokens(token).accessToken
 
             tokenDataSource.setAccessToken(userAccessToken)
+        }
+    }
+
+    override suspend fun requestSignIn(): Result<Unit> {
+        return runCatching {
+            authDataSource.getLoginValidity()
         }
     }
 }

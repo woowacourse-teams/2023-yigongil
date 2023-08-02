@@ -6,8 +6,11 @@ import retrofit2.http.Query
 
 interface AuthService {
 
-    @GET("v1/login/github/tokens?")
+    @GET("/v1/login/github/tokens?")
     suspend fun getTokens(
         @Query("code") oauthToken: String,
     ): AuthResponseDto
+
+    @GET("/v1/home")
+    suspend fun getLoginValidity()
 }

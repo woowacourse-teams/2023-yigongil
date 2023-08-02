@@ -4,4 +4,6 @@ import com.created.team201.data.remote.response.AuthResponseDto
 
 interface AuthDataSource {
     suspend fun getTokens(token: String): AuthResponseDto
+
+    suspend fun getLoginValidity()
 }

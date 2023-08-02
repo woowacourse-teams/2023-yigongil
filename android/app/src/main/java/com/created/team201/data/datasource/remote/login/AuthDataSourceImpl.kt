@@ -9,4 +9,8 @@ class AuthDataSourceImpl(
     override suspend fun getTokens(token: String): AuthResponseDto {
         return authService.getTokens(token)
     }
+
+    override suspend fun getLoginValidity() {
+        authService.getLoginValidity()
+    }
 }
