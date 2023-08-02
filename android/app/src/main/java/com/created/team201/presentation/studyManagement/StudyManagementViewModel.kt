@@ -27,6 +27,7 @@ import com.created.team201.presentation.studyManagement.model.StudyMemberUiModel
 import com.created.team201.presentation.studyManagement.model.StudyRoundDetailUiModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class StudyManagementViewModel(
     private val repository: StudyManagementRepository,
@@ -45,92 +46,46 @@ class StudyManagementViewModel(
 
     lateinit var studyInformation: StudyManagementInformationUiModel
 
-    fun fetchStudyInformation(studyId: Long, currentRoundId: Long) {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun initStudyManagement(studyId: Long) {
+        viewModelScope.launch {
+            fetchStudyInformation(studyId)
+            initStudyRounds(studyId)
+        }
+    }
+
+    private suspend fun fetchStudyInformation(studyId: Long) {
+        withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
             runCatching {
                 repository.getStudyDetail(studyId)
             }.onSuccess {
                 studyInformation = it.toUiModel()
                 rounds.postValue(it.rounds.map { round: Round -> round.toUiModel() })
-                initStudyRounds(studyId, currentRoundId)
             }.onFailure {
                 Log.e(LOG_ERROR, it.message.toString())
             }
         }
     }
 
-    private fun initStudyRounds(studyId: Long, currentRoundId: Long) {
+    private suspend fun initStudyRounds(studyId: Long) {
+        val rounds = rounds.value ?: listOf()
         _currentRound.postValue(studyInformation.currentRound)
         _state.postValue(StudyManagementState.Member)
 
-        viewModelScope.launch(Dispatchers.IO) {
-            getStudyRoundDetail(studyId, currentRoundId)
-                .onSuccess {
-                    _studyRounds.postValue(listOf(it.toUiModel()))
-                    fetchRoundDetail(studyId, PageIndex())
-                }.onFailure {
-                    Log.e(LOG_ERROR, it.message.toString())
-                }
-        }
-    }
-
-    fun fetchRoundDetail(studyId: Long, pageIndex: PageIndex) {
-        val studyRounds = studyRounds.value ?: listOf()
-        val rounds = rounds.value ?: listOf()
-        updateCurrentPage(pageIndex)
-
-        val index = rounds.indexOf(rounds.find { it.number == currentRound.value })
-
-        viewModelScope.launch {
-            if (pageIndex.isFirstPage() && (currentRound.value != rounds.first().number)) {
-                getFirstPage(studyId, rounds[index - ONE_PAGE].id, studyRounds)
+        withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
+            for (round in rounds) {
+                getStudyRoundDetail(studyId, round.id)
+                    .onSuccess {
+                        val studyRounds = studyRounds.value ?: listOf()
+                        _studyRounds.postValue(studyRounds + it.toUiModel())
+                    }.onFailure {
+                        Log.e(LOG_ERROR, it.message.toString())
+                    }
             }
-
-            if (pageIndex.isLastPage(studyRounds.size) && (currentRound.value != rounds.last().number)) {
-                getLastPage(studyId, rounds[index + ONE_PAGE].id, studyRounds)
-            }
-        }
-    }
-
-    private suspend fun getFirstPage(
-        studyId: Long,
-        roundId: Long,
-        studyRounds: List<StudyRoundDetailUiModel>,
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            getStudyRoundDetail(studyId, roundId)
-                .onSuccess {
-                    _studyRounds.postValue(listOf(it.toUiModel()) + studyRounds)
-                }.onFailure {
-                    Log.e(LOG_ERROR, it.message.toString())
-                }
-        }
-    }
-
-    private suspend fun getLastPage(
-        studyId: Long,
-        roundId: Long,
-        studyRounds: List<StudyRoundDetailUiModel>,
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            getStudyRoundDetail(studyId, roundId)
-                .onSuccess {
-                    _studyRounds.postValue(studyRounds + it.toUiModel())
-                }.onFailure {
-                    Log.e(LOG_ERROR, it.message.toString())
-                }
         }
     }
 
     fun updateCurrentPage(pageIndex: PageIndex) {
-        val rounds = rounds.value ?: listOf()
-        val studyRounds = studyRounds.value ?: listOf()
-
-        val round = rounds.find {
-            it.id == studyRounds[pageIndex.number].id
-        } ?: throw IllegalStateException("해당 스터디 없음")
-
-        _currentRound.postValue(round.number)
+        _currentRound.value = pageIndex.toRound()
     }
 
     private suspend fun getStudyRoundDetail(studyId: Long, roundId: Long): Result<RoundDetail> {
@@ -293,7 +248,6 @@ class StudyManagementViewModel(
 
     companion object {
         private const val DEFAULT_TODO_ID = 0L
-        private const val ONE_PAGE = 1
         private const val LOG_ERROR = "ERROR"
 
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
