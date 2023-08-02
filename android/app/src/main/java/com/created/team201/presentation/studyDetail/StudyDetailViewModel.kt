@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.Member
+import com.created.domain.model.Role
 import com.created.domain.model.StudyDetail
 import com.created.domain.repository.StudyDetailRepository
 import com.created.team201.data.datasource.remote.StudyDetailDataSourceImpl
@@ -16,7 +17,7 @@ import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
 import com.created.team201.presentation.studyDetail.model.StudyMemberUIModel
 import kotlinx.coroutines.launch
 
-class StudyDetailViewModel(
+class StudyDetailViewModel private constructor(
     private val studyDetailRepository: StudyDetailRepository,
 ) : ViewModel() {
 
@@ -24,8 +25,9 @@ class StudyDetailViewModel(
     val study: LiveData<StudyDetailUIModel> get() = _study
     private val _studyParticipants: MutableLiveData<List<StudyMemberUIModel>> = MutableLiveData()
     val studyParticipants: LiveData<List<StudyMemberUIModel>> get() = _studyParticipants
-    private val _isParticipateStudy: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
-    val isParticipateStudy: LiveData<Boolean> get() = _isParticipateStudy
+    private val _state: MutableLiveData<StudyDetailState> =
+        MutableLiveData(StudyDetailState.Nothing)
+    val state: LiveData<StudyDetailState> get() = _state
 
     fun fetchStudyDetail(userId: Long, studyId: Long) {
         viewModelScope.launch {
@@ -34,7 +36,8 @@ class StudyDetailViewModel(
             }.onSuccess {
                 _study.value = it
                 _studyParticipants.value = it.studyMembers
-                if (it.isMaster) fetchApplicants(1)
+                _state.value = it.role.toStudyDetailState()
+                if (it.role == Role.MASTER) fetchApplicants(studyId)
             }.onFailure {
                 Log.d("StudyDetailViewModel", it.message.toString())
             }
@@ -42,13 +45,14 @@ class StudyDetailViewModel(
     }
 
     fun participateStudy(studyId: Long) {
+        Log.d("bandalTest", "파티시페이트")
         viewModelScope.launch {
             runCatching {
-                studyDetailRepository.participateStudy(studyId)
+//                studyDetailRepository.participateStudy(studyId)
             }.onSuccess {
-                _isParticipateStudy.value = true
+                // 이제 이 유저의 Role은 APPLICANT가 되기 때문에 그에 맞춰 state도 변경되어야 합니다.
             }.onFailure {
-                _isParticipateStudy.value = false
+                Log.d("StudyDetailViewModel", it.message.toString())
             }
         }
     }
@@ -58,46 +62,52 @@ class StudyDetailViewModel(
             runCatching {
                 studyDetailRepository.startStudy(studyId)
             }.onSuccess {
-                Log.d("bandal", "startStudy")
+                // 스터디가 성공적으로 시작된다면 시작후 화면으로 이동해야 합니다.
+            }.onFailure {
+                Log.d("StudyDetailViewModel", it.message.toString())
             }
         }
     }
 
-    fun fetchApplicants(studyId: Long) {
+    private fun fetchApplicants(studyId: Long) {
         viewModelScope.launch {
             runCatching {
-//                studyDetailRepository.getStudyApplicants(studyId)
-            }.onSuccess {
-                _studyParticipants.value = _studyParticipants.value?.plus(
-                    listOf(
-                        StudyMemberUIModel(
-                            isMaster = false,
-                            isApplicant = true,
-                            tier = 3,
-                            name = "bandal",
-                            successRate = 90,
-                            profileImageUrl = "https://opgg-com-image.akamaized.net/attach/images/20200321020018.373875.jpg",
-                        ),
+                studyDetailRepository.getStudyApplicants(studyId)
+            }.onSuccess { members ->
+                _studyParticipants.value =
+                    _studyParticipants.value?.plus(
+                        members.map {
+                            it.toUIModel(
+                                study.value?.studyMasterId ?: 0L,
+                                true,
+                            )
+                        },
+                    )
+            }
+        }
+    }
 
-                        StudyMemberUIModel(
-                            isMaster = false,
-                            isApplicant = true,
-                            tier = 2,
-                            name = "sunny",
-                            successRate = 60,
-                            profileImageUrl = "https://opgg-com-image.akamaized.net/attach/images/20200321020018.373875.jpg",
-                        ),
-                    ),
-                )
+    fun acceptApplicant(studyId: Long, memberId: Long) {
+        viewModelScope.launch {
+            runCatching {
+                studyDetailRepository.acceptApplicant(studyId, memberId)
+            }.onSuccess {
+                val studyParticipants = _studyParticipants.value ?: listOf()
+                val acceptedMember =
+                    studyParticipants.find { it.id == memberId } ?: StudyMemberUIModel.DUMMY
+                _studyParticipants.value =
+                    studyParticipants.minus(acceptedMember) + acceptedMember.copy(isApplicant = false)
             }
         }
     }
 
     private fun StudyDetail.toUIModel(userId: Long): StudyDetailUIModel = StudyDetailUIModel(
+        studyMasterId = studyMasterId,
         isMaster = userId == studyMasterId,
         title = this.name,
         introduction = this.introduction,
         peopleCount = this.numberOfMaximumMembers,
+        role = Role.valueOf(this.role),
         startDate = this.startAt,
         period = this.totalRoundCount.toString(),
         cycle = this.periodOfRound,
@@ -107,6 +117,7 @@ class StudyDetailViewModel(
 
     private fun Member.toUIModel(studyMasterId: Long, isApplicant: Boolean): StudyMemberUIModel =
         StudyMemberUIModel(
+            id = id,
             isMaster = this.id == studyMasterId,
             isApplicant = isApplicant,
             profileImageUrl = this.profileImage,
@@ -114,6 +125,13 @@ class StudyDetailViewModel(
             successRate = this.successRate,
             tier = this.tier,
         )
+
+    private fun Role.toStudyDetailState(): StudyDetailState = when (this) {
+        Role.MASTER -> StudyDetailState.Master
+        Role.MEMBER -> StudyDetailState.Member
+        Role.APPLICANT -> StudyDetailState.Applicant
+        Role.NOTHING -> StudyDetailState.Nothing
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
