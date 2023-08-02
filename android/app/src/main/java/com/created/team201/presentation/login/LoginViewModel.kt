@@ -8,8 +8,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.test.core.app.ApplicationProvider
 import com.created.domain.repository.AuthRepository
 import com.created.team201.data.datasource.local.TokenDataSourceImpl
+import com.created.team201.data.datasource.local.TokenStorage
 import com.created.team201.data.datasource.remote.login.AuthDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.AuthRepositoryImpl
@@ -20,16 +22,16 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
-    private val _loginState: MutableLiveData<State> = MutableLiveData()
-    val loginState: LiveData<State> get() = _loginState
+    private val _signUpState: MutableLiveData<State> = MutableLiveData()
+    val signUpState: LiveData<State> get() = _signUpState
 
     fun signUp(token: String) {
         viewModelScope.launch {
             authRepository.signUp(token)
                 .onSuccess {
-                    _loginState.value = SUCCESS
+                    _signUpState.value = SUCCESS
                 }.onFailure {
-                    _loginState.value = FAIL
+                    _signUpState.value = FAIL
                     Log.e("FAIL_ERROR", "SIGN_UP : ${it.message}")
                 }
         }
@@ -42,6 +44,11 @@ class LoginViewModel(
     }
 
     companion object {
+
+        fun createTokenStorage(
+            tokenStorage: TokenStorage,
+        ): TokenStorage = tokenStorage
+
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 LoginViewModel(
@@ -49,7 +56,9 @@ class LoginViewModel(
                         AuthDataSourceImpl(
                             NetworkServiceModule.authService,
                         ),
-                        TokenDataSourceImpl(),
+                        TokenDataSourceImpl(
+                            TokenStorage.getInstance(context = ApplicationProvider.getApplicationContext()),
+                        ),
                     ),
                 )
             }

@@ -1,5 +1,7 @@
 package com.created.team201.presentation.login
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -27,7 +29,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
     }
 
     private fun observeLoginState() {
-        loginViewModel.loginState.observe(this) { loginState ->
+        loginViewModel.signUpState.observe(this) { loginState ->
             when (loginState) {
                 SUCCESS -> navigateToMain()
                 FAIL -> Toast.makeText(
@@ -65,5 +67,10 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
 
             loginViewModel.signUp(oauthToken)
         }
+    }
+
+    companion object {
+
+        fun getIntent(context: Context): Intent = Intent(context, LoginActivity::class.java)
     }
 }
