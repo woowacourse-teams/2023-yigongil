@@ -1,5 +1,7 @@
 package com.created.team201.presentation
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
@@ -60,9 +62,14 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         ;
 
         companion object {
+
             fun valueOf(id: Int): FragmentType = values().find { fragmentView ->
                 fragmentView.resId == id
             } ?: throw IllegalArgumentException()
         }
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent = Intent(context, MainActivity::class.java)
     }
 }
