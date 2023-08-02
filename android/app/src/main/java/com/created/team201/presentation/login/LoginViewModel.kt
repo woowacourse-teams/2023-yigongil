@@ -15,11 +15,6 @@ class LoginViewModel : ViewModel() {
         // loginRepository.postLogin(token)
     }
 
-    fun getRedirectUrl(): String {
-        return ""
-        // return loginRepository.getRedirectUrl()
-    }
-
     sealed interface State {
         object SUCCESS : State
         object FAIL : State

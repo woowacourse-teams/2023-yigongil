@@ -24,6 +24,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "TEAM201_BASE_URL", properties["BASE_URL"]
+        buildConfigField "String", "TEAM201_GIT_HUB_URL", properties["GIT_HUB_URL"]
     }
 
     buildTypes {

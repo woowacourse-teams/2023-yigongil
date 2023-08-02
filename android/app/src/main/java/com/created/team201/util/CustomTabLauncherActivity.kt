@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.os.ResultReceiver
 import androidx.appcompat.app.AppCompatActivity
+import com.created.team201.BuildConfig
 
 class CustomTabLauncherActivity : AppCompatActivity() {
     private lateinit var fullUri: Uri
@@ -52,18 +53,19 @@ class CustomTabLauncherActivity : AppCompatActivity() {
         super.onNewIntent(intent)
 
         setIntent(intent)
-        intent?.data?.let { sendOK(it) }
+        intent?.data?.getQueryParameter(OAUTH_TOKEN)?.let {
+            sendOK(it)
+        }
+        finish()
     }
 
-    private fun sendOK(uri: Uri) {
+    private fun sendOK(oauthToken: String) {
         if (::resultReceiver.isInitialized) {
             resultReceiver.send(
                 Activity.RESULT_OK,
-                Bundle().apply { putParcelable(GIT_OAUTH_TOKEN_KEY, uri) },
+                Bundle().apply { putString(GIT_OAUTH_TOKEN_KEY, oauthToken) },
             )
         }
-
-        finish()
     }
 
     private inline fun <reified T : Parcelable> Bundle.getParcelableCompat(key: String): T? {
@@ -77,6 +79,7 @@ class CustomTabLauncherActivity : AppCompatActivity() {
     companion object {
         internal const val GIT_OAUTH_TOKEN_KEY = "GIT_OAUTH_TOKEN_KEY"
 
+        private const val OAUTH_TOKEN = "code"
         private const val CUSTOM_TABS_OPENED = "CUSTOM_TABS_OPENED"
         private const val BUNDLE_KEY = "BUNDLE_KEY"
         private const val GIT_URL_KEY = "GIT_URL"
@@ -84,14 +87,13 @@ class CustomTabLauncherActivity : AppCompatActivity() {
 
         fun getIntent(
             context: Context,
-            url: String,
             resultReceiver: ResultReceiver,
         ): Intent = Intent(context, CustomTabLauncherActivity::class.java).apply {
             putExtra(
                 BUNDLE_KEY,
                 Bundle().apply {
                     putParcelable(RECEIVER_KEY, resultReceiver)
-                    putString(GIT_URL_KEY, url)
+                    putString(GIT_URL_KEY, BuildConfig.TEAM201_GIT_HUB_URL)
                 },
             )
         }

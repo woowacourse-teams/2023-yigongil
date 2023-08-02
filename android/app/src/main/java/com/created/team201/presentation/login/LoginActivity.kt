@@ -48,15 +48,12 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
 
     private fun setClickEventOnLoginButton() {
         binding.clLoginBtn.setOnClickListener {
-            val redirectUrl: String = loginViewModel.getRedirectUrl()
-
-            navigateToLoginWebView(redirectUrl)
+            navigateToLoginWebView()
         }
     }
 
-    private fun navigateToLoginWebView(redirectUrl: String) {
-        startActivity(CustomTabLauncherActivity.getIntent(this, redirectUrl, getResult()))
-        finish()
+    private fun navigateToLoginWebView() {
+        startActivity(CustomTabLauncherActivity.getIntent(this, getResult()))
     }
 
     private fun getResult() = object : ResultReceiver(Handler(Looper.getMainLooper())) {

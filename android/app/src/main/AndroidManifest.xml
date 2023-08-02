@@ -24,9 +24,9 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!--https://github.com/login/oauth/authorize?client_id=002374d6d5c4feab3c9c-->
+
                 <data
-                    android:host="login"
+                    android:host="auth"
                     android:scheme="example" />
             </intent-filter>
         </activity>
