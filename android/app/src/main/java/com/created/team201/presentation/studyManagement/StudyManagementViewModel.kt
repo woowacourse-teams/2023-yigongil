@@ -43,18 +43,19 @@ class StudyManagementViewModel(
 
     lateinit var studyInformation: StudyManagementInformationUiModel
 
-    fun fetchStudyInformation(studyId: Long) {
+    fun fetchStudyInformation(studyId: Long, currentRoundId: Long) {
         viewModelScope.launch {
             runCatching {
                 repository.getStudyDetail(studyId)
             }.onSuccess {
                 studyInformation = it.toUiModel()
                 rounds.value = it.rounds.map { round: Round -> round.toUiModel() }
+                initStudyRounds(studyId, currentRoundId)
             }
         }
     }
 
-    fun getStudyRounds(studyId: Long, currentRoundId: Long) {
+    private fun initStudyRounds(studyId: Long, currentRoundId: Long) {
         _currentRound.value = studyInformation.currentRound
         _state.value = StudyManagementState.Member
 

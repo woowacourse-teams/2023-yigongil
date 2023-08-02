@@ -8,6 +8,7 @@ import com.created.team201.databinding.FragmentStudyManageBinding
 import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.studyList.StudyListClickListener
 import com.created.team201.presentation.studyManage.adapter.StudyManageAdapter
+import com.created.team201.presentation.studyManagement.StudyManagementActivity
 import com.google.android.material.tabs.TabLayoutMediator
 
 class StudyManageFragment :
@@ -49,6 +50,7 @@ class StudyManageFragment :
         override fun onClickStudySummary(id: Long) {
             // 스터디 상세보기 뷰로 이동
             // 참여한인지, 개설한인지 구분
+            startActivity(StudyManagementActivity.getIntent(requireContext(), 1, 1))
         }
     }
 }

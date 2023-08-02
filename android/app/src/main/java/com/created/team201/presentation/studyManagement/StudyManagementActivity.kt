@@ -29,7 +29,6 @@ class StudyManagementActivity :
         initViewModel()
         initActionBar()
         initStudyInformation()
-        initStudyRounds()
         initAdapter()
         initPageButtonClickListener()
         observeStudyManagement()
@@ -48,11 +47,7 @@ class StudyManagementActivity :
     }
 
     private fun initStudyInformation() {
-        studyManagementViewModel.fetchStudyInformation(studyId)
-    }
-
-    private fun initStudyRounds() {
-        studyManagementViewModel.getStudyRounds(studyId, roundId)
+        studyManagementViewModel.fetchStudyInformation(studyId, roundId)
     }
 
     private fun initAdapter() {
