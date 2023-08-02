@@ -19,10 +19,10 @@ class StudyManagementDataSourceImpl(
     }
 
     override suspend fun patchTodo(studyId: Long, todoId: Long, todoRequestDto: TodoRequestDto) {
-        return service.patchTodo(studyId, todoId, todoRequestDto)
+        service.patchTodo(studyId, todoId, todoRequestDto)
     }
 
     override suspend fun createTodo(studyId: Long, todoCreateRequestDto: TodoCreateRequestDto) {
-        return service.createTodo(studyId, todoCreateRequestDto)
+        service.createTodo(studyId, todoCreateRequestDto)
     }
 }
