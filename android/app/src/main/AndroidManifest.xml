@@ -36,7 +36,7 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".presentation.splash.SplashActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".presentation.login.LoginActivity"
             android:exported="true">
