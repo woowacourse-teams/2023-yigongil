@@ -6,8 +6,12 @@
     <data>
 
         <variable
-            name="isMaster"
-            type="java.lang.Boolean" />
+            name="studyManagement"
+            type="com.created.team201.presentation.studyManagement.model.StudyRoundDetailUiModel" />
+
+        <variable
+            name="onClick"
+            type="com.created.team201.presentation.studyManagement.StudyManagementClickListener" />
 
     </data>
 
@@ -36,7 +40,7 @@
             android:textAppearance="@style/text_r12"
             android:textColor="@color/white"
             app:drawableStartCompat="@drawable/ic_edit_12"
-            app:isVisible="@{isMaster}"
+            app:isVisible="@{studyManagement.isMaster()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_item_study_management_essential_todo" />
 
@@ -52,10 +56,12 @@
             app:layout_constraintTop_toBottomOf="@id/tv_item_study_management_essential_todo">
 
             <TextView
+                android:id="@+id/tv_item_study_management_essential_todo_content"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:gravity="center_vertical"
+                android:text="@{studyManagement.necessaryTodo.content}"
                 android:textAppearance="@style/text_r14"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -69,8 +75,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/item_study_management_todo_description"
+                android:onClick="@{()->onClick.clickOnTodo(studyManagement.necessaryTodo.todoId,studyManagement.necessaryTodo.done)}"
                 android:padding="12dp"
                 android:src="@drawable/ic_selector_home_check_btn"
+                app:isSelected="@{studyManagement.necessaryTodo.done}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -92,12 +100,11 @@
             android:id="@+id/tv_study_management_add_optional_todo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:text="@string/study_management_add_todo"
             android:textAppearance="@style/text_r12"
             android:textColor="@color/white"
-            app:drawableStartCompat="@drawable/ic_add_personal_todo"
+            app:drawableStartCompat="@drawable/ic_add_todo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_item_study_management_optional_todo" />
 
