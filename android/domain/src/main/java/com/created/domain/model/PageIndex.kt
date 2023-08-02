@@ -4,10 +4,10 @@ data class PageIndex(
     val number: Int = 0,
 ) {
     fun increase(maxPage: Int): PageIndex =
-        PageIndex((number + ONE_PAGE).coerceAtMost(maxPage))
+        PageIndex((number + ONE_PAGE).coerceAtLeast(maxPage))
 
     fun decrease(): PageIndex =
-        PageIndex((number - ONE_PAGE).coerceAtLeast(MIN_VIEW_PAGER_INDEX))
+        PageIndex((number - ONE_PAGE).coerceAtMost(MIN_VIEW_PAGER_INDEX))
 
     fun isFirstPage(): Boolean = number == MIN_VIEW_PAGER_INDEX
 

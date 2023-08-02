@@ -25,6 +25,7 @@ import com.created.team201.presentation.studyManagement.model.RoundUiModel
 import com.created.team201.presentation.studyManagement.model.StudyManagementInformationUiModel
 import com.created.team201.presentation.studyManagement.model.StudyMemberUiModel
 import com.created.team201.presentation.studyManagement.model.StudyRoundDetailUiModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class StudyManagementViewModel(
@@ -45,12 +46,12 @@ class StudyManagementViewModel(
     lateinit var studyInformation: StudyManagementInformationUiModel
 
     fun fetchStudyInformation(studyId: Long, currentRoundId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             runCatching {
                 repository.getStudyDetail(studyId)
             }.onSuccess {
                 studyInformation = it.toUiModel()
-                rounds.value = it.rounds.map { round: Round -> round.toUiModel() }
+                rounds.postValue(it.rounds.map { round: Round -> round.toUiModel() })
                 initStudyRounds(studyId, currentRoundId)
             }.onFailure {
                 Log.e(LOG_ERROR, it.message.toString())
@@ -59,13 +60,13 @@ class StudyManagementViewModel(
     }
 
     private fun initStudyRounds(studyId: Long, currentRoundId: Long) {
-        _currentRound.value = studyInformation.currentRound
-        _state.value = StudyManagementState.Member
+        _currentRound.postValue(studyInformation.currentRound)
+        _state.postValue(StudyManagementState.Member)
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             getStudyRoundDetail(studyId, currentRoundId)
                 .onSuccess {
-                    _studyRounds.value = listOf(it.toUiModel())
+                    _studyRounds.postValue(listOf(it.toUiModel()))
                     fetchRoundDetail(studyId, PageIndex())
                 }.onFailure {
                     Log.e(LOG_ERROR, it.message.toString())
@@ -78,16 +79,14 @@ class StudyManagementViewModel(
         val rounds = rounds.value ?: listOf()
         updateCurrentPage(pageIndex)
 
-        if (checkLimitPage()) return
-
         val index = rounds.indexOf(rounds.find { it.number == currentRound.value })
 
         viewModelScope.launch {
-            if (pageIndex.isFirstPage()) {
+            if (pageIndex.isFirstPage() && (currentRound.value != rounds.first().number)) {
                 getFirstPage(studyId, rounds[index - ONE_PAGE].id, studyRounds)
             }
 
-            if (pageIndex.isLastPage(studyRounds.size)) {
+            if (pageIndex.isLastPage(studyRounds.size) && (currentRound.value != rounds.last().number)) {
                 getLastPage(studyId, rounds[index + ONE_PAGE].id, studyRounds)
             }
         }
@@ -98,10 +97,10 @@ class StudyManagementViewModel(
         roundId: Long,
         studyRounds: List<StudyRoundDetailUiModel>,
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             getStudyRoundDetail(studyId, roundId)
                 .onSuccess {
-                    _studyRounds.value = listOf(it.toUiModel()) + studyRounds
+                    _studyRounds.postValue(listOf(it.toUiModel()) + studyRounds)
                 }.onFailure {
                     Log.e(LOG_ERROR, it.message.toString())
                 }
@@ -113,20 +112,14 @@ class StudyManagementViewModel(
         roundId: Long,
         studyRounds: List<StudyRoundDetailUiModel>,
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             getStudyRoundDetail(studyId, roundId)
                 .onSuccess {
-                    _studyRounds.value = studyRounds + it.toUiModel()
+                    _studyRounds.postValue(studyRounds + it.toUiModel())
                 }.onFailure {
                     Log.e(LOG_ERROR, it.message.toString())
                 }
         }
-    }
-
-    private fun checkLimitPage(): Boolean {
-        if (currentRound.value == rounds.value?.last()?.number) return true
-        if (currentRound.value == rounds.value?.first()?.number) return true
-        return false
     }
 
     fun updateCurrentPage(pageIndex: PageIndex) {
@@ -137,7 +130,7 @@ class StudyManagementViewModel(
             it.id == studyRounds[pageIndex.number].id
         } ?: throw IllegalStateException("해당 스터디 없음")
 
-        _currentRound.value = round.number
+        _currentRound.postValue(round.number)
     }
 
     private suspend fun getStudyRoundDetail(studyId: Long, roundId: Long): Result<RoundDetail> {
@@ -173,7 +166,7 @@ class StudyManagementViewModel(
         isNecessary: Boolean,
         studyId: Long,
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             runCatching {
                 repository.patchTodo(
                     studyId = studyId,
@@ -218,7 +211,7 @@ class StudyManagementViewModel(
         val currentStudyRounds = studyRounds.value ?: listOf()
         val currentStudy = currentStudyRounds[currentPage]
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             runCatching {
                 repository.createTodo(studyId, CreateTodo(false, currentStudy.id, todoContent))
             }.onSuccess { result ->
