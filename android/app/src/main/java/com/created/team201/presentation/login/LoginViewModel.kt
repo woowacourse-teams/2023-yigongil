@@ -12,7 +12,6 @@ class LoginViewModel : ViewModel() {
     val loginState: LiveData<State> get() = _loginState
 
     fun postLogin(token: String) {
-        //
         // loginRepository.postLogin(token)
     }
 
