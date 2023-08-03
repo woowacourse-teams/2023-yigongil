@@ -2,7 +2,7 @@ package com.created.team201.data.datasource.local
 
 interface TokenDataSource {
 
-    suspend fun getAccessToken(): String
+    fun getAccessToken(): String
 
-    suspend fun setAccessToken(token: String)
+    fun setAccessToken(token: String)
 }

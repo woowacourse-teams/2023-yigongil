@@ -22,7 +22,7 @@ class TokenStorage(context: Context) {
     private val editor: SharedPreferences.Editor = storage.edit()
 
     fun putToken(key: String, value: String) {
-        editor.putString(key, value)
+        editor.putString(key, value).apply()
     }
 
     fun fetchToken(key: String): String? {

@@ -4,11 +4,11 @@ class TokenDataSourceImpl(
     private val tokenStorage: TokenStorage,
 ) : TokenDataSource {
 
-    override suspend fun getAccessToken(): String {
+    override fun getAccessToken(): String {
         return tokenStorage.fetchToken(ACCESS_TOKEN) ?: throw IllegalStateException()
     }
 
-    override suspend fun setAccessToken(token: String) {
+    override fun setAccessToken(token: String) {
         tokenStorage.putToken(ACCESS_TOKEN, token)
     }
 
