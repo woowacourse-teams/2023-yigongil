@@ -10,8 +10,7 @@ import com.created.team201.presentation.studyManagement.model.StudyRoundDetailUi
 class StudyManagementAdapter(
     private val studyManagementClickListener: StudyManagementClickListener,
     private val studyMemberClickListener: StudyMemberClickListener,
-) :
-    ListAdapter<StudyRoundDetailUiModel, StudyManagementViewHolder>(diffCallback) {
+) : ListAdapter<StudyRoundDetailUiModel, StudyManagementViewHolder>(diffCallback) {
 
     init {
         setHasStableIds(true)

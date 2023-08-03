@@ -22,6 +22,7 @@ class StudyManagementActivity :
     }
     private val studyId: Long by lazy { intent.getLongExtra(KEY_STUDY_ID, KEY_ERROR_LONG) }
     private val currentRound: Int by lazy { intent.getIntExtra(KEY_CURRENT_ROUND, KEY_ERROR_INT) }
+    private val roleIndex: Int by lazy { intent.getIntExtra(KEY_ROLE_INDEX, KEY_ERROR_ROLE_INT) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +49,7 @@ class StudyManagementActivity :
     }
 
     private fun initStudyInformation() {
-        studyManagementViewModel.initStudyManagement(studyId)
+        studyManagementViewModel.initStudyManagement(studyId, roleIndex)
     }
 
     private fun initAdapter() {
@@ -151,12 +152,16 @@ class StudyManagementActivity :
         private const val MAXIMUM_OPTIONAL_TODO_COUNT = 4
         private const val KEY_ERROR_LONG = 0L
         private const val KEY_ERROR_INT = 0
+        private const val KEY_ERROR_ROLE_INT = 3
         private const val KEY_STUDY_ID = "KEY_STUDY_ID"
         private const val KEY_CURRENT_ROUND = "KEY_CURRENT_ROUND"
-        fun getIntent(context: Context, studyId: Long, currentRound: Int): Intent =
+        private const val KEY_ROLE_INDEX = "KEY_ROLE_INDEX"
+
+        fun getIntent(context: Context, studyId: Long, currentRound: Int, roleIndex: Int): Intent =
             Intent(context, StudyManagementActivity::class.java).apply {
                 putExtra(KEY_STUDY_ID, studyId)
                 putExtra(KEY_CURRENT_ROUND, currentRound)
+                putExtra(KEY_ROLE_INDEX, roleIndex)
             }
     }
 }

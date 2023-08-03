@@ -49,7 +49,10 @@ class StudyManagementViewHolder(
     private fun initStudyManagementAdapter() {
         binding.onClick = studyManagementClickListener
         binding.rvItemStudyManagementStudyMember.adapter = studyManagementMemberAdapter
-        binding.rvItemStudyManagementOptionalTodos.adapter = studyManagementOptionalTodoAdapter
+        binding.rvItemStudyManagementOptionalTodos.apply {
+            adapter = studyManagementOptionalTodoAdapter
+            itemAnimator = null
+        }
     }
 
     fun bind(studyManagementUIModel: StudyRoundDetailUiModel) {

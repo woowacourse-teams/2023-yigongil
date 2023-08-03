@@ -50,7 +50,7 @@ class StudyManageFragment :
         override fun onClickStudySummary(id: Long) {
             // 스터디 상세보기 뷰로 이동
             // 참여한인지, 개설한인지 구분
-            startActivity(StudyManagementActivity.getIntent(requireContext(), id, 1))
+            startActivity(StudyManagementActivity.getIntent(requireContext(), id, 1, studyManageViewModel.getMyRole(id).index))
         }
     }
 }

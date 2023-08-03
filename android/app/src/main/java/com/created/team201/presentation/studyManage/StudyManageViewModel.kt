@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.model.Period
+import com.created.domain.model.Role
 import com.created.domain.model.Role.MASTER
 import com.created.domain.model.StudyManage
 import com.created.domain.model.StudySummary
@@ -64,6 +65,11 @@ class StudyManageViewModel(
                 } ?: listOf(),
             ),
         )
+    }
+
+    fun getMyRole(studyId: Long): Role {
+        val myStudies = studies.value ?: listOf()
+        return myStudies.find { it.studySummaryUiModel.id == studyId }?.role ?: Role.NOTHING
     }
 
     private fun StudyManage.toUiModel(): StudyManageUiModel =

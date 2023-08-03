@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.CreateTodo
 import com.created.domain.model.PageIndex
+import com.created.domain.model.Role
 import com.created.domain.model.Round
 import com.created.domain.model.RoundDetail
 import com.created.domain.model.StudyDetail
@@ -37,8 +38,7 @@ class StudyManagementViewModel(
     private val _studyRounds: MutableLiveData<List<StudyRoundDetailUiModel>> = MutableLiveData()
     val studyRounds: LiveData<List<StudyRoundDetailUiModel>> get() = _studyRounds
 
-    private val _state: MutableLiveData<StudyManagementState> =
-        MutableLiveData(StudyManagementState.Member)
+    private val _state: MutableLiveData<StudyManagementState> = MutableLiveData()
     val state: LiveData<StudyManagementState> get() = _state
 
     private val _currentRound: MutableLiveData<Int> = MutableLiveData(0)
@@ -46,11 +46,16 @@ class StudyManagementViewModel(
 
     lateinit var studyInformation: StudyManagementInformationUiModel
 
-    fun initStudyManagement(studyId: Long) {
+    fun initStudyManagement(studyId: Long, roleIndex: Int) {
+        initStatus(roleIndex)
         viewModelScope.launch {
             fetchStudyInformation(studyId)
             initStudyRounds(studyId)
         }
+    }
+
+    private fun initStatus(roleIndex: Int) {
+        _state.value = StudyManagementState.getRoleStatus(Role.valueOf(roleIndex))
     }
 
     private suspend fun fetchStudyInformation(studyId: Long) {
@@ -69,7 +74,6 @@ class StudyManagementViewModel(
     private suspend fun initStudyRounds(studyId: Long) {
         val rounds = rounds.value ?: listOf()
         _currentRound.postValue(studyInformation.currentRound)
-        _state.postValue(StudyManagementState.Member)
 
         withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
             for (round in rounds) {
