@@ -75,7 +75,7 @@ class StudyDetailActivity :
 
     fun convertPeriodOfCountFormat(periodOfCount: String?): String {
         val stringRes =
-            PeriodFormat.valueOf(periodOfCount?.last() ?: NON_EXISTENCE_PERIOD_SYMBOL).res
+            PeriodFormat.valueOf(periodOfCount?.last() ?: DEFAULT_PERIOD_SYMBOL).res
         return getString(stringRes, periodOfCount?.dropLast(STRING_LAST_INDEX)?.toInt())
     }
 
@@ -98,7 +98,7 @@ class StudyDetailActivity :
 
     companion object {
         private const val NON_EXISTENCE_STUDY_ID = 0L
-        private const val NON_EXISTENCE_PERIOD_SYMBOL = 'z'
+        private const val DEFAULT_PERIOD_SYMBOL = 'd'
         private const val STRING_LAST_INDEX = 1
         private const val KEY_STUDY_ID = "KEY_STUDY_ID"
         fun getIntent(context: Context, studyId: Long): Intent =
