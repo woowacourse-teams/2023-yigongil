@@ -20,6 +20,7 @@
         <activity
             android:name=".presentation.profile.ProfileActivity"
             android:exported="false" />
+
         <activity
             android:name=".util.auth.CustomTabLauncherActivity"
             android:exported="true"
@@ -50,6 +51,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".presentation.login.LoginActivity"
+            android:exported="false" />
+
         <activity
             android:name=".presentation.studyDetail.StudyDetailActivity"
             android:exported="false" />
