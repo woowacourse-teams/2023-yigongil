@@ -8,7 +8,7 @@ data class TodoResponseDto(
     @SerialName("content")
     val content: String,
     @SerialName("id")
-    val id: Int,
+    val id: Long,
     @SerialName("isDone")
     val isDone: Boolean,
 )

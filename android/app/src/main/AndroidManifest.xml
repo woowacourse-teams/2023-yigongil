@@ -18,20 +18,30 @@
         <activity
             android:name=".presentation.profile.ProfileActivity"
             android:exported="false" />
+      <activity
+            android:name=".util.CustomTabLauncherActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="auth"
+                    android:scheme="example" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".presentation.studyManagement.StudyManagementActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".presentation.splash.SplashActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.login.LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".presentation.studyDetail.StudyDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".presentation.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,6 +49,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".presentation.studyDetail.StudyDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".presentation.MainActivity"
+            android:exported="true" />
+
 
         <activity
             android:name=".presentation.createStudy.CreateStudyActivity"
