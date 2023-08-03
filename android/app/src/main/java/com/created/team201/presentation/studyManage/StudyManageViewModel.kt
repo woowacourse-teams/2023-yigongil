@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.model.Period
+import com.created.domain.model.Role
 import com.created.domain.model.Role.MASTER
 import com.created.domain.model.StudyManage
 import com.created.domain.model.StudySummary
@@ -16,6 +17,7 @@ import com.created.team201.data.datasource.remote.StudyManageDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.StudyManageRepositoryImpl
 import com.created.team201.presentation.studyList.model.PeriodUiModel
+import com.created.team201.presentation.studyList.model.StudyStatus
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 import com.created.team201.presentation.studyManage.model.MyStudiesUiModel
 import com.created.team201.presentation.studyManage.model.MyStudyStatus.OPENED
@@ -35,6 +37,12 @@ class StudyManageViewModel(
     init {
         studies.value = listOf()
         loadStudies()
+    }
+
+    fun getMyStudyInProcessing(studyId: Long): Boolean {
+        val studies = studies.value ?: listOf()
+        val study = studies.find { it.studySummaryUiModel.id == studyId }!!
+        return study.studySummaryUiModel.processingStatus == StudyStatus.PROCESSING.id
     }
 
     private fun loadStudies() {
@@ -64,6 +72,11 @@ class StudyManageViewModel(
                 } ?: listOf(),
             ),
         )
+    }
+
+    fun getMyRole(studyId: Long): Role {
+        val myStudies = studies.value ?: listOf()
+        return myStudies.find { it.studySummaryUiModel.id == studyId }?.role ?: Role.NOTHING
     }
 
     private fun StudyManage.toUiModel(): StudyManageUiModel =

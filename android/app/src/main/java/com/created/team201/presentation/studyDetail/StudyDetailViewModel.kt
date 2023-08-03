@@ -96,11 +96,11 @@ class StudyDetailViewModel private constructor(
 
     private fun StudyDetail.toUIModel(): StudyDetailUIModel = StudyDetailUIModel(
         studyMasterId = studyMasterId,
-        isMaster = Role.valueOf(role) == Role.MASTER,
+        isMaster = role == Role.MASTER,
         title = this.name,
         introduction = this.introduction,
         peopleCount = this.numberOfMaximumMembers,
-        role = Role.valueOf(this.role),
+        role = this.role,
         startDate = this.startAt,
         period = this.totalRoundCount.toString(),
         cycle = this.periodOfRound,
@@ -115,7 +115,7 @@ class StudyDetailViewModel private constructor(
             isApplicant = isApplicant,
             profileImageUrl = this.profileImage,
             name = this.nickname,
-            successRate = this.successRate,
+            successRate = this.successRate.toInt(),
             tier = this.tier,
         )
 

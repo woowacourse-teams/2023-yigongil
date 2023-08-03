@@ -85,6 +85,8 @@
     <string name="item_study_management_optional_todo_button">투두 체크박스</string>
     <string name="item_study_management_add_todo_button_text">추가</string>
     <string name="item_study_management_add_todo_hint">투두를 추가해주세요</string>
+    <string name="item_study_management_empty_todo">아직 투두가 없어요!</string>
+    <string name="item_study_management_require_todo">필수 투두를 추가해 주세요!</string>
 
     <!--커스텀 프로필 이미지 뷰-->
     <string name="custom_profile_image_content_description">프로필 이미지</string>

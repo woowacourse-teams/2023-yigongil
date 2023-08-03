@@ -11,15 +11,19 @@ import com.created.domain.model.PageIndex
 import com.created.team201.R
 import com.created.team201.databinding.ActivityStudyManagementBinding
 import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.profile.ProfileActivity
 import com.created.team201.presentation.studyManagement.adapter.StudyManagementAdapter
 
 class StudyManagementActivity :
     BindingActivity<ActivityStudyManagementBinding>(R.layout.activity_study_management) {
 
-    private val studyManagementViewModel by viewModels<StudyManagementViewModel>()
+    private val studyManagementViewModel: StudyManagementViewModel by viewModels { StudyManagementViewModel.Factory }
     private val studyManagementAdapter: StudyManagementAdapter by lazy {
         StudyManagementAdapter(studyManagementClickListener, memberClickListener)
     }
+    private val studyId: Long by lazy { intent.getLongExtra(KEY_STUDY_ID, KEY_ERROR_LONG) }
+    private val currentRound: Int by lazy { intent.getIntExtra(KEY_CURRENT_ROUND, KEY_ERROR_INT) }
+    private val roleIndex: Int by lazy { intent.getIntExtra(KEY_ROLE_INDEX, KEY_ERROR_ROLE_INT) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,8 +31,8 @@ class StudyManagementActivity :
         initViewModel()
         initActionBar()
         initStudyInformation()
-        initStudyRounds()
         initAdapter()
+        initPage()
         initPageButtonClickListener()
         observeStudyManagement()
     }
@@ -46,17 +50,18 @@ class StudyManagementActivity :
     }
 
     private fun initStudyInformation() {
-        studyManagementViewModel.fetchStudyInformation()
-    }
-
-    private fun initStudyRounds() {
-        val studyId = intent.getLongExtra(KEY_STUDY_ID, KEY_ERROR)
-        val roundId = intent.getLongExtra(KEY_ROUND_ID, KEY_ERROR)
-        studyManagementViewModel.getStudyRounds(studyId, roundId)
+        studyManagementViewModel.initStudyManagement(studyId, roleIndex)
     }
 
     private fun initAdapter() {
         binding.vpStudyManagement.adapter = studyManagementAdapter
+    }
+
+    private fun initPage() {
+        binding.vpStudyManagement.setCurrentItem(
+            currentRound - CONVERT_TO_PAGE,
+            true,
+        )
     }
 
     private fun observeStudyManagement() {
@@ -85,7 +90,21 @@ class StudyManagementActivity :
     private val studyManagementClickListener = object : StudyManagementClickListener {
         override fun clickOnTodo(id: Long, isDone: Boolean) {
             val currentItemId = binding.vpStudyManagement.currentItem
-            studyManagementViewModel.updateTodo(currentItemId, id, !isDone)
+            studyManagementViewModel.updateTodo(currentItemId, id, !isDone, studyId)
+        }
+
+        override fun clickOnUpdateTodo(isNecessary: Boolean, todoContent: String) {
+            if (todoContent.isEmpty()) {
+                toastEmptyTodoInput()
+                return
+            }
+            val currentPage = binding.vpStudyManagement.currentItem
+            studyManagementViewModel.updateTodoContent(
+                currentPage,
+                isNecessary,
+                todoContent,
+                studyId,
+            )
         }
 
         override fun onClickAddTodo(todoContent: String) {
@@ -94,7 +113,6 @@ class StudyManagementActivity :
                 return
             }
             val currentPage = binding.vpStudyManagement.currentItem
-            val studyId = intent.getLongExtra(KEY_STUDY_ID, KEY_ERROR)
             studyManagementViewModel.addOptionalTodo(studyId, currentPage, todoContent)
         }
 
@@ -119,7 +137,7 @@ class StudyManagementActivity :
 
     private val memberClickListener = object : StudyMemberClickListener {
         override fun onClickMember(id: Long) {
-            // 프로필 페이지로 이동
+            startActivity(ProfileActivity.getIntent(this@StudyManagementActivity, id))
         }
     }
 
@@ -127,13 +145,11 @@ class StudyManagementActivity :
         binding.ivStudyManagementPreviousButton.setOnClickListener {
             val page = PageIndex(binding.vpStudyManagement.currentItem).decrease()
             binding.vpStudyManagement.setCurrentItem(page.number, true)
-            studyManagementViewModel.fetchRoundDetail(page)
         }
         binding.ivStudyManagementNextButton.setOnClickListener {
             val page =
                 PageIndex(binding.vpStudyManagement.currentItem).increase(studyManagementAdapter.itemCount - 1)
             binding.vpStudyManagement.setCurrentItem(page.number, true)
-            studyManagementViewModel.fetchRoundDetail(page)
         }
     }
 
@@ -146,14 +162,20 @@ class StudyManagementActivity :
 
     companion object {
         private const val FIRST_ROUND = 1
+        private const val CONVERT_TO_PAGE = 1
         private const val MAXIMUM_OPTIONAL_TODO_COUNT = 4
-        private const val KEY_ERROR = 0L
+        private const val KEY_ERROR_LONG = 0L
+        private const val KEY_ERROR_INT = 0
+        private const val KEY_ERROR_ROLE_INT = 3
         private const val KEY_STUDY_ID = "KEY_STUDY_ID"
-        private const val KEY_ROUND_ID = "KEY_ROUND_ID"
-        fun getIntent(context: Context, studyId: Long, roundId: Long): Intent =
+        private const val KEY_CURRENT_ROUND = "KEY_CURRENT_ROUND"
+        private const val KEY_ROLE_INDEX = "KEY_ROLE_INDEX"
+
+        fun getIntent(context: Context, studyId: Long, currentRound: Int, roleIndex: Int): Intent =
             Intent(context, StudyManagementActivity::class.java).apply {
                 putExtra(KEY_STUDY_ID, studyId)
-                putExtra(KEY_ROUND_ID, roundId)
+                putExtra(KEY_CURRENT_ROUND, currentRound)
+                putExtra(KEY_ROLE_INDEX, roleIndex)
             }
     }
 }

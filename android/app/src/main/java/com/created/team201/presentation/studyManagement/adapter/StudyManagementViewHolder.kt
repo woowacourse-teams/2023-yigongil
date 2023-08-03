@@ -1,6 +1,7 @@
 package com.created.team201.presentation.studyManagement.adapter
 
 import android.view.LayoutInflater
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.databinding.ItemStudyManagementBinding
@@ -15,6 +16,7 @@ class StudyManagementViewHolder(
     private val studyMemberClickListener: StudyMemberClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    private lateinit var studyRoundDetail: StudyRoundDetailUiModel
     private val studyManagementMemberAdapter: StudyManagementMemberAdapter by lazy {
         StudyManagementMemberAdapter(studyMemberClickListener)
     }
@@ -30,20 +32,38 @@ class StudyManagementViewHolder(
     private fun setClickAddTodo() {
         binding.tvStudyManagementAddOptionalTodo.setOnClickListener {
             studyManagementClickListener.onClickAddOptionalTodo(studyManagementOptionalTodoAdapter.itemCount)
-            if (studyManagementOptionalTodoAdapter.currentList.last().viewType == OptionalTodoViewType.ADD.viewType || studyManagementOptionalTodoAdapter.itemCount >= 4) {
+            val currentTodos = studyManagementOptionalTodoAdapter.currentList
+
+            if (currentTodos.isEmpty()) {
+                binding.rvItemStudyManagementOptionalTodos.visibility = VISIBLE
+                studyManagementOptionalTodoAdapter.submitList(listOf(OptionalTodoUiModel.ADD_TODO.copy()))
                 return@setOnClickListener
             }
-            studyManagementOptionalTodoAdapter.submitList(studyManagementOptionalTodoAdapter.currentList + OptionalTodoUiModel.ADD_TODO)
+            if (currentTodos.last().viewType == OptionalTodoViewType.ADD.viewType || studyManagementOptionalTodoAdapter.itemCount >= 4) {
+                return@setOnClickListener
+            }
+
+            studyManagementOptionalTodoAdapter.submitList(studyManagementOptionalTodoAdapter.currentList + OptionalTodoUiModel.ADD_TODO.copy())
+        }
+        binding.tvItemStudyManagementEdit.setOnClickListener {
+            studyManagementClickListener.clickOnUpdateTodo(
+                true,
+                binding.etItemStudyManagementEssentialTodoContent.text.toString(),
+            )
         }
     }
 
     private fun initStudyManagementAdapter() {
         binding.onClick = studyManagementClickListener
         binding.rvItemStudyManagementStudyMember.adapter = studyManagementMemberAdapter
-        binding.rvItemStudyManagementOptionalTodos.adapter = studyManagementOptionalTodoAdapter
+        binding.rvItemStudyManagementOptionalTodos.apply {
+            adapter = studyManagementOptionalTodoAdapter
+            itemAnimator = null
+        }
     }
 
     fun bind(studyManagementUIModel: StudyRoundDetailUiModel) {
+        studyRoundDetail = studyManagementUIModel
         binding.studyManagement = studyManagementUIModel
         studyManagementMemberAdapter.submitList(studyManagementUIModel.studyMembers)
         studyManagementOptionalTodoAdapter.submitList(studyManagementUIModel.optionalTodos)

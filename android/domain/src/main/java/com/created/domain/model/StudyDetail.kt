@@ -7,7 +7,7 @@ data class StudyDetail(
     val numberOfCurrentMembers: Int,
     val numberOfMaximumMembers: Int,
     val studyMasterId: Long,
-    val role: Int,
+    val role: Role,
     val startAt: String,
     val totalRoundCount: Int,
     val periodOfRound: String,
