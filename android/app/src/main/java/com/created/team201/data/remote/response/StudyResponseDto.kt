@@ -7,18 +7,18 @@ import kotlinx.serialization.Serializable
 data class StudyResponseDto(
     @SerialName("id")
     val id: Int,
-    @SerialName("name")
-    val name: String,
-    @SerialName("roundId")
-    val roundId: Int,
-    @SerialName("necessaryTodo")
-    val necessaryTodo: TodoResponseDto,
     @SerialName("leftDays")
     val leftDays: Int,
-    @SerialName("membersNecessaryTodoProgressRate")
+    @SerialName("memberNecessaryTodoProgressRate")
     val membersNecessaryTodoProgressRate: Int,
+    @SerialName("name")
+    val name: String,
+    @SerialName("necessaryTodo")
+    val necessaryTodo: TodoResponseDto,
     @SerialName("nextDate")
     val nextDate: String,
     @SerialName("optionalTodos")
     val optionalTodos: List<TodoResponseDto>,
+    @SerialName("roundId")
+    val roundId: Int,
 )
