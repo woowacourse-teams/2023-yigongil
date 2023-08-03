@@ -12,7 +12,7 @@ import com.created.domain.model.CreateStudy
 import com.created.domain.model.Period
 import com.created.domain.model.PeriodUnit
 import com.created.domain.repository.CreateStudyRepository
-import com.created.team201.data.datasource.remote.CreateStudyRemoteDataSourceImpl
+import com.created.team201.data.datasource.remote.CreateStudyDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.CreateStudyRepositoryImpl
 import com.created.team201.presentation.createStudy.model.CreateStudyUiModel
@@ -136,7 +136,7 @@ class CreateStudyViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val repository = CreateStudyRepositoryImpl(
-                    CreateStudyRemoteDataSourceImpl(
+                    CreateStudyDataSourceImpl(
                         NetworkServiceModule.createStudyService,
                     ),
                 )
