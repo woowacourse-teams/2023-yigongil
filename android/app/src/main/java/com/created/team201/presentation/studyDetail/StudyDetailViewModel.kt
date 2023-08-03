@@ -29,10 +29,10 @@ class StudyDetailViewModel private constructor(
         MutableLiveData(StudyDetailState.Nothing)
     val state: LiveData<StudyDetailState> get() = _state
 
-    fun fetchStudyDetail(userId: Long, studyId: Long) {
+    fun fetchStudyDetail(studyId: Long) {
         viewModelScope.launch {
             runCatching {
-                studyDetailRepository.getStudyDetail(studyId).toUIModel(userId)
+                studyDetailRepository.getStudyDetail(studyId).toUIModel()
             }.onSuccess {
                 _study.value = it
                 _studyParticipants.value = it.studyMembers
@@ -45,10 +45,9 @@ class StudyDetailViewModel private constructor(
     }
 
     fun participateStudy(studyId: Long) {
-        Log.d("bandalTest", "파티시페이트")
         viewModelScope.launch {
             runCatching {
-//                studyDetailRepository.participateStudy(studyId)
+                studyDetailRepository.participateStudy(studyId)
             }.onSuccess {
                 // 이제 이 유저의 Role은 APPLICANT가 되기 때문에 그에 맞춰 state도 변경되어야 합니다.
             }.onFailure {
@@ -101,9 +100,9 @@ class StudyDetailViewModel private constructor(
         }
     }
 
-    private fun StudyDetail.toUIModel(userId: Long): StudyDetailUIModel = StudyDetailUIModel(
+    private fun StudyDetail.toUIModel(): StudyDetailUIModel = StudyDetailUIModel(
         studyMasterId = studyMasterId,
-        isMaster = userId == studyMasterId,
+        isMaster = Role.valueOf(role) == Role.MASTER,
         title = this.name,
         introduction = this.introduction,
         peopleCount = this.numberOfMaximumMembers,
