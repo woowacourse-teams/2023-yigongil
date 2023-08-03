@@ -100,14 +100,13 @@ class StudyManagementViewModel(
 
     fun updateTodoContent(
         currentItemId: Int,
-        todo: TodoUiModel,
+        isNecessary: Boolean,
         todoContent: String,
         studyId: Long,
     ) {
-        val isNecessary =
-            studyRounds.value?.get(currentItemId)?.necessaryTodo?.todoId == todo.todoId
-        val newTodo = todo.copy(content = todoContent)
         val studyDetails = studyRounds.value ?: listOf()
+        val todo = studyDetails[currentItemId].necessaryTodo
+        val newTodo = todo.copy(content = todoContent)
         updateNecessaryTodoContent(studyDetails, todo.todoId, todoContent)
         patchTodo(newTodo, isNecessary, studyId)
     }
@@ -218,6 +217,7 @@ class StudyManagementViewModel(
         currentStudy: StudyRoundDetailUiModel,
         todoId: Long,
         todoContent: String,
+
     ): MutableList<OptionalTodoUiModel> {
         val newOptionalTodos = currentStudy.optionalTodos.toMutableList()
         newOptionalTodos.addAll(

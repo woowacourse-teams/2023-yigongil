@@ -11,7 +11,6 @@ import com.created.domain.model.PageIndex
 import com.created.team201.R
 import com.created.team201.databinding.ActivityStudyManagementBinding
 import com.created.team201.presentation.common.BindingActivity
-import com.created.team201.presentation.home.model.TodoUiModel
 import com.created.team201.presentation.studyManagement.adapter.StudyManagementAdapter
 
 class StudyManagementActivity :
@@ -93,13 +92,13 @@ class StudyManagementActivity :
             studyManagementViewModel.updateTodo(currentItemId, id, !isDone, studyId)
         }
 
-        override fun clickOnUpdateTodo(todo: TodoUiModel, todoContent: String) {
+        override fun clickOnUpdateTodo(isNecessary: Boolean, todoContent: String) {
             if (todoContent.isEmpty()) {
                 toastEmptyTodoInput()
                 return
             }
             val currentPage = binding.vpStudyManagement.currentItem
-            studyManagementViewModel.updateTodoContent(currentPage, todo, todoContent, studyId)
+            studyManagementViewModel.updateTodoContent(currentPage, isNecessary, todoContent, studyId)
         }
 
         override fun onClickAddTodo(todoContent: String) {

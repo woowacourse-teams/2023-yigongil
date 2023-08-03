@@ -47,7 +47,7 @@ class StudyManagementViewHolder(
         }
         binding.tvItemStudyManagementEdit.setOnClickListener {
             studyManagementClickListener.clickOnUpdateTodo(
-                studyRoundDetail.necessaryTodo,
+                true,
                 binding.etItemStudyManagementEssentialTodoContent.text.toString(),
             )
         }
