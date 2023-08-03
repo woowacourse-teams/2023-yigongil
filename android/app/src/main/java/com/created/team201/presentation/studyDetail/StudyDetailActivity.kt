@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import com.created.team201.R
 import com.created.team201.databinding.ActivityStudyDetailBinding
 import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.profile.ProfileActivity
 import com.created.team201.presentation.studyDetail.adapter.StudyParticipantsAdapter
 import com.created.team201.presentation.studyDetail.model.PeriodFormat
 
@@ -94,6 +95,10 @@ class StudyDetailActivity :
 
     override fun onAcceptApplicantClick(memberId: Long) {
         studyDetailViewModel.acceptApplicant(studyId, memberId)
+    }
+
+    override fun onUserClick(memberId: Long) {
+        startActivity(ProfileActivity.getIntent(this, memberId))
     }
 
     companion object {
