@@ -15,7 +15,7 @@ interface HomeService {
     @PATCH("/v1/studies/{studyId}/todos/{todoId}")
     suspend fun patchTodo(
         @Path("studyId") studyId: Int,
-        @Path("todoId") todoId: Int,
+        @Path("todoId") todoId: Long,
         @Body todoRequestDto: TodoRequestDto,
     )
 }

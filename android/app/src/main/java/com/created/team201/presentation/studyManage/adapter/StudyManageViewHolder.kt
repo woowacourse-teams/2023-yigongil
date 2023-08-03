@@ -1,6 +1,5 @@
 package com.created.team201.presentation.studyManage.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout.VERTICAL
@@ -42,7 +41,6 @@ class StudyManageViewHolder(
     }
 
     fun bind(item: MyStudiesUiModel) {
-        Log.d("hello", item.studySummariesUiModel.toString())
         studyListAdapter.submitList(item.studySummariesUiModel)
     }
 }

@@ -1,33 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="44dp"
-    android:background="@color/black02_181B21">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tv_item_study_management_optional_todo_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:gravity="center_vertical"
-        android:textAppearance="@style/text_r14"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/iv_item_study_management_optional_todo_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="블로그에 정리하기" />
+    <data>
 
-    <ImageView
-        android:id="@+id/iv_item_study_management_optional_todo_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/item_study_management_optional_todo_button"
-        android:padding="10dp"
-        android:src="@drawable/ic_selector_home_check_btn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <variable
+            name="onClick"
+            type="com.created.team201.presentation.studyManagement.StudyManagementClickListener" />
+
+        <variable
+            name="optionalTodo"
+            type="com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@color/black02_181B21">
+
+        <TextView
+            android:id="@+id/tv_item_study_management_optional_todo_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:text="@{optionalTodo.todo.content}"
+            android:textAppearance="@style/text_r14"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_item_study_management_optional_todo_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="블로그에 정리하기" />
+
+        <ImageView
+            android:id="@+id/iv_item_study_management_optional_todo_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/item_study_management_optional_todo_button"
+            android:onClick="@{()->onClick.clickOnTodo(optionalTodo.todo.todoId, optionalTodo.todo.done)}"
+            android:padding="10dp"
+            android:src="@drawable/ic_selector_home_check_btn"
+            app:isSelected="@{optionalTodo.todo.done}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

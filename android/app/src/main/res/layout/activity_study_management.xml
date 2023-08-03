@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="isParticipant"
-            type="java.lang.Boolean" />
+            name="viewModel"
+            type="com.created.team201.presentation.studyManagement.StudyManagementViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,7 +23,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:menu="@menu/menu_study_management"
-            app:title="@{isParticipant? @string/study_management_app_bar_title_is_study_participant : @string/study_management_app_bar_title_is_study_master}"
+            app:title="@{viewModel.state.title}"
             app:titleCentered="true"
             app:titleTextAppearance="@style/header_sb15"
             app:titleTextColor="@color/white"
@@ -44,7 +44,7 @@
             android:layout_height="20dp"
             android:layout_marginEnd="26dp"
             android:contentDescription="@string/study_management_previous_button_description"
-            android:src="@drawable/ic_arrow_prev_active"
+            android:src="@drawable/ic_selector_previous_button"
             app:layout_constraintBottom_toBottomOf="@+id/tv_study_management_round"
             app:layout_constraintEnd_toStartOf="@+id/tv_study_management_round"
             app:layout_constraintTop_toTopOf="@+id/tv_study_management_round" />
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
-            android:text="@string/study_management_round"
+            android:text="@{@string/study_management_round(viewModel.currentRound)}"
             android:textAppearance="@style/subtitle_r15"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +69,7 @@
             android:layout_height="20dp"
             android:layout_marginStart="26dp"
             android:contentDescription="@string/study_management_next_button_description"
-            android:src="@drawable/ic_arrow_next_active"
+            android:src="@drawable/ic_selector_next_button"
             app:layout_constraintBottom_toBottomOf="@+id/tv_study_management_round"
             app:layout_constraintStart_toEndOf="@+id/tv_study_management_round"
             app:layout_constraintTop_toTopOf="@+id/tv_study_management_round" />
@@ -92,7 +92,7 @@
             android:layout_marginBottom="32dp"
             android:background="@drawable/bg_rectangle_radius_10dp_green01"
             android:gravity="center"
-            android:text="@{isParticipant? @string/study_management_end_button_is_study_participant : @string/study_management_end_button_is_study_master}"
+            android:text="@{viewModel.state.buttonText}"
             android:textAppearance="@style/button_sb18"
             android:textColor="@color/green09_799E82"
             app:layout_constraintBottom_toBottomOf="parent"

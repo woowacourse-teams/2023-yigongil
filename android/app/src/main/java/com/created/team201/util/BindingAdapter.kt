@@ -40,6 +40,12 @@ object BindingAdapter {
     }
 
     @JvmStatic
+    @BindingAdapter("isEnabled")
+    fun isEnabled(view: View, isEnabled: Boolean) {
+        view.isEnabled = isEnabled
+    }
+
+    @JvmStatic
     @BindingAdapter("glideSrcUrl")
     fun glideSrcUrl(imageview: ImageView, imageUrl: String?) {
         imageUrl?.let {

@@ -34,8 +34,22 @@ jobs:
     - name: local properties 세팅
       env:
         BASE_URL: ${{ secrets.BASE_URL }}
-      run: echo "BASE_URL=\"$BASE_URL\"" >> local.properties
+        GIT_HUB_URL: ${{ secrets.GIT_HUB_URL }}
+      run: 
+        echo -e "BASE_URL=\"$BASE_URL\"\n
+        GIT_HUB_URL=\"$GIT_HUB_URL\"" >> local.properties
       working-directory: ${{ env.working-directory }}
+      
+    - name: google-services json 생성
+      run: touch google-services.json
+      working-directory: ${{ env.working-directory }}/app
+      
+    - name: google-services json 세팅
+      env:
+        GOOGLE: ${{ secrets.GOOGLE }}
+      run: echo "$GOOGLE" >> google-services.json
+      working-directory: ${{ env.working-directory }}/app
+      
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
