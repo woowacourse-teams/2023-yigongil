@@ -1,6 +1,5 @@
 package com.created.team201.presentation.studyDetail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -38,8 +37,6 @@ class StudyDetailViewModel private constructor(
                 _studyParticipants.value = it.studyMembers
                 _state.value = it.role.toStudyDetailState()
                 if (it.role == Role.MASTER) fetchApplicants(studyId)
-            }.onFailure {
-                Log.d("StudyDetailViewModel", it.message.toString())
             }
         }
     }
@@ -50,8 +47,6 @@ class StudyDetailViewModel private constructor(
                 studyDetailRepository.participateStudy(studyId)
             }.onSuccess {
                 // 이제 이 유저의 Role은 APPLICANT가 되기 때문에 그에 맞춰 state도 변경되어야 합니다.
-            }.onFailure {
-                Log.d("StudyDetailViewModel", it.message.toString())
             }
         }
     }
@@ -62,8 +57,6 @@ class StudyDetailViewModel private constructor(
                 studyDetailRepository.startStudy(studyId)
             }.onSuccess {
                 // 스터디가 성공적으로 시작된다면 시작후 화면으로 이동해야 합니다.
-            }.onFailure {
-                Log.d("StudyDetailViewModel", it.message.toString())
             }
         }
     }
