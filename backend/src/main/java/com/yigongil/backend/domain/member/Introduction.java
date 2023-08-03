@@ -23,7 +23,7 @@ class Introduction {
     }
 
     private void validateLength(String introduction) {
-        if (Objects.isNull(introduction)) {
+        if (introduction == null) {
             return;
         }
         if (MAXIMUM_INTRODUCTION_LENGTH < introduction.length() || introduction.isBlank()) {

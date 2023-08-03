@@ -1,6 +1,6 @@
 package com.yigongil.backend.config;
 
-import com.yigongil.backend.config.auth.LoginInterceptor;
+import com.yigongil.backend.config.auth.AuthInterceptor;
 import com.yigongil.backend.config.auth.MemberArgumentResolver;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
@@ -12,19 +12,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     private final MemberArgumentResolver memberArgumentResolver;
-    private final LoginInterceptor loginInterceptor;
+    private final AuthInterceptor authInterceptor;
 
-    public WebConfig(MemberArgumentResolver memberArgumentResolver, LoginInterceptor loginInterceptor) {
+    public WebConfig(MemberArgumentResolver memberArgumentResolver, AuthInterceptor authInterceptor) {
         this.memberArgumentResolver = memberArgumentResolver;
-        this.loginInterceptor = loginInterceptor;
+        this.authInterceptor = authInterceptor;
     }
 
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor)
+        registry.addInterceptor(authInterceptor)
                 .addPathPatterns("/v1/**")
                 .excludePathPatterns("/v1/login/**")
-                .excludePathPatterns("/v1/members/*")
+                .excludePathPatterns("/v1/members/{id:[0-9]\\d*}")
                 .excludePathPatterns("/v1/studies/recruiting");
     }
 
