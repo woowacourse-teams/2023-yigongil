@@ -16,6 +16,7 @@ class StudyManagementViewHolder(
     private val studyMemberClickListener: StudyMemberClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    private lateinit var studyRoundDetail: StudyRoundDetailUiModel
     private val studyManagementMemberAdapter: StudyManagementMemberAdapter by lazy {
         StudyManagementMemberAdapter(studyMemberClickListener)
     }
@@ -44,6 +45,12 @@ class StudyManagementViewHolder(
 
             studyManagementOptionalTodoAdapter.submitList(studyManagementOptionalTodoAdapter.currentList + OptionalTodoUiModel.ADD_TODO.copy())
         }
+        binding.tvItemStudyManagementEdit.setOnClickListener {
+            studyManagementClickListener.clickOnUpdateTodo(
+                studyRoundDetail.necessaryTodo,
+                binding.etItemStudyManagementEssentialTodoContent.text.toString(),
+            )
+        }
     }
 
     private fun initStudyManagementAdapter() {
@@ -56,6 +63,7 @@ class StudyManagementViewHolder(
     }
 
     fun bind(studyManagementUIModel: StudyRoundDetailUiModel) {
+        studyRoundDetail = studyManagementUIModel
         binding.studyManagement = studyManagementUIModel
         studyManagementMemberAdapter.submitList(studyManagementUIModel.studyMembers)
         studyManagementOptionalTodoAdapter.submitList(studyManagementUIModel.optionalTodos)

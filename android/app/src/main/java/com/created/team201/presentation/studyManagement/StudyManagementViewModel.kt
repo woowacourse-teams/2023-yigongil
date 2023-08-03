@@ -98,6 +98,20 @@ class StudyManagementViewModel(
         }
     }
 
+    fun updateTodoContent(
+        currentItemId: Int,
+        todo: TodoUiModel,
+        todoContent: String,
+        studyId: Long,
+    ) {
+        val isNecessary =
+            studyRounds.value?.get(currentItemId)?.necessaryTodo?.todoId == todo.todoId
+        val newTodo = todo.copy(content = todoContent)
+        val studyDetails = studyRounds.value ?: listOf()
+        updateNecessaryTodoContent(studyDetails, todo.todoId, todoContent)
+        patchTodo(newTodo, isNecessary, studyId)
+    }
+
     fun updateTodo(currentItemId: Int, todoId: Long, isDone: Boolean, studyId: Long) {
         val studyDetails = studyRounds.value ?: listOf()
         val isNecessary = studyRounds.value?.get(currentItemId)?.necessaryTodo?.todoId == todoId
@@ -112,8 +126,10 @@ class StudyManagementViewModel(
 
             false -> {
                 updateOptionalTodoCheck(studyDetails, todoId, isDone)
-                studyRound = studyDetails.find { it.optionalTodos.any { it.todo.todoId == todoId } }!!
-                todo = studyRound.optionalTodos.find { it.todo.todoId == todoId }!!.todo.copy(isDone = isDone)
+                studyRound =
+                    studyDetails.find { it.optionalTodos.any { it.todo.todoId == todoId } }!!
+                todo =
+                    studyRound.optionalTodos.find { it.todo.todoId == todoId }!!.todo.copy(isDone = isDone)
             }
         }
         patchTodo(todo, isNecessary, studyId)
@@ -134,6 +150,18 @@ class StudyManagementViewModel(
             }.onFailure {
                 Log.e(LOG_ERROR, it.message.toString())
             }
+        }
+    }
+
+    private fun updateNecessaryTodoContent(
+        studyDetails: List<StudyRoundDetailUiModel>,
+        id: Long,
+        content: String,
+    ) {
+        _studyRounds.value = studyDetails.map { studyDetailUiModel ->
+            studyDetailUiModel.takeIf { it.necessaryTodo.todoId != id } ?: studyDetailUiModel.copy(
+                necessaryTodo = studyDetailUiModel.necessaryTodo.copy(content = content),
+            )
         }
     }
 
@@ -229,7 +257,7 @@ class StudyManagementViewModel(
 
     private fun Todo.toUiModel(): TodoUiModel = TodoUiModel(
         todoId = todoId,
-        content = content,
+        content = if (content == null) "" else content,
         isDone = isDone,
     )
 
