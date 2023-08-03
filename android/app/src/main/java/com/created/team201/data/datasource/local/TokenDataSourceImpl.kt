@@ -1,6 +1,6 @@
 package com.created.team201.data.datasource.local
 
-class TokenDataSourceImpl private constructor(
+class TokenDataSourceImpl(
     private val tokenStorage: TokenStorage,
 ) : TokenDataSource {
 

@@ -38,7 +38,7 @@ class TokenStorage(context: Context) {
         fun getInstance(context: Context): TokenStorage {
             synchronized(this) {
                 instance?.let { return it }
-                return TokenStorage(context)
+                return TokenStorage(context).also { instance = it }
             }
         }
     }

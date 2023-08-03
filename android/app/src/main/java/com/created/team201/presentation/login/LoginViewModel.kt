@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.repository.AuthRepository
+import com.created.team201.application.Team201App
 import com.created.team201.data.datasource.local.TokenDataSourceImpl
 import com.created.team201.data.datasource.remote.login.AuthDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
@@ -49,7 +50,7 @@ class LoginViewModel(
                         AuthDataSourceImpl(
                             NetworkServiceModule.authService,
                         ),
-                        TokenDataSourceImpl(),
+                        TokenDataSourceImpl(Team201App.provideTokenStorage()),
                     ),
                 )
             }
