@@ -1,8 +1,12 @@
 package com.created.team201.presentation.profile.model
 
+import androidx.annotation.DrawableRes
 import com.created.team201.R
 
-enum class FinishedStudyStatus(private val isSucceed: Boolean, private val resId: Int) {
+enum class FinishedStudyStatus(
+    private val isSucceed: Boolean,
+    @DrawableRes private val resId: Int,
+) {
     SUCCESS(true, R.drawable.ic_success),
     FAILURE(false, R.drawable.ic_failure),
     ;
