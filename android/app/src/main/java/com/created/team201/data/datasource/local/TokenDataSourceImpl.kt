@@ -1,7 +1,5 @@
 package com.created.team201.data.datasource.local
 
-import android.util.Log
-
 class TokenDataSourceImpl(
     private val tokenStorage: TokenStorage,
 ) : TokenDataSource {
@@ -11,7 +9,6 @@ class TokenDataSourceImpl(
     }
 
     override fun setAccessToken(token: String) {
-        Log.d("123123", token.toString())
         tokenStorage.putToken(ACCESS_TOKEN, token)
     }
 

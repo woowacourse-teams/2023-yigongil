@@ -2,6 +2,7 @@ package com.created.team201.data.remote.api
 
 import com.created.team201.data.remote.response.AuthResponseDto
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Query
 
 interface AuthService {
@@ -17,5 +18,7 @@ interface AuthService {
     ): AuthResponseDto
 
     @GET("/v1/home")
-    suspend fun getLoginValidity()
+    suspend fun getLoginValidity(
+        @Header("Authorization") accessToken: String,
+    )
 }
