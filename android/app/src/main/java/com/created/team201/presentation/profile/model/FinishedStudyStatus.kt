@@ -13,8 +13,8 @@ enum class FinishedStudyStatus(
 
     companion object {
         fun imageOf(isSucceed: Boolean): Int {
-            return FinishedStudyStatus.values().find { image ->
-                image.isSucceed == isSucceed
+            return FinishedStudyStatus.values().find { status ->
+                status.isSucceed == isSucceed
             }?.resId ?: throw IllegalAccessException("해당 스터디 상태를 찾을 수 없습니다.")
         }
     }
