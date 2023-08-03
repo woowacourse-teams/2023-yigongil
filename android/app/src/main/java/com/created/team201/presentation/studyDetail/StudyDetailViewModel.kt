@@ -1,86 +1,142 @@
 package com.created.team201.presentation.studyDetail
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.created.team201.presentation.studyList.uiModel.StudyParticipant
-import com.created.team201.presentation.studyList.uiModel.StudyUIModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.created.domain.model.Member
+import com.created.domain.model.Role
+import com.created.domain.model.StudyDetail
+import com.created.domain.repository.StudyDetailRepository
+import com.created.team201.data.datasource.remote.StudyDetailDataSourceImpl
+import com.created.team201.data.remote.NetworkServiceModule
+import com.created.team201.data.repository.StudyDetailRepositoryImpl
+import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
+import com.created.team201.presentation.studyDetail.model.StudyMemberUIModel
+import kotlinx.coroutines.launch
 
-class StudyDetailViewModel : ViewModel() {
-    val study: StudyUIModel = DUMMY_STUDY
-    val studyParticipants: List<StudyParticipant> = DUMMY_STUDY_PARTICIPANTS
+class StudyDetailViewModel private constructor(
+    private val studyDetailRepository: StudyDetailRepository,
+) : ViewModel() {
 
-    fun participateStudy() {
-        // 서버통신 로직
+    private val _study: MutableLiveData<StudyDetailUIModel> = MutableLiveData()
+    val study: LiveData<StudyDetailUIModel> get() = _study
+    private val _studyParticipants: MutableLiveData<List<StudyMemberUIModel>> = MutableLiveData()
+    val studyParticipants: LiveData<List<StudyMemberUIModel>> get() = _studyParticipants
+    private val _state: MutableLiveData<StudyDetailState> =
+        MutableLiveData(StudyDetailState.Nothing)
+    val state: LiveData<StudyDetailState> get() = _state
+
+    fun fetchStudyDetail(studyId: Long) {
+        viewModelScope.launch {
+            runCatching {
+                val studyDetail = studyDetailRepository.getStudyDetail(studyId).toUIModel()
+                studyDetail
+            }.onSuccess {
+                _study.value = it
+                _studyParticipants.value = it.studyMembers
+                _state.value = it.role.toStudyDetailState()
+                if (it.role == Role.MASTER) fetchApplicants(studyId)
+            }
+        }
+    }
+
+    fun participateStudy(studyId: Long) {
+        viewModelScope.launch {
+            runCatching {
+                studyDetailRepository.participateStudy(studyId)
+            }.onFailure { // 204 No Content가 onFailure로 가는 현상이 있습니다.
+                _state.value = StudyDetailState.Applicant
+            }
+        }
+    }
+
+    private fun fetchApplicants(studyId: Long) {
+        viewModelScope.launch {
+            runCatching {
+                studyDetailRepository.getStudyApplicants(studyId)
+            }.onSuccess { members ->
+                _studyParticipants.value =
+                    _studyParticipants.value?.plus(
+                        members.map {
+                            it.toUIModel(
+                                study.value?.studyMasterId ?: 0L,
+                                true,
+                            )
+                        },
+                    )
+            }
+        }
+    }
+
+    fun startStudy(studyId: Long) {
+        viewModelScope.launch {
+            runCatching {
+                studyDetailRepository.startStudy(studyId)
+            }.onFailure { // 204 No Content가 onFailure로 가는 현상이 있습니다.
+                // 스터디가 성공적으로 시작된다면 시작후 화면으로 이동해야 합니다.
+            }
+        }
+    }
+
+    fun acceptApplicant(studyId: Long, memberId: Long) {
+        viewModelScope.launch {
+            runCatching {
+                studyDetailRepository.acceptApplicant(studyId, memberId)
+            }.onFailure { // 204 No Content가 onFailure로 가는 현상이 있습니다.
+                val studyParticipants = _studyParticipants.value ?: listOf()
+                val acceptedMember =
+                    studyParticipants.find { it.id == memberId } ?: StudyMemberUIModel.DUMMY
+                _studyParticipants.value =
+                    studyParticipants.minus(acceptedMember) + acceptedMember.copy(isApplicant = false)
+            }
+        }
+    }
+
+    private fun StudyDetail.toUIModel(): StudyDetailUIModel = StudyDetailUIModel(
+        studyMasterId = studyMasterId,
+        isMaster = Role.valueOf(role) == Role.MASTER,
+        title = this.name,
+        introduction = this.introduction,
+        peopleCount = this.numberOfMaximumMembers,
+        role = Role.valueOf(this.role),
+        startDate = this.startAt,
+        period = this.totalRoundCount.toString(),
+        cycle = this.periodOfRound,
+        applicantCount = this.members.count(),
+        studyMembers = this.members.map { it.toUIModel(this.studyMasterId, isApplicant = false) },
+    )
+
+    private fun Member.toUIModel(studyMasterId: Long, isApplicant: Boolean): StudyMemberUIModel =
+        StudyMemberUIModel(
+            id = id,
+            isMaster = this.id == studyMasterId,
+            isApplicant = isApplicant,
+            profileImageUrl = this.profileImage,
+            name = this.nickname,
+            successRate = this.successRate,
+            tier = this.tier,
+        )
+
+    private fun Role.toStudyDetailState(): StudyDetailState = when (this) {
+        Role.MASTER -> StudyDetailState.Master
+        Role.MEMBER -> StudyDetailState.Member
+        Role.APPLICANT -> StudyDetailState.Applicant
+        Role.NOTHING -> StudyDetailState.Nothing
     }
 
     companion object {
-        val DUMMY_STUDY = StudyUIModel(
-            title = "두 달 동안 자바 스터디 빡세게 하실 분 구합니다~!!",
-            introduction = "안녕하세요 기깔나게 자바 스터디하실 분들 구합니다. 언제부터 할지는 미정인데요 미정이니? 어 잘지내? 음 .그렇구나 잘지내",
-            peopleCount = 8,
-            startDate = "2023.08.02",
-            period = "8주",
-            cycle = "1주",
-            applicantCount = 3,
-        )
-
-        val DUMMY_STUDY_PARTICIPANTS = listOf(
-            StudyParticipant(
-                true,
-                "https://opgg-com-image.akamaized.net/attach/images/20200321020018.373875.jpg",
-                "우아한반달",
-                100,
-                "diamond",
-            ),
-            StudyParticipant(
-                false,
-                "https://opgg-com-image.akamaized.net/attach/images/20200321020018.373875.jpg",
-                "98대장산군",
-                75,
-                "platinum",
-            ),
-            StudyParticipant(
-                false,
-                "https://opgg-com-image.akamaized.net/attach/images/20200321020018.373875.jpg",
-                "오른손해넷이",
-                60,
-                "gold",
-            ),
-            StudyParticipant(
-                false,
-                "https://opgg-com-image.akamaized.net/attach/images/20200321020018.373875.jpg",
-                "집에간써니",
-                50,
-                "silver",
-            ),
-            StudyParticipant(
-                false,
-                "https://opgg-com-image.akamaized.net/attach/images/20200321020018.373875.jpg",
-                "우아한반달",
-                100,
-                "bronze",
-            ),
-            StudyParticipant(
-                false,
-                "https://opgg-com-image.akamaized.net/attach/images/20200321020018.373875.jpg",
-                "98대장산군",
-                75,
-                "silver",
-            ),
-            StudyParticipant(
-                false,
-                "https://opgg-com-image.akamaized.net/attach/images/20200321020018.373875.jpg",
-                "오른손해넷이",
-                60,
-                "platinum",
-
-            ),
-            StudyParticipant(
-                false,
-                "https://opgg-com-image.akamaized.net/attach/images/20200321020018.373875.jpg",
-                "집에간써니",
-                50,
-                "diamond",
-            ),
-        )
+        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            @Suppress("UNCHECKED_CAST")
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                val repository = StudyDetailRepositoryImpl(
+                    StudyDetailDataSourceImpl(
+                        NetworkServiceModule.studyDetailService,
+                    ),
+                )
+                return StudyDetailViewModel(repository) as T
+            }
+        }
     }
 }

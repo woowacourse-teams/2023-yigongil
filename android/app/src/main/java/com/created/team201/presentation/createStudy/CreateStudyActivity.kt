@@ -10,10 +10,14 @@ import androidx.fragment.app.commit
 import com.created.team201.R
 import com.created.team201.databinding.ActivityCreateStudyBinding
 import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.State.Success
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.State.FAIL
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.State.IDLE
 import com.created.team201.presentation.createStudy.bottomSheet.CycleBottomSheetFragment
 import com.created.team201.presentation.createStudy.bottomSheet.PeopleCountBottomSheetFragment
 import com.created.team201.presentation.createStudy.bottomSheet.PeriodBottomSheetFragment
 import com.created.team201.presentation.createStudy.bottomSheet.StartDateBottomSheetFragment
+import com.created.team201.presentation.studyDetail.StudyDetailActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class CreateStudyActivity :
@@ -43,13 +47,23 @@ class CreateStudyActivity :
     }
 
     private fun setObserveCreateStudyResult() {
-        viewModel.isSuccessCreateStudy.observe(this) {
-            when (it) {
-                true -> showToast(getString(R.string.createStudy_toast_success))
-                false -> showToast(getString(R.string.createStudy_toast_fail))
+        viewModel.studyState.observe(this) { studyState ->
+            when (studyState) {
+                is Success -> navigateToStudyDetail(studyState.studyId)
+                is FAIL -> {
+                    showToast(getString(R.string.createStudy_toast_fail))
+                    finish()
+                }
+
+                is IDLE -> throw IllegalStateException()
             }
-            finish()
         }
+    }
+
+    private fun navigateToStudyDetail(studyId: Long) {
+        startActivity(
+            StudyDetailActivity.getIntent(this, studyId),
+        )
     }
 
     private fun showToast(message: String) =
@@ -106,7 +120,6 @@ class CreateStudyActivity :
     }
 
     companion object {
-        fun getIntent(context: Context): Intent =
-            Intent(context, CreateStudyActivity::class.java)
+        fun getIntent(context: Context): Intent = Intent(context, CreateStudyActivity::class.java)
     }
 }
