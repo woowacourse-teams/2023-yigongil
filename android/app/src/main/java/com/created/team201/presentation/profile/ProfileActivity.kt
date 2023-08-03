@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -15,14 +16,13 @@ import com.created.team201.presentation.profile.adapter.FinishedStudyAdapter
 class ProfileActivity : BindingActivity<ActivityProfileBinding>(R.layout.activity_profile) {
 
     private val profileViewModel: ProfileViewModel by viewModels { ProfileViewModel.Factory }
-    private val userId: Long by lazy { intent.getLongExtra(KEY_USER_ID, DEFAULT_USER_ID) }
     private val finishedStudyAdapter: FinishedStudyAdapter by lazy { FinishedStudyAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initBinding()
-        profileViewModel.initProfile(userId)
+        profileViewModel.initProfile(getValidatedUserId())
         initFinishedStudyAdapter()
         submitFinishedStudies()
     }
@@ -30,6 +30,19 @@ class ProfileActivity : BindingActivity<ActivityProfileBinding>(R.layout.activit
     private fun initBinding() {
         binding.viewModel = profileViewModel
         binding.lifecycleOwner = this
+    }
+
+    private fun getValidatedUserId(): Long {
+        val userId = intent.getLongExtra(KEY_USER_ID, NON_EXISTENCE_USER_ID)
+        if (userId == NON_EXISTENCE_USER_ID) {
+            Toast.makeText(
+                this,
+                this.getString(R.string.profile_unexpected_user_access_warning),
+                Toast.LENGTH_SHORT,
+            ).show()
+            finish()
+        }
+        return userId
     }
 
     private fun initFinishedStudyAdapter() {
@@ -52,7 +65,7 @@ class ProfileActivity : BindingActivity<ActivityProfileBinding>(R.layout.activit
     }
 
     companion object {
-        private const val DEFAULT_USER_ID = 0L
+        private const val NON_EXISTENCE_USER_ID = 0L
         private const val KEY_USER_ID = "KEY_USER_ID"
         fun getIntent(context: Context, userId: Long): Intent =
             Intent(context, ProfileActivity::class.java).apply {
