@@ -3,6 +3,8 @@ package com.created.team201.presentation.profile
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -22,6 +24,7 @@ class ProfileActivity : BindingActivity<ActivityProfileBinding>(R.layout.activit
         super.onCreate(savedInstanceState)
 
         initBinding()
+        initActionBar()
         profileViewModel.initProfile(getValidatedUserId())
         initFinishedStudyAdapter()
         submitFinishedStudies()
@@ -30,6 +33,12 @@ class ProfileActivity : BindingActivity<ActivityProfileBinding>(R.layout.activit
     private fun initBinding() {
         binding.viewModel = profileViewModel
         binding.lifecycleOwner = this
+    }
+
+    private fun initActionBar() {
+        setSupportActionBar(binding.tbProfile)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
     }
 
     private fun getValidatedUserId(): Long {
@@ -62,6 +71,18 @@ class ProfileActivity : BindingActivity<ActivityProfileBinding>(R.layout.activit
 
     private fun submitFinishedStudies() {
         finishedStudyAdapter.submitList(profileViewModel.profile.value?.finishedStudies)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_profile, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     companion object {
