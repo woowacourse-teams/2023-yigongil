@@ -50,10 +50,16 @@
 
     <!--스터디 상세보기 뷰-->
     <string name="study_detail_app_bar_title">스터디 상세보기</string>
+    <string name="study_detail_app_bar_study_master_title">개설한 스터디 관리하기</string>
     <string name="study_detail_study_people">스터디원</string>
     <string name="study_detail_study_capacity">참여하기(%d/%d)</string>
+    <string name="study_detail_button_start_study">시작하기(%d/%d)</string>
     <string name="study_detail_dm_button_content_description">스터디장에게 문의하기</string>
-    <string name="study_detail_study_waiting">스터디장의 수락을 기다리고있어요.</string>
+    <string name="study_detail_study_accept_waiting">스터디장의 수락을 기다리고있어요.</string>
+    <string name="study_detail_study_start_waiting">스터디 시작을 기다리고있어요.</string>
+    <string name="study_detail_period_of_count_day">%d일</string>
+    <string name="study_detail_period_of_count_week">%d주</string>
+    <string name="study_detail_period_format">%s회차</string>
     <string name="item_study_detail_study_success_rate">스터디 성공률 %d%%</string>
 
     <!--스터디 관리하기 뷰-->
@@ -112,6 +118,8 @@
     <string name="multiPicker_display_name_day">일</string>
     <string name="multiPicker_display_name_week">주</string>
     <string name="multiPicker_formatter_information">%d %s</string>
+    <string name="item_study_detail_accept_await">승낙을 기다리고 있어요.</string>
+    <string name="item_study_button_accept">수락</string>
 
     <!-- 마이페이지 뷰 -->
     <string name="myPage_menu_title_setting">설정</string>
@@ -128,5 +136,7 @@
     <string name="profile_title">프로필</string>
     <string name="profile_study_success_rate">스터디 성공률</string>
     <string name="profile_todo_success_rate">필수투두 완료횟수</string>
+    <string name="profile_unexpected_user_access_warning">존재하지 않는 사용자입니다.</string>
+    <string name="item_profile_finished_study_information_format">시작일 %s · 총 %d회차 · %d %s(주기)</string>
 
 </resources>

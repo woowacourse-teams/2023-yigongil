@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.created.team201.presentation.profile.ProfileViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -55,6 +58,7 @@
                     android:layout_marginTop="24dp"
                     android:padding="2dp"
                     android:scaleType="centerCrop"
+                    app:glideSrcUrl="@{viewModel.profile.profile.profileImageUrl}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:shapeAppearanceOverlay="@style/circleImageView"
@@ -71,6 +75,7 @@
                     android:layout_marginEnd="12dp"
                     android:ellipsize="end"
                     android:maxLines="1"
+                    android:text="@{viewModel.profile.profile.nickname}"
                     android:textAppearance="@style/name_sb18"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -85,6 +90,7 @@
                     android:layout_marginTop="8dp"
                     android:ellipsize="end"
                     android:maxLines="1"
+                    android:text="@{viewModel.profile.profile.githubId}"
                     android:textAppearance="@style/text_r12"
                     android:textColor="@color/grey03_595959"
                     app:layout_constraintEnd_toEndOf="@id/tv_profile_user_name"
@@ -103,6 +109,7 @@
                     app:layout_constraintEnd_toStartOf="@id/view_profile_rate_board_border_line"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/iv_profile_image"
+                    app:result="@{@string/profile_success_rate_format(viewModel.profile.profile.successRate)}"
                     app:title="@{@string/profile_study_success_rate}" />
 
                 <View
@@ -125,6 +132,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/view_profile_rate_board_border_line"
                     app:layout_constraintTop_toTopOf="@id/layout_profile_study_success_rate"
+                    app:result="@{@string/profile_todo_success_rate_format(viewModel.profile.profile.successfulRoundCount)}"
                     app:title="@{@string/profile_todo_success_rate}" />
 
                 <TextView
@@ -134,6 +142,7 @@
                     android:layout_marginTop="24dp"
                     android:background="@drawable/bg_rectangle_radius_5dp"
                     android:padding="16dp"
+                    android:text="@{viewModel.profile.profile.introduction}"
                     android:textAppearance="@style/text_r14"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
