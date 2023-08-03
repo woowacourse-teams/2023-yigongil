@@ -2,7 +2,7 @@ package com.created.team201.presentation.studyList.model
 
 import com.created.team201.R
 
-enum class StudyStatus(private val id: Int, private val resId: Int, val formatIndex: Int) {
+enum class StudyStatus(val id: Int, private val resId: Int, val formatIndex: Int) {
     RECRUITING(0, R.drawable.ic_gathering, 0),
     PROCESSING(1, R.drawable.ic_processing, 1),
     END(2, R.drawable.ic_over, 1),

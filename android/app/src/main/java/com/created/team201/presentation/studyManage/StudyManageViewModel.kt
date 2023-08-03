@@ -17,6 +17,7 @@ import com.created.team201.data.datasource.remote.StudyManageDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.StudyManageRepositoryImpl
 import com.created.team201.presentation.studyList.model.PeriodUiModel
+import com.created.team201.presentation.studyList.model.StudyStatus
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 import com.created.team201.presentation.studyManage.model.MyStudiesUiModel
 import com.created.team201.presentation.studyManage.model.MyStudyStatus.OPENED
@@ -36,6 +37,12 @@ class StudyManageViewModel(
     init {
         studies.value = listOf()
         loadStudies()
+    }
+
+    fun getMyStudyInProcessing(studyId: Long): Boolean {
+        val studies = studies.value ?: listOf()
+        val study = studies.find { it.studySummaryUiModel.id == studyId }!!
+        return study.studySummaryUiModel.processingStatus == StudyStatus.PROCESSING.id
     }
 
     private fun loadStudies() {
