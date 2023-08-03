@@ -10,7 +10,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.model.Study
 import com.created.domain.model.Todo
-import com.created.domain.model.UserInfo
 import com.created.domain.repository.HomeRepository
 import com.created.team201.data.datasource.remote.HomeDataSourceImpl
 import com.created.team201.data.mapper.toDomain
@@ -34,21 +33,21 @@ class HomeViewModel(
     }
 
     fun updateUserStudies() {
-        _userStudies.value = DUMMY.studies.map { it.toUiModel() }
-
         viewModelScope.launch {
             runCatching {
                 homeRepository.getUserStudies()
             }.onSuccess { result ->
                 _userName.value = result.userName
-//                _userStudies.value = result.studies.map { it.toUiModel() }
+                _userStudies.value = result.studies.map { it.toUiModel() }
             }.onFailure {
-                Log.d("123123", it.message.toString())
+                Log.d("ERROR", it.toString())
             }
         }
     }
 
     fun updateTodo(todoId: Long, isDone: Boolean) {
+        // 투두 항목이 비어 있을 경우 체크 불가
+        // 투두 항목이 비어 있을 경우, 체크 버튼 숨김
         val studies = userStudies.value ?: throw IllegalArgumentException()
         val isNecessary = studies.any { it.necessaryTodo.todoId == todoId }
         val study: StudyUiModel
@@ -115,7 +114,7 @@ class HomeViewModel(
 
     private fun Todo.toUiModel(): TodoUiModel = TodoUiModel(
         todoId = this.todoId,
-        content = this.content,
+        content = this.content ?: "",
         isDone = this.isDone,
     )
 
@@ -129,37 +128,5 @@ class HomeViewModel(
                 )
             }
         }
-
-        private val DUMMY = UserInfo(
-            "산군",
-            2,
-            listOf(
-                Study(
-                    2,
-                    "빨리 만들자",
-                    90,
-                    5,
-                    "2023.01.02",
-                    Todo(2, "잔디구현끝내기", true),
-                    listOf(
-                        Todo(3, "홈뷰 끝내기", false),
-                        Todo(4, "홈뷰 끝내기2", false),
-                        Todo(5, "홈뷰 끝내기3", false),
-                        Todo(6, "홈뷰 끝내기4", false),
-                    ),
-
-                ),
-                Study(
-                    2,
-                    "빨리 만들자고",
-                    57,
-                    9,
-                    "2023.07.02",
-                    Todo(7, "선택 투두 끝내기", true),
-                    listOf(Todo(8, "홈뷰 끝내기2", true)),
-
-                ),
-            ),
-        )
     }
 }

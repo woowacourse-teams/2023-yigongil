@@ -38,7 +38,10 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         bindViewModel()
         initAdapter()
         observeUserStudies()
+    }
 
+    override fun onResume() {
+        super.onResume()
         homeViewModel.updateUserStudies()
     }
 
