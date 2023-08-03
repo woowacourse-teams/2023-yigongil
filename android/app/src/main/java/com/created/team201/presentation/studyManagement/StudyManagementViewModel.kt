@@ -164,20 +164,19 @@ class StudyManagementViewModel(
 
     fun addOptionalTodo(studyId: Long, currentPage: Int, todoContent: String) {
         val currentStudyRounds = studyRounds.value ?: listOf()
-        val currentStudy = currentStudyRounds[currentPage]
+        val currentRound = currentStudyRounds[currentPage]
 
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
-                repository.createTodo(studyId, CreateTodo(false, currentStudy.id, todoContent))
+                repository.createTodo(studyId, CreateTodo(false, currentRound.id, todoContent))
             }.onSuccess { result ->
                 val todoId = result.getOrDefault(DEFAULT_TODO_ID)
-                val newOptionalTodos = getNewOptionalTodos(currentStudy, todoId, todoContent)
-
-                val newStudy = currentStudy.copy(optionalTodos = newOptionalTodos)
+                val newOptionalTodos = getNewOptionalTodos(currentRound, todoId, todoContent)
+                val newRound = currentRound.copy(optionalTodos = newOptionalTodos)
                 val updatedStudyRounds = currentStudyRounds.map { studyRoundDetailUiModel ->
-                    studyRoundDetailUiModel.takeIf { it.id != studyId } ?: newStudy
+                    studyRoundDetailUiModel.takeIf { it.id != currentRound.id } ?: newRound
                 }
-                _studyRounds.value = updatedStudyRounds
+                _studyRounds.postValue(updatedStudyRounds)
             }.onFailure {
                 Log.e(LOG_ERROR, it.message.toString())
             }
@@ -190,7 +189,9 @@ class StudyManagementViewModel(
         todoContent: String,
     ): MutableList<OptionalTodoUiModel> {
         val newOptionalTodos = currentStudy.optionalTodos.toMutableList()
-        newOptionalTodos.removeLast()
+        if (newOptionalTodos.last().viewType != OptionalTodoViewType.DISPLAY.viewType) {
+            newOptionalTodos.removeLast()
+        }
         newOptionalTodos.add(
             OptionalTodoUiModel(
                 TodoUiModel(todoId, todoContent, false),
