@@ -68,11 +68,11 @@ public class Round extends BaseEntity {
             List<RoundOfMember> roundOfMembers
     ) {
         this.id = id;
-        this.roundNumber = roundNumber;
+        this.roundNumber = roundNumber != null ? roundNumber : 1;
         this.necessaryToDoContent = necessaryToDoContent;
         this.master = master;
         this.endAt = endAt;
-        this.roundOfMembers = roundOfMembers;
+        this.roundOfMembers = roundOfMembers != null ? roundOfMembers : new ArrayList<>();
     }
 
     public static List<Round> of(Integer totalRoundCount, Member master) {

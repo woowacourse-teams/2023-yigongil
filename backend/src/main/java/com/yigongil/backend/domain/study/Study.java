@@ -106,7 +106,7 @@ public class Study extends BaseEntity {
         this.periodOfRound = periodOfRound;
         this.periodUnit = periodUnit;
         this.currentRound = currentRound;
-        this.rounds = rounds;
+        this.rounds = rounds != null ? rounds : new ArrayList<>();
     }
 
     public static Study initializeStudyOf(
@@ -163,7 +163,8 @@ public class Study extends BaseEntity {
                      .filter(round -> round.getId().equals(roundId))
                      .findAny()
                      .orElseThrow(
-                             () -> new RoundNotFoundException("스터디에 해당 회차가 존재하지 않습니다.", roundId));
+                             () -> new RoundNotFoundException("스터디에 해당 회차가 존재하지 않습니다.", roundId)
+                     );
     }
 
     public void addMember(Member member) {

@@ -32,7 +32,6 @@ public class FakeController {
                         Member.builder()
                               .githubId(githubId)
                               .profileImageUrl("this_is_fake_image_url")
-                              .tier(1)
                               .build()
                 )
         ).getId();
