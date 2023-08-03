@@ -15,7 +15,7 @@ enum class FinishedStudyStatus(
         fun imageOf(isSucceed: Boolean): Int {
             return FinishedStudyStatus.values().find { status ->
                 status.isSucceed == isSucceed
-            }?.resId ?: throw IllegalAccessException("해당 스터디 상태를 찾을 수 없습니다.")
+            }?.resId ?: throw IllegalArgumentException("해당 스터디 상태를 찾을 수 없습니다.")
         }
     }
 }
