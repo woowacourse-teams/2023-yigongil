@@ -4,13 +4,13 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MyPageResponseDto(
-    @SerialName("githubId")
-    val githubId: String,
+data class ProfileResponseDto(
     @SerialName("id")
     val id: Long,
+    @SerialName("githubId")
+    val githubId: String,
     @SerialName("introduction")
-    val introduction: String?,
+    val introduction: String,
     @SerialName("nickname")
     val nickname: String,
     @SerialName("profileImageUrl")
@@ -23,4 +23,6 @@ data class MyPageResponseDto(
     val tier: Int,
     @SerialName("tierProgress")
     val tierProgress: Int,
+    @SerialName("finishedStudies")
+    val finishedStudies: List<FinishedStudyResponseDto>,
 )
