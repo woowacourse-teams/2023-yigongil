@@ -1,14 +1,18 @@
 package com.yigongil.backend.config.oauth;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.exception.InvalidTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import java.io.IOException;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Base64;
+import java.util.Map;
 import javax.crypto.SecretKey;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,5 +54,16 @@ public class JwtTokenProvider {
                               .getBody();
 
         return Long.parseLong(claims.getSubject());
+    }
+
+    public String renewToken(String previousToken) {
+        String payload = previousToken.split("\\.")[1];
+        try {
+            String id = (String) new ObjectMapper().readValue(Base64.getUrlDecoder().decode(payload), Map.class)
+                                                   .get("sub");
+            return createToken(Long.valueOf(id));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
