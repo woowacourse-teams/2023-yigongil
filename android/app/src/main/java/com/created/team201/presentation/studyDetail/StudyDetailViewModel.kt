@@ -46,7 +46,7 @@ class StudyDetailViewModel private constructor(
             runCatching {
                 studyDetailRepository.participateStudy(studyId)
             }.onSuccess {
-                // 이제 이 유저의 Role은 APPLICANT가 되기 때문에 그에 맞춰 state도 변경되어야 합니다.
+                _state.value = StudyDetailState.Applicant
             }
         }
     }
