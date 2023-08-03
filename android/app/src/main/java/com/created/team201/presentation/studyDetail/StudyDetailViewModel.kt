@@ -31,7 +31,8 @@ class StudyDetailViewModel private constructor(
     fun fetchStudyDetail(studyId: Long) {
         viewModelScope.launch {
             runCatching {
-                studyDetailRepository.getStudyDetail(studyId).toUIModel()
+                val studyDetail = studyDetailRepository.getStudyDetail(studyId).toUIModel()
+                studyDetail
             }.onSuccess {
                 _study.value = it
                 _studyParticipants.value = it.studyMembers
@@ -45,18 +46,8 @@ class StudyDetailViewModel private constructor(
         viewModelScope.launch {
             runCatching {
                 studyDetailRepository.participateStudy(studyId)
-            }.onSuccess {
+            }.onFailure { // 204 No Content가 onFailure로 가는 현상이 있습니다.
                 _state.value = StudyDetailState.Applicant
-            }
-        }
-    }
-
-    fun startStudy(studyId: Long) {
-        viewModelScope.launch {
-            runCatching {
-                studyDetailRepository.startStudy(studyId)
-            }.onSuccess {
-                // 스터디가 성공적으로 시작된다면 시작후 화면으로 이동해야 합니다.
             }
         }
     }
@@ -79,11 +70,21 @@ class StudyDetailViewModel private constructor(
         }
     }
 
+    fun startStudy(studyId: Long) {
+        viewModelScope.launch {
+            runCatching {
+                studyDetailRepository.startStudy(studyId)
+            }.onFailure { // 204 No Content가 onFailure로 가는 현상이 있습니다.
+                // 스터디가 성공적으로 시작된다면 시작후 화면으로 이동해야 합니다.
+            }
+        }
+    }
+
     fun acceptApplicant(studyId: Long, memberId: Long) {
         viewModelScope.launch {
             runCatching {
                 studyDetailRepository.acceptApplicant(studyId, memberId)
-            }.onSuccess {
+            }.onFailure { // 204 No Content가 onFailure로 가는 현상이 있습니다.
                 val studyParticipants = _studyParticipants.value ?: listOf()
                 val acceptedMember =
                     studyParticipants.find { it.id == memberId } ?: StudyMemberUIModel.DUMMY
