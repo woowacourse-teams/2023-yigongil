@@ -1,4 +1,4 @@
-package com.created.team201.util
+package com.created.team201.util.auth
 
 import android.content.Context
 import android.net.Uri

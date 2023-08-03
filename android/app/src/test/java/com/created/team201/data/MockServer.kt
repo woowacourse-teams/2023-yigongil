@@ -9,6 +9,8 @@ object MockServer {
     val server = MockWebServer()
     private const val HEADER_NAME_TYPE: String = "Content-Type"
     private const val HEADER_VALUE_JSON: String = "application/json"
+    private const val HEADER_LOCATION: String = "Location"
+    private const val HEADER_VALUE_LOCATION: String = "location/studyId/1"
 
     private val dispatcher = object : Dispatcher() {
         override fun dispatch(request: RecordedRequest): MockResponse {
@@ -17,6 +19,7 @@ object MockServer {
                 path == "/v1/studies" && request.method == "POST" -> {
                     MockResponse()
                         .setHeader(HEADER_NAME_TYPE, HEADER_VALUE_JSON)
+                        .setHeader(HEADER_LOCATION, HEADER_VALUE_LOCATION)
                         .setResponseCode(201)
                 }
 

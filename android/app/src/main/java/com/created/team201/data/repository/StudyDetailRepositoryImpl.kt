@@ -14,14 +14,18 @@ class StudyDetailRepositoryImpl(
     }
 
     override suspend fun participateStudy(studyId: Long) {
-        return studyDetailDataSource.participateStudy(studyId)
+        studyDetailDataSource.participateStudy(studyId)
     }
 
     override suspend fun startStudy(studyId: Long) {
-        return studyDetailDataSource.startStudy(studyId)
+        studyDetailDataSource.startStudy(studyId)
     }
 
     override suspend fun getStudyApplicants(studyId: Long): List<Member> {
         return studyDetailDataSource.getStudyApplicants(studyId).map { it.toDomain() }
+    }
+
+    override suspend fun acceptApplicant(studyId: Long, memberId: Long) {
+        studyDetailDataSource.acceptApplicant(studyId, memberId)
     }
 }

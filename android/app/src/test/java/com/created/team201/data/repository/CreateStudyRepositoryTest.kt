@@ -2,7 +2,7 @@ package com.created.team201.data.repository
 
 import com.created.domain.repository.CreateStudyRepository
 import com.created.team201.data.MockServiceModule
-import com.created.team201.data.datasource.remote.CreateStudyRemoteDataSourceImpl
+import com.created.team201.data.datasource.remote.CreateStudyDataSourceImpl
 import com.created.team201.data.remote.api.CreateStudyService
 import com.created.team201.presentation.createStudy.CreateStudyFixture
 import junit.framework.TestCase.assertEquals
@@ -14,7 +14,7 @@ class CreateStudyRepositoryTest {
     private val service: CreateStudyService = MockServiceModule.createStudyService
 
     private val repository: CreateStudyRepository =
-        CreateStudyRepositoryImpl(CreateStudyRemoteDataSourceImpl(service))
+        CreateStudyRepositoryImpl(CreateStudyDataSourceImpl(service))
 
     @ExperimentalCoroutinesApi
     @Test
@@ -26,5 +26,8 @@ class CreateStudyRepositoryTest {
 
         // then
         assertEquals(true, actual.isSuccess)
+        actual.onSuccess { studyId ->
+            assertEquals(1L, studyId)
+        }
     }
 }

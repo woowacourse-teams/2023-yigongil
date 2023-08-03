@@ -1,5 +1,7 @@
 package com.created.team201.presentation.login
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,8 +15,8 @@ import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.login.LoginViewModel.State.FAIL
 import com.created.team201.presentation.login.LoginViewModel.State.IDLE
 import com.created.team201.presentation.login.LoginViewModel.State.SUCCESS
-import com.created.team201.util.CustomTabLauncherActivity
-import com.created.team201.util.CustomTabLauncherActivity.Companion.GIT_OAUTH_TOKEN_KEY
+import com.created.team201.util.auth.CustomTabLauncherActivity
+import com.created.team201.util.auth.CustomTabLauncherActivity.Companion.GIT_OAUTH_TOKEN_KEY
 
 class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_login) {
     private val loginViewModel by viewModels<LoginViewModel> { LoginViewModel.Factory }
@@ -27,7 +29,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
     }
 
     private fun observeLoginState() {
-        loginViewModel.loginState.observe(this) { loginState ->
+        loginViewModel.signUpState.observe(this) { loginState ->
             when (loginState) {
                 SUCCESS -> navigateToMain()
                 FAIL -> Toast.makeText(
@@ -63,7 +65,12 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
             val oauthToken = resultData.getString(GIT_OAUTH_TOKEN_KEY)
                 ?: throw IllegalArgumentException()
 
-            loginViewModel.postLogin(oauthToken)
+            loginViewModel.signUp(oauthToken)
         }
+    }
+
+    companion object {
+
+        fun getIntent(context: Context): Intent = Intent(context, LoginActivity::class.java)
     }
 }

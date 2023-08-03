@@ -1,6 +1,5 @@
-package com.created.team201.presentation.login
+package com.created.team201.presentation.splash
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,24 +13,28 @@ import com.created.team201.data.datasource.local.TokenDataSourceImpl
 import com.created.team201.data.datasource.remote.login.AuthDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.AuthRepositoryImpl
-import com.created.team201.presentation.login.LoginViewModel.State.FAIL
-import com.created.team201.presentation.login.LoginViewModel.State.SUCCESS
+import com.created.team201.presentation.splash.SplashViewModel.State.FAIL
+import com.created.team201.presentation.splash.SplashViewModel.State.SUCCESS
 import kotlinx.coroutines.launch
 
-class LoginViewModel(
+class SplashViewModel(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
-    private val _signUpState: MutableLiveData<State> = MutableLiveData()
-    val signUpState: LiveData<State> get() = _signUpState
+    private val _loginState: MutableLiveData<State> = MutableLiveData()
+    val loginState: LiveData<State> get() = _loginState
 
-    fun signUp(token: String) {
+    init {
+        tryLogin()
+    }
+
+    private fun tryLogin() {
         viewModelScope.launch {
-            authRepository.requestSignUp(token)
+            authRepository.requestSignIn()
                 .onSuccess {
-                    _signUpState.value = SUCCESS
-                }.onFailure {
-                    _signUpState.value = FAIL
-                    Log.e("FAIL_ERROR", "SIGN_UP : ${it.message}")
+                    _loginState.value = SUCCESS
+                }
+                .onFailure {
+                    _loginState.value = FAIL
                 }
         }
     }
@@ -45,7 +48,7 @@ class LoginViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                LoginViewModel(
+                SplashViewModel(
                     AuthRepositoryImpl(
                         AuthDataSourceImpl(
                             NetworkServiceModule.authService,

@@ -55,7 +55,11 @@
     <string name="study_detail_study_capacity">참여하기(%d/%d)</string>
     <string name="study_detail_button_start_study">시작하기(%d/%d)</string>
     <string name="study_detail_dm_button_content_description">스터디장에게 문의하기</string>
-    <string name="study_detail_study_waiting">스터디장의 수락을 기다리고있어요.</string>
+    <string name="study_detail_study_accept_waiting">스터디장의 수락을 기다리고있어요.</string>
+    <string name="study_detail_study_start_waiting">스터디 시작을 기다리고있어요.</string>
+    <string name="study_detail_period_of_count_day">%d일</string>
+    <string name="study_detail_period_of_count_week">%d주</string>
+    <string name="study_detail_period_format">%s회차</string>
     <string name="item_study_detail_study_success_rate">스터디 성공률 %d%%</string>
 
     <!--스터디 관리하기 뷰-->

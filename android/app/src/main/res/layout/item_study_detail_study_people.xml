@@ -8,6 +8,10 @@
         <variable
             name="studyMember"
             type="com.created.team201.presentation.studyDetail.model.StudyMemberUIModel" />
+
+        <variable
+            name="studyMemberClickListener"
+            type="com.created.team201.presentation.studyDetail.StudyMemberClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -87,6 +91,7 @@
             android:text="@string/item_study_button_accept"
             android:textAppearance="@style/accept_sb9"
             android:textColor="@color/white"
+            android:onClick="@{() -> studyMemberClickListener.onAcceptApplicantClick(studyMember.id)}"
             app:isGone="@{!studyMember.isApplicant}"
             app:layout_constraintBottom_toBottomOf="@id/tv_item_study_detail_waiting_description"
             app:layout_constraintStart_toEndOf="@id/tv_item_study_detail_waiting_description"
