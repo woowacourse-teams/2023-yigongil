@@ -37,4 +37,3 @@ fun FinishedStudyResponseDto.toDomain(): FinishedStudy = FinishedStudy(
 
 private fun String.toPeriod(): Period =
     Period(Character.getNumericValue(first()), PeriodUnit.valueOf(last()))
-

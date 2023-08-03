@@ -4,8 +4,8 @@ import com.created.team201.data.remote.api.AuthService
 import com.created.team201.data.remote.api.CreateStudyService
 import com.created.team201.data.remote.api.HomeService
 import com.created.team201.data.remote.api.MyPageService
-import com.created.team201.data.remote.api.ProfileService
 import com.created.team201.data.remote.api.StudyDetailService
+import com.created.team201.data.remote.api.ProfileService
 import com.created.team201.data.remote.api.StudyListService
 import com.created.team201.data.remote.api.StudyManageService
 
