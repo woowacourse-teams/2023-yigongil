@@ -18,6 +18,6 @@ public enum PageStrategy {
 
     public static class Constants {
 
-        public static final int PAGE_SIZE = 1;
+        public static final int PAGE_SIZE = 30;
     }
 }
