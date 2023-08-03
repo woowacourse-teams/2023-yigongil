@@ -8,7 +8,7 @@ data class MyPageResponseDto(
     @SerialName("githubId")
     val githubId: String,
     @SerialName("id")
-    val id: Int,
+    val id: Long,
     @SerialName("introduction")
     val introduction: String?,
     @SerialName("nickname")

@@ -56,7 +56,7 @@ jobs:
       working-directory: ${{ env.working-directory }}
       
     - name: test 진행
-      run: ./gradlew --info test
+      run: ./gradlew test
       working-directory: ${{ env.working-directory }}
       
     - name: test 결과
@@ -67,3 +67,12 @@ jobs:
           ${{ env.working-directory }}/app/build/test-results/*Debug*/*.xml
           ${{ env.working-directory }}/domain/build/test-results/test/*.xml
 
+    - name: 테스트 실패 slack 알림
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        author_name: 안드로이드 테스트 실패 알림
+        fields: repo, message, commit, author, action, eventName, ref, workflow, job, took
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: failure()
