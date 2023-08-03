@@ -6,4 +6,6 @@ interface AuthDataSource {
     suspend fun getTokens(token: String): AuthResponseDto
 
     suspend fun getLoginValidity()
+
+    suspend fun getRenewedAccessToken(token: String): AuthResponseDto
 }

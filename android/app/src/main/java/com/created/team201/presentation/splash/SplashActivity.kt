@@ -28,7 +28,7 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
 
     private fun delayView() {
         lifecycleScope.launch {
-            delay(1500)
+            delay(800)
         }
     }
 

@@ -11,6 +11,11 @@ interface AuthService {
         @Query("code") oauthToken: String,
     ): AuthResponseDto
 
+    @GET("/v1/login/github/renew")
+    suspend fun getRenewedAccessToken(
+        @Query("accessToken") accessToken: String,
+    ): AuthResponseDto
+
     @GET("/v1/home")
     suspend fun getLoginValidity()
 }
