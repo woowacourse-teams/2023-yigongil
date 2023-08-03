@@ -10,9 +10,9 @@ import androidx.fragment.app.commit
 import com.created.team201.R
 import com.created.team201.databinding.ActivityCreateStudyBinding
 import com.created.team201.presentation.common.BindingActivity
-import com.created.team201.presentation.createStudy.CreateStudyViewModel.State.Success
 import com.created.team201.presentation.createStudy.CreateStudyViewModel.State.FAIL
 import com.created.team201.presentation.createStudy.CreateStudyViewModel.State.IDLE
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.State.Success
 import com.created.team201.presentation.createStudy.bottomSheet.CycleBottomSheetFragment
 import com.created.team201.presentation.createStudy.bottomSheet.PeopleCountBottomSheetFragment
 import com.created.team201.presentation.createStudy.bottomSheet.PeriodBottomSheetFragment

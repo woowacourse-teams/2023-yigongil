@@ -109,4 +109,8 @@ dependencies {
 
     // browser
     implementation 'androidx.browser:browser:1.5.0'
+
+    // EncryptedSharedPreferences
+    implementation "androidx.security:security-crypto-ktx:1.1.0-alpha06"
+
 }

@@ -63,7 +63,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
             val oauthToken = resultData.getString(GIT_OAUTH_TOKEN_KEY)
                 ?: throw IllegalArgumentException()
 
-            loginViewModel.postLogin(oauthToken)
+            loginViewModel.signUp(oauthToken)
         }
     }
 }
