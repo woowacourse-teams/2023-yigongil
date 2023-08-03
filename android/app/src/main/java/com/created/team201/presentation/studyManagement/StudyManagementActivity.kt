@@ -11,6 +11,7 @@ import com.created.domain.model.PageIndex
 import com.created.team201.R
 import com.created.team201.databinding.ActivityStudyManagementBinding
 import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.profile.ProfileActivity
 import com.created.team201.presentation.studyManagement.adapter.StudyManagementAdapter
 
 class StudyManagementActivity :
@@ -98,7 +99,12 @@ class StudyManagementActivity :
                 return
             }
             val currentPage = binding.vpStudyManagement.currentItem
-            studyManagementViewModel.updateTodoContent(currentPage, isNecessary, todoContent, studyId)
+            studyManagementViewModel.updateTodoContent(
+                currentPage,
+                isNecessary,
+                todoContent,
+                studyId,
+            )
         }
 
         override fun onClickAddTodo(todoContent: String) {
@@ -131,7 +137,7 @@ class StudyManagementActivity :
 
     private val memberClickListener = object : StudyMemberClickListener {
         override fun onClickMember(id: Long) {
-            // 프로필 페이지로 이동
+            startActivity(ProfileActivity.getIntent(this@StudyManagementActivity, id))
         }
     }
 
