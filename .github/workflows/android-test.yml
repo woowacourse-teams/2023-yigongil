@@ -56,7 +56,7 @@ jobs:
       working-directory: ${{ env.working-directory }}
       
     - name: test 진행
-      run: ./gradlew --info test
+      run: ./gradlew test
       working-directory: ${{ env.working-directory }}
       
     - name: test 결과

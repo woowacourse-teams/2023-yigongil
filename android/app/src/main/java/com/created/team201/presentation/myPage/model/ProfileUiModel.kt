@@ -2,7 +2,7 @@ package com.created.team201.presentation.myPage.model
 
 data class ProfileUiModel(
     val githubId: String,
-    val id: Int,
+    val id: Long,
     val introduction: String?,
     val nickname: String,
     val profileImageUrl: String?,

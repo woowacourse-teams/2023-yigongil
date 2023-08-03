@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.created.domain.model.CreateStudy
 import com.created.domain.model.Period
 import com.created.domain.repository.CreateStudyRepository
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.State.Success
 import com.created.team201.presentation.createStudy.model.CreateStudyUiModel
 import com.created.team201.presentation.createStudy.model.PeriodUiModel
 import com.created.team201.presentation.util.getOrAwaitValue
@@ -42,14 +43,15 @@ class CreateStudyViewModelTest {
     @Test
     fun `스터디 정보를 갖고 스터디를 개설할 수 있다`() {
         // given
-        coEvery { repository.createStudy(CreateStudyFixture.study) } returns Result.success(Unit)
+        val studyId = 1L
+        coEvery { repository.createStudy(CreateStudyFixture.study) } returns Result.success(studyId)
 
         // when
         viewModel.createStudy(CreateStudyFixture.study.toUiModel())
 
         // then
-        viewModel.isSuccessCreateStudy.getOrAwaitValue()
-        assertEquals(true, viewModel.isSuccessCreateStudy.value)
+        viewModel.studyState.getOrAwaitValue()
+        assertEquals(Success(1L), viewModel.studyState.value)
     }
 
     @Test
