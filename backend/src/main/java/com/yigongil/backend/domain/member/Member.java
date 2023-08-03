@@ -61,19 +61,22 @@ public class Member extends BaseEntity {
         this.introduction = new Introduction(introduction);
     }
 
-    public String getNickname() {
-        return nickname.getNickname();
-    }
-
-    public String getIntroduction() {
-        return introduction.getIntroduction();
-    }
-
     public int isSameWithMaster(Member master) {
         if (this.equals(master)) {
             return MASTER_NUMBER;
         }
         return PARTICIPANT_NUMBER;
+    }
+
+    public String getNickname() {
+        return nickname.getNickname();
+    }
+
+    public String getIntroduction() {
+        if (introduction == null) {
+            return null;
+        }
+        return introduction.getIntroduction();
     }
 
     @Override
