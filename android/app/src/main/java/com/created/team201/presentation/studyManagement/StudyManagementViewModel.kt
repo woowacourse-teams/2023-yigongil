@@ -97,22 +97,21 @@ class StudyManagementViewModel(
     fun updateTodo(currentItemId: Int, todoId: Long, isDone: Boolean, studyId: Long) {
         val studyDetails = studyRounds.value ?: listOf()
         val isNecessary = studyRounds.value?.get(currentItemId)?.necessaryTodo?.todoId == todoId
-        val study: StudyRoundDetailUiModel
+        val studyRound: StudyRoundDetailUiModel
         val todo: TodoUiModel
         when (isNecessary) {
             true -> {
                 updateNecessaryTodoCheck(studyDetails, todoId, isDone)
-                study = studyDetails.find { it.necessaryTodo.todoId == todoId }!!
-                todo = study.necessaryTodo
+                studyRound = studyDetails.find { it.necessaryTodo.todoId == todoId }!!
+                todo = studyRound.necessaryTodo.copy(isDone = isDone)
             }
 
             false -> {
                 updateOptionalTodoCheck(studyDetails, todoId, isDone)
-                study = studyDetails.find { it.optionalTodos.any { it.todo.todoId == todoId } }!!
-                todo = study.optionalTodos.find { it.todo.todoId == todoId }!!.todo
+                studyRound = studyDetails.find { it.optionalTodos.any { it.todo.todoId == todoId } }!!
+                todo = studyRound.optionalTodos.find { it.todo.todoId == todoId }!!.todo.copy(isDone = isDone)
             }
         }
-
         patchTodo(todo, isNecessary, studyId)
     }
 
