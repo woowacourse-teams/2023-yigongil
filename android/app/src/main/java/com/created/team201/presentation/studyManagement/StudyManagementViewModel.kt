@@ -189,13 +189,12 @@ class StudyManagementViewModel(
         todoContent: String,
     ): MutableList<OptionalTodoUiModel> {
         val newOptionalTodos = currentStudy.optionalTodos.toMutableList()
-        if (newOptionalTodos.last().viewType != OptionalTodoViewType.DISPLAY.viewType) {
-            newOptionalTodos.removeLast()
-        }
-        newOptionalTodos.add(
-            OptionalTodoUiModel(
-                TodoUiModel(todoId, todoContent, false),
-                OptionalTodoViewType.DISPLAY.viewType,
+        newOptionalTodos.addAll(
+            listOf(
+                OptionalTodoUiModel(
+                    TodoUiModel(todoId, todoContent, false),
+                    OptionalTodoViewType.DISPLAY.viewType,
+                ),
             ),
         )
         return newOptionalTodos
