@@ -26,5 +26,8 @@ class CreateStudyRepositoryTest {
 
         // then
         assertEquals(true, actual.isSuccess)
+        actual.onSuccess { studyId ->
+            assertEquals(1L, studyId)
+        }
     }
 }

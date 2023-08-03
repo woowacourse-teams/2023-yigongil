@@ -19,7 +19,6 @@ import com.created.team201.presentation.createStudy.model.CreateStudyUiModel
 import com.created.team201.presentation.createStudy.model.PeriodUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CreateStudyViewModel(
@@ -59,9 +58,9 @@ class CreateStudyViewModel(
     val isEnableCreateStudy: LiveData<Boolean>
         get() = _isEnableCreateStudy
 
-    private val _isSuccessCreateStudy: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
-    val isSuccessCreateStudy: LiveData<Boolean>
-        get() = _isSuccessCreateStudy
+    private val _studyState: MutableLiveData<State> = MutableLiveData()
+    val studyState: LiveData<State>
+        get() = _studyState
 
     val study: CreateStudyUiModel
         get() = CreateStudyUiModel(
@@ -99,14 +98,23 @@ class CreateStudyViewModel(
     }
 
     fun createStudy(study: CreateStudyUiModel) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             createStudyRepository.createStudy(study.toDomain())
                 .onSuccess {
-                    _isSuccessCreateStudy.value = true
+                    _studyState.value = State.Success(it)
                 }.onFailure {
-                    _isSuccessCreateStudy.value = false
+                    _studyState.value = State.FAIL
                 }
         }
+    }
+
+    sealed interface State {
+        data class Success(
+            val studyId: Long,
+        ) : State
+
+        object FAIL : State
+        object IDLE : State
     }
 
     private fun isInitializeCreateStudyInformation(): Boolean =

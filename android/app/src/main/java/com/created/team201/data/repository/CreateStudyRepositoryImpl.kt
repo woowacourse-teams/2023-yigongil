@@ -7,9 +7,19 @@ import com.created.team201.data.datasource.remote.CreateStudyDataSource
 class CreateStudyRepositoryImpl(
     private val createStudyDataSource: CreateStudyDataSource,
 ) : CreateStudyRepository {
-    override suspend fun createStudy(createStudy: CreateStudy): Result<Unit> {
+    override suspend fun createStudy(createStudy: CreateStudy): Result<Long> {
         return runCatching {
-            createStudyDataSource.createStudy(createStudy)
+            val location = createStudyDataSource.createStudy(createStudy)
+
+            return@runCatching location.headers()[LOCATION_KEY]
+                ?.substringAfterLast(LOCATION_DELIMITER)
+                ?.toLong()
+                ?: throw IllegalStateException()
         }
+    }
+
+    companion object {
+        private const val LOCATION_KEY = "Location"
+        private const val LOCATION_DELIMITER = "/"
     }
 }
