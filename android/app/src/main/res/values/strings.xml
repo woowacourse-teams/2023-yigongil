@@ -57,6 +57,7 @@
     <string name="study_detail_dm_button_content_description">스터디장에게 문의하기</string>
     <string name="study_detail_study_accept_waiting">스터디장의 수락을 기다리고있어요.</string>
     <string name="study_detail_study_start_waiting">스터디 시작을 기다리고있어요.</string>
+    <string name="study_detail_do_not_accept_member_anymore">더이상 스터디 멤버를 받을 수 없습니다.</string>
     <string name="study_detail_period_of_count_day">%d일</string>
     <string name="study_detail_period_of_count_week">%d주</string>
     <string name="study_detail_period_format">%s회차</string>

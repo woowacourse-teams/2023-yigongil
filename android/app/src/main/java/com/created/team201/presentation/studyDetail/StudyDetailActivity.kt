@@ -96,6 +96,14 @@ class StudyDetailActivity :
     }
 
     override fun onAcceptApplicantClick(memberId: Long) {
+        if (studyDetailViewModel.isFullMember.value == true) {
+            Toast.makeText(
+                this,
+                getString(R.string.study_detail_do_not_accept_member_anymore),
+                Toast.LENGTH_SHORT,
+            ).show()
+            return
+        }
         studyDetailViewModel.acceptApplicant(studyId, memberId)
     }
 

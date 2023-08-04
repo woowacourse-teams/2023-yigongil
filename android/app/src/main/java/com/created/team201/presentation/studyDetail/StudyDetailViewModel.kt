@@ -29,6 +29,8 @@ class StudyDetailViewModel private constructor(
     val state: LiveData<StudyDetailState> get() = _state
     private val _isStartStudy: MutableLiveData<Boolean> = MutableLiveData(false)
     val isStartStudy: LiveData<Boolean> get() = _isStartStudy
+    private val _isFullMember: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isFullMember: LiveData<Boolean> get() = _isFullMember
 
     fun fetchStudyDetail(studyId: Long) {
         viewModelScope.launch {
@@ -38,6 +40,7 @@ class StudyDetailViewModel private constructor(
             }.onSuccess {
                 _study.value = it
                 _studyParticipants.value = it.studyMembers
+                _isFullMember.value = it.peopleCount == _studyParticipants.value!!.size
                 _state.value = it.role.toStudyDetailState()
                 if (it.role == Role.MASTER) fetchApplicants(studyId)
             }
