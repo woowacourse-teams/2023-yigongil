@@ -27,6 +27,8 @@ class StudyDetailViewModel private constructor(
     private val _state: MutableLiveData<StudyDetailState> =
         MutableLiveData(StudyDetailState.Nothing)
     val state: LiveData<StudyDetailState> get() = _state
+    private val _isStartStudy: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isStartStudy: LiveData<Boolean> get() = _isStartStudy
 
     fun fetchStudyDetail(studyId: Long) {
         viewModelScope.launch {
@@ -74,8 +76,8 @@ class StudyDetailViewModel private constructor(
         viewModelScope.launch {
             runCatching {
                 studyDetailRepository.startStudy(studyId)
-            }.onFailure { // 204 No Content가 onFailure로 가는 현상이 있습니다.
-                // 스터디가 성공적으로 시작된다면 시작후 화면으로 이동해야 합니다.
+            }.onSuccess {
+                _isStartStudy.value = true
             }
         }
     }
