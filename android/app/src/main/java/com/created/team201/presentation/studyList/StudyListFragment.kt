@@ -40,7 +40,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     override fun onResume() {
         super.onResume()
 
-        studyListViewModel.refreshPage()
+        studyListViewModel.initPage()
     }
 
     private fun setUpToolbar() {
