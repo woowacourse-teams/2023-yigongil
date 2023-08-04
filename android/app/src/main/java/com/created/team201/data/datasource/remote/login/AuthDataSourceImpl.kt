@@ -15,6 +15,6 @@ class AuthDataSourceImpl(
     }
 
     override suspend fun getRenewedAccessToken(token: String): AuthResponseDto {
-        return authService.getRenewedAccessToken(token)
+        return authService.postRenewedAccessToken(token)
     }
 }

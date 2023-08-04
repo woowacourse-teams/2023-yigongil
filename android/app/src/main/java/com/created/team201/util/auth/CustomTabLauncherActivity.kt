@@ -42,6 +42,8 @@ class CustomTabLauncherActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        if (customTabsOpened) finish()
+
         if (!customTabsOpened) {
             customTabsOpened = true
 

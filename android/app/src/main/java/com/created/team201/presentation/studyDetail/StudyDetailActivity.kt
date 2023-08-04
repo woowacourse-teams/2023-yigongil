@@ -9,8 +9,10 @@ import androidx.activity.viewModels
 import com.created.team201.R
 import com.created.team201.databinding.ActivityStudyDetailBinding
 import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.profile.ProfileActivity
 import com.created.team201.presentation.studyDetail.adapter.StudyParticipantsAdapter
 import com.created.team201.presentation.studyDetail.model.PeriodFormat
+import com.created.team201.presentation.studyManagement.StudyManagementActivity
 
 class StudyDetailActivity :
     BindingActivity<ActivityStudyDetailBinding>(R.layout.activity_study_detail),
@@ -29,6 +31,7 @@ class StudyDetailActivity :
         initStudyParticipantsList()
         initStudyDetailInformation()
         observeStudyDetailParticipants()
+        observeStartStudy()
     }
 
     private fun initViewModel() {
@@ -93,10 +96,40 @@ class StudyDetailActivity :
     }
 
     override fun onAcceptApplicantClick(memberId: Long) {
+        if (studyDetailViewModel.isFullMember.value == true) {
+            Toast.makeText(
+                this,
+                getString(R.string.study_detail_do_not_accept_member_anymore),
+                Toast.LENGTH_SHORT,
+            ).show()
+            return
+        }
         studyDetailViewModel.acceptApplicant(studyId, memberId)
     }
 
+    override fun onUserClick(memberId: Long) {
+        startActivity(ProfileActivity.getIntent(this, memberId))
+    }
+
+    private fun observeStartStudy() {
+        studyDetailViewModel.isStartStudy.observe(this) { isStartStudy ->
+            if (isStartStudy) {
+                startActivity(
+                    StudyManagementActivity.getIntent(
+                        this,
+                        studyId,
+                        FIRST_PAGE,
+                        ROLE_INDEX_STUDY_MASTER,
+                    ),
+                )
+                finish()
+            }
+        }
+    }
+
     companion object {
+        private const val FIRST_PAGE = 1
+        private const val ROLE_INDEX_STUDY_MASTER = 0
         private const val NON_EXISTENCE_STUDY_ID = 0L
         private const val DEFAULT_PERIOD_SYMBOL = 'd'
         private const val STRING_LAST_INDEX = 1
