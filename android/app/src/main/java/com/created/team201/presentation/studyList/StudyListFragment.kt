@@ -37,6 +37,12 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         setUpScrollListener()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        studyListViewModel.initPage()
+    }
+
     private fun setUpToolbar() {
         binding.tbStudyList.setOnMenuItemClickListener {
             when (it.itemId) {

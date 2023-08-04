@@ -36,7 +36,6 @@ class StudyManageViewModel(
 
     init {
         studies.value = listOf()
-        loadStudies()
     }
 
     fun getMyStudyInProcessing(studyId: Long): Boolean {
@@ -45,7 +44,7 @@ class StudyManageViewModel(
         return study.studySummaryUiModel.processingStatus == StudyStatus.PROCESSING.id
     }
 
-    private fun loadStudies() {
+    fun loadStudies() {
         viewModelScope.launch {
             kotlin.runCatching {
                 studies.value = studyManageRepository.getMyStudies().toUiModel()
