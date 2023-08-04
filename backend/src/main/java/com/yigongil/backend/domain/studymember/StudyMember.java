@@ -17,8 +17,7 @@ import lombok.Getter;
 
 @Getter
 @Entity
-public class
-StudyMember extends BaseEntity {
+public class StudyMember extends BaseEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
