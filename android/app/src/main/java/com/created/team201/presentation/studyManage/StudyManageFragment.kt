@@ -30,6 +30,12 @@ class StudyManageFragment :
         setUpStudyManageObserve()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        studyManageViewModel.loadStudies()
+    }
+
     private fun setUpViewPagerAdapter() {
         binding.vpStudyManage.adapter = studyManageAdapter
     }

@@ -70,7 +70,9 @@ class ProfileActivity : BindingActivity<ActivityProfileBinding>(R.layout.activit
     }
 
     private fun submitFinishedStudies() {
-        finishedStudyAdapter.submitList(profileViewModel.profile.value?.finishedStudies)
+        profileViewModel.profile.observe(this) {
+            finishedStudyAdapter.submitList(profileViewModel.profile.value?.finishedStudies)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
