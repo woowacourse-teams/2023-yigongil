@@ -62,11 +62,12 @@ class StudyListViewModel(
     }
 
     fun loadNextPage() {
-        viewModelScope.launch {
-            _loadingState.value = true
-            loadPage()
-            _loadingState.value = false
+        if (page == Page(0)) {
+            return
         }
+        _loadingState.value = true
+        loadPage()
+        _loadingState.value = false
     }
 
     fun updateScrollState(state: Int) {
