@@ -1,5 +1,6 @@
 package com.created.team201.data.remote.interceptor
 
+import android.util.Log
 import com.created.domain.repository.AuthRepository
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -24,6 +25,7 @@ class AuthInterceptor(
 
     private fun putNewHeader(response: Response, chain: Interceptor.Chain): Response {
         renewAccessToken()
+        Log.d("Interceptor", "new Token: ${authRepository.accessToken}")
 
         val newRequestWithNewToken = chain.request().newBuilder()
             .addHeader(HEADER_KEY, authRepository.accessToken)
