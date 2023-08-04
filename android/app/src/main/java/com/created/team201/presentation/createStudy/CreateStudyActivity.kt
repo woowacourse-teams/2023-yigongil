@@ -64,6 +64,7 @@ class CreateStudyActivity :
         startActivity(
             StudyDetailActivity.getIntent(this, studyId),
         )
+        finish()
     }
 
     private fun showToast(message: String) =
