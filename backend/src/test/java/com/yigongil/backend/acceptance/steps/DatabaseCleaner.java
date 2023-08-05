@@ -1,7 +1,6 @@
 package com.yigongil.backend.acceptance.steps;
 
 import java.util.List;
-import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.metamodel.EntityType;
@@ -22,10 +21,10 @@ public class DatabaseCleaner implements InitializingBean {
     @Override
     public void afterPropertiesSet() {
         this.tables = entityManager.getMetamodel().getEntities().stream()
-                                   .filter(e -> e.getJavaType().getAnnotation(Entity.class) != null)
                                    .map(EntityType::getName)
                                    .map(this::toSnake)
                                    .toList();
+        System.out.println("tables = " + tables);
     }
 
     private String toSnake(String camel) {
