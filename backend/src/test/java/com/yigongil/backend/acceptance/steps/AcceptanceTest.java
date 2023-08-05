@@ -18,7 +18,6 @@ public class AcceptanceTest {
     @LocalServerPort
     int port;
 
-
     @Autowired
     private DatabaseCleaner databaseCleaner;
 

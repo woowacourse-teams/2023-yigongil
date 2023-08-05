@@ -24,7 +24,6 @@ public class DatabaseCleaner implements InitializingBean {
                                    .map(EntityType::getName)
                                    .map(this::toSnake)
                                    .toList();
-        System.out.println("tables = " + tables);
     }
 
     private String toSnake(String camel) {
