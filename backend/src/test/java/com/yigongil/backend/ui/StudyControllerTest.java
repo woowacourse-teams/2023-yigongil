@@ -22,6 +22,7 @@ import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.request.StudyCreateRequest;
 import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
+import com.yigongil.backend.ui.querycounter.ApiQueryCounter;
 import java.util.Optional;
 import org.apache.http.HttpHeaders;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,6 +56,9 @@ class StudyControllerTest {
 
     @MockBean
     private JwtTokenProvider tokenProvider;
+
+    @MockBean
+    private ApiQueryCounter apiQueryCounter;
 
     @BeforeEach
     void setUp() {

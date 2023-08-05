@@ -22,6 +22,7 @@ import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.request.ProfileUpdateRequest;
 import com.yigongil.backend.response.ProfileResponse;
+import com.yigongil.backend.ui.querycounter.ApiQueryCounter;
 import java.util.Collections;
 import java.util.Optional;
 import org.apache.http.HttpHeaders;
@@ -54,6 +55,9 @@ class MemberControllerTest {
 
     @MockBean
     private JwtTokenProvider tokenProvider;
+
+    @MockBean
+    private ApiQueryCounter apiQueryCounter;
 
     @Test
     void 프로필_정보를_조회한다() throws Exception {
