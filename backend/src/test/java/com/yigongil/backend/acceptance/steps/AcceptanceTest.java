@@ -4,14 +4,13 @@ import com.yigongil.backend.BackendApplication;
 import io.cucumber.java.Before;
 import io.cucumber.spring.CucumberContextConfiguration;
 import io.restassured.RestAssured;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 @CucumberContextConfiguration
-@DirtiesContext
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = BackendApplication.class)
 public class AcceptanceTest {
@@ -19,8 +18,13 @@ public class AcceptanceTest {
     @LocalServerPort
     int port;
 
+
+    @Autowired
+    private DatabaseCleaner databaseCleaner;
+
     @Before
     public void before() {
         RestAssured.port = port;
+        databaseCleaner.clean();
     }
 }
