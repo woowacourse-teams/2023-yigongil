@@ -9,6 +9,7 @@ import com.yigongil.backend.config.oauth.JwtTokenProvider;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.response.TokenResponse;
+import io.jsonwebtoken.ExpiredJwtException;
 import java.net.URI;
 import java.util.Optional;
 import org.springframework.http.HttpEntity;
@@ -94,5 +95,14 @@ public class OauthService {
                 httpEntity,
                 GithubProfileResponse.class
         ).getBody();
+    }
+
+    public TokenResponse renew(String accessToken) {
+        try {
+            jwtTokenProvider.parseToken(accessToken);
+            return new TokenResponse(accessToken);
+        } catch (ExpiredJwtException e) {
+            return new TokenResponse(jwtTokenProvider.renewToken(accessToken));
+        }
     }
 }

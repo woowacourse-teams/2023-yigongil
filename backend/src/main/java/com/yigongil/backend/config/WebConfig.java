@@ -1,6 +1,6 @@
 package com.yigongil.backend.config;
 
-import com.yigongil.backend.config.auth.LoginInterceptor;
+import com.yigongil.backend.config.auth.AuthInterceptor;
 import com.yigongil.backend.config.auth.MemberArgumentResolver;
 import com.yigongil.backend.ui.querycounter.LoggingInterceptor;
 import java.util.List;
@@ -27,14 +27,13 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor)
+    public void addInterceptors(final InterceptorRegistry registry) {
+        registry.addInterceptor(authInterceptor)
                 .addPathPatterns("/v1/**")
                 .excludePathPatterns("/v1/login/**")
-                .excludePathPatterns("/v1/members/*")
-                .excludePathPatterns("/v1/studies/recruiting")
-                .order(2);
-
+                .excludePathPatterns("/v1/members/{id:[0-9]\\d*}")
+                .excludePathPatterns("/v1/studies/recruiting");
+      
         registry.addInterceptor(loggingInterceptor)
                 .addPathPatterns("/**")
                 .order(3);
