@@ -106,7 +106,7 @@ public class Study extends BaseEntity {
         this.periodOfRound = periodOfRound;
         this.periodUnit = periodUnit;
         this.currentRound = currentRound;
-        this.rounds = rounds != null ? rounds : new ArrayList<>();
+        this.rounds = rounds == null ? new ArrayList<>() : rounds;
     }
 
     public static Study initializeStudyOf(
