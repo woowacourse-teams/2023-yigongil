@@ -12,7 +12,7 @@
         </root>
     </springProfile>
 
-    <!-- 프로덕션 환경 -->
+    <!-- 개발 환경 -->
     <springProfile name="dev">
         <include resource="dev-file-appender.xml"/>
 
@@ -23,6 +23,7 @@
         </root>
     </springProfile>
 
+    <!-- 프로덕션 환경 -->
     <springProfile name="prod">
         <include resource="prod-file-appender.xml"/>
 
