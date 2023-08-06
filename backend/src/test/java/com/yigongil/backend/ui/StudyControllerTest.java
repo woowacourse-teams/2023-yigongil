@@ -87,7 +87,7 @@ class StudyControllerTest {
     void 투두를_생성한다() throws Exception {
         TodoCreateRequest request = new TodoCreateRequest(true, 1L, "첫 투두");
 
-        willReturn(1L).given(todoService).create(MemberFixture.김진우.toMember(), 1L, request);
+        willReturn(1L).given(todoService).create(MemberFixture.김진우.toMember(), request);
 
         mockMvc.perform(post("/v1/studies/1/todos")
                        .header(HttpHeaders.AUTHORIZATION, "1")
@@ -102,7 +102,7 @@ class StudyControllerTest {
     void 투두를_업데이트한다() throws Exception {
         TodoUpdateRequest request = new TodoUpdateRequest(false, true, "수정");
 
-        willDoNothing().given(todoService).update(MemberFixture.김진우.toMember(), 1L, 1L, request);
+        willDoNothing().given(todoService).update(MemberFixture.김진우.toMember(), 1L, request);
 
         mockMvc.perform(patch("/v1/studies/1/todos/1")
                        .header(HttpHeaders.AUTHORIZATION, "1")
@@ -111,6 +111,6 @@ class StudyControllerTest {
                .andDo(print())
                .andExpect(status().isNoContent());
 
-        verify(todoService, only()).update(MemberFixture.김진우.toMember(), 1L, 1L, request);
+        verify(todoService, only()).update(MemberFixture.김진우.toMember(), 1L, request);
     }
 }
