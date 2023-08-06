@@ -1,25 +1,25 @@
 package com.yigongil.backend.acceptance.steps;
 
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.metamodel.EntityType;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Profile("test")
 @Component
-public class DatabaseCleaner implements InitializingBean {
+public class DatabaseCleaner {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     private List<String> tables;
 
-    @Override
-    public void afterPropertiesSet() {
+    @PostConstruct
+    public void init() {
         this.tables = entityManager.getMetamodel().getEntities().stream()
                                    .map(EntityType::getName)
                                    .map(this::toSnake)
