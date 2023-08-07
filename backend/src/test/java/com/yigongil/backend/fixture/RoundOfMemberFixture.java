@@ -2,7 +2,6 @@ package com.yigongil.backend.fixture;
 
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
-import java.util.ArrayList;
 
 public enum RoundOfMemberFixture {
 
@@ -23,7 +22,6 @@ public enum RoundOfMemberFixture {
         return RoundOfMember.builder()
                             .id(id)
                             .member(member)
-                            .optionalTodos(new ArrayList<>())
                             .isDone(isDone)
                             .build();
     }

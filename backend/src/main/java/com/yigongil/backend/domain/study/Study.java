@@ -2,7 +2,6 @@ package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.roundofmember.RoundOfMembers;
@@ -106,7 +105,7 @@ public class Study extends BaseEntity {
         this.periodOfRound = periodOfRound;
         this.periodUnit = periodUnit;
         this.currentRound = currentRound;
-        this.rounds = rounds;
+        this.rounds = rounds == null ? new ArrayList<>() : rounds;
     }
 
     public static Study initializeStudyOf(
@@ -137,33 +136,13 @@ public class Study extends BaseEntity {
         return currentRound.calculateAverageTier();
     }
 
-    public Long createNecessaryTodo(Member author, Long roundId, String content) {
-        Round targetRound = findRoundById(roundId);
-        targetRound.createNecessaryTodo(author, content);
-        return targetRound.getId();
-    }
-
-    public OptionalTodo createOptionalTodo(Member author, Long roundId, String content) {
-        Round targetRound = findRoundById(roundId);
-        return targetRound.createOptionalTodo(author, content);
-    }
-
-    public void updateNecessaryTodoContent(Long todoId, String content) {
-        Round round = findRoundById(todoId);
-        round.updateNecessaryTodoContent(content);
-    }
-
-    public void updateNecessaryTodoIsDone(Member member, Long todoId, Boolean isDone) {
-        Round round = findRoundById(todoId);
-        round.updateNecessaryTodoIsDone(member, isDone);
-    }
-
     public Round findRoundById(Long roundId) {
         return rounds.stream()
                      .filter(round -> round.getId().equals(roundId))
                      .findAny()
                      .orElseThrow(
-                             () -> new RoundNotFoundException("스터디에 해당 회차가 존재하지 않습니다.", roundId));
+                             () -> new RoundNotFoundException("스터디에 해당 회차가 존재하지 않습니다.", roundId)
+                     );
     }
 
     public void addMember(Member member) {

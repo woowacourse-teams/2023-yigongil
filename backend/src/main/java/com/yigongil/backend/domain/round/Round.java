@@ -72,7 +72,7 @@ public class Round extends BaseEntity {
         this.necessaryToDoContent = necessaryToDoContent;
         this.master = master;
         this.endAt = endAt;
-        this.roundOfMembers = roundOfMembers;
+        this.roundOfMembers = roundOfMembers == null ? new ArrayList<>() : roundOfMembers;
     }
 
     public static List<Round> of(Integer totalRoundCount, Member master) {
@@ -95,13 +95,14 @@ public class Round extends BaseEntity {
         return rounds;
     }
 
-    public void createNecessaryTodo(Member author, String content) {
+    public Long createNecessaryTodo(Member author, String content) {
         validateLength(content);
         validateMaster(author);
         if (Objects.nonNull(necessaryToDoContent)) {
             throw new NecessaryTodoAlreadyExistException("필수 투두가 이미 존재합니다.", necessaryToDoContent);
         }
         necessaryToDoContent = content;
+        return id;
     }
 
     public void validateMaster(Member member) {
