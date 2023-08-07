@@ -52,7 +52,7 @@ public class Member extends BaseEntity {
         this.githubId = githubId;
         this.nickname = new Nickname(nickname);
         this.profileImageUrl = profileImageUrl;
-        this.tier = tier;
+        this.tier = tier == null ? 1 : tier;
         this.introduction = new Introduction(introduction);
     }
 

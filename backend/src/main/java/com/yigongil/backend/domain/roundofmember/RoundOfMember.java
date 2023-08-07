@@ -50,7 +50,7 @@ public class RoundOfMember extends BaseEntity {
         this.id = id;
         this.member = member;
         this.isDone = isDone;
-        this.optionalTodos = optionalTodos;
+        this.optionalTodos = optionalTodos == null ? new ArrayList<>() : optionalTodos;
     }
 
     public OptionalTodo createOptionalTodo(String content) {
