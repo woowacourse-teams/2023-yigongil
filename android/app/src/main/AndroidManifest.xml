@@ -16,11 +16,12 @@
         android:theme="@style/Theme.Team201"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".presentation.setting.SettingActivity"
+            android:exported="false" />
         <activity
             android:name=".presentation.profile.ProfileActivity"
             android:exported="false" />
-
         <activity
             android:name=".util.auth.CustomTabLauncherActivity"
             android:exported="true"
@@ -36,12 +37,10 @@
                     android:scheme="example" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".presentation.studyManagement.StudyManagementActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
-
         <activity
             android:name=".presentation.splash.SplashActivity"
             android:exported="true">
@@ -51,19 +50,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".presentation.login.LoginActivity"
             android:exported="false" />
-
         <activity
             android:name=".presentation.studyDetail.StudyDetailActivity"
             android:exported="false" />
-
         <activity
             android:name=".presentation.MainActivity"
             android:exported="false" />
-
         <activity
             android:name=".presentation.createStudy.CreateStudyActivity"
             android:exported="false" />
