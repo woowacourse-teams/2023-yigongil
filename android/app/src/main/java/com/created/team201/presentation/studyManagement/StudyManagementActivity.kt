@@ -88,13 +88,15 @@ class StudyManagementActivity :
     }
 
     private val studyManagementClickListener = object : StudyManagementClickListener {
+
         override fun clickOnTodo(id: Long, isDone: Boolean) {
             val currentItemId = binding.vpStudyManagement.currentItem
             studyManagementViewModel.updateTodo(currentItemId, id, !isDone, studyId)
         }
 
         override fun clickOnUpdateTodo(isNecessary: Boolean, todoContent: String) {
-            if (todoContent.isEmpty()) {
+            val trimmedTodoContent = todoContent.trim()
+            if (trimmedTodoContent.isEmpty() || trimmedTodoContent.isBlank()) {
                 toastEmptyTodoInput()
                 return
             }
@@ -102,18 +104,19 @@ class StudyManagementActivity :
             studyManagementViewModel.updateTodoContent(
                 currentPage,
                 isNecessary,
-                todoContent,
+                trimmedTodoContent,
                 studyId,
             )
         }
 
         override fun onClickAddTodo(todoContent: String) {
-            if (todoContent.isEmpty()) {
+            val trimmedTodoContent = todoContent.trim()
+            if (trimmedTodoContent.isEmpty() || trimmedTodoContent.isBlank()) {
                 toastEmptyTodoInput()
                 return
             }
             val currentPage = binding.vpStudyManagement.currentItem
-            studyManagementViewModel.addOptionalTodo(studyId, currentPage, todoContent)
+            studyManagementViewModel.addOptionalTodo(studyId, currentPage, trimmedTodoContent)
         }
 
         override fun onClickAddOptionalTodo(optionalTodoCount: Int) {
