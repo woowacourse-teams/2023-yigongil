@@ -42,6 +42,7 @@ class CreateStudyActivity :
 
     private fun initActionBar() {
         setSupportActionBar(binding.tbCreateStudy)
+        supportActionBar?.setHomeActionContentDescription(R.string.toolbar_back_text)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
     }
