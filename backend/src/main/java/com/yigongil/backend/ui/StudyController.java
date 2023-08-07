@@ -1,12 +1,9 @@
 package com.yigongil.backend.ui;
 
 import com.yigongil.backend.application.StudyService;
-import com.yigongil.backend.application.TodoService;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.request.StudyCreateRequest;
-import com.yigongil.backend.request.TodoCreateRequest;
-import com.yigongil.backend.request.TodoUpdateRequest;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
@@ -29,11 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudyController {
 
     private final StudyService studyService;
-    private final TodoService todoService;
 
-    public StudyController(StudyService studyService, TodoService todoService) {
+    public StudyController(StudyService studyService) {
         this.studyService = studyService;
-        this.todoService = todoService;
     }
 
     @PostMapping
@@ -43,37 +38,6 @@ public class StudyController {
     ) {
         Long studyId = studyService.create(member, request);
         return ResponseEntity.created(URI.create("/v1/studies/" + studyId)).build();
-    }
-
-    @PostMapping("/{studyId}/todos")
-    public ResponseEntity<Void> createTodo(
-            @Authorization Member member,
-            @PathVariable Long studyId,
-            @RequestBody @Valid TodoCreateRequest request
-    ) {
-        Long todoId = todoService.create(member, request);
-        return ResponseEntity.created(URI.create("/v1/studies/" + studyId + "/todos/" + todoId)).build();
-    }
-
-    @PatchMapping("/{studyId}/todos/{todoId}")
-    public ResponseEntity<Void> updateTodo(
-            @Authorization Member member,
-            @PathVariable Long studyId,
-            @PathVariable Long todoId,
-            @RequestBody TodoUpdateRequest request
-    ) {
-        todoService.update(member, todoId, request);
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/{studyId}/todos/{todoId}")
-    public ResponseEntity<Void> deleteTodo(
-            @Authorization Member member,
-            @PathVariable Long studyId,
-            @PathVariable Long todoId
-    ) {
-        todoService.delete(member, todoId);
-        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{studyId}/applicants")

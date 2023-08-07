@@ -5,8 +5,8 @@ import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodoRepository;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
+import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.roundofmember.RoundOfMemberRepository;
-import com.yigongil.backend.exception.NotTodoOwnerException;
 import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.exception.TodoNotFoundException;
 import com.yigongil.backend.request.TodoCreateRequest;
@@ -32,14 +32,9 @@ public class TodoService {
     }
 
     @Transactional
-    public Long create(Member member, TodoCreateRequest request) {
-        Round round = findRoundById(request.roundId());
-        if (request.isNecessary()) {
-            return round.createNecessaryTodo(member, request.content());
-        }
-        OptionalTodo todo = round.createOptionalTodo(member, request.content());
-        optionalTodoRepository.save(todo);
-        return todo.getId();
+    public void createNecessaryTodo(Member member, Long roundId, TodoCreateRequest request) {
+        Round round = findRoundById(roundId);
+        round.createNecessaryTodo(member, request.content());
     }
 
     private Round findRoundById(Long roundId) {
@@ -48,27 +43,29 @@ public class TodoService {
     }
 
     @Transactional
-    public void update(Member member, Long todoId, TodoUpdateRequest request) {
-        if (request.isNecessary()) {
-            updateNecessaryTodo(member, todoId, request);
-            return;
-        }
-
-        updateOptionalTodo(todoId, request);
-    }
-
-    private void updateNecessaryTodo(Member member, Long todoId, TodoUpdateRequest request) {
-        Round round = findRoundById(todoId);
-        if (request.content() != null) {
-            round.updateNecessaryTodoContent(request.content());
-        }
+    public void updateNecessaryTodo(Member member, Long roundId, TodoUpdateRequest request) {
+        Round round = findRoundById(roundId);
         if (request.isDone() != null) {
             round.updateNecessaryTodoIsDone(member, request.isDone());
         }
+        if (request.content() != null) {
+            round.updateNecessaryTodoContent(member, request.content());
+        }
     }
 
-    private void updateOptionalTodo(Long todoId, TodoUpdateRequest request) {
+    @Transactional
+    public Long createOptionalTodo(Member member, Long roundId, TodoCreateRequest request) {
+        Round round = findRoundById(roundId);
+        OptionalTodo todo = optionalTodoRepository.save(round.createOptionalTodo(member, request.content()));
+        return todo.getId();
+    }
+
+    @Transactional
+    public void updateOptionalTodo(Member member, Long roundId, Long todoId, TodoUpdateRequest request) {
+        Round round = findRoundById(roundId);
         OptionalTodo todo = findOptionalTodoById(todoId);
+        round.findRoundOfMemberBy(member)
+             .validateTodoOwner(todo);
         if (request.content() != null) {
             todo.updateContent(request.content());
         }
@@ -78,13 +75,11 @@ public class TodoService {
     }
 
     @Transactional
-    public void delete(Member member, Long todoId) {
+    public void deleteOptionalTodo(Member member, Long roundId, Long todoId) {
+        Round round = findRoundById(roundId);
+        RoundOfMember roundOfMember = round.findRoundOfMemberBy(member);
         OptionalTodo todo = findOptionalTodoById(todoId);
-        if (roundOfMemberRepository.existsByOptionalTodosAndMember(todo, member)) {
-            optionalTodoRepository.deleteById(todoId);
-            return;
-        }
-        throw new NotTodoOwnerException("투두 작성자가 아닙니다.", String.valueOf(member.getId()));
+        roundOfMember.removeOptionalTodo(todo);
     }
 
     private OptionalTodo findOptionalTodoById(Long todoId) {

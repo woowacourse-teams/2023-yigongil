@@ -3,6 +3,7 @@ package com.yigongil.backend.domain.roundofmember;
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
+import com.yigongil.backend.exception.NotTodoOwnerException;
 import com.yigongil.backend.exception.TooManyOptionalTodosException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class RoundOfMember extends BaseEntity {
     private boolean isDone;
 
     @Cascade(CascadeType.PERSIST)
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "round_of_member_id")
     private List<OptionalTodo> optionalTodos = new ArrayList<>();
 
@@ -70,5 +71,16 @@ public class RoundOfMember extends BaseEntity {
 
     public boolean isMemberEquals(Member member) {
         return this.member.equals(member);
+    }
+
+    public void validateTodoOwner(OptionalTodo todo) {
+        if (!optionalTodos.contains(todo)) {
+            throw new NotTodoOwnerException("투두 작성자가 아닙니다.", String.valueOf(member.getId()));
+        }
+    }
+
+    public void removeOptionalTodo(OptionalTodo todo) {
+        validateTodoOwner(todo);
+        optionalTodos.remove(todo);
     }
 }

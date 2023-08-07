@@ -44,6 +44,10 @@ public class OptionalTodo extends BaseEntity {
         this.isDone = isDone;
     }
 
+    public boolean isSameId(Long id) {
+        return Objects.equals(this.id, id);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

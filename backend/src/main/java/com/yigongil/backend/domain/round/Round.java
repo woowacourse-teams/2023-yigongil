@@ -6,6 +6,7 @@ import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NecessaryTodoAlreadyExistException;
+import com.yigongil.backend.exception.NecessaryTodoNotExistException;
 import com.yigongil.backend.exception.NotStudyMasterException;
 import com.yigongil.backend.exception.NotStudyMemberException;
 import java.time.LocalDate;
@@ -96,21 +97,20 @@ public class Round extends BaseEntity {
         return rounds;
     }
 
-    public Long createNecessaryTodo(Member author, String content) {
+    public void createNecessaryTodo(Member author, String content) {
         validateTodoLength(content);
         validateMaster(author);
-        if (Objects.nonNull(necessaryToDoContent)) {
+        if (necessaryToDoContent != null) {
             throw new NecessaryTodoAlreadyExistException("필수 투두가 이미 존재합니다.", necessaryToDoContent);
         }
         necessaryToDoContent = content;
-        return id;
     }
 
     public void validateMaster(Member member) {
         if (master.getId().equals(member.getId())) {
             return;
         }
-        throw new NotStudyMasterException("스터디 마스터가 아니라 권한이 없습니다 ", member.getNickname());
+        throw new NotStudyMasterException("필수 투두를 수정할 권한이 없습니다.", member.getNickname());
     }
 
     public OptionalTodo createOptionalTodo(Member author, String content) {
@@ -156,6 +156,9 @@ public class Round extends BaseEntity {
     }
 
     public void updateNecessaryTodoIsDone(Member member, Boolean isDone) {
+        if (necessaryToDoContent == null) {
+            throw new NecessaryTodoNotExistException("필수 투두가 생성되지 않았습니다.", String.valueOf(id));
+        }
         findRoundOfMemberBy(member).updateNecessaryTodoIsDone(isDone);
     }
 
@@ -167,11 +170,15 @@ public class Round extends BaseEntity {
         return roundOfMembers.stream()
                              .filter(roundOfMember -> roundOfMember.isMemberEquals(member))
                              .findAny()
-                             .orElseThrow(() -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.",
-                                     member.getGithubId()));
+                             .orElseThrow(
+                                     () -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", member.getGithubId())
+                             );
     }
 
-    public void updateNecessaryTodoContent(String content) {
+    public void updateNecessaryTodoContent(Member member, String content) {
+        if (!master.equals(member)) {
+            throw new NotStudyMasterException("필수 투두를 수정할 권한이 없습니다.", String.valueOf(member.getNickname()));
+        }
         necessaryToDoContent = content;
     }
 
