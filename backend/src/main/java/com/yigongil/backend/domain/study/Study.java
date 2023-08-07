@@ -2,7 +2,6 @@ package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.roundofmember.RoundOfMembers;
@@ -135,27 +134,6 @@ public class Study extends BaseEntity {
 
     public Integer calculateAverageTier() {
         return currentRound.calculateAverageTier();
-    }
-
-    public Long createNecessaryTodo(Member author, Long roundId, String content) {
-        Round targetRound = findRoundById(roundId);
-        targetRound.createNecessaryTodo(author, content);
-        return targetRound.getId();
-    }
-
-    public OptionalTodo createOptionalTodo(Member author, Long roundId, String content) {
-        Round targetRound = findRoundById(roundId);
-        return targetRound.createOptionalTodo(author, content);
-    }
-
-    public void updateNecessaryTodoContent(Long todoId, String content) {
-        Round round = findRoundById(todoId);
-        round.updateNecessaryTodoContent(content);
-    }
-
-    public void updateNecessaryTodoIsDone(Member member, Long todoId, Boolean isDone) {
-        Round round = findRoundById(todoId);
-        round.updateNecessaryTodoIsDone(member, isDone);
     }
 
     public Round findRoundById(Long roundId) {

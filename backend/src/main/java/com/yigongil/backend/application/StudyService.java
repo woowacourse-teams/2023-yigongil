@@ -230,6 +230,7 @@ public class StudyService {
 
     @Transactional
     public void startStudy(Member member, Long studyId) {
+        studyMemberRepository.deleteAllByStudyIdAndRole(studyId, Role.APPLICANT);
         Study study = findStudyById(studyId);
         study.validateMaster(member);
 

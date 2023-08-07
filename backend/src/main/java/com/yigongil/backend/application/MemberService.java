@@ -76,6 +76,7 @@ public class MemberService {
 
     private int calculateNumberOfSuccessRounds(Member member) {
         List<Study> studies = studyMemberRepository.findAllByMemberId(member.getId()).stream()
+                                                   .filter(StudyMember::isNotApplicant)
                                                    .map(StudyMember::getStudy)
                                                    .toList();
 

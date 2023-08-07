@@ -47,7 +47,7 @@ public class StudyController {
             @PathVariable Long studyId,
             @RequestBody TodoCreateRequest request
     ) {
-        Long todoId = todoService.create(member, studyId, request);
+        Long todoId = todoService.create(member, request);
         return ResponseEntity.created(URI.create("/v1/studies/" + studyId + "/todos/" + todoId)).build();
     }
 
@@ -58,7 +58,7 @@ public class StudyController {
             @PathVariable Long todoId,
             @RequestBody TodoUpdateRequest request
     ) {
-        todoService.update(member, studyId, todoId, request);
+        todoService.update(member, todoId, request);
         return ResponseEntity.noContent().build();
     }
 
@@ -68,7 +68,7 @@ public class StudyController {
             @PathVariable Long studyId,
             @PathVariable Long todoId
     ) {
-        todoService.delete(member, studyId, todoId);
+        todoService.delete(member, todoId);
         return ResponseEntity.noContent().build();
     }
 
