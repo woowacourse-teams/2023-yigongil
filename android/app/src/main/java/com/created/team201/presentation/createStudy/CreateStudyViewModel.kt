@@ -62,6 +62,8 @@ class CreateStudyViewModel(
     val studyState: LiveData<State>
         get() = _studyState
 
+    private var isOpenStudy: Boolean = false
+
     val study: CreateStudyUiModel
         get() = CreateStudyUiModel(
             name.value.trim(),
@@ -98,6 +100,8 @@ class CreateStudyViewModel(
     }
 
     fun createStudy(study: CreateStudyUiModel) {
+        if (isOpenStudy) return
+        isOpenStudy = true
         viewModelScope.launch {
             createStudyRepository.createStudy(study.toDomain())
                 .onSuccess {
