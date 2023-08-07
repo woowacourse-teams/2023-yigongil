@@ -121,6 +121,9 @@ class CreateStudyActivity :
     }
 
     companion object {
-        fun getIntent(context: Context): Intent = Intent(context, CreateStudyActivity::class.java)
+        fun getIntent(context: Context): Intent =
+            Intent(context, CreateStudyActivity::class.java).also {
+                it.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            }
     }
 }
