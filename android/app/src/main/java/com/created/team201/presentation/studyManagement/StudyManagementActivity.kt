@@ -44,9 +44,12 @@ class StudyManagementActivity :
 
     private fun initActionBar() {
         setSupportActionBar(binding.tbStudyManagement)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
+        supportActionBar?.apply {
+            setDisplayShowTitleEnabled(false)
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_back)
+            setHomeActionContentDescription(R.string.toolbar_back_text)
+        }
     }
 
     private fun initStudyInformation() {
