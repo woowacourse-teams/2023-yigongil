@@ -32,7 +32,8 @@ import org.hibernate.annotations.CascadeType;
 @Entity
 public class Round extends BaseEntity {
 
-    private static final int MAX_CONTENT_LENGTH = 20;
+    private static final int MAX_TODO_CONTENT_LENGTH = 20;
+    private static final int MIN_TODO_CONTENT_LENGTH = 1;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -41,7 +42,7 @@ public class Round extends BaseEntity {
     @Column(nullable = false)
     private Integer roundNumber;
 
-    @Column(length = MAX_CONTENT_LENGTH)
+    @Column(length = MAX_TODO_CONTENT_LENGTH)
     private String necessaryToDoContent;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -96,7 +97,7 @@ public class Round extends BaseEntity {
     }
 
     public Long createNecessaryTodo(Member author, String content) {
-        validateLength(content);
+        validateTodoLength(content);
         validateMaster(author);
         if (Objects.nonNull(necessaryToDoContent)) {
             throw new NecessaryTodoAlreadyExistException("필수 투두가 이미 존재합니다.", necessaryToDoContent);
@@ -113,14 +114,21 @@ public class Round extends BaseEntity {
     }
 
     public OptionalTodo createOptionalTodo(Member author, String content) {
-        validateLength(content);
+        validateTodoLength(content);
         RoundOfMember targetRoundOfMember = findRoundOfMemberBy(author);
         return targetRoundOfMember.createOptionalTodo(content);
     }
 
-    private void validateLength(String content) {
-        if (content.length() > MAX_CONTENT_LENGTH) {
-            throw new InvalidTodoLengthException("투두 길이는 20자까지 가능합니다.", content);
+    private void validateTodoLength(String content) {
+        int contentLength = content.strip().length();
+        if (contentLength > MAX_TODO_CONTENT_LENGTH || contentLength < MIN_TODO_CONTENT_LENGTH) {
+            throw new InvalidTodoLengthException(
+                    String.format(
+                            "투두 길이는 %d자 이상 %d자 이하로 작성 가능합니다.",
+                            MIN_TODO_CONTENT_LENGTH,
+                            MAX_TODO_CONTENT_LENGTH
+                    ), content
+            );
         }
     }
 

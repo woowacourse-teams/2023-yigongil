@@ -112,12 +112,15 @@ class StudyTest {
     @Test
     void 정원이_가득_찬_스터디에_Member를_추가하면_예외가_발생한다() {
         // given
-        Study study = StudyFixture.자바_스터디_모집중_정원_1.toStudy();
-        Member member = MemberFixture.폰노이만.toMember();
+        Study study = StudyFixture.자바_스터디_모집중_정원_2.toStudy();
+        Member member1 = MemberFixture.폰노이만.toMember();
+        Member member2 = MemberFixture.마틴파울러.toMember();
 
         // when
+        study.addMember(member1);
+
         // then
-        assertThatThrownBy(() -> study.addMember(member))
+        assertThatThrownBy(() -> study.addMember(member2))
                 .isInstanceOf(InvalidMemberSizeException.class);
     }
 }
