@@ -1,7 +1,7 @@
 <configuration>
     <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>
     <property name="LOG_PATTERN"
-      value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
+      value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %cyan([%C.%M:%yellow(%L)]) - %msg%n"/>
 
     <!--  프로덕션 외의 환경 -->
     <springProfile name="local, test, default">
@@ -12,7 +12,7 @@
         </root>
     </springProfile>
 
-    <!-- 프로덕션 환경 -->
+    <!-- 개발 환경 -->
     <springProfile name="dev">
         <include resource="dev-file-appender.xml"/>
 
@@ -23,6 +23,7 @@
         </root>
     </springProfile>
 
+    <!-- 프로덕션 환경 -->
     <springProfile name="prod">
         <include resource="prod-file-appender.xml"/>
 
