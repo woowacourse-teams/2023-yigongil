@@ -1,26 +1,16 @@
 package com.yigongil.backend.utils;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class DateConverter {
 
+    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+
     private DateConverter() {
     }
 
-    public static LocalDateTime toLocalDateTime(String dateString) {
-        String pattern = "yyyy.MM.dd";
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-        LocalDate ld = LocalDate.parse(dateString, formatter);
-        return LocalDateTime.of(ld, LocalTime.MIDNIGHT);
-    }
-
     public static String toStringFormat(LocalDateTime localDateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
-
-        return localDateTime.format(formatter);
+        return localDateTime.format(FORMATTER);
     }
 }

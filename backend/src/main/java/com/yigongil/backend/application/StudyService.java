@@ -55,7 +55,7 @@ public class StudyService {
                 request.name(),
                 request.introduction(),
                 request.numberOfMaximumMembers(),
-                request.startAt(),
+                request.startAt().atStartOfDay(),
                 request.totalRoundCount(),
                 request.periodOfRound(),
                 member

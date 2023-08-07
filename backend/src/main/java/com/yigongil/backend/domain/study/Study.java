@@ -9,7 +9,6 @@ import com.yigongil.backend.exception.CannotStartException;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.RoundNotFoundException;
-import com.yigongil.backend.utils.DateConverter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -112,7 +111,7 @@ public class Study extends BaseEntity {
             String name,
             String introduction,
             Integer numberOfMaximumMembers,
-            String startAt,
+            LocalDateTime startAt,
             Integer totalRoundCount,
             String periodOfRound,
             Member master
@@ -120,7 +119,7 @@ public class Study extends BaseEntity {
         Study study = Study.builder()
                            .name(name)
                            .numberOfMaximumMembers(numberOfMaximumMembers)
-                           .startAt(DateConverter.toLocalDateTime(startAt))
+                           .startAt(startAt)
                            .totalRoundCount(totalRoundCount)
                            .periodOfRound(PeriodUnit.getPeriodNumber(periodOfRound))
                            .periodUnit(PeriodUnit.getPeriodUnit(periodOfRound))
