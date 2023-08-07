@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View.OVER_SCROLL_NEVER
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.viewpager2.widget.ViewPager2
@@ -31,8 +32,7 @@ class StudyManagementActivity :
         initViewModel()
         initActionBar()
         initStudyInformation()
-        initAdapter()
-        initPage()
+        initViewPager()
         initPageButtonClickListener()
         observeStudyManagement()
     }
@@ -53,15 +53,12 @@ class StudyManagementActivity :
         studyManagementViewModel.initStudyManagement(studyId, roleIndex)
     }
 
-    private fun initAdapter() {
-        binding.vpStudyManagement.adapter = studyManagementAdapter
-    }
-
-    private fun initPage() {
-        binding.vpStudyManagement.setCurrentItem(
-            currentRound - CONVERT_TO_PAGE,
-            true,
-        )
+    private fun initViewPager() {
+        binding.vpStudyManagement.apply {
+            adapter = studyManagementAdapter
+            setCurrentItem(currentRound - CONVERT_TO_PAGE, true)
+            getChildAt(PAGE_INDEX_ZERO).overScrollMode = OVER_SCROLL_NEVER
+        }
     }
 
     private fun observeStudyManagement() {
@@ -166,6 +163,7 @@ class StudyManagementActivity :
     companion object {
         private const val FIRST_ROUND = 1
         private const val CONVERT_TO_PAGE = 1
+        private const val PAGE_INDEX_ZERO = 0
         private const val MAXIMUM_OPTIONAL_TODO_COUNT = 4
         private const val KEY_ERROR_LONG = 0L
         private const val KEY_ERROR_INT = 0
