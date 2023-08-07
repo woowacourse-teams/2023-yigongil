@@ -26,6 +26,7 @@
 
     <!--스터디 목록 탭-->
     <string name="study_list_create">스터디 만들기</string>
+    <string name="study_list_item_sort_description">정렬</string>
     <string name="study_list_search_button_menu">검색</string>
     <string name="study_list_title">스터디 목록</string>
     <string name="study_list_information_format">%s %s · 총 %d회차 · %d %s(주기)</string>

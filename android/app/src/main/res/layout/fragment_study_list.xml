@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Sort"
+            android:text="@string/study_list_item_sort_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_study_list_toolbar_boarder_line" />
 
@@ -64,6 +64,7 @@
                 android:layout_height="0dp"
                 android:background="@drawable/bg_rectangle_radius_5dp_transparent"
                 android:orientation="vertical"
+                android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
