@@ -64,12 +64,12 @@ class CreateStudyViewModel(
 
     val study: CreateStudyUiModel
         get() = CreateStudyUiModel(
-            name.value,
+            name.value.trim(),
             peopleCount.value,
             startDate.value,
             period.value,
             cycle.value,
-            introduction.value,
+            introduction.value.trim(),
         )
 
     fun setName(name: String) {
@@ -118,14 +118,18 @@ class CreateStudyViewModel(
     }
 
     private fun isInitializeCreateStudyInformation(): Boolean =
-        name.value.isNotEmpty() && peopleCount.value.isNotZero() && startDate.value.isNotEmpty() && period.value.isNotZero() && cycle.value.date.isNotZero() && introduction.value.isNotEmpty()
+        name.value.isNotBlankAndEmpty() && peopleCount.value.isNotZero() && startDate.value.isNotEmpty() && period.value.isNotZero() && cycle.value.date.isNotZero() && introduction.value.isNotBlankAndEmpty()
 
     private fun CreateStudyUiModel.toDomain(): CreateStudy =
         CreateStudy(name, peopleCount, startDate, period, cycle.toDomain(), introduction)
 
     private fun PeriodUiModel.toDomain(): Period = Period(date, unit)
 
+    private fun String.isNotBlankAndEmpty(): Boolean = isNotBlank().and(isNotEmpty())
+
     private fun String.isNotEmpty(): Boolean = isEmpty().not()
+
+    private fun String.isNotBlank(): Boolean = isBlank().not()
 
     private fun Int.isNotZero(): Boolean = this != 0
 
