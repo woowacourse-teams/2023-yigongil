@@ -117,7 +117,7 @@ class StudyDetailActivity :
     private fun observeParticipantsCount() {
         studyDetailViewModel.studyMemberCount.observe(this) {
             if (studyDetailViewModel.state.value is StudyDetailState.Master) {
-                binding.btnStudyDetailMainNotStudyMaster.text =
+                binding.btnStudyDetailMain.text =
                     getString(
                         R.string.study_detail_button_start_study,
                         studyDetailViewModel.studyMemberCount.value,
@@ -145,7 +145,7 @@ class StudyDetailActivity :
 
     private fun observeCanStartStudy() {
         studyDetailViewModel.canStudyStart.observe(this) { cantStartStudy ->
-            binding.btnStudyDetailMainNotStudyMaster.isEnabled = cantStartStudy
+            binding.btnStudyDetailMain.isEnabled = cantStartStudy
         }
     }
 
