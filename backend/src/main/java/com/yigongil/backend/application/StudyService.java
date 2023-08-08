@@ -20,7 +20,6 @@ import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
-import com.yigongil.backend.utils.DateConverter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +54,7 @@ public class StudyService {
                 request.name(),
                 request.introduction(),
                 request.numberOfMaximumMembers(),
-                request.startAt(),
+                request.startAt().atStartOfDay(),
                 request.totalRoundCount(),
                 request.periodOfRound(),
                 member
@@ -189,7 +188,7 @@ public class StudyService {
                                        .getCode(),
                             study.getName(),
                             study.calculateAverageTier(),
-                            DateConverter.toStringFormat(study.getStartAt()),
+                            study.getStartAt().toLocalDate(),
                             study.getTotalRoundCount(),
                             study.getPeriodUnit()
                                  .toStringFormat(study.getPeriodOfRound()),

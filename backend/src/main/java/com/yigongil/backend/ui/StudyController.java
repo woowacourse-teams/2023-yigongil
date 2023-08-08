@@ -13,6 +13,7 @@ import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import java.net.URI;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +37,10 @@ public class StudyController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createStudy(@Authorization Member member, @RequestBody StudyCreateRequest request) {
+    public ResponseEntity<Void> createStudy(
+            @Authorization Member member,
+            @RequestBody @Valid StudyCreateRequest request
+    ) {
         Long studyId = studyService.create(member, request);
         return ResponseEntity.created(URI.create("/v1/studies/" + studyId)).build();
     }
@@ -45,7 +49,7 @@ public class StudyController {
     public ResponseEntity<Void> createTodo(
             @Authorization Member member,
             @PathVariable Long studyId,
-            @RequestBody TodoCreateRequest request
+            @RequestBody @Valid TodoCreateRequest request
     ) {
         Long todoId = todoService.create(member, request);
         return ResponseEntity.created(URI.create("/v1/studies/" + studyId + "/todos/" + todoId)).build();

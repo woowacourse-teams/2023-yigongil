@@ -20,6 +20,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -39,16 +41,17 @@ public class StudySteps {
         this.tokenProvider = tokenProvider;
     }
 
-    @Given("{string}가 {string}, {string}, {string}, {string}, {string}, {string}로 스터디를 개설한다.")
+    @Given("{string}가 제목-{string}, 정원-{string}명, 예상시작일-{string}일 뒤, 총 회차-{string}회, 주기-{string}, 소개-{string}로 스터디를 개설한다.")
     public void 스터디를_개설한다(
             String masterGithubId,
             String name,
             String numberOfMaximumMembers,
-            String startAt,
+            String leftDays,
             String totalRoundCount,
             String periodOfRound,
             String introduction
     ) throws JsonProcessingException {
+        LocalDate startAt = LocalDate.now().plus(Long.parseLong(leftDays), ChronoUnit.DAYS);
         StudyCreateRequest request = new StudyCreateRequest(
                 name,
                 Integer.parseInt(numberOfMaximumMembers),
