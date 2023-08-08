@@ -12,6 +12,7 @@ data class StudyDetailUIModel(
     val startDate: String,
     val period: String,
     val cycle: String,
-    val applicantCount: Int,
+    val memberCount: Int,
+    val canStartStudy: Boolean,
     val studyMembers: List<StudyMemberUIModel>,
 )

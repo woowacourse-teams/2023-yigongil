@@ -208,7 +208,7 @@
             android:enabled="@{viewModel.state.mainButtonIsEnabled}"
             android:gravity="center"
             android:onClick="@{() -> activity.initMainButtonOnClick(viewModel.study.isMaster)}"
-            android:text="@{context.getString(viewModel.state.mainButtonText, viewModel.study.applicantCount, viewModel.study.peopleCount)}"
+            android:text="@{context.getString(viewModel.state.mainButtonText, viewModel.study.memberCount, viewModel.study.peopleCount)}"
             android:textAppearance="@style/button_sb18"
             android:textColor="@{context.getColor(viewModel.state.mainButtonTextColor)}"
             app:layout_constraintBottom_toBottomOf="parent"
