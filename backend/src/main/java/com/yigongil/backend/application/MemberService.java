@@ -97,7 +97,6 @@ public class MemberService {
         Member member = memberRepository.save(
                 Member.builder()
                       .githubId(request.githubId())
-                      .tier(1)
                       .build()
         );
 
