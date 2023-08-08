@@ -3,6 +3,7 @@ package com.created.team201.presentation.report
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import com.created.team201.R
 import com.created.team201.databinding.ActivityReportBinding
@@ -20,6 +21,7 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
         initBinding()
         initToolBar()
         initDatePickerClickListener()
+        initKeyboardSetting()
     }
 
     private fun initBinding() {
@@ -60,6 +62,19 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
         ).apply {
             datePicker.maxDate = System.currentTimeMillis()
             show()
+        }
+    }
+
+    private fun initKeyboardSetting() {
+        binding.clReport.setOnClickListener {
+            hideKeyboard()
+        }
+    }
+
+    private fun hideKeyboard() {
+        val inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        currentFocus?.let {
+            inputManager.hideSoftInputFromWindow(it.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
         }
     }
 
