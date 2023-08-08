@@ -19,6 +19,8 @@ public interface StudyRepository extends Repository<Study, Long> {
 
     Page<Study> findAllByProcessingStatus(ProcessingStatus processingStatus, Pageable pageable);
 
+    Page<Study> findAllByProcessingStatusAndNameContainingIgnoreCase(ProcessingStatus processingStatus, String word, Pageable pageable);
+
     List<Study> findAllByProcessingStatus(ProcessingStatus processingStatus);
 
     @Query("""
@@ -35,12 +37,4 @@ public interface StudyRepository extends Repository<Study, Long> {
                 and s.processingStatus = :processingStatus
             """)
     List<Study> findByMemberAndProcessingStatus(@Param("member") Member member, @Param("processingStatus") ProcessingStatus processingStatus);
-
-    @Query("""
-                select distinct s from Study s
-                join StudyMember sm
-                on s = sm.study
-                where sm.member = :member
-            """)
-    List<Study> findStudiesOfMember(@Param("member") Member member);
 }

@@ -219,4 +219,26 @@ public class StudySteps {
 
         assertThat(homeResponse.studies().get(0).nextDate()).isNotNull();
     }
+
+    @When("{string}를 검색한다.")
+    public void 검색한다(String search) {
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .when()
+                                                        .get("/v1/studies/recruiting/search?page=0&q=" + search)
+                                                        .then().log().all().extract();
+
+        sharedContext.setResponse(response);
+    }
+
+    @Then("결과가 모두 {string}를 포함하고 {int} 개가 조회된다.")
+    public void 결과가_모두_검색어를_포함한다(String search, int number) {
+        List<RecruitingStudyResponse> responses = sharedContext.getResponse()
+                                                               .jsonPath()
+                                                               .getList(".", RecruitingStudyResponse.class);
+
+        assertAll(
+                () -> assertThat(responses).map(RecruitingStudyResponse::name).allMatch(name -> name.contains(search)),
+                () -> assertThat(responses).hasSize(number)
+        );
+    }
 }

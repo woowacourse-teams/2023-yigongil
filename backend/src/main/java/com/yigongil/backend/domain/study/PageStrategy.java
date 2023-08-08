@@ -6,7 +6,7 @@ import org.springframework.data.domain.Sort;
 @Getter
 public enum PageStrategy {
 
-    CREATED_AT_DESC(Constants.PAGE_SIZE, Sort.by("createdAt").descending());
+    ID_DESC(Constants.PAGE_SIZE, Sort.by("id").descending());
 
     private final int size;
     private final Sort sort;
