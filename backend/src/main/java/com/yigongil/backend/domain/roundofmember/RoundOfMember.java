@@ -69,18 +69,29 @@ public class RoundOfMember extends BaseEntity {
         this.isDone = isDone;
     }
 
+    public void updateOptionalTodoIsDone(Long todoId, boolean isDone) {
+        OptionalTodo todo = findOptionalTodoById(todoId);
+        todo.updateIsDone(isDone);
+    }
+
+    public void updateOptionalTodoContent(Long todoId, String content) {
+        OptionalTodo todo = findOptionalTodoById(todoId);
+        todo.updateContent(content);
+    }
+
+    public void removeOptionalTodoById(Long todoId) {
+        OptionalTodo todo = findOptionalTodoById(todoId);
+        optionalTodos.remove(todo);
+    }
+
+    private OptionalTodo findOptionalTodoById(Long todoId) {
+        return optionalTodos.stream()
+                            .filter(optionalTodo -> optionalTodo.isSameId(todoId))
+                            .findFirst()
+                            .orElseThrow(() -> new NotTodoOwnerException("투두 작성자가 아닙니다.", String.valueOf(member.getId())));
+    }
+
     public boolean isMemberEquals(Member member) {
         return this.member.equals(member);
-    }
-
-    public void validateTodoOwner(OptionalTodo todo) {
-        if (!optionalTodos.contains(todo)) {
-            throw new NotTodoOwnerException("투두 작성자가 아닙니다.", String.valueOf(member.getId()));
-        }
-    }
-
-    public void removeOptionalTodo(OptionalTodo todo) {
-        validateTodoOwner(todo);
-        optionalTodos.remove(todo);
     }
 }

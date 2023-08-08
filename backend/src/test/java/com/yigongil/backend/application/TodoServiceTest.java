@@ -138,7 +138,6 @@ class TodoServiceTest {
         @Test
         void 투두를_수정한다() {
             //given
-            willReturn(Optional.of(todo)).given(optionalTodoRepository).findById(1L);
             willReturn(Optional.of(round)).given(roundRepository).findById(1L);
 
             TodoUpdateRequest request = new TodoUpdateRequest(true, "수정된 내용");

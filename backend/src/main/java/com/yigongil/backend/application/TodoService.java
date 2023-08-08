@@ -7,7 +7,6 @@ import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.exception.RoundNotFoundException;
-import com.yigongil.backend.exception.TodoNotFoundException;
 import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
 import org.springframework.stereotype.Service;
@@ -59,13 +58,11 @@ public class TodoService {
     @Transactional
     public void updateOptionalTodo(Member member, Long roundId, Long todoId, TodoUpdateRequest request) {
         Round round = findRoundById(roundId);
-        OptionalTodo todo = findOptionalTodoById(todoId);
-        RoundOfMember roundOfMember = round.findRoundOfMemberBy(member);
         if (request.content() != null) {
-            todo.updateContent(request.content());
+            round.updateOptionalTodoContent(member, todoId, request.content());
         }
         if (request.isDone() != null) {
-            todo.updateIsDone(request.isDone());
+            round.updateOptionalTodoIsDone(member, todoId, request.isDone());
         }
     }
 
@@ -73,12 +70,6 @@ public class TodoService {
     public void deleteOptionalTodo(Member member, Long roundId, Long todoId) {
         Round round = findRoundById(roundId);
         RoundOfMember roundOfMember = round.findRoundOfMemberBy(member);
-        OptionalTodo todo = findOptionalTodoById(todoId);
-        roundOfMember.removeOptionalTodo(todo);
-    }
-
-    private OptionalTodo findOptionalTodoById(Long todoId) {
-        return optionalTodoRepository.findById(todoId)
-                                     .orElseThrow(() -> new TodoNotFoundException("해당 투두가 존재하지 않습니다.", String.valueOf(todoId)));
+        roundOfMember.removeOptionalTodoById(todoId);
     }
 }

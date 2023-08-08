@@ -191,6 +191,14 @@ public class Round extends BaseEntity {
         this.endAt = LocalDateTime.of(endAt.toLocalDate(), LocalTime.MIN);
     }
 
+    public void updateOptionalTodoContent(Member member, Long todoId, String content) {
+        findRoundOfMemberBy(member).updateOptionalTodoContent(todoId, content);
+    }
+
+    public void updateOptionalTodoIsDone(Member member, Long todoId, boolean isDone) {
+        findRoundOfMemberBy(member).updateOptionalTodoIsDone(todoId, isDone);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
