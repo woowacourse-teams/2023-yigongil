@@ -216,7 +216,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="4"
             app:layout_constraintStart_toEndOf="@+id/btn_study_detail_sub"
-            tools:text="참여하기(3/6)" />
+            tools:text="@string/study_detail_study_accept_waiting" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
