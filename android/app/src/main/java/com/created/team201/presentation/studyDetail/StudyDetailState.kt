@@ -16,12 +16,12 @@ sealed class StudyDetailState(
     @DrawableRes
     val subButtonSrc: Int,
 ) {
-    object Master : StudyDetailState(
+    data class Master(private val canStartStudy: Boolean) : StudyDetailState(
         appBarTitle = R.string.study_detail_app_bar_study_master_title,
         mainButtonText = R.string.study_detail_button_start_study,
         mainButtonTextColor = R.color.white,
         subButtonSrc = R.drawable.ic_edit_20,
-        mainButtonIsEnabled = true,
+        mainButtonIsEnabled = canStartStudy,
     )
 
     object Member :

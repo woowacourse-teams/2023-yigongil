@@ -32,6 +32,8 @@ class StudyDetailActivity :
         initStudyDetailInformation()
         observeStudyDetailParticipants()
         observeStartStudy()
+        observeCanStartStudy()
+        observeParticipantsCount()
     }
 
     private fun initViewModel() {
@@ -112,6 +114,19 @@ class StudyDetailActivity :
         startActivity(ProfileActivity.getIntent(this, memberId))
     }
 
+    private fun observeParticipantsCount() {
+        studyDetailViewModel.studyMemberCount.observe(this) {
+            if (studyDetailViewModel.state.value is StudyDetailState.Master) {
+                binding.btnStudyDetailMainNotStudyMaster.text =
+                    getString(
+                        R.string.study_detail_button_start_study,
+                        studyDetailViewModel.studyMemberCount.value,
+                        studyDetailViewModel.study.value?.peopleCount,
+                    )
+            }
+        }
+    }
+
     private fun observeStartStudy() {
         studyDetailViewModel.isStartStudy.observe(this) { isStartStudy ->
             if (isStartStudy) {
@@ -125,6 +140,12 @@ class StudyDetailActivity :
                 )
                 finish()
             }
+        }
+    }
+
+    private fun observeCanStartStudy() {
+        studyDetailViewModel.canStudyStart.observe(this) { cantStartStudy ->
+            binding.btnStudyDetailMainNotStudyMaster.isEnabled = cantStartStudy
         }
     }
 
