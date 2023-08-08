@@ -12,7 +12,7 @@ public class ApiQueryCounterAop {
 
     private final ApiQueryCounter apiQueryCounter;
 
-    public ApiQueryCounterAop(final ApiQueryCounter apiQueryCounter) {
+    public ApiQueryCounterAop(ApiQueryCounter apiQueryCounter) {
         this.apiQueryCounter = apiQueryCounter;
     }
 

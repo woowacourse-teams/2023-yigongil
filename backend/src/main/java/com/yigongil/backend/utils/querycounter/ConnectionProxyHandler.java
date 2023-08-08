@@ -9,13 +9,13 @@ public class ConnectionProxyHandler implements InvocationHandler {
     private final Object connection;
     private final ApiQueryCounter apiQueryCounter;
 
-    public ConnectionProxyHandler(final Object connection, final ApiQueryCounter apiQueryCounter) {
+    public ConnectionProxyHandler(Object connection, ApiQueryCounter apiQueryCounter) {
         this.connection = connection;
         this.apiQueryCounter = apiQueryCounter;
     }
 
     @Override
-    public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Object invokeResult = method.invoke(connection, args);
         if (method.getName().equals("prepareStatement")) {
             return Proxy.newProxyInstance(
