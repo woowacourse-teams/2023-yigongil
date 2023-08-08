@@ -22,6 +22,7 @@ import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.request.StudyCreateRequest;
 import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
+import com.yigongil.backend.utils.querycounter.ApiQueryCounter;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
@@ -57,6 +58,9 @@ class StudyControllerTest {
 
     @MockBean
     private JwtTokenProvider tokenProvider;
+
+    @MockBean
+    private ApiQueryCounter apiQueryCounter;
 
     @BeforeEach
     void setUp() {
