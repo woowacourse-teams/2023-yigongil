@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.report.ReportActivity">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_report"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/report_toolbar_title"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/header_sb15"
+            app:titleTextColor="@color/white" />
+
+        <View
+            android:id="@+id/view_report_border_line"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/black02_181B21"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_report" />
+
+        <EditText
+            android:id="@+id/et_report_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            android:hint="@string/report_title_hint"
+            android:maxLength="20"
+            android:padding="16dp"
+            android:singleLine="true"
+            android:textAppearance="@style/text_r14"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey04_989DA5"
+            app:layout_constraintBottom_toTopOf="@id/cl_report_date"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_report_border_line" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_report_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_report_title">
+
+            <TextView
+                android:id="@+id/tv_report_date_string"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textAppearance="@style/text_r14"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/iv_report_calender_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/iv_report_calender_button"
+                tools:text="2022.03.04" />
+
+            <ImageView
+                android:id="@+id/iv_report_calender_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/report_calender_image_description"
+                android:padding="14dp"
+                android:src="@drawable/ic_period"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <EditText
+            android:id="@+id/et_report_content"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            android:gravity="top"
+            android:hint="@string/report_content_hint"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine|textNoSuggestions"
+            android:maxLength="200"
+            android:maxLines="10"
+            android:padding="16dp"
+            android:singleLine="true"
+            android:textAppearance="@style/text_r14"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey04_989DA5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_report_date" />
+
+
+        <TextView
+            android:id="@+id/tv_report_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
+            android:enabled="false"
+            android:paddingVertical="14dp"
+            android:text="@string/report_button_description"
+            android:textAlignment="center"
+            android:textAppearance="@style/button_sb16"
+            android:textColor="@color/tv_color_disabled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
