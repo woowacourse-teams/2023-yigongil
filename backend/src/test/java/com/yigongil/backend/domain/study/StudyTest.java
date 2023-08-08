@@ -11,6 +11,7 @@ import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.fixture.StudyFixture;
 import java.time.LocalDateTime;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
 
 class StudyTest {
@@ -122,5 +123,25 @@ class StudyTest {
         // then
         assertThatThrownBy(() -> study.addMember(member2))
                 .isInstanceOf(InvalidMemberSizeException.class);
+    }
+
+    @Test
+    void 스터디의_상태가_모집중이_아닐_때_정보를_수정하면_예외가_발생한다() {
+        // given
+        Study study = StudyFixture.자바_스터디_진행중.toStudy();
+
+        // when
+        ThrowingCallable throwable = () -> study.updateInformation(
+                "이름 수정",
+                5,
+                LocalDateTime.now(),
+                5,
+                "3d",
+                "소개"
+        );
+
+        // then
+        assertThatThrownBy(throwable)
+                .isInstanceOf(InvalidProcessingStatusException.class);
     }
 }

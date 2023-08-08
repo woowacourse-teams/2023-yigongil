@@ -189,17 +189,6 @@ public class Study extends BaseEntity {
         }
     }
 
-    private void validateStudyProcessingStatus() {
-        if (!isRecruiting()) {
-            throw new InvalidProcessingStatusException("모집 중인 스터디가 아니기 때문에 신청을 수락할 수 없습니다.",
-                    processingStatus.name());
-        }
-    }
-
-    public boolean isRecruiting() {
-        return this.processingStatus == ProcessingStatus.RECRUITING;
-    }
-
     private void validateMemberSize() {
         if (sizeOfCurrentMembers() >= numberOfMaximumMembers) {
             throw new InvalidMemberSizeException("스터디 정원이 가득 찼습니다.", numberOfMaximumMembers);
@@ -265,5 +254,34 @@ public class Study extends BaseEntity {
 
     public Member getMaster() {
         return currentRound.getMaster();
+    }
+
+    public void updateInformation(
+            String name,
+            Integer numberOfMaximumMembers,
+            LocalDateTime startAt,
+            Integer totalRoundCount,
+            String periodOfRound,
+            String introduction
+    ) {
+        validateStudyProcessingStatus();
+        this.name = name;
+        this.numberOfMaximumMembers = numberOfMaximumMembers;
+        this.startAt = startAt;
+        this.totalRoundCount = totalRoundCount;
+        this.periodOfRound = PeriodUnit.getPeriodNumber(periodOfRound);
+        this.periodUnit = PeriodUnit.getPeriodUnit(periodOfRound);
+        this.introduction = introduction;
+    }
+
+    private void validateStudyProcessingStatus() {
+        if (!isRecruiting()) {
+            throw new InvalidProcessingStatusException("현재 스터디의 상태가 모집중이 아닙니다.",
+                    processingStatus.name());
+        }
+    }
+
+    public boolean isRecruiting() {
+        return this.processingStatus == ProcessingStatus.RECRUITING;
     }
 }

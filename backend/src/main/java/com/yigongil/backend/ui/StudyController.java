@@ -4,6 +4,7 @@ import com.yigongil.backend.application.StudyService;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.request.StudyCreateRequest;
+import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +40,16 @@ public class StudyController {
     ) {
         Long studyId = studyService.create(member, request);
         return ResponseEntity.created(URI.create("/v1/studies/" + studyId)).build();
+    }
+
+    @PutMapping("/{studyId}")
+    public ResponseEntity<Void> updateStudy(
+            @Authorization Member member,
+            @PathVariable Long studyId,
+            @RequestBody @Valid StudyUpdateRequest request
+    ) {
+        studyService.update(member, studyId, request);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{studyId}/applicants")
