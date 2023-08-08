@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.created.team201.databinding.ItemStudyManagementOptionalTodoAddBinding
 import com.created.team201.presentation.studyManagement.StudyManagementClickListener
+import com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel
 
 class StudyManagementOptionalTodoAddViewHolder(
     binding: ItemStudyManagementOptionalTodoAddBinding,
@@ -14,6 +15,10 @@ class StudyManagementOptionalTodoAddViewHolder(
         binding.ivItemStudyManagementOptionalTodoAddButton.setOnClickListener {
             studyManagementClickListener.onClickAddTodo(binding.etItemStudyManagementOptionalTodo.text.toString())
         }
+    }
+
+    fun bind(optionalTodoUiModel: OptionalTodoUiModel) {
+        (binding as ItemStudyManagementOptionalTodoAddBinding).optionalTodo = optionalTodoUiModel
     }
 
     companion object {
