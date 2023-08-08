@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.created.team201.presentation.report.ReportViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,11 +42,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
+            android:autofillHints="no"
             android:background="@drawable/bg_rectangle_radius_5dp"
             android:hint="@string/report_title_hint"
             android:maxLength="20"
+            android:onTextChanged="@{(text, start, before, count)->viewModel.setTitle(text.toString())}"
             android:padding="16dp"
             android:singleLine="true"
+            android:text="@{viewModel.title}"
             android:textAppearance="@style/text_r14"
             android:textColor="@color/white"
             android:textColorHint="@color/grey04_989DA5"
@@ -92,15 +98,17 @@
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:layout_margin="20dp"
+            android:autofillHints="no"
             android:background="@drawable/bg_rectangle_radius_5dp"
             android:gravity="top"
             android:hint="@string/report_content_hint"
-            android:importantForAutofill="no"
             android:inputType="textMultiLine|textNoSuggestions"
             android:maxLength="200"
             android:maxLines="10"
+            android:onTextChanged="@{(text, start, before, count)->viewModel.setContent(text.toString())}"
             android:padding="16dp"
             android:singleLine="true"
+            android:text="@{viewModel.content}"
             android:textAppearance="@style/text_r14"
             android:textColor="@color/white"
             android:textColorHint="@color/grey04_989DA5"
@@ -122,6 +130,7 @@
             android:textAlignment="center"
             android:textAppearance="@style/button_sb16"
             android:textColor="@color/tv_color_disabled"
+            app:isEnabled="@{viewModel.isEnableReport()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
