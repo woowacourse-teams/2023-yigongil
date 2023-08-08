@@ -9,6 +9,19 @@
     <string name="login_github_guide">깃허브로 시작하기</string>
     <string name="login_fail_message">로그인에 실패하였습니다.</string>
 
+    <!-- 온보딩 뷰 -->
+    <string name="onBoarding_title_text">나에 대해 소개해주세요!</string>
+    <string name="onBoarding_sub_title_text">작성된 간단 소개는 스터디 지원 시 공개됩니다</string>
+    <string name="onBoarding_nickname_title_text">닉네임</string>
+    <string name="onBoarding_nickname_sub_title_text">2 ~ 8자(공백 불가) 한글, 영문, 숫자, 언더바(_) 사용 가능</string>
+    <string name="onBoarding_nickname_hint_text">닉네임 입력</string>
+    <string name="onBoarding_introduction_title_text">간단 소개</string>
+    <string name="onBoarding_introduction_sub_title_text">200자 이내</string>
+    <string name="onBoarding_introduction_hint_text">간단 소개 입력</string>
+    <string name="onBoarding_btn_text">작성완료</string>
+    <string name="onBoarding_unAvailable_nickname">닉네임은 2~8자 한글, 영문, 숫자, 언더바로 구성되어야합니다</string>
+    <string name="onBoarding_available_nickname">사용가능한 닉네임입니다</string>
+    <string name="onBoarding_duplicate_nickname">중복된 닉네임입니다</string>
 
     <!--메인 뷰-->
     <string name="main_ic_home">홈</string>
@@ -29,6 +42,7 @@
 
     <!--스터디 목록 탭-->
     <string name="study_list_create">스터디 만들기</string>
+    <string name="study_list_item_sort_description">정렬</string>
     <string name="study_list_search_button_menu">검색</string>
     <string name="study_list_title">스터디 목록</string>
     <string name="study_list_information_format">%s %s · 총 %d회차 · %d %s(주기)</string>
@@ -144,5 +158,12 @@
     <string name="profile_todo_success_rate">필수투두 완료횟수</string>
     <string name="profile_unexpected_user_access_warning">존재하지 않는 사용자입니다.</string>
     <string name="item_profile_finished_study_information_format">시작일 %s · 총 %d회차 · %d %s(주기)</string>
+
+    <!-- 설정 뷰 -->
+    <string name="setting_toolbar_title">설정</string>
+
+    <!-- 계정 관리 뷰 -->
+    <string name="accountSetting_toolbar_title">계정 관리</string>
+    <string name="accountSetting_withdraw_account_title_text">서비스 탈퇴하기</string>
 
 </resources>
