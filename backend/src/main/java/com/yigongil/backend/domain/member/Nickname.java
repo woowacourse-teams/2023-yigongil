@@ -18,14 +18,14 @@ public class Nickname {
     private String nickname;
 
     public Nickname(String nickname) {
-        if (Objects.isNull(nickname)) {
-            nickname = "guest" + (int) (Math.random() * 999);
+        if (nickname == null) {
+            nickname = "게스트" + (int) (Math.random() * 99999);
         }
         validate(nickname);
         this.nickname = nickname;
     }
 
-    public Nickname() {
+    protected Nickname() {
 
     }
 

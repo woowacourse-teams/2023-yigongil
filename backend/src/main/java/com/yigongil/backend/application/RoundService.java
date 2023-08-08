@@ -17,7 +17,6 @@ import com.yigongil.backend.response.MemberOfRoundResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.TodoResponse;
 import com.yigongil.backend.response.UpcomingStudyResponse;
-import com.yigongil.backend.utils.DateConverter;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -90,7 +89,7 @@ public class RoundService {
                             currentRound.getId(),
                             TodoResponse.fromNecessaryTodo(currentRoundOfMemberOwn, currentRound),
                             leftDays,
-                            DateConverter.toStringFormat(endAt),
+                            endAt.toLocalDate(),
                             currentRoundOfMembers.calculateMembersProgress(),
                             TodoResponse.fromOptionalTodo(currentRoundOfMemberOwn.getOptionalTodos())
                     )

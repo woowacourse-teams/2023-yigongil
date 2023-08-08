@@ -23,6 +23,8 @@ import com.yigongil.backend.request.StudyCreateRequest;
 import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
 import com.yigongil.backend.utils.querycounter.ApiQueryCounter;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import org.apache.http.HttpHeaders;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,10 +69,11 @@ class StudyControllerTest {
 
     @Test
     void 프로필_정보를_업데이트_한다() throws Exception {
+        LocalDate startAt = LocalDate.now().plus(5L, ChronoUnit.MONTHS);
         StudyCreateRequest request = new StudyCreateRequest(
                 "자바",
                 5,
-                "2023.05.21",
+                startAt,
                 14,
                 "1w",
                 "안녕"

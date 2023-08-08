@@ -14,7 +14,7 @@ public enum StudyFixture {
 
     자바_스터디_진행중(1L, LocalDateTime.now(), "자바", "스터디소개", 3, PeriodUnit.DAY, ProcessingStatus.PROCESSING, 3, 4),
     자바_스터디_모집중(1L, LocalDateTime.now(), "자바", "스터디소개", 3, PeriodUnit.WEEK, ProcessingStatus.RECRUITING, 3, 4),
-    자바_스터디_모집중_정원_1(1L, LocalDateTime.now(), "자바", "스터디소개", 3, PeriodUnit.DAY, ProcessingStatus.RECRUITING, 3, 1),
+    자바_스터디_모집중_정원_2(1L, LocalDateTime.now(), "자바", "스터디소개", 3, PeriodUnit.DAY, ProcessingStatus.RECRUITING, 3, 2),
     ;
 
     private final Long id;

@@ -1,14 +1,14 @@
 package com.yigongil.backend.response;
 
 import com.yigongil.backend.domain.study.Study;
-import com.yigongil.backend.utils.DateConverter;
+import java.time.LocalDate;
 
 public record RecruitingStudyResponse(
         Long id,
         Integer processingStatus,
         String name,
         Integer averageTier,
-        String startAt,
+        LocalDate startAt,
         Integer totalRoundCount,
         String periodOfRound,
         Integer numberOfCurrentMembers,
@@ -21,7 +21,7 @@ public record RecruitingStudyResponse(
                 study.getProcessingStatus().getCode(),
                 study.getName(),
                 study.calculateAverageTier(),
-                DateConverter.toStringFormat(study.getStartAt()),
+                study.getStartAt().toLocalDate(),
                 study.getTotalRoundCount(),
                 study.getPeriodUnit().toStringFormat(study.getPeriodOfRound()),
                 study.sizeOfCurrentMembers(),

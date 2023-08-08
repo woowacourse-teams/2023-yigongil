@@ -7,9 +7,10 @@ import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.roundofmember.RoundOfMembers;
 import com.yigongil.backend.exception.CannotStartException;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
+import com.yigongil.backend.exception.InvalidNumberOfMaximumStudyMember;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
+import com.yigongil.backend.exception.InvalidStudyNameLengthException;
 import com.yigongil.backend.exception.RoundNotFoundException;
-import com.yigongil.backend.utils.DateConverter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,6 +37,12 @@ import org.hibernate.annotations.CascadeType;
 public class Study extends BaseEntity {
 
     private static final int ONE_MEMBER = 1;
+    private static final int MIN_NAME_LENGTH = 1;
+    private static final int MAX_NAME_LENGTH = 30;
+    private static final int MIN_MEMBER_SIZE = 2;
+    private static final int MAX_MEMBER_SIZE = 8;
+
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -94,6 +101,9 @@ public class Study extends BaseEntity {
             List<Round> rounds,
             PeriodUnit periodUnit
     ) {
+        name = name.strip();
+        validateNumberOfMaximumMembers(numberOfMaximumMembers);
+        validateName(name);
         this.id = id;
         this.name = name;
         this.introduction = introduction;
@@ -108,11 +118,36 @@ public class Study extends BaseEntity {
         this.rounds = rounds == null ? new ArrayList<>() : rounds;
     }
 
+    private void validateNumberOfMaximumMembers(Integer numberOfMaximumMembers) {
+        if (numberOfMaximumMembers < MIN_MEMBER_SIZE || numberOfMaximumMembers > MAX_MEMBER_SIZE) {
+            throw new InvalidNumberOfMaximumStudyMember(
+                    String.format(
+                            "스터디의 정원은 최소 %d명 최대 %d명까지 설정 가능합니다",
+                            MIN_MEMBER_SIZE,
+                            MAX_MEMBER_SIZE
+                    ), numberOfMaximumMembers
+            );
+        }
+    }
+
+    private void validateName(String name) {
+        int nameLength = name.length();
+        if (nameLength < MIN_NAME_LENGTH || nameLength > MAX_NAME_LENGTH) {
+            throw new InvalidStudyNameLengthException(
+                    String.format(
+                            "스터디 이름의 길이는 %d자 이상 %d자 이하로 작성 가능합니다.",
+                            MIN_NAME_LENGTH,
+                            MAX_NAME_LENGTH
+                    ), nameLength
+            );
+        }
+    }
+
     public static Study initializeStudyOf(
             String name,
             String introduction,
             Integer numberOfMaximumMembers,
-            String startAt,
+            LocalDateTime startAt,
             Integer totalRoundCount,
             String periodOfRound,
             Member master
@@ -120,7 +155,7 @@ public class Study extends BaseEntity {
         Study study = Study.builder()
                            .name(name)
                            .numberOfMaximumMembers(numberOfMaximumMembers)
-                           .startAt(DateConverter.toLocalDateTime(startAt))
+                           .startAt(startAt)
                            .totalRoundCount(totalRoundCount)
                            .periodOfRound(PeriodUnit.getPeriodNumber(periodOfRound))
                            .periodUnit(PeriodUnit.getPeriodUnit(periodOfRound))

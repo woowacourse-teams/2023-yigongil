@@ -3,7 +3,7 @@ package com.yigongil.backend.response;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.studymember.Role;
-import com.yigongil.backend.utils.DateConverter;
+import java.time.LocalDate;
 import java.util.List;
 
 public record StudyDetailResponse(
@@ -14,7 +14,7 @@ public record StudyDetailResponse(
         Integer numberOfMaximumMembers,
         Long studyMasterId,
         Integer role,
-        String startAt,
+        LocalDate startAt,
         Integer totalRoundCount,
         String periodOfRound,
         Integer currentRound,
@@ -38,7 +38,7 @@ public record StudyDetailResponse(
                 study.getNumberOfMaximumMembers(),
                 currentRound.getMaster().getId(),
                 role.getCode(),
-                DateConverter.toStringFormat(study.getStartAt()),
+                study.getStartAt().toLocalDate(),
                 study.getTotalRoundCount(),
                 study.findPeriodOfRoundToString(),
                 study.getCurrentRound().getRoundNumber(),
