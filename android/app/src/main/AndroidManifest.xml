@@ -19,6 +19,7 @@
         <activity
             android:name=".presentation.report.ReportActivity"
             android:exported="false" />
+
         <activity
             android:name=".presentation.accountSetting.AccountSettingActivity"
             android:exported="false" />
