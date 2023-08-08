@@ -5,7 +5,6 @@ import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodoRepository;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
-import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
@@ -30,11 +29,6 @@ public class TodoService {
     public void createNecessaryTodo(Member member, Long roundId, TodoCreateRequest request) {
         Round round = findRoundById(roundId);
         round.createNecessaryTodo(member, request.content());
-    }
-
-    private Round findRoundById(Long roundId) {
-        return roundRepository.findById(roundId)
-                              .orElseThrow(() -> new RoundNotFoundException("존재하지 않는 회차입니다.", roundId));
     }
 
     @Transactional
@@ -69,7 +63,11 @@ public class TodoService {
     @Transactional
     public void deleteOptionalTodo(Member member, Long roundId, Long todoId) {
         Round round = findRoundById(roundId);
-        RoundOfMember roundOfMember = round.findRoundOfMemberBy(member);
-        roundOfMember.removeOptionalTodoById(todoId);
+        round.deleteOptionalTodo(member, todoId);
+    }
+
+    private Round findRoundById(Long roundId) {
+        return roundRepository.findById(roundId)
+                              .orElseThrow(() -> new RoundNotFoundException("존재하지 않는 회차입니다.", roundId));
     }
 }

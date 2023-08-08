@@ -166,15 +166,6 @@ public class Round extends BaseEntity {
         return findRoundOfMemberBy(member).isDone();
     }
 
-    public RoundOfMember findRoundOfMemberBy(Member member) {
-        return roundOfMembers.stream()
-                             .filter(roundOfMember -> roundOfMember.isMemberEquals(member))
-                             .findAny()
-                             .orElseThrow(
-                                     () -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", member.getGithubId())
-                             );
-    }
-
     public void updateNecessaryTodoContent(Member member, String content) {
         if (!master.equals(member)) {
             throw new NotStudyMasterException("필수 투두를 수정할 권한이 없습니다.", String.valueOf(member.getNickname()));
@@ -197,6 +188,19 @@ public class Round extends BaseEntity {
 
     public void updateOptionalTodoIsDone(Member member, Long todoId, boolean isDone) {
         findRoundOfMemberBy(member).updateOptionalTodoIsDone(todoId, isDone);
+    }
+
+    public void deleteOptionalTodo(Member member, Long todoId) {
+        findRoundOfMemberBy(member).removeOptionalTodoById(todoId);
+    }
+
+    public RoundOfMember findRoundOfMemberBy(Member member) {
+        return roundOfMembers.stream()
+                             .filter(roundOfMember -> roundOfMember.isMemberEquals(member))
+                             .findAny()
+                             .orElseThrow(
+                                     () -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", member.getGithubId())
+                             );
     }
 
     @Override
