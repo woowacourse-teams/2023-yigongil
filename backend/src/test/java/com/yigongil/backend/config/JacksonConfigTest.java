@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.request.StudyCreateRequest;
-import com.yigongil.backend.utils.DateConverter;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ class JacksonConfigTest {
     void 문자열로_전달된_JSON을_LocalDate_타입으로_파싱한다() throws JsonProcessingException {
         // given
         LocalDate startAt = LocalDate.now().plus(1L, ChronoUnit.DAYS);
-        String startAtInput = DateConverter.toStringFormat(startAt.atStartOfDay());
+        String startAtInput = startAt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
 
         String json = """
                 {

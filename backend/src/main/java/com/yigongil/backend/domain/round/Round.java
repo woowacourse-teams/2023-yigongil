@@ -120,7 +120,7 @@ public class Round extends BaseEntity {
     }
 
     private void validateTodoLength(String content) {
-        int contentLength = content.strip().length();
+        int contentLength = content.length();
         if (contentLength > MAX_TODO_CONTENT_LENGTH || contentLength < MIN_TODO_CONTENT_LENGTH) {
             throw new InvalidTodoLengthException(
                     String.format(

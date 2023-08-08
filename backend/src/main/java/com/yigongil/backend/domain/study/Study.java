@@ -101,6 +101,7 @@ public class Study extends BaseEntity {
             List<Round> rounds,
             PeriodUnit periodUnit
     ) {
+        name = name.strip();
         validateNumberOfMaximumMembers(numberOfMaximumMembers);
         validateName(name);
         this.id = id;
@@ -130,11 +131,11 @@ public class Study extends BaseEntity {
     }
 
     private void validateName(String name) {
-        int nameLength = name.strip().length();
+        int nameLength = name.length();
         if (nameLength < MIN_NAME_LENGTH || nameLength > MAX_NAME_LENGTH) {
             throw new InvalidStudyNameLengthException(
                     String.format(
-                            "스터디 이름의 길이는 2자 이상 30자 이하로 작성 가능합니다.",
+                            "스터디 이름의 길이는 %d자 이상 %d자 이하로 작성 가능합니다.",
                             MIN_NAME_LENGTH,
                             MAX_NAME_LENGTH
                     ), nameLength
