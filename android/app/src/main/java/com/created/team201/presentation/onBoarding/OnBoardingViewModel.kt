@@ -41,6 +41,10 @@ class OnBoardingViewModel : ViewModel() {
         _nickname.value = NicknameUiModel(nickname)
     }
 
+    fun setIntroduction(introduction: String) {
+        _introduction.value = introduction
+    }
+
     fun getInputFilter(): InputFilter = object : InputFilter {
         override fun filter(
             text: CharSequence,
