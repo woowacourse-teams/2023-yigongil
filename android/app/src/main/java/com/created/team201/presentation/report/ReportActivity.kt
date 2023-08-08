@@ -1,11 +1,14 @@
 package com.created.team201.presentation.report
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
 import com.created.team201.R
 import com.created.team201.databinding.ActivityReportBinding
 import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.report.model.DateUiModel
+import java.util.Calendar
 
 class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_report) {
 
@@ -16,6 +19,7 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
 
         initBinding()
         initToolBar()
+        initDatePickerClickListener()
     }
 
     private fun initBinding() {
@@ -32,6 +36,33 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
         }
     }
 
+    private fun initDatePickerClickListener() {
+        binding.ivReportCalenderButton.setOnClickListener {
+            showDatePickerDialog()
+        }
+    }
+
+    private fun showDatePickerDialog() {
+        val cal = Calendar.getInstance()
+        val todayDate = DateUiModel(
+            cal.get(Calendar.YEAR),
+            cal.get(Calendar.MONTH) + MONTH_CALIBRATION_VALUE,
+            cal.get(Calendar.DAY_OF_MONTH),
+        )
+        val selectedDate = reportViewModel.selectedDate.value ?: todayDate
+
+        DatePickerDialog(
+            this,
+            reportViewModel.updateDate(),
+            selectedDate.year,
+            selectedDate.month,
+            selectedDate.day,
+        ).apply {
+            datePicker.maxDate = System.currentTimeMillis()
+            show()
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
@@ -43,5 +74,9 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
                 false
             }
         }
+    }
+
+    companion object {
+        private const val MONTH_CALIBRATION_VALUE = 1
     }
 }

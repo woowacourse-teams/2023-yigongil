@@ -1,9 +1,12 @@
 package com.created.team201.presentation.report
 
+import android.app.DatePickerDialog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.created.team201.presentation.report.model.DateUiModel
+import java.util.Calendar
 
 class ReportViewModel : ViewModel() {
 
@@ -19,6 +22,18 @@ class ReportViewModel : ViewModel() {
         }
     }
     val isEnableReport: LiveData<Boolean> get() = _isEnableReport
+
+    private val _selectedDate: MutableLiveData<DateUiModel> = MutableLiveData(initDate())
+    val selectedDate: LiveData<DateUiModel> get() = _selectedDate
+
+    private fun initDate(): DateUiModel {
+        val cal = Calendar.getInstance()
+        return DateUiModel(
+            cal.get(Calendar.YEAR),
+            cal.get(Calendar.MONTH) + MONTH_CALIBRATION_VALUE,
+            cal.get(Calendar.DAY_OF_MONTH),
+        )
+    }
 
     fun setTitle(title: String) {
         _title.value = title.trim().replace(NEW_LINE, EMPTY_STRING)
@@ -47,8 +62,13 @@ class ReportViewModel : ViewModel() {
         }
     }
 
+    fun updateDate() = DatePickerDialog.OnDateSetListener { _, year, month, day ->
+        _selectedDate.value = DateUiModel(year, month + MONTH_CALIBRATION_VALUE, day)
+    }
+
     companion object {
         private const val EMPTY_STRING = ""
         private const val NEW_LINE = "/n"
+        private const val MONTH_CALIBRATION_VALUE = 1
     }
 }
