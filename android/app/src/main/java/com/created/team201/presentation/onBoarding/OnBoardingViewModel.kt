@@ -1,0 +1,84 @@
+package com.created.team201.presentation.onBoarding
+
+import android.text.InputFilter
+import android.text.Spanned
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.created.team201.presentation.onBoarding.model.NicknameState
+import com.created.team201.presentation.onBoarding.model.NicknameUiModel
+import com.created.team201.util.NonNullLiveData
+import com.created.team201.util.NonNullMutableLiveData
+import java.util.regex.Pattern
+
+class OnBoardingViewModel : ViewModel() {
+    private val _nickname: MutableLiveData<NicknameUiModel> = MutableLiveData()
+    val nickname: LiveData<NicknameUiModel>
+        get() = _nickname
+
+    private val _introduction: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
+    val introduction: NonNullLiveData<String>
+        get() = _introduction
+
+    private val _nicknameState: MutableLiveData<NicknameState> = MutableLiveData()
+    val nicknameState: LiveData<NicknameState>
+        get() = _nicknameState
+
+    private val _isEnableSave: MediatorLiveData<Boolean> =
+        MediatorLiveData<Boolean>().apply {
+            addSourceList(nickname, nicknameState) {
+                isInitializeOnBoarding()
+            }
+        }
+    val isEnableSave: LiveData<Boolean>
+        get() = _isEnableSave
+
+    fun setNickname(nickname: String) {
+        _nickname.value = NicknameUiModel(nickname)
+    }
+
+    fun getInputFilter(): InputFilter = object : InputFilter {
+        override fun filter(
+            text: CharSequence,
+            start: Int,
+            end: Int,
+            dest: Spanned,
+            dStart: Int,
+            dEnd: Int
+        ): CharSequence {
+            if (text.isBlank() || PATTERN_NICKNAME.matcher(text).matches())
+                return text
+
+            _nicknameState.value = NicknameState.UNAVAILABLE
+            return ""
+        }
+    }
+
+    private fun isInitializeOnBoarding(): Boolean =
+        nickname.value != null && nicknameState.value == NicknameState.AVAILABLE
+
+    private fun <T> MediatorLiveData<T>.addSourceList(
+        vararg liveDataArgument: LiveData<*>,
+        onChanged: () -> T,
+    ) {
+        liveDataArgument.forEach {
+            this.addSource(it) {
+                value = onChanged()
+            }
+        }
+    }
+
+    companion object {
+        private val PATTERN_NICKNAME = Pattern.compile("^[_a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]+$")
+
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                OnBoardingViewModel()
+            }
+        }
+    }
+}

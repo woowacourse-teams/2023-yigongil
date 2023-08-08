@@ -4,6 +4,9 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.created.team201.presentation.onBoarding.OnBoardingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -72,6 +75,7 @@
             android:inputType="text"
             android:maxLength="8"
             android:maxLines="1"
+            android:onTextChanged="@{(text, start, before, count) -> viewModel.setNickname(text)}"
             android:paddingHorizontal="12dp"
             android:textAppearance="@style/text_r14"
             android:textColor="@color/white"
@@ -144,6 +148,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="28dp"
             android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
+            android:enabled="@{viewModel.isEnableSave()}"
             android:paddingVertical="14dp"
             android:text="@string/onBoarding_btn_text"
             android:textAlignment="center"
