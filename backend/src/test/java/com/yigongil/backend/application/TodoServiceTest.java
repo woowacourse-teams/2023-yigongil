@@ -13,6 +13,7 @@ import com.yigongil.backend.domain.optionaltodo.OptionalTodoRepository;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
+import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NecessaryTodoAlreadyExistException;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.request.TodoCreateRequest;
@@ -76,9 +77,21 @@ class TodoServiceTest {
             TodoCreateRequest request = new TodoCreateRequest("필수 투두");
 
             //when
-            todoService.createNecessaryTodo(member, round.getId(), request);
-
             //then
+            assertDoesNotThrow(() -> todoService.createNecessaryTodo(member, round.getId(), request));
+        }
+
+        @Test
+        void 투두가_20자_이상이면_예외가_발생한다() {
+            //given
+            willReturn(Optional.of(round)).given(roundRepository).findById(3L);
+
+            TodoCreateRequest request = new TodoCreateRequest("필수 투두를 20글자 이상으로 만들고 있습니다 아아");
+
+            //when
+            //then
+            assertThatThrownBy(() -> todoService.createNecessaryTodo(member, round.getId(), request))
+                    .isInstanceOf(InvalidTodoLengthException.class);
         }
 
         @Test

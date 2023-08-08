@@ -31,9 +31,7 @@ public class TodoSteps {
 
     @Given("{string}가 찾은 회차에 {string}로 필수 투두를 추가한다.")
     public void 투두_추가(String studyMemberGithubId, String content) throws JsonProcessingException {
-        TodoCreateRequest request = new TodoCreateRequest(
-                content
-        );
+        TodoCreateRequest request = new TodoCreateRequest(content);
 
         given().log().all()
                .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -46,9 +44,7 @@ public class TodoSteps {
 
     @Given("{string}가 찾은 회차에 {string}로 선택 투두를 추가한다.")
     public void 선택_투두_추가(String studyMemberGithubId, String content) throws JsonProcessingException {
-        TodoCreateRequest request = new TodoCreateRequest(
-                content
-        );
+        TodoCreateRequest request = new TodoCreateRequest(content);
 
         ExtractableResponse<Response> response = given().log().all()
                                                         .contentType(MediaType.APPLICATION_JSON_VALUE)
