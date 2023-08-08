@@ -39,8 +39,7 @@ class StudyDetailViewModel private constructor(
     fun fetchStudyDetail(studyId: Long) {
         viewModelScope.launch {
             runCatching {
-                val studyDetail = studyDetailRepository.getStudyDetail(studyId).toUIModel()
-                studyDetail
+                studyDetailRepository.getStudyDetail(studyId).toUIModel()
             }.onSuccess {
                 _study.value = it
                 _studyParticipants.value = it.studyMembers
