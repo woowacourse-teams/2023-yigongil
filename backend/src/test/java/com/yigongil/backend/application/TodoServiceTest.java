@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
 
 import com.yigongil.backend.domain.member.Member;
@@ -11,13 +12,14 @@ import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodoRepository;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
-import com.yigongil.backend.domain.study.Study;
+import com.yigongil.backend.domain.roundofmember.RoundOfMember;
+import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NecessaryTodoAlreadyExistException;
 import com.yigongil.backend.fixture.MemberFixture;
-import com.yigongil.backend.fixture.RoundFixture;
-import com.yigongil.backend.fixture.StudyFixture;
 import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,17 +44,26 @@ class TodoServiceTest {
 
     private Member member;
     private Round round;
-    private Study study;
     private OptionalTodo todo;
+    private RoundOfMember roundOfMember;
 
     @BeforeEach
     void setUp() {
         member = MemberFixture.김진우.toMember();
-        round = RoundFixture.아이디_삼_투두없는_라운드.toRound();
-        study = StudyFixture.자바_스터디_진행중.toStudy();
         todo = OptionalTodo.builder()
                            .id(1L)
                            .content("투두").build();
+        roundOfMember = RoundOfMember.builder()
+                                     .member(member)
+                                     .optionalTodos(new ArrayList<>(List.of(todo)))
+                                     .build();
+        round = Round.builder()
+                     .id(3L)
+                     .roundOfMembers(List.of(roundOfMember))
+                     .roundNumber(1)
+                     .master(member)
+                     .necessaryToDoContent(null)
+                     .build();
     }
 
     @Nested
@@ -63,13 +74,24 @@ class TodoServiceTest {
             //given
             willReturn(Optional.of(round)).given(roundRepository).findById(3L);
 
-            TodoCreateRequest request = new TodoCreateRequest(true, round.getId(), "필수 투두");
+            TodoCreateRequest request = new TodoCreateRequest("필수 투두");
 
             //when
-            Long id = todoService.create(member, request);
-
             //then
-            assertThat(id).isEqualTo(round.getId());
+            assertDoesNotThrow(() -> todoService.createNecessaryTodo(member, round.getId(), request));
+        }
+
+        @Test
+        void 투두가_20자_이상이면_예외가_발생한다() {
+            //given
+            willReturn(Optional.of(round)).given(roundRepository).findById(3L);
+
+            TodoCreateRequest request = new TodoCreateRequest("필수 투두를 20글자 이상으로 만들고 있습니다 아아");
+
+            //when
+            //then
+            assertThatThrownBy(() -> todoService.createNecessaryTodo(member, round.getId(), request))
+                    .isInstanceOf(InvalidTodoLengthException.class);
         }
 
         @Test
@@ -77,12 +99,12 @@ class TodoServiceTest {
             //given
             willReturn(Optional.of(round)).given(roundRepository).findById(3L);
 
-            TodoCreateRequest request1 = new TodoCreateRequest(true, round.getId(), "필수 투두1");
-            todoService.create(member, request1);
-            TodoCreateRequest request2 = new TodoCreateRequest(true, round.getId(), "필수 투두2");
+            TodoCreateRequest request1 = new TodoCreateRequest("필수 투두1");
+            todoService.createNecessaryTodo(member, 3L, request1);
+            TodoCreateRequest request2 = new TodoCreateRequest("필수 투두2");
 
             //when
-            ThrowingCallable throwable = () -> todoService.create(member, request2);
+            ThrowingCallable throwable = () -> todoService.createNecessaryTodo(member, 3L, request2);
 
             //then
             assertThatThrownBy(throwable)
@@ -94,11 +116,11 @@ class TodoServiceTest {
             //given
             willReturn(Optional.of(round)).given(roundRepository).findById(3L);
 
-            TodoUpdateRequest request = new TodoUpdateRequest(true, true, "hey");
+            TodoUpdateRequest request = new TodoUpdateRequest(true, "hey");
             round.createNecessaryTodo(member, "기존 투두");
 
             //when
-            todoService.update(member, round.getId(), request);
+            todoService.updateNecessaryTodo(member, round.getId(), request);
 
             //then
             assertAll(
@@ -117,27 +139,24 @@ class TodoServiceTest {
         void 투두를_생성한다() {
             //given
             willReturn(Optional.of(round)).given(roundRepository).findById(3L);
+            willReturn(todo).given(optionalTodoRepository).save(any());
 
-            TodoCreateRequest request = new TodoCreateRequest(false, round.getId(), "선택 투두");
+            TodoCreateRequest request = new TodoCreateRequest("선택 투두");
 
             //when
             //then
-            assertDoesNotThrow(() -> todoService.create(member, request));
+            assertDoesNotThrow(() -> todoService.createOptionalTodo(member, 3L, request));
         }
 
         @Test
         void 투두를_수정한다() {
             //given
-            willReturn(Optional.of(todo)).given(optionalTodoRepository).findById(1L);
+            willReturn(Optional.of(round)).given(roundRepository).findById(1L);
 
-            study.findRoundById(round.getId())
-                 .findRoundOfMemberBy(member)
-                 .getOptionalTodos()
-                 .add(todo);
-            TodoUpdateRequest request = new TodoUpdateRequest(false, true, "수정된 내용");
+            TodoUpdateRequest request = new TodoUpdateRequest(true, "수정된 내용");
 
             //when
-            todoService.update(member, todo.getId(), request);
+            todoService.updateOptionalTodo(member, 1L, todo.getId(), request);
 
             //then
             assertAll(
