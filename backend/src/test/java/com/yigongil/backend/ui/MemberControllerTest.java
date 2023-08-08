@@ -22,7 +22,7 @@ import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.request.ProfileUpdateRequest;
 import com.yigongil.backend.response.ProfileResponse;
-import com.yigongil.backend.ui.querycounter.ApiQueryCounter;
+import com.yigongil.backend.utils.querycounter.ApiQueryCounter;
 import java.util.Collections;
 import java.util.Optional;
 import org.apache.http.HttpHeaders;

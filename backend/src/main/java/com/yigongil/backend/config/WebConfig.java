@@ -2,7 +2,7 @@ package com.yigongil.backend.config;
 
 import com.yigongil.backend.config.auth.AuthInterceptor;
 import com.yigongil.backend.config.auth.MemberArgumentResolver;
-import com.yigongil.backend.ui.querycounter.LoggingInterceptor;
+import com.yigongil.backend.utils.querycounter.LoggingInterceptor;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

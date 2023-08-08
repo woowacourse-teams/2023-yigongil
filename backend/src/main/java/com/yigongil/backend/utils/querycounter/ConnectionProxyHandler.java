@@ -1,4 +1,4 @@
-package com.yigongil.backend.ui.querycounter;
+package com.yigongil.backend.utils.querycounter;
 
 import java.lang.reflect.Method;
 import org.springframework.cglib.proxy.InvocationHandler;

@@ -1,4 +1,4 @@
-package com.yigongil.backend.ui.querycounter;
+package com.yigongil.backend.utils.querycounter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

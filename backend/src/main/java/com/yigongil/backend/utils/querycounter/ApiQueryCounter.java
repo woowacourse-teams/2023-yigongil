@@ -1,4 +1,4 @@
-package com.yigongil.backend.ui.querycounter;
+package com.yigongil.backend.utils.querycounter;
 
 import lombok.Getter;
 import org.springframework.stereotype.Component;

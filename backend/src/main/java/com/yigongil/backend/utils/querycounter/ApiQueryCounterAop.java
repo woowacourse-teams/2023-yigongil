@@ -1,4 +1,4 @@
-package com.yigongil.backend.ui.querycounter;
+package com.yigongil.backend.utils.querycounter;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
