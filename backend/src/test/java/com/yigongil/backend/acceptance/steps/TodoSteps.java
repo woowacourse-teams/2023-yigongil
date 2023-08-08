@@ -171,8 +171,8 @@ public class TodoSteps {
         assertThat(response.optionalTodos()).hasSize(0);
     }
 
-    @Then("투두를 삭제할 수 없다.")
-    public void 투두를_삭제할_수_없다() {
+    @Then("권한 예외가 발생한다.")
+    public void 권한_예외_발생() {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());

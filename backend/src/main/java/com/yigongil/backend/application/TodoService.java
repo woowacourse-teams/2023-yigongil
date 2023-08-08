@@ -6,7 +6,6 @@ import com.yigongil.backend.domain.optionaltodo.OptionalTodoRepository;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
-import com.yigongil.backend.domain.roundofmember.RoundOfMemberRepository;
 import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.exception.TodoNotFoundException;
 import com.yigongil.backend.request.TodoCreateRequest;
@@ -18,16 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class TodoService {
 
     private final OptionalTodoRepository optionalTodoRepository;
-    private final RoundOfMemberRepository roundOfMemberRepository;
     private final RoundRepository roundRepository;
 
     public TodoService(
             OptionalTodoRepository optionalTodoRepository,
-            RoundOfMemberRepository roundOfMemberRepository,
             RoundRepository roundRepository
     ) {
         this.optionalTodoRepository = optionalTodoRepository;
-        this.roundOfMemberRepository = roundOfMemberRepository;
         this.roundRepository = roundRepository;
     }
 
@@ -64,8 +60,7 @@ public class TodoService {
     public void updateOptionalTodo(Member member, Long roundId, Long todoId, TodoUpdateRequest request) {
         Round round = findRoundById(roundId);
         OptionalTodo todo = findOptionalTodoById(todoId);
-        round.findRoundOfMemberBy(member)
-             .validateTodoOwner(todo);
+        RoundOfMember roundOfMember = round.findRoundOfMemberBy(member);
         if (request.content() != null) {
             todo.updateContent(request.content());
         }
