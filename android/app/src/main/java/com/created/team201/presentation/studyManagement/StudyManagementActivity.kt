@@ -119,14 +119,13 @@ class StudyManagementActivity :
             )
         }
 
-        override fun onClickAddTodo(todoContent: String) {
+        override fun onClickAddOptionalTodo(todoContent: String) {
             val trimmedTodoContent = todoContent.trim()
             if (trimmedTodoContent.isEmpty() || trimmedTodoContent.isBlank()) {
                 toastEmptyTodoInput()
                 return
             }
-            val currentPage = binding.vpStudyManagement.currentItem
-            studyManagementViewModel.addOptionalTodo(currentPage, trimmedTodoContent)
+            studyManagementViewModel.addOptionalTodo(trimmedTodoContent)
         }
 
         override fun onClickAddNecessaryTodo(todoContent: String) {
@@ -138,7 +137,7 @@ class StudyManagementActivity :
             studyManagementViewModel.addNecessaryTodo(trimmedTodoContent)
         }
 
-        override fun onClickAddOptionalTodo(optionalTodoCount: Int) {
+        override fun onClickGenerateOptionalTodo(optionalTodoCount: Int) {
             if (optionalTodoCount >= MAXIMUM_OPTIONAL_TODO_COUNT) {
                 Toast.makeText(
                     this@StudyManagementActivity,

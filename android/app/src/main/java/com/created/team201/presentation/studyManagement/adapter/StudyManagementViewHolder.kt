@@ -31,7 +31,7 @@ class StudyManagementViewHolder(
 
     private fun setClickAddTodo() {
         binding.tvStudyManagementAddOptionalTodo.setOnClickListener {
-            studyManagementClickListener.onClickAddOptionalTodo(studyManagementOptionalTodoAdapter.itemCount)
+            studyManagementClickListener.onClickGenerateOptionalTodo(studyManagementOptionalTodoAdapter.itemCount)
             val currentTodos = studyManagementOptionalTodoAdapter.currentList
 
             if (currentTodos.isEmpty()) {

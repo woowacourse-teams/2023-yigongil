@@ -245,9 +245,11 @@ class StudyManagementViewModel(
         }
     }
 
-    fun addOptionalTodo(currentPage: Int, todoContent: String) {
+    fun addOptionalTodo(todoContent: String) {
         val currentStudyRounds = studyRounds.value ?: listOf()
-        val currentRound = currentStudyRounds[currentPage]
+        val studyDetails = studyRounds.value ?: listOf()
+        val currentPage = currentRound.value ?: ROUND_NOT_FOUND
+        val currentRound = studyDetails[currentPage - CONVERT_PAGE_TO_ROUND]
 
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
