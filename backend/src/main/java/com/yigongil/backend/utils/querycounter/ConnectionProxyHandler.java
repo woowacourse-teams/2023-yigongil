@@ -18,11 +18,9 @@ public class ConnectionProxyHandler implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Object invokeResult = method.invoke(connection, args);
         if (method.getName().equals("prepareStatement")) {
-            return Proxy.newProxyInstance(
-                    invokeResult.getClass().getClassLoader(),
+            return Proxy.newProxyInstance(invokeResult.getClass().getClassLoader(),
                     invokeResult.getClass().getInterfaces(),
-                    new PreparedStatementProxyHandler(invokeResult, apiQueryCounter)
-            );
+                    new PreparedStatementProxyHandler(invokeResult, apiQueryCounter));
         }
         return invokeResult;
     }

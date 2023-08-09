@@ -2,24 +2,23 @@ package com.yigongil.backend.config;
 
 import com.yigongil.backend.config.auth.AuthInterceptor;
 import com.yigongil.backend.config.auth.MemberArgumentResolver;
-import com.yigongil.backend.utils.querycounter.LoggingInterceptor;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+@Profile(value = {"prod", "dev"})
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class ProdWebConfig implements WebMvcConfigurer {
 
     private final MemberArgumentResolver memberArgumentResolver;
     private final AuthInterceptor authInterceptor;
-    private final LoggingInterceptor loggingInterceptor;
 
-    public WebConfig(MemberArgumentResolver memberArgumentResolver, AuthInterceptor authInterceptor, LoggingInterceptor loggingInterceptor) {
+    public ProdWebConfig(MemberArgumentResolver memberArgumentResolver, AuthInterceptor authInterceptor) {
         this.memberArgumentResolver = memberArgumentResolver;
         this.authInterceptor = authInterceptor;
-        this.loggingInterceptor = loggingInterceptor;
     }
 
     @Override
@@ -29,12 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/v1/login/**")
                 .excludePathPatterns("/v1/members/{id:[0-9]\\d*}")
                 .excludePathPatterns("/v1/members/exists")
-                .excludePathPatterns("/v1/studies/recruiting/**")
-                .order(2);
-
-        registry.addInterceptor(loggingInterceptor)
-                .addPathPatterns("/**")
-                .order(3);
+                .excludePathPatterns("/v1/studies/recruiting/**");
     }
 
     @Override
