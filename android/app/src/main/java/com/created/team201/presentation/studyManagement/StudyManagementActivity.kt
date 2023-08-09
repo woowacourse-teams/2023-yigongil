@@ -100,9 +100,17 @@ class StudyManagementActivity :
 
     private val studyManagementClickListener = object : StudyManagementClickListener {
 
-        override fun clickOnTodo(id: Long, isDone: Boolean) {
-            val currentItemId = binding.vpStudyManagement.currentItem
-            studyManagementViewModel.updateTodo(currentItemId, id, !isDone)
+        override fun onClickAddTodo(isNecessary: Boolean, todoContent: String) {
+            val trimmedTodoContent = todoContent.trim()
+            if (trimmedTodoContent.isEmpty() || trimmedTodoContent.isBlank()) {
+                toastEmptyTodoInput()
+                return
+            }
+            studyManagementViewModel.addTodo(isNecessary, trimmedTodoContent)
+        }
+
+        override fun onClickUpdateTodoIsDone(isNecessary: Boolean, todoId: Long, isDone: Boolean) {
+            studyManagementViewModel.updateTodoIsDone(isNecessary, todoId, isDone)
         }
 
         override fun clickOnUpdateTodo(isNecessary: Boolean, todoContent: String) {
@@ -119,24 +127,6 @@ class StudyManagementActivity :
             )
         }
 
-        override fun onClickAddOptionalTodo(todoContent: String) {
-            val trimmedTodoContent = todoContent.trim()
-            if (trimmedTodoContent.isEmpty() || trimmedTodoContent.isBlank()) {
-                toastEmptyTodoInput()
-                return
-            }
-            studyManagementViewModel.addOptionalTodo(trimmedTodoContent)
-        }
-
-        override fun onClickAddNecessaryTodo(todoContent: String) {
-            val trimmedTodoContent = todoContent.trim()
-            if (trimmedTodoContent.isEmpty() || trimmedTodoContent.isBlank()) {
-                toastEmptyTodoInput()
-                return
-            }
-            studyManagementViewModel.addNecessaryTodo(trimmedTodoContent)
-        }
-
         override fun onClickGenerateOptionalTodo(optionalTodoCount: Int) {
             if (optionalTodoCount >= MAXIMUM_OPTIONAL_TODO_COUNT) {
                 Toast.makeText(
@@ -145,10 +135,6 @@ class StudyManagementActivity :
                     Toast.LENGTH_SHORT,
                 ).show()
             }
-        }
-
-        override fun onClickUpdateNecessaryTodoIsDone(isDone: Boolean) {
-            studyManagementViewModel.updateNecessaryTodoIsDone(isDone)
         }
     }
 

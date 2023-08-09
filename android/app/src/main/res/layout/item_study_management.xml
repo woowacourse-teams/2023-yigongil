@@ -79,11 +79,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/item_study_management_todo_description"
-                android:onClick="@{()->onClick.onClickUpdateNecessaryTodoIsDone(!studyManagement.necessaryTodo.todo.done)}"
+                android:onClick="@{()->onClick.onClickUpdateTodoIsDone(true, studyManagement.necessaryTodo.todo.todoId, !studyManagement.necessaryTodo.todo.done)}"
                 android:padding="12dp"
                 android:src="@drawable/ic_selector_home_check_btn"
-                app:isSelected="@{studyManagement.necessaryTodo.todo.done}"
                 app:isGone="@{studyManagement.necessaryTodo.todo.content.empty}"
+                app:isSelected="@{studyManagement.necessaryTodo.todo.done}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -94,8 +94,8 @@
                 android:layout_height="wrap_content"
                 android:padding="10dp"
                 android:src="@drawable/ic_add_todo_button"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:isGone="@{!studyManagement.isMaster() | studyManagement.necessaryTodo.initialized}"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

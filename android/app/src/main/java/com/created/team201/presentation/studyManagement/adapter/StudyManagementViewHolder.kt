@@ -52,7 +52,8 @@ class StudyManagementViewHolder(
             )
         }
         binding.ivStudyManagementNecessaryTodoAddButton.setOnClickListener {
-            studyManagementClickListener.onClickAddNecessaryTodo(
+            studyManagementClickListener.onClickAddTodo(
+                true,
                 binding.etItemStudyManagementEssentialTodoContent.text.toString(),
             )
         }

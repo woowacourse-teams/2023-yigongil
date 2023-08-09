@@ -53,6 +53,11 @@ class StudyManagementViewModel(
     private val _isStudyRoundsLoaded: MutableLiveData<Boolean> = MutableLiveData(false)
     val isStudyRoundsLoaded: LiveData<Boolean> get() = _isStudyRoundsLoaded
 
+    private val currentStudyRounds get() = studyRounds.value ?: listOf()
+    private val studyDetails get() = studyRounds.value ?: listOf()
+    private val currentPage get() = currentRound.value ?: ROUND_NOT_FOUND
+    private val currentRoundDetail get() = studyDetails[currentPage - CONVERT_PAGE_TO_ROUND]
+
     fun initStudyManagement(studyId: Long, roleIndex: Int) {
         initStatus(roleIndex)
         viewModelScope.launch {
@@ -96,14 +101,140 @@ class StudyManagementViewModel(
         }
     }
 
-    fun updateCurrentPage(pageIndex: PageIndex) {
-        _currentRound.value = pageIndex.toRound()
-    }
-
     private suspend fun getStudyRoundDetail(studyId: Long, roundId: Long): Result<RoundDetail> {
         return runCatching {
             repository.getRoundDetail(studyId, roundId)
         }
+    }
+
+    fun updateCurrentPage(pageIndex: PageIndex) {
+        _currentRound.value = pageIndex.toRound()
+    }
+
+    fun addTodo(isNecessary: Boolean, content: String) {
+        when (isNecessary) {
+            true -> addNecessaryTodo(content)
+            false -> addOptionalTodo(content)
+        }
+    }
+
+    private fun addNecessaryTodo(todoContent: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching {
+                repository.createNecessaryTodo(currentRoundDetail.id, CreateTodo(todoContent))
+            }.onSuccess { result ->
+                val newNecessaryTodo = currentRoundDetail.necessaryTodo.copy(
+                    todo = currentRoundDetail.necessaryTodo.todo.copy(content = todoContent),
+                    isInitialized = true,
+                )
+                val newRound = currentRoundDetail.copy(necessaryTodo = newNecessaryTodo)
+                val updatedStudyRounds = currentStudyRounds.map { studyRoundDetailUiModel ->
+                    studyRoundDetailUiModel.takeIf { it.id != currentRoundDetail.id } ?: newRound
+                }
+                _studyRounds.postValue(updatedStudyRounds)
+            }.onFailure {
+                Log.e(LOG_ERROR, it.message.toString())
+            }
+        }
+    }
+
+    private fun addOptionalTodo(todoContent: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching {
+                repository.createOptionalTodo(currentRoundDetail.id, CreateTodo(todoContent))
+            }.onSuccess { result ->
+                val todoId = result.getOrDefault(DEFAULT_TODO_ID)
+                val newOptionalTodos = getNewOptionalTodos(currentRoundDetail, todoId, todoContent)
+                val newRound = currentRoundDetail.copy(optionalTodos = newOptionalTodos)
+                val updatedStudyRounds = currentStudyRounds.map { studyRoundDetailUiModel ->
+                    studyRoundDetailUiModel.takeIf { it.id != currentRoundDetail.id } ?: newRound
+                }
+                _studyRounds.postValue(updatedStudyRounds)
+            }.onFailure {
+                Log.e(LOG_ERROR, it.message.toString())
+            }
+        }
+    }
+
+    private fun getNewOptionalTodos(
+        currentStudy: StudyRoundDetailUiModel,
+        todoId: Long,
+        todoContent: String,
+    ): MutableList<OptionalTodoUiModel> {
+        val newOptionalTodos = currentStudy.optionalTodos.toMutableList()
+        newOptionalTodos.addAll(
+            listOf(
+                OptionalTodoUiModel(
+                    TodoUiModel(todoId, todoContent, false),
+                    OptionalTodoViewType.DISPLAY.viewType,
+                ),
+            ),
+        )
+        return newOptionalTodos
+    }
+
+    fun updateTodoIsDone(isNecessary: Boolean, todoId: Long, isDone: Boolean) {
+        when (isNecessary) {
+            true -> updateNecessaryTodoIsDone(isDone)
+            false -> updateOptionalTodoIsDone(todoId, isDone)
+        }
+    }
+
+    private fun updateNecessaryTodoIsDone(isDone: Boolean) {
+        val newNecessaryTodo = currentRoundDetail.necessaryTodo.copy(
+            todo = currentRoundDetail.necessaryTodo.todo.copy(isDone = isDone),
+            isInitialized = true,
+        )
+
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching {
+                repository.patchNecessaryTodo(
+                    currentRoundDetail.id,
+                    newNecessaryTodo.todo.toDomain(),
+                )
+            }.onSuccess {
+                val newRound = currentRoundDetail.copy(necessaryTodo = newNecessaryTodo)
+                val updatedStudyRounds = currentStudyRounds.map { studyRoundDetailUiModel ->
+                    studyRoundDetailUiModel.takeIf { it.id != currentRoundDetail.id } ?: newRound
+                }
+                _studyRounds.postValue(updatedStudyRounds)
+            }.onFailure {
+                Log.e(LOG_ERROR, it.message.toString())
+            }
+        }
+    }
+
+    private fun updateOptionalTodoIsDone(todoId: Long, isDone: Boolean) {
+        val newOptionalTodo = getNewOptionalTodo(todoId, isDone)
+        viewModelScope.launch(Dispatchers.IO) {
+            val optionalTodos = currentRoundDetail.optionalTodos.map { optionalTodo ->
+                optionalTodo.takeIf { it.todo.todoId != todoId } ?: newOptionalTodo
+            }
+            runCatching {
+                repository.patchOptionalTodo(
+                    currentRoundDetail.id,
+                    newOptionalTodo.todo.toDomain(),
+                )
+            }.onSuccess {
+                val newRound = currentRoundDetail.copy(optionalTodos = optionalTodos)
+                val updatedStudyRounds = currentStudyRounds.map { studyRoundDetailUiModel ->
+                    studyRoundDetailUiModel.takeIf { it.id != currentRoundDetail.id } ?: newRound
+                }
+                _studyRounds.postValue(updatedStudyRounds)
+            }.onFailure {
+                Log.e(LOG_ERROR, it.message.toString())
+            }
+        }
+    }
+
+    private fun getNewOptionalTodo(todoId: Long, isDone: Boolean): OptionalTodoUiModel {
+        val currentOptionalTodo = currentRoundDetail.optionalTodos.find { optionalTodo ->
+            optionalTodo.todo.todoId == todoId
+        } ?: OptionalTodoUiModel(
+            TodoUiModel(DEFAULT_TODO_ID, "", false),
+            OptionalTodoViewType.DISPLAY.viewType,
+        )
+        return currentOptionalTodo.copy(todo = currentOptionalTodo.todo.copy(isDone = isDone))
     }
 
     fun updateTodoContent(
@@ -120,54 +251,7 @@ class StudyManagementViewModel(
             addNecessaryTodo(todoContent)
             return
         }
-        patchTodo(newTodo.todo, isNecessary)
-    }
-
-    fun updateTodo(currentItemId: Int, todoId: Long, isDone: Boolean) {
-        val studyDetails = studyRounds.value ?: listOf()
-        val isNecessary =
-            studyRounds.value?.get(currentItemId)?.necessaryTodo?.todo?.todoId == todoId
-        val studyRound: StudyRoundDetailUiModel
-        val todo: TodoUiModel
-
-        when (isNecessary) {
-            true -> {
-                updateNecessaryTodoCheck(studyDetails, todoId, isDone)
-                studyRound = studyDetails.find { it.necessaryTodo.todo.todoId == todoId }!!
-                todo = studyRound.necessaryTodo.todo.copy(isDone = isDone)
-            }
-
-            false -> {
-                updateOptionalTodoCheck(studyDetails, todoId, isDone)
-                studyRound =
-                    studyDetails.find { it.optionalTodos.any { it.todo.todoId == todoId } }!!
-                todo =
-                    studyRound.optionalTodos.find { it.todo.todoId == todoId }!!.todo.copy(isDone = isDone)
-            }
-        }
-        patchTodo(todo, isNecessary)
-    }
-
-    private fun patchTodo(
-        todo: TodoUiModel,
-        isNecessary: Boolean,
-    ) {
-        val studyDetails = studyRounds.value ?: listOf()
-        val currentPage = currentRound.value ?: ROUND_NOT_FOUND
-        val currentRoundId = studyDetails[currentPage].id
-        viewModelScope.launch(Dispatchers.IO) {
-            runCatching {
-                when (isNecessary) {
-                    true -> {
-                        repository.patchNecessaryTodo(currentRoundId, todo.toDomain())
-                    }
-
-                    false -> repository.patchOptionalTodo(currentRoundId, todo.toDomain())
-                }
-            }.onFailure {
-                Log.e(LOG_ERROR, it.message.toString())
-            }
-        }
+        // patchTodo(newTodo.todo, isNecessary)
     }
 
     private fun updateNecessaryTodoContent(
@@ -184,131 +268,6 @@ class StudyManagementViewModel(
                         ),
                     ),
                 )
-        }
-    }
-
-    private fun updateNecessaryTodoCheck(
-        studyDetails: List<StudyRoundDetailUiModel>,
-        id: Long,
-        isDone: Boolean,
-    ) {
-        _studyRounds.value = studyDetails.map { studyDetailUiModel ->
-            studyDetailUiModel.takeIf { it.necessaryTodo.todo.todoId != id }
-                ?: studyDetailUiModel.copy(
-                    necessaryTodo = studyDetailUiModel.necessaryTodo.copy(
-                        studyDetailUiModel.necessaryTodo.todo.copy(
-                            isDone = isDone,
-                        ),
-                    ),
-                )
-        }
-    }
-
-    private fun updateOptionalTodoCheck(
-        studyDetails: List<StudyRoundDetailUiModel>,
-        id: Long,
-        isDone: Boolean,
-    ) {
-        _studyRounds.value = studyDetails.map { studyDetailUiModel ->
-            studyDetailUiModel.takeIf { todoUiModel -> !todoUiModel.optionalTodos.any { it.todo.todoId == id } }
-                ?: studyDetailUiModel.copy(
-                    optionalTodos = studyDetailUiModel.optionalTodos.map {
-                        it.takeUnless { it.todo.todoId == id }
-                            ?: it.copy(it.todo.copy(isDone = isDone))
-                    },
-                )
-        }
-    }
-
-    fun addNecessaryTodo(todoContent: String) {
-        val currentStudyRounds = studyRounds.value ?: listOf()
-        val studyDetails = studyRounds.value ?: listOf()
-        val currentPage = currentRound.value ?: ROUND_NOT_FOUND
-        val currentRound = studyDetails[currentPage - CONVERT_PAGE_TO_ROUND]
-
-        viewModelScope.launch(Dispatchers.IO) {
-            runCatching {
-                repository.createNecessaryTodo(currentRound.id, CreateTodo(todoContent))
-            }.onSuccess { result ->
-                val newNecessaryTodo = currentRound.necessaryTodo.copy(
-                    todo = currentRound.necessaryTodo.todo.copy(content = todoContent),
-                    isInitialized = true,
-                )
-                val newRound = currentRound.copy(necessaryTodo = newNecessaryTodo)
-                val updatedStudyRounds = currentStudyRounds.map { studyRoundDetailUiModel ->
-                    studyRoundDetailUiModel.takeIf { it.id != currentRound.id } ?: newRound
-                }
-                _studyRounds.postValue(updatedStudyRounds)
-            }.onFailure {
-                Log.e(LOG_ERROR, it.message.toString())
-            }
-        }
-    }
-
-    fun addOptionalTodo(todoContent: String) {
-        val currentStudyRounds = studyRounds.value ?: listOf()
-        val studyDetails = studyRounds.value ?: listOf()
-        val currentPage = currentRound.value ?: ROUND_NOT_FOUND
-        val currentRound = studyDetails[currentPage - CONVERT_PAGE_TO_ROUND]
-
-        viewModelScope.launch(Dispatchers.IO) {
-            runCatching {
-                repository.createOptionalTodo(currentRound.id, CreateTodo(todoContent))
-            }.onSuccess { result ->
-                val todoId = result.getOrDefault(DEFAULT_TODO_ID)
-                val newOptionalTodos = getNewOptionalTodos(currentRound, todoId, todoContent)
-                val newRound = currentRound.copy(optionalTodos = newOptionalTodos)
-                val updatedStudyRounds = currentStudyRounds.map { studyRoundDetailUiModel ->
-                    studyRoundDetailUiModel.takeIf { it.id != currentRound.id } ?: newRound
-                }
-                _studyRounds.postValue(updatedStudyRounds)
-            }.onFailure {
-                Log.e(LOG_ERROR, it.message.toString())
-            }
-        }
-    }
-
-    private fun getNewOptionalTodos(
-        currentStudy: StudyRoundDetailUiModel,
-        todoId: Long,
-        todoContent: String,
-
-    ): MutableList<OptionalTodoUiModel> {
-        val newOptionalTodos = currentStudy.optionalTodos.toMutableList()
-        newOptionalTodos.addAll(
-            listOf(
-                OptionalTodoUiModel(
-                    TodoUiModel(todoId, todoContent, false),
-                    OptionalTodoViewType.DISPLAY.viewType,
-                ),
-            ),
-        )
-        return newOptionalTodos
-    }
-
-    fun updateNecessaryTodoIsDone(isDone: Boolean) {
-        val currentStudyRounds = studyRounds.value ?: listOf()
-        val studyDetails = studyRounds.value ?: listOf()
-        val currentPage = currentRound.value ?: ROUND_NOT_FOUND
-        val currentRound = studyDetails[currentPage - CONVERT_PAGE_TO_ROUND]
-
-        val newNecessaryTodo = currentRound.necessaryTodo.copy(
-            todo = currentRound.necessaryTodo.todo.copy(isDone = isDone),
-            isInitialized = true,
-        )
-
-        viewModelScope.launch(Dispatchers.IO) {
-            runCatching {
-                repository.patchNecessaryTodo(currentRound.id, newNecessaryTodo.todo.toDomain())
-            }.onSuccess {
-                val newRound = currentRound.copy(necessaryTodo = newNecessaryTodo)
-                val updatedStudyRounds = currentStudyRounds.map { studyRoundDetailUiModel ->
-                    studyRoundDetailUiModel.takeIf { it.id != currentRound.id } ?: newRound
-                }
-                _studyRounds.postValue(updatedStudyRounds)
-            }.onFailure {
-                Log.e(LOG_ERROR, it.message.toString())
-            }
         }
     }
 

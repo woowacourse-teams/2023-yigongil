@@ -55,7 +55,7 @@ interface StudyManagementService {
         @Path("roundId") roundId: Long,
         @Path("todoId") todoId: Long,
         @Body todoUpdateRequestDto: TodoUpdateRequestDto,
-    )
+    ): Response<Unit?>
 
     @DELETE("/v1/rounds/{roundId}/todos/optional/{todoId}")
     suspend fun deleteOptionalTodo(

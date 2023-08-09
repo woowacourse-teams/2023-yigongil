@@ -1,18 +1,12 @@
 package com.created.team201.presentation.studyManagement
 
-import com.created.team201.presentation.common.TodoClickListener
+interface StudyManagementClickListener{
 
-interface StudyManagementClickListener : TodoClickListener {
+    fun onClickAddTodo(isNecessary: Boolean, todoContent: String)
 
-    override fun clickOnTodo(id: Long, isDone: Boolean)
-
-    fun onClickAddOptionalTodo(todoContent: String)
-
-    fun onClickAddNecessaryTodo(todoContent: String)
+    fun onClickUpdateTodoIsDone(isNecessary: Boolean, todoId: Long, isDone: Boolean)
 
     fun onClickGenerateOptionalTodo(optionalTodoCount: Int)
-
-    fun onClickUpdateNecessaryTodoIsDone(isDone: Boolean)
 
     fun clickOnUpdateTodo(isNecessary: Boolean, todoContent: String)
 }
