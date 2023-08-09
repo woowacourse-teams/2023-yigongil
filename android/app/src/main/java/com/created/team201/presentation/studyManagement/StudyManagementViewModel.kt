@@ -23,6 +23,7 @@ import com.created.team201.data.repository.StudyManagementRepositoryImpl
 import com.created.team201.presentation.home.model.TodoUiModel
 import com.created.team201.presentation.studyList.model.PeriodUiModel
 import com.created.team201.presentation.studyManagement.adapter.OptionalTodoViewType
+import com.created.team201.presentation.studyManagement.model.NecessaryTodoUiModel
 import com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel
 import com.created.team201.presentation.studyManagement.model.RoundUiModel
 import com.created.team201.presentation.studyManagement.model.StudyManagementInformationUiModel
@@ -109,25 +110,31 @@ class StudyManagementViewModel(
         currentItemId: Int,
         isNecessary: Boolean,
         todoContent: String,
-        studyId: Long,
     ) {
         val studyDetails = studyRounds.value ?: listOf()
-        val todo = studyDetails[currentItemId].necessaryTodo
-        val newTodo = todo.copy(content = todoContent)
-        updateNecessaryTodoContent(studyDetails, todo.todoId, todoContent)
-        patchTodo(newTodo, isNecessary, studyId)
+        val necessaryTodo = studyDetails[currentItemId].necessaryTodo
+        val newTodo = necessaryTodo.copy(todo = necessaryTodo.todo.copy(content = todoContent))
+        updateNecessaryTodoContent(studyDetails, necessaryTodo.todo.todoId, todoContent)
+
+        if (!necessaryTodo.isInitialized) {
+            addNecessaryTodo(todoContent)
+            return
+        }
+        patchTodo(newTodo.todo, isNecessary)
     }
 
-    fun updateTodo(currentItemId: Int, todoId: Long, isDone: Boolean, studyId: Long) {
+    fun updateTodo(currentItemId: Int, todoId: Long, isDone: Boolean) {
         val studyDetails = studyRounds.value ?: listOf()
-        val isNecessary = studyRounds.value?.get(currentItemId)?.necessaryTodo?.todoId == todoId
+        val isNecessary =
+            studyRounds.value?.get(currentItemId)?.necessaryTodo?.todo?.todoId == todoId
         val studyRound: StudyRoundDetailUiModel
         val todo: TodoUiModel
+
         when (isNecessary) {
             true -> {
                 updateNecessaryTodoCheck(studyDetails, todoId, isDone)
-                studyRound = studyDetails.find { it.necessaryTodo.todoId == todoId }!!
-                todo = studyRound.necessaryTodo.copy(isDone = isDone)
+                studyRound = studyDetails.find { it.necessaryTodo.todo.todoId == todoId }!!
+                todo = studyRound.necessaryTodo.todo.copy(isDone = isDone)
             }
 
             false -> {
@@ -138,21 +145,25 @@ class StudyManagementViewModel(
                     studyRound.optionalTodos.find { it.todo.todoId == todoId }!!.todo.copy(isDone = isDone)
             }
         }
-        patchTodo(todo, isNecessary, studyId)
+        patchTodo(todo, isNecessary)
     }
 
     private fun patchTodo(
         todo: TodoUiModel,
         isNecessary: Boolean,
-        studyId: Long,
     ) {
+        val studyDetails = studyRounds.value ?: listOf()
+        val currentPage = currentRound.value ?: ROUND_NOT_FOUND
+        val currentRoundId = studyDetails[currentPage].id
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
-                repository.patchTodo(
-                    studyId = studyId,
-                    todo = todo.toDomain(),
-                    isNecessary = isNecessary,
-                )
+                when (isNecessary) {
+                    true -> {
+                        repository.patchNecessary(currentRoundId, todo.toDomain())
+                    }
+
+                    false -> repository.patchOptionalTodo(currentRoundId, todo.toDomain())
+                }
             }.onFailure {
                 Log.e(LOG_ERROR, it.message.toString())
             }
@@ -165,9 +176,14 @@ class StudyManagementViewModel(
         content: String,
     ) {
         _studyRounds.value = studyDetails.map { studyDetailUiModel ->
-            studyDetailUiModel.takeIf { it.necessaryTodo.todoId != id } ?: studyDetailUiModel.copy(
-                necessaryTodo = studyDetailUiModel.necessaryTodo.copy(content = content),
-            )
+            studyDetailUiModel.takeIf { it.necessaryTodo.todo.todoId != id }
+                ?: studyDetailUiModel.copy(
+                    necessaryTodo = studyDetailUiModel.necessaryTodo.copy(
+                        studyDetailUiModel.necessaryTodo.todo.copy(
+                            content = content,
+                        ),
+                    ),
+                )
         }
     }
 
@@ -177,9 +193,14 @@ class StudyManagementViewModel(
         isDone: Boolean,
     ) {
         _studyRounds.value = studyDetails.map { studyDetailUiModel ->
-            studyDetailUiModel.takeIf { it.necessaryTodo.todoId != id } ?: studyDetailUiModel.copy(
-                necessaryTodo = studyDetailUiModel.necessaryTodo.copy(isDone = isDone),
-            )
+            studyDetailUiModel.takeIf { it.necessaryTodo.todo.todoId != id }
+                ?: studyDetailUiModel.copy(
+                    necessaryTodo = studyDetailUiModel.necessaryTodo.copy(
+                        studyDetailUiModel.necessaryTodo.todo.copy(
+                            isDone = isDone,
+                        ),
+                    ),
+                )
         }
     }
 
@@ -256,7 +277,7 @@ class StudyManagementViewModel(
         id = id,
         masterId = masterId,
         role = role,
-        necessaryTodo = necessaryTodo.toUiModel(),
+        necessaryTodo = necessaryTodo.toNecessaryTodoUiModel(),
         optionalTodos = optionalTodos.map { it.toOptionalTodoUiModel() },
         studyMembers = members.map { it.toUiModel(masterId) },
 
@@ -287,8 +308,15 @@ class StudyManagementViewModel(
         viewType = OptionalTodoViewType.DISPLAY.viewType,
     )
 
+    private fun Todo.toNecessaryTodoUiModel(): NecessaryTodoUiModel = NecessaryTodoUiModel(
+        todo = this.toUiModel(),
+        isInitialized = content != null,
+    )
+
     companion object {
         private const val DEFAULT_TODO_ID = 0L
+        private const val ROUND_NOT_FOUND = 0
+        private const val CONVERT_PAGE_TO_ROUND = 1
         private const val LOG_ERROR = "ERROR"
 
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {

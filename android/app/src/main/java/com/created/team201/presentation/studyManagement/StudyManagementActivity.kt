@@ -102,7 +102,7 @@ class StudyManagementActivity :
 
         override fun clickOnTodo(id: Long, isDone: Boolean) {
             val currentItemId = binding.vpStudyManagement.currentItem
-            studyManagementViewModel.updateTodo(currentItemId, id, !isDone, studyId)
+            studyManagementViewModel.updateTodo(currentItemId, id, !isDone)
         }
 
         override fun clickOnUpdateTodo(isNecessary: Boolean, todoContent: String) {
@@ -116,7 +116,6 @@ class StudyManagementActivity :
                 currentPage,
                 isNecessary,
                 trimmedTodoContent,
-                studyId,
             )
         }
 

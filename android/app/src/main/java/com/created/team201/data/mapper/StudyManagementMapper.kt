@@ -33,5 +33,5 @@ fun CreateTodo.toRequestBody(): TodoCreateRequestDto = TodoCreateRequestDto(
 
 fun Todo.toTodoUpdateRequestBody(): TodoUpdateRequestDto = TodoUpdateRequestDto(
     isDone = isDone,
-    content = content ?: "",
+    content = content!!,
 )
