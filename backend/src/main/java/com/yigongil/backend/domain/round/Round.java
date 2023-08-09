@@ -175,7 +175,7 @@ public class Round extends BaseEntity {
 
     public boolean isEndAt(LocalDate today) {
         LocalDate endAtDate = endAt.toLocalDate();
-        return endAtDate.equals(today);
+        return endAtDate.isBefore(today) || endAtDate.equals(today);
     }
 
     public void updateEndAt(LocalDateTime endAt) {
@@ -201,6 +201,12 @@ public class Round extends BaseEntity {
                              .orElseThrow(
                                      () -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", member.getGithubId())
                              );
+    }
+
+    public void updateMembersTier() {
+        for (RoundOfMember roundOfMember : roundOfMembers) {
+            roundOfMember.updateMemberTier();
+        }
     }
 
     @Override

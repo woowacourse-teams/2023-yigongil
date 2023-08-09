@@ -10,7 +10,6 @@ import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidNumberOfMaximumStudyMember;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.InvalidStudyNameLengthException;
-import com.yigongil.backend.exception.RoundNotFoundException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -171,15 +170,6 @@ public class Study extends BaseEntity {
         return currentRound.calculateAverageTier();
     }
 
-    public Round findRoundById(Long roundId) {
-        return rounds.stream()
-                     .filter(round -> round.getId().equals(roundId))
-                     .findAny()
-                     .orElseThrow(
-                             () -> new RoundNotFoundException("스터디에 해당 회차가 존재하지 않습니다.", roundId)
-                     );
-    }
-
     public void addMember(Member member) {
         validateStudyProcessingStatus();
         validateMemberSize();
@@ -231,6 +221,7 @@ public class Study extends BaseEntity {
 
     private void finishStudy() {
         this.processingStatus = ProcessingStatus.END;
+        currentRound.updateMembersTier();
     }
 
     public void startStudy() {
