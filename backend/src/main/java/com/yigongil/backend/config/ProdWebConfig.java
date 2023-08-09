@@ -2,7 +2,6 @@ package com.yigongil.backend.config;
 
 import com.yigongil.backend.config.auth.AuthInterceptor;
 import com.yigongil.backend.config.auth.MemberArgumentResolver;
-import com.yigongil.backend.utils.querycounter.LoggingInterceptor;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -17,7 +16,7 @@ public class ProdWebConfig implements WebMvcConfigurer {
     private final MemberArgumentResolver memberArgumentResolver;
     private final AuthInterceptor authInterceptor;
 
-    public ProdWebConfig(MemberArgumentResolver memberArgumentResolver, AuthInterceptor authInterceptor, LoggingInterceptor loggingInterceptor) {
+    public ProdWebConfig(MemberArgumentResolver memberArgumentResolver, AuthInterceptor authInterceptor) {
         this.memberArgumentResolver = memberArgumentResolver;
         this.authInterceptor = authInterceptor;
     }
