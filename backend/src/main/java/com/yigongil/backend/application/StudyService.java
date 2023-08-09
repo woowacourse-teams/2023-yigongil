@@ -94,7 +94,6 @@ public class StudyService {
         return toRecruitingStudyResponse(studies);
     }
 
-
     private List<RecruitingStudyResponse> toRecruitingStudyResponse(Page<Study> studies) {
         return studies.get()
                       .map(RecruitingStudyResponse::from)
