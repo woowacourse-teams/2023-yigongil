@@ -15,4 +15,11 @@ data class StudyDetail(
     val introduction: String,
     val members: List<Member>,
     val rounds: List<Round>,
-)
+) {
+    companion object {
+        private const val START_MEMBER_CONDITION = 2
+
+        fun canStartStudy(numberOfCurrentMembers: Int): Boolean =
+            numberOfCurrentMembers >= START_MEMBER_CONDITION
+    }
+}

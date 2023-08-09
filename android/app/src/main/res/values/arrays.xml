@@ -10,13 +10,6 @@
         <item>@string/multiPicker_display_name_week</item>
     </string-array>
 
-    <!-- 온보딩 -->
-    <string-array name="onBoardingAvailableNicknameIntroductions">
-        <item>@string/onBoarding_unAvailable_nickname</item>
-        <item>@string/onBoarding_available_nickname</item>
-        <item>@string/onBoarding_duplicate_nickname</item>
-    </string-array>
-
     <!-- 스터디 관리 탭 -->
     <string-array name="tabLayoutTitles">
         <item>@string/study_manage_joined_tab</item>
