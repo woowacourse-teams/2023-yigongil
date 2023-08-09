@@ -24,6 +24,7 @@ import kotlinx.coroutines.launch
 
 class UpdateStudyViewModel(
     private val createStudyRepository: CreateStudyRepository,
+    viewMode: String,
 ) : ViewModel() {
     private val _name: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
     val name: NonNullLiveData<String>
@@ -64,6 +65,11 @@ class UpdateStudyViewModel(
         get() = _studyState
 
     private var isOpenStudy: Boolean = false
+
+    init {
+        if (viewMode == UpdateStudyActivity.EDIT_MODE) {
+        }
+    }
 
     fun setName(name: String) {
         _name.value = name.replace("\n", "")
@@ -138,14 +144,14 @@ class UpdateStudyViewModel(
     private fun Int.isNotZero(): Boolean = this != 0
 
     companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
+        fun Factory(mode: String): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val repository = CreateStudyRepositoryImpl(
                     CreateStudyDataSourceImpl(
                         NetworkServiceModule.createStudyService,
                     ),
                 )
-                UpdateStudyViewModel(repository)
+                UpdateStudyViewModel(repository, mode)
             }
         }
     }

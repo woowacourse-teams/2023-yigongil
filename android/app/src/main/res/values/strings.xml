@@ -111,7 +111,8 @@
     <string name="custom_profile_image_content_description">프로필 이미지</string>
 
     <!--스터디 개설 뷰-->
-    <string name="createStudy_toolbar_title">스터디 만들기</string>
+    <string name="createStudy_toolbar_title_create">스터디 만들기</string>
+    <string name="createStudy_toolbar_title_edit">수정하기</string>
     <string name="createStudy_study_hint_name">제목을 입력해주세요.</string>
     <string name="createStudy_study_hint_introduction">스터디를 소개해주세요.</string>
     <string name="createStudy_button_created">작성완료</string>

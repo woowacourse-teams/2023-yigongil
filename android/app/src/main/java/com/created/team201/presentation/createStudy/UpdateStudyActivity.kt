@@ -23,14 +23,31 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class UpdateStudyActivity :
     BindingActivity<ActivityUpdateStudyBinding>(R.layout.activity_update_study) {
 
-    private val viewModel: UpdateStudyViewModel by viewModels { UpdateStudyViewModel.Factory }
+    private val viewModel: UpdateStudyViewModel by viewModels {
+        UpdateStudyViewModel.Factory(
+            intent.getStringExtra(VIEW_MODE) ?: throw IllegalArgumentException(),
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initBinding()
+        initView()
         initActionBar()
         setObserveCreateStudyResult()
+    }
+
+    private fun initView() {
+        when (intent.getStringExtra(VIEW_MODE)) {
+            EDIT_MODE ->
+                binding.tbCreateStudy.title =
+                    getString(R.string.createStudy_toolbar_title_edit)
+
+            CREATE_MODE ->
+                binding.tbCreateStudy.title =
+                    getString(R.string.createStudy_toolbar_title_create)
+        }
     }
 
     private fun initBinding() {
