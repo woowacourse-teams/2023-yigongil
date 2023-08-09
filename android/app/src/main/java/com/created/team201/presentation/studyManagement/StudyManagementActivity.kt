@@ -65,7 +65,8 @@ class StudyManagementActivity :
     }
 
     private fun initPage() {
-        studyManagementViewModel.isStudyRoundsLoaded.observe(this) {
+        studyManagementViewModel.isStudyRoundsLoaded.observe(this) { isStudyRoundsLoaded ->
+            if (!isStudyRoundsLoaded) return@observe
             val currentRound = studyManagementViewModel.currentRound.value ?: FIRST_ROUND
             binding.vpStudyManagement.setCurrentItem(currentRound - CONVERT_TO_PAGE, true)
             binding.skeletonStudyManagement.clItemStudyManagementSkeleton.visibility = GONE
