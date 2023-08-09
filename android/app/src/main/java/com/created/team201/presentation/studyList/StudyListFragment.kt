@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.R
 import com.created.team201.databinding.FragmentStudyListBinding
 import com.created.team201.presentation.common.BindingFragment
-import com.created.team201.presentation.createStudy.CreateStudyActivity
+import com.created.team201.presentation.createStudy.UpdateStudyActivity
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
 import com.created.team201.presentation.studyList.adapter.StudyListAdapter
 import kotlinx.coroutines.launch
@@ -88,7 +88,13 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
     private fun setUpCreateStudyListener() {
         binding.fabStudyListCreateButton.setOnClickListener {
-            startActivity(CreateStudyActivity.getIntent(requireContext()))
+            startActivity(
+                UpdateStudyActivity.getIntent(
+                    context = requireContext(),
+                    viewMode = UpdateStudyActivity.CREATE_MODE,
+                    studyId = null,
+                ),
+            )
         }
     }
 

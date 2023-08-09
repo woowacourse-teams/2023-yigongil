@@ -22,7 +22,7 @@ import com.created.team201.util.NonNullMutableLiveData
 import com.created.team201.util.addSourceList
 import kotlinx.coroutines.launch
 
-class CreateStudyViewModel(
+class UpdateStudyViewModel(
     private val createStudyRepository: CreateStudyRepository,
 ) : ViewModel() {
     private val _name: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
@@ -145,7 +145,7 @@ class CreateStudyViewModel(
                         NetworkServiceModule.createStudyService,
                     ),
                 )
-                CreateStudyViewModel(repository)
+                UpdateStudyViewModel(repository)
             }
         }
     }

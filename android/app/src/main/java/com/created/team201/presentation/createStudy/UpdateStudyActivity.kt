@@ -8,11 +8,11 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.fragment.app.commit
 import com.created.team201.R
-import com.created.team201.databinding.ActivityCreateStudyBinding
+import com.created.team201.databinding.ActivityUpdateStudyBinding
 import com.created.team201.presentation.common.BindingActivity
-import com.created.team201.presentation.createStudy.CreateStudyViewModel.State.FAIL
-import com.created.team201.presentation.createStudy.CreateStudyViewModel.State.IDLE
-import com.created.team201.presentation.createStudy.CreateStudyViewModel.State.Success
+import com.created.team201.presentation.createStudy.UpdateStudyViewModel.State.FAIL
+import com.created.team201.presentation.createStudy.UpdateStudyViewModel.State.IDLE
+import com.created.team201.presentation.createStudy.UpdateStudyViewModel.State.Success
 import com.created.team201.presentation.createStudy.bottomSheet.CycleBottomSheetFragment
 import com.created.team201.presentation.createStudy.bottomSheet.PeopleCountBottomSheetFragment
 import com.created.team201.presentation.createStudy.bottomSheet.PeriodBottomSheetFragment
@@ -20,10 +20,10 @@ import com.created.team201.presentation.createStudy.bottomSheet.StartDateBottomS
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class CreateStudyActivity :
-    BindingActivity<ActivityCreateStudyBinding>(R.layout.activity_create_study) {
+class UpdateStudyActivity :
+    BindingActivity<ActivityUpdateStudyBinding>(R.layout.activity_update_study) {
 
-    private val viewModel: CreateStudyViewModel by viewModels { CreateStudyViewModel.Factory }
+    private val viewModel: UpdateStudyViewModel by viewModels { UpdateStudyViewModel.Factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -122,9 +122,16 @@ class CreateStudyActivity :
     }
 
     companion object {
-        fun getIntent(context: Context): Intent =
-            Intent(context, CreateStudyActivity::class.java).also {
-                it.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        private const val VIEW_MODE = "VIEW_MODE"
+        private const val STUDY_KEY = "STUDY_KEY"
+        const val CREATE_MODE = "CREATE_MODE"
+        const val EDIT_MODE = "EDIT_MODE"
+
+        fun getIntent(context: Context, viewMode: String, studyId: Long?): Intent =
+            Intent(context, UpdateStudyActivity::class.java).apply {
+                putExtra(VIEW_MODE, viewMode)
+                putExtra(STUDY_KEY, studyId)
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             }
     }
 }

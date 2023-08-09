@@ -6,12 +6,12 @@ import androidx.fragment.app.activityViewModels
 import com.created.team201.R
 import com.created.team201.databinding.FragmentCycleBottomSheetBinding
 import com.created.team201.presentation.common.BindingBottomSheetFragment
-import com.created.team201.presentation.createStudy.CreateStudyViewModel
+import com.created.team201.presentation.createStudy.UpdateStudyViewModel
 import com.created.team201.presentation.createStudy.custom.MultiPickerChangeListener
 
 class CycleBottomSheetFragment :
     BindingBottomSheetFragment<FragmentCycleBottomSheetBinding>(R.layout.fragment_cycle_bottom_sheet) {
-    private val viewModel: CreateStudyViewModel by activityViewModels()
+    private val viewModel: UpdateStudyViewModel by activityViewModels()
 
     private val numbers: IntArray by lazy {
         resources.getIntArray(R.array.multiPickerMaxNumbers)

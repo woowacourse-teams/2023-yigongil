@@ -2,7 +2,7 @@ package com.created.team201.presentation.createStudy
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.created.domain.repository.CreateStudyRepository
-import com.created.team201.presentation.createStudy.CreateStudyViewModel.State.Success
+import com.created.team201.presentation.createStudy.UpdateStudyViewModel.State.Success
 import com.created.team201.presentation.util.getOrAwaitValue
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -14,9 +14,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class CreateStudyViewModelTest {
+class UpdateStudyViewModelTest {
     private lateinit var repository: CreateStudyRepository
-    private lateinit var viewModel: CreateStudyViewModel
+    private lateinit var viewModel: UpdateStudyViewModel
 
     // LiveData 테스트를 위한 룰 선언
     @get:Rule
@@ -32,7 +32,7 @@ class CreateStudyViewModelTest {
     @Before
     fun setupViewModel() {
         repository = mockk()
-        viewModel = CreateStudyViewModel(repository)
+        viewModel = UpdateStudyViewModel(repository)
     }
 
     @ExperimentalCoroutinesApi
