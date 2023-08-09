@@ -102,6 +102,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         searchView.setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 Toast.makeText(requireContext(), query, Toast.LENGTH_SHORT).show()
+                searchView.hideKeyboard()
                 return true
             }
 
