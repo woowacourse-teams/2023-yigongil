@@ -28,7 +28,6 @@ fun StudyMemberResponseDto.toDomain(): StudyMember = StudyMember(
 )
 
 fun CreateTodo.toRequestBody(): TodoCreateRequestDto = TodoCreateRequestDto(
-    roundId = roundId,
     content = content,
 )
 

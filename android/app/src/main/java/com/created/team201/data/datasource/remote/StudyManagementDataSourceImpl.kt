@@ -24,13 +24,6 @@ class StudyManagementDataSourceImpl(
         service.patchTodo(studyId, todoId, todoRequestDto)
     }
 
-    override suspend fun createTodo(
-        studyId: Long,
-        todoCreateRequestDto: TodoCreateRequestDto,
-    ): Response<Unit> {
-        return service.createTodo(studyId, todoCreateRequestDto)
-    }
-
     override suspend fun createNecessaryTodo(
         roundId: Long,
         todoCreateRequestDto: TodoCreateRequestDto,

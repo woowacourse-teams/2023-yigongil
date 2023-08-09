@@ -5,8 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TodoCreateRequestDto(
-    @SerialName("roundId")
-    val roundId: Long,
     @SerialName("content")
     val content: String,
 )

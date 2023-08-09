@@ -127,7 +127,7 @@ class StudyManagementActivity :
                 return
             }
             val currentPage = binding.vpStudyManagement.currentItem
-            studyManagementViewModel.addOptionalTodo(studyId, currentPage, trimmedTodoContent)
+            studyManagementViewModel.addOptionalTodo(currentPage, trimmedTodoContent)
         }
 
         override fun onClickAddOptionalTodo(optionalTodoCount: Int) {

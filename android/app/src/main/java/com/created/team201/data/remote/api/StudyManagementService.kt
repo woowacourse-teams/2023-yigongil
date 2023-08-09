@@ -32,12 +32,6 @@ interface StudyManagementService {
         @Body todoRequestDto: TodoRequestDto,
     )
 
-    @POST("/v1/studies/{studyId}/todos")
-    suspend fun createTodo(
-        @Path("studyId") studyId: Long,
-        @Body todoCreateRequestDto: TodoCreateRequestDto,
-    ): Response<Unit>
-
     @POST("/v1/rounds/{roundId}/todos/necessary")
     suspend fun createNecessaryTodo(
         @Path("roundId") roundId: Long,

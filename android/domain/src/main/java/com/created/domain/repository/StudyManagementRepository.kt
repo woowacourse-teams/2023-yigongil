@@ -13,8 +13,6 @@ interface StudyManagementRepository {
 
     suspend fun patchTodo(studyId: Long, todo: Todo, isNecessary: Boolean)
 
-    suspend fun createTodo(studyId: Long, createTodo: CreateTodo): Result<Long>
-
     suspend fun createNecessaryTodo(roundId: Long, createTodo: CreateTodo): Result<Long>
 
     suspend fun createOptionalTodo(roundId: Long, createTodo: CreateTodo): Result<Long>

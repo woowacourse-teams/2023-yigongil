@@ -199,13 +199,13 @@ class StudyManagementViewModel(
         }
     }
 
-    fun addOptionalTodo(studyId: Long, currentPage: Int, todoContent: String) {
+    fun addOptionalTodo(currentPage: Int, todoContent: String) {
         val currentStudyRounds = studyRounds.value ?: listOf()
         val currentRound = currentStudyRounds[currentPage]
 
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
-                repository.createTodo(studyId, CreateTodo(currentRound.id, todoContent))
+                repository.createOptionalTodo(currentRound.id, CreateTodo(todoContent))
             }.onSuccess { result ->
                 val todoId = result.getOrDefault(DEFAULT_TODO_ID)
                 val newOptionalTodos = getNewOptionalTodos(currentRound, todoId, todoContent)
