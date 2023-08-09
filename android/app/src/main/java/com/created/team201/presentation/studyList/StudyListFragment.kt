@@ -114,7 +114,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
     private fun setUpStudyListSettings() {
         val dividerItemDecoration = DividerItemDecoration(context, VERTICAL)
-        getDrawable(requireContext(), R.drawable.divider_study_list)?.let {
+        getDrawable(requireContext(), R.drawable.divider_recyclerview_line)?.let {
             dividerItemDecoration.setDrawable(it)
         }
 
