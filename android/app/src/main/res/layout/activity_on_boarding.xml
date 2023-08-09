@@ -156,6 +156,7 @@
             android:enabled="@{viewModel.isEnableSave()}"
             android:paddingVertical="14dp"
             android:text="@string/onBoarding_btn_text"
+            android:onClick="@{() -> viewModel.patchOnBoarding()}"
             android:textAlignment="center"
             android:textAppearance="@style/button_sb18"
             android:textColor="@color/tv_color_disabled"

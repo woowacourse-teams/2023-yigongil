@@ -8,18 +8,30 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.created.domain.model.Nickname
+import com.created.domain.model.OnBoarding
+import com.created.domain.repository.OnBoardingRepository
+import com.created.team201.data.datasource.remote.OnBoardingDataSourceImpl
+import com.created.team201.data.remote.NetworkServiceModule
+import com.created.team201.data.repository.OnBoardingRepositoryImpl
 import com.created.team201.presentation.onBoarding.model.NicknameState
 import com.created.team201.presentation.onBoarding.model.NicknameUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
 import com.created.team201.util.addSourceList
+import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
-class OnBoardingViewModel : ViewModel() {
-    private val _nickname: MutableLiveData<NicknameUiModel> = MutableLiveData()
-    val nickname: LiveData<NicknameUiModel>
+class OnBoardingViewModel(
+    private val onBoardingRepository: OnBoardingRepository
+) : ViewModel() {
+    private val _nickname: NonNullMutableLiveData<NicknameUiModel> = NonNullMutableLiveData(
+        NicknameUiModel("")
+    )
+    val nickname: NonNullLiveData<NicknameUiModel>
         get() = _nickname
 
     private val _introduction: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
@@ -36,6 +48,12 @@ class OnBoardingViewModel : ViewModel() {
                 isInitializeOnBoarding()
             }
         }
+
+    private var isSaveOnBoarding: Boolean = false
+    private val _onBoardingState: MutableLiveData<State> = MutableLiveData<State>()
+    val onBoardingState: LiveData<State>
+        get() = _onBoardingState
+
     val isEnableSave: LiveData<Boolean>
         get() = _isEnableSave
 
@@ -45,6 +63,36 @@ class OnBoardingViewModel : ViewModel() {
 
     fun setIntroduction(introduction: String) {
         _introduction.value = introduction
+    }
+
+    fun patchOnBoarding() {
+        if (isSaveOnBoarding) return
+        isSaveOnBoarding = true
+
+        viewModelScope.launch {
+            OnBoarding(nickname.value.toDomain(), introduction.value).apply {
+                onBoardingRepository.patchOnBoarding(this)
+                    .onSuccess { result ->
+                        _onBoardingState.value = object : State.SUCCESS {
+                            override val message: String
+                                get() = result
+                        }
+                    }.onFailure { result ->
+                        _onBoardingState.value = object : State.FAIL {
+                            override val message: String
+                                get() = result.message.toString()
+                        }
+                    }
+            }
+        }
+    }
+
+    sealed interface State {
+        val message: String
+
+        interface SUCCESS : State
+        interface FAIL : State
+        interface IDLE : State
     }
 
     fun getInputFilter(): Array<InputFilter> = arrayOf(object : InputFilter {
@@ -65,7 +113,9 @@ class OnBoardingViewModel : ViewModel() {
     }, LengthFilter(MAX_NICKNAME_LENGTH))
 
     private fun isInitializeOnBoarding(): Boolean =
-        nickname.value != null && nicknameState.value == NicknameState.AVAILABLE
+        nickname.value.nickname.isBlank().not() && nicknameState.value == NicknameState.AVAILABLE
+
+    private fun NicknameUiModel.toDomain(): Nickname = Nickname(nickname = nickname)
 
     companion object {
         private val PATTERN_NICKNAME = Pattern.compile("^[_a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]+$")
@@ -73,7 +123,11 @@ class OnBoardingViewModel : ViewModel() {
 
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                OnBoardingViewModel()
+                OnBoardingViewModel(
+                    OnBoardingRepositoryImpl(
+                        OnBoardingDataSourceImpl(NetworkServiceModule.onBoardingService)
+                    )
+                )
             }
         }
     }
