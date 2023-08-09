@@ -65,6 +65,21 @@ class OnBoardingViewModel(
         _introduction.value = introduction
     }
 
+    fun getAvailableNickname() {
+        viewModelScope.launch {
+            onBoardingRepository.getAvailableNickname(nickname.value.toDomain())
+                .onSuccess { result ->
+                    when (result) {
+                        false -> _nicknameState.value = NicknameState.AVAILABLE
+                        true -> _nicknameState.value = NicknameState.DUPLICATE
+                    }
+                }
+                .onFailure {
+                    _nicknameState.value = NicknameState.UNAVAILABLE
+                }
+        }
+    }
+
     fun patchOnBoarding() {
         if (isSaveOnBoarding) return
         isSaveOnBoarding = true
@@ -72,27 +87,19 @@ class OnBoardingViewModel(
         viewModelScope.launch {
             OnBoarding(nickname.value.toDomain(), introduction.value).apply {
                 onBoardingRepository.patchOnBoarding(this)
-                    .onSuccess { result ->
-                        _onBoardingState.value = object : State.SUCCESS {
-                            override val message: String
-                                get() = result
-                        }
-                    }.onFailure { result ->
-                        _onBoardingState.value = object : State.FAIL {
-                            override val message: String
-                                get() = result.message.toString()
-                        }
+                    .onSuccess {
+                        _onBoardingState.value = State.SUCCESS
+                    }.onFailure {
+                        _onBoardingState.value = State.FAIL
                     }
             }
         }
     }
 
     sealed interface State {
-        val message: String
-
-        interface SUCCESS : State
-        interface FAIL : State
-        interface IDLE : State
+        object SUCCESS : State
+        object FAIL : State
+        object IDLE : State
     }
 
     fun getInputFilter(): Array<InputFilter> = arrayOf(object : InputFilter {

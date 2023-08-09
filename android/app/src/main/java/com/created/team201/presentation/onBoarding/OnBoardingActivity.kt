@@ -23,6 +23,7 @@ class OnBoardingActivity :
         super.onCreate(savedInstanceState)
 
         initBinding()
+        setValidateEditText()
         setObserveOnBoardingResult()
     }
 
@@ -31,18 +32,25 @@ class OnBoardingActivity :
         binding.viewModel = viewModel
     }
 
+    private fun setValidateEditText() {
+        binding.etOnBoardingNickname.setOnFocusChangeListener { _, focus ->
+            if (focus) return@setOnFocusChangeListener
+            viewModel.getAvailableNickname()
+        }
+    }
+
     private fun setObserveOnBoardingResult() {
         viewModel.onBoardingState.observe(this) { state ->
             when (state) {
-                is SUCCESS -> {
+                SUCCESS -> {
                     navigateToMain()
                 }
 
-                is FAIL -> {
-                    showToast(state.message)
+                FAIL -> {
+                    showToast(getString(R.string.onBoarding_toast_fail))
                 }
 
-                is IDLE -> throw IllegalStateException()
+                IDLE -> throw IllegalStateException()
             }
         }
     }
