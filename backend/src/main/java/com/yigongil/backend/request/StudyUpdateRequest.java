@@ -5,7 +5,7 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
-public record StudyCreateRequest(
+public record StudyUpdateRequest(
         @NotBlank(message = "스터디 이름이 공백입니다.")
         String name,
         @Positive(message = "스터디 멤버 정원은 음수일 수 없습니다.")

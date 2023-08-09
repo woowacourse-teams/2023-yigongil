@@ -5,6 +5,7 @@ import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.request.ProfileUpdateRequest;
 import com.yigongil.backend.response.MyProfileResponse;
+import com.yigongil.backend.response.NicknameValidationResponse;
 import com.yigongil.backend.response.ProfileResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/v1/members")
@@ -54,4 +56,9 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping(path = "/exists")
+    public ResponseEntity<NicknameValidationResponse> existsByNickname(@RequestParam String nickname) {
+        NicknameValidationResponse response = memberService.existsByNickname(nickname);
+        return ResponseEntity.ok(response);
+    }
 }
