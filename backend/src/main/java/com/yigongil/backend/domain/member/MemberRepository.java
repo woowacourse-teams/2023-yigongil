@@ -20,4 +20,6 @@ public interface MemberRepository extends Repository<Member, Long> {
             on r.id = :id
             """)
     List<Member> findMembersByRoundId(@Param("id") Long id);
+
+    boolean existsByNickname(Nickname nickname);
 }

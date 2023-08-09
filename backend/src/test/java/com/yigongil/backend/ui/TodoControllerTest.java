@@ -20,6 +20,7 @@ import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
+import com.yigongil.backend.ui.exceptionhandler.InternalServerErrorMessageConverter;
 import com.yigongil.backend.utils.querycounter.ApiQueryCounter;
 import java.util.Optional;
 import org.apache.http.HttpHeaders;
@@ -54,6 +55,9 @@ class TodoControllerTest {
 
     @MockBean
     private ApiQueryCounter apiQueryCounter;
+
+    @MockBean
+    private InternalServerErrorMessageConverter internalServerErrorMessageConverter;
 
     @BeforeEach
     void setUp() {
