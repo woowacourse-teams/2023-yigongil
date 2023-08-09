@@ -15,7 +15,7 @@ import com.yigongil.backend.config.auth.AuthContext;
 import com.yigongil.backend.config.oauth.JwtTokenProvider;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.fixture.MemberFixture;
-import com.yigongil.backend.request.StudyCreateRequest;
+import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.ui.exceptionhandler.InternalServerErrorMessageConverter;
 import com.yigongil.backend.utils.querycounter.ApiQueryCounter;
 import java.time.LocalDate;
@@ -68,7 +68,7 @@ class StudyControllerTest {
     @Test
     void 스터디를_개설한다() throws Exception {
         LocalDate startAt = LocalDate.now().plus(5L, ChronoUnit.MONTHS);
-        StudyCreateRequest request = new StudyCreateRequest(
+        StudyUpdateRequest request = new StudyUpdateRequest(
                 "자바",
                 5,
                 startAt,

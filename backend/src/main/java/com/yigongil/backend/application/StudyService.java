@@ -15,7 +15,7 @@ import com.yigongil.backend.domain.studymember.StudyResult;
 import com.yigongil.backend.exception.ApplicantAlreadyExistException;
 import com.yigongil.backend.exception.ApplicantNotFoundException;
 import com.yigongil.backend.exception.StudyNotFoundException;
-import com.yigongil.backend.request.StudyCreateRequest;
+import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
@@ -49,7 +49,7 @@ public class StudyService {
     }
 
     @Transactional
-    public Long create(Member member, StudyCreateRequest request) {
+    public Long create(Member member, StudyUpdateRequest request) {
         Study study = Study.initializeStudyOf(
                 request.name(),
                 request.introduction(),
@@ -251,6 +251,20 @@ public class StudyService {
 
         study.startStudy();
         publisher.publishEvent(new StudyStartedEvent(study));
+    }
+
+    @Transactional
+    public void update(Member member, Long studyId, StudyUpdateRequest request) {
+        Study study = findStudyById(studyId);
+        study.updateInformation(
+                member,
+                request.name(),
+                request.numberOfMaximumMembers(),
+                request.startAt().atStartOfDay(),
+                request.totalRoundCount(),
+                request.periodOfRound(),
+                request.introduction()
+        );
     }
 
     private Study findStudyById(Long studyId) {

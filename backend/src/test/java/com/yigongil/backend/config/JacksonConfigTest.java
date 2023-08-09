@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yigongil.backend.request.StudyCreateRequest;
+import com.yigongil.backend.request.StudyUpdateRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -38,7 +38,7 @@ class JacksonConfigTest {
                 """.formatted(startAtInput);
 
         // when
-        StudyCreateRequest request = objectMapper.readValue(json, StudyCreateRequest.class);
+        StudyUpdateRequest request = objectMapper.readValue(json, StudyUpdateRequest.class);
 
         // then
         assertThat(request.startAt()).isEqualTo(startAt);
