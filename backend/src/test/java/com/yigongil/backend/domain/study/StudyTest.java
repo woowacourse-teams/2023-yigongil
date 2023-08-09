@@ -91,10 +91,14 @@ class StudyTest {
         LocalDateTime endAt = currentRound.getEndAt();
 
         // when
-        boolean actual = study.isCurrentRoundEndAt(endAt.toLocalDate());
+        boolean actual1 = study.isCurrentRoundEndAt(endAt.toLocalDate());
+        boolean actual2 = study.isCurrentRoundEndAt(endAt.plusDays(1).toLocalDate());
 
         // then
-        assertThat(actual).isTrue();
+        assertAll(
+                () -> assertThat(actual1).isTrue(),
+                () -> assertThat(actual2).isTrue()
+        );
     }
 
     @Test
@@ -105,7 +109,7 @@ class StudyTest {
         LocalDateTime endAt = currentRound.getEndAt();
 
         // when
-        boolean actual = study.isCurrentRoundEndAt(endAt.plusDays(1).toLocalDate());
+        boolean actual = study.isCurrentRoundEndAt(endAt.minusDays(1).toLocalDate());
 
         // then
         assertThat(actual).isFalse();
