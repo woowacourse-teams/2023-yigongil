@@ -2,12 +2,14 @@ package com.yigongil.backend.application;
 
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
+import com.yigongil.backend.domain.member.Nickname;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
 import com.yigongil.backend.exception.MemberNotFoundException;
 import com.yigongil.backend.request.ProfileUpdateRequest;
 import com.yigongil.backend.response.FinishedStudyResponse;
+import com.yigongil.backend.response.NicknameValidationResponse;
 import com.yigongil.backend.response.ProfileResponse;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -88,5 +90,11 @@ public class MemberService {
     @Transactional
     public void update(Member member, ProfileUpdateRequest request) {
         member.updateProfile(request.nickname(), request.introduction());
+    }
+
+    @Transactional(readOnly = true)
+    public NicknameValidationResponse existsByNickname(String nickname) {
+        boolean exists = memberRepository.existsByNickname(new Nickname(nickname));
+        return new NicknameValidationResponse(exists);
     }
 }

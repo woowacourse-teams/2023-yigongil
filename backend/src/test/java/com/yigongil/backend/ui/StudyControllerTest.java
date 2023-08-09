@@ -16,6 +16,7 @@ import com.yigongil.backend.config.oauth.JwtTokenProvider;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.request.StudyUpdateRequest;
+import com.yigongil.backend.ui.exceptionhandler.InternalServerErrorMessageConverter;
 import com.yigongil.backend.utils.querycounter.ApiQueryCounter;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -56,13 +57,16 @@ class StudyControllerTest {
     @MockBean
     private ApiQueryCounter apiQueryCounter;
 
+    @MockBean
+    private InternalServerErrorMessageConverter internalServerErrorMessageConverter;
+
     @BeforeEach
     void setUp() {
         given(memberRepository.findById(anyLong())).willReturn(Optional.of(MemberFixture.김진우.toMember()));
     }
 
     @Test
-    void 프로필_정보를_업데이트_한다() throws Exception {
+    void 스터디를_개설한다() throws Exception {
         LocalDate startAt = LocalDate.now().plus(5L, ChronoUnit.MONTHS);
         StudyUpdateRequest request = new StudyUpdateRequest(
                 "자바",

@@ -28,7 +28,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/v1/**")
                 .excludePathPatterns("/v1/login/**")
                 .excludePathPatterns("/v1/members/{id:[0-9]\\d*}")
-                .excludePathPatterns("/v1/studies/recruiting")
+                .excludePathPatterns("/v1/members/exists")
+                .excludePathPatterns("/v1/studies/recruiting/**")
                 .order(2);
 
         registry.addInterceptor(loggingInterceptor)
