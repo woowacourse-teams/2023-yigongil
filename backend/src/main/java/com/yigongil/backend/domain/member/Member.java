@@ -17,6 +17,7 @@ public class Member extends BaseEntity {
 
     private static final int MASTER_NUMBER = 0;
     private static final int PARTICIPANT_NUMBER = 1;
+    private static final int MAXIMUM_TIER = 5;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -77,6 +78,12 @@ public class Member extends BaseEntity {
             return null;
         }
         return introduction.getIntroduction();
+    }
+
+    public void updateTier() {
+        if (tier < MAXIMUM_TIER) {
+            tier += 1;
+        }
     }
 
     @Override

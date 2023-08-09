@@ -203,6 +203,12 @@ public class Round extends BaseEntity {
                              );
     }
 
+    public void updateTier() {
+        for (RoundOfMember roundOfMember : roundOfMembers) {
+            roundOfMember.updateTier();
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
