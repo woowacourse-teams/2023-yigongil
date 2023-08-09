@@ -17,6 +17,7 @@ public class Member extends BaseEntity {
 
     private static final int MASTER_NUMBER = 0;
     private static final int PARTICIPANT_NUMBER = 1;
+    private static final int MAXIMUM_TIER = 5;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -52,7 +53,7 @@ public class Member extends BaseEntity {
         this.githubId = githubId;
         this.nickname = new Nickname(nickname);
         this.profileImageUrl = profileImageUrl;
-        this.tier = tier;
+        this.tier = tier == null ? 1 : tier;
         this.introduction = new Introduction(introduction);
     }
 
@@ -77,6 +78,12 @@ public class Member extends BaseEntity {
             return null;
         }
         return introduction.getIntroduction();
+    }
+
+    public void upgradeTier() {
+        if (tier < MAXIMUM_TIER) {
+            tier++;
+        }
     }
 
     @Override

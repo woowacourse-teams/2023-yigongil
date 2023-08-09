@@ -1,11 +1,10 @@
 package com.yigongil.backend.domain.studymember;
 
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
-
-import java.util.List;
-import java.util.Optional;
 import org.springframework.data.repository.query.Param;
 
 public interface StudyMemberRepository extends Repository<StudyMember, Long> {
@@ -46,4 +45,6 @@ public interface StudyMemberRepository extends Repository<StudyMember, Long> {
     List<StudyMember> findAllByMemberIdAndParticipatingAndNotEnd(@Param("memberId") Long memberId);
 
     Long countByMemberIdAndStudyResult(Long memberId, StudyResult studyResult);
+
+    void deleteAllByStudyIdAndRole(Long studyId, Role role);
 }

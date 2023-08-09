@@ -39,7 +39,7 @@ public enum RoundFixture {
                     .roundNumber(roundNumber)
                     .master(master)
                     .endAt(LocalDateTime.now())
-                    .roundOfMembers(new ArrayList<>(List.of(RoundOfMemberFixture.김진우_라운드_삼.toRoundOfMember())))
+                    .roundOfMembers(new ArrayList<>(List.of(RoundOfMemberFixture.김진우_라운드_삼.toRoundOfMember(), RoundOfMemberFixture.노이만_라오멤.toRoundOfMember())))
                     .build();
     }
 

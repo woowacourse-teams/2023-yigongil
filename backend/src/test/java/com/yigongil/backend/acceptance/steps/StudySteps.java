@@ -9,7 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.config.oauth.JwtTokenProvider;
 import com.yigongil.backend.domain.study.ProcessingStatus;
-import com.yigongil.backend.request.StudyCreateRequest;
+import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.HomeResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.RoundNumberResponse;
@@ -20,6 +20,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -39,17 +41,18 @@ public class StudySteps {
         this.tokenProvider = tokenProvider;
     }
 
-    @Given("{string}가 {string}, {string}, {string}, {string}, {string}, {string}로 스터디를 개설한다.")
+    @Given("{string}가 제목-{string}, 정원-{string}명, 예상시작일-{string}일 뒤, 총 회차-{string}회, 주기-{string}, 소개-{string}로 스터디를 개설한다.")
     public void 스터디를_개설한다(
             String masterGithubId,
             String name,
             String numberOfMaximumMembers,
-            String startAt,
+            String leftDays,
             String totalRoundCount,
             String periodOfRound,
             String introduction
     ) throws JsonProcessingException {
-        StudyCreateRequest request = new StudyCreateRequest(
+        LocalDate startAt = LocalDate.now().plus(Long.parseLong(leftDays), ChronoUnit.DAYS);
+        StudyUpdateRequest request = new StudyUpdateRequest(
                 name,
                 Integer.parseInt(numberOfMaximumMembers),
                 startAt,
@@ -109,14 +112,16 @@ public class StudySteps {
         sharedContext.setResponse(response);
     }
 
-    @Then("스터디 상세조회가 입력한 대로 되어있다.")
-    public void 스터디상세_조회에서_해당_스터디를_확인할_수_있다() {
+    @Then("스터디 상세조회 결과가 제목-{string}, 정원-{string}로 조회된다.")
+    public void 스터디상세_조회에서_해당_스터디를_확인할_수_있다(String studyName, String maximumNumber) {
         StudyDetailResponse response = sharedContext.getResponse()
                                                     .as(StudyDetailResponse.class);
 
         assertAll(
-                () -> assertThat(response.name()).isEqualTo("자바"),
-                () -> assertThat(response.numberOfMaximumMembers()).isEqualTo(5)
+                () -> assertThat(response.name()).isEqualTo(studyName),
+                () -> assertThat(
+                        response.numberOfMaximumMembers()).isEqualTo(Integer.parseInt(maximumNumber)
+                )
         );
     }
 
@@ -142,7 +147,8 @@ public class StudySteps {
                                            .as(RoundResponse.class);
 
         assertAll(
-                () -> assertThat(round.masterId()).isEqualTo(tokenProvider.parseToken((String) sharedContext.getParameter(masterGithubId))),
+                () -> assertThat(round.masterId()).isEqualTo(tokenProvider.parseToken(
+                        (String) sharedContext.getParameter(masterGithubId))),
                 () -> assertThat(round.id()).isEqualTo(sharedContext.getParameter("roundId"))
         );
     }
@@ -154,7 +160,8 @@ public class StudySteps {
         String studyId = (String) sharedContext.getParameter(studyName);
 
         StudyDetailResponse studyDetailResponse = given().log().all()
-                                                         .header(HttpHeaders.AUTHORIZATION, memberId)
+                                                         .header(HttpHeaders.AUTHORIZATION,
+                                                                 memberId)
                                                          .when()
                                                          .get("/v1/studies/" + studyId)
                                                          .then().log().all()
@@ -163,7 +170,8 @@ public class StudySteps {
 
         Long roundId = studyDetailResponse.rounds()
                                           .stream()
-                                          .filter(round -> Objects.equals(round.number(), roundNumber))
+                                          .filter(round -> Objects.equals(round.number(),
+                                                  roundNumber))
                                           .findFirst()
                                           .map(RoundNumberResponse::id)
                                           .get();
@@ -208,6 +216,41 @@ public class StudySteps {
         sharedContext.setResponse(response);
     }
 
+    @Given("{string}가 {string} 스터디의 정보를 제목-{string}, 정원-{string}명, 예상시작일-{string}일 뒤, 총 회차-{string}회, 주기-{string}, 소개-{string}로 수정한다.")
+    public void 스터디_정보_수정(
+            String masterGithubId,
+            String originalStudyName,
+            String updateStudyName,
+            String updateNumberOfMaximumMembers,
+            String updateStartAt,
+            String updateTotalRoundCount,
+            String updatePeriodOfRound,
+            String updateIntroduction
+    ) {
+        String memberId = (String) sharedContext.getParameter(masterGithubId);
+        String studyId = (String) sharedContext.getParameter(originalStudyName);
+
+        StudyUpdateRequest request = new StudyUpdateRequest(
+                updateStudyName,
+                Integer.parseInt(updateNumberOfMaximumMembers),
+                LocalDate.now().plus(Long.parseLong(updateStartAt), ChronoUnit.DAYS),
+                Integer.parseInt(updateTotalRoundCount),
+                updatePeriodOfRound,
+                updateIntroduction
+        );
+
+        given().log().all()
+               .header(HttpHeaders.AUTHORIZATION, memberId)
+               .contentType(
+                       MediaType.APPLICATION_JSON_VALUE)
+               .body(request)
+               .when()
+               .put("/v1/studies/{studyId}", studyId)
+               .then().log().all();
+
+        sharedContext.setParameter(updateStudyName, studyId);
+    }
+
     @Then("스터디의 남은 날짜가 null이 아니다.")
     public void 스터디_회차_업데이트_검증() {
         ExtractableResponse<Response> response = sharedContext.getResponse();
@@ -215,5 +258,27 @@ public class StudySteps {
         HomeResponse homeResponse = response.as(HomeResponse.class);
 
         assertThat(homeResponse.studies().get(0).nextDate()).isNotNull();
+    }
+
+    @When("{string}를 검색한다.")
+    public void 검색한다(String search) {
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .when()
+                                                        .get("/v1/studies/recruiting/search?page=0&q=" + search)
+                                                        .then().log().all().extract();
+
+        sharedContext.setResponse(response);
+    }
+
+    @Then("결과가 모두 {string}를 포함하고 {int} 개가 조회된다.")
+    public void 결과가_모두_검색어를_포함한다(String search, int number) {
+        List<RecruitingStudyResponse> responses = sharedContext.getResponse()
+                                                               .jsonPath()
+                                                               .getList(".", RecruitingStudyResponse.class);
+
+        assertAll(
+                () -> assertThat(responses).map(RecruitingStudyResponse::name).allMatch(name -> name.contains(search)),
+                () -> assertThat(responses).hasSize(number)
+        );
     }
 }

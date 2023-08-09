@@ -2,15 +2,15 @@ package com.yigongil.backend.application;
 
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
+import com.yigongil.backend.domain.member.Nickname;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
 import com.yigongil.backend.exception.MemberNotFoundException;
-import com.yigongil.backend.request.MemberJoinRequest;
 import com.yigongil.backend.request.ProfileUpdateRequest;
 import com.yigongil.backend.response.FinishedStudyResponse;
+import com.yigongil.backend.response.NicknameValidationResponse;
 import com.yigongil.backend.response.ProfileResponse;
-import com.yigongil.backend.utils.DateConverter;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +50,7 @@ public class MemberService {
                 member.getNickname(),
                 member.getGithubId(),
                 member.getProfileImageUrl(),
-                (double) studyService.calculateSuccessRate(member),
+                studyService.calculateSuccessRate(member),
                 calculateNumberOfSuccessRounds(member),
                 99, // TODO: 2023/07/27 티어 진행률은 추후 티어 진행 알고리즘 회의 후 추가
                 member.getTier(),
@@ -65,7 +65,7 @@ public class MemberService {
                 study.getId(),
                 study.getName(),
                 study.calculateAverageTier(),
-                DateConverter.toStringFormat(study.getStartAt()),
+                study.getStartAt().toLocalDate(),
                 study.getTotalRoundCount(),
                 study.getPeriodUnit().toStringFormat(study.getPeriodOfRound()),
                 study.sizeOfCurrentMembers(),
@@ -92,15 +92,9 @@ public class MemberService {
         member.updateProfile(request.nickname(), request.introduction());
     }
 
-    @Transactional
-    public Long join(MemberJoinRequest request) {
-        Member member = memberRepository.save(
-                Member.builder()
-                      .githubId(request.githubId())
-                      .tier(1)
-                      .build()
-        );
-
-        return member.getId();
+    @Transactional(readOnly = true)
+    public NicknameValidationResponse existsByNickname(String nickname) {
+        boolean exists = memberRepository.existsByNickname(new Nickname(nickname));
+        return new NicknameValidationResponse(exists);
     }
 }

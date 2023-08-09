@@ -1,5 +1,6 @@
 package com.yigongil.backend.response;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public record UpcomingStudyResponse(
@@ -8,7 +9,7 @@ public record UpcomingStudyResponse(
         Long roundId,
         TodoResponse necessaryTodo,
         Integer leftDays,
-        String nextDate,
+        LocalDate nextDate,
         Integer memberNecessaryTodoProgressRate,
         List<TodoResponse> optionalTodos
 ) {

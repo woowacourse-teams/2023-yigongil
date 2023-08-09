@@ -1,6 +1,6 @@
 package com.yigongil.backend.application;
 
-import static com.yigongil.backend.domain.study.PageStrategy.CREATED_AT_DESC;
+import static com.yigongil.backend.domain.study.PageStrategy.ID_DESC;
 
 import com.yigongil.backend.application.studyevent.StudyStartedEvent;
 import com.yigongil.backend.domain.member.Member;
@@ -15,12 +15,11 @@ import com.yigongil.backend.domain.studymember.StudyResult;
 import com.yigongil.backend.exception.ApplicantAlreadyExistException;
 import com.yigongil.backend.exception.ApplicantNotFoundException;
 import com.yigongil.backend.exception.StudyNotFoundException;
-import com.yigongil.backend.request.StudyCreateRequest;
+import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
-import com.yigongil.backend.utils.DateConverter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,12 +49,12 @@ public class StudyService {
     }
 
     @Transactional
-    public Long create(Member member, StudyCreateRequest request) {
+    public Long create(Member member, StudyUpdateRequest request) {
         Study study = Study.initializeStudyOf(
                 request.name(),
                 request.introduction(),
                 request.numberOfMaximumMembers(),
-                request.startAt(),
+                request.startAt().atStartOfDay(),
                 request.totalRoundCount(),
                 request.periodOfRound(),
                 member
@@ -77,9 +76,25 @@ public class StudyService {
 
     @Transactional(readOnly = true)
     public List<RecruitingStudyResponse> findRecruitingStudies(int page) {
-        Pageable pageable = PageRequest.of(page, CREATED_AT_DESC.getSize(), CREATED_AT_DESC.getSort());
-        Page<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.RECRUITING, pageable);
+        Pageable pageable = PageRequest.of(page, ID_DESC.getSize(), ID_DESC.getSort());
 
+        Page<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.RECRUITING, pageable);
+        return toRecruitingStudyResponse(studies);
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<RecruitingStudyResponse> findRecruitingStudiesWithSearch(int page, String word) {
+        Pageable pageable = PageRequest.of(page, ID_DESC.getSize(), ID_DESC.getSort());
+        Page<Study> studies = studyRepository.findAllByProcessingStatusAndNameContainingIgnoreCase(
+                ProcessingStatus.RECRUITING,
+                word,
+                pageable
+        );
+        return toRecruitingStudyResponse(studies);
+    }
+
+    private List<RecruitingStudyResponse> toRecruitingStudyResponse(Page<Study> studies) {
         return studies.get()
                       .map(RecruitingStudyResponse::from)
                       .toList();
@@ -189,7 +204,7 @@ public class StudyService {
                                        .getCode(),
                             study.getName(),
                             study.calculateAverageTier(),
-                            DateConverter.toStringFormat(study.getStartAt()),
+                            study.getStartAt().toLocalDate(),
                             study.getTotalRoundCount(),
                             study.getPeriodUnit()
                                  .toStringFormat(study.getPeriodOfRound()),
@@ -230,11 +245,26 @@ public class StudyService {
 
     @Transactional
     public void startStudy(Member member, Long studyId) {
+        studyMemberRepository.deleteAllByStudyIdAndRole(studyId, Role.APPLICANT);
         Study study = findStudyById(studyId);
         study.validateMaster(member);
 
         study.startStudy();
         publisher.publishEvent(new StudyStartedEvent(study));
+    }
+
+    @Transactional
+    public void update(Member member, Long studyId, StudyUpdateRequest request) {
+        Study study = findStudyById(studyId);
+        study.updateInformation(
+                member,
+                request.name(),
+                request.numberOfMaximumMembers(),
+                request.startAt().atStartOfDay(),
+                request.totalRoundCount(),
+                request.periodOfRound(),
+                request.introduction()
+        );
     }
 
     private Study findStudyById(Long studyId) {

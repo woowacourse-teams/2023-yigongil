@@ -6,11 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
+import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.fixture.StudyFixture;
 import java.time.LocalDateTime;
+import java.util.List;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
 
 class StudyTest {
@@ -55,6 +58,33 @@ class StudyTest {
     }
 
     @Test
+    void 스터디를_성공적으로_완수하면_티어가_증가한다() {
+        // given
+        Study study = StudyFixture.자바_스터디_모집중.toStudy();
+        study.updateToNextRound();
+        study.updateToNextRound();
+        List<Integer> expected = study.getCurrentRound()
+                                      .getRoundOfMembers()
+                                      .stream()
+                                      .map(RoundOfMember::getMember)
+                                      .map(Member::getTier)
+                                      .map(tier -> tier < 5 ? tier + 1 : tier)
+                                      .toList();
+
+        // when
+        study.updateToNextRound();
+        List<Integer> actual = study.getCurrentRound()
+                                    .getRoundOfMembers()
+                                    .stream()
+                                    .map(RoundOfMember::getMember)
+                                    .map(Member::getTier)
+                                    .toList();
+
+        // then
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
     void 스터디의_현재_라운드가_종료되는_날이면_true를_반환한다() {
         // given
         Study study = StudyFixture.자바_스터디_진행중.toStudy();
@@ -62,10 +92,14 @@ class StudyTest {
         LocalDateTime endAt = currentRound.getEndAt();
 
         // when
-        boolean actual = study.isCurrentRoundEndAt(endAt.toLocalDate());
+        boolean actual1 = study.isCurrentRoundEndAt(endAt.toLocalDate());
+        boolean actual2 = study.isCurrentRoundEndAt(endAt.plusDays(1).toLocalDate());
 
         // then
-        assertThat(actual).isTrue();
+        assertAll(
+                () -> assertThat(actual1).isTrue(),
+                () -> assertThat(actual2).isTrue()
+        );
     }
 
     @Test
@@ -76,7 +110,7 @@ class StudyTest {
         LocalDateTime endAt = currentRound.getEndAt();
 
         // when
-        boolean actual = study.isCurrentRoundEndAt(endAt.plusDays(1).toLocalDate());
+        boolean actual = study.isCurrentRoundEndAt(endAt.minusDays(1).toLocalDate());
 
         // then
         assertThat(actual).isFalse();
@@ -112,12 +146,33 @@ class StudyTest {
     @Test
     void 정원이_가득_찬_스터디에_Member를_추가하면_예외가_발생한다() {
         // given
-        Study study = StudyFixture.자바_스터디_모집중_정원_1.toStudy();
-        Member member = MemberFixture.폰노이만.toMember();
+        Study study = StudyFixture.자바_스터디_모집중_정원_2.toStudy();
+        Member member2 = MemberFixture.마틴파울러.toMember();
 
         // when
         // then
-        assertThatThrownBy(() -> study.addMember(member))
+        assertThatThrownBy(() -> study.addMember(member2))
                 .isInstanceOf(InvalidMemberSizeException.class);
+    }
+
+    @Test
+    void 스터디의_상태가_모집중이_아닐_때_정보를_수정하면_예외가_발생한다() {
+        // given
+        Study study = StudyFixture.자바_스터디_진행중.toStudy();
+
+        // when
+        ThrowingCallable throwable = () -> study.updateInformation(
+                study.getMaster(),
+                "이름 수정",
+                5,
+                LocalDateTime.now(),
+                5,
+                "3d",
+                "소개"
+        );
+
+        // then
+        assertThatThrownBy(throwable)
+                .isInstanceOf(InvalidProcessingStatusException.class);
     }
 }

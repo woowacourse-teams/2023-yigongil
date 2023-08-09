@@ -10,7 +10,7 @@
       <pattern>${LOG_PATTERN}</pattern> <!-- 로그 형식 -->
     </encoder>
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <fileNamePattern>./backup/dev/error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <fileNamePattern>./log/dev/error/error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
       <maxFileSize>100MB</maxFileSize>
       <maxHistory>30</maxHistory>
       <totalSizeCap>3GB</totalSizeCap>
@@ -29,7 +29,7 @@
       <pattern>${LOG_PATTERN}</pattern>
     </encoder>
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <fileNamePattern>./backup/dev/warn/warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <fileNamePattern>./log/dev/warn/warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
       <maxFileSize>100MB</maxFileSize>
       <maxHistory>30</maxHistory>
       <totalSizeCap>3GB</totalSizeCap>
@@ -47,7 +47,7 @@
       <pattern>${LOG_PATTERN}</pattern>
     </encoder>
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <fileNamePattern>./backup/dev/info/info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <fileNamePattern>./log/dev/info/info-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
       <maxFileSize>100MB</maxFileSize>
       <maxHistory>30</maxHistory>
       <totalSizeCap>3GB</totalSizeCap>

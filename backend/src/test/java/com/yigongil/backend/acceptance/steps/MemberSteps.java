@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.config.oauth.JwtTokenProvider;
 import com.yigongil.backend.request.ProfileUpdateRequest;
+import com.yigongil.backend.response.NicknameValidationResponse;
 import com.yigongil.backend.response.ProfileResponse;
 import com.yigongil.backend.response.TokenResponse;
 import io.cucumber.java.en.Given;
@@ -16,6 +17,7 @@ import io.cucumber.java.en.When;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 public class MemberSteps {
@@ -71,6 +73,20 @@ public class MemberSteps {
         assertAll(
                 () -> assertThat(response.nickname()).isEqualTo(nickname),
                 () -> assertThat(response.introduction()).isEqualTo(introduction)
+        );
+    }
+
+    @Then("{string}은 중복된 닉네임인 것을 확인할 수 있다.")
+    public void 중복_닉네임_확인(String nickname) {
+        ExtractableResponse<Response> response = given()
+                .when()
+                .get("/v1/members/exists?nickname=" + nickname)
+                .then().log().all()
+                .extract();
+
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(response.as(NicknameValidationResponse.class).exists()).isTrue()
         );
     }
 }

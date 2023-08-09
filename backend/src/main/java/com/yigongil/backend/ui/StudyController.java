@@ -1,26 +1,26 @@
 package com.yigongil.backend.ui;
 
 import com.yigongil.backend.application.StudyService;
-import com.yigongil.backend.application.TodoService;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.request.StudyCreateRequest;
-import com.yigongil.backend.request.TodoCreateRequest;
-import com.yigongil.backend.request.TodoUpdateRequest;
+import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import java.net.URI;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/v1/studies")
@@ -28,48 +28,28 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudyController {
 
     private final StudyService studyService;
-    private final TodoService todoService;
 
-    public StudyController(StudyService studyService, TodoService todoService) {
+    public StudyController(StudyService studyService) {
         this.studyService = studyService;
-        this.todoService = todoService;
     }
 
     @PostMapping
-    public ResponseEntity<Void> createStudy(@Authorization Member member, @RequestBody StudyCreateRequest request) {
+    public ResponseEntity<Void> createStudy(
+            @Authorization Member member,
+            @RequestBody @Valid StudyUpdateRequest request
+    ) {
         Long studyId = studyService.create(member, request);
         return ResponseEntity.created(URI.create("/v1/studies/" + studyId)).build();
     }
 
-    @PostMapping("/{studyId}/todos")
-    public ResponseEntity<Void> createTodo(
+    @PutMapping("/{studyId}")
+    public ResponseEntity<Void> updateStudy(
             @Authorization Member member,
             @PathVariable Long studyId,
-            @RequestBody TodoCreateRequest request
+            @RequestBody @Valid StudyUpdateRequest request
     ) {
-        Long todoId = todoService.create(member, studyId, request);
-        return ResponseEntity.created(URI.create("/v1/studies/" + studyId + "/todos/" + todoId)).build();
-    }
-
-    @PatchMapping("/{studyId}/todos/{todoId}")
-    public ResponseEntity<Void> updateTodo(
-            @Authorization Member member,
-            @PathVariable Long studyId,
-            @PathVariable Long todoId,
-            @RequestBody TodoUpdateRequest request
-    ) {
-        todoService.update(member, studyId, todoId, request);
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping("/{studyId}/todos/{todoId}")
-    public ResponseEntity<Void> deleteTodo(
-            @Authorization Member member,
-            @PathVariable Long studyId,
-            @PathVariable Long todoId
-    ) {
-        todoService.delete(member, studyId, todoId);
-        return ResponseEntity.noContent().build();
+        studyService.update(member, studyId, request);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{studyId}/applicants")
@@ -103,6 +83,15 @@ public class StudyController {
     @GetMapping("/recruiting")
     public ResponseEntity<List<RecruitingStudyResponse>> findRecruitingStudies(int page) {
         List<RecruitingStudyResponse> response = studyService.findRecruitingStudies(page);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/recruiting/search")
+    public ResponseEntity<List<RecruitingStudyResponse>> findRecruitingStudiesWithSearch(
+            int page,
+            @RequestParam(name = "q") String word
+    ) {
+        List<RecruitingStudyResponse> response = studyService.findRecruitingStudiesWithSearch(page, word);
         return ResponseEntity.ok(response);
     }
 

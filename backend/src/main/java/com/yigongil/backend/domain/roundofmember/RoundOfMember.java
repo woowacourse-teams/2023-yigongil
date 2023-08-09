@@ -3,6 +3,7 @@ package com.yigongil.backend.domain.roundofmember;
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
+import com.yigongil.backend.exception.NotTodoOwnerException;
 import com.yigongil.backend.exception.TooManyOptionalTodosException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class RoundOfMember extends BaseEntity {
     private boolean isDone;
 
     @Cascade(CascadeType.PERSIST)
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "round_of_member_id")
     private List<OptionalTodo> optionalTodos = new ArrayList<>();
 
@@ -50,7 +51,7 @@ public class RoundOfMember extends BaseEntity {
         this.id = id;
         this.member = member;
         this.isDone = isDone;
-        this.optionalTodos = optionalTodos;
+        this.optionalTodos = optionalTodos == null ? new ArrayList<>() : optionalTodos;
     }
 
     public OptionalTodo createOptionalTodo(String content) {
@@ -68,7 +69,33 @@ public class RoundOfMember extends BaseEntity {
         this.isDone = isDone;
     }
 
+    public void updateOptionalTodoIsDone(Long todoId, boolean isDone) {
+        OptionalTodo todo = findOptionalTodoById(todoId);
+        todo.updateIsDone(isDone);
+    }
+
+    public void updateOptionalTodoContent(Long todoId, String content) {
+        OptionalTodo todo = findOptionalTodoById(todoId);
+        todo.updateContent(content);
+    }
+
+    public void removeOptionalTodoById(Long todoId) {
+        OptionalTodo todo = findOptionalTodoById(todoId);
+        optionalTodos.remove(todo);
+    }
+
+    private OptionalTodo findOptionalTodoById(Long todoId) {
+        return optionalTodos.stream()
+                            .filter(optionalTodo -> optionalTodo.isSameId(todoId))
+                            .findFirst()
+                            .orElseThrow(() -> new NotTodoOwnerException("투두 작성자가 아닙니다.", String.valueOf(member.getId())));
+    }
+
     public boolean isMemberEquals(Member member) {
         return this.member.equals(member);
+    }
+
+    public void updateMemberTier() {
+        member.upgradeTier();
     }
 }

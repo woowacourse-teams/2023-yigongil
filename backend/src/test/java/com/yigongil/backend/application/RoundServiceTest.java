@@ -1,11 +1,11 @@
 package com.yigongil.backend.application;
 
-import static com.yigongil.backend.utils.DateConverter.toStringFormat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.fixture.RoundFixture;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +32,10 @@ class RoundServiceTest {
         roundService.updateRoundsEndAt(rounds, time, 3);
 
         assertAll(
-                () -> assertThat(toStringFormat(round.getEndAt())).isEqualTo("2023.07.23"),
-                () -> assertThat(toStringFormat(round2.getEndAt())).isEqualTo("2023.07.26"),
-                () -> assertThat(toStringFormat(round3.getEndAt())).isEqualTo("2023.07.29"),
-                () -> assertThat(toStringFormat(round1.getEndAt())).isEqualTo("2023.08.01")
+                () -> assertThat(round.getEndAt().toLocalDate()).isEqualTo(LocalDate.of(2023, 7, 23)),
+                () -> assertThat(round2.getEndAt().toLocalDate()).isEqualTo(LocalDate.of(2023, 7, 26)),
+                () -> assertThat(round3.getEndAt().toLocalDate()).isEqualTo(LocalDate.of(2023, 7, 29)),
+                () -> assertThat(round1.getEndAt().toLocalDate()).isEqualTo(LocalDate.of(2023, 8, 1))
         );
     }
 }
