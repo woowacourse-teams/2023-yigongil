@@ -1,4 +1,4 @@
-package com.yigongil.backend.ui;
+package com.yigongil.backend.ui.exceptionhandler;
 
 import com.yigongil.backend.exception.HttpException;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class ApiExceptionHandler {
+
+    private final InternalServerErrorMessageConverter internalServerErrorMessageConverter;
+
+    public ApiExceptionHandler(InternalServerErrorMessageConverter internalServerErrorMessageConverter) {
+        this.internalServerErrorMessageConverter = internalServerErrorMessageConverter;
+    }
 
     @ExceptionHandler
     public ResponseEntity<String> handleHttpException(HttpException e) {
@@ -38,6 +44,6 @@ public class ApiExceptionHandler {
     public ResponseEntity<String> handleException(Exception e) {
         log.error("예상치 못한 예외 발생: ", e);
         return ResponseEntity.internalServerError()
-                             .body("서버 에러 발생");
+                             .body(internalServerErrorMessageConverter.convert(e));
     }
 }
