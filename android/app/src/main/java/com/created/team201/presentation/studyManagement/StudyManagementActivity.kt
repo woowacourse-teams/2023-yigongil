@@ -68,7 +68,7 @@ class StudyManagementActivity :
         studyManagementViewModel.isStudyRoundsLoaded.observe(this) { isStudyRoundsLoaded ->
             if (!isStudyRoundsLoaded) return@observe
             val currentRound = studyManagementViewModel.currentRound.value ?: FIRST_ROUND
-            binding.vpStudyManagement.setCurrentItem(currentRound - CONVERT_TO_PAGE, true)
+            binding.vpStudyManagement.setCurrentItem(currentRound - CONVERT_TO_PAGE, false)
             binding.skeletonStudyManagement.clItemStudyManagementSkeleton.visibility = GONE
         }
     }
