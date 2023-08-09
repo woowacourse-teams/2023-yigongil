@@ -12,9 +12,12 @@ import com.created.domain.model.CreateStudy
 import com.created.domain.model.Period
 import com.created.domain.model.PeriodUnit
 import com.created.domain.repository.CreateStudyRepository
+import com.created.domain.repository.StudyDetailRepository
 import com.created.team201.data.datasource.remote.CreateStudyDataSourceImpl
+import com.created.team201.data.datasource.remote.StudyDetailDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.CreateStudyRepositoryImpl
+import com.created.team201.data.repository.StudyDetailRepositoryImpl
 import com.created.team201.presentation.createStudy.model.CreateStudyUiModel
 import com.created.team201.presentation.createStudy.model.PeriodUiModel
 import com.created.team201.util.NonNullLiveData
@@ -24,7 +27,7 @@ import kotlinx.coroutines.launch
 
 class UpdateStudyViewModel(
     private val createStudyRepository: CreateStudyRepository,
-    viewMode: String,
+    private val studyDetailRepository: StudyDetailRepository,
 ) : ViewModel() {
     private val _name: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
     val name: NonNullLiveData<String>
@@ -51,6 +54,10 @@ class UpdateStudyViewModel(
     val cycle: NonNullLiveData<PeriodUiModel>
         get() = _cycle
 
+    private val _content: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
+    val content: NonNullLiveData<String>
+        get() = _content
+
     private val _isEnableCreateStudy: MediatorLiveData<Boolean> =
         MediatorLiveData<Boolean>().apply {
             addSourceList(name, introduction, peopleCount, startDate, period, cycle) {
@@ -66,8 +73,17 @@ class UpdateStudyViewModel(
 
     private var isOpenStudy: Boolean = false
 
-    init {
-        if (viewMode == UpdateStudyActivity.EDIT_MODE) {
+    fun setViewState(studyId: Long) {
+        viewModelScope.launch {
+            runCatching { studyDetailRepository.getStudyDetail(studyId) }
+                .onSuccess {
+                    _name.value = it.name
+                    _content.value = it.introduction
+                    _peopleCount.value = it.numberOfMaximumMembers
+                    _startDate.value = it.startAt
+                    _cycle.value = cycle.value.copy(date = it.getPeriod())
+                    _period.value = it.totalRoundCount
+                }
         }
     }
 
@@ -97,6 +113,8 @@ class UpdateStudyViewModel(
     }
 
     fun createStudy() {
+        // 패치
+
         if (isOpenStudy) return
         isOpenStudy = true
         viewModelScope.launch {
@@ -144,14 +162,19 @@ class UpdateStudyViewModel(
     private fun Int.isNotZero(): Boolean = this != 0
 
     companion object {
-        fun Factory(mode: String): ViewModelProvider.Factory = viewModelFactory {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val repository = CreateStudyRepositoryImpl(
+                val createStudyRepository = CreateStudyRepositoryImpl(
                     CreateStudyDataSourceImpl(
                         NetworkServiceModule.createStudyService,
                     ),
                 )
-                UpdateStudyViewModel(repository, mode)
+                val studyDetailRepository = StudyDetailRepositoryImpl(
+                    StudyDetailDataSourceImpl(
+                        NetworkServiceModule.studyDetailService,
+                    ),
+                )
+                UpdateStudyViewModel(createStudyRepository, studyDetailRepository)
             }
         }
     }

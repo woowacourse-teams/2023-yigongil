@@ -167,6 +167,7 @@
                 android:maxLength="200"
                 android:maxLines="7"
                 android:onTextChanged="@{(text, start, before, count) -> viewModel.setIntroduction(text.toString())}"
+                android:text="@{viewModel.content}"
                 android:textAppearance="@style/text_r14"
                 android:textColor="@color/white"
                 android:textColorHint="@color/grey02_78808B"

@@ -16,6 +16,8 @@ data class StudyDetail(
     val members: List<Member>,
     val rounds: List<Round>,
 ) {
+    fun getPeriod(): Int = periodOfRound.replace("[^0-9]".toRegex(), "").toInt()
+
     companion object {
         private const val START_MEMBER_CONDITION = 2
 
