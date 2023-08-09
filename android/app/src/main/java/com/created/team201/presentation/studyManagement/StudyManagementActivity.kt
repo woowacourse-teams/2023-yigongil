@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View.GONE
 import android.view.View.OVER_SCROLL_NEVER
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -23,7 +24,6 @@ class StudyManagementActivity :
         StudyManagementAdapter(studyManagementClickListener, memberClickListener)
     }
     private val studyId: Long by lazy { intent.getLongExtra(KEY_STUDY_ID, KEY_ERROR_LONG) }
-    private val currentRound: Int by lazy { intent.getIntExtra(KEY_CURRENT_ROUND, KEY_ERROR_INT) }
     private val roleIndex: Int by lazy { intent.getIntExtra(KEY_ROLE_INDEX, KEY_ERROR_ROLE_INT) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +33,7 @@ class StudyManagementActivity :
         initActionBar()
         initStudyInformation()
         initViewPager()
+        initPage()
         initPageButtonClickListener()
         observeStudyManagement()
     }
@@ -59,8 +60,15 @@ class StudyManagementActivity :
     private fun initViewPager() {
         binding.vpStudyManagement.apply {
             adapter = studyManagementAdapter
-            setCurrentItem(currentRound - CONVERT_TO_PAGE, true)
             getChildAt(PAGE_INDEX_ZERO).overScrollMode = OVER_SCROLL_NEVER
+        }
+    }
+
+    private fun initPage() {
+        studyManagementViewModel.isStudyRoundsLoaded.observe(this) {
+            val currentRound = studyManagementViewModel.currentRound.value ?: FIRST_ROUND
+            binding.vpStudyManagement.setCurrentItem(currentRound - CONVERT_TO_PAGE, true)
+            binding.skeletonStudyManagement.clItemStudyManagementSkeleton.visibility = GONE
         }
     }
 
@@ -169,16 +177,13 @@ class StudyManagementActivity :
         private const val PAGE_INDEX_ZERO = 0
         private const val MAXIMUM_OPTIONAL_TODO_COUNT = 4
         private const val KEY_ERROR_LONG = 0L
-        private const val KEY_ERROR_INT = 0
         private const val KEY_ERROR_ROLE_INT = 3
         private const val KEY_STUDY_ID = "KEY_STUDY_ID"
-        private const val KEY_CURRENT_ROUND = "KEY_CURRENT_ROUND"
         private const val KEY_ROLE_INDEX = "KEY_ROLE_INDEX"
 
-        fun getIntent(context: Context, studyId: Long, currentRound: Int, roleIndex: Int): Intent =
+        fun getIntent(context: Context, studyId: Long, roleIndex: Int): Intent =
             Intent(context, StudyManagementActivity::class.java).apply {
                 putExtra(KEY_STUDY_ID, studyId)
-                putExtra(KEY_CURRENT_ROUND, currentRound)
                 putExtra(KEY_ROLE_INDEX, roleIndex)
             }
     }

@@ -33,6 +33,7 @@ import kotlinx.coroutines.withContext
 class StudyManagementViewModel(
     private val repository: StudyManagementRepository,
 ) : ViewModel() {
+
     private val rounds: MutableLiveData<List<RoundUiModel>> = MutableLiveData()
 
     private val _studyRounds: MutableLiveData<List<StudyRoundDetailUiModel>> = MutableLiveData()
@@ -46,11 +47,15 @@ class StudyManagementViewModel(
 
     lateinit var studyInformation: StudyManagementInformationUiModel
 
+    private val _isStudyRoundsLoaded: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isStudyRoundsLoaded: LiveData<Boolean> get() = _isStudyRoundsLoaded
+
     fun initStudyManagement(studyId: Long, roleIndex: Int) {
         initStatus(roleIndex)
         viewModelScope.launch {
             fetchStudyInformation(studyId)
             initStudyRounds(studyId)
+            _isStudyRoundsLoaded.value = true
         }
     }
 
