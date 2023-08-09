@@ -42,6 +42,7 @@ class CreateStudyActivity :
 
     private fun initActionBar() {
         setSupportActionBar(binding.tbCreateStudy)
+        supportActionBar?.setHomeActionContentDescription(R.string.toolbar_back_text)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
     }
@@ -121,6 +122,9 @@ class CreateStudyActivity :
     }
 
     companion object {
-        fun getIntent(context: Context): Intent = Intent(context, CreateStudyActivity::class.java)
+        fun getIntent(context: Context): Intent =
+            Intent(context, CreateStudyActivity::class.java).also {
+                it.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            }
     }
 }

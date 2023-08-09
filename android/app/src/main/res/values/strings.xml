@@ -124,6 +124,10 @@
     <string name="createStudy_toast_fail">스터디 개설에 실패했습니다</string>
 
     <!-- 스터디 개설 - 바텀 다이얼로그 뷰 -->
+    <string name="bottomSheetFragment_peopleCount_title_text">인원 수</string>
+    <string name="bottomSheetFragment_startDate_title_text">예상 시작일</string>
+    <string name="bottomSheetFragment_cycle_title_text">스터디 주기</string>
+    <string name="bottomSheetFragment_period_title_text">스터디 기간</string>
     <string name="bottomSheetFragment_button_name_cancel">취소</string>
     <string name="bottomSheetFragment_button_name_save">저장</string>
 
