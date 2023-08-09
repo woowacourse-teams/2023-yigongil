@@ -108,7 +108,7 @@ class StudyDetailViewModel private constructor(
             }.onFailure { // 204 No Content가 onFailure로 가는 현상이 있습니다.
                 val studyParticipants = _studyParticipants.value
                 val acceptedMember =
-                    studyParticipants.find { it.id == memberId } ?: StudyMemberUIModel.INVALID_STUDY_MEMBER
+                    studyParticipants.find { it.id == memberId } ?: return@launch
                 _studyParticipants.value =
                     studyParticipants.minus(acceptedMember) + acceptedMember.copy(isApplicant = false)
                 _canStudyStart.value = StudyDetail.canStartStudy(studyParticipants.size)
