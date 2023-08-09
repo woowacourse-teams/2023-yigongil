@@ -10,7 +10,7 @@ data class StudyMemberUIModel(
     val tier: Int,
 ) {
     companion object {
-        val DUMMY = StudyMemberUIModel(
+        val INVALID_STUDY_MEMBER = StudyMemberUIModel(
             id = 0L,
             isMaster = true,
             isApplicant = false,

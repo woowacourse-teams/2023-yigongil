@@ -1,7 +1,6 @@
 package com.created.team201.presentation.studyDetail
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -14,40 +13,52 @@ import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.StudyDetailRepositoryImpl
 import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
 import com.created.team201.presentation.studyDetail.model.StudyMemberUIModel
+import com.created.team201.util.NonNullLiveData
+import com.created.team201.util.NonNullMutableLiveData
 import kotlinx.coroutines.launch
 
 class StudyDetailViewModel private constructor(
     private val studyDetailRepository: StudyDetailRepository,
 ) : ViewModel() {
 
-    private val _study: MutableLiveData<StudyDetailUIModel> = MutableLiveData()
-    val study: LiveData<StudyDetailUIModel> get() = _study
-    private val _studyParticipants: MutableLiveData<List<StudyMemberUIModel>> = MutableLiveData()
-    val studyParticipants: LiveData<List<StudyMemberUIModel>> get() = _studyParticipants
-    private val _state: MutableLiveData<StudyDetailState> =
-        MutableLiveData(StudyDetailState.Nothing)
-    val state: LiveData<StudyDetailState> get() = _state
-    private val _isStartStudy: MutableLiveData<Boolean> = MutableLiveData(false)
-    val isStartStudy: LiveData<Boolean> get() = _isStartStudy
-    private val _isFullMember: MutableLiveData<Boolean> = MutableLiveData(false)
-    val isFullMember: LiveData<Boolean> get() = _isFullMember
-    private val _canStudyStart: MutableLiveData<Boolean> = MutableLiveData()
-    val canStudyStart: LiveData<Boolean> get() = _canStudyStart
-    private val _studyMemberCount: MutableLiveData<Int> = MutableLiveData()
-    val studyMemberCount: LiveData<Int> get() = _studyMemberCount
+    private val _study: NonNullMutableLiveData<StudyDetailUIModel> =
+        NonNullMutableLiveData(StudyDetailUIModel.INVALID_STUDY_DETAIL)
+    val study: NonNullLiveData<StudyDetailUIModel> get() = _study
 
-    fun fetchStudyDetail(studyId: Long) {
+    private val _studyParticipants: NonNullMutableLiveData<List<StudyMemberUIModel>> =
+        NonNullMutableLiveData(listOf())
+    val studyParticipants: NonNullLiveData<List<StudyMemberUIModel>> get() = _studyParticipants
+
+    private val _state: NonNullMutableLiveData<StudyDetailState> =
+        NonNullMutableLiveData(StudyDetailState.Nothing)
+    val state: LiveData<StudyDetailState> get() = _state
+
+    private val _isStartStudy: NonNullMutableLiveData<Boolean> = NonNullMutableLiveData(false)
+    val isStartStudy: NonNullLiveData<Boolean> get() = _isStartStudy
+
+    private val _isFullMember: NonNullMutableLiveData<Boolean> = NonNullMutableLiveData(false)
+    val isFullMember: NonNullLiveData<Boolean> get() = _isFullMember
+
+    private val _canStudyStart: NonNullMutableLiveData<Boolean> = NonNullMutableLiveData(false)
+    val canStudyStart: NonNullLiveData<Boolean> get() = _canStudyStart
+
+    private val _studyMemberCount: NonNullMutableLiveData<Int> = NonNullMutableLiveData(0)
+    val studyMemberCount: NonNullLiveData<Int> get() = _studyMemberCount
+
+    fun fetchStudyDetail(studyId: Long, notifyInvalidStudy: () -> Unit) {
         viewModelScope.launch {
             runCatching {
                 studyDetailRepository.getStudyDetail(studyId).toUIModel()
             }.onSuccess {
                 _study.value = it
                 _studyParticipants.value = it.studyMembers
-                _isFullMember.value = it.peopleCount == _studyParticipants.value!!.size
+                _isFullMember.value = it.peopleCount == _studyParticipants.value.size
                 _state.value = it.role.toStudyDetailState(it.canStartStudy)
                 _studyMemberCount.value = it.memberCount
                 _canStudyStart.value = it.canStartStudy
                 if (it.role == Role.MASTER) fetchApplicants(studyId)
+            }.onFailure {
+                notifyInvalidStudy()
             }
         }
     }
@@ -68,10 +79,10 @@ class StudyDetailViewModel private constructor(
                 studyDetailRepository.getStudyApplicants(studyId)
             }.onSuccess { members ->
                 _studyParticipants.value =
-                    _studyParticipants.value?.plus(
+                    _studyParticipants.value.plus(
                         members.map {
                             it.toUIModel(
-                                study.value?.studyMasterId ?: 0L,
+                                study.value.studyMasterId,
                                 true,
                             )
                         },
@@ -95,13 +106,13 @@ class StudyDetailViewModel private constructor(
             runCatching {
                 studyDetailRepository.acceptApplicant(studyId, memberId)
             }.onFailure { // 204 No Content가 onFailure로 가는 현상이 있습니다.
-                val studyParticipants = _studyParticipants.value ?: listOf()
+                val studyParticipants = _studyParticipants.value
                 val acceptedMember =
-                    studyParticipants.find { it.id == memberId } ?: StudyMemberUIModel.DUMMY
+                    studyParticipants.find { it.id == memberId } ?: StudyMemberUIModel.INVALID_STUDY_MEMBER
                 _studyParticipants.value =
                     studyParticipants.minus(acceptedMember) + acceptedMember.copy(isApplicant = false)
                 _canStudyStart.value = StudyDetail.canStartStudy(studyParticipants.size)
-                _studyMemberCount.value = _studyMemberCount.value?.plus(1)
+                _studyMemberCount.value = _studyMemberCount.value.plus(1)
             }
         }
     }

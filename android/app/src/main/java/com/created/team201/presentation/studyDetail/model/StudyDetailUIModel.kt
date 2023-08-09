@@ -15,4 +15,21 @@ data class StudyDetailUIModel(
     val memberCount: Int,
     val canStartStudy: Boolean,
     val studyMembers: List<StudyMemberUIModel>,
-)
+) {
+    companion object {
+        val INVALID_STUDY_DETAIL = StudyDetailUIModel(
+            studyMasterId = 0,
+            isMaster = false,
+            title = "",
+            introduction = "",
+            peopleCount = 0,
+            role = Role.NOTHING,
+            startDate = "",
+            period = "",
+            cycle = "",
+            memberCount = 0,
+            canStartStudy = false,
+            studyMembers = listOf(),
+        )
+    }
+}
