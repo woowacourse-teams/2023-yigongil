@@ -43,7 +43,7 @@ class StudyManagementViewHolder(
                 return@setOnClickListener
             }
 
-            studyManagementOptionalTodoAdapter.submitList(studyManagementOptionalTodoAdapter.currentList + OptionalTodoUiModel.ADD_TODO.copy())
+            studyManagementOptionalTodoAdapter.submitList(currentTodos + OptionalTodoUiModel.ADD_TODO.copy())
         }
         binding.tvItemStudyManagementEdit.setOnClickListener {
             studyManagementClickListener.clickOnUpdateTodo(

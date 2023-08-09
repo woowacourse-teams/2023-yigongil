@@ -19,6 +19,7 @@ import com.created.team201.presentation.createStudy.model.CreateStudyUiModel
 import com.created.team201.presentation.createStudy.model.PeriodUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
+import com.created.team201.util.addSourceList
 import kotlinx.coroutines.launch
 
 class CreateStudyViewModel(
@@ -62,15 +63,7 @@ class CreateStudyViewModel(
     val studyState: LiveData<State>
         get() = _studyState
 
-    val study: CreateStudyUiModel
-        get() = CreateStudyUiModel(
-            name.value,
-            peopleCount.value,
-            startDate.value,
-            period.value,
-            cycle.value,
-            introduction.value,
-        )
+    private var isOpenStudy: Boolean = false
 
     fun setName(name: String) {
         _name.value = name.replace("\n", "")
@@ -97,14 +90,25 @@ class CreateStudyViewModel(
         _period.value = period
     }
 
-    fun createStudy(study: CreateStudyUiModel) {
+    fun createStudy() {
+        if (isOpenStudy) return
+        isOpenStudy = true
         viewModelScope.launch {
-            createStudyRepository.createStudy(study.toDomain())
-                .onSuccess {
-                    _studyState.value = State.Success(it)
-                }.onFailure {
-                    _studyState.value = State.FAIL
-                }
+            CreateStudyUiModel(
+                name.value.trim(),
+                peopleCount.value,
+                startDate.value,
+                period.value,
+                cycle.value,
+                introduction.value.trim(),
+            ).apply {
+                createStudyRepository.createStudy(this.toDomain())
+                    .onSuccess {
+                        _studyState.value = State.Success(it)
+                    }.onFailure {
+                        _studyState.value = State.FAIL
+                    }
+            }
         }
     }
 
@@ -118,27 +122,20 @@ class CreateStudyViewModel(
     }
 
     private fun isInitializeCreateStudyInformation(): Boolean =
-        name.value.isNotEmpty() && peopleCount.value.isNotZero() && startDate.value.isNotEmpty() && period.value.isNotZero() && cycle.value.date.isNotZero() && introduction.value.isNotEmpty()
+        name.value.isNotBlankAndEmpty() && peopleCount.value.isNotZero() && startDate.value.isNotEmpty() && period.value.isNotZero() && cycle.value.date.isNotZero() && introduction.value.isNotBlankAndEmpty()
 
     private fun CreateStudyUiModel.toDomain(): CreateStudy =
         CreateStudy(name, peopleCount, startDate, period, cycle.toDomain(), introduction)
 
     private fun PeriodUiModel.toDomain(): Period = Period(date, unit)
 
+    private fun String.isNotBlankAndEmpty(): Boolean = isNotBlank().and(isNotEmpty())
+
     private fun String.isNotEmpty(): Boolean = isEmpty().not()
 
-    private fun Int.isNotZero(): Boolean = this != 0
+    private fun String.isNotBlank(): Boolean = isBlank().not()
 
-    private fun <T> MediatorLiveData<T>.addSourceList(
-        vararg liveDataArgument: LiveData<*>,
-        onChanged: () -> T,
-    ) {
-        liveDataArgument.forEach {
-            this.addSource(it) {
-                value = onChanged()
-            }
-        }
-    }
+    private fun Int.isNotZero(): Boolean = this != 0
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {

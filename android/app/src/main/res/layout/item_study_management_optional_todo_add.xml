@@ -8,6 +8,10 @@
             name="onAddClick"
             type="com.created.team201.presentation.studyManagement.StudyManagementClickListener" />
 
+        <variable
+            name="optionalTodo"
+            type="com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,6 +26,7 @@
             android:background="@color/transparent"
             android:hint="@string/item_study_management_add_todo_hint"
             android:maxLength="20"
+            android:text="@{optionalTodo.todo.content}"
             android:singleLine="true"
             android:textAppearance="@style/text_r14"
             android:textColor="@color/white"
