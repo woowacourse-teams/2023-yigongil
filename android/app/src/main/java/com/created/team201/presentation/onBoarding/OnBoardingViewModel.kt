@@ -67,16 +67,22 @@ class OnBoardingViewModel(
 
     fun getAvailableNickname() {
         viewModelScope.launch {
-            onBoardingRepository.getAvailableNickname(nickname.value.toDomain())
-                .onSuccess { result ->
-                    when (result) {
-                        false -> _nicknameState.value = NicknameState.AVAILABLE
-                        true -> _nicknameState.value = NicknameState.DUPLICATE
+            runCatching {
+                nickname.value.toDomain()
+            }.onSuccess {
+                onBoardingRepository.getAvailableNickname(it)
+                    .onSuccess { result ->
+                        when (result) {
+                            false -> _nicknameState.value = NicknameState.AVAILABLE
+                            true -> _nicknameState.value = NicknameState.DUPLICATE
+                        }
                     }
-                }
-                .onFailure {
-                    _nicknameState.value = NicknameState.UNAVAILABLE
-                }
+                    .onFailure {
+                        _nicknameState.value = NicknameState.UNAVAILABLE
+                    }
+            }.onFailure {
+                _nicknameState.value = NicknameState.UNAVAILABLE
+            }
         }
     }
 
