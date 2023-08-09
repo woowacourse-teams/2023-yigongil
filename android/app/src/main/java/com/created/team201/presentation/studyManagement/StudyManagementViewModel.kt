@@ -220,6 +220,31 @@ class StudyManagementViewModel(
         }
     }
 
+    fun addNecessaryTodo(todoContent: String) {
+        val currentStudyRounds = studyRounds.value ?: listOf()
+        val studyDetails = studyRounds.value ?: listOf()
+        val currentPage = currentRound.value ?: ROUND_NOT_FOUND
+        val currentRound = studyDetails[currentPage - CONVERT_PAGE_TO_ROUND]
+
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching {
+                repository.createNecessaryTodo(currentRound.id, CreateTodo(todoContent))
+            }.onSuccess { result ->
+                val newNecessaryTodo = currentRound.necessaryTodo.copy(
+                    todo = currentRound.necessaryTodo.todo.copy(content = todoContent),
+                    isInitialized = true,
+                )
+                val newRound = currentRound.copy(necessaryTodo = newNecessaryTodo)
+                val updatedStudyRounds = currentStudyRounds.map { studyRoundDetailUiModel ->
+                    studyRoundDetailUiModel.takeIf { it.id != currentRound.id } ?: newRound
+                }
+                _studyRounds.postValue(updatedStudyRounds)
+            }.onFailure {
+                Log.e(LOG_ERROR, it.message.toString())
+            }
+        }
+    }
+
     fun addOptionalTodo(currentPage: Int, todoContent: String) {
         val currentStudyRounds = studyRounds.value ?: listOf()
         val currentRound = currentStudyRounds[currentPage]

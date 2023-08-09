@@ -129,6 +129,15 @@ class StudyManagementActivity :
             studyManagementViewModel.addOptionalTodo(currentPage, trimmedTodoContent)
         }
 
+        override fun onClickAddNecessaryTodo(todoContent: String) {
+            val trimmedTodoContent = todoContent.trim()
+            if (trimmedTodoContent.isEmpty() || trimmedTodoContent.isBlank()) {
+                toastEmptyTodoInput()
+                return
+            }
+            studyManagementViewModel.addNecessaryTodo(trimmedTodoContent)
+        }
+
         override fun onClickAddOptionalTodo(optionalTodoCount: Int) {
             if (optionalTodoCount >= MAXIMUM_OPTIONAL_TODO_COUNT) {
                 Toast.makeText(
