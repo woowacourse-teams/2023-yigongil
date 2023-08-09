@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.R
 import com.created.team201.databinding.FragmentStudyListBinding
 import com.created.team201.presentation.common.BindingFragment
-import com.created.team201.presentation.createStudy.UpdateStudyActivity
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
 import com.created.team201.presentation.studyList.adapter.StudyListAdapter
+import com.created.team201.presentation.updateStudy.UpdateStudyActivity
 import kotlinx.coroutines.launch
 
 class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fragment_study_list) {

@@ -1,4 +1,4 @@
-package com.created.team201.presentation.createStudy
+package com.created.team201.presentation.updateStudy
 
 import com.created.domain.model.CreateStudy
 import com.created.domain.model.Period

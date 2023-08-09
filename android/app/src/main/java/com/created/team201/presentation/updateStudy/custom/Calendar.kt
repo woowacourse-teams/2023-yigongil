@@ -1,4 +1,4 @@
-package com.created.team201.presentation.createStudy.custom
+package com.created.team201.presentation.updateStudy.custom
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.created.team201.R
 import com.created.team201.databinding.CalendarBinding
-import com.created.team201.presentation.createStudy.custom.decorator.SaturdayDecorator
-import com.created.team201.presentation.createStudy.custom.decorator.SundayDecorator
-import com.created.team201.presentation.createStudy.custom.decorator.TodayDecorator
+import com.created.team201.presentation.updateStudy.custom.decorator.SaturdayDecorator
+import com.created.team201.presentation.updateStudy.custom.decorator.SundayDecorator
+import com.created.team201.presentation.updateStudy.custom.decorator.TodayDecorator
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter

@@ -1,7 +1,6 @@
 package com.created.team201.presentation.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.created.team201.R

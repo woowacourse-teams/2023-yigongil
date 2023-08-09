@@ -1,4 +1,4 @@
-package com.created.team201.presentation.createStudy.custom.decorator
+package com.created.team201.presentation.updateStudy.custom.decorator
 
 import android.text.style.ForegroundColorSpan
 import com.prolificinteractive.materialcalendarview.CalendarDay

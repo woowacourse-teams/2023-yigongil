@@ -1,4 +1,4 @@
-package com.created.team201.presentation.createStudy.bottomSheet
+package com.created.team201.presentation.updateStudy.bottomSheet
 
 import android.os.Bundle
 import android.view.View
@@ -6,8 +6,8 @@ import androidx.fragment.app.activityViewModels
 import com.created.team201.R
 import com.created.team201.databinding.FragmentCycleBottomSheetBinding
 import com.created.team201.presentation.common.BindingBottomSheetFragment
-import com.created.team201.presentation.createStudy.UpdateStudyViewModel
-import com.created.team201.presentation.createStudy.custom.MultiPickerChangeListener
+import com.created.team201.presentation.updateStudy.UpdateStudyViewModel
+import com.created.team201.presentation.updateStudy.custom.MultiPickerChangeListener
 
 class CycleBottomSheetFragment :
     BindingBottomSheetFragment<FragmentCycleBottomSheetBinding>(R.layout.fragment_cycle_bottom_sheet) {

@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.created.team201.presentation.createStudy.UpdateStudyViewModel" />
+            type="com.created.team201.presentation.updateStudy.UpdateStudyViewModel" />
 
         <variable
             name="onCancelClickListener"
@@ -52,7 +52,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_create_study_period" />
 
-        <com.created.team201.presentation.createStudy.custom.SinglePicker
+        <com.created.team201.presentation.updateStudy.custom.SinglePicker
             android:id="@+id/sp_period"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

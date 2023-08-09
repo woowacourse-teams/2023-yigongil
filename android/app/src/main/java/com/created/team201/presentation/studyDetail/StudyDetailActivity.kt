@@ -10,13 +10,13 @@ import androidx.annotation.StringRes
 import com.created.team201.R
 import com.created.team201.databinding.ActivityStudyDetailBinding
 import com.created.team201.presentation.common.BindingActivity
-import com.created.team201.presentation.createStudy.UpdateStudyActivity
 import com.created.team201.presentation.profile.ProfileActivity
 import com.created.team201.presentation.studyDetail.StudyDetailState.Master
 import com.created.team201.presentation.studyDetail.adapter.StudyParticipantsAdapter
 import com.created.team201.presentation.studyDetail.model.PeriodFormat
 import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
 import com.created.team201.presentation.studyManagement.StudyManagementActivity
+import com.created.team201.presentation.updateStudy.UpdateStudyActivity
 
 class StudyDetailActivity :
     BindingActivity<ActivityStudyDetailBinding>(R.layout.activity_study_detail),

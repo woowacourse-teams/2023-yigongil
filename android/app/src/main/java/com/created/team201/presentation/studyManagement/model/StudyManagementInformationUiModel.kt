@@ -12,5 +12,5 @@ data class StudyManagementInformationUiModel(
     val periodOfRound: String,
     val currentRound: Int,
     val introduction: String,
-    val rounds: List<RoundUiModel>
+    val rounds: List<RoundUiModel>,
 )

@@ -1,4 +1,4 @@
-package com.created.team201.presentation.createStudy.custom
+package com.created.team201.presentation.updateStudy.custom
 
 import android.content.Context
 import android.util.AttributeSet

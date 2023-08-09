@@ -10,7 +10,7 @@
     <declare-styleable name="CustomProfileImage">
         <attr name="glideCircleImageUrl" format="string" />
         <attr name="borderProgress" format="integer" />
-        <attr name="tier" format="integer"/>
+        <attr name="tier" format="integer" />
     </declare-styleable>
 
     <declare-styleable name="MultiPicker">
