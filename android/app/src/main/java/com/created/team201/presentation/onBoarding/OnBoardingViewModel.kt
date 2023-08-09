@@ -1,6 +1,7 @@
 package com.created.team201.presentation.onBoarding
 
 import android.text.InputFilter
+import android.text.InputFilter.LengthFilter
 import android.text.Spanned
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -45,7 +46,7 @@ class OnBoardingViewModel : ViewModel() {
         _introduction.value = introduction
     }
 
-    fun getInputFilter(): InputFilter = object : InputFilter {
+    fun getInputFilter(): Array<InputFilter> = arrayOf(object : InputFilter {
         override fun filter(
             text: CharSequence,
             start: Int,
@@ -60,7 +61,7 @@ class OnBoardingViewModel : ViewModel() {
             _nicknameState.value = NicknameState.UNAVAILABLE
             return ""
         }
-    }
+    }, LengthFilter(MAX_NICKNAME_LENGTH))
 
     private fun isInitializeOnBoarding(): Boolean =
         nickname.value != null && nicknameState.value == NicknameState.AVAILABLE
@@ -78,6 +79,7 @@ class OnBoardingViewModel : ViewModel() {
 
     companion object {
         private val PATTERN_NICKNAME = Pattern.compile("^[_a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]+$")
+        private const val MAX_NICKNAME_LENGTH = 8
 
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
