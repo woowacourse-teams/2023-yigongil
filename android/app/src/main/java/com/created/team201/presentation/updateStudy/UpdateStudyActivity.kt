@@ -1,4 +1,4 @@
-package com.created.team201.presentation.createStudy
+package com.created.team201.presentation.updateStudy
 
 import android.content.Context
 import android.content.Intent
@@ -10,19 +10,21 @@ import androidx.fragment.app.commit
 import com.created.team201.R
 import com.created.team201.databinding.ActivityUpdateStudyBinding
 import com.created.team201.presentation.common.BindingActivity
-import com.created.team201.presentation.createStudy.UpdateStudyViewModel.State.FAIL
-import com.created.team201.presentation.createStudy.UpdateStudyViewModel.State.IDLE
-import com.created.team201.presentation.createStudy.UpdateStudyViewModel.State.Success
-import com.created.team201.presentation.createStudy.bottomSheet.CycleBottomSheetFragment
-import com.created.team201.presentation.createStudy.bottomSheet.PeopleCountBottomSheetFragment
-import com.created.team201.presentation.createStudy.bottomSheet.PeriodBottomSheetFragment
-import com.created.team201.presentation.createStudy.bottomSheet.StartDateBottomSheetFragment
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
+import com.created.team201.presentation.updateStudy.UpdateStudyViewModel.State.FAIL
+import com.created.team201.presentation.updateStudy.UpdateStudyViewModel.State.IDLE
+import com.created.team201.presentation.updateStudy.UpdateStudyViewModel.State.Success
+import com.created.team201.presentation.updateStudy.bottomSheet.CycleBottomSheetFragment
+import com.created.team201.presentation.updateStudy.bottomSheet.PeopleCountBottomSheetFragment
+import com.created.team201.presentation.updateStudy.bottomSheet.PeriodBottomSheetFragment
+import com.created.team201.presentation.updateStudy.bottomSheet.StartDateBottomSheetFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class UpdateStudyActivity :
     BindingActivity<ActivityUpdateStudyBinding>(R.layout.activity_update_study) {
     private val viewModel: UpdateStudyViewModel by viewModels { UpdateStudyViewModel.Factory }
+    private val updateStudyViewMode by lazy { intent.getStringExtra(VIEW_MODE) }
+    private val studyId by lazy { intent.getLongExtra(STUDY_KEY, -1L) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,14 +33,23 @@ class UpdateStudyActivity :
         initView()
         initActionBar()
         setObserveCreateStudyResult()
+        setClickOnDoneButton()
+    }
+
+    private fun setClickOnDoneButton() {
+        binding.tvCreateStudyBtnDone.setOnClickListener {
+            when (updateStudyViewMode) {
+                EDIT_MODE -> viewModel.editStudy(studyId)
+                CREATE_MODE -> viewModel.createStudy()
+            }
+        }
     }
 
     private fun initView() {
-        when (intent.getStringExtra(VIEW_MODE)) {
+        when (updateStudyViewMode) {
             EDIT_MODE -> {
                 binding.tbCreateStudy.title = getString(R.string.createStudy_toolbar_title_edit)
 
-                val studyId = intent.getLongExtra(STUDY_KEY, -1L)
                 if (studyId == -1L) throw IllegalArgumentException()
                 viewModel.setViewState(studyId)
             }

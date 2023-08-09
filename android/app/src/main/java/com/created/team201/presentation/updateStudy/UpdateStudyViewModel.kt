@@ -1,4 +1,4 @@
-package com.created.team201.presentation.createStudy
+package com.created.team201.presentation.updateStudy
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -19,8 +19,8 @@ import com.created.team201.data.datasource.remote.StudyDetailDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.CreateStudyRepositoryImpl
 import com.created.team201.data.repository.StudyDetailRepositoryImpl
-import com.created.team201.presentation.createStudy.model.CreateStudyUiModel
-import com.created.team201.presentation.createStudy.model.PeriodUiModel
+import com.created.team201.presentation.updateStudy.model.CreateStudyUiModel
+import com.created.team201.presentation.updateStudy.model.PeriodUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
 import com.created.team201.util.addSourceList
@@ -113,9 +113,27 @@ class UpdateStudyViewModel(
         _period.value = period
     }
 
-    fun createStudy() {
-        // 패치
+    fun editStudy(studyId: Long) {
+        viewModelScope.launch {
+            runCatching {
+                CreateStudyUiModel(
+                    name.value.trim(),
+                    peopleCount.value,
+                    startDate.value,
+                    period.value,
+                    cycle.value,
+                    introduction.value.trim(),
+                ).apply { createStudyRepository.editStudy(studyId, this.toDomain()) }
+            }
+                .onSuccess {
+                    _studyState.value = State.Success(studyId)
+                }.onFailure {
+                    _studyState.value = State.FAIL
+                }
+        }
+    }
 
+    fun createStudy() {
         if (isOpenStudy) return
         isOpenStudy = true
         viewModelScope.launch {

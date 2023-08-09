@@ -11,4 +11,8 @@ class CreateStudyDataSourceImpl(
     override suspend fun createStudy(createStudy: CreateStudy): Response<Unit> {
         return createStudyService.createStudy(createStudy.toRequestDto())
     }
+
+    override suspend fun editStudy(studyId: Long, createStudy: CreateStudy) {
+        createStudyService.editStudy(studyId, createStudy.toRequestDto())
+    }
 }

@@ -18,6 +18,10 @@ class CreateStudyRepositoryImpl(
         }
     }
 
+    override suspend fun editStudy(studyId: Long, createStudy: CreateStudy) {
+        createStudyDataSource.editStudy(studyId, createStudy)
+    }
+
     companion object {
         private const val LOCATION_KEY = "Location"
         private const val LOCATION_DELIMITER = "/"

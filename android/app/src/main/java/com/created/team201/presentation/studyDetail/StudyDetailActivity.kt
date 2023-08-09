@@ -186,6 +186,7 @@ class StudyDetailActivity :
         fun getIntent(context: Context, studyId: Long): Intent =
             Intent(context, StudyDetailActivity::class.java).apply {
                 putExtra(KEY_STUDY_ID, studyId)
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             }
     }
 }

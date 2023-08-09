@@ -5,4 +5,6 @@ import retrofit2.Response
 
 interface CreateStudyDataSource {
     suspend fun createStudy(createStudy: CreateStudy): Response<Unit>
+
+    suspend fun editStudy(studyId: Long, createStudy: CreateStudy)
 }
