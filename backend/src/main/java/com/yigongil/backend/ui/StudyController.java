@@ -3,7 +3,6 @@ package com.yigongil.backend.ui;
 import com.yigongil.backend.application.StudyService;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.request.StudyCreateRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
@@ -36,7 +35,7 @@ public class StudyController {
     @PostMapping
     public ResponseEntity<Void> createStudy(
             @Authorization Member member,
-            @RequestBody @Valid StudyCreateRequest request
+            @RequestBody @Valid StudyUpdateRequest request
     ) {
         Long studyId = studyService.create(member, request);
         return ResponseEntity.created(URI.create("/v1/studies/" + studyId)).build();

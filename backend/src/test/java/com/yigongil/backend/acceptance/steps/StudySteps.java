@@ -9,7 +9,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.config.oauth.JwtTokenProvider;
 import com.yigongil.backend.domain.study.ProcessingStatus;
-import com.yigongil.backend.request.StudyCreateRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.HomeResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
@@ -53,7 +52,7 @@ public class StudySteps {
             String introduction
     ) throws JsonProcessingException {
         LocalDate startAt = LocalDate.now().plus(Long.parseLong(leftDays), ChronoUnit.DAYS);
-        StudyCreateRequest request = new StudyCreateRequest(
+        StudyUpdateRequest request = new StudyUpdateRequest(
                 name,
                 Integer.parseInt(numberOfMaximumMembers),
                 startAt,
@@ -217,7 +216,7 @@ public class StudySteps {
         sharedContext.setResponse(response);
     }
 
-    @When("{string}가 {string} 스터디의 정보를 제목-{string}, 정원-{string}명, 예상시작일-{string}일 뒤, 총 회차-{string}회, 주기-{string}, 소개-{string}로 수정한다.")
+    @Given("{string}가 {string} 스터디의 정보를 제목-{string}, 정원-{string}명, 예상시작일-{string}일 뒤, 총 회차-{string}회, 주기-{string}, 소개-{string}로 수정한다.")
     public void 스터디_정보_수정(
             String masterGithubId,
             String originalStudyName,

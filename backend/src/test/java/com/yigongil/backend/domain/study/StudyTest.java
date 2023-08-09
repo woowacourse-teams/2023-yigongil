@@ -132,6 +132,7 @@ class StudyTest {
 
         // when
         ThrowingCallable throwable = () -> study.updateInformation(
+                study.getMaster(),
                 "이름 수정",
                 5,
                 LocalDateTime.now(),

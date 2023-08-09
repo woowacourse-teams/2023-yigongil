@@ -257,6 +257,7 @@ public class Study extends BaseEntity {
     }
 
     public void updateInformation(
+            Member member,
             String name,
             Integer numberOfMaximumMembers,
             LocalDateTime startAt,
@@ -264,6 +265,7 @@ public class Study extends BaseEntity {
             String periodOfRound,
             String introduction
     ) {
+        validateMaster(member);
         validateStudyProcessingStatus();
         this.name = name;
         this.numberOfMaximumMembers = numberOfMaximumMembers;
