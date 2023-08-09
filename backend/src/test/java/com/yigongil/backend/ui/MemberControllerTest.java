@@ -23,6 +23,7 @@ import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.request.ProfileUpdateRequest;
 import com.yigongil.backend.response.NicknameValidationResponse;
 import com.yigongil.backend.response.ProfileResponse;
+import com.yigongil.backend.ui.exceptionhandler.InternalServerErrorMessageConverter;
 import com.yigongil.backend.utils.querycounter.ApiQueryCounter;
 import java.util.Collections;
 import java.util.Optional;
@@ -59,6 +60,9 @@ class MemberControllerTest {
 
     @MockBean
     private ApiQueryCounter apiQueryCounter;
+
+    @MockBean
+    private InternalServerErrorMessageConverter internalServerErrorMessageConverter;
 
     @Test
     void 프로필_정보를_조회한다() throws Exception {
