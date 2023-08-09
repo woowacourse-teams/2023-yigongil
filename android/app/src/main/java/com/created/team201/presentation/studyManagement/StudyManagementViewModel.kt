@@ -159,7 +159,7 @@ class StudyManagementViewModel(
             runCatching {
                 when (isNecessary) {
                     true -> {
-                        repository.patchNecessary(currentRoundId, todo.toDomain())
+                        repository.patchNecessaryTodo(currentRoundId, todo.toDomain())
                     }
 
                     false -> repository.patchOptionalTodo(currentRoundId, todo.toDomain())
@@ -282,6 +282,32 @@ class StudyManagementViewModel(
             ),
         )
         return newOptionalTodos
+    }
+
+    fun updateNecessaryTodoIsDone(isDone: Boolean) {
+        val currentStudyRounds = studyRounds.value ?: listOf()
+        val studyDetails = studyRounds.value ?: listOf()
+        val currentPage = currentRound.value ?: ROUND_NOT_FOUND
+        val currentRound = studyDetails[currentPage - CONVERT_PAGE_TO_ROUND]
+
+        val newNecessaryTodo = currentRound.necessaryTodo.copy(
+            todo = currentRound.necessaryTodo.todo.copy(isDone = isDone),
+            isInitialized = true,
+        )
+
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching {
+                repository.patchNecessaryTodo(currentRound.id, newNecessaryTodo.todo.toDomain())
+            }.onSuccess {
+                val newRound = currentRound.copy(necessaryTodo = newNecessaryTodo)
+                val updatedStudyRounds = currentStudyRounds.map { studyRoundDetailUiModel ->
+                    studyRoundDetailUiModel.takeIf { it.id != currentRound.id } ?: newRound
+                }
+                _studyRounds.postValue(updatedStudyRounds)
+            }.onFailure {
+                Log.e(LOG_ERROR, it.message.toString())
+            }
+        }
     }
 
     private fun StudyDetail.toUiModel(): StudyManagementInformationUiModel =

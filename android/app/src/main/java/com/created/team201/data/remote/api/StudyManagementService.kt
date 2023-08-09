@@ -45,10 +45,10 @@ interface StudyManagementService {
     ): Response<Unit>
 
     @PATCH("/v1/rounds/{roundId}/todos/necessary")
-    suspend fun patchNecessary(
+    suspend fun patchNecessaryTodo(
         @Path("roundId") roundId: Long,
         @Body todoUpdateRequestDto: TodoUpdateRequestDto,
-    )
+    ): Response<Unit?>
 
     @PATCH("/v1/rounds/{roundId}/todos/optional/{todoId}")
     suspend fun patchOptionalTodo(

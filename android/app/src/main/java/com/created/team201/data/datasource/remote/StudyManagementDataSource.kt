@@ -25,7 +25,7 @@ interface StudyManagementDataSource {
         todoCreateRequestDto: TodoCreateRequestDto,
     ): Response<Unit>
 
-    suspend fun patchNecessary(roundId: Long, todoUpdateRequestDto: TodoUpdateRequestDto)
+    suspend fun patchNecessaryTodo(roundId: Long, todoUpdateRequestDto: TodoUpdateRequestDto)
 
     suspend fun patchOptionalTodo(
         roundId: Long,

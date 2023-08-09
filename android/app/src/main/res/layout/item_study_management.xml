@@ -79,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/item_study_management_todo_description"
-                android:onClick="@{()->onClick.clickOnTodo(studyManagement.necessaryTodo.todo.todoId,studyManagement.necessaryTodo.todo.done)}"
+                android:onClick="@{()->onClick.onClickUpdateNecessaryTodoIsDone(!studyManagement.necessaryTodo.todo.done)}"
                 android:padding="12dp"
                 android:src="@drawable/ic_selector_home_check_btn"
                 app:isSelected="@{studyManagement.necessaryTodo.todo.done}"

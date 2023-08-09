@@ -38,8 +38,11 @@ class StudyManagementDataSourceImpl(
         return service.createOptionalTodo(roundId, todoCreateRequestDto)
     }
 
-    override suspend fun patchNecessary(roundId: Long, todoUpdateRequestDto: TodoUpdateRequestDto) {
-        return service.patchNecessary(roundId, todoUpdateRequestDto)
+    override suspend fun patchNecessaryTodo(
+        roundId: Long,
+        todoUpdateRequestDto: TodoUpdateRequestDto,
+    ) {
+        service.patchNecessaryTodo(roundId, todoUpdateRequestDto)
     }
 
     override suspend fun patchOptionalTodo(
@@ -47,7 +50,7 @@ class StudyManagementDataSourceImpl(
         todoId: Long,
         todoUpdateRequestDto: TodoUpdateRequestDto,
     ) {
-        return service.patchOptionalTodo(roundId, todoId, todoUpdateRequestDto)
+        service.patchOptionalTodo(roundId, todoId, todoUpdateRequestDto)
     }
 
     override suspend fun deleteOptionalTodo(roundId: Long, todoId: Long) {

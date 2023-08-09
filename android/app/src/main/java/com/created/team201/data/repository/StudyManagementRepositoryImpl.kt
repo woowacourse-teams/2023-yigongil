@@ -51,8 +51,8 @@ class StudyManagementRepositoryImpl(
         }
     }
 
-    override suspend fun patchNecessary(roundId: Long, todo: Todo) {
-        studyManagementDataSource.patchNecessary(roundId, todo.toTodoUpdateRequestBody())
+    override suspend fun patchNecessaryTodo(roundId: Long, todo: Todo) {
+        studyManagementDataSource.patchNecessaryTodo(roundId, todo.toTodoUpdateRequestBody())
     }
 
     override suspend fun patchOptionalTodo(roundId: Long, todo: Todo) {

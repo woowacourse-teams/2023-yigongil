@@ -147,6 +147,10 @@ class StudyManagementActivity :
                 ).show()
             }
         }
+
+        override fun onClickUpdateNecessaryTodoIsDone(isDone: Boolean) {
+            studyManagementViewModel.updateNecessaryTodoIsDone(isDone)
+        }
     }
 
     private fun toastEmptyTodoInput() {

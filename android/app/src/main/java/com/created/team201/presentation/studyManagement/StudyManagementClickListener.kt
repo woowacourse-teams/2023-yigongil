@@ -12,5 +12,7 @@ interface StudyManagementClickListener : TodoClickListener {
 
     fun onClickAddOptionalTodo(optionalTodoCount: Int)
 
+    fun onClickUpdateNecessaryTodoIsDone(isDone: Boolean)
+
     fun clickOnUpdateTodo(isNecessary: Boolean, todoContent: String)
 }
