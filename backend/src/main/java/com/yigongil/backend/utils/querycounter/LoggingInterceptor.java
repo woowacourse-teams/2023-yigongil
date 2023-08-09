@@ -3,9 +3,11 @@ package com.yigongil.backend.utils.querycounter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+@Profile(value = {"local", "test"})
 @Slf4j
 @Component
 public class LoggingInterceptor implements HandlerInterceptor {
