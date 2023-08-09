@@ -1,8 +1,9 @@
-package com.created.team201.presentation.createStudy
+package com.created.team201.presentation.updateStudy
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.created.domain.repository.CreateStudyRepository
-import com.created.team201.presentation.createStudy.UpdateStudyViewModel.State.Success
+import com.created.domain.repository.StudyDetailRepository
+import com.created.team201.presentation.updateStudy.UpdateStudyViewModel.State.Success
 import com.created.team201.presentation.util.getOrAwaitValue
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -15,7 +16,8 @@ import org.junit.Rule
 import org.junit.Test
 
 class UpdateStudyViewModelTest {
-    private lateinit var repository: CreateStudyRepository
+    private lateinit var createStudyRepository: CreateStudyRepository
+    private lateinit var studyDetailRepository: StudyDetailRepository
     private lateinit var viewModel: UpdateStudyViewModel
 
     // LiveData 테스트를 위한 룰 선언
@@ -31,8 +33,9 @@ class UpdateStudyViewModelTest {
 
     @Before
     fun setupViewModel() {
-        repository = mockk()
-        viewModel = UpdateStudyViewModel(repository)
+        studyDetailRepository = mockk()
+        createStudyRepository = mockk()
+        viewModel = UpdateStudyViewModel(createStudyRepository, studyDetailRepository)
     }
 
     @ExperimentalCoroutinesApi
@@ -40,7 +43,11 @@ class UpdateStudyViewModelTest {
     fun `스터디 정보를 갖고 스터디를 개설할 수 있다`() {
         // given
         val studyId = 1L
-        coEvery { repository.createStudy(CreateStudyFixture.study) } returns Result.success(studyId)
+        coEvery {
+            createStudyRepository.createStudy(
+                CreateStudyFixture.study,
+            )
+        } returns Result.success(studyId)
         viewModel.setName(CreateStudyFixture.study.name)
         viewModel.setPeopleCount(CreateStudyFixture.study.peopleCount)
         viewModel.setStartDate(CreateStudyFixture.study.startDate)
