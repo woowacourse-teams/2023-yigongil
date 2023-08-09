@@ -92,6 +92,11 @@ public class MemberService {
         member.updateProfile(request.nickname(), request.introduction());
     }
 
+    @Transactional
+    public void delete(Member member) {
+        member.exit();
+    }
+
     @Transactional(readOnly = true)
     public NicknameValidationResponse existsByNickname(String nickname) {
         boolean exists = memberRepository.existsByNickname(new Nickname(nickname));

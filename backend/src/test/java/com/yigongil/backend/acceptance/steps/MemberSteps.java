@@ -76,6 +76,31 @@ public class MemberSteps {
         );
     }
 
+    @When("{string}가 회원 탈퇴한다.")
+    public void 회원이_탈퇴한다(String githubId) {
+        Object token = sharedContext.getParameter(githubId);
+
+        given().log().all()
+               .header(HttpHeaders.AUTHORIZATION, token)
+               .when()
+               .delete("/v1/members")
+               .then().log().all();
+    }
+
+    @When("{string}가 마이페이지를 조회한다.")
+    public void 마이페이지를_조회한다(String githubId) {
+        Object token = sharedContext.getParameter(githubId);
+
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .header(HttpHeaders.AUTHORIZATION, token)
+                                                        .when()
+                                                        .get("/v1/members/my")
+                                                        .then().log().all()
+                                                        .extract();
+
+        sharedContext.setResponse(response);
+    }
+
     @Then("{string}은 중복된 닉네임인 것을 확인할 수 있다.")
     public void 중복_닉네임_확인(String nickname) {
         ExtractableResponse<Response> response = given()

@@ -6,9 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import com.yigongil.backend.exception.InvalidIntroductionLengthException;
 import com.yigongil.backend.exception.InvalidNicknameLengthException;
 import com.yigongil.backend.exception.InvalidNicknamePatternException;
+import com.yigongil.backend.fixture.MemberFixture;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
-import org.junit.Test;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.ThrowingSupplier;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -105,5 +106,15 @@ class MemberTest {
             //then
             assertDoesNotThrow(supplier);
         }
+    }
+
+    @Test
+    void 탈퇴시_닉네임_검증() {
+        Member member = MemberFixture.김진우.toMember();
+
+        member.exit();
+
+        assertThatThrownBy(member::getNickname)
+                .isInstanceOf(NullPointerException.class);
     }
 }
