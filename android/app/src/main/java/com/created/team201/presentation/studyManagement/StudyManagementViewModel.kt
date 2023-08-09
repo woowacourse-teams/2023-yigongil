@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.CreateTodo
 import com.created.domain.model.PageIndex
+import com.created.domain.model.PeriodUnit
 import com.created.domain.model.Role
 import com.created.domain.model.Round
 import com.created.domain.model.RoundDetail
@@ -20,6 +21,7 @@ import com.created.team201.data.mapper.toDomain
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.StudyManagementRepositoryImpl
 import com.created.team201.presentation.home.model.TodoUiModel
+import com.created.team201.presentation.studyList.model.PeriodUiModel
 import com.created.team201.presentation.studyManagement.adapter.OptionalTodoViewType
 import com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel
 import com.created.team201.presentation.studyManagement.model.RoundUiModel
@@ -244,7 +246,7 @@ class StudyManagementViewModel(
             role = role,
             startAt = startAt,
             totalRoundCount = totalRoundCount,
-            periodOfRound = periodOfRound,
+            periodOfRound = periodOfRound.toPeriodUiModel(),
             currentRound = currentRound,
             introduction = introduction,
             rounds = rounds.map { it.toUiModel() },
@@ -259,6 +261,9 @@ class StudyManagementViewModel(
         studyMembers = members.map { it.toUiModel(masterId) },
 
     )
+
+    private fun String.toPeriodUiModel(): PeriodUiModel =
+        PeriodUiModel(Character.getNumericValue(first()), PeriodUnit.valueOf(last()))
 
     private fun Todo.toUiModel(): TodoUiModel = TodoUiModel(
         todoId = todoId,

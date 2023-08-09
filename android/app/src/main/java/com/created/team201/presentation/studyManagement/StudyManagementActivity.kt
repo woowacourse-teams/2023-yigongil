@@ -3,6 +3,7 @@ package com.created.team201.presentation.studyManagement
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.OVER_SCROLL_NEVER
@@ -15,6 +16,7 @@ import com.created.team201.databinding.ActivityStudyManagementBinding
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.profile.ProfileActivity
 import com.created.team201.presentation.studyManagement.adapter.StudyManagementAdapter
+import com.created.team201.presentation.studyManagement.custom.StudyInformationDialog
 
 class StudyManagementActivity :
     BindingActivity<ActivityStudyManagementBinding>(R.layout.activity_study_management) {
@@ -165,11 +167,29 @@ class StudyManagementActivity :
         }
     }
 
+    private fun showStudyInformationDialog() {
+        StudyInformationDialog(this, studyManagementViewModel.studyInformation).show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_study_management, menu)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            finish()
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+
+            R.id.menu_study_management_information -> {
+                showStudyInformationDialog()
+                true
+            }
+
+            else -> false
         }
-        return super.onOptionsItemSelected(item)
     }
 
     companion object {
