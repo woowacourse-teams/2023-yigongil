@@ -1,12 +1,8 @@
 package com.created.team201.presentation.createStudy
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.created.domain.model.CreateStudy
-import com.created.domain.model.Period
 import com.created.domain.repository.CreateStudyRepository
 import com.created.team201.presentation.createStudy.CreateStudyViewModel.State.Success
-import com.created.team201.presentation.createStudy.model.CreateStudyUiModel
-import com.created.team201.presentation.createStudy.model.PeriodUiModel
 import com.created.team201.presentation.util.getOrAwaitValue
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -45,9 +41,18 @@ class CreateStudyViewModelTest {
         // given
         val studyId = 1L
         coEvery { repository.createStudy(CreateStudyFixture.study) } returns Result.success(studyId)
+        viewModel.setName(CreateStudyFixture.study.name)
+        viewModel.setPeopleCount(CreateStudyFixture.study.peopleCount)
+        viewModel.setStartDate(CreateStudyFixture.study.startDate)
+        viewModel.setPeriod(CreateStudyFixture.study.period)
+        viewModel.setCycle(
+            CreateStudyFixture.study.cycle.date,
+            CreateStudyFixture.study.cycle.unit.type
+        )
+        viewModel.setIntroduction(CreateStudyFixture.study.introduction)
 
         // when
-        viewModel.createStudy(CreateStudyFixture.study.toUiModel())
+        viewModel.createStudy()
 
         // then
         viewModel.studyState.getOrAwaitValue()
@@ -70,10 +75,4 @@ class CreateStudyViewModelTest {
         viewModel.isEnableCreateStudy.getOrAwaitValue()
         assertEquals(true, viewModel.isEnableCreateStudy.value)
     }
-
-    private fun CreateStudy.toUiModel(): CreateStudyUiModel =
-        CreateStudyUiModel(name, peopleCount, startDate, period, cycle.toUiModel(), introduction)
-
-    private fun Period.toUiModel(): PeriodUiModel =
-        PeriodUiModel(date, unit)
 }

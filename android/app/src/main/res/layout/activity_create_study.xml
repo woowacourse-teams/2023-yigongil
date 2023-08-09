@@ -185,7 +185,7 @@
             android:layout_marginBottom="28dp"
             android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
             android:enabled="@{viewModel.isEnableCreateStudy}"
-            android:onClick="@{() -> viewModel.createStudy(viewModel.study)}"
+            android:onClick="@{() -> viewModel.createStudy()}"
             android:paddingVertical="14dp"
             android:text="@string/createStudy_button_created"
             android:textAlignment="center"
