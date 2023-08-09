@@ -64,16 +64,6 @@ class CreateStudyViewModel(
 
     private var isOpenStudy: Boolean = false
 
-    val study: CreateStudyUiModel
-        get() = CreateStudyUiModel(
-            name.value.trim(),
-            peopleCount.value,
-            startDate.value,
-            period.value,
-            cycle.value,
-            introduction.value.trim(),
-        )
-
     fun setName(name: String) {
         _name.value = name.replace("\n", "")
     }
@@ -99,16 +89,25 @@ class CreateStudyViewModel(
         _period.value = period
     }
 
-    fun createStudy(study: CreateStudyUiModel) {
+    fun createStudy() {
         if (isOpenStudy) return
         isOpenStudy = true
         viewModelScope.launch {
-            createStudyRepository.createStudy(study.toDomain())
-                .onSuccess {
-                    _studyState.value = State.Success(it)
-                }.onFailure {
-                    _studyState.value = State.FAIL
-                }
+            CreateStudyUiModel(
+                name.value.trim(),
+                peopleCount.value,
+                startDate.value,
+                period.value,
+                cycle.value,
+                introduction.value.trim(),
+            ).apply {
+                createStudyRepository.createStudy(this.toDomain())
+                    .onSuccess {
+                        _studyState.value = State.Success(it)
+                    }.onFailure {
+                        _studyState.value = State.FAIL
+                    }
+            }
         }
     }
 
