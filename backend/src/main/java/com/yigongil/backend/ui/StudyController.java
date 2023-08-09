@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/v1/studies")
@@ -71,6 +72,15 @@ public class StudyController {
     @GetMapping("/recruiting")
     public ResponseEntity<List<RecruitingStudyResponse>> findRecruitingStudies(int page) {
         List<RecruitingStudyResponse> response = studyService.findRecruitingStudies(page);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/recruiting/search")
+    public ResponseEntity<List<RecruitingStudyResponse>> findRecruitingStudiesWithSearch(
+            int page,
+            @RequestParam(name = "q") String word
+    ) {
+        List<RecruitingStudyResponse> response = studyService.findRecruitingStudiesWithSearch(page, word);
         return ResponseEntity.ok(response);
     }
 
