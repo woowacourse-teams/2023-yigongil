@@ -55,7 +55,7 @@ class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activit
         binding.rvSetting.hasFixedSize()
 
         val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        ContextCompat.getDrawable(this, R.drawable.divider_study_list)?.let {
+        ContextCompat.getDrawable(this, R.drawable.divider_recyclerview_line)?.let {
             decoration.setDrawable(it)
         }
 
