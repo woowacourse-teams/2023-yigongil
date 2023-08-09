@@ -4,6 +4,7 @@ import com.yigongil.backend.application.MemberService;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.request.ProfileUpdateRequest;
+import com.yigongil.backend.request.ReportCreateRequest;
 import com.yigongil.backend.response.MyProfileResponse;
 import com.yigongil.backend.response.NicknameValidationResponse;
 import com.yigongil.backend.response.ProfileResponse;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,5 +66,15 @@ public class MemberController {
     public ResponseEntity<NicknameValidationResponse> existsByNickname(@RequestParam String nickname) {
         NicknameValidationResponse response = memberService.existsByNickname(nickname);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{reportedMemberId}/reports")
+    public ResponseEntity<Void> createReport(
+            @Authorization Member reporter,
+            @PathVariable Long reportedMemberId,
+            @RequestBody @Valid ReportCreateRequest request
+    ) {
+        memberService.report(reporter, reportedMemberId, request);
+        return ResponseEntity.ok().build();
     }
 }
