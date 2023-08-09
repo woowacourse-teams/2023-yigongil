@@ -14,6 +14,7 @@ import com.created.team201.presentation.onBoarding.model.NicknameState
 import com.created.team201.presentation.onBoarding.model.NicknameUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
+import com.created.team201.util.addSourceList
 import java.util.regex.Pattern
 
 class OnBoardingViewModel : ViewModel() {
@@ -65,17 +66,6 @@ class OnBoardingViewModel : ViewModel() {
 
     private fun isInitializeOnBoarding(): Boolean =
         nickname.value != null && nicknameState.value == NicknameState.AVAILABLE
-
-    private fun <T> MediatorLiveData<T>.addSourceList(
-        vararg liveDataArgument: LiveData<*>,
-        onChanged: () -> T,
-    ) {
-        liveDataArgument.forEach {
-            this.addSource(it) {
-                value = onChanged()
-            }
-        }
-    }
 
     companion object {
         private val PATTERN_NICKNAME = Pattern.compile("^[_a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]+$")
