@@ -3,8 +3,10 @@ package com.yigongil.backend.utils.querycounter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.springframework.cglib.proxy.InvocationHandler;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.context.request.RequestContextHolder;
 
+@Profile(value = {"local", "test"})
 public class PreparedStatementProxyHandler implements InvocationHandler {
 
     private final Object preparedStatement;

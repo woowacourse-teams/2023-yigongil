@@ -3,7 +3,9 @@ package com.yigongil.backend.utils.querycounter;
 import java.lang.reflect.Method;
 import org.springframework.cglib.proxy.InvocationHandler;
 import org.springframework.cglib.proxy.Proxy;
+import org.springframework.context.annotation.Profile;
 
+@Profile(value = {"local", "test"})
 public class ConnectionProxyHandler implements InvocationHandler {
 
     private final Object connection;
