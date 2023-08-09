@@ -3,6 +3,7 @@ package com.created.team201.presentation.studyManage
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView.OVER_SCROLL_NEVER
 import com.created.team201.R
 import com.created.team201.databinding.FragmentStudyManageBinding
 import com.created.team201.presentation.common.BindingFragment
@@ -30,8 +31,17 @@ class StudyManageFragment :
         setUpStudyManageObserve()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        studyManageViewModel.loadStudies()
+    }
+
     private fun setUpViewPagerAdapter() {
-        binding.vpStudyManage.adapter = studyManageAdapter
+        binding.vpStudyManage.apply {
+            adapter = studyManageAdapter
+            getChildAt(PAGE_INDEX_ZERO).overScrollMode = OVER_SCROLL_NEVER
+        }
     }
 
     private fun setUpTabLayoutViewPagerConnection() {
@@ -62,5 +72,9 @@ class StudyManageFragment :
                 false -> startActivity(StudyDetailActivity.getIntent(requireContext(), id))
             }
         }
+    }
+
+    companion object {
+        private const val PAGE_INDEX_ZERO = 0
     }
 }

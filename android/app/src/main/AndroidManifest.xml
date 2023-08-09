@@ -16,7 +16,23 @@
         android:theme="@style/Theme.Team201"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        
+
+        <activity
+            android:name=".presentation.report.ReportActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".presentation.accountSetting.AccountSettingActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".presentation.setting.SettingActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".presentation.onBoarding.OnBoardingActivity"
+            android:exported="false" />
+
         <activity
             android:name=".presentation.splash.SplashActivity"
             android:exported="true">

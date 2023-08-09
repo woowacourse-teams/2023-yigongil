@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View.OVER_SCROLL_NEVER
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.viewpager2.widget.ViewPager2
@@ -31,8 +32,7 @@ class StudyManagementActivity :
         initViewModel()
         initActionBar()
         initStudyInformation()
-        initAdapter()
-        initPage()
+        initViewPager()
         initPageButtonClickListener()
         observeStudyManagement()
     }
@@ -44,24 +44,24 @@ class StudyManagementActivity :
 
     private fun initActionBar() {
         setSupportActionBar(binding.tbStudyManagement)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
+        supportActionBar?.apply {
+            setDisplayShowTitleEnabled(false)
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_back)
+            setHomeActionContentDescription(R.string.toolbar_back_text)
+        }
     }
 
     private fun initStudyInformation() {
         studyManagementViewModel.initStudyManagement(studyId, roleIndex)
     }
 
-    private fun initAdapter() {
-        binding.vpStudyManagement.adapter = studyManagementAdapter
-    }
-
-    private fun initPage() {
-        binding.vpStudyManagement.setCurrentItem(
-            currentRound - CONVERT_TO_PAGE,
-            true,
-        )
+    private fun initViewPager() {
+        binding.vpStudyManagement.apply {
+            adapter = studyManagementAdapter
+            setCurrentItem(currentRound - CONVERT_TO_PAGE, true)
+            getChildAt(PAGE_INDEX_ZERO).overScrollMode = OVER_SCROLL_NEVER
+        }
     }
 
     private fun observeStudyManagement() {
@@ -88,13 +88,15 @@ class StudyManagementActivity :
     }
 
     private val studyManagementClickListener = object : StudyManagementClickListener {
+
         override fun clickOnTodo(id: Long, isDone: Boolean) {
             val currentItemId = binding.vpStudyManagement.currentItem
             studyManagementViewModel.updateTodo(currentItemId, id, !isDone, studyId)
         }
 
         override fun clickOnUpdateTodo(isNecessary: Boolean, todoContent: String) {
-            if (todoContent.isEmpty()) {
+            val trimmedTodoContent = todoContent.trim()
+            if (trimmedTodoContent.isEmpty() || trimmedTodoContent.isBlank()) {
                 toastEmptyTodoInput()
                 return
             }
@@ -102,18 +104,19 @@ class StudyManagementActivity :
             studyManagementViewModel.updateTodoContent(
                 currentPage,
                 isNecessary,
-                todoContent,
+                trimmedTodoContent,
                 studyId,
             )
         }
 
         override fun onClickAddTodo(todoContent: String) {
-            if (todoContent.isEmpty()) {
+            val trimmedTodoContent = todoContent.trim()
+            if (trimmedTodoContent.isEmpty() || trimmedTodoContent.isBlank()) {
                 toastEmptyTodoInput()
                 return
             }
             val currentPage = binding.vpStudyManagement.currentItem
-            studyManagementViewModel.addOptionalTodo(studyId, currentPage, todoContent)
+            studyManagementViewModel.addOptionalTodo(studyId, currentPage, trimmedTodoContent)
         }
 
         override fun onClickAddOptionalTodo(optionalTodoCount: Int) {
@@ -163,6 +166,7 @@ class StudyManagementActivity :
     companion object {
         private const val FIRST_ROUND = 1
         private const val CONVERT_TO_PAGE = 1
+        private const val PAGE_INDEX_ZERO = 0
         private const val MAXIMUM_OPTIONAL_TODO_COUNT = 4
         private const val KEY_ERROR_LONG = 0L
         private const val KEY_ERROR_INT = 0
