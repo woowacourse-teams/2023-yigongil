@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.model.CreateStudy
 import com.created.domain.model.Period
 import com.created.domain.model.PeriodUnit
+import com.created.domain.model.StudyDetail.Companion.getPeriod
 import com.created.domain.repository.CreateStudyRepository
 import com.created.domain.repository.StudyDetailRepository
 import com.created.team201.data.datasource.remote.CreateStudyDataSourceImpl
@@ -81,7 +82,7 @@ class UpdateStudyViewModel(
                     _content.value = it.introduction
                     _peopleCount.value = it.numberOfMaximumMembers
                     _startDate.value = it.startAt
-                    _cycle.value = cycle.value.copy(date = it.getPeriod())
+                    _cycle.value = cycle.value.copy(date = getPeriod(it.periodOfRound))
                     _period.value = it.totalRoundCount
                 }
         }
