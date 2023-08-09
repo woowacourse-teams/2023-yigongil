@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.created.team201.R
 import com.created.team201.databinding.ActivitySettingBinding
 import com.created.team201.presentation.accountSetting.AccountSettingActivity
@@ -51,6 +53,13 @@ class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activit
 
     private fun initSettingRecyclerView() {
         binding.rvSetting.hasFixedSize()
+
+        val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        ContextCompat.getDrawable(this, R.drawable.divider_study_list)?.let {
+            decoration.setDrawable(it)
+        }
+
+        binding.rvSetting.addItemDecoration(decoration)
         binding.rvSetting.adapter =
             SettingAdapter(onSettingItemClick).also { it.submitList(settingItems) }
     }
