@@ -175,7 +175,7 @@ public class Round extends BaseEntity {
 
     public boolean isEndAt(LocalDate today) {
         LocalDate endAtDate = endAt.toLocalDate();
-        return endAtDate.equals(today);
+        return endAtDate.isBefore(today) || endAtDate.equals(today);
     }
 
     public void updateEndAt(LocalDateTime endAt) {
@@ -203,9 +203,9 @@ public class Round extends BaseEntity {
                              );
     }
 
-    public void updateTier() {
+    public void updateMembersTier() {
         for (RoundOfMember roundOfMember : roundOfMembers) {
-            roundOfMember.updateTier();
+            roundOfMember.updateMemberTier();
         }
     }
 

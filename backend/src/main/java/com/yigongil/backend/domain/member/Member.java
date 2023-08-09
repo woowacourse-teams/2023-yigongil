@@ -80,9 +80,9 @@ public class Member extends BaseEntity {
         return introduction.getIntroduction();
     }
 
-    public void updateTier() {
+    public void upgradeTier() {
         if (tier < MAXIMUM_TIER) {
-            tier += 1;
+            tier++;
         }
     }
 

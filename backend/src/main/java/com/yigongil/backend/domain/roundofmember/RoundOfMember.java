@@ -95,7 +95,7 @@ public class RoundOfMember extends BaseEntity {
         return this.member.equals(member);
     }
 
-    public void updateTier() {
-        member.updateTier();
+    public void updateMemberTier() {
+        member.upgradeTier();
     }
 }

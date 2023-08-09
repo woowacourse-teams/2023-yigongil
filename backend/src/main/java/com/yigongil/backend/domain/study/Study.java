@@ -232,7 +232,7 @@ public class Study extends BaseEntity {
 
     private void finishStudy() {
         this.processingStatus = ProcessingStatus.END;
-        currentRound.updateTier();
+        currentRound.updateMembersTier();
     }
 
     public void startStudy() {
