@@ -205,7 +205,7 @@ class StudyManagementViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
-                repository.createTodo(studyId, CreateTodo(false, currentRound.id, todoContent))
+                repository.createTodo(studyId, CreateTodo(currentRound.id, todoContent))
             }.onSuccess { result ->
                 val todoId = result.getOrDefault(DEFAULT_TODO_ID)
                 val newOptionalTodos = getNewOptionalTodos(currentRound, todoId, todoContent)
