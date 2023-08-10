@@ -51,6 +51,7 @@
     <string name="study_list_processing_date">시작일</string>
     <string name="study_list_item_date_format">일</string>
     <string name="study_list_item_week_format">주</string>
+    <string name="study_list_not_found">찾으시는 스터디가 없어요</string>
 
     <!--스터디 관리 탭-->
     <string name="study_manage_title">스터디 관리</string>
