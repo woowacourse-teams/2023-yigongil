@@ -27,4 +27,12 @@
         <item>@string/study_list_item_week_format</item>
     </string-array>
 
+    <!-- 설정 뷰 -->
+    <string-array name="settingItems">
+        <item>@string/setting_item_notification_title</item>
+        <item>@string/setting_item_account_title</item>
+        <item>@string/setting_item_policy</item>
+        <item>@string/setting_item_logout</item>
+    </string-array>
+
 </resources>
