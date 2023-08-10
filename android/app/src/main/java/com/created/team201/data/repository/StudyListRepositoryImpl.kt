@@ -12,4 +12,8 @@ class StudyListRepositoryImpl(
     override suspend fun getStudyList(page: Int): List<StudySummary> {
         return studyListDataSource.getStudyList(page).toDomain()
     }
+
+    override suspend fun getSearchedStudyList(searchWord: String, page: Int): List<StudySummary> {
+        return studyListDataSource.getSearchedStudyList(searchWord, page).toDomain()
+    }
 }
