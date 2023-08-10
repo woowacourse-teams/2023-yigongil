@@ -33,7 +33,7 @@ public class MemberSteps {
     }
 
     @Given("{string}의 깃허브 아이디로 회원가입을 한다.")
-    public void 깃허브_아이디로_회원가입을_한다(String githubId) throws JsonProcessingException {
+    public void 깃허브_아이디로_회원가입을_한다(String githubId) {
         TokenResponse tokenResponse = given().log().all()
                                              .when()
                                              .get("/v1/login/fake/tokens?githubId=" + githubId)
