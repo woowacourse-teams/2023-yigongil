@@ -40,7 +40,7 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
 
     - name: Test 실행
-      run: ./gradlew clean build
+      run: ./gradlew test
       
     - name: Test 결과를 PR에 코멘트로 등록
       uses: EnricoMi/publish-unit-test-result-action@v2
