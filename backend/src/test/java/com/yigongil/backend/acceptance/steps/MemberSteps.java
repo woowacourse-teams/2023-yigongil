@@ -27,7 +27,11 @@ public class MemberSteps {
     private final SharedContext sharedContext;
     private final JwtTokenProvider jwtTokenProvider;
 
-    public MemberSteps(ObjectMapper objectMapper, SharedContext sharedContext, JwtTokenProvider jwtTokenProvider) {
+    public MemberSteps(
+            ObjectMapper objectMapper,
+            SharedContext sharedContext,
+            JwtTokenProvider jwtTokenProvider
+    ) {
         this.objectMapper = objectMapper;
         this.sharedContext = sharedContext;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -47,7 +51,11 @@ public class MemberSteps {
     }
 
     @When("{string}가 닉네임 {string}과 간단 소개{string}으로 수정한다.")
-    public void 닉네임_간단소개_입력(String memberGithubId, String nickname, String introduction) throws JsonProcessingException {
+    public void 닉네임_간단소개_입력(
+            String memberGithubId,
+            String nickname,
+            String introduction
+    ) throws JsonProcessingException {
         ProfileUpdateRequest request = new ProfileUpdateRequest(nickname, introduction);
 
         ExtractableResponse<Response> response = given().log().all()
