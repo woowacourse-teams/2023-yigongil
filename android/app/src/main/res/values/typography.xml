@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="title_b24">
-        <item name="fontFamily">@font/pretendard_bold</item>
-        <item name="android:textSize">24dp</item>
-    </style>
 
     <style name="subtitle_r15">
         <item name="fontFamily">@font/pretendard_regular</item>
@@ -31,14 +27,14 @@
         <item name="android:textSize">14dp</item>
     </style>
 
-    <style name="text_sb10">
+    <style name="text_sb12">
         <item name="fontFamily">@font/pretendard_semibold</item>
-        <item name="android:textSize">10dp</item>
+        <item name="android:textSize">12dp</item>
     </style>
 
-    <style name="study_title_b22">
+    <style name="study_title_b16">
         <item name="fontFamily">@font/pretendard_bold</item>
-        <item name="android:textSize">22dp</item>
+        <item name="android:textSize">16dp</item>
     </style>
 
     <style name="navi_bar_m10">
