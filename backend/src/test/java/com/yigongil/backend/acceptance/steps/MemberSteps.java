@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.config.oauth.JwtTokenProvider;
 import com.yigongil.backend.request.ProfileUpdateRequest;
 import com.yigongil.backend.response.NicknameValidationResponse;
+import com.yigongil.backend.response.OnboardingCheckResponse;
 import com.yigongil.backend.response.ProfileResponse;
 import com.yigongil.backend.response.TokenResponse;
 import io.cucumber.java.en.Given;
@@ -33,7 +34,7 @@ public class MemberSteps {
     }
 
     @Given("{string}의 깃허브 아이디로 회원가입을 한다.")
-    public void 깃허브_아이디로_회원가입을_한다(String githubId) throws JsonProcessingException {
+    public void 깃허브_아이디로_회원가입을_한다(String githubId) {
         TokenResponse tokenResponse = given().log().all()
                                              .when()
                                              .get("/v1/login/fake/tokens?githubId=" + githubId)
@@ -88,5 +89,18 @@ public class MemberSteps {
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
                 () -> assertThat(response.as(NicknameValidationResponse.class).exists()).isTrue()
         );
+    }
+
+    @Then("{string}의 온보딩 상태가 완료로 변경된다.")
+    public void 온보딩_상태_검증(String githubId) {
+        ExtractableResponse<Response> response = given().log().all()
+                                                             .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(githubId))
+                                                             .when()
+                                                             .get("v1/members/check-onboarding-is-done")
+                                                             .then().log().all()
+                                                             .statusCode(HttpStatus.OK.value())
+                                                             .extract();
+
+        assertThat(response.as(OnboardingCheckResponse.class).isOnboardingDone()).isTrue();
     }
 }

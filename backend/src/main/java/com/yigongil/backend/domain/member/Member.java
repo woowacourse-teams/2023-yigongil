@@ -37,6 +37,9 @@ public class Member extends BaseEntity {
     @Embedded
     private Introduction introduction;
 
+    @Column(nullable = false)
+    private Boolean isOnboardingDone;
+
     protected Member() {
     }
 
@@ -47,7 +50,8 @@ public class Member extends BaseEntity {
             String nickname,
             String profileImageUrl,
             Integer tier,
-            String introduction
+            String introduction,
+            Boolean isOnboardingDone
     ) {
         this.id = id;
         this.githubId = githubId;
@@ -55,11 +59,13 @@ public class Member extends BaseEntity {
         this.profileImageUrl = profileImageUrl;
         this.tier = tier == null ? 1 : tier;
         this.introduction = new Introduction(introduction);
+        this.isOnboardingDone = isOnboardingDone != null && isOnboardingDone;
     }
 
     public void updateProfile(String nickname, String introduction) {
         this.nickname = new Nickname(nickname);
         this.introduction = new Introduction(introduction);
+        this.isOnboardingDone = true;
     }
 
     public int isSameWithMaster(Member master) {

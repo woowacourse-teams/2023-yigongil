@@ -6,6 +6,7 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.request.ProfileUpdateRequest;
 import com.yigongil.backend.response.MyProfileResponse;
 import com.yigongil.backend.response.NicknameValidationResponse;
+import com.yigongil.backend.response.OnboardingCheckResponse;
 import com.yigongil.backend.response.ProfileResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,6 +60,12 @@ public class MemberController {
     @GetMapping(path = "/exists")
     public ResponseEntity<NicknameValidationResponse> existsByNickname(@RequestParam String nickname) {
         NicknameValidationResponse response = memberService.existsByNickname(nickname);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(path = "/check-onboarding-is-done")
+    public ResponseEntity<OnboardingCheckResponse> checkOnboardingIsDone(@Authorization Member member) {
+        OnboardingCheckResponse response = new OnboardingCheckResponse(member.getIsOnboardingDone());
         return ResponseEntity.ok(response);
     }
 }
