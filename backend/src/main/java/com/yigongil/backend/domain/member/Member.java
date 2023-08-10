@@ -10,7 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.Where;
 
+@Where(clause = "is_deleted = false")
 @Getter
 @Entity
 public class Member extends BaseEntity {
@@ -74,6 +76,9 @@ public class Member extends BaseEntity {
     }
 
     public String getNickname() {
+        if (this.nickname == null) {
+            return null;
+        }
         return nickname.getNickname();
     }
 

@@ -35,14 +35,9 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
             WebDataBinderFactory binderFactory
     ) {
         Long possibleMemberId = authContext.getMemberId();
-        Member member = memberRepository.findById(possibleMemberId)
-                                        .orElseThrow(
-                                                () -> new AuthorizationException("인증할 수 없습니다.", String.valueOf(possibleMemberId)
-                                                ));
-
-        if (member.isDeleted()) {
-            throw new AuthorizationException("인증할 수 없습니다.", String.valueOf(possibleMemberId));
-        }
-        return member;
+        return memberRepository.findById(possibleMemberId)
+                               .orElseThrow(
+                                       () -> new AuthorizationException("인증된 사용자가 아닙니다.", String.valueOf(possibleMemberId)
+                                       ));
     }
 }
