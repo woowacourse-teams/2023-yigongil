@@ -53,8 +53,8 @@ public class MemberSteps {
 
     @Given("신고 제목-{string}, 내용-{string}, 문제발생일-{string}일 전으로 신고 정보를 작성한다.")
     public void 신고_폼_작성(String title, String content, String days) {
-        LocalDate problemOccurDate = LocalDate.now().minusDays(Long.parseLong(days));
-        ReportCreateRequest request = new ReportCreateRequest(title, content, problemOccurDate);
+        LocalDate problemOccuredAt = LocalDate.now().minusDays(Long.parseLong(days));
+        ReportCreateRequest request = new ReportCreateRequest(title, content, problemOccuredAt);
         sharedContext.setParameter(title, request);
     }
 

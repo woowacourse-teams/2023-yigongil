@@ -41,7 +41,7 @@ public class Report extends BaseEntity {
     private String content;
 
     @Column(nullable = false)
-    private LocalDate problemOccurDate;
+    private LocalDate problemOccuredAt;
 
     protected Report() {
     }
@@ -53,7 +53,7 @@ public class Report extends BaseEntity {
             Member reported,
             String title,
             String content,
-            LocalDate problemOccurDate
+            LocalDate problemOccuredAt
     ) {
         validateReport(reporter, reported, title, content);
         this.id = id;
@@ -61,7 +61,7 @@ public class Report extends BaseEntity {
         this.reported = reported;
         this.title = title;
         this.content = content;
-        this.problemOccurDate = problemOccurDate;
+        this.problemOccuredAt = problemOccuredAt;
     }
 
     private void validateReport(Member reporter, Member reported, String title, String content) {

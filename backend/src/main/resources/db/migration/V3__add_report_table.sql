@@ -3,7 +3,7 @@ create table report (
     created_at           timestamp not null,
     updated_at           timestamp,
     content              varchar(200) not null,
-    problem_occur_date   datetime not null,
+    problem_occured_at   datetime not null,
     title                varchar(30) not null,
     reported_id          bigint,
     reporter_id          bigint,

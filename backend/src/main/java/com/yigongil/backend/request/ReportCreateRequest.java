@@ -10,7 +10,7 @@ public record ReportCreateRequest(
         @NotBlank(message = "신고 내용이 공백입니다.")
         String content,
         @PastOrPresent(message = "문제발생일이 미래의 날짜로 입력되었습니다.")
-        LocalDate problemOccurDate
+        LocalDate problemOccuredAt
 ) {
 
 }
