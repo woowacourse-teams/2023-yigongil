@@ -27,14 +27,17 @@ public class ApplySteps {
     @Given("깃허브 아이디가 {string}인 멤버가 이름이 {string}스터디에 신청할 수 있다.")
     public void 스터디_신청(String githubId, String studyName) {
         String memberId = (String) sharedContext.getParameter(githubId);
-        given().log()
-               .all()
-               .header(HttpHeaders.AUTHORIZATION, memberId)
-               .when()
-               .post("/v1/studies/" + sharedContext.getParameter(studyName) + "/applicants")
-               .then()
-               .log()
-               .all();
+        ExtractableResponse<Response> response = given().log()
+                                                        .all()
+                                                        .header(HttpHeaders.AUTHORIZATION, memberId)
+                                                        .when()
+                                                        .post("/v1/studies/" + sharedContext.getParameter(studyName) + "/applicants")
+                                                        .then()
+                                                        .log()
+                                                        .all()
+                                                        .extract();
+
+        sharedContext.setResponse(response);
     }
 
     @When("{string}가 이름이 {string}인 스터디의 신청자를 조회한다.")
@@ -103,5 +106,12 @@ public class ApplySteps {
                        .extract();
 
         sharedContext.setResponse(response);
+    }
+
+    @Then("스터디 신청에 실패한다.")
+    public void 스터디_신청_실패() {
+        ExtractableResponse<Response> response = sharedContext.getResponse();
+
+        assertThat(response.statusCode()).isBetween(400, 500);
     }
 }
