@@ -79,6 +79,7 @@
     <string name="study_detail_period_of_count_week">%d주</string>
     <string name="study_detail_period_format">%s회차</string>
     <string name="study_detail_notify_invalid_study">스터디를 찾을 수 없습니다.</string>
+    <string name="study_detail_notify_cant_participant">더는 참가할 수 없어요</string>
     <string name="item_study_detail_study_success_rate">스터디 성공률 %d%%</string>
 
     <!--스터디 관리하기 뷰-->
