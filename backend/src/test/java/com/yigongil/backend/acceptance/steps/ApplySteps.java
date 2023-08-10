@@ -24,7 +24,7 @@ public class ApplySteps {
         this.tokenProvider = tokenProvider;
     }
 
-    @Given("깃허브 아이디가 {string}인 멤버가 이름이 {string}스터디에 신청할 수 있다.")
+    @Given("깃허브 아이디가 {string}인 멤버가 이름이 {string}스터디에 신청한다.")
     public void 스터디_신청(String githubId, String studyName) {
         String memberId = (String) sharedContext.getParameter(githubId);
         ExtractableResponse<Response> response = given().log()
