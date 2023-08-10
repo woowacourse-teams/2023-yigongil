@@ -35,14 +35,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.created.team201.presentation.createStudy.custom.Calendar
+        <TextView
+            android:id="@+id/tv_start_date_bottom_sheet_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:text="@string/bottomSheetFragment_startDate_title_text"
+            android:textAlignment="center"
+            android:textAppearance="@style/picker_sb16"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/calendar_create_study_start_date"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_create_study_start_date" />
+
+        <com.created.team201.presentation.updateStudy.custom.Calendar
             android:id="@+id/calendar_create_study_start_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_create_study_start_date"
+            app:layout_constraintTop_toBottomOf="@id/tv_start_date_bottom_sheet_title"
             app:maximumMonthRange="3" />
 
 

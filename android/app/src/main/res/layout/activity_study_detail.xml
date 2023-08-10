@@ -76,7 +76,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_study_detail_title" />
 
-            <com.created.team201.presentation.createStudy.custom.IconTextButton
+            <com.created.team201.presentation.updateStudy.custom.IconTextButton
                 android:id="@+id/itb_study_detail_capacity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/view_study_detail_information_divider" />
 
-            <com.created.team201.presentation.createStudy.custom.IconTextButton
+            <com.created.team201.presentation.updateStudy.custom.IconTextButton
                 android:id="@+id/itb_study_detail_start_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
                 app:layout_constraintStart_toEndOf="@id/itb_study_detail_capacity"
                 app:layout_constraintTop_toBottomOf="@id/view_study_detail_information_divider" />
 
-            <com.created.team201.presentation.createStudy.custom.IconTextButton
+            <com.created.team201.presentation.updateStudy.custom.IconTextButton
                 android:id="@+id/itb_study_detail_period"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
                 app:layout_constraintStart_toEndOf="@id/itb_study_detail_start_date"
                 app:layout_constraintTop_toBottomOf="@id/view_study_detail_information_divider" />
 
-            <com.created.team201.presentation.createStudy.custom.IconTextButton
+            <com.created.team201.presentation.updateStudy.custom.IconTextButton
                 android:id="@+id/itb_study_detail_cycle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -169,7 +169,7 @@
             android:orientation="vertical"
             android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintBottom_toTopOf="@id/btn_study_detail_main_not_study_master"
+            app:layout_constraintBottom_toTopOf="@id/btn_study_detail_main"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_study_detail_study_people_title"
@@ -190,7 +190,7 @@
             android:padding="16dp"
             android:src="@{context.getDrawable(viewModel.state.subButtonSrc)}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_study_detail_main_not_study_master"
+            app:layout_constraintEnd_toStartOf="@id/btn_study_detail_main"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintHorizontal_weight="1"
@@ -198,7 +198,7 @@
             tools:src="@drawable/ic_dm" />
 
         <TextView
-            android:id="@+id/btn_study_detail_main_not_study_master"
+            android:id="@+id/btn_study_detail_main"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginEnd="16dp"
@@ -208,15 +208,15 @@
             android:enabled="@{viewModel.state.mainButtonIsEnabled}"
             android:gravity="center"
             android:onClick="@{() -> activity.initMainButtonOnClick(viewModel.study.isMaster)}"
-            android:text="@{context.getString(viewModel.state.mainButtonText, viewModel.study.applicantCount, viewModel.study.peopleCount)}"
+            android:text="@{context.getString(viewModel.state.mainButtonText, viewModel.study.memberCount, viewModel.study.peopleCount)}"
             android:textAppearance="@style/button_sb18"
             android:textColor="@{context.getColor(viewModel.state.mainButtonTextColor)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_weight="4"
-            app:layout_constraintStart_toEndOf="@+id/btn_study_detail_sub"
-            tools:text="참여하기(3/6)" />
+            app:layout_constraintStart_toEndOf="@id/btn_study_detail_sub"
+            tools:text="@string/study_detail_study_accept_waiting" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

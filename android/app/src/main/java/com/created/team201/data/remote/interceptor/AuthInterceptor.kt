@@ -27,6 +27,7 @@ class AuthInterceptor(
         renewAccessToken()
         Log.d("Interceptor", "new Token: ${authRepository.accessToken}")
 
+        Log.d("newToken", authRepository.accessToken)
         val newRequestWithNewToken = chain.request().newBuilder()
             .addHeader(HEADER_KEY, authRepository.accessToken)
             .build()

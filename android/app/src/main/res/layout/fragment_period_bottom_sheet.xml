@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.created.team201.presentation.createStudy.CreateStudyViewModel" />
+            type="com.created.team201.presentation.updateStudy.UpdateStudyViewModel" />
 
         <variable
             name="onCancelClickListener"
@@ -38,14 +38,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.created.team201.presentation.createStudy.custom.SinglePicker
+        <TextView
+            android:id="@+id/tv_period_bottom_sheet_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:text="@string/bottomSheetFragment_period_title_text"
+            android:textAlignment="center"
+            android:textAppearance="@style/picker_sb16"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/sp_period"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_create_study_period" />
+
+        <com.created.team201.presentation.updateStudy.custom.SinglePicker
             android:id="@+id/sp_period"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_create_study_period"
+            app:layout_constraintTop_toBottomOf="@id/tv_period_bottom_sheet_title"
             app:maxValue="60"
             app:minValue="1"
             app:singlePickerTitle="@string/single_picker_text_period"
