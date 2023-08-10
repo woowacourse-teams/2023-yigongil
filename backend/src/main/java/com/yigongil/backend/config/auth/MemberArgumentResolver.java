@@ -2,7 +2,6 @@ package com.yigongil.backend.config.auth;
 
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
-import com.yigongil.backend.exception.AuthorizationException;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -27,6 +26,7 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
                 && parameter.hasParameterAnnotation(Authorization.class);
     }
 
+    // TODO: 2023/08/01 서비스에서 도메인 객체를 반환할 때 리팩토링 드가자~
     @Override
     public Object resolveArgument(
             MethodParameter parameter,
@@ -34,10 +34,7 @@ public class MemberArgumentResolver implements HandlerMethodArgumentResolver {
             NativeWebRequest webRequest,
             WebDataBinderFactory binderFactory
     ) {
-        Long possibleMemberId = authContext.getMemberId();
-        return memberRepository.findById(possibleMemberId)
-                               .orElseThrow(
-                                       () -> new AuthorizationException("인증된 사용자가 아닙니다.", String.valueOf(possibleMemberId)
-                                       ));
+        return memberRepository.findById(authContext.getMemberId())
+                               .orElseThrow(IllegalArgumentException::new);
     }
 }

@@ -53,10 +53,7 @@ public class StudyController {
     }
 
     @PostMapping("/{studyId}/applicants")
-    public ResponseEntity<Void> applyStudy(
-            @Authorization Member member,
-            @PathVariable Long studyId
-    ) {
+    public ResponseEntity<Void> applyStudy(@Authorization Member member, @PathVariable Long studyId) {
         studyService.apply(member, studyId);
         return ResponseEntity.noContent().build();
     }
@@ -72,19 +69,13 @@ public class StudyController {
     }
 
     @DeleteMapping("/{studyId}/applicants")
-    public ResponseEntity<Void> deleteApplicant(
-            @Authorization Member member,
-            @PathVariable Long studyId
-    ) {
+    public ResponseEntity<Void> deleteApplicant(@Authorization Member member, @PathVariable Long studyId) {
         studyService.deleteApplicant(member, studyId);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudyDetailResponse> viewStudyDetail(
-            @Authorization Member member,
-            @PathVariable Long id
-    ) {
+    public ResponseEntity<StudyDetailResponse> viewStudyDetail(@Authorization Member member, @PathVariable Long id) {
         StudyDetailResponse response = studyService.findStudyDetailByStudyId(member, id);
         return ResponseEntity.ok(response);
     }
@@ -105,10 +96,7 @@ public class StudyController {
     }
 
     @GetMapping("/{id}/applicants")
-    public ResponseEntity<List<StudyMemberResponse>> findApplicantOfStudy(
-            @PathVariable Long id,
-            @Authorization Member master
-    ) {
+    public ResponseEntity<List<StudyMemberResponse>> findApplicantOfStudy(@PathVariable Long id, @Authorization Member master) {
         List<StudyMemberResponse> applicants = studyService.findApplicantsOfStudy(id, master);
         return ResponseEntity.ok(applicants);
     }

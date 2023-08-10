@@ -104,7 +104,6 @@ public class StudyService {
     public void apply(Member member, Long studyId) {
         Study study = findStudyById(studyId);
 
-        study.validateMemberSize();
         validateApplicantAlreadyExist(member, study);
 
         studyMemberRepository.save(
@@ -176,8 +175,7 @@ public class StudyService {
                 member.getTier(),
                 member.getNickname(),
                 calculateSuccessRate(member),
-                member.getProfileImageUrl(),
-                member.isDeleted()
+                member.getProfileImageUrl()
         );
     }
 

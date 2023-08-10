@@ -3,7 +3,7 @@ on:
   pull_request:
     branches: [BE/develop, BE/release]
     types: [opened, synchronize, reopened]
-
+      
 
 defaults:
   run:
@@ -25,15 +25,14 @@ jobs:
     - name: JDK17 설치
       uses: actions/setup-java@v3
       with:
-        distribution: 'temurin'
         java-version: '17'
-        cache: 'gradle'
+        distribution: 'temurin'
 
     - name: Gradle에 권한부여
       run: chmod +x gradlew
-
+      
     - name: Test 실행
-      run: ./gradlew test
+      run: ./gradlew clean build
       
     - name: Test 결과를 PR에 코멘트로 등록
       uses: EnricoMi/publish-unit-test-result-action@v2
