@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:editText="http://schemas.android.com/tools"
+    xmlns:textView="http://schemas.android.com/tools">
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.created.team201.presentation.onBoarding.OnBoardingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,6 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="48dp"
+            android:onTextChanged="@{(text, start, before, count) -> viewModel.setIntroduction(text.toString())}"
             android:text="@string/onBoarding_title_text"
             android:textAppearance="@style/title_b24"
             android:textColor="@color/white"
@@ -72,13 +78,15 @@
             android:inputType="text"
             android:maxLength="8"
             android:maxLines="1"
+            android:onTextChanged="@{(text, start, before, count) -> viewModel.setNickname(text.toString())}"
             android:paddingHorizontal="12dp"
             android:textAppearance="@style/text_r14"
             android:textColor="@color/white"
             android:textColorHint="@color/grey02_78808B"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/tv_on_boarding_nickname_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_on_boarding_nickname_title" />
+            app:layout_constraintTop_toBottomOf="@id/tv_on_boarding_nickname_title"
+            editText:inputFilter="@{viewModel.getInputFilter()}" />
 
         <TextView
             android:id="@+id/tv_on_boarding_nickname_validate_introduction"
@@ -88,7 +96,8 @@
             android:textAppearance="@style/description_r10"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/et_on_boarding_nickname"
-            app:layout_constraintTop_toBottomOf="@id/et_on_boarding_nickname" />
+            app:layout_constraintTop_toBottomOf="@id/et_on_boarding_nickname"
+            textView:nicknameState="@{viewModel.nicknameState}" />
 
         <TextView
             android:id="@+id/tv_on_boarding_introduction_title"
@@ -144,6 +153,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="28dp"
             android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
+            android:enabled="@{viewModel.isEnableSave()}"
             android:paddingVertical="14dp"
             android:text="@string/onBoarding_btn_text"
             android:textAlignment="center"
