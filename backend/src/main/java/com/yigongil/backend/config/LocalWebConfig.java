@@ -33,6 +33,7 @@ public class LocalWebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/v1/members/{id:[0-9]\\d*}")
                 .excludePathPatterns("/v1/members/exists")
                 .excludePathPatterns("/v1/studies/recruiting/**")
+                .excludePathPatterns("/v1/fake/proceed")
                 .order(2);
 
         registry.addInterceptor(loggingInterceptor)
