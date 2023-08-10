@@ -176,7 +176,8 @@ public class StudyService {
                 member.getTier(),
                 member.getNickname(),
                 calculateSuccessRate(member),
-                member.getProfileImageUrl()
+                member.getProfileImageUrl(),
+                member.isDeleted()
         );
     }
 
