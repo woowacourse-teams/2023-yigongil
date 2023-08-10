@@ -30,6 +30,8 @@ import com.created.team201.presentation.studyManagement.model.RoundUiModel
 import com.created.team201.presentation.studyManagement.model.StudyManagementInformationUiModel
 import com.created.team201.presentation.studyManagement.model.StudyMemberUiModel
 import com.created.team201.presentation.studyManagement.model.StudyRoundDetailUiModel
+import com.created.team201.util.NonNullLiveData
+import com.created.team201.util.NonNullMutableLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -46,8 +48,8 @@ class StudyManagementViewModel(
     private val _state: MutableLiveData<StudyManagementState> = MutableLiveData()
     val state: LiveData<StudyManagementState> get() = _state
 
-    private val _currentRound: MutableLiveData<Int> = MutableLiveData(0)
-    val currentRound: LiveData<Int> get() = _currentRound
+    private val _currentRound: NonNullMutableLiveData<Int> = NonNullMutableLiveData(0)
+    val currentRound: NonNullLiveData<Int> get() = _currentRound
 
     lateinit var studyInformation: StudyManagementInformationUiModel
 
@@ -59,7 +61,7 @@ class StudyManagementViewModel(
 
     private val currentStudyRounds get() = studyRounds.value ?: listOf()
     private val studyDetails get() = studyRounds.value ?: listOf()
-    private val currentPage get() = currentRound.value ?: ROUND_NOT_FOUND
+    private val currentPage get() = currentRound.value
     private val currentRoundDetail get() = studyDetails[currentPage - CONVERT_PAGE_TO_ROUND]
 
     fun initStudyManagement(studyId: Long, roleIndex: Int) {
@@ -312,7 +314,7 @@ class StudyManagementViewModel(
         optionalTodos = optionalTodos.map { it.toOptionalTodoUiModel() },
         studyMembers = members.map { it.toUiModel(masterId) },
 
-    )
+        )
 
     private fun String.toPeriodUiModel(): PeriodUiModel =
         PeriodUiModel(Character.getNumericValue(first()), PeriodUnit.valueOf(last()))
@@ -330,7 +332,7 @@ class StudyManagementViewModel(
         profileImageUrl = profileImageUrl,
         isDone = isDone,
 
-    )
+        )
 
     private fun Round.toUiModel(): RoundUiModel = RoundUiModel(id = id, number = number)
 
