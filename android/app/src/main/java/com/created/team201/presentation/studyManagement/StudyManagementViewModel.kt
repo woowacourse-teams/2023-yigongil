@@ -61,8 +61,7 @@ class StudyManagementViewModel(
 
     private val currentStudyRounds get() = studyRounds.value ?: listOf()
     private val studyDetails get() = studyRounds.value ?: listOf()
-    private val currentPage get() = currentRound.value
-    private val currentRoundDetail get() = studyDetails[currentPage - CONVERT_PAGE_TO_ROUND]
+    private val currentRoundDetail get() = studyDetails[currentRound.value - CONVERT_PAGE_TO_ROUND]
 
     fun initStudyManagement(studyId: Long, roleIndex: Int) {
         initStatus(roleIndex)
@@ -314,7 +313,7 @@ class StudyManagementViewModel(
         optionalTodos = optionalTodos.map { it.toOptionalTodoUiModel() },
         studyMembers = members.map { it.toUiModel(masterId) },
 
-        )
+    )
 
     private fun String.toPeriodUiModel(): PeriodUiModel =
         PeriodUiModel(Character.getNumericValue(first()), PeriodUnit.valueOf(last()))
@@ -332,7 +331,7 @@ class StudyManagementViewModel(
         profileImageUrl = profileImageUrl,
         isDone = isDone,
 
-        )
+    )
 
     private fun Round.toUiModel(): RoundUiModel = RoundUiModel(id = id, number = number)
 
@@ -348,7 +347,6 @@ class StudyManagementViewModel(
 
     companion object {
         private const val DEFAULT_TODO_ID = 0L
-        private const val ROUND_NOT_FOUND = 0
         private const val CONVERT_PAGE_TO_ROUND = 1
         private const val LOG_ERROR = "ERROR"
 

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
@@ -30,7 +29,6 @@ import com.created.team201.presentation.studyManagement.adapter.StudyManagementA
 import com.created.team201.presentation.studyManagement.custom.StudyInformationDialog
 import com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel
 
-
 class StudyManagementActivity :
     BindingActivity<ActivityStudyManagementBinding>(R.layout.activity_study_management) {
 
@@ -51,9 +49,7 @@ class StudyManagementActivity :
         initPage()
         initPageButtonClickListener()
         observeStudyManagement()
-        // min, max 라운드 리밋
         setCurrentRoundChangeListener()
-        // enter 시 뷰페이저 전환
         setPageRoundChangeListener()
     }
 
@@ -86,7 +82,7 @@ class StudyManagementActivity :
     private fun initPage() {
         studyManagementViewModel.isStudyRoundsLoaded.observe(this) { isStudyRoundsLoaded ->
             if (!isStudyRoundsLoaded) return@observe
-            val currentRound = studyManagementViewModel.currentRound.value ?: FIRST_ROUND
+            val currentRound = studyManagementViewModel.currentRound.value
             binding.vpStudyManagement.setCurrentItem(currentRound - CONVERT_TO_PAGE, false)
             binding.skeletonStudyManagement.clItemStudyManagementSkeleton.visibility = GONE
         }
@@ -119,7 +115,7 @@ class StudyManagementActivity :
 
         override fun onClickAddTodo(isNecessary: Boolean, todoContent: String) {
             val trimmedTodoContent = todoContent.trim()
-            if (trimmedTodoContent.isEmpty() || trimmedTodoContent.isBlank()) {
+            if (trimmedTodoContent.isBlank()) {
                 toastEmptyTodoInput()
                 return
             }
@@ -159,7 +155,6 @@ class StudyManagementActivity :
         }
 
         override fun onClickEditOptionalTodo(updatedTodos: List<OptionalTodoUiModel>): TodoState {
-            Log.d("ring", "엥" + updatedTodos.toString())
             return when (studyManagementViewModel.todoState.value) {
                 OPTIONAL_TODO_EDIT -> {
                     val updatedContents: List<String> = updatedTodos.map { it.todo.content ?: "" }
@@ -238,11 +233,11 @@ class StudyManagementActivity :
                     if (it.isBlank()) return@let
                     var currentNumber = it.toString().toIntOrNull() ?: return@let
 
-                    currentNumber =
-                        currentNumber.coerceAtLeast(1)
-
-                    // Max Round 지정해주세요~
-                    currentNumber = currentNumber.coerceAtMost(60)
+                    currentNumber = currentNumber.coerceAtLeast(1)
+                    if (studyManagementViewModel.isStudyRoundsLoaded.value == true) {
+                        currentNumber =
+                            currentNumber.coerceAtMost(studyManagementViewModel.studyInformation.totalRoundCount)
+                    }
 
                     binding.etStudyManagementRound.removeTextChangedListener(this)
                     binding.etStudyManagementRound.setText(currentNumber.toString())
@@ -257,19 +252,24 @@ class StudyManagementActivity :
     }
 
     private fun setPageRoundChangeListener() {
-        binding.etStudyManagementRound.setOnKeyListener { view, _, keyEvent ->
-            when (keyEvent.keyCode) {
+        binding.etStudyManagementRound.setOnKeyListener { view, keycode, _ ->
+            when (keycode) {
                 KeyEvent.KEYCODE_ENTER -> {
                     (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).also {
                         it.hideSoftInputFromWindow(view.windowToken, 0)
                     }
 
-                    // 여기서 페이지 지정해주면 됩니다.
-                    binding.vpStudyManagement.setCurrentItem(binding.etStudyManagementRound.text.toString().toInt(), true)
+                    val input = binding.etStudyManagementRound.text.toString().toIntOrNull()
+                        ?: studyManagementViewModel.currentRound.value
+                    binding.vpStudyManagement.setCurrentItem(
+                        input - CONVERT_TO_PAGE,
+                        true,
+                    )
+                    binding.etStudyManagementRound.setText(input.toString())
+                    return@setOnKeyListener true
                 }
             }
-
-            return@setOnKeyListener true
+            return@setOnKeyListener false
         }
     }
 
