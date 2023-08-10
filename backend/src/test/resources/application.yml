@@ -19,6 +19,7 @@ spring:
         show_sql: true
     hibernate:
       ddl-auto: create
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
 logging:
   level:
