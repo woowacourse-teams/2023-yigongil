@@ -3,6 +3,7 @@ package com.created.team201.presentation.studyManagement.adapter
 import android.view.LayoutInflater
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.R
 import com.created.team201.databinding.ItemStudyManagementBinding
@@ -95,11 +96,13 @@ class StudyManagementViewHolder(
             DEFAULT -> {
                 binding.etItemStudyManagementEssentialTodoContent.isEnabled = false
                 binding.tvItemStudyManagementEdit.setText(R.string.study_management_edit_todo)
+                binding.ivItemStudyManagementEssentialTodoCheckButton.isVisible = true
             }
 
             NECESSARY_TODO_EDIT -> {
                 binding.etItemStudyManagementEssentialTodoContent.isEnabled = true
                 binding.tvItemStudyManagementEdit.setText(R.string.study_management_edit_todo_done)
+                binding.ivItemStudyManagementEssentialTodoCheckButton.isVisible = false
             }
 
             else -> return
