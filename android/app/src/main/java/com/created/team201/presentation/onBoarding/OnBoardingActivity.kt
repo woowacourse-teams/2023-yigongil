@@ -64,6 +64,9 @@ class OnBoardingActivity :
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
     companion object {
-        fun getIntent(context: Context): Intent = Intent(context, OnBoardingActivity::class.java)
+        fun getIntent(context: Context): Intent =
+            Intent(context, OnBoardingActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            }
     }
 }

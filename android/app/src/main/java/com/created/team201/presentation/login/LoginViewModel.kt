@@ -16,6 +16,7 @@ import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.AuthRepositoryImpl
 import com.created.team201.presentation.login.LoginViewModel.State.FAIL
 import com.created.team201.presentation.login.LoginViewModel.State.SUCCESS
+import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
@@ -23,6 +24,9 @@ class LoginViewModel(
 ) : ViewModel() {
     private val _signUpState: MutableLiveData<State> = MutableLiveData()
     val signUpState: LiveData<State> get() = _signUpState
+
+    private val _onBoardingDoneState: MutableLiveData<OnBoardingDoneState> = MutableLiveData()
+    val onBoardingDoneState: LiveData<OnBoardingDoneState> get() = _onBoardingDoneState
 
     fun signUp(token: String) {
         viewModelScope.launch {
@@ -32,6 +36,17 @@ class LoginViewModel(
                 }.onFailure {
                     _signUpState.value = FAIL
                     Log.e("FAIL_ERROR", "SIGN_UP : ${it.message}")
+                }
+        }
+    }
+
+    fun getIsOnboardingDone() {
+        viewModelScope.launch {
+            authRepository.getIsOnboardingDone()
+                .onSuccess { state ->
+                    _onBoardingDoneState.value = OnBoardingDoneState.Success(state)
+                }.onFailure {
+                    _onBoardingDoneState.value = OnBoardingDoneState.FAIL
                 }
         }
     }

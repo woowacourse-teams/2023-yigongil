@@ -9,4 +9,6 @@ interface AuthRepository {
     suspend fun requestSignIn(): Result<Unit>
 
     suspend fun renewAccessToken()
+
+    suspend fun getIsOnboardingDone(): Result<Boolean>
 }
