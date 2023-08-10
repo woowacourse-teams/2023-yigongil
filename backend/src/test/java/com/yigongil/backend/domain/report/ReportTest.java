@@ -24,7 +24,7 @@ class ReportTest {
                                                  .reported(MemberFixture.폰노이만.toMember())
                                                  .title(invalidTitle)
                                                  .content("내용")
-                                                 .problemOccuredAt(LocalDate.now())
+                                                 .problemOccurredAt(LocalDate.now())
                                                  .build();
 
         // then
@@ -43,7 +43,7 @@ class ReportTest {
                                                  .reported(MemberFixture.폰노이만.toMember())
                                                  .title("제목")
                                                  .content(invalidContent)
-                                                 .problemOccuredAt(LocalDate.now())
+                                                 .problemOccurredAt(LocalDate.now())
                                                  .build();
 
         // then
@@ -62,7 +62,7 @@ class ReportTest {
                                                  .reported(member)
                                                  .title("제목")
                                                  .content("내용")
-                                                 .problemOccuredAt(LocalDate.now())
+                                                 .problemOccurredAt(LocalDate.now())
                                                  .build();
 
         // then
