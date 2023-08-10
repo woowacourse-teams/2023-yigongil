@@ -14,7 +14,7 @@ public class ScheduleService {
         this.studyService = studyService;
     }
 
-    @Scheduled(cron = "${schedules.round-update}")
+    @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void proceedRoundPerDay() {
         studyService.proceedRound(LocalDate.now());

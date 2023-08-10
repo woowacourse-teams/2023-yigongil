@@ -1,4 +1,4 @@
-package com.yigongil.backend.ui;
+package com.yigongil.backend.fake;
 
 import com.yigongil.backend.application.StudyService;
 import com.yigongil.backend.config.oauth.JwtTokenProvider;
