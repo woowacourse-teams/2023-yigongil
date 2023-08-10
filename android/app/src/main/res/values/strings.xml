@@ -181,6 +181,6 @@
     <string name="report_button_description">제출하기</string>
     <string name="report_content_hint">신고 내용을 입력해 주세요</string>
     <string name="report_calender_image_description">달력 날짜 선택</string>
-
+    <string name="report_calender_selected_date_format">%d.%d.%d</string>
 
 </resources>
