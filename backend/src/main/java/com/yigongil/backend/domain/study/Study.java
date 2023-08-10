@@ -179,7 +179,7 @@ public class Study extends BaseEntity {
         }
     }
 
-    private void validateMemberSize() {
+    public void validateMemberSize() {
         if (sizeOfCurrentMembers() >= numberOfMaximumMembers) {
             throw new InvalidMemberSizeException("스터디 정원이 가득 찼습니다.", numberOfMaximumMembers);
         }
