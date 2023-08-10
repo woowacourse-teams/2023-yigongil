@@ -24,6 +24,7 @@ import com.created.team201.presentation.studyManagement.StudyManagementActivity.
 import com.created.team201.presentation.studyManagement.TodoState.DEFAULT
 import com.created.team201.presentation.studyManagement.TodoState.NECESSARY_TODO_EDIT
 import com.created.team201.presentation.studyManagement.TodoState.NOTHING
+import com.created.team201.presentation.studyManagement.TodoState.OPTIONAL_TODO_ADD
 import com.created.team201.presentation.studyManagement.TodoState.OPTIONAL_TODO_EDIT
 import com.created.team201.presentation.studyManagement.adapter.StudyManagementAdapter
 import com.created.team201.presentation.studyManagement.custom.StudyInformationDialog
@@ -126,7 +127,10 @@ class StudyManagementActivity :
             studyManagementViewModel.updateTodoIsDone(isNecessary, todoId, isDone)
         }
 
-        override fun onClickGenerateOptionalTodo(optionalTodoCount: Int) {
+        override fun onClickGenerateOptionalTodo(optionalTodoCount: Int): TodoState {
+            if (studyManagementViewModel.todoState.value != DEFAULT) {
+                return studyManagementViewModel.todoState.value ?: NOTHING
+            }
             if (optionalTodoCount >= MAXIMUM_OPTIONAL_TODO_COUNT) {
                 Toast.makeText(
                     this@StudyManagementActivity,
@@ -134,6 +138,8 @@ class StudyManagementActivity :
                     Toast.LENGTH_SHORT,
                 ).show()
             }
+            studyManagementViewModel.setTodoState(OPTIONAL_TODO_ADD)
+            return OPTIONAL_TODO_ADD
         }
 
         override fun onClickEditNecessaryTodo(todoContents: String): TodoState {
@@ -171,6 +177,10 @@ class StudyManagementActivity :
 
                 else -> NOTHING
             }
+        }
+
+        override fun onClickDeleteOptionalTodo(todo: OptionalTodoUiModel) {
+            studyManagementViewModel.deleteTodo(todo)
         }
     }
 

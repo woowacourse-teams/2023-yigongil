@@ -1,8 +1,6 @@
 package com.created.team201.presentation.studyManagement.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +10,7 @@ import com.created.team201.presentation.studyManagement.StudyManagementClickList
 import com.created.team201.presentation.studyManagement.StudyMemberClickListener
 import com.created.team201.presentation.studyManagement.TodoState.DEFAULT
 import com.created.team201.presentation.studyManagement.TodoState.NECESSARY_TODO_EDIT
+import com.created.team201.presentation.studyManagement.TodoState.OPTIONAL_TODO_ADD
 import com.created.team201.presentation.studyManagement.TodoState.OPTIONAL_TODO_EDIT
 import com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel
 import com.created.team201.presentation.studyManagement.model.StudyRoundDetailUiModel
@@ -38,9 +37,12 @@ class StudyManagementViewHolder(
 
     private fun setClickAddTodo() {
         binding.tvStudyManagementAddOptionalTodo.setOnClickListener {
-            studyManagementClickListener.onClickGenerateOptionalTodo(
+            val todoState = studyManagementClickListener.onClickGenerateOptionalTodo(
                 studyManagementOptionalTodoAdapter.itemCount,
             )
+            if (todoState != OPTIONAL_TODO_ADD) {
+                return@setOnClickListener
+            }
             val currentTodos = studyManagementOptionalTodoAdapter.currentList
 
             if (currentTodos.isEmpty()) {
@@ -107,24 +109,20 @@ class StudyManagementViewHolder(
     private fun setEditOptionalTodos() {
         when (studyManagementClickListener.onClickEditOptionalTodo(updatedOptionalTodoUiModels.toList())) {
             DEFAULT -> {
-                Log.d("ring", "복귀")
                 val updatedOptionalTodos = studyManagementOptionalTodoAdapter.currentList.map {
                     it.copy(viewType = OptionalTodoViewType.DISPLAY.viewType)
                 }
                 studyManagementOptionalTodoAdapter.submitList(updatedOptionalTodos)
                 binding.tvItemStudyManagementEditOptinalTodo.setText(R.string.study_management_edit_todo)
-                binding.ivItemStudyManagementEssentialTodoCheckButton.visibility = VISIBLE
             }
 
             OPTIONAL_TODO_EDIT -> {
-                Log.d("ring", "편집")
                 val updatedOptionalTodos = studyManagementOptionalTodoAdapter.currentList.map {
                     it.copy(viewType = OptionalTodoViewType.EDIT.viewType)
                 }
                 updatedOptionalTodoUiModels = mutableListOf()
                 studyManagementOptionalTodoAdapter.submitList(updatedOptionalTodos)
                 binding.tvItemStudyManagementEditOptinalTodo.setText(R.string.study_management_edit_todo_done)
-                binding.ivItemStudyManagementEssentialTodoCheckButton.visibility = INVISIBLE
             }
 
             else -> return

@@ -8,9 +8,11 @@ interface StudyManagementClickListener {
 
     fun onClickUpdateTodoIsDone(isNecessary: Boolean, todoId: Long, isDone: Boolean)
 
-    fun onClickGenerateOptionalTodo(optionalTodoCount: Int)
+    fun onClickGenerateOptionalTodo(optionalTodoCount: Int): TodoState
 
     fun onClickEditNecessaryTodo(todoContents: String): TodoState
 
     fun onClickEditOptionalTodo(updatedTodos: List<OptionalTodoUiModel>): TodoState
+
+    fun onClickDeleteOptionalTodo(todo: OptionalTodoUiModel)
 }

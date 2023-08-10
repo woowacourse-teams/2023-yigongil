@@ -287,6 +287,27 @@ class StudyManagementViewModel(
         }
     }
 
+    fun deleteTodo(optionalTodo: OptionalTodoUiModel) {
+        val newOptionalTodos = currentRoundDetail.optionalTodos.toMutableList()
+        newOptionalTodos.removeIf {
+            it.todo.todoId == optionalTodo.todo.todoId
+        }
+        Log.d("ring", newOptionalTodos.toString())
+        viewModelScope.launch {
+            kotlin.runCatching {
+                repository.deleteOptionalTodo(currentRoundDetail.id, optionalTodo.todo.todoId)
+            }.onSuccess {
+                val newRound = currentRoundDetail.copy(optionalTodos = newOptionalTodos)
+                val updatedStudyRounds = currentStudyRounds.map { studyRoundDetailUiModel ->
+                    studyRoundDetailUiModel.takeIf { it.id != currentRoundDetail.id } ?: newRound
+                }
+                _studyRounds.postValue(updatedStudyRounds)
+            }.onFailure {
+                Log.e(LOG_ERROR, it.message.toString())
+            }
+        }
+    }
+
     fun setTodoState(updatedTodoState: TodoState) {
         _todoState.value = updatedTodoState
     }

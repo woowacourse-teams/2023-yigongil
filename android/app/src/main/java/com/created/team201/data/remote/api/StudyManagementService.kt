@@ -61,5 +61,5 @@ interface StudyManagementService {
     suspend fun deleteOptionalTodo(
         @Path("roundId") roundId: Long,
         @Path("todoId") todoId: Long,
-    )
+    ): Response<Unit?>
 }

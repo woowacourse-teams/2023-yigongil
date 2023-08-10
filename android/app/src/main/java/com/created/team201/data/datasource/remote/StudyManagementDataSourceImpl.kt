@@ -54,6 +54,6 @@ class StudyManagementDataSourceImpl(
     }
 
     override suspend fun deleteOptionalTodo(roundId: Long, todoId: Long) {
-        return service.deleteOptionalTodo(roundId, todoId)
+        service.deleteOptionalTodo(roundId, todoId)
     }
 }
