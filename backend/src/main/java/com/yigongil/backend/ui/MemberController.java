@@ -7,6 +7,7 @@ import com.yigongil.backend.request.ProfileUpdateRequest;
 import com.yigongil.backend.response.MyProfileResponse;
 import com.yigongil.backend.response.NicknameValidationResponse;
 import com.yigongil.backend.response.ProfileResponse;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;

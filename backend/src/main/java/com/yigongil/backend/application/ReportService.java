@@ -19,8 +19,8 @@ public class ReportService {
     }
 
     @Transactional
-    public void report(Member reporter, Long reportedMemberId, ReportCreateRequest request) {
-        Member reportedMember = memberService.findMemberById(reportedMemberId);
+    public void report(Member reporter, ReportCreateRequest request) {
+        Member reportedMember = memberService.findMemberById(request.reportedMemberId());
         reportRepository.save(Report.builder()
                                     .reporter(reporter)
                                     .reported(reportedMember)

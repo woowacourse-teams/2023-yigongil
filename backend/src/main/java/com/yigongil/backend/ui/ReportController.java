@@ -6,7 +6,6 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.request.ReportCreateRequest;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,13 +21,12 @@ public class ReportController {
         this.reportService = reportService;
     }
 
-    @PostMapping("/{reportedMemberId}")
+    @PostMapping
     public ResponseEntity<Void> createReport(
             @Authorization Member reporter,
-            @PathVariable Long reportedMemberId,
             @RequestBody @Valid ReportCreateRequest request
     ) {
-        reportService.report(reporter, reportedMemberId, request);
+        reportService.report(reporter, request);
         return ResponseEntity.ok().build();
     }
 }

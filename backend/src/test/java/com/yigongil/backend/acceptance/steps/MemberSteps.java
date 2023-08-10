@@ -8,7 +8,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.config.oauth.JwtTokenProvider;
 import com.yigongil.backend.request.ProfileUpdateRequest;
-import com.yigongil.backend.request.ReportCreateRequest;
 import com.yigongil.backend.response.NicknameValidationResponse;
 import com.yigongil.backend.response.ProfileResponse;
 import com.yigongil.backend.response.TokenResponse;
@@ -17,7 +16,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import java.time.LocalDate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -51,13 +49,6 @@ public class MemberSteps {
         sharedContext.setParameter(githubId, accessToken);
     }
 
-    @Given("신고 제목-{string}, 내용-{string}, 문제발생일-{string}일 전으로 신고 정보를 작성한다.")
-    public void 신고_폼_작성(String title, String content, String days) {
-        LocalDate problemOccuredAt = LocalDate.now().minusDays(Long.parseLong(days));
-        ReportCreateRequest request = new ReportCreateRequest(title, content, problemOccuredAt);
-        sharedContext.setParameter(title, request);
-    }
-
     @When("{string}가 닉네임 {string}과 간단 소개{string}으로 수정한다.")
     public void 닉네임_간단소개_입력(
             String memberGithubId,
@@ -76,23 +67,6 @@ public class MemberSteps {
                                                         .extract();
 
         sharedContext.setResponse(response);
-    }
-
-    @When("{string}가 제목이 {string}인 신고 정보를 통해 {string}을 신고한다.")
-    public void 유저_신고(String reporter, String reportTitle, String reportedMember) {
-        String reporterToken = (String) sharedContext.getParameter(reporter);
-        ReportCreateRequest request = (ReportCreateRequest) sharedContext.getParameter(reportTitle);
-        String reportedMemberToken = (String) sharedContext.getParameter(reportedMember);
-        Long reportedMemberId = jwtTokenProvider.parseToken(reportedMemberToken);
-
-        sharedContext.setResponse(given().log().all()
-                                         .header(HttpHeaders.AUTHORIZATION, reporterToken)
-                                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                         .body(request)
-                                         .when()
-                                         .post("/v1/reports/{reportedMemberId}", reportedMemberId)
-                                         .then().log().all()
-                                         .extract());
     }
 
     @Then("{string}가 변경된 정보 닉네임 {string}과 간단 소개{string}를 확인할 수 있다.")
@@ -122,12 +96,5 @@ public class MemberSteps {
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
                 () -> assertThat(response.as(NicknameValidationResponse.class).exists()).isTrue()
         );
-    }
-
-    @Then("신고에 성공한다.")
-    public void 신고_응답_상태코드_확인() {
-        ExtractableResponse<Response> response = sharedContext.getResponse();
-
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
     }
 }

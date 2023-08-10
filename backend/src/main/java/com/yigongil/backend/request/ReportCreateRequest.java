@@ -3,8 +3,11 @@ package com.yigongil.backend.request;
 import java.time.LocalDate;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Positive;
 
 public record ReportCreateRequest(
+        @Positive(message = "피신고자 식별자는 양수만 입력 가능합니다.")
+        Long reportedMemberId,
         @NotBlank(message = "신고 제목이 공백입니다.")
         String title,
         @NotBlank(message = "신고 내용이 공백입니다.")
