@@ -28,6 +28,9 @@ logging:
 schedules:
   round-update: 0/2 * * * * ?
 
+flyway:
+  enabled: false
+
 oauth2:
   github:
     client:

@@ -8,7 +8,8 @@ public record MemberOfRoundResponse(
         Long id,
         String nickname,
         String profileImageUrl,
-        Boolean isDone
+        Boolean isDone,
+        Boolean isDeleted
 ) {
 
     public static MemberOfRoundResponse from(RoundOfMember roundOfMember) {
@@ -17,7 +18,8 @@ public record MemberOfRoundResponse(
                 member.getId(),
                 member.getNickname(),
                 member.getProfileImageUrl(),
-                roundOfMember.isDone()
+                roundOfMember.isDone(),
+                member.isDeleted()
         );
     }
 
