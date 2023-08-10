@@ -3,14 +3,12 @@ package com.yigongil.backend.application;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.domain.member.Nickname;
-import com.yigongil.backend.domain.report.Report;
 import com.yigongil.backend.domain.report.ReportRepository;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
 import com.yigongil.backend.exception.MemberNotFoundException;
 import com.yigongil.backend.request.ProfileUpdateRequest;
-import com.yigongil.backend.request.ReportCreateRequest;
 import com.yigongil.backend.response.FinishedStudyResponse;
 import com.yigongil.backend.response.NicknameValidationResponse;
 import com.yigongil.backend.response.ProfileResponse;
@@ -63,6 +61,14 @@ public class MemberService {
         );
     }
 
+    public Member findMemberById(Long id) {
+        return memberRepository.findById(id)
+                               .orElseThrow(() -> new MemberNotFoundException(
+                                               "해당 멤버가 존재하지 않습니다.", String.valueOf(id)
+                                       )
+                               );
+    }
+
     private FinishedStudyResponse createFinishedStudyResponse(StudyMember studyMember) {
         Study study = studyMember.getStudy();
         return new FinishedStudyResponse(
@@ -100,26 +106,5 @@ public class MemberService {
     public NicknameValidationResponse existsByNickname(String nickname) {
         boolean exists = memberRepository.existsByNickname(new Nickname(nickname));
         return new NicknameValidationResponse(exists);
-    }
-
-
-    @Transactional
-    public void report(Member reporter, Long reportedMemberId, ReportCreateRequest request) {
-        Member reportedMember = findMemberById(reportedMemberId);
-        reportRepository.save(Report.builder()
-                                                    .reporter(reporter)
-                                                    .reported(reportedMember)
-                                                    .title(request.title())
-                                                    .content(request.content())
-                                                    .problemOccurDate(request.problemOccurDate())
-                                                    .build());
-    }
-
-    private Member findMemberById(Long id) {
-        return memberRepository.findById(id)
-                               .orElseThrow(() -> new MemberNotFoundException(
-                                               "해당 멤버가 존재하지 않습니다.", String.valueOf(id)
-                                       )
-                               );
     }
 }

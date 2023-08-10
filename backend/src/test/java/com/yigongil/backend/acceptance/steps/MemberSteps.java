@@ -90,7 +90,7 @@ public class MemberSteps {
                                          .contentType(MediaType.APPLICATION_JSON_VALUE)
                                          .body(request)
                                          .when()
-                                         .post("/v1/members/{reportedMemberId}/reports", reportedMemberId)
+                                         .post("/v1/reports/{reportedMemberId}", reportedMemberId)
                                          .then().log().all()
                                          .extract());
     }
