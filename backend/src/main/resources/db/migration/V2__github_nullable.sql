@@ -3,4 +3,4 @@ alter table member
 alter table member
     modify column nickname varchar(8);
 alter table member
-    add column is_deleted boolean not null;
+    add column is_deleted boolean not null default false;
