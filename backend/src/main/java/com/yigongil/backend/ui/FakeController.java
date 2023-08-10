@@ -6,12 +6,14 @@ import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.response.TokenResponse;
 import java.util.Optional;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Profile("test")
+@Profile(value = {"local", "test"})
 @RestController
 public class FakeController {
 
@@ -32,11 +34,9 @@ public class FakeController {
                         Member.builder()
                               .githubId(githubId)
                               .profileImageUrl("this_is_fake_image_url")
-                              .tier(1)
                               .build()
                 )
         ).getId();
-
-        return ResponseEntity.ok(new TokenResponse(jwtTokenProvider.createToken(id)));
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new TokenResponse(jwtTokenProvider.createToken(id)));
     }
 }

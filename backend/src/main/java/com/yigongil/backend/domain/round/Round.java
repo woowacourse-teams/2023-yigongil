@@ -6,6 +6,7 @@ import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NecessaryTodoAlreadyExistException;
+import com.yigongil.backend.exception.NecessaryTodoNotExistException;
 import com.yigongil.backend.exception.NotStudyMasterException;
 import com.yigongil.backend.exception.NotStudyMemberException;
 import java.time.LocalDate;
@@ -32,7 +33,8 @@ import org.hibernate.annotations.CascadeType;
 @Entity
 public class Round extends BaseEntity {
 
-    private static final int MAX_CONTENT_LENGTH = 20;
+    private static final int MAX_TODO_CONTENT_LENGTH = 20;
+    private static final int MIN_TODO_CONTENT_LENGTH = 1;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -41,7 +43,7 @@ public class Round extends BaseEntity {
     @Column(nullable = false)
     private Integer roundNumber;
 
-    @Column(length = MAX_CONTENT_LENGTH)
+    @Column(length = MAX_TODO_CONTENT_LENGTH)
     private String necessaryToDoContent;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -72,7 +74,7 @@ public class Round extends BaseEntity {
         this.necessaryToDoContent = necessaryToDoContent;
         this.master = master;
         this.endAt = endAt;
-        this.roundOfMembers = roundOfMembers;
+        this.roundOfMembers = roundOfMembers == null ? new ArrayList<>() : roundOfMembers;
     }
 
     public static List<Round> of(Integer totalRoundCount, Member master) {
@@ -96,9 +98,9 @@ public class Round extends BaseEntity {
     }
 
     public void createNecessaryTodo(Member author, String content) {
-        validateLength(content);
+        validateTodoLength(content);
         validateMaster(author);
-        if (Objects.nonNull(necessaryToDoContent)) {
+        if (necessaryToDoContent != null) {
             throw new NecessaryTodoAlreadyExistException("필수 투두가 이미 존재합니다.", necessaryToDoContent);
         }
         necessaryToDoContent = content;
@@ -108,18 +110,25 @@ public class Round extends BaseEntity {
         if (master.getId().equals(member.getId())) {
             return;
         }
-        throw new NotStudyMasterException("스터디 마스터가 아니라 권한이 없습니다 ", member.getNickname());
+        throw new NotStudyMasterException("필수 투두를 수정할 권한이 없습니다.", member.getNickname());
     }
 
     public OptionalTodo createOptionalTodo(Member author, String content) {
-        validateLength(content);
+        validateTodoLength(content);
         RoundOfMember targetRoundOfMember = findRoundOfMemberBy(author);
         return targetRoundOfMember.createOptionalTodo(content);
     }
 
-    private void validateLength(String content) {
-        if (content.length() > MAX_CONTENT_LENGTH) {
-            throw new InvalidTodoLengthException("투두 길이는 20자까지 가능합니다.", content);
+    private void validateTodoLength(String content) {
+        int contentLength = content.length();
+        if (contentLength > MAX_TODO_CONTENT_LENGTH || contentLength < MIN_TODO_CONTENT_LENGTH) {
+            throw new InvalidTodoLengthException(
+                    String.format(
+                            "투두 길이는 %d자 이상 %d자 이하로 작성 가능합니다.",
+                            MIN_TODO_CONTENT_LENGTH,
+                            MAX_TODO_CONTENT_LENGTH
+                    ), content
+            );
         }
     }
 
@@ -147,6 +156,9 @@ public class Round extends BaseEntity {
     }
 
     public void updateNecessaryTodoIsDone(Member member, Boolean isDone) {
+        if (necessaryToDoContent == null) {
+            throw new NecessaryTodoNotExistException("필수 투두가 생성되지 않았습니다.", String.valueOf(id));
+        }
         findRoundOfMemberBy(member).updateNecessaryTodoIsDone(isDone);
     }
 
@@ -154,25 +166,47 @@ public class Round extends BaseEntity {
         return findRoundOfMemberBy(member).isDone();
     }
 
-    public RoundOfMember findRoundOfMemberBy(Member member) {
-        return roundOfMembers.stream()
-                             .filter(roundOfMember -> roundOfMember.isMemberEquals(member))
-                             .findAny()
-                             .orElseThrow(() -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.",
-                                     member.getGithubId()));
-    }
-
-    public void updateNecessaryTodoContent(String content) {
+    public void updateNecessaryTodoContent(Member member, String content) {
+        if (!master.equals(member)) {
+            throw new NotStudyMasterException("필수 투두를 수정할 권한이 없습니다.", String.valueOf(member.getNickname()));
+        }
         necessaryToDoContent = content;
     }
 
     public boolean isEndAt(LocalDate today) {
         LocalDate endAtDate = endAt.toLocalDate();
-        return endAtDate.equals(today);
+        return endAtDate.isBefore(today) || endAtDate.equals(today);
     }
 
     public void updateEndAt(LocalDateTime endAt) {
         this.endAt = LocalDateTime.of(endAt.toLocalDate(), LocalTime.MIN);
+    }
+
+    public void updateOptionalTodoContent(Member member, Long todoId, String content) {
+        findRoundOfMemberBy(member).updateOptionalTodoContent(todoId, content);
+    }
+
+    public void updateOptionalTodoIsDone(Member member, Long todoId, boolean isDone) {
+        findRoundOfMemberBy(member).updateOptionalTodoIsDone(todoId, isDone);
+    }
+
+    public void deleteOptionalTodo(Member member, Long todoId) {
+        findRoundOfMemberBy(member).removeOptionalTodoById(todoId);
+    }
+
+    public RoundOfMember findRoundOfMemberBy(Member member) {
+        return roundOfMembers.stream()
+                             .filter(roundOfMember -> roundOfMember.isMemberEquals(member))
+                             .findAny()
+                             .orElseThrow(
+                                     () -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", member.getGithubId())
+                             );
+    }
+
+    public void updateMembersTier() {
+        for (RoundOfMember roundOfMember : roundOfMembers) {
+            roundOfMember.updateMemberTier();
+        }
     }
 
     @Override

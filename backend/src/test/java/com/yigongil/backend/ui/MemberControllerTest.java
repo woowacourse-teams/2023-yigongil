@@ -14,14 +14,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.application.MemberService;
-import com.yigongil.backend.config.WebConfig;
+import com.yigongil.backend.config.LocalWebConfig;
 import com.yigongil.backend.config.auth.AuthContext;
 import com.yigongil.backend.config.oauth.JwtTokenProvider;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.request.ProfileUpdateRequest;
+import com.yigongil.backend.response.NicknameValidationResponse;
 import com.yigongil.backend.response.ProfileResponse;
+import com.yigongil.backend.ui.exceptionhandler.InternalServerErrorMessageConverter;
+import com.yigongil.backend.utils.querycounter.ApiQueryCounter;
 import java.util.Collections;
 import java.util.Optional;
 import org.apache.http.HttpHeaders;
@@ -33,7 +36,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@Import(WebConfig.class)
+@Import(LocalWebConfig.class)
 @WebMvcTest(MemberController.class)
 class MemberControllerTest {
 
@@ -54,6 +57,12 @@ class MemberControllerTest {
 
     @MockBean
     private JwtTokenProvider tokenProvider;
+
+    @MockBean
+    private ApiQueryCounter apiQueryCounter;
+
+    @MockBean
+    private InternalServerErrorMessageConverter internalServerErrorMessageConverter;
 
     @Test
     void 프로필_정보를_조회한다() throws Exception {
@@ -99,5 +108,16 @@ class MemberControllerTest {
                .andExpect(status().isOk());
 
         verify(memberService, only()).update(MemberFixture.김진우.toMember(), request);
+    }
+
+    @Test
+    void 중복된_닉네임이_있는지_확인한다() throws Exception {
+        final String existNickname = "jinwoo";
+        given(memberService.existsByNickname(existNickname)).willReturn(new NicknameValidationResponse(true));
+
+        mockMvc.perform(get("/v1/members/exists?nickname={nickname}", existNickname))
+               .andDo(print())
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.exists").value(true));
     }
 }

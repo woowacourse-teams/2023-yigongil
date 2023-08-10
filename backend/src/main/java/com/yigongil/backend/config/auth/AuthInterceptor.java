@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
-public class LoginInterceptor implements HandlerInterceptor {
+public class AuthInterceptor implements HandlerInterceptor {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthContext authContext;
 
-    public LoginInterceptor(JwtTokenProvider jwtTokenProvider, AuthContext authContext) {
+    public AuthInterceptor(JwtTokenProvider jwtTokenProvider, AuthContext authContext) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.authContext = authContext;
     }

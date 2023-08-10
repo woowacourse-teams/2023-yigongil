@@ -6,7 +6,7 @@ import org.springframework.data.domain.Sort;
 @Getter
 public enum PageStrategy {
 
-    CREATED_AT_DESC(Constants.PAGE_SIZE, Sort.by("createdAt").descending());
+    ID_DESC(Constants.PAGE_SIZE, Sort.by("id").descending());
 
     private final int size;
     private final Sort sort;
@@ -18,6 +18,6 @@ public enum PageStrategy {
 
     public static class Constants {
 
-        public static final int PAGE_SIZE = 1;
+        public static final int PAGE_SIZE = 30;
     }
 }

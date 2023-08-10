@@ -2,15 +2,14 @@ package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.roundofmember.RoundOfMembers;
 import com.yigongil.backend.exception.CannotStartException;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
+import com.yigongil.backend.exception.InvalidNumberOfMaximumStudyMember;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
-import com.yigongil.backend.exception.RoundNotFoundException;
-import com.yigongil.backend.utils.DateConverter;
+import com.yigongil.backend.exception.InvalidStudyNameLengthException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -37,6 +36,12 @@ import org.hibernate.annotations.CascadeType;
 public class Study extends BaseEntity {
 
     private static final int ONE_MEMBER = 1;
+    private static final int MIN_NAME_LENGTH = 1;
+    private static final int MAX_NAME_LENGTH = 30;
+    private static final int MIN_MEMBER_SIZE = 2;
+    private static final int MAX_MEMBER_SIZE = 8;
+
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -95,6 +100,9 @@ public class Study extends BaseEntity {
             List<Round> rounds,
             PeriodUnit periodUnit
     ) {
+        name = name.strip();
+        validateNumberOfMaximumMembers(numberOfMaximumMembers);
+        validateName(name);
         this.id = id;
         this.name = name;
         this.introduction = introduction;
@@ -106,14 +114,39 @@ public class Study extends BaseEntity {
         this.periodOfRound = periodOfRound;
         this.periodUnit = periodUnit;
         this.currentRound = currentRound;
-        this.rounds = rounds;
+        this.rounds = rounds == null ? new ArrayList<>() : rounds;
+    }
+
+    private void validateNumberOfMaximumMembers(Integer numberOfMaximumMembers) {
+        if (numberOfMaximumMembers < MIN_MEMBER_SIZE || numberOfMaximumMembers > MAX_MEMBER_SIZE) {
+            throw new InvalidNumberOfMaximumStudyMember(
+                    String.format(
+                            "스터디의 정원은 최소 %d명 최대 %d명까지 설정 가능합니다",
+                            MIN_MEMBER_SIZE,
+                            MAX_MEMBER_SIZE
+                    ), numberOfMaximumMembers
+            );
+        }
+    }
+
+    private void validateName(String name) {
+        int nameLength = name.length();
+        if (nameLength < MIN_NAME_LENGTH || nameLength > MAX_NAME_LENGTH) {
+            throw new InvalidStudyNameLengthException(
+                    String.format(
+                            "스터디 이름의 길이는 %d자 이상 %d자 이하로 작성 가능합니다.",
+                            MIN_NAME_LENGTH,
+                            MAX_NAME_LENGTH
+                    ), nameLength
+            );
+        }
     }
 
     public static Study initializeStudyOf(
             String name,
             String introduction,
             Integer numberOfMaximumMembers,
-            String startAt,
+            LocalDateTime startAt,
             Integer totalRoundCount,
             String periodOfRound,
             Member master
@@ -121,7 +154,7 @@ public class Study extends BaseEntity {
         Study study = Study.builder()
                            .name(name)
                            .numberOfMaximumMembers(numberOfMaximumMembers)
-                           .startAt(DateConverter.toLocalDateTime(startAt))
+                           .startAt(startAt)
                            .totalRoundCount(totalRoundCount)
                            .periodOfRound(PeriodUnit.getPeriodNumber(periodOfRound))
                            .periodUnit(PeriodUnit.getPeriodUnit(periodOfRound))
@@ -137,35 +170,6 @@ public class Study extends BaseEntity {
         return currentRound.calculateAverageTier();
     }
 
-    public Long createNecessaryTodo(Member author, Long roundId, String content) {
-        Round targetRound = findRoundById(roundId);
-        targetRound.createNecessaryTodo(author, content);
-        return targetRound.getId();
-    }
-
-    public OptionalTodo createOptionalTodo(Member author, Long roundId, String content) {
-        Round targetRound = findRoundById(roundId);
-        return targetRound.createOptionalTodo(author, content);
-    }
-
-    public void updateNecessaryTodoContent(Long todoId, String content) {
-        Round round = findRoundById(todoId);
-        round.updateNecessaryTodoContent(content);
-    }
-
-    public void updateNecessaryTodoIsDone(Member member, Long todoId, Boolean isDone) {
-        Round round = findRoundById(todoId);
-        round.updateNecessaryTodoIsDone(member, isDone);
-    }
-
-    public Round findRoundById(Long roundId) {
-        return rounds.stream()
-                     .filter(round -> round.getId().equals(roundId))
-                     .findAny()
-                     .orElseThrow(
-                             () -> new RoundNotFoundException("스터디에 해당 회차가 존재하지 않습니다.", roundId));
-    }
-
     public void addMember(Member member) {
         validateStudyProcessingStatus();
         validateMemberSize();
@@ -173,17 +177,6 @@ public class Study extends BaseEntity {
         for (Round round : rounds) {
             round.addMember(member);
         }
-    }
-
-    private void validateStudyProcessingStatus() {
-        if (!isRecruiting()) {
-            throw new InvalidProcessingStatusException("모집 중인 스터디가 아니기 때문에 신청을 수락할 수 없습니다.",
-                    processingStatus.name());
-        }
-    }
-
-    public boolean isRecruiting() {
-        return this.processingStatus == ProcessingStatus.RECRUITING;
     }
 
     private void validateMemberSize() {
@@ -228,6 +221,7 @@ public class Study extends BaseEntity {
 
     private void finishStudy() {
         this.processingStatus = ProcessingStatus.END;
+        currentRound.updateMembersTier();
     }
 
     public void startStudy() {
@@ -251,5 +245,36 @@ public class Study extends BaseEntity {
 
     public Member getMaster() {
         return currentRound.getMaster();
+    }
+
+    public void updateInformation(
+            Member member,
+            String name,
+            Integer numberOfMaximumMembers,
+            LocalDateTime startAt,
+            Integer totalRoundCount,
+            String periodOfRound,
+            String introduction
+    ) {
+        validateMaster(member);
+        validateStudyProcessingStatus();
+        this.name = name;
+        this.numberOfMaximumMembers = numberOfMaximumMembers;
+        this.startAt = startAt;
+        this.totalRoundCount = totalRoundCount;
+        this.periodOfRound = PeriodUnit.getPeriodNumber(periodOfRound);
+        this.periodUnit = PeriodUnit.getPeriodUnit(periodOfRound);
+        this.introduction = introduction;
+    }
+
+    private void validateStudyProcessingStatus() {
+        if (!isRecruiting()) {
+            throw new InvalidProcessingStatusException("현재 스터디의 상태가 모집중이 아닙니다.",
+                    processingStatus.name());
+        }
+    }
+
+    public boolean isRecruiting() {
+        return this.processingStatus == ProcessingStatus.RECRUITING;
     }
 }
