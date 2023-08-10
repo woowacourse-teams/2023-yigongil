@@ -15,6 +15,11 @@ import com.created.team201.R
 import com.created.team201.databinding.ActivityStudyManagementBinding
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.profile.ProfileActivity
+import com.created.team201.presentation.studyManagement.StudyManagementActivity.TodoEditState.FAILURE
+import com.created.team201.presentation.studyManagement.StudyManagementActivity.TodoEditState.SUCCESS
+import com.created.team201.presentation.studyManagement.TodoState.DEFAUTL
+import com.created.team201.presentation.studyManagement.TodoState.NECESSARY_TODO_EDIT
+import com.created.team201.presentation.studyManagement.TodoState.NOTHING
 import com.created.team201.presentation.studyManagement.adapter.StudyManagementAdapter
 import com.created.team201.presentation.studyManagement.custom.StudyInformationDialog
 
@@ -113,20 +118,6 @@ class StudyManagementActivity :
             studyManagementViewModel.updateTodoIsDone(isNecessary, todoId, isDone)
         }
 
-        override fun clickOnUpdateTodo(isNecessary: Boolean, todoContent: String) {
-            val trimmedTodoContent = todoContent.trim()
-            if (trimmedTodoContent.isEmpty() || trimmedTodoContent.isBlank()) {
-                toastEmptyTodoInput()
-                return
-            }
-            val currentPage = binding.vpStudyManagement.currentItem
-            studyManagementViewModel.updateTodoContent(
-                currentPage,
-                isNecessary,
-                trimmedTodoContent,
-            )
-        }
-
         override fun onClickGenerateOptionalTodo(optionalTodoCount: Int) {
             if (optionalTodoCount >= MAXIMUM_OPTIONAL_TODO_COUNT) {
                 Toast.makeText(
@@ -136,6 +127,38 @@ class StudyManagementActivity :
                 ).show()
             }
         }
+
+        override fun onClickEditNecessaryTodo(todoContent: String): TodoState {
+            return when (studyManagementViewModel.todoState.value) {
+                NECESSARY_TODO_EDIT -> {
+                    when (updateTodoContent(true, todoContent)) {
+                        SUCCESS -> DEFAUTL
+                        FAILURE -> NECESSARY_TODO_EDIT
+                    }
+                }
+
+                DEFAUTL -> {
+                    studyManagementViewModel.setTodoState(NECESSARY_TODO_EDIT)
+                    NECESSARY_TODO_EDIT
+                }
+
+                else -> NOTHING
+            }
+        }
+    }
+
+    private fun updateTodoContent(isNecessary: Boolean, todoContent: String): TodoEditState {
+        val trimmedTodoContent = todoContent.trim()
+        if (trimmedTodoContent.isEmpty() || trimmedTodoContent.isBlank()) {
+            toastEmptyTodoInput()
+            return FAILURE
+        }
+        val currentPage = binding.vpStudyManagement.currentItem
+        studyManagementViewModel.updateTodoContent(
+            isNecessary,
+            trimmedTodoContent,
+        )
+        return SUCCESS
     }
 
     private fun toastEmptyTodoInput() {
@@ -187,6 +210,13 @@ class StudyManagementActivity :
 
             else -> false
         }
+    }
+
+    sealed interface TodoEditState {
+
+        object SUCCESS : TodoEditState
+
+        object FAILURE : TodoEditState
     }
 
     companion object {

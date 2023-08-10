@@ -1,12 +1,16 @@
 package com.created.team201.presentation.studyManagement.adapter
 
 import android.view.LayoutInflater
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.created.team201.R
 import com.created.team201.databinding.ItemStudyManagementBinding
 import com.created.team201.presentation.studyManagement.StudyManagementClickListener
 import com.created.team201.presentation.studyManagement.StudyMemberClickListener
+import com.created.team201.presentation.studyManagement.TodoState.DEFAUTL
+import com.created.team201.presentation.studyManagement.TodoState.NECESSARY_TODO_EDIT
 import com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel
 import com.created.team201.presentation.studyManagement.model.StudyRoundDetailUiModel
 
@@ -31,7 +35,9 @@ class StudyManagementViewHolder(
 
     private fun setClickAddTodo() {
         binding.tvStudyManagementAddOptionalTodo.setOnClickListener {
-            studyManagementClickListener.onClickGenerateOptionalTodo(studyManagementOptionalTodoAdapter.itemCount)
+            studyManagementClickListener.onClickGenerateOptionalTodo(
+                studyManagementOptionalTodoAdapter.itemCount,
+            )
             val currentTodos = studyManagementOptionalTodoAdapter.currentList
 
             if (currentTodos.isEmpty()) {
@@ -45,12 +51,11 @@ class StudyManagementViewHolder(
 
             studyManagementOptionalTodoAdapter.submitList(currentTodos + OptionalTodoUiModel.ADD_TODO.copy())
         }
+
         binding.tvItemStudyManagementEdit.setOnClickListener {
-            studyManagementClickListener.clickOnUpdateTodo(
-                true,
-                binding.etItemStudyManagementEssentialTodoContent.text.toString(),
-            )
+            setEditNecessaryTodo()
         }
+
         binding.ivStudyManagementNecessaryTodoAddButton.setOnClickListener {
             studyManagementClickListener.onClickAddTodo(
                 true,
@@ -73,6 +78,25 @@ class StudyManagementViewHolder(
         binding.studyManagement = studyManagementUIModel
         studyManagementMemberAdapter.submitList(studyManagementUIModel.studyMembers)
         studyManagementOptionalTodoAdapter.submitList(studyManagementUIModel.optionalTodos)
+    }
+
+    private fun setEditNecessaryTodo() {
+        val currentContent = binding.etItemStudyManagementEssentialTodoContent.text.toString()
+        when (studyManagementClickListener.onClickEditNecessaryTodo(currentContent)) {
+            DEFAUTL -> {
+                binding.etItemStudyManagementEssentialTodoContent.isEnabled = false
+                binding.tvItemStudyManagementEdit.setText(R.string.study_management_edit_todo)
+                binding.ivItemStudyManagementEssentialTodoCheckButton.visibility = VISIBLE
+            }
+
+            NECESSARY_TODO_EDIT -> {
+                binding.etItemStudyManagementEssentialTodoContent.isEnabled = true
+                binding.tvItemStudyManagementEdit.setText(R.string.study_management_edit_todo_done)
+                binding.ivItemStudyManagementEssentialTodoCheckButton.visibility = INVISIBLE
+            }
+
+            else -> return
+        }
     }
 
     companion object {

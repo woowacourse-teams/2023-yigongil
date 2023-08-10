@@ -70,8 +70,10 @@
                 android:textColorHint="@color/grey04_989DA5"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/iv_item_study_management_essential_todo_check_button"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.483"
                 tools:text="블로그에 정리하기" />
 
             <ImageView

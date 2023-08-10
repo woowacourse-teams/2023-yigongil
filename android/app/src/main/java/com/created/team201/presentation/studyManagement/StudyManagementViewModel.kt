@@ -53,6 +53,9 @@ class StudyManagementViewModel(
     private val _isStudyRoundsLoaded: MutableLiveData<Boolean> = MutableLiveData(false)
     val isStudyRoundsLoaded: LiveData<Boolean> get() = _isStudyRoundsLoaded
 
+    private val _todoState: MutableLiveData<TodoState> = MutableLiveData(TodoState.DEFAUTL)
+    val todoState: LiveData<TodoState> get() = _todoState
+
     private val currentStudyRounds get() = studyRounds.value ?: listOf()
     private val studyDetails get() = studyRounds.value ?: listOf()
     private val currentPage get() = currentRound.value ?: ROUND_NOT_FOUND
@@ -238,37 +241,44 @@ class StudyManagementViewModel(
     }
 
     fun updateTodoContent(
-        currentItemId: Int,
         isNecessary: Boolean,
         todoContent: String,
     ) {
-        val studyDetails = studyRounds.value ?: listOf()
-        val necessaryTodo = studyDetails[currentItemId].necessaryTodo
-        val newTodo = necessaryTodo.copy(todo = necessaryTodo.todo.copy(content = todoContent))
-        updateNecessaryTodoContent(studyDetails, necessaryTodo.todo.todoId, todoContent)
-
-        if (!necessaryTodo.isInitialized) {
-            addNecessaryTodo(todoContent)
-            return
+        _todoState.value = TodoState.DEFAUTL
+        when (isNecessary) {
+            true -> updateNecessaryTodoContent(todoContent)
+            false -> updateOptionalTodosContent(todoContent)
         }
-        // patchTodo(newTodo.todo, isNecessary)
     }
 
-    private fun updateNecessaryTodoContent(
-        studyDetails: List<StudyRoundDetailUiModel>,
-        id: Long,
-        content: String,
-    ) {
-        _studyRounds.value = studyDetails.map { studyDetailUiModel ->
-            studyDetailUiModel.takeIf { it.necessaryTodo.todo.todoId != id }
-                ?: studyDetailUiModel.copy(
-                    necessaryTodo = studyDetailUiModel.necessaryTodo.copy(
-                        studyDetailUiModel.necessaryTodo.todo.copy(
-                            content = content,
-                        ),
-                    ),
+    private fun updateNecessaryTodoContent(todoContent: String) {
+        val newNecessaryTodo = currentRoundDetail.necessaryTodo.copy(
+            todo = currentRoundDetail.necessaryTodo.todo.copy(content = todoContent),
+        )
+
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching {
+                repository.patchNecessaryTodo(
+                    currentRoundDetail.id,
+                    newNecessaryTodo.todo.toDomain(),
                 )
+            }.onSuccess {
+                val newRound = currentRoundDetail.copy(necessaryTodo = newNecessaryTodo)
+                val updatedStudyRounds = currentStudyRounds.map { studyRoundDetailUiModel ->
+                    studyRoundDetailUiModel.takeIf { it.id != currentRoundDetail.id } ?: newRound
+                }
+                _studyRounds.postValue(updatedStudyRounds)
+            }.onFailure {
+                Log.e(LOG_ERROR, it.message.toString())
+            }
         }
+    }
+
+    private fun updateOptionalTodosContent(todoContent: String) {
+    }
+
+    fun setTodoState(updatedTodoState: TodoState) {
+        _todoState.value = updatedTodoState
     }
 
     private fun StudyDetail.toUiModel(): StudyManagementInformationUiModel =
