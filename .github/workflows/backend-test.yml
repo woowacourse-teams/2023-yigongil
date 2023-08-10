@@ -3,7 +3,7 @@ on:
   pull_request:
     branches: [BE/develop, BE/release]
     types: [opened, synchronize, reopened]
-      
+
 
 defaults:
   run:
@@ -30,9 +30,17 @@ jobs:
 
     - name: Gradle에 권한부여
       run: chmod +x gradlew
-      
+
+    - name: 캐싱 적용
+      uses: actions/cache@v3
+      with:
+        path: |
+         ~/.gradle/caches
+         ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+
     - name: Test 실행
-      run: ./gradlew clean build
+      run: ./gradlew test
       
     - name: Test 결과를 PR에 코멘트로 등록
       uses: EnricoMi/publish-unit-test-result-action@v2
