@@ -29,6 +29,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     }
 
     private fun navigateToStudyDetailActivity(studyId: Long) {
+        // TODO: 스터디 관리하기 뷰로 이동
         startActivity(StudyDetailActivity.getIntent(requireContext(), studyId))
     }
 
