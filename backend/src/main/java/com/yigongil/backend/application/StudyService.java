@@ -104,6 +104,7 @@ public class StudyService {
     public void apply(Member member, Long studyId) {
         Study study = findStudyById(studyId);
 
+        study.validateMemberSize();
         validateApplicantAlreadyExist(member, study);
 
         studyMemberRepository.save(
