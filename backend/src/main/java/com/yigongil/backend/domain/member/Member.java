@@ -42,6 +42,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private boolean isOnboardingDone;
 
+    @Column(nullable = false)
     private boolean isDeleted;
 
 
@@ -56,7 +57,7 @@ public class Member extends BaseEntity {
             String profileImageUrl,
             Integer tier,
             String introduction,
-            boolean isOnboardingDone
+            boolean isOnboardingDone,
             boolean isDeleted
     ) {
         this.id = id;
