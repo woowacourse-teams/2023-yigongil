@@ -113,6 +113,7 @@ class StudyDetailViewModel private constructor(
                     studyParticipants.minus(acceptedMember) + acceptedMember.copy(isApplicant = false)
                 _canStudyStart.value = StudyDetail.canStartStudy(studyParticipants.size)
                 _studyMemberCount.value = _studyMemberCount.value.plus(1)
+                if (study.value.peopleCount == studyMemberCount.value) _isFullMember.value = true
             }
         }
     }
