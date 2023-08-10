@@ -40,7 +40,11 @@ public class Member extends BaseEntity {
     private Introduction introduction;
 
     @Column(nullable = false)
+    private boolean isOnboardingDone;
+
+    @Column(nullable = false)
     private boolean isDeleted;
+
 
     protected Member() {
     }
@@ -53,19 +57,23 @@ public class Member extends BaseEntity {
             String profileImageUrl,
             Integer tier,
             String introduction,
-            boolean isDeleted) {
+            boolean isOnboardingDone,
+            boolean isDeleted
+    ) {
         this.id = id;
         this.githubId = githubId;
         this.nickname = new Nickname(nickname);
         this.profileImageUrl = profileImageUrl;
         this.tier = tier == null ? 1 : tier;
         this.introduction = new Introduction(introduction);
+        this.isOnboardingDone = isOnboardingDone;
         this.isDeleted = isDeleted;
     }
 
     public void updateProfile(String nickname, String introduction) {
         this.nickname = new Nickname(nickname);
         this.introduction = new Introduction(introduction);
+        this.isOnboardingDone = true;
     }
 
     public int isSameWithMaster(Member master) {
