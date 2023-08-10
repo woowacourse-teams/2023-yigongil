@@ -63,7 +63,7 @@ class ProfileActivity : BindingActivity<ActivityProfileBinding>(R.layout.activit
 
     private fun getDividerItemDecoration(): DividerItemDecoration {
         val dividerItemDecoration = DividerItemDecoration(this, LinearLayout.VERTICAL)
-        ContextCompat.getDrawable(this, R.drawable.divider_study_list)?.let {
+        ContextCompat.getDrawable(this, R.drawable.divider_recyclerview_line)?.let {
             dividerItemDecoration.setDrawable(it)
         }
         return dividerItemDecoration
