@@ -4,6 +4,7 @@ import com.created.team201.data.remote.api.AuthService
 import com.created.team201.data.remote.api.HomeService
 import com.created.team201.data.remote.api.MyPageService
 import com.created.team201.data.remote.api.ProfileService
+import com.created.team201.data.remote.api.ReportService
 import com.created.team201.data.remote.api.StudyDetailService
 import com.created.team201.data.remote.api.StudyListService
 import com.created.team201.data.remote.api.StudyManageService
@@ -20,4 +21,5 @@ object NetworkServiceModule {
     val studyDetailService by lazy { NetworkModule.create<StudyDetailService>() }
     val profileService by lazy { NetworkModule.create<ProfileService>() }
     val authService by lazy { NetworkModule.create<AuthService>() }
+    val reportService by lazy { NetworkModule.create<ReportService>() }
 }
