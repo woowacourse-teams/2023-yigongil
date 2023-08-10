@@ -46,10 +46,8 @@ class ReportViewModel : ViewModel() {
     private fun isInputsNotEmptyAndNotBlank(): Boolean {
         val title = title.value ?: EMPTY_STRING
         val content = content.value ?: EMPTY_STRING
-        return title.isNotEmptyAndNotBlack() && content.isNotEmptyAndNotBlack()
+        return title.isNotBlank() && content.isNotBlank()
     }
-
-    private fun String.isNotEmptyAndNotBlack(): Boolean = isNotEmpty() && isNotBlank()
 
     private fun <T> MediatorLiveData<T>.addSourceList(
         vararg liveDataArgument: LiveData<*>,
