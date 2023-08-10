@@ -1,6 +1,8 @@
 package com.created.team201.presentation.report
 
 import android.app.DatePickerDialog
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
@@ -9,6 +11,7 @@ import com.created.team201.R
 import com.created.team201.databinding.ActivityReportBinding
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.report.model.DateUiModel
+import com.created.team201.presentation.report.model.ReportCategory
 import java.util.Calendar
 
 class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_report) {
@@ -93,5 +96,13 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
 
     companion object {
         private const val MONTH_CALIBRATION_VALUE = 1
+        private const val KEY_CATEGORY = "key_category"
+        private const val KEY_TARGET_ID = "key_target_id"
+        fun getIntent(context: Context, reportCategory: ReportCategory, targetId: Long): Intent =
+            Intent(context, ReportActivity::class.java).apply {
+                putExtra(KEY_CATEGORY, reportCategory.index)
+                putExtra(KEY_TARGET_ID, targetId)
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            }
     }
 }
