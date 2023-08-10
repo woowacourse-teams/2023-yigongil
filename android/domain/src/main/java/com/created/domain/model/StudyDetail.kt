@@ -18,6 +18,8 @@ data class StudyDetail(
 ) {
     companion object {
         private const val START_MEMBER_CONDITION = 2
+        fun getPeriod(periodOfRound: String): Int =
+            periodOfRound.replace("[^0-9]".toRegex(), "").toInt()
 
         fun canStartStudy(numberOfCurrentMembers: Int): Boolean =
             numberOfCurrentMembers >= START_MEMBER_CONDITION

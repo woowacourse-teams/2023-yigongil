@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="java.util.List" />
+
+        <variable
+            name="viewModel"
+            type="com.created.team201.presentation.updateStudy.UpdateStudyViewModel" />
+
+        <variable
+            name="displayNames"
+            type="List&lt;String>" />
+
+        <variable
+            name="onIconTextButtonClickListener"
+            type="kotlin.jvm.functions.Function1" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_create_study"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/black01_0D1117"
+            android:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/header_sb15"
+            app:titleTextColor="@color/white" />
+
+        <View
+            android:id="@+id/view_create_study_toolbar_border_line"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/black02_181B21"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_create_study" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_create_study"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_create_study_toolbar_border_line">
+
+            <EditText
+                android:id="@+id/et_create_study_name"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:background="@android:color/transparent"
+                android:gravity="top"
+                android:hint="@string/createStudy_study_hint_name"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine|textNoSuggestions"
+                android:maxLength="30"
+                android:maxLines="3"
+                android:onTextChanged="@{(text, start, before, count) -> viewModel.setName(text.toString())}"
+                android:text="@{viewModel.name}"
+                android:textAppearance="@style/title_b20"
+                android:textColor="@color/white"
+                android:textColorHint="@color/grey02_78808B"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/view_create_study_name_between_button"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/black03_272C33"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_create_study_name" />
+
+            <com.created.team201.presentation.updateStudy.custom.IconTextButton
+                android:id="@+id/itb_create_study_people_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> onIconTextButtonClickListener.invoke(@string/createStudy_tag_people_count)}"
+                app:buttonName="@string/icon_text_button_name_people_count"
+                app:iconResource="@drawable/ic_people_capacity"
+                app:information="@{viewModel.peopleCount == 0 ? null : @string/icon_text_button_formatter_information_people_count(viewModel.peopleCount.intValue())}"
+                app:layout_constraintBottom_toBottomOf="@id/itb_create_study_start_date"
+                app:layout_constraintEnd_toStartOf="@id/itb_create_study_start_date"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/itb_create_study_start_date" />
+
+            <com.created.team201.presentation.updateStudy.custom.IconTextButton
+                android:id="@+id/itb_create_study_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:onClick="@{() -> onIconTextButtonClickListener.invoke(@string/createStudy_tag_start_date)}"
+                app:buttonName="@string/icon_text_button_name_start_date"
+                app:iconResource="@drawable/ic_start_date"
+                app:information="@{viewModel.startDate.toString().empty ? null : viewModel.startDate.toString()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/itb_create_study_cycle"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toEndOf="@id/itb_create_study_people_count"
+                app:layout_constraintTop_toBottomOf="@id/view_create_study_name_between_button"
+                app:layout_constraintVertical_chainStyle="spread" />
+
+            <com.created.team201.presentation.updateStudy.custom.IconTextButton
+                android:id="@+id/itb_create_study_cycle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> onIconTextButtonClickListener.invoke(@string/createStudy_tag_cycle)}"
+                app:buttonName="@string/icon_text_button_name_cycle"
+                app:iconResource="@drawable/ic_cycle"
+                app:information="@{viewModel.cycle.date == 0 ? null : @string/multiPicker_formatter_information(viewModel.cycle.date, displayNames[viewModel.cycle.unit.type])}"
+                app:layout_constraintBottom_toBottomOf="@id/itb_create_study_start_date"
+                app:layout_constraintEnd_toStartOf="@id/itb_create_study_period"
+                app:layout_constraintStart_toEndOf="@id/itb_create_study_start_date"
+                app:layout_constraintTop_toTopOf="@id/itb_create_study_start_date" />
+
+            <com.created.team201.presentation.updateStudy.custom.IconTextButton
+                android:id="@+id/itb_create_study_period"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> onIconTextButtonClickListener.invoke(@string/createStudy_tag_period)}"
+                app:buttonName="@string/icon_text_button_name_period"
+                app:iconResource="@drawable/ic_period"
+                app:information="@{viewModel.period == 0 ? null : @string/icon_text_button_formatter_information_period(viewModel.period)}"
+                app:layout_constraintBottom_toBottomOf="@id/itb_create_study_start_date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/itb_create_study_cycle"
+                app:layout_constraintTop_toTopOf="@id/itb_create_study_start_date" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_create_study">
+
+            <EditText
+                android:id="@+id/et_create_study_introduction"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:background="@android:color/transparent"
+                android:gravity="top"
+                android:hint="@string/createStudy_study_hint_introduction"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine|textNoSuggestions"
+                android:maxLength="200"
+                android:maxLines="7"
+                android:onTextChanged="@{(text, start, before, count) -> viewModel.setIntroduction(text.toString())}"
+                android:text="@{viewModel.content}"
+                android:textAppearance="@style/text_r14"
+                android:textColor="@color/white"
+                android:textColorHint="@color/grey02_78808B"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_create_study_btn_done"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="28dp"
+            android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
+            android:enabled="@{viewModel.isEnableCreateStudy}"
+            android:paddingVertical="14dp"
+            android:text="@string/createStudy_button_created"
+            android:textAlignment="center"
+            android:textAppearance="@style/button_sb18"
+            android:textColor="@color/tv_color_disabled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
