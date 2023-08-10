@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.config.oauth.JwtTokenProvider;
 import com.yigongil.backend.request.ProfileUpdateRequest;
 import com.yigongil.backend.response.NicknameValidationResponse;
+import com.yigongil.backend.response.OnboardingCheckResponse;
 import com.yigongil.backend.response.ProfileResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.TokenResponse;
@@ -124,6 +125,19 @@ public class MemberSteps {
         );
     }
 
+    @Then("{string}의 온보딩 상태가 완료로 변경된다.")
+    public void 온보딩_상태_검증(String githubId) {
+        ExtractableResponse<Response> response = given().log().all()
+                                                             .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(githubId))
+                                                             .when()
+                                                             .get("v1/members/check-onboarding-is-done")
+                                                             .then().log().all()
+                                                             .statusCode(HttpStatus.OK.value())
+                                                             .extract();
+
+        assertThat(response.as(OnboardingCheckResponse.class).isOnboardingDone()).isTrue();
+    }
+  
     @Then("{string}가 회원 탈퇴 상태이다.")
     public void 회원_탈퇴한_상태이다(String githubId) {
         Long id = jwtTokenProvider.parseToken((String) sharedContext.getParameter(githubId));
