@@ -25,6 +25,9 @@ logging:
     org.hibernate.type: trace
     org.hibernate.sql: debug
 
+flyway:
+  enabled: false
+
 oauth2:
   github:
     client:
