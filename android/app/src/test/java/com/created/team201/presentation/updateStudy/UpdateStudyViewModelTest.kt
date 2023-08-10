@@ -1,8 +1,8 @@
 package com.created.team201.presentation.updateStudy
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.created.domain.repository.CreateStudyRepository
 import com.created.domain.repository.StudyDetailRepository
+import com.created.domain.repository.UpdateStudyRepository
 import com.created.team201.presentation.updateStudy.UpdateStudyViewModel.State.Success
 import com.created.team201.presentation.util.getOrAwaitValue
 import io.mockk.coEvery
@@ -16,7 +16,7 @@ import org.junit.Rule
 import org.junit.Test
 
 class UpdateStudyViewModelTest {
-    private lateinit var createStudyRepository: CreateStudyRepository
+    private lateinit var updateStudyRepository: UpdateStudyRepository
     private lateinit var studyDetailRepository: StudyDetailRepository
     private lateinit var viewModel: UpdateStudyViewModel
 
@@ -34,8 +34,8 @@ class UpdateStudyViewModelTest {
     @Before
     fun setupViewModel() {
         studyDetailRepository = mockk()
-        createStudyRepository = mockk()
-        viewModel = UpdateStudyViewModel(createStudyRepository, studyDetailRepository)
+        updateStudyRepository = mockk()
+        viewModel = UpdateStudyViewModel(updateStudyRepository, studyDetailRepository)
     }
 
     @ExperimentalCoroutinesApi
@@ -44,20 +44,20 @@ class UpdateStudyViewModelTest {
         // given
         val studyId = 1L
         coEvery {
-            createStudyRepository.createStudy(
-                CreateStudyFixture.study,
+            updateStudyRepository.createStudy(
+                UpdateStudyFixture.study,
             )
         } returns Result.success(studyId)
-        viewModel.setName(CreateStudyFixture.study.name)
-        viewModel.setPeopleCount(CreateStudyFixture.study.peopleCount)
-        viewModel.setStartDate(CreateStudyFixture.study.startDate)
-        viewModel.setPeriod(CreateStudyFixture.study.period)
+        viewModel.setName(UpdateStudyFixture.study.name)
+        viewModel.setPeopleCount(UpdateStudyFixture.study.peopleCount)
+        viewModel.setStartDate(UpdateStudyFixture.study.startDate)
+        viewModel.setPeriod(UpdateStudyFixture.study.period)
         viewModel.setCycle(
-            CreateStudyFixture.study.cycle.date,
-            CreateStudyFixture.study.cycle.unit.type,
+            UpdateStudyFixture.study.cycle.date,
+            UpdateStudyFixture.study.cycle.unit.type,
         )
 
-        viewModel.setIntroduction(CreateStudyFixture.study.introduction)
+        viewModel.setIntroduction(UpdateStudyFixture.study.introduction)
 
         // when
         viewModel.createStudy()

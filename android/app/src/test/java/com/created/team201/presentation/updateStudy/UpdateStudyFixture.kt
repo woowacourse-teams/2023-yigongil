@@ -1,11 +1,11 @@
 package com.created.team201.presentation.updateStudy
 
-import com.created.domain.model.CreateStudy
 import com.created.domain.model.Period
 import com.created.domain.model.PeriodUnit
+import com.created.domain.model.UpdateStudy
 
-object CreateStudyFixture {
-    val study: CreateStudy = CreateStudy(
+object UpdateStudyFixture {
+    val study: UpdateStudy = UpdateStudy(
         name = "자바 스터디",
         peopleCount = 4,
         startDate = "2023.07.30.",

@@ -2,18 +2,18 @@ package com.created.team201.data.request
 
 import com.created.domain.model.Period
 import com.created.domain.model.PeriodUnit
-import com.created.team201.data.remote.request.CreateStudyRequestDto
+import com.created.team201.data.remote.request.UpdateStudyRequestDto
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
-class CreateStudyRequestDtoTest {
+class UpdateStudyRequestDtoTest {
     @Test
     fun `Period의 date는 14, type은 PeriodUnit_DAY 이면 PeriodString은 14d이다`() {
         // given
         val period = Period(14, PeriodUnit.DAY)
 
         // when
-        val actual = CreateStudyRequestDto.getPeriodString(period)
+        val actual = UpdateStudyRequestDto.getPeriodString(period)
 
         // then
         assertEquals("14d", actual)
@@ -25,7 +25,7 @@ class CreateStudyRequestDtoTest {
         val period = Period(2, PeriodUnit.WEEK)
 
         // when
-        val actual = CreateStudyRequestDto.getPeriodString(period)
+        val actual = UpdateStudyRequestDto.getPeriodString(period)
 
         // then
         assertEquals("2w", actual)

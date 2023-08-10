@@ -8,26 +8,26 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.created.domain.model.CreateStudy
 import com.created.domain.model.Period
 import com.created.domain.model.PeriodUnit
 import com.created.domain.model.StudyDetail.Companion.getPeriod
-import com.created.domain.repository.CreateStudyRepository
+import com.created.domain.model.UpdateStudy
 import com.created.domain.repository.StudyDetailRepository
-import com.created.team201.data.datasource.remote.CreateStudyDataSourceImpl
+import com.created.domain.repository.UpdateStudyRepository
 import com.created.team201.data.datasource.remote.StudyDetailDataSourceImpl
+import com.created.team201.data.datasource.remote.UpdateStudyDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.CreateStudyRepositoryImpl
 import com.created.team201.data.repository.StudyDetailRepositoryImpl
-import com.created.team201.presentation.updateStudy.model.CreateStudyUiModel
+import com.created.team201.data.repository.UpdateStudyRepositoryImpl
 import com.created.team201.presentation.updateStudy.model.PeriodUiModel
+import com.created.team201.presentation.updateStudy.model.UpdateStudyUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
 import com.created.team201.util.addSourceList
 import kotlinx.coroutines.launch
 
 class UpdateStudyViewModel(
-    private val createStudyRepository: CreateStudyRepository,
+    private val updateStudyRepository: UpdateStudyRepository,
     private val studyDetailRepository: StudyDetailRepository,
 ) : ViewModel() {
     private val _name: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
@@ -116,14 +116,14 @@ class UpdateStudyViewModel(
     fun editStudy(studyId: Long) {
         viewModelScope.launch {
             runCatching {
-                CreateStudyUiModel(
+                UpdateStudyUiModel(
                     name.value.trim(),
                     peopleCount.value,
                     startDate.value,
                     period.value,
                     cycle.value,
                     introduction.value.trim(),
-                ).apply { createStudyRepository.editStudy(studyId, this.toDomain()) }
+                ).apply { updateStudyRepository.editStudy(studyId, this.toDomain()) }
             }
                 .onSuccess {
                     _studyState.value = State.Success(studyId)
@@ -137,7 +137,7 @@ class UpdateStudyViewModel(
         if (isOpenStudy) return
         isOpenStudy = true
         viewModelScope.launch {
-            CreateStudyUiModel(
+            UpdateStudyUiModel(
                 name.value.trim(),
                 peopleCount.value,
                 startDate.value,
@@ -145,7 +145,7 @@ class UpdateStudyViewModel(
                 cycle.value,
                 introduction.value.trim(),
             ).apply {
-                createStudyRepository.createStudy(this.toDomain())
+                updateStudyRepository.createStudy(this.toDomain())
                     .onSuccess {
                         _studyState.value = State.Success(it)
                     }.onFailure {
@@ -167,8 +167,8 @@ class UpdateStudyViewModel(
     private fun isInitializeCreateStudyInformation(): Boolean =
         name.value.isNotBlankAndEmpty() && peopleCount.value.isNotZero() && startDate.value.isNotEmpty() && period.value.isNotZero() && cycle.value.date.isNotZero() && introduction.value.isNotBlankAndEmpty()
 
-    private fun CreateStudyUiModel.toDomain(): CreateStudy =
-        CreateStudy(name, peopleCount, startDate, period, cycle.toDomain(), introduction)
+    private fun UpdateStudyUiModel.toDomain(): UpdateStudy =
+        UpdateStudy(name, peopleCount, startDate, period, cycle.toDomain(), introduction)
 
     private fun PeriodUiModel.toDomain(): Period = Period(date, unit)
 
@@ -183,9 +183,9 @@ class UpdateStudyViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val createStudyRepository = CreateStudyRepositoryImpl(
-                    CreateStudyDataSourceImpl(
-                        NetworkServiceModule.createStudyService,
+                val createStudyRepository = UpdateStudyRepositoryImpl(
+                    UpdateStudyDataSourceImpl(
+                        NetworkServiceModule.updateStudyService,
                     ),
                 )
                 val studyDetailRepository = StudyDetailRepositoryImpl(

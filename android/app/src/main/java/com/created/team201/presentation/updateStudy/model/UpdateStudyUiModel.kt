@@ -1,6 +1,6 @@
 package com.created.team201.presentation.updateStudy.model
 
-data class CreateStudyUiModel(
+data class UpdateStudyUiModel(
     val name: String,
     val peopleCount: Int,
     val startDate: String,
