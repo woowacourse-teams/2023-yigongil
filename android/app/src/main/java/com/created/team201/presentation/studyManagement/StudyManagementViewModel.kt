@@ -22,6 +22,7 @@ import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.StudyManagementRepositoryImpl
 import com.created.team201.presentation.home.model.TodoUiModel
 import com.created.team201.presentation.studyList.model.PeriodUiModel
+import com.created.team201.presentation.studyManagement.TodoState.DEFAULT
 import com.created.team201.presentation.studyManagement.adapter.OptionalTodoViewType
 import com.created.team201.presentation.studyManagement.model.NecessaryTodoUiModel
 import com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel
@@ -53,7 +54,7 @@ class StudyManagementViewModel(
     private val _isStudyRoundsLoaded: MutableLiveData<Boolean> = MutableLiveData(false)
     val isStudyRoundsLoaded: LiveData<Boolean> get() = _isStudyRoundsLoaded
 
-    private val _todoState: MutableLiveData<TodoState> = MutableLiveData(TodoState.DEFAUTL)
+    private val _todoState: MutableLiveData<TodoState> = MutableLiveData(DEFAULT)
     val todoState: LiveData<TodoState> get() = _todoState
 
     private val currentStudyRounds get() = studyRounds.value ?: listOf()
@@ -240,18 +241,7 @@ class StudyManagementViewModel(
         return currentOptionalTodo.copy(todo = currentOptionalTodo.todo.copy(isDone = isDone))
     }
 
-    fun updateTodoContent(
-        isNecessary: Boolean,
-        todoContent: String,
-    ) {
-        _todoState.value = TodoState.DEFAUTL
-        when (isNecessary) {
-            true -> updateNecessaryTodoContent(todoContent)
-            false -> updateOptionalTodosContent(todoContent)
-        }
-    }
-
-    private fun updateNecessaryTodoContent(todoContent: String) {
+    fun updateNecessaryTodoContent(todoContent: String) {
         val newNecessaryTodo = currentRoundDetail.necessaryTodo.copy(
             todo = currentRoundDetail.necessaryTodo.todo.copy(content = todoContent),
         )
@@ -274,7 +264,26 @@ class StudyManagementViewModel(
         }
     }
 
-    private fun updateOptionalTodosContent(todoContent: String) {
+    fun updateOptionalTodosContent(updatedTodos: List<OptionalTodoUiModel>) {
+        val newOptionalTodos = currentRoundDetail.optionalTodos.map { optionalTodo ->
+            updatedTodos.find { it.todo.todoId == optionalTodo.todo.todoId } ?: optionalTodo
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching {
+                for (updatedTodo in updatedTodos) {
+                    repository.patchOptionalTodo(currentRoundDetail.id, updatedTodo.todo.toDomain())
+                }
+            }.onSuccess {
+                val newRound = currentRoundDetail.copy(optionalTodos = newOptionalTodos)
+                val updatedStudyRounds = currentStudyRounds.map { studyRoundDetailUiModel ->
+                    studyRoundDetailUiModel.takeIf { it.id != currentRoundDetail.id } ?: newRound
+                }
+                _studyRounds.postValue(updatedStudyRounds)
+            }.onFailure {
+                Log.e(LOG_ERROR, it.message.toString())
+            }
+        }
     }
 
     fun setTodoState(updatedTodoState: TodoState) {

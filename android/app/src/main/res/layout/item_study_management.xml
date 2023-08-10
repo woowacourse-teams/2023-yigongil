@@ -124,6 +124,19 @@
             android:textAppearance="@style/text_r12"
             android:textColor="@color/white"
             app:drawableStartCompat="@drawable/ic_add_todo"
+            app:layout_constraintEnd_toStartOf="@id/tv_item_study_management_edit_optinal_todo"
+            app:layout_constraintTop_toTopOf="@id/tv_item_study_management_optional_todo" />
+
+        <TextView
+            android:id="@+id/tv_item_study_management_edit_optinal_todo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/study_management_edit_todo"
+            android:textAppearance="@style/text_r12"
+            android:textColor="@color/white"
+            app:drawableStartCompat="@drawable/ic_edit_12"
+            app:isGone="@{studyManagement.optionalTodos.size()==0}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_item_study_management_optional_todo" />
 

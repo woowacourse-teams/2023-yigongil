@@ -3,6 +3,7 @@ package com.created.team201.presentation.studyManagement
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.GONE
@@ -17,11 +18,13 @@ import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.profile.ProfileActivity
 import com.created.team201.presentation.studyManagement.StudyManagementActivity.TodoEditState.FAILURE
 import com.created.team201.presentation.studyManagement.StudyManagementActivity.TodoEditState.SUCCESS
-import com.created.team201.presentation.studyManagement.TodoState.DEFAUTL
+import com.created.team201.presentation.studyManagement.TodoState.DEFAULT
 import com.created.team201.presentation.studyManagement.TodoState.NECESSARY_TODO_EDIT
 import com.created.team201.presentation.studyManagement.TodoState.NOTHING
+import com.created.team201.presentation.studyManagement.TodoState.OPTIONAL_TODO_EDIT
 import com.created.team201.presentation.studyManagement.adapter.StudyManagementAdapter
 import com.created.team201.presentation.studyManagement.custom.StudyInformationDialog
+import com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel
 
 class StudyManagementActivity :
     BindingActivity<ActivityStudyManagementBinding>(R.layout.activity_study_management) {
@@ -128,16 +131,16 @@ class StudyManagementActivity :
             }
         }
 
-        override fun onClickEditNecessaryTodo(todoContent: String): TodoState {
+        override fun onClickEditNecessaryTodo(todoContents: String): TodoState {
             return when (studyManagementViewModel.todoState.value) {
                 NECESSARY_TODO_EDIT -> {
-                    when (updateTodoContent(true, todoContent)) {
-                        SUCCESS -> DEFAUTL
+                    when (updateTodoContent(true, listOf(todoContents))) {
+                        SUCCESS -> DEFAULT
                         FAILURE -> NECESSARY_TODO_EDIT
                     }
                 }
 
-                DEFAUTL -> {
+                DEFAULT -> {
                     studyManagementViewModel.setTodoState(NECESSARY_TODO_EDIT)
                     NECESSARY_TODO_EDIT
                 }
@@ -145,19 +148,44 @@ class StudyManagementActivity :
                 else -> NOTHING
             }
         }
+
+        override fun onClickEditOptionalTodo(updatedTodos: List<OptionalTodoUiModel>): TodoState {
+            Log.d("ring", "엥" + updatedTodos.toString())
+            return when (studyManagementViewModel.todoState.value) {
+                OPTIONAL_TODO_EDIT -> {
+                    val updatedContents: List<String> = updatedTodos.map { it.todo.content ?: "" }
+                    when (updateTodoContent(false, updatedContents, updatedTodos)) {
+                        SUCCESS -> DEFAULT
+                        FAILURE -> OPTIONAL_TODO_EDIT
+                    }
+                }
+
+                DEFAULT -> {
+                    studyManagementViewModel.setTodoState(OPTIONAL_TODO_EDIT)
+                    OPTIONAL_TODO_EDIT
+                }
+
+                else -> NOTHING
+            }
+        }
     }
 
-    private fun updateTodoContent(isNecessary: Boolean, todoContent: String): TodoEditState {
-        val trimmedTodoContent = todoContent.trim()
-        if (trimmedTodoContent.isEmpty() || trimmedTodoContent.isBlank()) {
+    private fun updateTodoContent(
+        isNecessary: Boolean,
+        todoContents: List<String>,
+        optionalTodos: List<OptionalTodoUiModel> = listOf(),
+    ): TodoEditState {
+        val trimmedTodoContents = todoContents.map { it.trim() }
+        if (trimmedTodoContents.any { it.isBlank() }) {
             toastEmptyTodoInput()
             return FAILURE
         }
-        val currentPage = binding.vpStudyManagement.currentItem
-        studyManagementViewModel.updateTodoContent(
-            isNecessary,
-            trimmedTodoContent,
-        )
+
+        when (isNecessary) {
+            true -> studyManagementViewModel.updateNecessaryTodoContent(trimmedTodoContents.first())
+            false -> studyManagementViewModel.updateOptionalTodosContent(optionalTodos)
+        }
+        studyManagementViewModel.setTodoState(DEFAULT)
         return SUCCESS
     }
 

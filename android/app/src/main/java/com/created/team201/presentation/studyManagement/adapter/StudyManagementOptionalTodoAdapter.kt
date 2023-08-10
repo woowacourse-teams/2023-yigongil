@@ -6,9 +6,13 @@ import androidx.recyclerview.widget.ListAdapter
 import com.created.team201.presentation.studyManagement.StudyManagementClickListener
 import com.created.team201.presentation.studyManagement.adapter.OptionalTodoViewType.ADD
 import com.created.team201.presentation.studyManagement.adapter.OptionalTodoViewType.DISPLAY
+import com.created.team201.presentation.studyManagement.adapter.OptionalTodoViewType.EDIT
 import com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel
 
-class StudyManagementOptionalTodoAdapter(private val studyManagementClickListener: StudyManagementClickListener) :
+class StudyManagementOptionalTodoAdapter(
+    private val studyManagementClickListener: StudyManagementClickListener,
+    private val changedOptionalTodos: (optionalTodo: OptionalTodoUiModel) -> Unit,
+) :
     ListAdapter<OptionalTodoUiModel, StudyOptionalTodoViewHolder>(
         diffCallback,
     ) {
@@ -17,6 +21,7 @@ class StudyManagementOptionalTodoAdapter(private val studyManagementClickListene
         return when (OptionalTodoViewType.valueOf(viewType)) {
             ADD -> StudyManagementOptionalTodoAddViewHolder.from(parent, studyManagementClickListener)
             DISPLAY -> StudyManagementOptionalTodoViewHolder.from(parent, studyManagementClickListener)
+            EDIT -> StudyManagementOptionalTodoEditViewHolder.from(parent, studyManagementClickListener, changedOptionalTodos)
         }
     }
 
@@ -24,6 +29,7 @@ class StudyManagementOptionalTodoAdapter(private val studyManagementClickListene
         when (OptionalTodoViewType.valueOf(getItemViewType(position))) {
             ADD -> (holder as StudyManagementOptionalTodoAddViewHolder).bind(getItem(position))
             DISPLAY -> (holder as StudyManagementOptionalTodoViewHolder).bind(getItem(position))
+            EDIT -> (holder as StudyManagementOptionalTodoEditViewHolder).bind(getItem(position))
         }
     }
 
