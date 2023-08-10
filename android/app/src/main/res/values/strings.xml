@@ -91,6 +91,7 @@
     <string name="study_management_edit_todo_done">수정완료</string>
     <string name="study_management_add_todo"> 추가하기</string>
     <string name="study_management_round">%d회차</string>
+    <string name="study_management_round_postfix">회차</string>
     <string name="study_management_end_button_is_study_participant">그만두기</string>
     <string name="study_management_end_button_is_study_master">종료하기</string>
     <string name="study_management_previous_button_description">이전 스터디 회차</string>

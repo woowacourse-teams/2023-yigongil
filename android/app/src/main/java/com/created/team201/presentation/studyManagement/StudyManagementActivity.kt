@@ -3,11 +3,15 @@ package com.created.team201.presentation.studyManagement
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.OVER_SCROLL_NEVER
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.viewpager2.widget.ViewPager2
@@ -25,6 +29,7 @@ import com.created.team201.presentation.studyManagement.TodoState.OPTIONAL_TODO_
 import com.created.team201.presentation.studyManagement.adapter.StudyManagementAdapter
 import com.created.team201.presentation.studyManagement.custom.StudyInformationDialog
 import com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel
+
 
 class StudyManagementActivity :
     BindingActivity<ActivityStudyManagementBinding>(R.layout.activity_study_management) {
@@ -46,6 +51,10 @@ class StudyManagementActivity :
         initPage()
         initPageButtonClickListener()
         observeStudyManagement()
+        // min, max 라운드 리밋
+        setCurrentRoundChangeListener()
+        // enter 시 뷰페이저 전환
+        setPageRoundChangeListener()
     }
 
     private fun initViewModel() {
@@ -217,6 +226,51 @@ class StudyManagementActivity :
 
     private fun showStudyInformationDialog() {
         StudyInformationDialog(this, studyManagementViewModel.studyInformation).show()
+    }
+
+    private fun setCurrentRoundChangeListener() {
+        binding.etStudyManagementRound.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                p0?.let {
+                    if (it.isBlank()) return@let
+                    var currentNumber = it.toString().toIntOrNull() ?: return@let
+
+                    currentNumber =
+                        currentNumber.coerceAtLeast(1)
+
+                    // Max Round 지정해주세요~
+                    currentNumber = currentNumber.coerceAtMost(60)
+
+                    binding.etStudyManagementRound.removeTextChangedListener(this)
+                    binding.etStudyManagementRound.setText(currentNumber.toString())
+                    binding.etStudyManagementRound.setSelection(binding.etStudyManagementRound.text.toString().length)
+                    binding.etStudyManagementRound.addTextChangedListener(this)
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        })
+    }
+
+    private fun setPageRoundChangeListener() {
+        binding.etStudyManagementRound.setOnKeyListener { view, _, keyEvent ->
+            when (keyEvent.keyCode) {
+                KeyEvent.KEYCODE_ENTER -> {
+                    (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).also {
+                        it.hideSoftInputFromWindow(view.windowToken, 0)
+                    }
+
+                    // 여기서 페이지 지정해주면 됩니다.
+                    binding.vpStudyManagement.setCurrentItem(binding.etStudyManagementRound.text.toString().toInt(), true)
+                }
+            }
+
+            return@setOnKeyListener true
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
