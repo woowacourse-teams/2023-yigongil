@@ -5,8 +5,7 @@ public record StudyMemberResponse(
         Integer tier,
         String nickname,
         Double successRate,
-        String profileImage,
-        Boolean isDeleted
+        String profileImage
 ) {
 
 }

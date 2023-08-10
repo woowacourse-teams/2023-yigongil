@@ -25,8 +25,8 @@ logging:
     org.hibernate.type: trace
     org.hibernate.sql: debug
 
-flyway:
-  enabled: false
+schedules:
+  round-update: 0/2 * * * * ?
 
 oauth2:
   github:

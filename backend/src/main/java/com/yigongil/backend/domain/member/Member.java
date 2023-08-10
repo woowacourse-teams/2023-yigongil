@@ -10,9 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.annotations.Where;
 
-@Where(clause = "is_deleted = false")
 @Getter
 @Entity
 public class Member extends BaseEntity {
@@ -25,7 +23,7 @@ public class Member extends BaseEntity {
     @Id
     private Long id;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String githubId;
 
     @Embedded
@@ -39,13 +37,6 @@ public class Member extends BaseEntity {
     @Embedded
     private Introduction introduction;
 
-    @Column(nullable = false)
-    private boolean isOnboardingDone;
-
-    @Column(nullable = false)
-    private boolean isDeleted;
-
-
     protected Member() {
     }
 
@@ -56,9 +47,7 @@ public class Member extends BaseEntity {
             String nickname,
             String profileImageUrl,
             Integer tier,
-            String introduction,
-            boolean isOnboardingDone,
-            boolean isDeleted
+            String introduction
     ) {
         this.id = id;
         this.githubId = githubId;
@@ -66,14 +55,11 @@ public class Member extends BaseEntity {
         this.profileImageUrl = profileImageUrl;
         this.tier = tier == null ? 1 : tier;
         this.introduction = new Introduction(introduction);
-        this.isOnboardingDone = isOnboardingDone;
-        this.isDeleted = isDeleted;
     }
 
     public void updateProfile(String nickname, String introduction) {
         this.nickname = new Nickname(nickname);
         this.introduction = new Introduction(introduction);
-        this.isOnboardingDone = true;
     }
 
     public int isSameWithMaster(Member master) {
@@ -84,9 +70,6 @@ public class Member extends BaseEntity {
     }
 
     public String getNickname() {
-        if (this.nickname == null) {
-            return null;
-        }
         return nickname.getNickname();
     }
 
@@ -101,14 +84,6 @@ public class Member extends BaseEntity {
         if (tier < MAXIMUM_TIER) {
             tier++;
         }
-    }
-
-    public void exit() {
-        this.githubId = null;
-        this.nickname = null;
-        this.profileImageUrl = null;
-        this.introduction = new Introduction(null);
-        this.isDeleted = true;
     }
 
     @Override
