@@ -6,6 +6,7 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
 import java.net.URI;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -29,7 +30,7 @@ public class TodoController {
     public ResponseEntity<Void> createNecessaryTodo(
             @Authorization Member member,
             @PathVariable Long roundId,
-            @RequestBody TodoCreateRequest request
+            @RequestBody @Valid TodoCreateRequest request
     ) {
         todoService.createNecessaryTodo(member, roundId, request);
         return ResponseEntity.ok().build();
@@ -39,7 +40,7 @@ public class TodoController {
     public ResponseEntity<Void> createOptionalTodo(
             @Authorization Member member,
             @PathVariable Long roundId,
-            @RequestBody TodoCreateRequest request
+            @RequestBody @Valid TodoCreateRequest request
     ) {
         Long todoId = todoService.createOptionalTodo(member, roundId, request);
         return ResponseEntity.created(URI.create("/v1/rounds/" + roundId + "/todos/optional/" + todoId)).build();
@@ -49,7 +50,7 @@ public class TodoController {
     public ResponseEntity<Void> updateNecessaryTodo(
             @Authorization Member member,
             @PathVariable Long roundId,
-            @RequestBody TodoUpdateRequest request
+            @RequestBody @Valid TodoUpdateRequest request
     ) {
         todoService.updateNecessaryTodo(member, roundId, request);
         return ResponseEntity.noContent().build();
@@ -60,7 +61,7 @@ public class TodoController {
             @Authorization Member member,
             @PathVariable Long roundId,
             @PathVariable Long todoId,
-            @RequestBody TodoUpdateRequest request
+            @RequestBody @Valid TodoUpdateRequest request
     ) {
         todoService.updateOptionalTodo(member, roundId, todoId, request);
         return ResponseEntity.noContent().build();
