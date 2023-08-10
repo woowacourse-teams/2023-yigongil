@@ -65,7 +65,7 @@ public class MemberController {
 
     @GetMapping(path = "/check-onboarding-is-done")
     public ResponseEntity<OnboardingCheckResponse> checkOnboardingIsDone(@Authorization Member member) {
-        OnboardingCheckResponse response = new OnboardingCheckResponse(member.getIsOnboardingDone());
+        OnboardingCheckResponse response = new OnboardingCheckResponse(member.isOnboardingDone());
         return ResponseEntity.ok(response);
     }
 }
