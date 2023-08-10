@@ -10,6 +10,7 @@ import com.yigongil.backend.response.OnboardingCheckResponse;
 import com.yigongil.backend.response.ProfileResponse;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,6 +59,12 @@ public class MemberController {
             @RequestBody @Valid ProfileUpdateRequest request
     ) {
         memberService.update(member, request);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteMember(@Authorization Member member) {
+        memberService.delete(member);
         return ResponseEntity.ok().build();
     }
 
