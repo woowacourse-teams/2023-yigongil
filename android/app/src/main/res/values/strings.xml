@@ -53,6 +53,7 @@
     <string name="study_list_processing_date">시작일</string>
     <string name="study_list_item_date_format">일</string>
     <string name="study_list_item_week_format">주</string>
+    <string name="study_list_not_found">찾으시는 스터디가 없어요</string>
 
     <!--스터디 관리 탭-->
     <string name="study_manage_title">스터디 관리</string>
@@ -113,7 +114,8 @@
     <string name="custom_profile_image_content_description">프로필 이미지</string>
 
     <!--스터디 개설 뷰-->
-    <string name="createStudy_toolbar_title">스터디 만들기</string>
+    <string name="createStudy_toolbar_title_create">스터디 만들기</string>
+    <string name="createStudy_toolbar_title_edit">수정하기</string>
     <string name="createStudy_study_hint_name">제목을 입력해주세요.</string>
     <string name="createStudy_study_hint_introduction">스터디를 소개해주세요.</string>
     <string name="createStudy_button_created">작성완료</string>
@@ -168,6 +170,10 @@
 
     <!-- 설정 뷰 -->
     <string name="setting_toolbar_title">설정</string>
+    <string name="setting_item_notification_title">알림 설정</string>
+    <string name="setting_item_account_title">계정 관리</string>
+    <string name="setting_item_policy">정책 및 약관</string>
+    <string name="setting_item_logout">로그아웃</string>
 
     <!-- 계정 관리 뷰 -->
     <string name="accountSetting_toolbar_title">계정 관리</string>
@@ -179,6 +185,6 @@
     <string name="report_button_description">제출하기</string>
     <string name="report_content_hint">신고 내용을 입력해 주세요</string>
     <string name="report_calender_image_description">달력 날짜 선택</string>
-
+    <string name="report_calender_selected_date_format">%d.%d.%d</string>
 
 </resources>

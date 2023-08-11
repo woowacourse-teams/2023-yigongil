@@ -13,4 +13,3 @@ fun <T> MediatorLiveData<T>.addSourceList(
         }
     }
 }
-

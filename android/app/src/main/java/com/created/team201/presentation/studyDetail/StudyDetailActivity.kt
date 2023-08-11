@@ -11,10 +11,12 @@ import com.created.team201.R
 import com.created.team201.databinding.ActivityStudyDetailBinding
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.profile.ProfileActivity
+import com.created.team201.presentation.studyDetail.StudyDetailState.Master
 import com.created.team201.presentation.studyDetail.adapter.StudyParticipantsAdapter
 import com.created.team201.presentation.studyDetail.model.PeriodFormat
 import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
 import com.created.team201.presentation.studyManagement.StudyManagementActivity
+import com.created.team201.presentation.updateStudy.UpdateStudyActivity
 
 class StudyDetailActivity :
     BindingActivity<ActivityStudyDetailBinding>(R.layout.activity_study_detail),
@@ -36,6 +38,25 @@ class StudyDetailActivity :
         observeStartStudy()
         observeCanStartStudy()
         observeParticipantsCount()
+        setClickEventOnSub()
+    }
+
+    private fun setClickEventOnSub() {
+        binding.btnStudyDetailSub.setOnClickListener {
+            if (studyDetailViewModel.state.value is Master) {
+                navigateToEditStudyView()
+            }
+        }
+    }
+
+    private fun navigateToEditStudyView() {
+        startActivity(
+            UpdateStudyActivity.getIntent(
+                context = this,
+                viewMode = UpdateStudyActivity.EDIT_MODE,
+                studyId = studyId,
+            ),
+        )
     }
 
     private fun initViewModel() {
@@ -120,7 +141,7 @@ class StudyDetailActivity :
 
     private fun observeParticipantsCount() {
         studyDetailViewModel.studyMemberCount.observe(this) {
-            if (studyDetailViewModel.state.value is StudyDetailState.Master) {
+            if (studyDetailViewModel.state.value is Master) {
                 binding.btnStudyDetailMain.text =
                     getString(
                         R.string.study_detail_button_start_study,
@@ -165,6 +186,7 @@ class StudyDetailActivity :
         fun getIntent(context: Context, studyId: Long): Intent =
             Intent(context, StudyDetailActivity::class.java).apply {
                 putExtra(KEY_STUDY_ID, studyId)
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             }
     }
 }

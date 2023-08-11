@@ -29,7 +29,7 @@ class StudyManageViewHolder(
 
     private fun setUpStudyManageList() {
         val dividerItemDecoration = DividerItemDecoration(parent.context, VERTICAL)
-        getDrawable(parent.context, R.drawable.divider_study_list)?.let {
+        getDrawable(parent.context, R.drawable.divider_recyclerview_line)?.let {
             dividerItemDecoration.setDrawable(it)
         }
 

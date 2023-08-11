@@ -123,10 +123,12 @@ class OnBoardingViewModel(
             if (text.isBlank() || PATTERN_NICKNAME.matcher(text).matches())
                 return text
 
-            _nicknameState.value = NicknameState.UNAVAILABLE
-            return ""
-        }
-    }, LengthFilter(MAX_NICKNAME_LENGTH))
+                _nicknameState.value = NicknameState.UNAVAILABLE
+                return ""
+            }
+        },
+        LengthFilter(MAX_NICKNAME_LENGTH),
+    )
 
     private fun isInitializeOnBoarding(): Boolean =
         nickname.value.nickname.isBlank().not() &&
