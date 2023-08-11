@@ -25,7 +25,7 @@ class CustomViewPager(
     }
 
     private fun setPagesSize() {
-        binding.vpHome.setPadding(pagePadding, 0, pagePadding, 58)
+        binding.vpHome.setPadding(pagePadding, 0, pagePadding, 0)
         binding.vpHome.setPageTransformer(
             CompositePageTransformer().apply {
                 addTransformer(ZoomOutPageTransformer())

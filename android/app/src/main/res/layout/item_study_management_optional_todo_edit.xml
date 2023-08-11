@@ -5,10 +5,12 @@
     <data>
 
         <variable
+
             name="onClick"
             type="com.created.team201.presentation.studyManagement.StudyManagementClickListener" />
 
         <variable
+                  
             name="optionalTodo"
             type="com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel" />
 
@@ -17,7 +19,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="44dp">
-
 
         <EditText
             android:id="@+id/et_item_study_management_optional_todo_edit"

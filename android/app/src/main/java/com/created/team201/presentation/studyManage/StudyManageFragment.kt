@@ -63,7 +63,7 @@ class StudyManageFragment :
                 true -> startActivity(
                     StudyManagementActivity.getIntent(
                         requireContext(),
-                        id,
+                        id
                     ),
                 )
 

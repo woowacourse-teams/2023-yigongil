@@ -1,6 +1,8 @@
 package com.created.team201.presentation.studyManagement.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -44,6 +46,7 @@ class StudyManagementViewHolder(
             if (todoState != OPTIONAL_TODO_ADD) {
                 return@setOnClickListener
             }
+
             val currentTodos = studyManagementOptionalTodoAdapter.currentList
 
             if (currentTodos.isEmpty()) {

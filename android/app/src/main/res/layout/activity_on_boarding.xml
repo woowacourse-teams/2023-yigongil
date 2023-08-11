@@ -23,7 +23,7 @@
             android:layout_marginTop="48dp"
             android:onTextChanged="@{(text, start, before, count) -> viewModel.setIntroduction(text.toString())}"
             android:text="@string/onBoarding_title_text"
-            android:textAppearance="@style/title_b24"
+            android:textAppearance="@style/title_b20"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

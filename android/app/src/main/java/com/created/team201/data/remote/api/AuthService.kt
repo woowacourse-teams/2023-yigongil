@@ -1,7 +1,6 @@
 package com.created.team201.data.remote.api
 
 import com.created.team201.data.remote.response.AuthResponseDto
-import com.created.team201.data.remote.response.IsOnBoardingDoneResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
