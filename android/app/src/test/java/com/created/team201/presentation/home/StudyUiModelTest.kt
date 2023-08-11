@@ -1,7 +1,7 @@
 package com.created.team201.presentation.home
 
 import com.created.team201.presentation.home.model.StudyUiModel
-import com.created.team201.presentation.home.model.TodoUiModel
+import com.created.team201.presentation.home.model.TodoWithRoundIdUiModel
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
@@ -29,12 +29,12 @@ class StudyUiModelTest {
             0,
             5,
             "2023.01.02",
-            TodoUiModel(2, "잔디구현끝내기", true),
+            TodoWithRoundIdUiModel(2, "잔디구현끝내기", true, 1),
             listOf(
-                TodoUiModel(3, "홈뷰 끝내기", false),
-                TodoUiModel(4, "홈뷰 끝내기2", false),
-                TodoUiModel(5, "홈뷰 끝내기3", false),
-                TodoUiModel(6, "홈뷰 끝내기4", false),
+                TodoWithRoundIdUiModel(3, "홈뷰 끝내기", false, 1),
+                TodoWithRoundIdUiModel(4, "홈뷰 끝내기2", false, 1),
+                TodoWithRoundIdUiModel(5, "홈뷰 끝내기3", false, 1),
+                TodoWithRoundIdUiModel(6, "홈뷰 끝내기4", false, 1),
             ),
         )
     }

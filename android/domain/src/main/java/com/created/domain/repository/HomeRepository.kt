@@ -7,5 +7,7 @@ interface HomeRepository {
 
     suspend fun getUserStudies(): UserInfo
 
-    suspend fun patchTodo(todo: Todo, studyId: Long, isNecessary: Boolean)
+    suspend fun patchNecessaryTodo(roundId: Int, isDone: Boolean): Result<Unit>
+
+    suspend fun patchOptionalTodo(todo: Todo, roundId: Int): Result<Unit>
 }

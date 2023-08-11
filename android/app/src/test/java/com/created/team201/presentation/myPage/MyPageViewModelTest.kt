@@ -30,8 +30,9 @@ class MyPageViewModelTest {
     }
 
     @Before
-    fun setupRepository() {
+    fun setupViewModel() {
         repository = mockk()
+        viewModel = MyPageViewModel(repository)
     }
 
     @ExperimentalCoroutinesApi
@@ -41,7 +42,7 @@ class MyPageViewModelTest {
         coEvery { repository.getMyPage() } answers { Result.success(MyPageFixture.profile) }
 
         // when
-        viewModel = MyPageViewModel(repository)
+        viewModel.updateProfile()
 
         // then
         val expected = MyPageFixture.profile.toUiModel()

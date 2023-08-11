@@ -6,6 +6,7 @@ data class OptionalTodoUiModel(
     val todo: TodoUiModel,
     val viewType: Int,
 ) {
+
     companion object {
         val ADD_TODO = OptionalTodoUiModel(
             todo = TodoUiModel(0L, "", false),

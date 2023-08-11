@@ -5,4 +5,5 @@ data class StudyMember(
     val nickname: String,
     val profileImageUrl: String,
     val isDone: Boolean,
+    val isDeleted: Boolean,
 )
