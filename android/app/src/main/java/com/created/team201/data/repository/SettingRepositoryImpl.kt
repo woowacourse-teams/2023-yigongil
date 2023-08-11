@@ -1,10 +1,12 @@
 package com.created.team201.data.repository
 
 import com.created.domain.repository.SettingRepository
+import com.created.team201.data.datasource.local.OnBoardingIsDoneDataSource
 import com.created.team201.data.datasource.local.TokenDataSource
 import com.created.team201.data.datasource.remote.SettingDataSource
 
 class SettingRepositoryImpl(
+    private val onBoardingIsDoneDataSource: OnBoardingIsDoneDataSource,
     private val settingDataSource: SettingDataSource,
     private val tokenDataSource: TokenDataSource
 ) : SettingRepository {
@@ -16,6 +18,7 @@ class SettingRepositoryImpl(
         return runCatching {
             settingDataSource.requestWithdrawAccount()
             tokenDataSource.setAccessToken("")
+            onBoardingIsDoneDataSource.setOnBoardingIsDone(false)
         }
     }
 }

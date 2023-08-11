@@ -74,6 +74,11 @@ class AccountSettingActivity :
         viewModel.isWithdrawAccountState.observe(this) { state ->
             when (state) {
                 SUCCESS -> {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.setting_toast_withdraw_account_success),
+                        Toast.LENGTH_SHORT
+                    ).show()
                     navigateToLogin()
                 }
 

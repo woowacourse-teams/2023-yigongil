@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.repository.SettingRepository
 import com.created.team201.application.Team201App
+import com.created.team201.data.datasource.local.OnBoardingIsDoneDataSourceImpl
 import com.created.team201.data.datasource.local.TokenDataSourceImpl
 import com.created.team201.data.datasource.remote.SettingDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
@@ -48,8 +49,9 @@ class SettingViewModel(
             initializer {
                 SettingViewModel(
                     SettingRepositoryImpl(
+                        OnBoardingIsDoneDataSourceImpl(Team201App.provideOnBoardingIsDoneStorage()),
                         SettingDataSourceImpl(NetworkServiceModule.settingService),
-                        TokenDataSourceImpl(Team201App.provideTokenStorage())
+                        TokenDataSourceImpl(Team201App.provideTokenStorage()),
                     )
                 )
             }

@@ -183,6 +183,7 @@
     <string name="setting_dialog_toast_withdraw_account_fail">서비스 탈퇴에 실패했습니다</string>
     <string name="setting_dialog_btn_cancel_text">취소</string>
     <string name="setting_dialog_btn_ok_text">예</string>
+    <string name="setting_toast_withdraw_account_success">회원 탈퇴가 완료되었습니다</string>
 
     <!-- 계정 관리 뷰 -->
     <string name="accountSetting_toolbar_title">계정 관리</string>
