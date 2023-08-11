@@ -3,7 +3,6 @@ package com.yigongil.backend.application;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.domain.member.Nickname;
-import com.yigongil.backend.domain.report.ReportRepository;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
@@ -21,18 +20,15 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final StudyMemberRepository studyMemberRepository;
-    private final ReportRepository reportRepository;
     private final StudyService studyService;
 
     public MemberService(
             MemberRepository memberRepository,
             StudyMemberRepository studyMemberRepository,
-            ReportRepository reportRepository,
             StudyService studyService
     ) {
         this.memberRepository = memberRepository;
         this.studyMemberRepository = studyMemberRepository;
-        this.reportRepository = reportRepository;
         this.studyService = studyService;
     }
 

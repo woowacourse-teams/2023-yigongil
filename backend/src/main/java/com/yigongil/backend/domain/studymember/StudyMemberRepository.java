@@ -17,6 +17,9 @@ public interface StudyMemberRepository extends Repository<StudyMember, Long> {
     @EntityGraph(attributePaths = "member")
     List<StudyMember> findAllByStudyIdAndRole(Long studyId, Role role);
 
+    @EntityGraph(attributePaths = "member")
+    List<StudyMember> findAllByStudyId(Long studyId);
+
     @EntityGraph(attributePaths = "study")
     List<StudyMember> findAllByMemberId(Long memberId);
 

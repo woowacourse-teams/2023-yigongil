@@ -22,6 +22,7 @@ import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -243,6 +244,12 @@ public class StudyService {
         studies.stream()
                .filter(study -> study.isCurrentRoundEndAt(today))
                .forEach(Study::updateToNextRound);
+
+        studies.stream()
+               .filter(Study::isEnd)
+               .map(endedStudy -> studyMemberRepository.findAllByStudyId(endedStudy.getId()))
+               .flatMap(Collection::stream)
+               .forEach(StudyMember::completeSuccessfully);
     }
 
     @Transactional
