@@ -96,6 +96,7 @@
     <string name="study_management_edit_todo_done">수정완료</string>
     <string name="study_management_add_todo"> 추가하기</string>
     <string name="study_management_round">%d회차</string>
+    <string name="study_management_round_postfix">회차</string>
     <string name="study_management_end_button_is_study_participant">그만두기</string>
     <string name="study_management_end_button_is_study_master">종료하기</string>
     <string name="study_management_previous_button_description">이전 스터디 회차</string>
@@ -103,6 +104,8 @@
     <string name="study_management_information_button_menu">스터디 정보</string>
     <string name="study_management_not_allowed_add_optional_todo">더이상 선택투두를 추가할 수 없습니다.</string>
     <string name="study_management_not_allowed_empty_content">투두를 입력해 주세요.</string>
+    <string name="study_management_period_of_round">%d %s</string>
+    <string name="study_management_deleted_member_alert">탈퇴한 회원입니다.</string>
     <string name="item_study_management_todo_description">투두 체크박스</string>
     <string name="item_study_management_todo_done">필수투두를 완료했어요!</string>
     <string name="item_study_management_todo_undone">필수투두를 하고있어요!</string>
@@ -112,7 +115,6 @@
     <string name="item_study_management_add_todo_hint">투두를 추가해주세요</string>
     <string name="item_study_management_empty_todo">아직 투두가 없어요!</string>
     <string name="item_study_management_require_todo">필수 투두를 추가해 주세요!</string>
-    <string name="study_management_period_of_round">%d %s</string>
 
     <!--커스텀 프로필 이미지 뷰-->
     <string name="custom_profile_image_content_description">프로필 이미지</string>

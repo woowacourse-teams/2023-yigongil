@@ -81,7 +81,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         }
     }
 
-
     private enum class FragmentType(@IdRes private val resId: Int) {
         HOME(R.id.menu_home),
         STUDY_LIST(R.id.menu_study_list),

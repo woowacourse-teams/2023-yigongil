@@ -13,6 +13,6 @@ interface HomeDataSource {
     suspend fun patchOptionalTodo(
         roundId: Int,
         todoId: Long,
-        todoUpdateRequestDto: TodoUpdateRequestDto
+        todoUpdateRequestDto: TodoUpdateRequestDto,
     )
 }

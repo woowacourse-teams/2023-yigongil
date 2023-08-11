@@ -38,26 +38,17 @@
             android:background="@color/black02_181B21"
             app:layout_constraintTop_toBottomOf="@id/tb_study_list" />
 
-        <Spinner
-            android:id="@+id/spinner_study_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/study_list_item_sort_description"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_study_list_toolbar_boarder_line" />
-
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srl_study_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="12dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@id/pb_study_list_load"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spinner_study_list">
+            app:layout_constraintTop_toBottomOf="@id/view_study_list_toolbar_boarder_line">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_study_list_list"

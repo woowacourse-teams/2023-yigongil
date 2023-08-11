@@ -10,9 +10,9 @@ import com.created.team201.presentation.setting.model.SettingUiModel
 
 class SettingViewHolder(
     parent: ViewGroup,
-    settingClickListener: SettingClickListener
+    settingClickListener: SettingClickListener,
 ) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.item_setting, parent, false)
+    LayoutInflater.from(parent.context).inflate(R.layout.item_setting, parent, false),
 ) {
     private val binding = ItemSettingBinding.bind(itemView)
 
