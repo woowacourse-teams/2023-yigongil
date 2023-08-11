@@ -56,6 +56,10 @@ dependencies {
     implementation 'org.flywaydb:flyway-mysql'
 
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // slack alert
+    implementation 'com.slack.api:slack-api-client:1.30.0'
+    implementation 'com.github.maricn:logback-slack-appender:1.4.0'
 }
 
 tasks.named('test') {
