@@ -23,7 +23,8 @@ import com.created.team201.data.repository.StudyManagementRepositoryImpl
 import com.created.team201.presentation.home.model.TodoUiModel
 import com.created.team201.presentation.studyList.model.PeriodUiModel
 import com.created.team201.presentation.studyManagement.TodoState.DEFAULT
-import com.created.team201.presentation.studyManagement.adapter.OptionalTodoViewType
+import com.created.team201.presentation.studyManagement.adapter.OptionalTodoViewType.DISPLAY
+import com.created.team201.presentation.studyManagement.adapter.OptionalTodoViewType.EDIT
 import com.created.team201.presentation.studyManagement.model.NecessaryTodoUiModel
 import com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel
 import com.created.team201.presentation.studyManagement.model.RoundUiModel
@@ -166,17 +167,17 @@ class StudyManagementViewModel(
         currentStudy: StudyRoundDetailUiModel,
         todoId: Long,
         todoContent: String,
-    ): MutableList<OptionalTodoUiModel> {
-        val newOptionalTodos = currentStudy.optionalTodos.toMutableList()
-        newOptionalTodos.addAll(
-            listOf(
-                OptionalTodoUiModel(
-                    TodoUiModel(todoId, todoContent, false),
-                    OptionalTodoViewType.DISPLAY.viewType,
-                ),
+    ): List<OptionalTodoUiModel> {
+        val newOptionalTodos = currentStudy.optionalTodos.map {
+            it.copy(viewType = DISPLAY.viewType)
+        }.toMutableList()
+        newOptionalTodos.add(
+            OptionalTodoUiModel(
+                TodoUiModel(todoId, todoContent, false),
+                DISPLAY.viewType,
             ),
         )
-        return newOptionalTodos
+        return newOptionalTodos.toList()
     }
 
     fun updateTodoIsDone(isNecessary: Boolean, todoId: Long, isDone: Boolean) {
@@ -238,7 +239,7 @@ class StudyManagementViewModel(
             optionalTodo.todo.todoId == todoId
         } ?: OptionalTodoUiModel(
             TodoUiModel(DEFAULT_TODO_ID, "", false),
-            OptionalTodoViewType.DISPLAY.viewType,
+            DISPLAY.viewType,
         )
         return currentOptionalTodo.copy(todo = currentOptionalTodo.todo.copy(isDone = isDone))
     }
@@ -269,6 +270,8 @@ class StudyManagementViewModel(
     fun updateOptionalTodosContent(updatedTodos: List<OptionalTodoUiModel>) {
         val newOptionalTodos = currentRoundDetail.optionalTodos.map { optionalTodo ->
             updatedTodos.find { it.todo.todoId == optionalTodo.todo.todoId } ?: optionalTodo
+        }.map {
+            it.copy(viewType = DISPLAY.viewType)
         }
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -293,11 +296,16 @@ class StudyManagementViewModel(
         newOptionalTodos.removeIf {
             it.todo.todoId == optionalTodo.todo.todoId
         }
+
         viewModelScope.launch {
             kotlin.runCatching {
                 repository.deleteOptionalTodo(currentRoundDetail.id, optionalTodo.todo.todoId)
             }.onSuccess {
-                val newRound = currentRoundDetail.copy(optionalTodos = newOptionalTodos)
+                val newRound = currentRoundDetail.copy(
+                    optionalTodos = newOptionalTodos.map {
+                        it.copy(viewType = EDIT.viewType)
+                    },
+                )
                 val updatedStudyRounds = currentStudyRounds.map { studyRoundDetailUiModel ->
                     studyRoundDetailUiModel.takeIf { it.id != currentRoundDetail.id } ?: newRound
                 }
@@ -359,7 +367,7 @@ class StudyManagementViewModel(
 
     private fun Todo.toOptionalTodoUiModel(): OptionalTodoUiModel = OptionalTodoUiModel(
         todo = this.toUiModel(),
-        viewType = OptionalTodoViewType.DISPLAY.viewType,
+        viewType = DISPLAY.viewType,
     )
 
     private fun Todo.toNecessaryTodoUiModel(): NecessaryTodoUiModel = NecessaryTodoUiModel(

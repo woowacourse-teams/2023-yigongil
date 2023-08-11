@@ -137,6 +137,7 @@ class StudyManagementActivity :
                     getString(R.string.study_management_not_allowed_add_optional_todo),
                     Toast.LENGTH_SHORT,
                 ).show()
+                return DEFAULT
             }
             studyManagementViewModel.setTodoState(OPTIONAL_TODO_ADD)
             return OPTIONAL_TODO_ADD
