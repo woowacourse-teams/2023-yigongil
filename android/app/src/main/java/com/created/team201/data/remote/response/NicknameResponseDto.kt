@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NicknameResponseDto(
     @SerialName("exists")
-    val exists: Boolean
+    val exists: Boolean,
 )

@@ -74,12 +74,12 @@ class LoginViewModel(
                     ),
                     OnBoardingRepositoryImpl(
                         OnBoardingIsDoneDataSourceImpl(
-                            Team201App.provideOnBoardingIsDoneStorage()
+                            Team201App.provideOnBoardingIsDoneStorage(),
                         ),
                         OnBoardingDataSourceImpl(
                             NetworkServiceModule.onBoardingService,
                         ),
-                    )
+                    ),
                 )
             }
         }

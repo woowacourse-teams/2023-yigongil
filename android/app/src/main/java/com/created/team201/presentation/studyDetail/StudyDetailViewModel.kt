@@ -30,7 +30,7 @@ class StudyDetailViewModel private constructor(
     val studyParticipants: NonNullLiveData<List<StudyMemberUIModel>> get() = _studyParticipants
 
     private val _state: NonNullMutableLiveData<StudyDetailState> =
-        NonNullMutableLiveData(StudyDetailState.Nothing)
+        NonNullMutableLiveData(StudyDetailState.Nothing(true))
     val state: LiveData<StudyDetailState> get() = _state
 
     private val _isStartStudy: NonNullMutableLiveData<Boolean> = NonNullMutableLiveData(false)
@@ -52,7 +52,7 @@ class StudyDetailViewModel private constructor(
             }.onSuccess {
                 _study.value = it
                 _studyParticipants.value = it.studyMembers
-                _isFullMember.value = it.peopleCount == _studyParticipants.value.size
+                _isFullMember.value = it.peopleCount == it.memberCount
                 _state.value = it.role.toStudyDetailState(it.canStartStudy)
                 _studyMemberCount.value = it.memberCount
                 _canStudyStart.value = it.canStartStudy
@@ -113,6 +113,7 @@ class StudyDetailViewModel private constructor(
                     studyParticipants.minus(acceptedMember) + acceptedMember.copy(isApplicant = false)
                 _canStudyStart.value = StudyDetail.canStartStudy(studyParticipants.size)
                 _studyMemberCount.value = _studyMemberCount.value.plus(1)
+                if (study.value.peopleCount == studyMemberCount.value) _isFullMember.value = true
             }
         }
     }
@@ -141,13 +142,14 @@ class StudyDetailViewModel private constructor(
             name = this.nickname,
             successRate = this.successRate.toInt(),
             tier = this.tier,
+            isDeleted = this.isDeleted,
         )
 
     private fun Role.toStudyDetailState(canStartStudy: Boolean): StudyDetailState = when (this) {
         Role.MASTER -> StudyDetailState.Master(canStartStudy)
         Role.MEMBER -> StudyDetailState.Member
         Role.APPLICANT -> StudyDetailState.Applicant
-        Role.NOTHING -> StudyDetailState.Nothing
+        Role.NOTHING -> StudyDetailState.Nothing(isFullMember.value)
     }
 
     companion object {

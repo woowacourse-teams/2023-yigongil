@@ -42,12 +42,16 @@ sealed class StudyDetailState(
             mainButtonIsEnabled = false,
         )
 
-    object Nothing :
+    data class Nothing(private val isFullMember: Boolean) :
         StudyDetailState(
             appBarTitle = R.string.study_detail_app_bar_title,
-            mainButtonText = R.string.study_detail_study_capacity,
+            mainButtonText = if (isFullMember) {
+                R.string.study_detail_notify_cant_participant
+            } else {
+                R.string.study_detail_study_capacity
+            },
             mainButtonTextColor = R.color.white,
             subButtonSrc = R.drawable.ic_dm,
-            mainButtonIsEnabled = true,
+            mainButtonIsEnabled = !isFullMember,
         )
 }

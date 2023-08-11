@@ -5,8 +5,8 @@ import com.created.team201.data.remote.api.HomeService
 import com.created.team201.data.remote.api.MyPageService
 import com.created.team201.data.remote.api.OnBoardingService
 import com.created.team201.data.remote.api.ProfileService
-import com.created.team201.data.remote.api.SettingService
 import com.created.team201.data.remote.api.ReportService
+import com.created.team201.data.remote.api.SettingService
 import com.created.team201.data.remote.api.StudyDetailService
 import com.created.team201.data.remote.api.StudyListService
 import com.created.team201.data.remote.api.StudyManageService
