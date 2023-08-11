@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingDefaultResource">
+
+    <data>
+
+        <import type="java.util.List" />
+
+        <variable
+            name="periodStringFormat"
+            type="List&lt;String>" />
+
+        <variable
+            name="studyInformation"
+            type="com.created.team201.presentation.studyManagement.model.StudyManagementInformationUiModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_rectangle_radius_10dp_transparent"
+        android:padding="16dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_study_information_header"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_study_information_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:text="@{studyInformation.name}"
+                android:textAppearance="@style/title_b20"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="두 달 동안 자바 스터디 빡세게 하실 분 구합니다~!!" />
+
+            <View
+                android:id="@+id/view_study_information_header_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="14dp"
+                android:layout_marginVertical="20dp"
+                android:background="@color/black03_272C33"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_study_information_title" />
+
+            <com.created.team201.presentation.updateStudy.custom.IconTextButton
+                android:id="@+id/itb_study_information_capacity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:buttonName="@string/icon_text_button_name_people_count"
+                app:iconResource="@drawable/ic_people_capacity"
+                app:information="@{@string/icon_text_button_formatter_information_people_count(studyInformation.numberOfMaximumMembers)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/itb_study_information_start_date"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_study_information_header_divider" />
+
+            <com.created.team201.presentation.updateStudy.custom.IconTextButton
+                android:id="@+id/itb_study_information_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:buttonName="@string/icon_text_button_name_start_date"
+                app:iconResource="@drawable/ic_start_date"
+                app:information="@{studyInformation.startAt}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/itb_study_information_period"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/itb_study_information_capacity"
+                app:layout_constraintTop_toBottomOf="@id/view_study_information_header_divider" />
+
+            <com.created.team201.presentation.updateStudy.custom.IconTextButton
+                android:id="@+id/itb_study_information_period"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:buttonName="@string/icon_text_button_name_period"
+                app:iconResource="@drawable/ic_period"
+                app:information="@{@string/study_detail_period_format(String.valueOf(studyInformation.totalRoundCount))}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/itb_study_information_cycle"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/itb_study_information_start_date"
+                app:layout_constraintTop_toBottomOf="@id/view_study_information_header_divider" />
+
+            <com.created.team201.presentation.updateStudy.custom.IconTextButton
+                android:id="@+id/itb_study_information_cycle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:buttonName="@string/icon_text_button_name_cycle"
+                app:iconResource="@drawable/ic_cycle"
+                app:information="@{@string/study_management_period_of_round(studyInformation.periodOfRound.number, periodStringFormat[studyInformation.periodOfRound.unit.type])}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/itb_study_information_period"
+                app:layout_constraintTop_toBottomOf="@id/view_study_information_header_divider" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tv_study_information_content"
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            android:padding="16dp"
+            android:text="@{studyInformation.introduction}"
+            android:textAppearance="@style/text_r16"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_study_information_header"
+            tools:text="안녕하세요 기깔나게 자바 스터디하실 분들 구합니다. 언제부터 할지는 미정인데요 미정이니? 어 잘지내? 음 .그렇구나 잘지내 " />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="studyMember"
+            type="com.created.team201.presentation.studyDetail.model.StudyMemberUIModel" />
+
+        <variable
+            name="studyMemberClickListener"
+            type="com.created.team201.presentation.studyDetail.StudyMemberClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:background="@drawable/bg_rectangle_radius_5dp"
+        android:minHeight="60dp"
+        android:onClick="@{() -> studyMemberClickListener.onUserClick(studyMember.id)}">
+
+        <com.created.team201.presentation.studyDetail.CustomProfileImage
+            android:id="@+id/fl_item_study_detail_profile_image"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="8dp"
+            app:borderProgress="@{studyMember.successRate}"
+            app:glideCircleImageUrl="@{studyMember.profileImageUrl}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tier="@{studyMember.tier}" />
+
+        <ImageView
+            android:id="@+id/iv_item_study_detail_master_crown"
+            isVisible="@{studyMember.master}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="6dp"
+            android:src="@drawable/ic_crown"
+            app:layout_constraintStart_toEndOf="@id/fl_item_study_detail_profile_image"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_item_study_detail_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="@{studyMember.name}"
+            android:textAppearance="@style/name_sb14"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@id/fl_item_study_detail_profile_image"
+            app:layout_constraintTop_toBottomOf="@id/iv_item_study_detail_master_crown"
+            tools:text="우아한반달" />
+
+        <TextView
+            android:id="@+id/tv_item_study_detail_study_success_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/item_study_detail_study_success_rate(studyMember.successRate)}"
+            android:textAppearance="@style/description_r10"
+            android:textColor="@color/grey02_78808B"
+            app:layout_constraintStart_toStartOf="@id/tv_item_study_detail_user_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_study_detail_user_name"
+            tools:text="스터디 성공률 78%" />
+
+        <TextView
+            android:id="@+id/tv_item_study_detail_waiting_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/item_study_detail_accept_await"
+            android:textAppearance="@style/accept_sb12"
+            android:textColor="@color/white"
+            app:isGone="@{!studyMember.isApplicant}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fl_item_study_detail_profile_image" />
+
+        <TextView
+            android:id="@+id/btn_item_study_detail_accept"
+            android:layout_width="40dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            android:gravity="center"
+            android:onClick="@{() -> studyMemberClickListener.onAcceptApplicantClick(studyMember.id)}"
+            android:text="@string/item_study_button_accept"
+            android:textAppearance="@style/accept_sb12"
+            android:textColor="@color/white"
+            app:isGone="@{!studyMember.isApplicant}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/tv_item_study_detail_waiting_description"
+            app:layout_constraintStart_toStartOf="@+id/tv_item_study_detail_waiting_description"
+            app:layout_constraintTop_toBottomOf="@+id/tv_item_study_detail_waiting_description" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

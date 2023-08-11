@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.MainActivity">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bnv_main"
+            android:layout_width="match_parent"
+            android:layout_height="68dp"
+            app:backgroundTint="@color/black02_181B21"
+            app:itemActiveIndicatorStyle="@color/transparent"
+            app:itemBackground="@color/transparent"
+            app:itemIconTint="@color/btn_bnv_selector"
+            app:itemTextAppearanceActive="@style/navi_bar_m12"
+            app:itemTextAppearanceInactive="@style/navi_bar_m12"
+            app:itemTextColor="@color/btn_bnv_selector"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/menu_main_bnv"
+            tools:menu="@menu/menu_main_bnv" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fcv_main"
+            android:name="com.created.team201.presentation.home.HomeFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/bnv_main"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

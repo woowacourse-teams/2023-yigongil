@@ -1,0 +1,215 @@
+<resources>
+    <string name="app_name">201\nCreated</string>
+
+    <!-- 툴바 공통 -->
+    <string name="toolbar_back_text">뒤로가기</string>
+
+    <!--로그인 뷰-->
+    <string name="login_guide">로그인 후 이용이 가능합니다.</string>
+    <string name="login_github_guide">깃허브로 시작하기</string>
+    <string name="login_fail_message">로그인에 실패하였습니다.</string>
+    <string name="login_onBoarding_fail_message">내 소개 불러오기에 실패했습니다</string>
+
+    <!-- 온보딩 뷰 -->
+    <string name="onBoarding_title_text">나에 대해 소개해주세요!</string>
+    <string name="onBoarding_sub_title_text">작성된 간단 소개는 스터디 지원 시 공개됩니다</string>
+    <string name="onBoarding_nickname_title_text">닉네임</string>
+    <string name="onBoarding_nickname_sub_title_text">2 ~ 8자(공백 불가) 한글, 영문, 숫자, 언더바(_) 사용 가능</string>
+    <string name="onBoarding_nickname_hint_text">닉네임 입력</string>
+    <string name="onBoarding_introduction_title_text">간단 소개</string>
+    <string name="onBoarding_introduction_sub_title_text">200자 이내</string>
+    <string name="onBoarding_introduction_hint_text">간단 소개 입력</string>
+    <string name="onBoarding_btn_text">작성완료</string>
+    <string name="onBoarding_unAvailable_nickname">닉네임은 2~8자 한글, 영문, 숫자, 언더바로 구성되어야합니다</string>
+    <string name="onBoarding_available_nickname">사용가능한 닉네임입니다</string>
+    <string name="onBoarding_duplicate_nickname">중복된 닉네임입니다</string>
+    <string name="onBoarding_toast_fail">소개 저장에 실패했습니다</string>
+
+    <!--메인 뷰-->
+    <string name="main_ic_home">홈</string>
+    <string name="main_ic_study_list">스터디목록</string>
+    <string name="main_ic_study_manage">스터디관리</string>
+    <string name="main_ic_chat">쪽지</string>
+    <string name="main_ic_my_page">마이페이지</string>
+
+    <!--홈 탭-->
+    <string name="home_essential_todo">필수투두</string>
+    <string name="home_optional_todo">선택투두</string>
+    <string name="home_progress_rate">스터디원 필수투두 진행률 %d%%</string>
+    <string name="home_date">다음 스터디까지 D - %d (%s)</string>
+    <string name="home_welcome_phrase">%s님\n오늘 잔디는 심으셨나요?</string>
+    <string name="home_no_study">참여중인 스터디가 없어요!\n스터디를 개설/참여 해볼까요?</string>
+
+
+    <!--BASE ERROR-->
+    <string name="error_baseFragment">"[ERROR]Binding no initialization"</string>
+
+    <!--스터디 목록 탭-->
+    <string name="study_list_create">스터디 만들기</string>
+    <string name="study_list_item_sort_description">정렬</string>
+    <string name="study_list_search_button_menu">검색</string>
+    <string name="study_list_title">스터디 목록</string>
+    <string name="study_list_information_format">%s %s · 총 %d회차 · %d %s(주기)</string>
+    <string name="study_list_member_format">%d/%d</string>
+    <string name="study_list_previous_date">예상시작일</string>
+    <string name="study_list_processing_date">시작일</string>
+    <string name="study_list_item_date_format">일</string>
+    <string name="study_list_item_week_format">주</string>
+    <string name="study_list_not_found">찾으시는 스터디가 없어요</string>
+
+    <!--스터디 관리 탭-->
+    <string name="study_manage_title">스터디 관리</string>
+    <string name="study_manage_joined_tab">참여한 스터디</string>
+    <string name="study_manage_opened_tab">개설한 스터디</string>
+    <string name="study_manage_joined_tab_no_study">참여한 스터디가 없습니다 !</string>
+    <string name="study_manage_opened_tab_no_study">개설한 스터디가 없습니다 !</string>
+
+    <!-- 아이콘 텍스트 버튼 커스텀 뷰 -->
+    <string name="icon_text_button_name_people_count">인원 수</string>
+    <string name="icon_text_button_name_start_date">예상시작일</string>
+    <string name="icon_text_button_name_period">스터디기간</string>
+    <string name="icon_text_button_name_cycle">스터디주기</string>
+    <string name="icon_text_button_formatter_information_people_count">%d명</string>
+    <string name="icon_text_button_formatter_information_period">%d회차</string>
+
+    <!--스터디 상세보기 뷰-->
+    <string name="study_detail_app_bar_title">스터디 상세보기</string>
+    <string name="study_detail_app_bar_study_master_title">개설한 스터디 관리하기</string>
+    <string name="study_detail_study_people">스터디원</string>
+    <string name="study_detail_study_capacity">참여하기(%d/%d)</string>
+    <string name="study_detail_button_start_study">시작하기(%d/%d)</string>
+    <string name="study_detail_dm_button_content_description">스터디장에게 문의하기</string>
+    <string name="study_detail_study_accept_waiting">수락을 기다리고 있어요</string>
+    <string name="study_detail_study_start_waiting">시작을 기다리고 있어요</string>
+    <string name="study_detail_do_not_accept_member_anymore">더이상 스터디 멤버를 받을 수 없습니다.</string>
+    <string name="study_detail_period_of_count_day">%d일</string>
+    <string name="study_detail_period_of_count_week">%d주</string>
+    <string name="study_detail_period_format">%s회차</string>
+    <string name="study_detail_notify_invalid_study">스터디를 찾을 수 없습니다.</string>
+    <string name="study_detail_notify_cant_participant">더는 참가할 수 없어요</string>
+    <string name="study_detail_not_yet">아직 준비중입니다</string>
+    <string name="item_study_detail_deleted_user_description">탈퇴한 유저에요</string>
+    <string name="item_study_detail_study_success_rate">스터디 성공률 %d%%</string>
+
+    <!--스터디 관리하기 뷰-->
+    <string name="study_management_app_bar_title_is_study_participant">참여한 스터디 관리하기</string>
+    <string name="study_management_app_bar_title_is_study_master">개설한 스터디 관리하기</string>
+    <string name="study_management_essential_todo">필수투두</string>
+    <string name="study_management_optional_todo">선택투두</string>
+    <string name="study_management_study_member">스터디원</string>
+    <string name="study_management_edit_todo"> 수정하기</string>
+    <string name="study_management_edit_todo_done">수정완료</string>
+    <string name="study_management_add_todo"> 추가하기</string>
+    <string name="study_management_round">%d회차</string>
+    <string name="study_management_round_postfix">회차</string>
+    <string name="study_management_end_button_is_study_participant">그만두기</string>
+    <string name="study_management_end_button_is_study_master">종료하기</string>
+    <string name="study_management_previous_button_description">이전 스터디 회차</string>
+    <string name="study_management_next_button_description">다음 스터디 회차</string>
+    <string name="study_management_information_button_menu">스터디 정보</string>
+    <string name="study_management_not_allowed_add_optional_todo">더이상 선택투두를 추가할 수 없습니다.</string>
+    <string name="study_management_not_allowed_empty_content">투두를 입력해 주세요.</string>
+    <string name="study_management_period_of_round">%d %s</string>
+    <string name="study_management_deleted_member_alert">탈퇴한 회원입니다.</string>
+    <string name="item_study_management_todo_description">투두 체크박스</string>
+    <string name="item_study_management_todo_done">필수투두를 완료했어요!</string>
+    <string name="item_study_management_todo_undone">필수투두를 하고있어요!</string>
+    <string name="item_study_management_study_master_image_description">스터디장</string>
+    <string name="item_study_management_optional_todo_button">투두 체크박스</string>
+    <string name="item_study_management_add_todo_button_text">추가</string>
+    <string name="item_study_management_add_todo_hint">투두를 추가해주세요</string>
+    <string name="item_study_management_empty_todo">아직 투두가 없어요!</string>
+    <string name="item_study_management_require_todo">필수 투두를 추가해 주세요!</string>
+
+    <!--커스텀 프로필 이미지 뷰-->
+    <string name="custom_profile_image_content_description">프로필 이미지</string>
+
+    <!--스터디 개설 뷰-->
+    <string name="createStudy_toolbar_title_create">스터디 만들기</string>
+    <string name="createStudy_toolbar_title_edit">수정하기</string>
+    <string name="createStudy_study_hint_name">제목을 입력해주세요.</string>
+    <string name="createStudy_study_hint_introduction">스터디를 소개해주세요.</string>
+    <string name="createStudy_button_created">작성완료</string>
+
+    <string name="createStudy_tag_people_count">TAG_CREATE_STUDY_PEOPLE_COUNT</string>
+    <string name="createStudy_tag_start_date">TAG_CREATE_STUDY_START_DATE</string>
+    <string name="createStudy_tag_period">TAG_CREATE_STUDY_PERIOD</string>
+    <string name="createStudy_tag_cycle">TAG_CREATE_STUDY_CYCLE</string>
+
+    <string name="createStudy_toast_success">스터디 개설에 성공했습니다</string>
+    <string name="createStudy_toast_fail">스터디 개설에 실패했습니다</string>
+
+    <!-- 스터디 개설 - 바텀 다이얼로그 뷰 -->
+    <string name="bottomSheetFragment_peopleCount_title_text">인원 수</string>
+    <string name="bottomSheetFragment_startDate_title_text">예상 시작일</string>
+    <string name="bottomSheetFragment_cycle_title_text">스터디 주기</string>
+    <string name="bottomSheetFragment_period_title_text">스터디 기간</string>
+    <string name="bottomSheetFragment_button_name_cancel">취소</string>
+    <string name="bottomSheetFragment_button_name_save">저장</string>
+
+    <!-- 싱글 피커 커스텀 뷰 -->
+    <string name="single_picker_text_people_count">명</string>
+    <string name="single_picker_text_period">회차</string>
+
+    <!-- 캘린더 선택 커스텀 뷰-->
+    <string name="calendar_formatter_information_date">yyyy.MM.dd</string>
+
+    <!-- 멀티 피커 커스텀 뷰 -->
+    <string name="multiPicker_display_name_day">일</string>
+    <string name="multiPicker_display_name_week">주</string>
+    <string name="multiPicker_formatter_information">%d %s</string>
+    <string name="item_study_detail_accept_await">승낙을 기다리고 있어요.</string>
+    <string name="item_study_button_accept">수락</string>
+
+    <!-- 마이페이지 뷰 -->
+    <string name="myPage_menu_title_setting">설정</string>
+    <string name="myPage_toolbar_title">마이페이지</string>
+    <string name="myPage_button_modify_profile">프로필 수정</string>
+    <string name="myPage_study_success_rate_title">스터디 성공률</string>
+    <string name="myPage_todo_success_rate_title">필수투두 완료횟수</string>
+
+    <string name="profile_success_rate_format">%.1f%%</string>
+    <string name="profile_todo_success_rate_format">%d회</string>
+
+    <!-- 프로필 뷰 -->
+    <string name="profile_report_button_menu">신고</string>
+    <string name="profile_title">프로필</string>
+    <string name="profile_study_success_rate">스터디 성공률</string>
+    <string name="profile_todo_success_rate">필수투두 완료횟수</string>
+    <string name="profile_unexpected_user_access_warning">존재하지 않는 사용자입니다.</string>
+    <string name="item_profile_finished_study_information_format">시작일 %s · 총 %d회차 · %d %s(주기)</string>
+
+    <!-- 설정 뷰 -->
+    <string name="setting_toolbar_title">설정</string>
+    <string name="setting_item_notification_title">알림 설정</string>
+    <string name="setting_item_account_title">계정 관리</string>
+    <string name="setting_item_policy">정책 및 약관</string>
+    <string name="setting_item_logout">로그아웃</string>
+
+    <!-- 설정뷰 - 다이얼로그 -->
+    <string name="setting_dialog_logout_title">로그아웃</string>
+    <string name="setting_dialog_logout_content">정말로 로그아웃 하시겠어요?</string>
+    <string name="setting_dialog_withdraw_account_title">정말 탈퇴하시나요?</string>
+    <string name="setting_dialog_withdraw_account_content">서비스를 탈퇴하시면 스터디 이력, 업적 배지를 비롯한 모든 회원 정보가 삭제되며 다시 복구할 수 없습니다.</string>
+    <string name="setting_dialog_toast_withdraw_account_fail">서비스 탈퇴에 실패했습니다</string>
+    <string name="setting_dialog_btn_cancel_text">취소</string>
+    <string name="setting_dialog_btn_ok_text">예</string>
+    <string name="setting_toast_withdraw_account_success">회원 탈퇴가 완료되었습니다</string>
+
+    <!-- 계정 관리 뷰 -->
+    <string name="accountSetting_toolbar_title">계정 관리</string>
+    <string name="accountSetting_withdraw_account_title_text">서비스 탈퇴하기</string>
+
+    <!-- 신고하기 뷰 -->
+    <string name="report_toolbar_title">신고하기</string>
+    <string name="report_title_hint">제목을 입력해 주세요</string>
+    <string name="report_button_description">제출하기</string>
+    <string name="report_content_hint">신고 내용을 입력해 주세요</string>
+    <string name="report_calender_image_description">달력 날짜 선택</string>
+    <string name="report_calender_selected_date_format">%d.%d.%d</string>
+    <string name="report_report_successful_done">신고 접수가 완료되었어요</string>
+
+    <!-- 채팅 뷰 -->
+    <string name="chat_no_chat">아직 준비중인 기능이에요!\n조금만 기다려주세요!</string>
+
+</resources>

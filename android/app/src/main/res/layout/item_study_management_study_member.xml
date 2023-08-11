@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="isToDoDone"
+            type="java.lang.Boolean" />
+
+        <variable
+            name="studyMember"
+            type="com.created.team201.presentation.studyManagement.model.StudyMemberUiModel" />
+
+        <variable
+            name="onClickMember"
+            type="com.created.team201.presentation.studyManagement.StudyMemberClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="6dp"
+        android:background="@drawable/bg_rectangle_radius_5dp"
+        android:onClick="@{() -> onClickMember.onClickMember(studyMember.id)}">
+
+        <com.created.team201.presentation.studyDetail.CustomProfileImage
+            android:id="@+id/fl_item_study_management_study_member_profile_image"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="6dp"
+            app:borderProgress="@{studyMember.progressPercentage()}"
+            app:glideCircleImageUrl="@{studyMember.profileImageUrl}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_item_study_management_study_member_master_crown"
+            isVisible="@{studyMember.master}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="6dp"
+            android:contentDescription="@string/item_study_management_study_master_image_description"
+            android:src="@drawable/ic_crown"
+            app:layout_constraintStart_toEndOf="@id/fl_item_study_management_study_member_profile_image"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_item_study_management_study_member_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="@{studyMember.nickname}"
+            android:textAppearance="@style/name_sb14"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@id/fl_item_study_management_study_member_profile_image"
+            app:layout_constraintTop_toBottomOf="@id/iv_item_study_management_study_member_master_crown"
+            tools:text="우아한반달" />
+
+        <TextView
+            android:id="@+id/tv_item_study_management_study_member_essential_todo_done"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{context.getString(studyMember.getIsDoneDescription())}"
+            android:textAppearance="@style/description_r10"
+            android:textColor="@color/grey05_C3BCBC"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_item_study_management_study_member_user_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_item_study_management_study_member_user_name"
+            tools:text="필수투두를 완료했어요!" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

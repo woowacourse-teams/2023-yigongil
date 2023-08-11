@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="multiPickerMaxNumbers">
+        <item>14</item>
+        <item>2</item>
+    </integer-array>
+
+    <string-array name="multiPickerDisplayNames">
+        <item>@string/multiPicker_display_name_day</item>
+        <item>@string/multiPicker_display_name_week</item>
+    </string-array>
+
+    <!-- 스터디 관리 탭 -->
+    <string-array name="tabLayoutTitles">
+        <item>@string/study_manage_joined_tab</item>
+        <item>@string/study_manage_opened_tab</item>
+    </string-array>
+
+    <!-- 스터디 목록 탭 -->
+    <string-array name="startDateStrings">
+        <item>@string/study_list_previous_date</item>
+        <item>@string/study_list_processing_date</item>
+    </string-array>
+
+    <string-array name="periodUnitStrings">
+        <item>@string/study_list_item_date_format</item>
+        <item>@string/study_list_item_week_format</item>
+    </string-array>
+
+    <!-- 설정 뷰 -->
+    <string-array name="settingItems">
+        <item>@string/setting_item_notification_title</item>
+        <item>@string/setting_item_account_title</item>
+        <item>@string/setting_item_policy</item>
+        <item>@string/setting_item_logout</item>
+    </string-array>
+
+</resources>

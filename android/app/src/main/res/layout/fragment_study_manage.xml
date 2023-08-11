@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_study_manage"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginBottom="11dp"
+            android:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/study_manage_title"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/header_sb16"
+            app:titleTextColor="@color/white" />
+
+        <View
+            android:id="@+id/view_study_manage_toolbar_border_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black02_181B21"
+            app:layout_constraintTop_toBottomOf="@id/tb_study_manage" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tl_study_manage"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:backgroundTint="@color/transparent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_study_manage_toolbar_border_line"
+            app:tabIndicatorColor="@color/green07_0E4429"
+            app:tabIndicatorFullWidth="true"
+            app:tabRippleColor="@color/transparent"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextAppearance="@style/subtitle_r16"
+            app:tabTextColor="@color/grey02_78808B" />
+
+        <View
+            android:id="@+id/view_study_manage_tab_border_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black02_181B21"
+            app:layout_constraintTop_toBottomOf="@id/tl_study_manage" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srl_study_manage"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_study_manage_tab_border_line">
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_study_manage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+    </layout>

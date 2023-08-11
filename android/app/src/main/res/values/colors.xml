@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
+
+    <!--Custom Color-->
+    <color name="white01_66FFFFFF">#66FFFFFF</color>
+
+    <color name="green01_4039D353">#4039D353</color>
+    <color name="green02_E639D353">#E639D353</color>
+    <color name="green03_016D32">#016D32</color>
+    <color name="green04_26A641">#26A641</color>
+    <color name="green05_3AD353">#3AD353</color>
+    <color name="green06_7ADC4B">#7ADC4B</color>
+    <color name="green07_0E4429">#0E4429</color>
+    <color name="green08_A2FF86">#A2FF86</color>
+    <color name="green09_799E82">#799E82</color>
+
+    <color name="black01_0D1117">#0D1117</color>
+    <color name="black02_181B21">#181B21</color>
+    <color name="black03_272C33">#272C33</color>
+
+    <color name="grey01_C5C5C5">#C5C5C5</color>
+    <color name="grey02_78808B">#78808B</color>
+    <color name="grey03_595959">#595959</color>
+    <color name="grey04_989DA5">#989DA5</color>
+    <color name="grey05_C3BCBC">#C3BCBC</color>
+
+    <color name="red_EB7A7A">#EB7A7A</color>
+    <color name="blue_9BB9F2">#9BB9F2</color>
+
+    <!--Tier Color-->
+    <color name="bronze_FBBA8B">#FBBA8B</color>
+    <color name="silver_CFD5DE">#CFD5DE</color>
+    <color name="gold_F3E199">#F3E199</color>
+    <color name="platinum_71FFDD">#71FFDD</color>
+    <color name="diamond_9ABFF6">#9ABFF6</color>
+
+</resources>

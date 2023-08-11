@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="subtitle_r16">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="subtitle_r20">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+
+    <style name="text_r16">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="description_r12">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">12dp</item>
+    </style>
+
+    <style name="button_sb20">
+        <item name="fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+
+    <style name="text_sb16">
+        <item name="fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="text_sb14">
+        <item name="fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textSize">14dp</item>
+    </style>
+
+    <style name="study_title_b18">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">18dp</item>
+    </style>
+
+    <style name="navi_bar_m12">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">12dp</item>
+    </style>
+
+    <style name="text_m14">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">14dp</item>
+    </style>
+
+    <style name="header_sb16">
+        <item name="fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="button_sb18">
+        <item name="fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textSize">18dp</item>
+    </style>
+
+    <style name="picker_sb18">
+        <item name="fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textSize">18dp</item>
+    </style>
+
+    <style name="study_info_sb14">
+        <item name="fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textSize">14dp</item>
+    </style>
+
+    <style name="title_b20">
+        <item name="fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+
+    <style name="picker_r24">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">24dp</item>
+    </style>
+
+    <style name="picker_sb28">
+        <item name="fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textSize">28dp</item>
+    </style>
+
+    <style name="text_r14">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">14dp</item>
+    </style>
+
+    <style name="name_sb14">
+        <item name="fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textSize">14dp</item>
+    </style>
+
+    <style name="text_m18">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">18dp</item>
+    </style>
+
+    <style name="name_sb20">
+        <item name="fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+
+    <style name="title_sb22">
+        <item name="fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textSize">22dp</item>
+    </style>
+
+    <style name="description_r10">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">10dp</item>
+    </style>
+
+    <style name="accept_sb12">
+        <item name="fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textSize">12dp</item>
+    </style>
+
+
+</resources>
