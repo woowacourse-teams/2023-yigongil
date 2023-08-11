@@ -61,7 +61,7 @@ class TodoControllerTest {
 
     @BeforeEach
     void setUp() {
-        given(memberRepository.findById(anyLong())).willReturn(Optional.of(MemberFixture.김진우.toMember()));
+        given(memberRepository.findByIdAndDeletedFalse(anyLong())).willReturn(Optional.of(MemberFixture.김진우.toMember()));
     }
 
     @Test
