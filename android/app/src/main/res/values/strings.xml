@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Team201</string>
+    <string name="app_name">201\nCreated</string>
 
     <!-- 툴바 공통 -->
     <string name="toolbar_back_text">뒤로가기</string>
