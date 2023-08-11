@@ -22,6 +22,7 @@ import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -104,6 +105,7 @@ public class StudyService {
     public void apply(Member member, Long studyId) {
         Study study = findStudyById(studyId);
 
+        study.validateMemberSize();
         validateApplicantAlreadyExist(member, study);
 
         studyMemberRepository.save(
@@ -125,13 +127,13 @@ public class StudyService {
 
     @Transactional(readOnly = true)
     public StudyDetailResponse findStudyDetailByStudyId(Member member, Long studyId) {
-        Study study = studyRepository.findByIdWithRound(studyId)
+        Study study = studyRepository.findById(studyId)
                                      .orElseThrow(() -> new StudyNotFoundException("해당 스터디가 존재하지 않습니다", studyId));
 
         List<Round> rounds = study.getRounds();
         Round currentRound = study.getCurrentRound();
 
-        List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndParticipatingAndNotEnd(studyId);
+        List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRoleNotAndStudyResult(studyId, Role.APPLICANT, StudyResult.NONE);
 
         Role role = studyMemberRepository.findByStudyIdAndMemberId(studyId, member.getId())
                                          .map(StudyMember::getRole)
@@ -175,7 +177,8 @@ public class StudyService {
                 member.getTier(),
                 member.getNickname(),
                 calculateSuccessRate(member),
-                member.getProfileImageUrl()
+                member.getProfileImageUrl(),
+                member.isDeleted()
         );
     }
 
@@ -190,7 +193,11 @@ public class StudyService {
 
     @Transactional(readOnly = true)
     public List<MyStudyResponse> findMyStudies(Member member) {
-        List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndParticipatingAndNotEnd(member.getId());
+        List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndRoleNotAndStudyResult(
+                member.getId(),
+                Role.APPLICANT,
+                StudyResult.NONE
+        );
 
         List<MyStudyResponse> response = new ArrayList<>();
         for (StudyMember studyMember : studyMembers) {
@@ -241,6 +248,12 @@ public class StudyService {
         studies.stream()
                .filter(study -> study.isCurrentRoundEndAt(today))
                .forEach(Study::updateToNextRound);
+
+        studies.stream()
+               .filter(Study::isEnd)
+               .map(endedStudy -> studyMemberRepository.findAllByStudyId(endedStudy.getId()))
+               .flatMap(Collection::stream)
+               .forEach(StudyMember::completeSuccessfully);
     }
 
     @Transactional
