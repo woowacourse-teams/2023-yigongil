@@ -126,13 +126,13 @@ public class StudyService {
 
     @Transactional(readOnly = true)
     public StudyDetailResponse findStudyDetailByStudyId(Member member, Long studyId) {
-        Study study = studyRepository.findByIdWithRound(studyId)
+        Study study = studyRepository.findById(studyId)
                                      .orElseThrow(() -> new StudyNotFoundException("해당 스터디가 존재하지 않습니다", studyId));
 
         List<Round> rounds = study.getRounds();
         Round currentRound = study.getCurrentRound();
 
-        List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndParticipatingAndNotEnd(studyId);
+        List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRoleNotAndStudyResult(studyId, Role.APPLICANT, StudyResult.NONE);
 
         Role role = studyMemberRepository.findByStudyIdAndMemberId(studyId, member.getId())
                                          .map(StudyMember::getRole)
@@ -192,7 +192,11 @@ public class StudyService {
 
     @Transactional(readOnly = true)
     public List<MyStudyResponse> findMyStudies(Member member) {
-        List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndParticipatingAndNotEnd(member.getId());
+        List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndRoleNotAndStudyResult(
+                member.getId(),
+                Role.APPLICANT,
+                StudyResult.NONE
+        );
 
         List<MyStudyResponse> response = new ArrayList<>();
         for (StudyMember studyMember : studyMembers) {
