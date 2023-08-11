@@ -3,6 +3,7 @@ package com.created.team201.presentation.studyManage
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView.OVER_SCROLL_NEVER
 import com.created.team201.R
 import com.created.team201.databinding.FragmentStudyManageBinding
@@ -12,6 +13,7 @@ import com.created.team201.presentation.studyList.StudyListClickListener
 import com.created.team201.presentation.studyManage.adapter.StudyManageAdapter
 import com.created.team201.presentation.studyManagement.StudyManagementActivity
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.launch
 
 class StudyManageFragment :
     BindingFragment<FragmentStudyManageBinding>(R.layout.fragment_study_manage) {
@@ -29,12 +31,22 @@ class StudyManageFragment :
         setUpViewPagerAdapter()
         setUpTabLayoutViewPagerConnection()
         setUpStudyManageObserve()
+        setUpRefreshListener()
     }
 
     override fun onResume() {
         super.onResume()
 
         studyManageViewModel.loadStudies()
+    }
+
+    private fun setUpRefreshListener() {
+        binding.srlStudyManage.setOnRefreshListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                studyManageViewModel.loadStudies()
+                binding.srlStudyManage.isRefreshing = false
+            }
+        }
     }
 
     private fun setUpViewPagerAdapter() {
