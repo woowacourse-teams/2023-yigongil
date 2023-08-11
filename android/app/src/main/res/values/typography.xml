@@ -7,6 +7,11 @@
         <item name="android:textSize">15dp</item>
     </style>
 
+    <style name="subtitle_r20">
+        <item name="fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+
     <style name="text_r14">
         <item name="fontFamily">@font/pretendard_regular</item>
         <item name="android:textSize">14dp</item>

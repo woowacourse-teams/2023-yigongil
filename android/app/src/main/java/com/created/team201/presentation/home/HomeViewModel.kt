@@ -27,6 +27,9 @@ class HomeViewModel(
     private val _userStudies: MutableLiveData<List<StudyUiModel>> = MutableLiveData()
     val userStudies: LiveData<List<StudyUiModel>> get() = _userStudies
 
+    private val _isStudyExistence: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isStudyExistence: LiveData<Boolean> get() = _isStudyExistence
+
     fun updateUserStudies() {
         viewModelScope.launch {
             runCatching {
@@ -34,6 +37,7 @@ class HomeViewModel(
             }.onSuccess { result ->
                 _userName.value = result.userName
                 _userStudies.value = result.studies.map { it.toUiModel() }.sortedBy { it.leftDays }
+                if (!userStudies.value.isNullOrEmpty()) _isStudyExistence.value = true
             }.onFailure {
                 Log.d("ERROR", it.toString())
             }
