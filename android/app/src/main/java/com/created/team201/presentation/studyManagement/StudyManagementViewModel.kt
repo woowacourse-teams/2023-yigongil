@@ -267,7 +267,7 @@ class StudyManagementViewModel(
         nickname = nickname,
         profileImageUrl = profileImageUrl,
         isDone = isDone,
-
+        isDeleted = isDeleted,
     )
 
     private fun Round.toUiModel(): RoundUiModel = RoundUiModel(id = id, number = number)
