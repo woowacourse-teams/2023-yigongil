@@ -9,4 +9,11 @@ class StudyListDataSourceImpl(
     override suspend fun getStudyList(page: Int): List<StudySummaryResponseDto> {
         return studyListService.getStudyList(page)
     }
+
+    override suspend fun getSearchedStudyList(
+        searchWord: String,
+        page: Int,
+    ): List<StudySummaryResponseDto> {
+        return studyListService.getSearchedStudyList(searchWord, page)
+    }
 }

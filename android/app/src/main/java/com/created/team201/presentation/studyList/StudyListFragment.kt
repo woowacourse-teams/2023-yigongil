@@ -9,7 +9,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout.VERTICAL
 import android.widget.SearchView
 import android.widget.SearchView.OnQueryTextListener
-import android.widget.Toast
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -31,6 +30,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private val studyListAdapter: StudyListAdapter by lazy {
         StudyListAdapter(studyListClickListener())
     }
+    private var searchWord = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,14 +64,17 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     }
 
     private fun setOnSearchViewQueryTextFocusChangeListener(searchView: SearchView) {
-        searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
+        searchView.setOnQueryTextFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
-                val inputMethodManager: InputMethodManager =
-                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.toggleSoftInput(
-                    InputMethodManager.SHOW_IMPLICIT,
-                    InputMethodManager.HIDE_IMPLICIT_ONLY,
-                )
+                view?.postDelayed({
+                    view.requestFocus()
+                    val inputMethodManager: InputMethodManager =
+                        requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.showSoftInput(
+                        view.findFocus(),
+                        InputMethodManager.SHOW_IMPLICIT,
+                    )
+                }, 30)
             }
         }
     }
@@ -79,6 +82,8 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private fun setOnSearchItemCloseListener(searchView: SearchView, searchItem: MenuItem) {
         searchView.setOnCloseListener {
             searchItem.collapseActionView()
+            studyListViewModel.changeSearchMode(false)
+            studyListViewModel.refreshPage()
             true
         }
     }
@@ -87,12 +92,15 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         searchItem
             .setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
                 override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                    studyListViewModel.changeSearchMode(true)
                     searchView.requestFocus()
                     return true
                 }
 
                 override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                     searchView.hideKeyboard()
+                    studyListViewModel.changeSearchMode(false)
+                    studyListViewModel.refreshPage()
                     return true
                 }
             })
@@ -101,7 +109,9 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private fun setOnSearchViewQueryTextListener(searchView: SearchView) {
         searchView.setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                Toast.makeText(requireContext(), query, Toast.LENGTH_SHORT).show()
+                studyListViewModel.changeSearchMode(true)
+                searchWord = query.toString()
+                studyListViewModel.loadSearchedPage(searchWord)
                 searchView.hideKeyboard()
                 return true
             }
@@ -168,7 +178,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
                 }
 
                 if (!binding.rvStudyListList.canScrollVertically(1)) {
-                    studyListViewModel.loadNextPage()
+                    studyListViewModel.loadNextPage(searchWord)
                 }
             }
         }
