@@ -3,7 +3,7 @@ package com.created.domain.model
 import java.util.regex.Pattern
 
 data class Nickname(
-    val nickname: String
+    val nickname: String,
 ) {
     init {
         require(validateNickname(nickname)) { ERROR_UNAVAILABLE_NICKNAME }

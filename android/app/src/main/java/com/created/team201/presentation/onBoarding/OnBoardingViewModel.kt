@@ -47,22 +47,26 @@ class OnBoardingViewModel : ViewModel() {
         _introduction.value = introduction
     }
 
-    fun getInputFilter(): Array<InputFilter> = arrayOf(object : InputFilter {
-        override fun filter(
-            text: CharSequence,
-            start: Int,
-            end: Int,
-            dest: Spanned,
-            dStart: Int,
-            dEnd: Int
-        ): CharSequence {
-            if (text.isBlank() || PATTERN_NICKNAME.matcher(text).matches())
-                return text
+    fun getInputFilter(): Array<InputFilter> = arrayOf(
+        object : InputFilter {
+            override fun filter(
+                text: CharSequence,
+                start: Int,
+                end: Int,
+                dest: Spanned,
+                dStart: Int,
+                dEnd: Int,
+            ): CharSequence {
+                if (text.isBlank() || PATTERN_NICKNAME.matcher(text).matches()) {
+                    return text
+                }
 
-            _nicknameState.value = NicknameState.UNAVAILABLE
-            return ""
-        }
-    }, LengthFilter(MAX_NICKNAME_LENGTH))
+                _nicknameState.value = NicknameState.UNAVAILABLE
+                return ""
+            }
+        },
+        LengthFilter(MAX_NICKNAME_LENGTH),
+    )
 
     private fun isInitializeOnBoarding(): Boolean =
         nickname.value != null && nicknameState.value == NicknameState.AVAILABLE
