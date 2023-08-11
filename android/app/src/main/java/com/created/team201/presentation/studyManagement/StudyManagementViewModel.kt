@@ -121,6 +121,7 @@ class StudyManagementViewModel(
             true -> addNecessaryTodo(content)
             false -> addOptionalTodo(content)
         }
+        _todoState.value = DEFAULT
     }
 
     private fun addNecessaryTodo(todoContent: String) {
@@ -292,7 +293,6 @@ class StudyManagementViewModel(
         newOptionalTodos.removeIf {
             it.todo.todoId == optionalTodo.todo.todoId
         }
-        Log.d("ring", newOptionalTodos.toString())
         viewModelScope.launch {
             kotlin.runCatching {
                 repository.deleteOptionalTodo(currentRoundDetail.id, optionalTodo.todo.todoId)
@@ -306,6 +306,7 @@ class StudyManagementViewModel(
                 Log.e(LOG_ERROR, it.message.toString())
             }
         }
+        _todoState.value = DEFAULT
     }
 
     fun setTodoState(updatedTodoState: TodoState) {

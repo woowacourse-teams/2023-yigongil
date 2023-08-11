@@ -121,7 +121,6 @@ class StudyManagementActivity :
                 return
             }
             studyManagementViewModel.addTodo(isNecessary, trimmedTodoContent)
-            studyManagementViewModel.setTodoState(DEFAULT)
         }
 
         override fun onClickUpdateTodoIsDone(isNecessary: Boolean, todoId: Long, isDone: Boolean) {
