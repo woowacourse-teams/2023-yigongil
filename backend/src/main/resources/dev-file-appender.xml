@@ -53,4 +53,23 @@
       <totalSizeCap>3GB</totalSizeCap>
     </rollingPolicy>
   </appender>
+
+  <springProperty name="SLACK_WEBHOOK_URI" source="slack.webhook-url"/>
+
+  <appender name="SLACK" class="com.github.maricn.logback.SlackAppender">
+    <webhookUri>${SLACK_WEBHOOK_URI}</webhookUri>
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %msg %n</pattern>
+    </layout>
+    <username>서버-에러-스택-트레이스</username>
+    <iconEmoji>:stuck_out_tongue_winking_eye:</iconEmoji>
+    <colorCoding>true</colorCoding>
+  </appender>
+
+  <appender name="ASYNC_SLACK" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="SLACK"/>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>INFO</level>
+    </filter>
+  </appender>
 </included>
