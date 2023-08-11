@@ -24,7 +24,6 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
         observeOnBoardingDoneState()
     }
 
-
     private fun observeLoginState() {
         splashViewModel.loginState.observe(this@SplashActivity) { loginState ->
             when (loginState) {
