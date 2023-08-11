@@ -114,7 +114,6 @@
                 app:layout_constraintStart_toEndOf="@id/til_study_management_round"
                 app:layout_constraintTop_toTopOf="@id/til_study_management_round" />
 
-
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_study_management"
                 android:layout_width="0dp"
