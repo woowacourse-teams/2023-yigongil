@@ -7,7 +7,7 @@ import com.created.team201.data.remote.api.ReportService
 class ReportDataSourceImpl(
     private val reportService: ReportService,
 ) : ReportDataSource {
-    override suspend fun reportTarget(report: Report) {
-        reportService.reportTarget(report.toRequestDTO())
+    override suspend fun reportUser(report: Report) {
+        reportService.reportUser(report.toRequestDTO())
     }
 }

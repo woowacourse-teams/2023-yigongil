@@ -5,14 +5,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ReportRequestDTO(
-    @SerialName("targetId")
-    val targetId: Long,
-    @SerialName("category")
-    val category: Int,
+    @SerialName("reportedMemberId")
+    val reportedMemberId: Long,
     @SerialName("title")
     val title: String,
-    @SerialName("problemOccurredAt")
-    val problemOccurredAt: String,
+    @SerialName("problemOccuredAt")
+    val problemOccuredAt: String,
     @SerialName("content")
     val content: String,
 )

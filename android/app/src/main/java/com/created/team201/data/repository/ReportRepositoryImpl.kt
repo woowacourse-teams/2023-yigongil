@@ -7,7 +7,7 @@ import com.created.team201.data.datasource.remote.ReportDataSource
 class ReportRepositoryImpl(
     private val reportDataSource: ReportDataSource,
 ) : ReportRepository {
-    override suspend fun reportTarget(report: Report) {
-        reportDataSource.reportTarget(report)
+    override suspend fun reportUser(report: Report) {
+        reportDataSource.reportUser(report)
     }
 }

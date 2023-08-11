@@ -6,7 +6,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.StringRes
 import com.created.team201.R
 import com.created.team201.databinding.ActivityReportBinding
 import com.created.team201.presentation.common.BindingActivity
@@ -16,7 +18,7 @@ import java.util.Calendar
 
 class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_report) {
 
-    private val reportViewModel: ReportViewModel by viewModels()
+    private val reportViewModel: ReportViewModel by viewModels { ReportViewModel.Factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +32,7 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
     private fun initBinding() {
         binding.lifecycleOwner = this
         binding.viewModel = reportViewModel
+        binding.activity = this
     }
 
     private fun initToolBar() {
@@ -81,6 +84,15 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
         }
     }
 
+    fun reportUser() {
+        reportViewModel.reportUser(
+            intent.getLongExtra(KEY_TARGET_ID, NON_EXISTENCE_ID),
+        ) {
+            showToast(R.string.report_report_successful_done)
+            finish()
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
@@ -94,10 +106,15 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
         }
     }
 
+    private fun showToast(@StringRes stringRes: Int) {
+        Toast.makeText(this, stringRes, Toast.LENGTH_SHORT).show()
+    }
+
     companion object {
         private const val MONTH_CALIBRATION_VALUE = 1
         private const val KEY_CATEGORY = "key_category"
         private const val KEY_TARGET_ID = "key_target_id"
+        private const val NON_EXISTENCE_ID = 0L
         fun getIntent(context: Context, reportCategory: ReportCategory, targetId: Long): Intent =
             Intent(context, ReportActivity::class.java).apply {
                 putExtra(KEY_CATEGORY, reportCategory.index)

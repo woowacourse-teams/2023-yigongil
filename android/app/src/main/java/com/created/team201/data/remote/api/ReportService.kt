@@ -6,7 +6,7 @@ import retrofit2.http.POST
 
 interface ReportService {
     @POST("/v1/reports")
-    suspend fun reportTarget(
+    suspend fun reportUser(
         @Body report: ReportRequestDTO,
     )
 }
