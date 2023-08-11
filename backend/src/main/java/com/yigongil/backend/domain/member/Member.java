@@ -56,7 +56,7 @@ public class Member extends BaseEntity {
             Integer tier,
             String introduction,
             boolean isOnboardingDone,
-            boolean Deleted
+            boolean deleted
     ) {
         this.id = id;
         this.githubId = githubId;
@@ -65,7 +65,7 @@ public class Member extends BaseEntity {
         this.tier = tier == null ? 1 : tier;
         this.introduction = new Introduction(introduction);
         this.isOnboardingDone = isOnboardingDone;
-        this.deleted = Deleted;
+        this.deleted = deleted;
     }
 
     public void updateProfile(String nickname, String introduction) {

@@ -48,11 +48,7 @@ public class RoundService {
         Round round = roundRepository.findById(roundId)
                                      .orElseThrow(() -> new RoundNotFoundException("해당 회차를 찾을 수 없습니다", roundId));
 
-        List<Long> ids = round.getRoundOfMembers().stream()
-                              .map(RoundOfMember::getId)
-                              .toList();
-
-        List<RoundOfMember> roundOfMembers = roundOfMemberRepository.findAllByIdIn(ids);
+        List<RoundOfMember> roundOfMembers = round.getRoundOfMembers();
 
         RoundOfMember roundByMember =
                 roundOfMembers.stream()
