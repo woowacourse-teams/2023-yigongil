@@ -4,17 +4,24 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.commit
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.created.team201.R
 import com.created.team201.databinding.ActivitySettingBinding
 import com.created.team201.presentation.accountSetting.AccountSettingActivity
 import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.login.LoginActivity
 import com.created.team201.presentation.setting.adapter.SettingAdapter
 import com.created.team201.presentation.setting.model.SettingType
 import com.created.team201.presentation.setting.model.SettingUiModel
 
 class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activity_setting) {
+    private val viewModel: SettingViewModel by viewModels {
+        SettingViewModel.Factory
+    }
+
     private val settingItems: List<SettingUiModel> by lazy {
         resources.getStringArray(R.array.settingItems).mapIndexed { index, setting ->
             SettingUiModel(index.toLong(), setting)
@@ -31,7 +38,22 @@ class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activit
                     }
 
                     SettingType.POLICY -> {}
-                    SettingType.LOGOUT -> {}
+                    SettingType.LOGOUT -> {
+                        removeDialog()
+                        showDialog(
+                            getString(R.string.setting_dialog_logout_title),
+                            getString(R.string.setting_dialog_logout_content),
+                            object : SettingDialogClickListener {
+                                override fun onCancelClick() {
+                                }
+
+                                override fun onOkClick() {
+                                    viewModel.logout()
+                                    navigateToLogin()
+                                }
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -68,6 +90,31 @@ class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activit
         startActivity(AccountSettingActivity.getIntent(this))
     }
 
+    private fun showDialog(
+        title: String,
+        content: String,
+        settingDialogClickListener: SettingDialogClickListener,
+    ) {
+        SettingDialog(title, content, settingDialogClickListener).show(
+            supportFragmentManager,
+            TAG_DIALOG_LOGOUT,
+        )
+    }
+
+    private fun removeDialog() {
+        supportFragmentManager.findFragmentByTag(TAG_DIALOG_LOGOUT)?.let {
+            supportFragmentManager.commit {
+                remove(it)
+            }
+        }
+    }
+
+    private fun navigateToLogin() {
+        startActivity(
+            LoginActivity.getIntent(this).also { it.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP })
+        finishAffinity()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
             android.R.id.home -> {
@@ -79,6 +126,8 @@ class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activit
         }
 
     companion object {
+        private const val TAG_DIALOG_LOGOUT = "TAG_DIALOG_LOGOUT"
+
         fun getIntent(context: Context): Intent =
             Intent(context, SettingActivity::class.java).also {
                 it.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP

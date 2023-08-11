@@ -15,4 +15,6 @@ data class MemberResponseDto(
     val successRate: Double,
     @SerialName("profileImage")
     val profileImage: String?,
+    @SerialName("isDeleted")
+    val isDeleted: Boolean,
 )
