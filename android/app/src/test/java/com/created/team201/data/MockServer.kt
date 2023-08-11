@@ -30,6 +30,20 @@ object MockServer {
                         .setBody(myProfile)
                 }
 
+                path.startsWith("/v1/members/exists?") && request.method == "GET" -> {
+                    MockResponse()
+                        .setHeader(HEADER_NAME_TYPE, HEADER_VALUE_JSON)
+                        .setResponseCode(200)
+                        .setBody(nicknameValidationResponse)
+                }
+
+                path == "/v1/members/check-onboarding-is-done" && request.method == "GET" -> {
+                    MockResponse()
+                        .setHeader(HEADER_NAME_TYPE, HEADER_VALUE_JSON)
+                        .setResponseCode(200)
+                        .setBody(onBoardingIsDoneResponse)
+                }
+
                 else -> {
                     MockResponse().setResponseCode(404)
                 }
@@ -49,6 +63,20 @@ object MockServer {
                 "tierProgress": 50, 
                 "tier": 1,
                 "introduction": "안녕하세요, 김진우입니다."
+            }
+        """.trimIndent()
+
+    private val nicknameValidationResponse: String =
+        """
+            {
+                "exists": false
+            }
+        """.trimIndent()
+
+    private val onBoardingIsDoneResponse: String =
+        """
+            {
+                "isOnboardingDone" : true
             }
         """.trimIndent()
 
