@@ -61,7 +61,7 @@ class StudyManagementViewModel(
 
     private val currentStudyRounds get() = studyRounds.value ?: listOf()
     private val studyDetails get() = studyRounds.value ?: listOf()
-    private val currentRoundDetail get() = studyDetails[currentRound.value - CONVERT_PAGE_TO_ROUND]
+    val currentRoundDetail get() = studyDetails[currentRound.value - CONVERT_PAGE_TO_ROUND]
 
     fun initStudyManagement(studyId: Long, roleIndex: Int) {
         initStatus(roleIndex)
@@ -352,7 +352,7 @@ class StudyManagementViewModel(
         nickname = nickname,
         profileImageUrl = profileImageUrl,
         isDone = isDone,
-
+        isDeleted = isDeleted,
     )
 
     private fun Round.toUiModel(): RoundUiModel = RoundUiModel(id = id, number = number)

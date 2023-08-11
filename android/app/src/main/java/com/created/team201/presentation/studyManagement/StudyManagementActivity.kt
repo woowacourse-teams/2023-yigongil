@@ -213,8 +213,24 @@ class StudyManagementActivity :
 
     private val memberClickListener = object : StudyMemberClickListener {
         override fun onClickMember(id: Long) {
+            val studyMember = studyManagementViewModel.currentRoundDetail.studyMembers.find {
+                it.id == id
+            } ?: return
+
+            if (studyMember.isDeleted) {
+                toastDeletedMember()
+                return
+            }
             startActivity(ProfileActivity.getIntent(this@StudyManagementActivity, id))
         }
+    }
+
+    private fun toastDeletedMember() {
+        Toast.makeText(
+            this@StudyManagementActivity,
+            getString(R.string.study_management_deleted_member_alert),
+            Toast.LENGTH_SHORT,
+        ).show()
     }
 
     private fun initPageButtonClickListener() {
