@@ -24,11 +24,6 @@ public interface StudyRepository extends Repository<Study, Long> {
     List<Study> findAllByProcessingStatus(ProcessingStatus processingStatus);
 
     @Query("""
-            select distinct s from Study s join fetch s.rounds rs where s.id = :id
-            """)
-    Optional<Study> findByIdWithRound(@Param("id") Long id);
-
-    @Query("""
                 select distinct s from Study s
                 join StudyMember sm
                 on s = sm.study

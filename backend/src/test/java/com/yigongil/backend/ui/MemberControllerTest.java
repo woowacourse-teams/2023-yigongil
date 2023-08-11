@@ -67,7 +67,7 @@ class MemberControllerTest {
     @Test
     void 프로필_정보를_조회한다() throws Exception {
         Member member = MemberFixture.김진우.toMember();
-        given(memberRepository.findById(1L)).willReturn(Optional.of(member));
+        given(memberRepository.findByIdAndDeletedFalse(1L)).willReturn(Optional.of(member));
         given(memberService.findById(1L)).willReturn(
                 new ProfileResponse(
                         member.getId(),
@@ -97,7 +97,7 @@ class MemberControllerTest {
         willDoNothing().given(memberService).update(any(), any());
 
         given(tokenProvider.parseToken(any())).willReturn(1L);
-        given(memberRepository.findById(1L)).willReturn(Optional.of(MemberFixture.김진우.toMember()));
+        given(memberRepository.findByIdAndDeletedFalse(1L)).willReturn(Optional.of(MemberFixture.김진우.toMember()));
         given(authContext.getMemberId()).willReturn(1L);
 
         mockMvc.perform(patch("/v1/members")
