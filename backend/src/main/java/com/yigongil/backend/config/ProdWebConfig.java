@@ -3,6 +3,8 @@ package com.yigongil.backend.config;
 import com.yigongil.backend.config.auth.AuthInterceptor;
 import com.yigongil.backend.config.auth.MemberArgumentResolver;
 import java.util.List;
+import org.springframework.boot.actuate.trace.http.InMemoryHttpTraceRepository;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -34,5 +36,10 @@ public class ProdWebConfig implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(memberArgumentResolver);
+    }
+
+    @Bean
+    public InMemoryHttpTraceRepository inMemoryHttpTraceRepository() {
+        return new InMemoryHttpTraceRepository();
     }
 }
