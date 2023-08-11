@@ -23,8 +23,8 @@ fun RoundDetailResponseDto.toDomain(): RoundDetail = RoundDetail(
 
 fun StudyMemberResponseDto.toDomain(): StudyMember = StudyMember(
     id = id,
-    nickname = nickname,
-    profileImageUrl = profileImageUrl,
+    nickname = nickname ?: "",
+    profileImageUrl = profileImageUrl ?: "",
     isDone = isDone,
     isDeleted = isDeleted,
 )

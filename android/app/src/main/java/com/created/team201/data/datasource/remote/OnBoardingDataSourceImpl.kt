@@ -8,7 +8,7 @@ import com.created.team201.data.remote.response.IsOnBoardingDoneResponseDto
 import com.created.team201.data.remote.response.NicknameResponseDto
 
 class OnBoardingDataSourceImpl(
-    private val onBoardingService: OnBoardingService
+    private val onBoardingService: OnBoardingService,
 ) : OnBoardingDataSource {
     override suspend fun getIsOnboardingDone(): IsOnBoardingDoneResponseDto {
         return onBoardingService.getIsOnboardingDone()

@@ -8,9 +8,9 @@ data class StudyMemberResponseDto(
     @SerialName("id")
     val id: Long,
     @SerialName("nickname")
-    val nickname: String,
+    val nickname: String?,
     @SerialName("profileImageUrl")
-    val profileImageUrl: String,
+    val profileImageUrl: String?,
     @SerialName("isDone")
     val isDone: Boolean,
     @SerialName("isDeleted")

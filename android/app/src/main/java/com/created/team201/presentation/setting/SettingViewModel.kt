@@ -17,7 +17,7 @@ import com.created.team201.data.repository.SettingRepositoryImpl
 import kotlinx.coroutines.launch
 
 class SettingViewModel(
-    private val settingRepository: SettingRepository
+    private val settingRepository: SettingRepository,
 ) : ViewModel() {
     private val _isWithdrawAccountState: MutableLiveData<State> = MutableLiveData()
     val isWithdrawAccountState: LiveData<State>
@@ -52,7 +52,7 @@ class SettingViewModel(
                         OnBoardingIsDoneDataSourceImpl(Team201App.provideOnBoardingIsDoneStorage()),
                         SettingDataSourceImpl(NetworkServiceModule.settingService),
                         TokenDataSourceImpl(Team201App.provideTokenStorage()),
-                    )
+                    ),
                 )
             }
         }
