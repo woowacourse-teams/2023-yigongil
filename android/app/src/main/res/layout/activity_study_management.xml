@@ -25,7 +25,7 @@
             app:menu="@menu/menu_study_management"
             app:title="@{viewModel.state.title}"
             app:titleCentered="true"
-            app:titleTextAppearance="@style/header_sb15"
+            app:titleTextAppearance="@style/header_sb16"
             app:titleTextColor="@color/white"
             tools:title="참여한 스터디 관리하기" />
 
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
                 android:text="@{@string/study_management_round(viewModel.currentRound)}"
-                android:textAppearance="@style/subtitle_r15"
+                android:textAppearance="@style/subtitle_r16"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -114,7 +114,7 @@
                 android:background="@drawable/bg_rectangle_radius_10dp_green01"
                 android:gravity="center"
                 android:text="@{viewModel.state.buttonText}"
-                android:textAppearance="@style/button_sb18"
+                android:textAppearance="@style/button_sb20"
                 android:textColor="@color/green09_799E82"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

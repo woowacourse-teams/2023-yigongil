@@ -36,7 +36,7 @@
 
     <!-- 캘린더뷰 폰트, 컬러 테마 -->
     <style name="CalendarTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
-        <item name="android:textAppearance">@style/text_sb14</item>
+        <item name="android:textAppearance">@style/text_sb16</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/mcv_text_date_dark</item>
     </style>

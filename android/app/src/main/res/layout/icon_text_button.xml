@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="8dp"
-            android:textAppearance="@style/description_r8"
+            android:textAppearance="@style/description_r10"
             android:textColor="@color/grey02_78808B"
             tools:text="@string/icon_text_button_name_people_count" />
 
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="12dp"
-            android:textAppearance="@style/study_info_sb12"
+            android:textAppearance="@style/study_info_sb14"
             android:textColor="@color/white"
             android:visibility="gone"
             tools:text="6명" />

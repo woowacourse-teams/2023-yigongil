@@ -28,7 +28,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:title="@{viewModel.state.appBarTitle}"
             app:titleCentered="true"
-            app:titleTextAppearance="@style/header_sb15"
+            app:titleTextAppearance="@style/header_sb16"
             app:titleTextColor="@color/white" />
 
         <View
@@ -140,7 +140,7 @@
             android:minHeight="150dp"
             android:padding="16dp"
             android:text="@{viewModel.study.introduction}"
-            android:textAppearance="@style/text_r14"
+            android:textAppearance="@style/text_r16"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -154,7 +154,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:text="@string/study_detail_study_people"
-            android:textAppearance="@style/text_r12"
+            android:textAppearance="@style/text_r14"
             android:textColor="@color/grey02_78808B"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_study_detail_content" />
@@ -209,7 +209,7 @@
             android:gravity="center"
             android:onClick="@{() -> activity.initMainButtonOnClick(viewModel.study.isMaster)}"
             android:text="@{context.getString(viewModel.state.mainButtonText, viewModel.study.memberCount, viewModel.study.peopleCount)}"
-            android:textAppearance="@style/button_sb18"
+            android:textAppearance="@style/button_sb20"
             android:textColor="@{context.getColor(viewModel.state.mainButtonTextColor)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

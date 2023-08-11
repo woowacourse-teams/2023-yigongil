@@ -28,7 +28,7 @@
             app:menu="@menu/menu_study_list"
             app:title="@string/study_list_title"
             app:titleCentered="true"
-            app:titleTextAppearance="@style/header_sb15"
+            app:titleTextAppearance="@style/header_sb16"
             app:titleTextColor="@color/white" />
 
         <View
@@ -74,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/study_list_not_found"
-            android:textAppearance="@style/text_m16"
+            android:textAppearance="@style/text_m18"
             android:textColor="@color/white"
             app:isVisible="@{studyListViewModel.isNotFoundStudies}"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -104,7 +104,7 @@
             android:layout_marginBottom="24dp"
             android:backgroundTint="@color/green02_E639D353"
             android:text="@string/study_list_create"
-            android:textAppearance="@style/navi_bar_m10"
+            android:textAppearance="@style/navi_bar_m12"
             android:textColor="@color/white"
             app:icon="@drawable/ic_open_study"
             app:iconTint="@color/white"
