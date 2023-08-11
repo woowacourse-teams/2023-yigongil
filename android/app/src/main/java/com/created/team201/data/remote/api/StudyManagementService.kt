@@ -1,6 +1,7 @@
 package com.created.team201.data.remote.api
 
 import com.created.team201.data.remote.request.TodoCreateRequestDto
+import com.created.team201.data.remote.request.TodoIsDoneRequestDto
 import com.created.team201.data.remote.request.TodoRequestDto
 import com.created.team201.data.remote.request.TodoUpdateRequestDto
 import com.created.team201.data.remote.response.RoundDetailResponseDto
@@ -48,6 +49,12 @@ interface StudyManagementService {
     suspend fun patchNecessaryTodo(
         @Path("roundId") roundId: Long,
         @Body todoUpdateRequestDto: TodoUpdateRequestDto,
+    ): Response<Unit?>
+
+    @PATCH("/v1/rounds/{roundId}/todos/necessary")
+    suspend fun patchNecessaryTodoIsDone(
+        @Path("roundId") roundId: Long,
+        @Body todoUpdateRequestDto: TodoIsDoneRequestDto,
     ): Response<Unit?>
 
     @PATCH("/v1/rounds/{roundId}/todos/optional/{todoId}")

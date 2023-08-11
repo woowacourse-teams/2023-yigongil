@@ -8,6 +8,7 @@ import com.created.domain.repository.StudyManagementRepository
 import com.created.team201.data.datasource.remote.StudyManagementDataSource
 import com.created.team201.data.mapper.toDomain
 import com.created.team201.data.mapper.toRequestBody
+import com.created.team201.data.mapper.toTodoIsDoneRequestBody
 import com.created.team201.data.mapper.toTodoUpdateRequestBody
 
 class StudyManagementRepositoryImpl(
@@ -53,6 +54,10 @@ class StudyManagementRepositoryImpl(
 
     override suspend fun patchNecessaryTodo(roundId: Long, todo: Todo) {
         studyManagementDataSource.patchNecessaryTodo(roundId, todo.toTodoUpdateRequestBody())
+    }
+
+    override suspend fun patchNecessaryTodoIsDone(roundId: Long, todo: Todo) {
+        studyManagementDataSource.patchNecessaryTodoIsDone(roundId, todo.toTodoIsDoneRequestBody())
     }
 
     override suspend fun patchOptionalTodo(roundId: Long, todo: Todo) {

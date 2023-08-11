@@ -193,7 +193,7 @@ class StudyManagementViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
-                repository.patchNecessaryTodo(
+                repository.patchNecessaryTodoIsDone(
                     currentRoundDetail.id,
                     newNecessaryTodo.todo.toDomain(),
                 )

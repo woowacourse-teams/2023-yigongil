@@ -2,6 +2,7 @@ package com.created.team201.data.datasource.remote
 
 import com.created.team201.data.remote.api.StudyManagementService
 import com.created.team201.data.remote.request.TodoCreateRequestDto
+import com.created.team201.data.remote.request.TodoIsDoneRequestDto
 import com.created.team201.data.remote.request.TodoRequestDto
 import com.created.team201.data.remote.request.TodoUpdateRequestDto
 import com.created.team201.data.remote.response.RoundDetailResponseDto
@@ -43,6 +44,13 @@ class StudyManagementDataSourceImpl(
         todoUpdateRequestDto: TodoUpdateRequestDto,
     ) {
         service.patchNecessaryTodo(roundId, todoUpdateRequestDto)
+    }
+
+    override suspend fun patchNecessaryTodoIsDone(
+        roundId: Long,
+        todoIsDoneRequestDto: TodoIsDoneRequestDto,
+    ) {
+        service.patchNecessaryTodoIsDone(roundId, todoIsDoneRequestDto)
     }
 
     override suspend fun patchOptionalTodo(
