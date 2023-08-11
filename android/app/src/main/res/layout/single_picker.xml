@@ -21,7 +21,7 @@
             android:id="@+id/tv_single_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/picker_r22"
+            android:textAppearance="@style/picker_r24"
             android:textColor="@color/grey02_78808B"
             app:layout_constraintBottom_toBottomOf="@id/np_single_picker"
             app:layout_constraintEnd_toEndOf="parent"

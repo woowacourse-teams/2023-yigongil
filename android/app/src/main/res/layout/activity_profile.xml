@@ -26,7 +26,7 @@
             app:menu="@menu/menu_profile"
             app:title="@string/profile_title"
             app:titleCentered="true"
-            app:titleTextAppearance="@style/header_sb15"
+            app:titleTextAppearance="@style/header_sb16"
             app:titleTextColor="@color/white" />
 
         <View
@@ -76,7 +76,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="@{viewModel.profile.profile.nickname}"
-                    android:textAppearance="@style/name_sb18"
+                    android:textAppearance="@style/name_sb20"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/iv_profile_image"
@@ -91,24 +91,33 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="@{viewModel.profile.profile.githubId}"
-                    android:textAppearance="@style/text_r12"
+                    android:textAppearance="@style/text_r14"
                     android:textColor="@color/grey03_595959"
                     app:layout_constraintEnd_toEndOf="@id/tv_profile_user_name"
                     app:layout_constraintStart_toStartOf="@id/tv_profile_user_name"
                     app:layout_constraintTop_toBottomOf="@id/tv_profile_user_name"
                     tools:text="jwt1234" />
 
+                <View
+                    android:id="@+id/view_profile_border_line"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/black02_181B21"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_profile_image" />
 
                 <include
                     android:id="@+id/layout_profile_study_success_rate"
                     layout="@layout/layout_user_study_result_information"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="52dp"
+                    android:layout_marginTop="24dp"
                     app:icon="@{@drawable/ic_success_rate}"
                     app:layout_constraintEnd_toStartOf="@id/view_profile_rate_board_border_line"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/iv_profile_image"
+                    app:layout_constraintTop_toBottomOf="@+id/view_profile_border_line"
                     app:result="@{@string/profile_success_rate_format(viewModel.profile.profile.successRate)}"
                     app:title="@{@string/profile_study_success_rate}" />
 
@@ -143,7 +152,7 @@
                     android:background="@drawable/bg_rectangle_radius_5dp"
                     android:padding="16dp"
                     android:text="@{viewModel.profile.profile.introduction}"
-                    android:textAppearance="@style/text_r14"
+                    android:textAppearance="@style/text_r16"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

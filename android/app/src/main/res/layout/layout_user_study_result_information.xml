@@ -38,7 +38,7 @@
             android:layout_marginTop="8dp"
             android:text="@{title}"
             android:textAlignment="center"
-            android:textAppearance="@style/text_m16"
+            android:textAppearance="@style/text_r16"
             android:textColor="@color/white"
             tools:text="스터디 성공률" />
 
@@ -49,6 +49,7 @@
             android:layout_marginTop="8dp"
             android:text="@{result}"
             android:textAlignment="center"
+            android:paddingStart="12dp"
             android:textAppearance="@style/title_b20"
             android:textColor="@color/green08_A2FF86"
             tools:text="70.2%" />
