@@ -70,6 +70,8 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     }
 
     companion object {
-        fun getIntent(context: Context): Intent = Intent(context, MainActivity::class.java)
+        fun getIntent(context: Context): Intent = Intent(context, MainActivity::class.java).also {
+            it.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
     }
 }

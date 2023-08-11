@@ -1,9 +1,14 @@
 package com.created.team201.presentation.studyList
 
+import android.content.Context
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.view.View.VISIBLE
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout.VERTICAL
+import android.widget.SearchView
+import android.widget.SearchView.OnQueryTextListener
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -12,9 +17,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.R
 import com.created.team201.databinding.FragmentStudyListBinding
 import com.created.team201.presentation.common.BindingFragment
-import com.created.team201.presentation.createStudy.CreateStudyActivity
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
 import com.created.team201.presentation.studyList.adapter.StudyListAdapter
+import com.created.team201.presentation.updateStudy.UpdateStudyActivity
 import kotlinx.coroutines.launch
 
 class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fragment_study_list) {
@@ -25,6 +30,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private val studyListAdapter: StudyListAdapter by lazy {
         StudyListAdapter(studyListClickListener())
     }
+    private var searchWord = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,16 +50,76 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     }
 
     private fun setUpToolbar() {
-        binding.tbStudyList.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.menu_study_list_search -> {
-                    // 스터디 검색 뷰로 이동
-                    true
-                }
+        val menu = binding.tbStudyList.menu
+        val searchItem = menu.findItem(R.id.menu_study_list_search)
+        val searchView = searchItem.actionView as SearchView
 
-                else -> false
+        searchView.isIconified = false
+        searchView.isFocusable = true
+
+        setOnSearchViewQueryTextFocusChangeListener(searchView)
+        setOnSearchItemCloseListener(searchView, searchItem)
+        setOnSearchViewExpandListener(searchItem, searchView)
+        setOnSearchViewQueryTextListener(searchView)
+    }
+
+    private fun setOnSearchViewQueryTextFocusChangeListener(searchView: SearchView) {
+        searchView.setOnQueryTextFocusChangeListener { view, hasFocus ->
+            if (hasFocus) {
+                view?.postDelayed({
+                    view.requestFocus()
+                    val inputMethodManager: InputMethodManager =
+                        requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.showSoftInput(
+                        view.findFocus(),
+                        InputMethodManager.SHOW_IMPLICIT,
+                    )
+                }, 30)
             }
         }
+    }
+
+    private fun setOnSearchItemCloseListener(searchView: SearchView, searchItem: MenuItem) {
+        searchView.setOnCloseListener {
+            searchItem.collapseActionView()
+            studyListViewModel.changeSearchMode(false)
+            studyListViewModel.refreshPage()
+            true
+        }
+    }
+
+    private fun setOnSearchViewExpandListener(searchItem: MenuItem, searchView: SearchView) {
+        searchItem
+            .setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+                override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+                    studyListViewModel.changeSearchMode(true)
+                    searchView.requestFocus()
+                    return true
+                }
+
+                override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+                    searchView.hideKeyboard()
+                    studyListViewModel.changeSearchMode(false)
+                    studyListViewModel.refreshPage()
+                    return true
+                }
+            })
+    }
+
+    private fun setOnSearchViewQueryTextListener(searchView: SearchView) {
+        searchView.setOnQueryTextListener(object : OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                studyListViewModel.changeSearchMode(true)
+                searchWord = query.toString()
+                studyListViewModel.loadSearchedPage(searchWord)
+                searchView.hideKeyboard()
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
     }
 
     private fun setUpStudyListSettings() {
@@ -88,7 +154,13 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
     private fun setUpCreateStudyListener() {
         binding.fabStudyListCreateButton.setOnClickListener {
-            startActivity(CreateStudyActivity.getIntent(requireContext()))
+            startActivity(
+                UpdateStudyActivity.getIntent(
+                    context = requireContext(),
+                    viewMode = UpdateStudyActivity.CREATE_MODE,
+                    studyId = null,
+                ),
+            )
         }
     }
 
@@ -106,7 +178,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
                 }
 
                 if (!binding.rvStudyListList.canScrollVertically(1)) {
-                    studyListViewModel.loadNextPage()
+                    studyListViewModel.loadNextPage(searchWord)
                 }
             }
         }
@@ -117,5 +189,11 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         override fun onClickStudySummary(id: Long) {
             startActivity(StudyDetailActivity.getIntent(requireContext(), id))
         }
+    }
+
+    private fun View.hideKeyboard() {
+        val inputMethodManager =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
     }
 }

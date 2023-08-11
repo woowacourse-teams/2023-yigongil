@@ -65,9 +65,9 @@
             android:id="@+id/tv_item_study_management_study_member_essential_todo_done"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{context.getString(studyMember.getIsDoneDescription())}"
             android:textAppearance="@style/description_r8"
             android:textColor="@color/grey05_C3BCBC"
-            android:text="@{context.getString(studyMember.getIsDoneDescription())}"
             app:layout_constraintStart_toStartOf="@id/tv_item_study_management_study_member_user_name"
             app:layout_constraintTop_toBottomOf="@id/tv_item_study_management_study_member_user_name"
             tools:text="필수투두를 완료했어요!" />

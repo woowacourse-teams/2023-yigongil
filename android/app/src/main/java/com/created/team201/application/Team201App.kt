@@ -2,6 +2,7 @@ package com.created.team201.application
 
 import android.app.Application
 import android.content.Context
+import com.created.team201.data.datasource.local.OnBoardingIsDoneStorage
 import com.created.team201.data.datasource.local.TokenDataSourceImpl
 import com.created.team201.data.datasource.local.TokenStorage
 import com.created.team201.data.datasource.remote.login.AuthDataSourceImpl
@@ -19,10 +20,15 @@ class Team201App : Application() {
         super.onCreate()
 
         initTokenStorage()
+        initOnBoardingIsDoneStorage()
     }
 
     private fun initTokenStorage() {
         TokenStorage.getInstance(this)
+    }
+
+    private fun initOnBoardingIsDoneStorage() {
+        OnBoardingIsDoneStorage.getInstance(this)
     }
 
     companion object {
@@ -39,8 +45,10 @@ class Team201App : Application() {
                 AuthRepositoryImpl(
                     authDataSource = AuthDataSourceImpl(NetworkServiceModule.authService),
                     tokenDataSource = TokenDataSourceImpl(provideTokenStorage()),
-
                 ),
             )
+
+        fun provideOnBoardingIsDoneStorage(): OnBoardingIsDoneStorage =
+            OnBoardingIsDoneStorage.getInstance(context())
     }
 }

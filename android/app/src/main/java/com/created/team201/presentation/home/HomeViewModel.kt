@@ -48,6 +48,7 @@ class HomeViewModel(
     fun updateTodo(todoId: Long, isDone: Boolean) {
         // 투두 항목이 비어 있을 경우 체크 불가
         // 투두 항목이 비어 있을 경우, 체크 버튼 숨김
+        // 디데이순 스터디 카드 출력
         val studies = userStudies.value ?: throw IllegalArgumentException()
         val isNecessary = studies.any { it.necessaryTodo.todoId == todoId }
         val study: StudyUiModel
