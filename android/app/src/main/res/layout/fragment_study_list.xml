@@ -70,6 +70,19 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/study_list_not_found"
+            android:textAppearance="@style/text_m16"
+            android:textColor="@color/white"
+            app:isVisible="@{studyListViewModel.isNotFoundStudies}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tb_study_list"
+            tools:layout_editor_absoluteY="98dp" />
+
         <ProgressBar
             android:id="@+id/pb_study_list_load"
             style="?android:attr/progressBarStyle"

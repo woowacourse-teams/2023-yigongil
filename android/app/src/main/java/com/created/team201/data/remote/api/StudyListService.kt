@@ -10,4 +10,10 @@ interface StudyListService {
     suspend fun getStudyList(
         @Query("page") index: Int,
     ): List<StudySummaryResponseDto>
+
+    @GET("/v1/studies/recruiting/search")
+    suspend fun getSearchedStudyList(
+        @Query("q") searchWord: String,
+        @Query("page") index: Int,
+    ): List<StudySummaryResponseDto>
 }
