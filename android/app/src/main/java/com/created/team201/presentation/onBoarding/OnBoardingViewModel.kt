@@ -28,10 +28,10 @@ import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
 class OnBoardingViewModel(
-    private val onBoardingRepository: OnBoardingRepository
+    private val onBoardingRepository: OnBoardingRepository,
 ) : ViewModel() {
     private val _nickname: NonNullMutableLiveData<NicknameUiModel> = NonNullMutableLiveData(
-        NicknameUiModel("")
+        NicknameUiModel(""),
     )
     val nickname: NonNullLiveData<NicknameUiModel>
         get() = _nickname
@@ -119,10 +119,11 @@ class OnBoardingViewModel(
                 end: Int,
                 dest: Spanned,
                 dStart: Int,
-                dEnd: Int
+                dEnd: Int,
             ): CharSequence {
-                if (text.isBlank() || PATTERN_NICKNAME.matcher(text).matches())
+                if (text.isBlank() || PATTERN_NICKNAME.matcher(text).matches()) {
                     return text
+                }
 
                 _nicknameState.value = NicknameState.UNAVAILABLE
                 return ""
@@ -133,8 +134,8 @@ class OnBoardingViewModel(
 
     private fun isInitializeOnBoarding(): Boolean =
         nickname.value.nickname.isBlank().not() &&
-                nicknameState.value == NicknameState.AVAILABLE &&
-                introduction.value.isBlank().not()
+            nicknameState.value == NicknameState.AVAILABLE &&
+            introduction.value.isBlank().not()
 
     private fun NicknameUiModel.toDomain(): Nickname = Nickname(nickname = nickname)
 
@@ -147,10 +148,10 @@ class OnBoardingViewModel(
                 OnBoardingViewModel(
                     OnBoardingRepositoryImpl(
                         OnBoardingIsDoneDataSourceImpl(
-                            Team201App.provideOnBoardingIsDoneStorage()
+                            Team201App.provideOnBoardingIsDoneStorage(),
                         ),
                         OnBoardingDataSourceImpl(NetworkServiceModule.onBoardingService),
-                    )
+                    ),
                 )
             }
         }

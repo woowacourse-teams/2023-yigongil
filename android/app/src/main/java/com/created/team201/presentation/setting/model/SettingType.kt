@@ -4,7 +4,8 @@ enum class SettingType(val itemId: Long) {
     NOTIFICATION(0L),
     ACCOUNT(1L),
     POLICY(2L),
-    LOGOUT(3L);
+    LOGOUT(3L),
+    ;
 
     companion object {
         fun valueOf(itemId: Long): SettingType =

@@ -7,7 +7,7 @@ import com.created.team201.presentation.setting.SettingClickListener
 import com.created.team201.presentation.setting.model.SettingUiModel
 
 class SettingAdapter(
-    private val settingClickListener: SettingClickListener
+    private val settingClickListener: SettingClickListener,
 ) : ListAdapter<SettingUiModel, SettingViewHolder>(SettingDiffUtil) {
 
     init {

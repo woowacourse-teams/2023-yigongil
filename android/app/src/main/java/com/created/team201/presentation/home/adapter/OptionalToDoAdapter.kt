@@ -34,19 +34,18 @@ class OptionalToDoAdapter(
         holder.bind(getItem(position))
     }
 
-
     companion object {
         private val diffCallBack = object : DiffUtil.ItemCallback<TodoWithRoundIdUiModel>() {
             override fun areItemsTheSame(
                 oldItem: TodoWithRoundIdUiModel,
-                newItem: TodoWithRoundIdUiModel
+                newItem: TodoWithRoundIdUiModel,
             ): Boolean {
                 return oldItem.todoId == newItem.todoId
             }
 
             override fun areContentsTheSame(
                 oldItem: TodoWithRoundIdUiModel,
-                newItem: TodoWithRoundIdUiModel
+                newItem: TodoWithRoundIdUiModel,
             ): Boolean {
                 return oldItem == newItem
             }

@@ -26,8 +26,7 @@ class HomeRepositoryImpl(
             homeDataSource.patchOptionalTodo(
                 roundId,
                 todo.todoId,
-                todo.toTodoUpdateRequestBody()
+                todo.toTodoUpdateRequestBody(),
             )
         }
-
 }

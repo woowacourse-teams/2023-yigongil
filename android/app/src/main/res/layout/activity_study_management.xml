@@ -66,23 +66,41 @@
                 android:layout_marginEnd="26dp"
                 android:contentDescription="@string/study_management_previous_button_description"
                 android:src="@drawable/ic_selector_previous_button"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_study_management_round"
-                app:layout_constraintEnd_toStartOf="@+id/tv_study_management_round"
-                app:layout_constraintTop_toTopOf="@+id/tv_study_management_round" />
-
-            <TextView
-                android:id="@+id/tv_study_management_round"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:text="@{@string/study_management_round(viewModel.currentRound)}"
-                android:textAppearance="@style/subtitle_r15"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/til_study_management_round"
+                app:layout_constraintEnd_toStartOf="@id/til_study_management_round"
+                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="1회차" />
+                app:layout_constraintTop_toTopOf="@id/til_study_management_round" />
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_study_management_round"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/transparent"
+                android:gravity="center"
+                app:expandedHintEnabled="false"
+                app:layout_constraintDimensionRatio="W, 1.6:1"
+                app:layout_constraintEnd_toStartOf="@id/iv_study_management_next_button"
+                app:layout_constraintStart_toEndOf="@id/iv_study_management_previous_button"
+                app:layout_constraintTop_toTopOf="parent"
+                app:suffixText="@string/study_management_round_postfix"
+                app:suffixTextAppearance="@style/subtitle_r15"
+                app:suffixTextColor="@color/white">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_study_management_round"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@color/transparent"
+                    android:cursorVisible="false"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:text="@{viewModel.currentRound.toString()}"
+                    android:textAppearance="@style/subtitle_r15"
+                    android:textColor="@color/white" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
                 android:id="@+id/iv_study_management_next_button"
@@ -91,9 +109,10 @@
                 android:layout_marginStart="26dp"
                 android:contentDescription="@string/study_management_next_button_description"
                 android:src="@drawable/ic_selector_next_button"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_study_management_round"
-                app:layout_constraintStart_toEndOf="@+id/tv_study_management_round"
-                app:layout_constraintTop_toTopOf="@+id/tv_study_management_round" />
+                app:layout_constraintBottom_toBottomOf="@id/til_study_management_round"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/til_study_management_round"
+                app:layout_constraintTop_toTopOf="@id/til_study_management_round" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/vp_study_management"

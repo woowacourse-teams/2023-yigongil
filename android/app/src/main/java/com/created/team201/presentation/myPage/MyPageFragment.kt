@@ -13,6 +13,12 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         MyPageViewModel.Factory
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        myPageViewModel.updateProfile()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

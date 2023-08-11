@@ -6,6 +6,7 @@ import com.created.domain.model.RoundDetail
 import com.created.domain.model.StudyMember
 import com.created.domain.model.Todo
 import com.created.team201.data.remote.request.TodoCreateRequestDto
+import com.created.team201.data.remote.request.TodoIsDoneRequestDto
 import com.created.team201.data.remote.request.TodoUpdateRequestDto
 import com.created.team201.data.remote.response.RoundDetailResponseDto
 import com.created.team201.data.remote.response.StudyMemberResponseDto
@@ -35,4 +36,8 @@ fun CreateTodo.toRequestBody(): TodoCreateRequestDto = TodoCreateRequestDto(
 fun Todo.toTodoUpdateRequestBody(): TodoUpdateRequestDto = TodoUpdateRequestDto(
     isDone = isDone,
     content = content!!,
+)
+
+fun Todo.toTodoIsDoneRequestBody(): TodoIsDoneRequestDto = TodoIsDoneRequestDto(
+    isDone = isDone,
 )
