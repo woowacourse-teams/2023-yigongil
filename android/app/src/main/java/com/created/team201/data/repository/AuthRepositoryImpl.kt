@@ -31,10 +31,4 @@ class AuthRepositoryImpl(
         }.onFailure {
         }
     }
-
-    override suspend fun getIsOnboardingDone(): Result<Boolean> {
-        return runCatching {
-            authDataSource.getIsOnboardingDone().isOnboardingDone
-        }
-    }
 }

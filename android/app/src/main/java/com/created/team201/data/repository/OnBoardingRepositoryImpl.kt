@@ -8,6 +8,12 @@ import com.created.team201.data.datasource.remote.OnBoardingDataSource
 class OnBoardingRepositoryImpl(
     private val onBoardingDataSource: OnBoardingDataSource
 ) : OnBoardingRepository {
+    override suspend fun getIsOnboardingDone(): Result<Boolean> {
+        return runCatching {
+            onBoardingDataSource.getIsOnboardingDone().isOnboardingDone
+        }
+    }
+
     override suspend fun getAvailableNickname(nickname: Nickname): Result<Boolean> {
         return runCatching {
             onBoardingDataSource.getAvailableNickname(nickname).exists

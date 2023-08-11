@@ -1,6 +1,7 @@
 package com.created.team201.data.remote.api
 
 import com.created.team201.data.remote.request.OnBoardingRequestDto
+import com.created.team201.data.remote.response.IsOnBoardingDoneResponseDto
 import com.created.team201.data.remote.response.NicknameResponseDto
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -8,6 +9,9 @@ import retrofit2.http.PATCH
 import retrofit2.http.Query
 
 interface OnBoardingService {
+    @GET("/v1/members/check-onboarding-is-done")
+    suspend fun getIsOnboardingDone(): IsOnBoardingDoneResponseDto
+
     @GET("/v1/members/exists?")
     suspend fun getAvailableNickname(
         @Query("nickname") nickname: String

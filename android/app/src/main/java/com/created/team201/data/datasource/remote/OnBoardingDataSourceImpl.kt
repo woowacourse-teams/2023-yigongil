@@ -4,11 +4,16 @@ import com.created.domain.model.Nickname
 import com.created.domain.model.OnBoarding
 import com.created.team201.data.mapper.toRequestDto
 import com.created.team201.data.remote.api.OnBoardingService
+import com.created.team201.data.remote.response.IsOnBoardingDoneResponseDto
 import com.created.team201.data.remote.response.NicknameResponseDto
 
 class OnBoardingDataSourceImpl(
     private val onBoardingService: OnBoardingService
 ) : OnBoardingDataSource {
+    override suspend fun getIsOnboardingDone(): IsOnBoardingDoneResponseDto {
+        return onBoardingService.getIsOnboardingDone()
+    }
+
     override suspend fun getAvailableNickname(nickname: Nickname): NicknameResponseDto {
         return onBoardingService.getAvailableNickname(nickname.nickname)
     }

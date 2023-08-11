@@ -8,11 +8,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.repository.AuthRepository
+import com.created.domain.repository.OnBoardingRepository
 import com.created.team201.application.Team201App
 import com.created.team201.data.datasource.local.TokenDataSourceImpl
+import com.created.team201.data.datasource.remote.OnBoardingDataSourceImpl
 import com.created.team201.data.datasource.remote.login.AuthDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.AuthRepositoryImpl
+import com.created.team201.data.repository.OnBoardingRepositoryImpl
 import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
 import com.created.team201.presentation.splash.SplashViewModel.State.FAIL
 import com.created.team201.presentation.splash.SplashViewModel.State.SUCCESS
@@ -20,6 +23,7 @@ import kotlinx.coroutines.launch
 
 class SplashViewModel(
     private val authRepository: AuthRepository,
+    private val onBoardingRepository: OnBoardingRepository,
 ) : ViewModel() {
     private val _loginState: MutableLiveData<State> = MutableLiveData()
     val loginState: LiveData<State> get() = _loginState
@@ -45,7 +49,7 @@ class SplashViewModel(
 
     fun getIsOnboardingDone() {
         viewModelScope.launch {
-            authRepository.getIsOnboardingDone()
+            onBoardingRepository.getIsOnboardingDone()
                 .onSuccess { state ->
                     _onBoardingDoneState.value = OnBoardingDoneState.Success(state)
                 }.onFailure {
@@ -70,6 +74,11 @@ class SplashViewModel(
                         ),
                         TokenDataSourceImpl(Team201App.provideTokenStorage()),
                     ),
+                    OnBoardingRepositoryImpl(
+                        OnBoardingDataSourceImpl(
+                            NetworkServiceModule.onBoardingService,
+                        ),
+                    )
                 )
             }
         }

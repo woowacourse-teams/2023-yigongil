@@ -23,7 +23,4 @@ interface AuthService {
     suspend fun getLoginValidity(
         @Header("Authorization") accessToken: String,
     )
-
-    @GET("/v1/members/check-onboarding-is-done")
-    suspend fun getIsOnboardingDone(): IsOnBoardingDoneResponseDto
 }
