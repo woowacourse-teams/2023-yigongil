@@ -6,12 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.created.team201.presentation.home.HomeClickListener
 import com.created.team201.presentation.home.adapter.viewholder.OptionalToDoViewHolder
-import com.created.team201.presentation.home.model.TodoUiModel
+import com.created.team201.presentation.home.model.TodoWithRoundIdUiModel
 
 class OptionalToDoAdapter(
     private val onClick: HomeClickListener,
-) : ListAdapter<TodoUiModel, OptionalToDoViewHolder>(diffCallBack) {
-    private var roundId = 0
+) : ListAdapter<TodoWithRoundIdUiModel, OptionalToDoViewHolder>(diffCallBack) {
 
     init {
         setHasStableIds(true)
@@ -32,20 +31,23 @@ class OptionalToDoAdapter(
     }
 
     override fun onBindViewHolder(holder: OptionalToDoViewHolder, position: Int) {
-        holder.bind(getItem(position), roundId)
+        holder.bind(getItem(position))
     }
 
-    fun passRoundId(id: Int) {
-        roundId = id
-    }
 
     companion object {
-        private val diffCallBack = object : DiffUtil.ItemCallback<TodoUiModel>() {
-            override fun areItemsTheSame(oldItem: TodoUiModel, newItem: TodoUiModel): Boolean {
+        private val diffCallBack = object : DiffUtil.ItemCallback<TodoWithRoundIdUiModel>() {
+            override fun areItemsTheSame(
+                oldItem: TodoWithRoundIdUiModel,
+                newItem: TodoWithRoundIdUiModel
+            ): Boolean {
                 return oldItem.todoId == newItem.todoId
             }
 
-            override fun areContentsTheSame(oldItem: TodoUiModel, newItem: TodoUiModel): Boolean {
+            override fun areContentsTheSame(
+                oldItem: TodoWithRoundIdUiModel,
+                newItem: TodoWithRoundIdUiModel
+            ): Boolean {
                 return oldItem == newItem
             }
         }

@@ -38,8 +38,6 @@ class DashboardViewHolder(
         binding.studyUiModel = studyUiModel
 
         optionalTodoAdapter.submitList(studyUiModel.optionalTodos)
-        optionalTodoAdapter.passRoundId(studyUiModel.roundId)
-
         homeGrassAdapter.submitList(studyUiModel.grass)
     }
 

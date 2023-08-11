@@ -1,10 +1,10 @@
 package com.created.team201.presentation.common
 
-import com.created.team201.presentation.home.model.TodoUiModel
+import com.created.team201.presentation.home.model.TodoWithRoundIdUiModel
 
 interface TodoClickListener {
 
-    fun clickOnNecessaryTodoCheck(todo: TodoUiModel, roundId: Int, isDone: Boolean)
+    fun clickOnNecessaryTodoCheck(todo: TodoWithRoundIdUiModel, isDone: Boolean)
 
-    fun clickOnOptionalTodoCheck(todo: TodoUiModel, roundId: Int, isDone: Boolean)
+    fun clickOnOptionalTodoCheck(todo: TodoWithRoundIdUiModel, isDone: Boolean)
 }

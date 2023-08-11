@@ -7,7 +7,7 @@ import com.created.team201.R
 import com.created.team201.databinding.FragmentHomeBinding
 import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.home.adapter.DashboardAdapter
-import com.created.team201.presentation.home.model.TodoUiModel
+import com.created.team201.presentation.home.model.TodoWithRoundIdUiModel
 import com.created.team201.presentation.studyManagement.StudyManagementActivity
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
@@ -21,12 +21,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
     private fun implementClickListener() = object : HomeClickListener {
 
-        override fun clickOnNecessaryTodoCheck(todo: TodoUiModel, roundId: Int, isDone: Boolean) {
-            homeViewModel.updateNecessaryTodo(todo, roundId, !isDone)
+        override fun clickOnNecessaryTodoCheck(todo: TodoWithRoundIdUiModel, isDone: Boolean) {
+            homeViewModel.updateNecessaryTodo(todo, !isDone)
         }
 
-        override fun clickOnOptionalTodoCheck(todo: TodoUiModel, roundId: Int, isDone: Boolean) {
-            homeViewModel.updateOptionalTodo(todo, roundId, !isDone)
+        override fun clickOnOptionalTodoCheck(todo: TodoWithRoundIdUiModel, isDone: Boolean) {
+            homeViewModel.updateOptionalTodo(todo, !isDone)
         }
 
         override fun clickOnStudyCard(studyId: Long) {

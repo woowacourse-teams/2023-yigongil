@@ -11,11 +11,8 @@
 
         <variable
             name="todoUiModel"
-            type="com.created.team201.presentation.home.model.TodoUiModel" />
+            type="com.created.team201.presentation.home.model.TodoWithRoundIdUiModel" />
 
-        <variable
-            name="roundId"
-            type="Integer" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -42,9 +39,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
-            android:onClick="@{() -> onClick.clickOnOptionalTodoCheck(todoUiModel,roundId,todoUiModel.isDone)}"
+            android:onClick="@{() -> onClick.clickOnOptionalTodoCheck(todoUiModel,todoUiModel.isDone)}"
             android:src="@drawable/ic_selector_home_check_btn"
             app:isSelected="@{todoUiModel.done}"
+            app:isVisible="@{todoUiModel.contentEmpty}"
             app:layout_constraintBottom_toBottomOf="@id/tv_home_optional_todo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_home_optional_todo" />

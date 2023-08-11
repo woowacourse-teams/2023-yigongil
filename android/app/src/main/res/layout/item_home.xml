@@ -125,9 +125,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
-                android:onClick="@{() -> onClick.clickOnNecessaryTodoCheck(studyUiModel.necessaryTodo,studyUiModel.roundId,studyUiModel.necessaryTodo.isDone)}"
+                android:onClick="@{() -> onClick.clickOnNecessaryTodoCheck(studyUiModel.necessaryTodo,studyUiModel.necessaryTodo.isDone)}"
                 android:src="@drawable/ic_selector_home_check_btn"
                 app:isSelected="@{studyUiModel.necessaryTodo.done}"
+                app:isVisible="@{studyUiModel.necessaryTodo.contentEmpty}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

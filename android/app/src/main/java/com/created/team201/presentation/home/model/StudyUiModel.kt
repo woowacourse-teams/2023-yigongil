@@ -10,9 +10,8 @@ data class StudyUiModel(
     val progressRate: Int,
     val leftDays: Int,
     val nextDate: String,
-    val necessaryTodo: TodoUiModel,
-    val optionalTodos: List<TodoUiModel>,
-    val roundId: Int,
+    val necessaryTodo: TodoWithRoundIdUiModel,
+    val optionalTodos: List<TodoWithRoundIdUiModel>,
 ) {
     private val _grass: MutableList<Grass> = mutableListOf(
         Grass(BOTTOM, false), Grass(BOTTOM, false), Grass(BOTTOM, false),
