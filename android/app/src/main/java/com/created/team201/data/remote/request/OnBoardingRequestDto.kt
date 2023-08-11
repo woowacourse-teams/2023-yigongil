@@ -8,5 +8,5 @@ data class OnBoardingRequestDto(
     @SerialName("nickname")
     val nickname: String,
     @SerialName("introduction")
-    val introduction: String
+    val introduction: String,
 )

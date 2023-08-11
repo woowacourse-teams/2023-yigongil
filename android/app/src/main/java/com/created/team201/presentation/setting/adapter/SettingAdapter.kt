@@ -28,13 +28,13 @@ class SettingAdapter(
         private val SettingDiffUtil = object : DiffUtil.ItemCallback<SettingUiModel>() {
             override fun areItemsTheSame(
                 oldItem: SettingUiModel,
-                newItem: SettingUiModel
+                newItem: SettingUiModel,
             ): Boolean =
                 oldItem.id == newItem.id
 
             override fun areContentsTheSame(
                 oldItem: SettingUiModel,
-                newItem: SettingUiModel
+                newItem: SettingUiModel,
             ): Boolean =
                 oldItem == newItem
         }

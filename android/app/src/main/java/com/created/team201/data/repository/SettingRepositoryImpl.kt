@@ -8,7 +8,7 @@ import com.created.team201.data.datasource.remote.SettingDataSource
 class SettingRepositoryImpl(
     private val onBoardingIsDoneDataSource: OnBoardingIsDoneDataSource,
     private val settingDataSource: SettingDataSource,
-    private val tokenDataSource: TokenDataSource
+    private val tokenDataSource: TokenDataSource,
 ) : SettingRepository {
     override fun logout() {
         tokenDataSource.setAccessToken("")

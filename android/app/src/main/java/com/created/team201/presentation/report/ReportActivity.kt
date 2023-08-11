@@ -57,7 +57,7 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
             cal.get(Calendar.MONTH) + MONTH_CALIBRATION_VALUE,
             cal.get(Calendar.DAY_OF_MONTH),
         )
-        val selectedDate = reportViewModel.selectedDate.value ?: todayDate
+        val selectedDate = reportViewModel.selectedDate.value
 
         DatePickerDialog(
             this,

@@ -51,7 +51,7 @@ class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activit
                                     viewModel.logout()
                                     navigateToLogin()
                                 }
-                            }
+                            },
                         )
                     }
                 }
@@ -111,7 +111,8 @@ class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activit
 
     private fun navigateToLogin() {
         startActivity(
-            LoginActivity.getIntent(this).also { it.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP })
+            LoginActivity.getIntent(this).also { it.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP },
+        )
         finishAffinity()
     }
 

@@ -57,7 +57,7 @@ class AccountSettingActivity :
                     override fun onOkClick() {
                         viewModel.withdrawAccount()
                     }
-                }
+                },
             ).show(supportFragmentManager, TAG_DIALOG_WITHDRAW_ACCOUNT)
         }
     }
@@ -77,14 +77,14 @@ class AccountSettingActivity :
                     Toast.makeText(
                         this,
                         getString(R.string.setting_toast_withdraw_account_success),
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_SHORT,
                     ).show()
                     navigateToLogin()
                 }
 
                 FAIL -> {
                     showToast(
-                        getString(R.string.setting_dialog_toast_withdraw_account_fail)
+                        getString(R.string.setting_dialog_toast_withdraw_account_fail),
                     )
                 }
 
@@ -95,7 +95,8 @@ class AccountSettingActivity :
 
     private fun navigateToLogin() {
         startActivity(
-            LoginActivity.getIntent(this).also { it.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP })
+            LoginActivity.getIntent(this).also { it.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP },
+        )
         finishAffinity()
     }
 

@@ -9,7 +9,7 @@ import kotlinx.coroutines.runBlocking
 
 class OnBoardingRepositoryImpl(
     private val onBoardingIsDoneDataSource: OnBoardingIsDoneDataSource,
-    private val onBoardingDataSource: OnBoardingDataSource
+    private val onBoardingDataSource: OnBoardingDataSource,
 ) : OnBoardingRepository {
     override suspend fun getIsOnboardingDone(): Result<Boolean> {
         return runCatching {

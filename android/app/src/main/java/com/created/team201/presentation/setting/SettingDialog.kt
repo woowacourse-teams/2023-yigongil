@@ -12,17 +12,16 @@ import com.created.team201.databinding.LayoutDialogSettingBinding
 class SettingDialog(
     private val title: String,
     private val content: String,
-    private val settingDialogClickListener: SettingDialogClickListener
+    private val settingDialogClickListener: SettingDialogClickListener,
 ) : DialogFragment() {
     private var _binding: LayoutDialogSettingBinding? = null
     private val binding: LayoutDialogSettingBinding
         get() = _binding!!
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = LayoutDialogSettingBinding.inflate(inflater, container, false)
         return binding.root
