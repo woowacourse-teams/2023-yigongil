@@ -64,7 +64,6 @@ class HomeViewModel(
         }
     }
 
-
     private fun updateNecessaryTodoCheck(id: Long, isDone: Boolean) {
         _userStudies.value = userStudies.value?.map { studyUiModel ->
             studyUiModel.takeIf { it.necessaryTodo.todoId != id } ?: studyUiModel.copy(
@@ -99,13 +98,13 @@ class HomeViewModel(
         todoId = todoId,
         content = content ?: "",
         isDone = isDone,
-        roundId = roundId
+        roundId = roundId,
     )
 
     private fun TodoWithRoundIdUiModel.toDomain(isDone: Boolean): Todo = Todo(
         todoId = todoId,
         content = content,
-        isDone = isDone
+        isDone = isDone,
 
     )
 

@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.created.domain.model.CreateTodo
 import com.created.domain.model.PageIndex
 import com.created.domain.model.PeriodUnit
-import com.created.domain.model.Role
 import com.created.domain.model.Round
 import com.created.domain.model.RoundDetail
 import com.created.domain.model.StudyDetail
@@ -23,13 +22,16 @@ import com.created.team201.data.repository.StudyManagementRepositoryImpl
 import com.created.team201.presentation.home.model.TodoUiModel
 import com.created.team201.presentation.studyList.model.PeriodUiModel
 import com.created.team201.presentation.studyManagement.TodoState.DEFAULT
-import com.created.team201.presentation.studyManagement.adapter.OptionalTodoViewType
+import com.created.team201.presentation.studyManagement.adapter.OptionalTodoViewType.DISPLAY
+import com.created.team201.presentation.studyManagement.adapter.OptionalTodoViewType.EDIT
 import com.created.team201.presentation.studyManagement.model.NecessaryTodoUiModel
 import com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel
 import com.created.team201.presentation.studyManagement.model.RoundUiModel
 import com.created.team201.presentation.studyManagement.model.StudyManagementInformationUiModel
 import com.created.team201.presentation.studyManagement.model.StudyMemberUiModel
 import com.created.team201.presentation.studyManagement.model.StudyRoundDetailUiModel
+import com.created.team201.util.NonNullLiveData
+import com.created.team201.util.NonNullMutableLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -43,11 +45,12 @@ class StudyManagementViewModel(
     private val _studyRounds: MutableLiveData<List<StudyRoundDetailUiModel>> = MutableLiveData()
     val studyRounds: LiveData<List<StudyRoundDetailUiModel>> get() = _studyRounds
 
-    private val _state: MutableLiveData<StudyManagementState> = MutableLiveData()
+    private val _state: MutableLiveData<StudyManagementState> =
+        MutableLiveData(StudyManagementState.Member)
     val state: LiveData<StudyManagementState> get() = _state
 
-    private val _currentRound: MutableLiveData<Int> = MutableLiveData(0)
-    val currentRound: LiveData<Int> get() = _currentRound
+    private val _currentRound: NonNullMutableLiveData<Int> = NonNullMutableLiveData(0)
+    val currentRound: NonNullLiveData<Int> get() = _currentRound
 
     lateinit var studyInformation: StudyManagementInformationUiModel
 
@@ -59,11 +62,9 @@ class StudyManagementViewModel(
 
     private val currentStudyRounds get() = studyRounds.value ?: listOf()
     private val studyDetails get() = studyRounds.value ?: listOf()
-    private val currentPage get() = currentRound.value ?: ROUND_NOT_FOUND
-    private val currentRoundDetail get() = studyDetails[currentPage - CONVERT_PAGE_TO_ROUND]
+    val currentRoundDetail get() = studyDetails[currentRound.value - CONVERT_PAGE_TO_ROUND]
 
-    fun initStudyManagement(studyId: Long, roleIndex: Int) {
-        initStatus(roleIndex)
+    fun initStudyManagement(studyId: Long) {
         viewModelScope.launch {
             fetchStudyInformation(studyId)
             initStudyRounds(studyId)
@@ -71,8 +72,8 @@ class StudyManagementViewModel(
         }
     }
 
-    private fun initStatus(roleIndex: Int) {
-        _state.value = StudyManagementState.getRoleStatus(Role.valueOf(roleIndex))
+    fun initStatus() {
+        _state.value = StudyManagementState.getRoleStatus(studyInformation.role)
     }
 
     private suspend fun fetchStudyInformation(studyId: Long) {
@@ -120,6 +121,7 @@ class StudyManagementViewModel(
             true -> addNecessaryTodo(content)
             false -> addOptionalTodo(content)
         }
+        _todoState.value = DEFAULT
     }
 
     private fun addNecessaryTodo(todoContent: String) {
@@ -164,17 +166,17 @@ class StudyManagementViewModel(
         currentStudy: StudyRoundDetailUiModel,
         todoId: Long,
         todoContent: String,
-    ): MutableList<OptionalTodoUiModel> {
-        val newOptionalTodos = currentStudy.optionalTodos.toMutableList()
-        newOptionalTodos.addAll(
-            listOf(
-                OptionalTodoUiModel(
-                    TodoUiModel(todoId, todoContent, false),
-                    OptionalTodoViewType.DISPLAY.viewType,
-                ),
+    ): List<OptionalTodoUiModel> {
+        val newOptionalTodos = currentStudy.optionalTodos.map {
+            it.copy(viewType = DISPLAY.viewType)
+        }.toMutableList()
+        newOptionalTodos.add(
+            OptionalTodoUiModel(
+                TodoUiModel(todoId, todoContent, false),
+                DISPLAY.viewType,
             ),
         )
-        return newOptionalTodos
+        return newOptionalTodos.toList()
     }
 
     fun updateTodoIsDone(isNecessary: Boolean, todoId: Long, isDone: Boolean) {
@@ -192,7 +194,7 @@ class StudyManagementViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             runCatching {
-                repository.patchNecessaryTodo(
+                repository.patchNecessaryTodoIsDone(
                     currentRoundDetail.id,
                     newNecessaryTodo.todo.toDomain(),
                 )
@@ -236,7 +238,7 @@ class StudyManagementViewModel(
             optionalTodo.todo.todoId == todoId
         } ?: OptionalTodoUiModel(
             TodoUiModel(DEFAULT_TODO_ID, "", false),
-            OptionalTodoViewType.DISPLAY.viewType,
+            DISPLAY.viewType,
         )
         return currentOptionalTodo.copy(todo = currentOptionalTodo.todo.copy(isDone = isDone))
     }
@@ -267,6 +269,8 @@ class StudyManagementViewModel(
     fun updateOptionalTodosContent(updatedTodos: List<OptionalTodoUiModel>) {
         val newOptionalTodos = currentRoundDetail.optionalTodos.map { optionalTodo ->
             updatedTodos.find { it.todo.todoId == optionalTodo.todo.todoId } ?: optionalTodo
+        }.map {
+            it.copy(viewType = DISPLAY.viewType)
         }
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -276,6 +280,31 @@ class StudyManagementViewModel(
                 }
             }.onSuccess {
                 val newRound = currentRoundDetail.copy(optionalTodos = newOptionalTodos)
+                val updatedStudyRounds = currentStudyRounds.map { studyRoundDetailUiModel ->
+                    studyRoundDetailUiModel.takeIf { it.id != currentRoundDetail.id } ?: newRound
+                }
+                _studyRounds.postValue(updatedStudyRounds)
+            }.onFailure {
+                Log.e(LOG_ERROR, it.message.toString())
+            }
+        }
+    }
+
+    fun deleteTodo(optionalTodo: OptionalTodoUiModel) {
+        val newOptionalTodos = currentRoundDetail.optionalTodos.toMutableList()
+        newOptionalTodos.removeIf {
+            it.todo.todoId == optionalTodo.todo.todoId
+        }
+
+        viewModelScope.launch {
+            kotlin.runCatching {
+                repository.deleteOptionalTodo(currentRoundDetail.id, optionalTodo.todo.todoId)
+            }.onSuccess {
+                val newRound = currentRoundDetail.copy(
+                    optionalTodos = newOptionalTodos.map {
+                        it.copy(viewType = EDIT.viewType)
+                    },
+                )
                 val updatedStudyRounds = currentStudyRounds.map { studyRoundDetailUiModel ->
                     studyRoundDetailUiModel.takeIf { it.id != currentRoundDetail.id } ?: newRound
                 }
@@ -336,7 +365,7 @@ class StudyManagementViewModel(
 
     private fun Todo.toOptionalTodoUiModel(): OptionalTodoUiModel = OptionalTodoUiModel(
         todo = this.toUiModel(),
-        viewType = OptionalTodoViewType.DISPLAY.viewType,
+        viewType = DISPLAY.viewType,
     )
 
     private fun Todo.toNecessaryTodoUiModel(): NecessaryTodoUiModel = NecessaryTodoUiModel(
@@ -346,7 +375,6 @@ class StudyManagementViewModel(
 
     companion object {
         private const val DEFAULT_TODO_ID = 0L
-        private const val ROUND_NOT_FOUND = 0
         private const val CONVERT_PAGE_TO_ROUND = 1
         private const val LOG_ERROR = "ERROR"
 

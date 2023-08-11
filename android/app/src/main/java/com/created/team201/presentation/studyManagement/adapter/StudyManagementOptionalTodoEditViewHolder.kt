@@ -19,6 +19,7 @@ class StudyManagementOptionalTodoEditViewHolder private constructor(
         binding.etItemStudyManagementOptionalTodoEdit.addTextChangedListener {
             changedOptionalTodos(optionalTodo.copy(todo = optionalTodo.todo.copy(content = it.toString())))
         }
+        binding.onClick = studyManagementClickListener
     }
 
     fun bind(item: OptionalTodoUiModel) {

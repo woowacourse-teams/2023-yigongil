@@ -14,7 +14,7 @@ interface OnBoardingService {
 
     @GET("/v1/members/exists?")
     suspend fun getAvailableNickname(
-        @Query("nickname") nickname: String
+        @Query("nickname") nickname: String,
     ): NicknameResponseDto
 
     @PATCH("/v1/members")

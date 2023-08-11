@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NecessaryTodoRequestDto(
     @SerialName("isDone")
-    val isDone: Boolean
+    val isDone: Boolean,
 )

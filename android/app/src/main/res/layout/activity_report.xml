@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="activity"
+            type="com.created.team201.presentation.report.ReportActivity" />
+
+        <variable
             name="viewModel"
             type="com.created.team201.presentation.report.ReportViewModel" />
     </data>
@@ -122,13 +126,14 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginBottom="32dp"
-            android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
+            android:background="@drawable/btn_rectangle_radius_10dp"
             android:enabled="false"
             android:paddingVertical="14dp"
             android:text="@string/report_button_description"
             android:textAlignment="center"
             android:textAppearance="@style/button_sb18"
             android:textColor="@color/tv_color_disabled"
+            android:onClick="@{() -> activity.reportUser()}"
             app:isEnabled="@{viewModel.isEnableReport()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

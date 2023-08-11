@@ -19,6 +19,8 @@ interface StudyManagementRepository {
 
     suspend fun patchNecessaryTodo(roundId: Long, todo: Todo)
 
+    suspend fun patchNecessaryTodoIsDone(roundId: Long, todo: Todo)
+
     suspend fun patchOptionalTodo(roundId: Long, todo: Todo)
 
     suspend fun deleteOptionalTodo(roundId: Long, todoId: Long)

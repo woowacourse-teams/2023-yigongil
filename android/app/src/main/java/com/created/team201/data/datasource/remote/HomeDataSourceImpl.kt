@@ -14,7 +14,7 @@ class HomeDataSourceImpl(
 
     override suspend fun patchNecessaryTodo(
         roundId: Int,
-        necessaryTodoRequestDto: NecessaryTodoRequestDto
+        necessaryTodoRequestDto: NecessaryTodoRequestDto,
     ) {
         homeService.patchNecessaryTodo(roundId, necessaryTodoRequestDto)
     }
@@ -22,7 +22,7 @@ class HomeDataSourceImpl(
     override suspend fun patchOptionalTodo(
         roundId: Int,
         todoId: Long,
-        todoUpdateRequestDto: TodoUpdateRequestDto
+        todoUpdateRequestDto: TodoUpdateRequestDto,
     ) {
         homeService.patchOptionalTodo(roundId, todoId, todoUpdateRequestDto)
     }

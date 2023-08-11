@@ -1,6 +1,7 @@
 package com.created.team201.data.datasource.remote
 
 import com.created.team201.data.remote.request.TodoCreateRequestDto
+import com.created.team201.data.remote.request.TodoIsDoneRequestDto
 import com.created.team201.data.remote.request.TodoRequestDto
 import com.created.team201.data.remote.request.TodoUpdateRequestDto
 import com.created.team201.data.remote.response.RoundDetailResponseDto
@@ -26,6 +27,8 @@ interface StudyManagementDataSource {
     ): Response<Unit>
 
     suspend fun patchNecessaryTodo(roundId: Long, todoUpdateRequestDto: TodoUpdateRequestDto)
+
+    suspend fun patchNecessaryTodoIsDone(roundId: Long, todoIsDoneRequestDto: TodoIsDoneRequestDto)
 
     suspend fun patchOptionalTodo(
         roundId: Long,

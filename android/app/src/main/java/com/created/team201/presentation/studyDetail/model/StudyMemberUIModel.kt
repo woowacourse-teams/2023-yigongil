@@ -8,4 +8,5 @@ data class StudyMemberUIModel(
     val name: String,
     val successRate: Int,
     val tier: Int,
+    val isDeleted: Boolean,
 )

@@ -5,6 +5,12 @@
     <data>
 
         <variable
+
+            name="onClick"
+            type="com.created.team201.presentation.studyManagement.StudyManagementClickListener" />
+
+        <variable
+                  
             name="optionalTodo"
             type="com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel" />
 
@@ -16,7 +22,7 @@
 
         <EditText
             android:id="@+id/et_item_study_management_optional_todo_edit"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
             android:background="@color/transparent"
@@ -28,8 +34,18 @@
             android:textColor="@color/white"
             android:textColorHint="@color/grey04_989DA5"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_item_study_management_optional_todo_delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:onClick="@{()->onClick.onClickDeleteOptionalTodo(optionalTodo)}"
+            android:src="@drawable/ic_delete_todo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
