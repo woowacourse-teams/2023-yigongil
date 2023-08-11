@@ -313,7 +313,6 @@ class StudyManagementViewModel(
                 Log.e(LOG_ERROR, it.message.toString())
             }
         }
-        _todoState.value = DEFAULT
     }
 
     fun setTodoState(updatedTodoState: TodoState) {

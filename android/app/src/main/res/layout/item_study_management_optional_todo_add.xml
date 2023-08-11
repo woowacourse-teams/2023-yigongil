@@ -20,7 +20,7 @@
 
         <EditText
             android:id="@+id/et_item_study_management_optional_todo"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
             android:background="@color/transparent"
@@ -32,7 +32,6 @@
             android:textColor="@color/white"
             android:textColorHint="@color/grey04_989DA5"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iv_item_study_management_optional_todo_add_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
