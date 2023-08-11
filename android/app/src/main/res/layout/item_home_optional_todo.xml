@@ -13,6 +13,9 @@
             name="todoUiModel"
             type="com.created.team201.presentation.home.model.TodoUiModel" />
 
+        <variable
+            name="roundId"
+            type="Integer" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
-            android:onClick="@{() -> onClick.clickOnTodo(todoUiModel.todoId,todoUiModel.isDone)}"
+            android:onClick="@{() -> onClick.clickOnOptionalTodoCheck(todoUiModel,roundId,todoUiModel.isDone)}"
             android:src="@drawable/ic_selector_home_check_btn"
             app:isSelected="@{todoUiModel.done}"
             app:layout_constraintBottom_toBottomOf="@id/tv_home_optional_todo"

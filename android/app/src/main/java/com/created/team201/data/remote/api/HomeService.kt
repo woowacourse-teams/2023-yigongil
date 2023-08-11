@@ -1,6 +1,7 @@
 package com.created.team201.data.remote.api
 
-import com.created.team201.data.remote.request.TodoRequestDto
+import com.created.team201.data.remote.request.NecessaryTodoRequestDto
+import com.created.team201.data.remote.request.TodoUpdateRequestDto
 import com.created.team201.data.remote.response.UserStudiesResponseDto
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -12,10 +13,16 @@ interface HomeService {
     @GET("/v1/home")
     suspend fun getUserStudies(): UserStudiesResponseDto
 
-    @PATCH("/v1/studies/{studyId}/todos/{todoId}")
-    suspend fun patchTodo(
-        @Path("studyId") studyId: Int,
+    @PATCH("/v1/rounds/{roundId}/todos/necessary")
+    suspend fun patchNecessaryTodo(
+        @Path("roundId") roundId: Int,
+        @Body necessaryTodoRequestDto: NecessaryTodoRequestDto,
+    )
+
+    @PATCH("/v1/rounds/{roundId}/todos/optional/{todoId}")
+    suspend fun patchOptionalTodo(
+        @Path("roundId") roundId: Int,
         @Path("todoId") todoId: Long,
-        @Body todoRequestDto: TodoRequestDto,
+        @Body todoUpdateRequestDto: TodoUpdateRequestDto,
     )
 }

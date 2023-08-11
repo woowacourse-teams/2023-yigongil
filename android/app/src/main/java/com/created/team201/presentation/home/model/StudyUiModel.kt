@@ -12,6 +12,7 @@ data class StudyUiModel(
     val nextDate: String,
     val necessaryTodo: TodoUiModel,
     val optionalTodos: List<TodoUiModel>,
+    val roundId: Int,
 ) {
     private val _grass: MutableList<Grass> = mutableListOf(
         Grass(BOTTOM, false), Grass(BOTTOM, false), Grass(BOTTOM, false),

@@ -35,6 +35,7 @@ fun StudyResponseDto.toDomain(): Study = Study(
     necessaryTodo = necessaryTodo.toDomain(),
     nextDate = nextDate,
     optionalTodo = optionalTodos.map { it.toDomain() },
+    roundId = roundId,
 )
 
 fun TodoResponseDto.toDomain(): Todo = Todo(

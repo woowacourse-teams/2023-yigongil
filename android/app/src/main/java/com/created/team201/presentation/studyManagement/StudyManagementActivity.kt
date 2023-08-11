@@ -262,5 +262,10 @@ class StudyManagementActivity :
                 putExtra(KEY_STUDY_ID, studyId)
                 putExtra(KEY_ROLE_INDEX, roleIndex)
             }
+
+        fun getIntent(context: Context, studyId: Long): Intent =
+            Intent(context, StudyManagementActivity::class.java).apply {
+                putExtra(KEY_STUDY_ID, studyId)
+            }
     }
 }

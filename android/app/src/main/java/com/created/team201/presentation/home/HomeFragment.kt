@@ -7,7 +7,8 @@ import com.created.team201.R
 import com.created.team201.databinding.FragmentHomeBinding
 import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.home.adapter.DashboardAdapter
-import com.created.team201.presentation.studyDetail.StudyDetailActivity
+import com.created.team201.presentation.home.model.TodoUiModel
+import com.created.team201.presentation.studyManagement.StudyManagementActivity
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val homeViewModel: HomeViewModel by viewModels { HomeViewModel.Factory }
@@ -19,8 +20,13 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     }
 
     private fun implementClickListener() = object : HomeClickListener {
-        override fun clickOnTodo(id: Long, isDone: Boolean) {
-            homeViewModel.updateTodo(id, !isDone)
+
+        override fun clickOnNecessaryTodoCheck(todo: TodoUiModel, roundId: Int, isDone: Boolean) {
+            homeViewModel.updateNecessaryTodo(todo, roundId, !isDone)
+        }
+
+        override fun clickOnOptionalTodoCheck(todo: TodoUiModel, roundId: Int, isDone: Boolean) {
+            homeViewModel.updateOptionalTodo(todo, roundId, !isDone)
         }
 
         override fun clickOnStudyCard(studyId: Long) {
@@ -29,8 +35,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     }
 
     private fun navigateToStudyDetailActivity(studyId: Long) {
-        // TODO: 스터디 관리하기 뷰로 이동
-        startActivity(StudyDetailActivity.getIntent(requireContext(), studyId))
+        startActivity(StudyManagementActivity.getIntent(requireContext(), studyId))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

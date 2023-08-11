@@ -11,13 +11,14 @@ import com.created.team201.presentation.home.model.TodoUiModel
 class OptionalToDoAdapter(
     private val onClick: HomeClickListener,
 ) : ListAdapter<TodoUiModel, OptionalToDoViewHolder>(diffCallBack) {
+    private var roundId = 0
 
     init {
         setHasStableIds(true)
     }
 
     override fun getItemId(position: Int): Long {
-        return getItem(position).todoId.toLong()
+        return getItem(position).todoId
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OptionalToDoViewHolder {
@@ -31,7 +32,11 @@ class OptionalToDoAdapter(
     }
 
     override fun onBindViewHolder(holder: OptionalToDoViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), roundId)
+    }
+
+    fun passRoundId(id: Int) {
+        roundId = id
     }
 
     companion object {

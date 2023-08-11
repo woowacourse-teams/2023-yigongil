@@ -16,8 +16,9 @@ class OptionalToDoViewHolder(
         binding.onClick = onClick
     }
 
-    fun bind(todoUiModel: TodoUiModel) {
+    fun bind(todoUiModel: TodoUiModel, roundId: Int) {
         binding.todoUiModel = todoUiModel
+        binding.roundId = roundId
     }
 
     companion object {
