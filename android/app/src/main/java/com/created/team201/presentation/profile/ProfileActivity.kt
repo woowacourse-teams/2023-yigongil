@@ -14,11 +14,14 @@ import com.created.team201.R
 import com.created.team201.databinding.ActivityProfileBinding
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.profile.adapter.FinishedStudyAdapter
+import com.created.team201.presentation.report.ReportActivity
+import com.created.team201.presentation.report.model.ReportCategory
 
 class ProfileActivity : BindingActivity<ActivityProfileBinding>(R.layout.activity_profile) {
 
     private val profileViewModel: ProfileViewModel by viewModels { ProfileViewModel.Factory }
     private val finishedStudyAdapter: FinishedStudyAdapter by lazy { FinishedStudyAdapter() }
+    private val userId: Long by lazy { intent.getLongExtra(KEY_USER_ID, NON_EXISTENCE_USER_ID) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +45,6 @@ class ProfileActivity : BindingActivity<ActivityProfileBinding>(R.layout.activit
     }
 
     private fun getValidatedUserId(): Long {
-        val userId = intent.getLongExtra(KEY_USER_ID, NON_EXISTENCE_USER_ID)
         if (userId == NON_EXISTENCE_USER_ID) {
             Toast.makeText(
                 this,
@@ -83,6 +85,12 @@ class ProfileActivity : BindingActivity<ActivityProfileBinding>(R.layout.activit
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             finish()
+        }
+        when (item.itemId) {
+            android.R.id.home -> finish()
+            R.id.menu_profile_report -> {
+                startActivity(ReportActivity.getIntent(this, ReportCategory.USER, userId))
+            }
         }
         return super.onOptionsItemSelected(item)
     }

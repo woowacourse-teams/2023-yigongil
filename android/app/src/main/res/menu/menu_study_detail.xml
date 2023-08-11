@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_study_detail_report"
+        android:icon="@drawable/ic_siren"
+        android:title="@string/profile_report_button_menu"
+        app:showAsAction="always" />
+</menu>
