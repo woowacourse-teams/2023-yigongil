@@ -62,7 +62,7 @@ class StudyControllerTest {
 
     @BeforeEach
     void setUp() {
-        given(memberRepository.findById(anyLong()))
+        given(memberRepository.findByIdAndDeletedFalse(anyLong()))
                 .willReturn(Optional.of(MemberFixture.김진우.toMember()));
     }
 

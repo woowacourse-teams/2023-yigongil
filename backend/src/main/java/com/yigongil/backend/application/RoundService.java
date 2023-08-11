@@ -45,11 +45,14 @@ public class RoundService {
 
     @Transactional
     public RoundResponse findRoundDetail(Member member, Long roundId) {
-        Round round = roundRepository.findRoundByIdWithRoundsOfMember(roundId)
+        Round round = roundRepository.findById(roundId)
                                      .orElseThrow(() -> new RoundNotFoundException("해당 회차를 찾을 수 없습니다", roundId));
 
-        List<RoundOfMember> roundOfMembers =
-                roundOfMemberRepository.findRoundOfMembersWithMember(round.getRoundOfMembers());
+        List<Long> ids = round.getRoundOfMembers().stream()
+                              .map(RoundOfMember::getId)
+                              .toList();
+
+        List<RoundOfMember> roundOfMembers = roundOfMemberRepository.findAllByIdIn(ids);
 
         RoundOfMember roundByMember =
                 roundOfMembers.stream()

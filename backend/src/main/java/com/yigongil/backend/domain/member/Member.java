@@ -10,9 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.annotations.Where;
 
-@Where(clause = "is_deleted = false")
 @Getter
 @Entity
 public class Member extends BaseEntity {
@@ -43,7 +41,7 @@ public class Member extends BaseEntity {
     private boolean isOnboardingDone;
 
     @Column(nullable = false)
-    private boolean isDeleted;
+    private boolean deleted;
 
 
     protected Member() {
@@ -58,7 +56,7 @@ public class Member extends BaseEntity {
             Integer tier,
             String introduction,
             boolean isOnboardingDone,
-            boolean isDeleted
+            boolean Deleted
     ) {
         this.id = id;
         this.githubId = githubId;
@@ -67,7 +65,7 @@ public class Member extends BaseEntity {
         this.tier = tier == null ? 1 : tier;
         this.introduction = new Introduction(introduction);
         this.isOnboardingDone = isOnboardingDone;
-        this.isDeleted = isDeleted;
+        this.deleted = Deleted;
     }
 
     public void updateProfile(String nickname, String introduction) {
@@ -108,7 +106,7 @@ public class Member extends BaseEntity {
         this.nickname = null;
         this.profileImageUrl = null;
         this.introduction = new Introduction(null);
-        this.isDeleted = true;
+        this.deleted = true;
     }
 
     @Override

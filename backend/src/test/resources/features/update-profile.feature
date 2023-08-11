@@ -41,3 +41,11 @@ Feature: 프로필 정보를 업데이트한다
     Given "jinwoo"가 회원 탈퇴한다.
     When "noiman"이 "jinwoo"의 프로필을 조회한다.
     Then 404 코드를 반환한다.
+
+  Scenario: 스터디를 정상 진행한다.
+    Given "jinwoo"의 깃허브 아이디로 회원가입을 한다.
+    Given "noiman"의 깃허브 아이디로 회원가입을 한다.
+    Given "mint"의 깃허브 아이디로 회원가입을 한다.
+    Given "mint"가 회원 탈퇴한다.
+
+    When "noiman"가 마이페이지를 조회한다.

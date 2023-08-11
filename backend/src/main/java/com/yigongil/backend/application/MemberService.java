@@ -62,7 +62,7 @@ public class MemberService {
     }
 
     public Member findMemberById(Long id) {
-        return memberRepository.findById(id)
+        return memberRepository.findByIdAndDeletedFalse(id)
                                .orElseThrow(() -> new MemberNotFoundException(
                                                "해당 멤버가 존재하지 않습니다.", String.valueOf(id)
                                        )

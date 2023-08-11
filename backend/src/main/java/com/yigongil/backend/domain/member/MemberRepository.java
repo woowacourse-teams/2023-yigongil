@@ -5,7 +5,7 @@ import org.springframework.data.repository.Repository;
 
 public interface MemberRepository extends Repository<Member, Long> {
 
-    Optional<Member> findById(Long id);
+    Optional<Member> findByIdAndDeletedFalse(Long id);
 
     Optional<Member> findByGithubId(String githubId);
 
