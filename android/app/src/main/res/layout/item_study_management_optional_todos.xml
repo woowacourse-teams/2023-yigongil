@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/item_study_management_optional_todo_button"
-            android:onClick="@{()->onClick.clickOnTodo(optionalTodo.todo.todoId, optionalTodo.todo.done)}"
+            android:onClick="@{()->onClick.onClickUpdateTodoIsDone(false, optionalTodo.todo.todoId, !optionalTodo.todo.done)}"
             android:padding="10dp"
             android:src="@drawable/ic_selector_home_check_btn"
             app:isSelected="@{optionalTodo.todo.done}"

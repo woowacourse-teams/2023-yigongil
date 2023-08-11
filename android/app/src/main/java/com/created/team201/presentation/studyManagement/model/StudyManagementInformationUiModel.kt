@@ -1,6 +1,7 @@
 package com.created.team201.presentation.studyManagement.model
 
 import com.created.domain.model.Role
+import com.created.team201.presentation.studyList.model.PeriodUiModel
 
 data class StudyManagementInformationUiModel(
     val name: String,
@@ -9,7 +10,7 @@ data class StudyManagementInformationUiModel(
     val role: Role,
     val startAt: String,
     val totalRoundCount: Int,
-    val periodOfRound: String,
+    val periodOfRound: PeriodUiModel,
     val currentRound: Int,
     val introduction: String,
     val rounds: List<RoundUiModel>,

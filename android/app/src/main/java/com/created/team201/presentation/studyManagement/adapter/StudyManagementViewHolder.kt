@@ -1,12 +1,18 @@
 package com.created.team201.presentation.studyManagement.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.created.team201.R
 import com.created.team201.databinding.ItemStudyManagementBinding
 import com.created.team201.presentation.studyManagement.StudyManagementClickListener
 import com.created.team201.presentation.studyManagement.StudyMemberClickListener
+import com.created.team201.presentation.studyManagement.TodoState.DEFAULT
+import com.created.team201.presentation.studyManagement.TodoState.NECESSARY_TODO_EDIT
+import com.created.team201.presentation.studyManagement.TodoState.OPTIONAL_TODO_EDIT
 import com.created.team201.presentation.studyManagement.model.OptionalTodoUiModel
 import com.created.team201.presentation.studyManagement.model.StudyRoundDetailUiModel
 
@@ -17,11 +23,12 @@ class StudyManagementViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var studyRoundDetail: StudyRoundDetailUiModel
+    private var updatedOptionalTodoUiModels: MutableList<OptionalTodoUiModel> = mutableListOf()
     private val studyManagementMemberAdapter: StudyManagementMemberAdapter by lazy {
         StudyManagementMemberAdapter(studyMemberClickListener)
     }
     private val studyManagementOptionalTodoAdapter: StudyManagementOptionalTodoAdapter by lazy {
-        StudyManagementOptionalTodoAdapter(studyManagementClickListener)
+        StudyManagementOptionalTodoAdapter(studyManagementClickListener, ::changedOptionalTodos)
     }
 
     init {
@@ -31,7 +38,9 @@ class StudyManagementViewHolder(
 
     private fun setClickAddTodo() {
         binding.tvStudyManagementAddOptionalTodo.setOnClickListener {
-            studyManagementClickListener.onClickAddOptionalTodo(studyManagementOptionalTodoAdapter.itemCount)
+            studyManagementClickListener.onClickGenerateOptionalTodo(
+                studyManagementOptionalTodoAdapter.itemCount,
+            )
             val currentTodos = studyManagementOptionalTodoAdapter.currentList
 
             if (currentTodos.isEmpty()) {
@@ -45,8 +54,17 @@ class StudyManagementViewHolder(
 
             studyManagementOptionalTodoAdapter.submitList(currentTodos + OptionalTodoUiModel.ADD_TODO.copy())
         }
+
         binding.tvItemStudyManagementEdit.setOnClickListener {
-            studyManagementClickListener.clickOnUpdateTodo(
+            setEditNecessaryTodo()
+        }
+
+        binding.tvItemStudyManagementEditOptinalTodo.setOnClickListener {
+            setEditOptionalTodos()
+        }
+
+        binding.ivStudyManagementNecessaryTodoAddButton.setOnClickListener {
+            studyManagementClickListener.onClickAddTodo(
                 true,
                 binding.etItemStudyManagementEssentialTodoContent.text.toString(),
             )
@@ -67,6 +85,57 @@ class StudyManagementViewHolder(
         binding.studyManagement = studyManagementUIModel
         studyManagementMemberAdapter.submitList(studyManagementUIModel.studyMembers)
         studyManagementOptionalTodoAdapter.submitList(studyManagementUIModel.optionalTodos)
+    }
+
+    private fun setEditNecessaryTodo() {
+        val currentContent = binding.etItemStudyManagementEssentialTodoContent.text.toString()
+        when (studyManagementClickListener.onClickEditNecessaryTodo(currentContent)) {
+            DEFAULT -> {
+                binding.etItemStudyManagementEssentialTodoContent.isEnabled = false
+                binding.tvItemStudyManagementEdit.setText(R.string.study_management_edit_todo)
+            }
+
+            NECESSARY_TODO_EDIT -> {
+                binding.etItemStudyManagementEssentialTodoContent.isEnabled = true
+                binding.tvItemStudyManagementEdit.setText(R.string.study_management_edit_todo_done)
+            }
+
+            else -> return
+        }
+    }
+
+    private fun setEditOptionalTodos() {
+        when (studyManagementClickListener.onClickEditOptionalTodo(updatedOptionalTodoUiModels.toList())) {
+            DEFAULT -> {
+                Log.d("ring", "복귀")
+                val updatedOptionalTodos = studyManagementOptionalTodoAdapter.currentList.map {
+                    it.copy(viewType = OptionalTodoViewType.DISPLAY.viewType)
+                }
+                studyManagementOptionalTodoAdapter.submitList(updatedOptionalTodos)
+                binding.tvItemStudyManagementEditOptinalTodo.setText(R.string.study_management_edit_todo)
+                binding.ivItemStudyManagementEssentialTodoCheckButton.visibility = VISIBLE
+            }
+
+            OPTIONAL_TODO_EDIT -> {
+                Log.d("ring", "편집")
+                val updatedOptionalTodos = studyManagementOptionalTodoAdapter.currentList.map {
+                    it.copy(viewType = OptionalTodoViewType.EDIT.viewType)
+                }
+                updatedOptionalTodoUiModels = mutableListOf()
+                studyManagementOptionalTodoAdapter.submitList(updatedOptionalTodos)
+                binding.tvItemStudyManagementEditOptinalTodo.setText(R.string.study_management_edit_todo_done)
+                binding.ivItemStudyManagementEssentialTodoCheckButton.visibility = INVISIBLE
+            }
+
+            else -> return
+        }
+    }
+
+    private fun changedOptionalTodos(updatedTodo: OptionalTodoUiModel) {
+        updatedOptionalTodoUiModels.removeIf {
+            it.todo.todoId == updatedTodo.todo.todoId
+        }
+        updatedOptionalTodoUiModels.add(updatedTodo)
     }
 
     companion object {

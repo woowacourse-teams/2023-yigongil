@@ -111,17 +111,18 @@ class OnBoardingViewModel(
         object IDLE : State
     }
 
-    fun getInputFilter(): Array<InputFilter> = arrayOf(object : InputFilter {
-        override fun filter(
-            text: CharSequence,
-            start: Int,
-            end: Int,
-            dest: Spanned,
-            dStart: Int,
-            dEnd: Int
-        ): CharSequence {
-            if (text.isBlank() || PATTERN_NICKNAME.matcher(text).matches())
-                return text
+    fun getInputFilter(): Array<InputFilter> = arrayOf(
+        object : InputFilter {
+            override fun filter(
+                text: CharSequence,
+                start: Int,
+                end: Int,
+                dest: Spanned,
+                dStart: Int,
+                dEnd: Int
+            ): CharSequence {
+                if (text.isBlank() || PATTERN_NICKNAME.matcher(text).matches())
+                    return text
 
                 _nicknameState.value = NicknameState.UNAVAILABLE
                 return ""
