@@ -1,6 +1,7 @@
 package com.created.domain.repository
 
 import com.created.domain.model.CreateTodo
+import com.created.domain.model.Profile
 import com.created.domain.model.RoundDetail
 import com.created.domain.model.StudyDetail
 import com.created.domain.model.Todo
@@ -24,4 +25,6 @@ interface StudyManagementRepository {
     suspend fun patchOptionalTodo(roundId: Long, todo: Todo)
 
     suspend fun deleteOptionalTodo(roundId: Long, todoId: Long)
+
+    suspend fun getMyProfile(): Profile
 }

@@ -5,6 +5,7 @@ import com.created.team201.data.remote.request.TodoCreateRequestDto
 import com.created.team201.data.remote.request.TodoIsDoneRequestDto
 import com.created.team201.data.remote.request.TodoRequestDto
 import com.created.team201.data.remote.request.TodoUpdateRequestDto
+import com.created.team201.data.remote.response.MyPageResponseDto
 import com.created.team201.data.remote.response.RoundDetailResponseDto
 import com.created.team201.data.remote.response.StudyDetailResponseDto
 import retrofit2.Response
@@ -63,5 +64,9 @@ class StudyManagementDataSourceImpl(
 
     override suspend fun deleteOptionalTodo(roundId: Long, todoId: Long) {
         service.deleteOptionalTodo(roundId, todoId)
+    }
+
+    override suspend fun getMyProfile(): MyPageResponseDto {
+        return service.getMyProfile()
     }
 }

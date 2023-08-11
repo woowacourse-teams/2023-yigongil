@@ -5,12 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.Member
+import com.created.domain.model.Profile
 import com.created.domain.model.Role
 import com.created.domain.model.StudyDetail
 import com.created.domain.repository.StudyDetailRepository
 import com.created.team201.data.datasource.remote.StudyDetailDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.StudyDetailRepositoryImpl
+import com.created.team201.presentation.myPage.model.ProfileUiModel
 import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
 import com.created.team201.presentation.studyDetail.model.StudyMemberUIModel
 import com.created.team201.util.NonNullLiveData
@@ -44,10 +46,12 @@ class StudyDetailViewModel private constructor(
 
     private val _studyMemberCount: NonNullMutableLiveData<Int> = NonNullMutableLiveData(0)
     val studyMemberCount: NonNullLiveData<Int> get() = _studyMemberCount
+    lateinit var myProfile: ProfileUiModel
 
     fun fetchStudyDetail(studyId: Long, notifyInvalidStudy: () -> Unit) {
         viewModelScope.launch {
             runCatching {
+                getMyProfile()
                 studyDetailRepository.getStudyDetail(studyId).toUIModel()
             }.onSuccess {
                 _study.value = it
@@ -59,6 +63,17 @@ class StudyDetailViewModel private constructor(
                 if (it.role == Role.MASTER) fetchApplicants(studyId)
             }.onFailure {
                 notifyInvalidStudy()
+            }
+        }
+    }
+
+    private fun getMyProfile() {
+        viewModelScope.launch {
+            runCatching {
+                studyDetailRepository.getMyProfile()
+            }.onSuccess { profile ->
+                myProfile = profile.toUiModel()
+            }.onFailure {
             }
         }
     }
@@ -151,6 +166,18 @@ class StudyDetailViewModel private constructor(
         Role.APPLICANT -> StudyDetailState.Applicant
         Role.NOTHING -> StudyDetailState.Nothing(isFullMember.value)
     }
+
+    private fun Profile.toUiModel(): ProfileUiModel = ProfileUiModel(
+        githubId,
+        id,
+        introduction,
+        nickname,
+        profileImageUrl,
+        successRate,
+        successfulRoundCount,
+        tier,
+        tierProgress,
+    )
 
     companion object {
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {

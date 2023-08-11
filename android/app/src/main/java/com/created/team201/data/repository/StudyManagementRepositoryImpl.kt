@@ -1,6 +1,7 @@
 package com.created.team201.data.repository
 
 import com.created.domain.model.CreateTodo
+import com.created.domain.model.Profile
 import com.created.domain.model.RoundDetail
 import com.created.domain.model.StudyDetail
 import com.created.domain.model.Todo
@@ -70,6 +71,10 @@ class StudyManagementRepositoryImpl(
 
     override suspend fun deleteOptionalTodo(roundId: Long, todoId: Long) {
         studyManagementDataSource.deleteOptionalTodo(roundId, todoId)
+    }
+
+    override suspend fun getMyProfile(): Profile {
+        return studyManagementDataSource.getMyProfile().toDomain()
     }
 
     companion object {

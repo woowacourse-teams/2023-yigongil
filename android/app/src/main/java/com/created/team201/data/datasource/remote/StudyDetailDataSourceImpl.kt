@@ -2,6 +2,7 @@ package com.created.team201.data.datasource.remote
 
 import com.created.team201.data.remote.api.StudyDetailService
 import com.created.team201.data.remote.response.MemberResponseDto
+import com.created.team201.data.remote.response.MyPageResponseDto
 import com.created.team201.data.remote.response.StudyDetailResponseDto
 
 class StudyDetailDataSourceImpl(
@@ -25,5 +26,9 @@ class StudyDetailDataSourceImpl(
 
     override suspend fun acceptApplicant(studyId: Long, memberId: Long) {
         studyDetailService.acceptApplicant(studyId, memberId)
+    }
+
+    override suspend fun getMyProfile(): MyPageResponseDto {
+        return studyDetailService.getMyProfile()
     }
 }

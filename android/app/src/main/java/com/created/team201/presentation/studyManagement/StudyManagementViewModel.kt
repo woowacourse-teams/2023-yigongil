@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.created.domain.model.CreateTodo
 import com.created.domain.model.PageIndex
 import com.created.domain.model.PeriodUnit
+import com.created.domain.model.Profile
 import com.created.domain.model.Round
 import com.created.domain.model.RoundDetail
 import com.created.domain.model.StudyDetail
@@ -20,6 +21,7 @@ import com.created.team201.data.mapper.toDomain
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.StudyManagementRepositoryImpl
 import com.created.team201.presentation.home.model.TodoUiModel
+import com.created.team201.presentation.myPage.model.ProfileUiModel
 import com.created.team201.presentation.studyList.model.PeriodUiModel
 import com.created.team201.presentation.studyManagement.TodoState.DEFAULT
 import com.created.team201.presentation.studyManagement.adapter.OptionalTodoViewType.DISPLAY
@@ -54,6 +56,8 @@ class StudyManagementViewModel(
 
     lateinit var studyInformation: StudyManagementInformationUiModel
 
+    lateinit var myProfile: ProfileUiModel
+
     private val _isStudyRoundsLoaded: MutableLiveData<Boolean> = MutableLiveData(false)
     val isStudyRoundsLoaded: LiveData<Boolean> get() = _isStudyRoundsLoaded
 
@@ -66,14 +70,23 @@ class StudyManagementViewModel(
 
     fun initStudyManagement(studyId: Long) {
         viewModelScope.launch {
+            getMyProfile()
             fetchStudyInformation(studyId)
             initStudyRounds(studyId)
             _isStudyRoundsLoaded.value = true
         }
     }
 
-    fun initStatus() {
-        _state.value = StudyManagementState.getRoleStatus(studyInformation.role)
+    private fun getMyProfile() {
+        viewModelScope.launch {
+            runCatching {
+                repository.getMyProfile()
+            }.onSuccess { profile ->
+                myProfile = profile.toUiModel()
+            }.onFailure {
+                Log.e(LOG_ERROR, it.message.toString())
+            }
+        }
     }
 
     private suspend fun fetchStudyInformation(studyId: Long) {
@@ -87,6 +100,10 @@ class StudyManagementViewModel(
                 Log.e(LOG_ERROR, it.message.toString())
             }
         }
+    }
+
+    fun initStatus() {
+        _state.value = StudyManagementState.getRoleStatus(studyInformation.role)
     }
 
     private suspend fun initStudyRounds(studyId: Long) {
@@ -371,6 +388,18 @@ class StudyManagementViewModel(
     private fun Todo.toNecessaryTodoUiModel(): NecessaryTodoUiModel = NecessaryTodoUiModel(
         todo = this.toUiModel(),
         isInitialized = content != null,
+    )
+
+    private fun Profile.toUiModel(): ProfileUiModel = ProfileUiModel(
+        githubId,
+        id,
+        introduction,
+        nickname,
+        profileImageUrl,
+        successRate,
+        successfulRoundCount,
+        tier,
+        tierProgress,
     )
 
     companion object {
