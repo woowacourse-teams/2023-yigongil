@@ -38,7 +38,6 @@ class StudyManagementActivity :
         StudyManagementAdapter(studyManagementClickListener, memberClickListener)
     }
     private val studyId: Long by lazy { intent.getLongExtra(KEY_STUDY_ID, KEY_ERROR_LONG) }
-    private val roleIndex: Int by lazy { intent.getIntExtra(KEY_ROLE_INDEX, KEY_ERROR_ROLE_INT) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +69,7 @@ class StudyManagementActivity :
     }
 
     private fun initStudyInformation() {
-        studyManagementViewModel.initStudyManagement(studyId, roleIndex)
+        studyManagementViewModel.initStudyManagement(studyId)
     }
 
     private fun initViewPager() {
@@ -83,6 +82,7 @@ class StudyManagementActivity :
     private fun initPage() {
         studyManagementViewModel.isStudyRoundsLoaded.observe(this) { isStudyRoundsLoaded ->
             if (!isStudyRoundsLoaded) return@observe
+            studyManagementViewModel.initStatus()
             val currentRound = studyManagementViewModel.currentRound.value
             binding.vpStudyManagement.setCurrentItem(currentRound - CONVERT_TO_PAGE, false)
             binding.skeletonStudyManagement.clItemStudyManagementSkeleton.visibility = GONE
@@ -334,7 +334,6 @@ class StudyManagementActivity :
         private const val PAGE_INDEX_ZERO = 0
         private const val MAXIMUM_OPTIONAL_TODO_COUNT = 4
         private const val KEY_ERROR_LONG = 0L
-        private const val KEY_ERROR_ROLE_INT = 3
         private const val KEY_STUDY_ID = "KEY_STUDY_ID"
         private const val KEY_ROLE_INDEX = "KEY_ROLE_INDEX"
 
@@ -342,6 +341,11 @@ class StudyManagementActivity :
             Intent(context, StudyManagementActivity::class.java).apply {
                 putExtra(KEY_STUDY_ID, studyId)
                 putExtra(KEY_ROLE_INDEX, roleIndex)
+            }
+
+        fun getIntent(context: Context, studyId: Long): Intent =
+            Intent(context, StudyManagementActivity::class.java).apply {
+                putExtra(KEY_STUDY_ID, studyId)
             }
     }
 }

@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.created.domain.model.CreateTodo
 import com.created.domain.model.PageIndex
 import com.created.domain.model.PeriodUnit
-import com.created.domain.model.Role
 import com.created.domain.model.Round
 import com.created.domain.model.RoundDetail
 import com.created.domain.model.StudyDetail
@@ -46,7 +45,8 @@ class StudyManagementViewModel(
     private val _studyRounds: MutableLiveData<List<StudyRoundDetailUiModel>> = MutableLiveData()
     val studyRounds: LiveData<List<StudyRoundDetailUiModel>> get() = _studyRounds
 
-    private val _state: MutableLiveData<StudyManagementState> = MutableLiveData()
+    private val _state: MutableLiveData<StudyManagementState> =
+        MutableLiveData(StudyManagementState.Member)
     val state: LiveData<StudyManagementState> get() = _state
 
     private val _currentRound: NonNullMutableLiveData<Int> = NonNullMutableLiveData(0)
@@ -64,8 +64,7 @@ class StudyManagementViewModel(
     private val studyDetails get() = studyRounds.value ?: listOf()
     val currentRoundDetail get() = studyDetails[currentRound.value - CONVERT_PAGE_TO_ROUND]
 
-    fun initStudyManagement(studyId: Long, roleIndex: Int) {
-        initStatus(roleIndex)
+    fun initStudyManagement(studyId: Long) {
         viewModelScope.launch {
             fetchStudyInformation(studyId)
             initStudyRounds(studyId)
@@ -73,8 +72,8 @@ class StudyManagementViewModel(
         }
     }
 
-    private fun initStatus(roleIndex: Int) {
-        _state.value = StudyManagementState.getRoleStatus(Role.valueOf(roleIndex))
+    fun initStatus() {
+        _state.value = StudyManagementState.getRoleStatus(studyInformation.role)
     }
 
     private suspend fun fetchStudyInformation(studyId: Long) {

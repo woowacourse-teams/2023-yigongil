@@ -64,7 +64,6 @@ class StudyManageFragment :
                     StudyManagementActivity.getIntent(
                         requireContext(),
                         id,
-                        studyManageViewModel.getMyRole(id).index,
                     ),
                 )
 
