@@ -49,6 +49,7 @@
             android:layout_marginTop="8dp"
             android:text="@{result}"
             android:textAlignment="center"
+            android:paddingStart="12dp"
             android:textAppearance="@style/title_b20"
             android:textColor="@color/green08_A2FF86"
             tools:text="70.2%" />
