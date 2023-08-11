@@ -175,6 +175,16 @@
     <string name="setting_item_policy">정책 및 약관</string>
     <string name="setting_item_logout">로그아웃</string>
 
+    <!-- 설정뷰 - 다이얼로그 -->
+    <string name="setting_dialog_logout_title">로그아웃</string>
+    <string name="setting_dialog_logout_content">정말로 로그아웃 하시겠어요?</string>
+    <string name="setting_dialog_withdraw_account_title">정말 탈퇴하시나요?</string>
+    <string name="setting_dialog_withdraw_account_content">서비스를 탈퇴하시면 스터디 이력, 업적 배지를 비롯한 모든 회원 정보가 삭제되며 다시 복구할 수 없습니다.</string>
+    <string name="setting_dialog_toast_withdraw_account_fail">서비스 탈퇴에 실패했습니다</string>
+    <string name="setting_dialog_btn_cancel_text">취소</string>
+    <string name="setting_dialog_btn_ok_text">예</string>
+    <string name="setting_toast_withdraw_account_success">회원 탈퇴가 완료되었습니다</string>
+
     <!-- 계정 관리 뷰 -->
     <string name="accountSetting_toolbar_title">계정 관리</string>
     <string name="accountSetting_withdraw_account_title_text">서비스 탈퇴하기</string>
