@@ -14,6 +14,8 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.model.Nickname
 import com.created.domain.model.OnBoarding
 import com.created.domain.repository.OnBoardingRepository
+import com.created.team201.application.Team201App
+import com.created.team201.data.datasource.local.OnBoardingIsDoneDataSourceImpl
 import com.created.team201.data.datasource.remote.OnBoardingDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.OnBoardingRepositoryImpl
@@ -138,7 +140,10 @@ class OnBoardingViewModel(
             initializer {
                 OnBoardingViewModel(
                     OnBoardingRepositoryImpl(
-                        OnBoardingDataSourceImpl(NetworkServiceModule.onBoardingService)
+                        OnBoardingIsDoneDataSourceImpl(
+                            Team201App.provideOnBoardingIsDoneStorage()
+                        ),
+                        OnBoardingDataSourceImpl(NetworkServiceModule.onBoardingService),
                     )
                 )
             }

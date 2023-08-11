@@ -37,6 +37,13 @@ object MockServer {
                         .setBody(nicknameValidationResponse)
                 }
 
+                path == "/v1/members/check-onboarding-is-done" && request.method == "GET" -> {
+                    MockResponse()
+                        .setHeader(HEADER_NAME_TYPE, HEADER_VALUE_JSON)
+                        .setResponseCode(200)
+                        .setBody(onBoardingIsDoneResponse)
+                }
+
                 else -> {
                     MockResponse().setResponseCode(404)
                 }
@@ -63,6 +70,13 @@ object MockServer {
         """
             {
                 "exists": false
+            }
+        """.trimIndent()
+
+    private val onBoardingIsDoneResponse: String =
+        """
+            {
+                "isOnboardingDone" : true
             }
         """.trimIndent()
 
