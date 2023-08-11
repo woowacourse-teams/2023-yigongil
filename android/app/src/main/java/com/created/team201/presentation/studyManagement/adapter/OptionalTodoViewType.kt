@@ -1,9 +1,7 @@
 package com.created.team201.presentation.studyManagement.adapter
 
-import java.lang.IllegalArgumentException
-
 enum class OptionalTodoViewType(val viewType: Int) {
-    DISPLAY(0), ADD(1);
+    DISPLAY(0), ADD(1), EDIT(2);
 
     companion object {
         fun valueOf(viewType: Int): OptionalTodoViewType {

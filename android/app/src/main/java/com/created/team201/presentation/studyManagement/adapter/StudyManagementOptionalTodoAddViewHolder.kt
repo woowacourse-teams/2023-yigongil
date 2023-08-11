@@ -13,7 +13,10 @@ class StudyManagementOptionalTodoAddViewHolder(
 
     init {
         binding.ivItemStudyManagementOptionalTodoAddButton.setOnClickListener {
-            studyManagementClickListener.onClickAddTodo(binding.etItemStudyManagementOptionalTodo.text.toString())
+            studyManagementClickListener.onClickAddTodo(
+                false,
+                binding.etItemStudyManagementOptionalTodo.text.toString(),
+            )
         }
     }
 
