@@ -8,6 +8,7 @@ data class StudyMemberUiModel(
     val nickname: String,
     val profileImageUrl: String,
     val isDone: Boolean,
+    val isDeleted: Boolean,
 ) {
     fun progressPercentage(): Int = if (isDone) 100 else 0
     fun getIsDoneDescription(): Int {

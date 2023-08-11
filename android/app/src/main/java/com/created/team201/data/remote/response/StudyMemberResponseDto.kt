@@ -13,4 +13,6 @@ data class StudyMemberResponseDto(
     val profileImageUrl: String,
     @SerialName("isDone")
     val isDone: Boolean,
+    @SerialName("isDeleted")
+    val isDeleted: Boolean,
 )
