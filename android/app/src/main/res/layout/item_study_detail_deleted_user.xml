@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/item_study_detail_deleted_user_description"
-            android:textAppearance="@style/name_sb18"
+            android:textAppearance="@style/text_m14"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

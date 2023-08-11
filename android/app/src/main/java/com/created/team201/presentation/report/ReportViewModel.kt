@@ -28,6 +28,8 @@ class ReportViewModel(
     private val _content: NonNullMutableLiveData<String> = NonNullMutableLiveData(EMPTY_STRING)
     val content: NonNullLiveData<String> get() = _content
 
+    private var isReporting: Boolean = false
+
     private val _isEnableReport: MediatorLiveData<Boolean> = MediatorLiveData<Boolean>().apply {
         addSourceList(title, content) {
             isInputsNotEmptyAndNotBlank()
@@ -65,6 +67,10 @@ class ReportViewModel(
     fun reportUser(targetId: Long, notifySuccessfulReport: () -> Unit) {
         viewModelScope.launch {
             runCatching {
+                if (isReporting) {
+                    return@launch
+                }
+                isReporting = true
                 reportRepository.reportUser(
                     ReportTargetUiModel(
                         reportedMemberId = targetId,
@@ -75,6 +81,9 @@ class ReportViewModel(
                 )
             }.onSuccess {
                 notifySuccessfulReport()
+                isReporting = false
+            }.onFailure {
+                isReporting = false
             }
         }
     }

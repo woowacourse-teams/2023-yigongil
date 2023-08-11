@@ -22,7 +22,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:title="@string/setting_toolbar_title"
             app:titleCentered="true"
-            app:titleTextAppearance="@style/header_sb15"
+            app:titleTextAppearance="@style/header_sb16"
             app:titleTextColor="@color/white" />
 
         <View

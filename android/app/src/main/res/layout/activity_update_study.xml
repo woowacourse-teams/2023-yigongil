@@ -33,7 +33,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:titleCentered="true"
-            app:titleTextAppearance="@style/header_sb15"
+            app:titleTextAppearance="@style/header_sb16"
             app:titleTextColor="@color/white" />
 
         <View
@@ -168,7 +168,7 @@
                 android:maxLines="7"
                 android:onTextChanged="@{(text, start, before, count) -> viewModel.setIntroduction(text.toString())}"
                 android:text="@{viewModel.content}"
-                android:textAppearance="@style/text_r14"
+                android:textAppearance="@style/text_r16"
                 android:textColor="@color/white"
                 android:textColorHint="@color/grey02_78808B"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -188,7 +188,7 @@
             android:paddingVertical="14dp"
             android:text="@string/createStudy_button_created"
             android:textAlignment="center"
-            android:textAppearance="@style/button_sb18"
+            android:textAppearance="@style/button_sb20"
             android:textColor="@color/tv_color_disabled"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

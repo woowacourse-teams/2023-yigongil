@@ -21,7 +21,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:title="@string/study_manage_title"
             app:titleCentered="true"
-            app:titleTextAppearance="@style/header_sb15"
+            app:titleTextAppearance="@style/header_sb16"
             app:titleTextColor="@color/white" />
 
         <View
@@ -43,7 +43,7 @@
             app:tabIndicatorFullWidth="true"
             app:tabRippleColor="@color/transparent"
             app:tabSelectedTextColor="@color/white"
-            app:tabTextAppearance="@style/subtitle_r15"
+            app:tabTextAppearance="@style/subtitle_r16"
             app:tabTextColor="@color/grey02_78808B" />
 
         <View

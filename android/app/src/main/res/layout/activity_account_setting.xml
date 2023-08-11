@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:title="@string/accountSetting_toolbar_title"
             app:titleCentered="true"
-            app:titleTextAppearance="@style/header_sb15"
+            app:titleTextAppearance="@style/header_sb16"
             app:titleTextColor="@color/white" />
 
         <View
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:text="@string/accountSetting_withdraw_account_title_text"
-            android:textAppearance="@style/text_r14"
+            android:textAppearance="@style/text_r16"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

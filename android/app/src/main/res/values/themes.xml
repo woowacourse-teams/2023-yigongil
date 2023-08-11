@@ -1,10 +1,12 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Team201" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="android:windowBackground">@color/black01_0D1117</item>
         <item name="android:includeFontPadding">false</item>
-
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">
+            @android:color/transparent
+        </item>
         <!-- statusBar -->
         <item name="android:statusBarColor">@color/black</item>
         <item name="android:windowLightStatusBar">false</item>
@@ -36,7 +38,7 @@
 
     <!-- 캘린더뷰 폰트, 컬러 테마 -->
     <style name="CalendarTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
-        <item name="android:textAppearance">@style/text_sb14</item>
+        <item name="android:textAppearance">@style/text_sb16</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/mcv_text_date_dark</item>
     </style>

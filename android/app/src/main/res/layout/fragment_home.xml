@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_home_logo" />
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="@{@string/home_welcome_phrase(viewModel.userName)}"
-            android:textAppearance="@style/title_b20"
+            android:textAppearance="@style/title_sb22"
             android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="@id/iv_home_logo"
             app:layout_constraintTop_toBottomOf="@id/iv_home_logo" />
@@ -64,8 +64,7 @@
             app:isVisible="@{viewModel.studyExistence}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_home_title"
-            app:layout_constraintVertical_bias="0.0"
-            tools:layout_editor_absoluteX="0dp">
+            app:layout_constraintVertical_bias="0.0">
 
         </androidx.viewpager2.widget.ViewPager2>
 
