@@ -31,6 +31,7 @@ fun MemberResponseDto.toDomain(): Member = Member(
     nickname = this.nickname,
     successRate = this.successRate,
     profileImage = this.profileImage ?: "",
+    isDeleted = this.isDeleted,
 )
 
 fun RoundResponseDto.toDomain(): Round = Round(

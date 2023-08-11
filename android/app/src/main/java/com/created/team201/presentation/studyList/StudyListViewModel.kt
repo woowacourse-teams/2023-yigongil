@@ -61,7 +61,6 @@ class StudyListViewModel(
                     page++
                     return@launch
                 }
-                setNotFoundStudies()
             }.onFailure {
             }
         }

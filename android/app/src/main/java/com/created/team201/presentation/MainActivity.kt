@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.fragment.app.replace
 import com.created.team201.R
 import com.created.team201.databinding.ActivityMainBinding
 import com.created.team201.presentation.MainActivity.FragmentType.CHAT
@@ -30,28 +30,59 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
 
     private fun setBottomNavigationView() {
         binding.bnvMain.selectedItemId = R.id.menu_home
-        binding.bnvMain.setOnItemSelectedListener(::replaceFragment)
+        binding.bnvMain.setOnItemSelectedListener(::displayFragment)
     }
 
-    private fun replaceFragment(item: MenuItem): Boolean {
+    private fun displayFragment(item: MenuItem): Boolean {
         when (FragmentType.valueOf(item.itemId)) {
-            HOME -> replaceFragment<HomeFragment>()
-            STUDY_LIST -> replaceFragment<StudyListFragment>()
-            STUDY_MANAGE -> replaceFragment<StudyManageFragment>()
-            CHAT -> replaceFragment<ChatFragment>()
-            MY_PAGE -> replaceFragment<MyPageFragment>()
+            HOME -> showFragment(HOME)
+            STUDY_LIST -> showFragment(STUDY_LIST)
+            STUDY_MANAGE -> showFragment(STUDY_MANAGE)
+            CHAT -> showFragment(CHAT)
+            MY_PAGE -> showFragment(MY_PAGE)
         }
         return true
     }
 
-    private inline fun <reified T : Fragment> replaceFragment() {
+    private fun showFragment(type: FragmentType) {
+        val (fragment: Fragment, isCreated: Boolean) = findFragment(type) ?: createFragment(type)
+
         supportFragmentManager.commit {
-            replace<T>(R.id.fcv_main)
             setReorderingAllowed(true)
+
+            if (isCreated) add(R.id.fcv_main, fragment, type.name)
+
+            hideAllFragment()
+            show(fragment)
         }
     }
 
-    private enum class FragmentType(val resId: Int) {
+    private fun createFragment(type: FragmentType): Pair<Fragment, Boolean> {
+        val fragment = when (type) {
+            HOME -> HomeFragment()
+            STUDY_LIST -> StudyListFragment()
+            STUDY_MANAGE -> StudyManageFragment()
+            CHAT -> ChatFragment()
+            MY_PAGE -> MyPageFragment()
+        }
+        return Pair(fragment, true)
+    }
+
+    private fun findFragment(type: FragmentType): Pair<Fragment, Boolean>? {
+        val fragment = supportFragmentManager.findFragmentByTag(type.name) ?: return null
+        return Pair(fragment, false)
+    }
+
+    private fun hideAllFragment() {
+        supportFragmentManager.fragments.forEach { fragment ->
+            supportFragmentManager.commit {
+                hide(fragment)
+            }
+        }
+    }
+
+
+    private enum class FragmentType(@IdRes private val resId: Int) {
         HOME(R.id.menu_home),
         STUDY_LIST(R.id.menu_study_list),
         STUDY_MANAGE(R.id.menu_study_manage),
@@ -68,6 +99,8 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     }
 
     companion object {
-        fun getIntent(context: Context): Intent = Intent(context, MainActivity::class.java)
+        fun getIntent(context: Context): Intent = Intent(context, MainActivity::class.java).also {
+            it.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
     }
 }

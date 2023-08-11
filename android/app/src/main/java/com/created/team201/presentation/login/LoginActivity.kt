@@ -15,6 +15,8 @@ import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.login.LoginViewModel.State.FAIL
 import com.created.team201.presentation.login.LoginViewModel.State.IDLE
 import com.created.team201.presentation.login.LoginViewModel.State.SUCCESS
+import com.created.team201.presentation.onBoarding.OnBoardingActivity
+import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
 import com.created.team201.util.auth.CustomTabLauncherActivity
 import com.created.team201.util.auth.CustomTabLauncherActivity.Companion.GIT_OAUTH_TOKEN_KEY
 
@@ -25,13 +27,14 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
         super.onCreate(savedInstanceState)
 
         observeLoginState()
+        observeOnBoardingDoneState()
         setClickEventOnLoginButton()
     }
 
     private fun observeLoginState() {
         loginViewModel.signUpState.observe(this) { loginState ->
             when (loginState) {
-                SUCCESS -> navigateToMain()
+                SUCCESS -> loginViewModel.getIsOnboardingDone()
                 FAIL -> Toast.makeText(
                     this,
                     getString(R.string.login_fail_message),
@@ -43,8 +46,35 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
         }
     }
 
+    private fun observeOnBoardingDoneState() {
+        loginViewModel.onBoardingDoneState.observe(this) { onBoardingDoneState ->
+            when (onBoardingDoneState) {
+                is OnBoardingDoneState.Success -> {
+                    if (onBoardingDoneState.isDone) {
+                        navigateToMain()
+                        return@observe
+                    }
+                    navigateToOnBoarding()
+                }
+
+                OnBoardingDoneState.FAIL -> Toast.makeText(
+                    this,
+                    getString(R.string.login_onBoarding_fail_message),
+                    Toast.LENGTH_SHORT,
+                ).show()
+
+                OnBoardingDoneState.IDLE -> throw IllegalStateException()
+            }
+        }
+    }
+
     private fun navigateToMain() {
         startActivity(MainActivity.getIntent(this))
+        finish()
+    }
+
+    private fun navigateToOnBoarding() {
+        startActivity(OnBoardingActivity.getIntent(this))
         finish()
     }
 

@@ -25,6 +25,7 @@ fun StudyMemberResponseDto.toDomain(): StudyMember = StudyMember(
     nickname = nickname,
     profileImageUrl = profileImageUrl,
     isDone = isDone,
+    isDeleted = isDeleted,
 )
 
 fun CreateTodo.toRequestBody(): TodoCreateRequestDto = TodoCreateRequestDto(
