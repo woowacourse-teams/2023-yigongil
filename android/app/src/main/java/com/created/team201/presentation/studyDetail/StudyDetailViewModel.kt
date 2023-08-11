@@ -142,6 +142,7 @@ class StudyDetailViewModel private constructor(
             name = this.nickname,
             successRate = this.successRate.toInt(),
             tier = this.tier,
+            isDeleted = this.isDeleted,
         )
 
     private fun Role.toStudyDetailState(canStartStudy: Boolean): StudyDetailState = when (this) {

@@ -201,6 +201,7 @@
     <string name="report_content_hint">신고 내용을 입력해 주세요</string>
     <string name="report_calender_image_description">달력 날짜 선택</string>
     <string name="report_calender_selected_date_format">%d.%d.%d</string>
+    <string name="item_study_detail_deleted_user_description">탈퇴한 유저에요</string>
 
     <!-- 채팅 뷰 -->
     <string name="chat_no_chat">아직 준비중인 기능이에요!\n조금만 기다려주세요!</string>
