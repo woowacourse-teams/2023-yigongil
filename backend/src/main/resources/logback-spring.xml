@@ -1,4 +1,5 @@
 <configuration>
+
     <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>
     <property name="LOG_PATTERN"
       value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %green([%thread]) %highlight(%-5level) %cyan([%C.%M:%yellow(%L)]) - %msg%n"/>
@@ -20,6 +21,11 @@
             <appender-ref ref="FILE-ERROR"/>
             <appender-ref ref="FILE-WARN"/>
             <appender-ref ref="FILE-INFO"/>
+
+        </root>
+
+        <root level="ERROR">
+            <appender-ref ref="ASYNC_SLACK"/>
         </root>
     </springProfile>
 
@@ -31,6 +37,11 @@
             <appender-ref ref="FILE-ERROR"/>
             <appender-ref ref="FILE-WARN"/>
             <appender-ref ref="FILE-INFO"/>
+        </root>
+
+
+        <root level="ERROR">
+            <appender-ref ref="ASYNC_SLACK"/>
         </root>
     </springProfile>
 
