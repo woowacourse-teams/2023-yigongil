@@ -4,6 +4,7 @@ import com.created.team201.data.remote.request.TodoCreateRequestDto
 import com.created.team201.data.remote.request.TodoIsDoneRequestDto
 import com.created.team201.data.remote.request.TodoRequestDto
 import com.created.team201.data.remote.request.TodoUpdateRequestDto
+import com.created.team201.data.remote.response.MyPageResponseDto
 import com.created.team201.data.remote.response.RoundDetailResponseDto
 import com.created.team201.data.remote.response.StudyDetailResponseDto
 import retrofit2.Response
@@ -69,4 +70,7 @@ interface StudyManagementService {
         @Path("roundId") roundId: Long,
         @Path("todoId") todoId: Long,
     ): Response<Unit?>
+
+    @GET("/v1/members/my")
+    suspend fun getMyProfile(): MyPageResponseDto
 }

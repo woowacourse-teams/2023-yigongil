@@ -61,6 +61,8 @@
     <string name="study_manage_title">스터디 관리</string>
     <string name="study_manage_joined_tab">참여한 스터디</string>
     <string name="study_manage_opened_tab">개설한 스터디</string>
+    <string name="study_manage_joined_tab_no_study">참여한 스터디가 없습니다 !</string>
+    <string name="study_manage_opened_tab_no_study">개설한 스터디가 없습니다 !</string>
 
     <!-- 아이콘 텍스트 버튼 커스텀 뷰 -->
     <string name="icon_text_button_name_people_count">인원 수</string>

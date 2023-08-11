@@ -1,6 +1,7 @@
 package com.created.domain.repository
 
 import com.created.domain.model.Member
+import com.created.domain.model.Profile
 import com.created.domain.model.StudyDetail
 
 interface StudyDetailRepository {
@@ -14,4 +15,6 @@ interface StudyDetailRepository {
     suspend fun startStudy(studyId: Long)
 
     suspend fun acceptApplicant(studyId: Long, memberId: Long)
+
+    suspend fun getMyProfile(): Profile
 }

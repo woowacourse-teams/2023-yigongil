@@ -2,7 +2,9 @@ package com.created.team201.presentation.studyManage.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.LinearLayout.GONE
 import android.widget.LinearLayout.VERTICAL
+import android.widget.LinearLayout.VISIBLE
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
@@ -42,5 +44,13 @@ class StudyManageViewHolder(
 
     fun bind(item: MyStudiesUiModel) {
         studyListAdapter.submitList(item.studySummariesUiModel)
+        when (item.studySummariesUiModel.isEmpty()) {
+            true -> {
+                binding.tvStudyManageNoStudy.visibility = VISIBLE
+                binding.tvStudyManageNoStudy.setText(item.status.notice)
+            }
+
+            false -> binding.tvStudyManageNoStudy.visibility = GONE
+        }
     }
 }

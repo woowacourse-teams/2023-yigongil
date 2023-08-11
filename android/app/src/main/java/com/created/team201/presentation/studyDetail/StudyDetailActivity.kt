@@ -145,6 +145,9 @@ class StudyDetailActivity :
     }
 
     override fun onUserClick(memberId: Long) {
+        if (studyDetailViewModel.myProfile.id == memberId) {
+            return
+        }
         startActivity(ProfileActivity.getIntent(this, memberId))
     }
 

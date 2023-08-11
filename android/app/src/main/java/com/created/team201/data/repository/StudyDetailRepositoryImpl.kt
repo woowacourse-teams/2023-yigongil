@@ -1,6 +1,7 @@
 package com.created.team201.data.repository
 
 import com.created.domain.model.Member
+import com.created.domain.model.Profile
 import com.created.domain.model.StudyDetail
 import com.created.domain.repository.StudyDetailRepository
 import com.created.team201.data.datasource.remote.StudyDetailDataSource
@@ -27,5 +28,9 @@ class StudyDetailRepositoryImpl(
 
     override suspend fun acceptApplicant(studyId: Long, memberId: Long) {
         studyDetailDataSource.acceptApplicant(studyId, memberId)
+    }
+
+    override suspend fun getMyProfile(): Profile {
+        return studyDetailDataSource.getMyProfile().toDomain()
     }
 }

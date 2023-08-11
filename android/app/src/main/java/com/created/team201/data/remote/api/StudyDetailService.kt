@@ -1,6 +1,7 @@
 package com.created.team201.data.remote.api
 
 import com.created.team201.data.remote.response.MemberResponseDto
+import com.created.team201.data.remote.response.MyPageResponseDto
 import com.created.team201.data.remote.response.StudyDetailResponseDto
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -33,4 +34,7 @@ interface StudyDetailService {
         @Path("studyId") studyId: Long,
         @Path("memberId") memberId: Long,
     )
+
+    @GET("/v1/members/my")
+    suspend fun getMyProfile(): MyPageResponseDto
 }
