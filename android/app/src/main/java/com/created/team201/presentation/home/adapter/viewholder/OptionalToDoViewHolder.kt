@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.databinding.ItemHomeOptionalTodoBinding
 import com.created.team201.presentation.home.HomeClickListener
-import com.created.team201.presentation.home.model.TodoUiModel
+import com.created.team201.presentation.home.model.TodoWithRoundIdUiModel
 
 class OptionalToDoViewHolder(
     onClick: HomeClickListener,
@@ -16,7 +16,7 @@ class OptionalToDoViewHolder(
         binding.onClick = onClick
     }
 
-    fun bind(todoUiModel: TodoUiModel) {
+    fun bind(todoUiModel: TodoWithRoundIdUiModel) {
         binding.todoUiModel = todoUiModel
     }
 

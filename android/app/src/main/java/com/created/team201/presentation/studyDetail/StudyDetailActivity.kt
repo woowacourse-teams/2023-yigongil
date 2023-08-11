@@ -156,12 +156,7 @@ class StudyDetailActivity :
         studyDetailViewModel.isStartStudy.observe(this) { isStartStudy ->
             if (isStartStudy) {
                 startActivity(
-                    StudyManagementActivity.getIntent(
-                        this,
-                        studyId,
-                        FIRST_PAGE,
-                        ROLE_INDEX_STUDY_MASTER,
-                    ),
+                    StudyManagementActivity.getIntent(this, studyId, ROLE_INDEX_STUDY_MASTER),
                 )
                 finish()
             }
@@ -178,7 +173,6 @@ class StudyDetailActivity :
         Toast.makeText(this, getString(stringRes), Toast.LENGTH_SHORT).show()
 
     companion object {
-        private const val FIRST_PAGE = 1
         private const val ROLE_INDEX_STUDY_MASTER = 0
         private const val NON_EXISTENCE_STUDY_ID = 0L
         private const val STRING_LAST_INDEX = 1

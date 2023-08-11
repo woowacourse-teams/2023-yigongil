@@ -1,7 +1,8 @@
 package com.created.team201.data.datasource.remote
 
 import com.created.team201.data.remote.api.HomeService
-import com.created.team201.data.remote.request.TodoRequestDto
+import com.created.team201.data.remote.request.NecessaryTodoRequestDto
+import com.created.team201.data.remote.request.TodoUpdateRequestDto
 import com.created.team201.data.remote.response.UserStudiesResponseDto
 
 class HomeDataSourceImpl(
@@ -11,11 +12,18 @@ class HomeDataSourceImpl(
         return homeService.getUserStudies()
     }
 
-    override suspend fun patchTodo(studyId: Int, todoId: Long, todoRequestDto: TodoRequestDto) {
-        homeService.patchTodo(
-            studyId = studyId,
-            todoId = todoId,
-            todoRequestDto = todoRequestDto,
-        )
+    override suspend fun patchNecessaryTodo(
+        roundId: Int,
+        necessaryTodoRequestDto: NecessaryTodoRequestDto
+    ) {
+        homeService.patchNecessaryTodo(roundId, necessaryTodoRequestDto)
+    }
+
+    override suspend fun patchOptionalTodo(
+        roundId: Int,
+        todoId: Long,
+        todoUpdateRequestDto: TodoUpdateRequestDto
+    ) {
+        homeService.patchOptionalTodo(roundId, todoId, todoUpdateRequestDto)
     }
 }

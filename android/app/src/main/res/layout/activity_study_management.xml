@@ -38,67 +38,89 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_study_management" />
 
-        <ImageView
-            android:id="@+id/iv_study_management_previous_button"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginEnd="26dp"
-            android:contentDescription="@string/study_management_previous_button_description"
-            android:src="@drawable/ic_selector_previous_button"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_study_management_round"
-            app:layout_constraintEnd_toStartOf="@+id/tv_study_management_round"
-            app:layout_constraintTop_toTopOf="@+id/tv_study_management_round" />
-
-        <TextView
-            android:id="@+id/tv_study_management_round"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:text="@{@string/study_management_round(viewModel.currentRound)}"
-            android:textAppearance="@style/subtitle_r15"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_study_management_tool_bar_divider"
-            tools:text="1회차" />
-
-
-        <ImageView
-            android:id="@+id/iv_study_management_next_button"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="26dp"
-            android:contentDescription="@string/study_management_next_button_description"
-            android:src="@drawable/ic_selector_next_button"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_study_management_round"
-            app:layout_constraintStart_toEndOf="@+id/tv_study_management_round"
-            app:layout_constraintTop_toTopOf="@+id/tv_study_management_round" />
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vp_study_management"
-            android:layout_width="0dp"
+        <include
+            android:id="@+id/skeleton_study_management"
+            layout="@layout/item_study_management_skeleton"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="32dp"
-            app:layout_constraintBottom_toTopOf="@id/tv_study_management_end_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_study_management_previous_button" />
-
-        <TextView
-            android:id="@+id/tv_study_management_end_button"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="32dp"
-            android:background="@drawable/bg_rectangle_radius_10dp_green01"
-            android:gravity="center"
-            android:text="@{viewModel.state.buttonText}"
-            android:textAppearance="@style/button_sb18"
-            android:textColor="@color/green09_799E82"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="그만두기" />
+            app:layout_constraintTop_toBottomOf="@id/view_study_management_tool_bar_divider" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_item_study_management"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:isGone="@{!viewModel.isStudyRoundsLoaded()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_study_management_tool_bar_divider">
+
+            <ImageView
+                android:id="@+id/iv_study_management_previous_button"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="26dp"
+                android:contentDescription="@string/study_management_previous_button_description"
+                android:src="@drawable/ic_selector_previous_button"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_study_management_round"
+                app:layout_constraintEnd_toStartOf="@+id/tv_study_management_round"
+                app:layout_constraintTop_toTopOf="@+id/tv_study_management_round" />
+
+            <TextView
+                android:id="@+id/tv_study_management_round"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:text="@{@string/study_management_round(viewModel.currentRound)}"
+                android:textAppearance="@style/subtitle_r15"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="1회차" />
+
+
+            <ImageView
+                android:id="@+id/iv_study_management_next_button"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="26dp"
+                android:contentDescription="@string/study_management_next_button_description"
+                android:src="@drawable/ic_selector_next_button"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_study_management_round"
+                app:layout_constraintStart_toEndOf="@+id/tv_study_management_round"
+                app:layout_constraintTop_toTopOf="@+id/tv_study_management_round" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_study_management"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="32dp"
+                app:layout_constraintBottom_toTopOf="@id/tv_study_management_end_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_study_management_previous_button" />
+
+            <TextView
+                android:id="@+id/tv_study_management_end_button"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/bg_rectangle_radius_10dp_green01"
+                android:gravity="center"
+                android:text="@{viewModel.state.buttonText}"
+                android:textAppearance="@style/button_sb18"
+                android:textColor="@color/green09_799E82"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="그만두기" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TodoCreateRequestDto(
-    @SerialName("content")
-    val content: String,
+data class NecessaryTodoRequestDto(
+    @SerialName("isDone")
+    val isDone: Boolean
 )
