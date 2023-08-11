@@ -45,7 +45,6 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
     override fun onResume() {
         super.onResume()
-
         studyListViewModel.initPage()
     }
 
@@ -83,7 +82,6 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         searchView.setOnCloseListener {
             searchItem.collapseActionView()
             studyListViewModel.changeSearchMode(false)
-            studyListViewModel.refreshPage()
             true
         }
     }
@@ -172,8 +170,26 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
+                var totalItemHeight = 0
+                var recyclerViewHeight = 0
+                val layoutManager = binding.rvStudyListList.layoutManager
+                val adapter = binding.rvStudyListList.adapter
 
-                if (binding.srlStudyList.isRefreshing || binding.pbStudyListLoad.visibility == VISIBLE) {
+                if (adapter != null && layoutManager != null) {
+                    for (i in 0 until adapter.itemCount) {
+                        val itemView = layoutManager.findViewByPosition(i)
+                        itemView?.let {
+                            totalItemHeight += it.height
+                        }
+                    }
+
+                    recyclerViewHeight = recyclerView.height
+                }
+
+                if (binding.srlStudyList.isRefreshing ||
+                    binding.pbStudyListLoad.visibility == VISIBLE ||
+                    totalItemHeight < recyclerViewHeight
+                ) {
                     return
                 }
 
