@@ -277,4 +277,8 @@ public class Study extends BaseEntity {
     public boolean isRecruiting() {
         return this.processingStatus == ProcessingStatus.RECRUITING;
     }
+
+    public boolean isEnd() {
+        return this.processingStatus == ProcessingStatus.END;
+    }
 }
