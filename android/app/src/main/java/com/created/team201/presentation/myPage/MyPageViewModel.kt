@@ -22,11 +22,7 @@ class MyPageViewModel(
     val profile: LiveData<ProfileUiModel>
         get() = _profile
 
-    init {
-        updateProfile()
-    }
-
-    private fun updateProfile() {
+    fun updateProfile() {
         viewModelScope.launch {
             myPageRepository.getMyPage()
                 .onSuccess {

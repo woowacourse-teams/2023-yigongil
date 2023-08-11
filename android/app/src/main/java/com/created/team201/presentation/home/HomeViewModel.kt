@@ -12,11 +12,10 @@ import com.created.domain.model.Study
 import com.created.domain.model.Todo
 import com.created.domain.repository.HomeRepository
 import com.created.team201.data.datasource.remote.HomeDataSourceImpl
-import com.created.team201.data.mapper.toDomain
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.HomeRepositoryImpl
 import com.created.team201.presentation.home.model.StudyUiModel
-import com.created.team201.presentation.home.model.TodoUiModel
+import com.created.team201.presentation.home.model.TodoWithRoundIdUiModel
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -28,9 +27,8 @@ class HomeViewModel(
     private val _userStudies: MutableLiveData<List<StudyUiModel>> = MutableLiveData()
     val userStudies: LiveData<List<StudyUiModel>> get() = _userStudies
 
-    init {
-        updateUserStudies()
-    }
+    private val _isStudyExistence: MutableLiveData<Boolean> = MutableLiveData(false)
+    val isStudyExistence: LiveData<Boolean> get() = _isStudyExistence
 
     fun updateUserStudies() {
         viewModelScope.launch {
@@ -38,61 +36,44 @@ class HomeViewModel(
                 homeRepository.getUserStudies()
             }.onSuccess { result ->
                 _userName.value = result.userName
-                _userStudies.value = result.studies.map { it.toUiModel() }
+                _userStudies.value = result.studies.map { it.toUiModel() }.sortedBy { it.leftDays }
+                if (!userStudies.value.isNullOrEmpty()) _isStudyExistence.value = true
             }.onFailure {
                 Log.d("ERROR", it.toString())
             }
         }
     }
 
-    fun updateTodo(todoId: Long, isDone: Boolean) {
-        // 투두 항목이 비어 있을 경우 체크 불가
-        // 투두 항목이 비어 있을 경우, 체크 버튼 숨김
-        // 디데이순 스터디 카드 출력
-        val studies = userStudies.value ?: throw IllegalArgumentException()
-        val isNecessary = studies.any { it.necessaryTodo.todoId == todoId }
-        val study: StudyUiModel
-        val todo: TodoUiModel
+    fun updateNecessaryTodo(todo: TodoWithRoundIdUiModel, isDone: Boolean) {
+        updateNecessaryTodoCheck(todo.todoId, isDone)
 
-        when (isNecessary) {
-            true -> {
-                updateNecessaryTodoCheck(studies, todoId, isDone)
-                study = studies.find { it.necessaryTodo.todoId == todoId }!!
-                todo = study.necessaryTodo
-            }
-
-            false -> {
-                updateOptionalTodoCheck(studies, todoId, isDone)
-                study = studies.find { it.optionalTodos.any { it.todoId == todoId } }!!
-                todo = study.optionalTodos.find { it.todoId == todoId }!!
-            }
-        }
-
-        patchTodo(todo, study, isNecessary)
-    }
-
-    private fun patchTodo(todo: TodoUiModel, study: StudyUiModel, isNecessary: Boolean) {
         viewModelScope.launch {
-            runCatching {
-                homeRepository.patchTodo(todo.toDomain(), study.studyId, isNecessary)
-            }.onSuccess { result ->
-                Log.d("투두 통신 성공", "투두 통신 성공")
-            }.onFailure {
-                Log.d("투두 에러", it.message.toString())
-            }
+            homeRepository.patchNecessaryTodo(todo.roundId, isDone)
+                .onSuccess { }
+                .onFailure { }
         }
     }
 
-    private fun updateNecessaryTodoCheck(studies: List<StudyUiModel>, id: Long, isDone: Boolean) {
-        _userStudies.value = studies.map { studyUiModel ->
+    fun updateOptionalTodo(todo: TodoWithRoundIdUiModel, isDone: Boolean) {
+        updateOptionalTodoCheck(todo.todoId, isDone)
+
+        viewModelScope.launch {
+            homeRepository.patchOptionalTodo(todo.toDomain(isDone), todo.roundId)
+                .onSuccess { }
+                .onFailure { }
+        }
+    }
+
+    private fun updateNecessaryTodoCheck(id: Long, isDone: Boolean) {
+        _userStudies.value = userStudies.value?.map { studyUiModel ->
             studyUiModel.takeIf { it.necessaryTodo.todoId != id } ?: studyUiModel.copy(
                 necessaryTodo = studyUiModel.necessaryTodo.copy(isDone = isDone),
             )
         }
     }
 
-    private fun updateOptionalTodoCheck(studies: List<StudyUiModel>, id: Long, isDone: Boolean) {
-        _userStudies.value = studies.map { studyUiModel ->
+    private fun updateOptionalTodoCheck(id: Long, isDone: Boolean) {
+        _userStudies.value = userStudies.value?.map { studyUiModel ->
             studyUiModel.takeIf { todoUiModel -> !todoUiModel.optionalTodos.any { it.todoId == id } }
                 ?: studyUiModel.copy(
                     optionalTodos = studyUiModel.optionalTodos.map {
@@ -104,19 +85,27 @@ class HomeViewModel(
 
     private fun Study.toUiModel(): StudyUiModel =
         StudyUiModel(
-            studyId = this.studyId.toLong(),
-            studyName = this.studyName,
-            progressRate = this.progressRate,
-            leftDays = this.leftDays,
-            nextDate = this.nextDate,
-            necessaryTodo = this.necessaryTodo.toUiModel(),
-            optionalTodos = this.optionalTodo.map { it.toUiModel() },
+            studyId = studyId.toLong(),
+            studyName = studyName,
+            progressRate = progressRate,
+            leftDays = leftDays,
+            nextDate = nextDate,
+            necessaryTodo = necessaryTodo.toUiModel(roundId),
+            optionalTodos = optionalTodo.map { it.toUiModel(roundId) },
         )
 
-    private fun Todo.toUiModel(): TodoUiModel = TodoUiModel(
-        todoId = this.todoId,
-        content = this.content ?: "",
-        isDone = this.isDone,
+    private fun Todo.toUiModel(roundId: Int): TodoWithRoundIdUiModel = TodoWithRoundIdUiModel(
+        todoId = todoId,
+        content = content ?: "",
+        isDone = isDone,
+        roundId = roundId,
+    )
+
+    private fun TodoWithRoundIdUiModel.toDomain(isDone: Boolean): Todo = Todo(
+        todoId = todoId,
+        content = content,
+        isDone = isDone,
+
     )
 
     companion object {

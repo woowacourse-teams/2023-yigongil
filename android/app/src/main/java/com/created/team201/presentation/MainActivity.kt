@@ -50,9 +50,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         supportFragmentManager.commit {
             setReorderingAllowed(true)
 
-            if (isCreated) {
-                add(R.id.fcv_main, fragment, type.name)
-            }
+            if (isCreated) add(R.id.fcv_main, fragment, type.name)
 
             hideAllFragment()
             show(fragment)
