@@ -46,7 +46,7 @@ class OnBoardingViewModel(
 
     private val _isEnableSave: MediatorLiveData<Boolean> =
         MediatorLiveData<Boolean>().apply {
-            addSourceList(nickname, nicknameState) {
+            addSourceList(nickname, nicknameState, introduction) {
                 isInitializeOnBoarding()
             }
         }
@@ -99,6 +99,7 @@ class OnBoardingViewModel(
                         _onBoardingState.value = State.SUCCESS
                     }.onFailure {
                         _onBoardingState.value = State.FAIL
+                        isSaveOnBoarding = false
                     }
             }
         }
@@ -128,7 +129,9 @@ class OnBoardingViewModel(
     }, LengthFilter(MAX_NICKNAME_LENGTH))
 
     private fun isInitializeOnBoarding(): Boolean =
-        nickname.value.nickname.isBlank().not() && nicknameState.value == NicknameState.AVAILABLE
+        nickname.value.nickname.isBlank().not() &&
+                nicknameState.value == NicknameState.AVAILABLE &&
+                introduction.value.isBlank().not()
 
     private fun NicknameUiModel.toDomain(): Nickname = Nickname(nickname = nickname)
 

@@ -93,9 +93,10 @@ class OnBoardingViewModelTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun `닉네임이 공백이 아니고, 닉네임 중복 검증을 통과하면 버튼이 활성화 된다`() {
+    fun `닉네임이 공백이 아니고, 닉네임 중복 검증을 통과하고, 소개가 공백이 아니면 버튼이 활성화 된다`() {
         // given
         viewModel.setNickname(OnBoardingFixture.nickname.nickname)
+        viewModel.setIntroduction(OnBoardingFixture.introduction)
 
         coEvery {
             repository.getAvailableNickname(OnBoardingFixture.nickname)
