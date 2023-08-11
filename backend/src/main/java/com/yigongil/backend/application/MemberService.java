@@ -3,6 +3,7 @@ package com.yigongil.backend.application;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.domain.member.Nickname;
+import com.yigongil.backend.domain.report.ReportRepository;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
@@ -20,23 +21,24 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final StudyMemberRepository studyMemberRepository;
+    private final ReportRepository reportRepository;
     private final StudyService studyService;
 
     public MemberService(
             MemberRepository memberRepository,
             StudyMemberRepository studyMemberRepository,
+            ReportRepository reportRepository,
             StudyService studyService
     ) {
         this.memberRepository = memberRepository;
         this.studyMemberRepository = studyMemberRepository;
+        this.reportRepository = reportRepository;
         this.studyService = studyService;
     }
 
     @Transactional(readOnly = true)
     public ProfileResponse findById(Long id) {
-        Member member = memberRepository.findById(id)
-                                        .orElseThrow(() -> new MemberNotFoundException(
-                                                "해당 멤버가 존재하지 않습니다.", String.valueOf(id)));
+        Member member = findMemberById(id);
 
         List<FinishedStudyResponse> finishedStudyResponses =
                 studyMemberRepository.findAllByMemberId(member.getId())
@@ -57,6 +59,14 @@ public class MemberService {
                 member.getIntroduction(),
                 finishedStudyResponses
         );
+    }
+
+    public Member findMemberById(Long id) {
+        return memberRepository.findById(id)
+                               .orElseThrow(() -> new MemberNotFoundException(
+                                               "해당 멤버가 존재하지 않습니다.", String.valueOf(id)
+                                       )
+                               );
     }
 
     private FinishedStudyResponse createFinishedStudyResponse(StudyMember studyMember) {
@@ -90,6 +100,11 @@ public class MemberService {
     @Transactional
     public void update(Member member, ProfileUpdateRequest request) {
         member.updateProfile(request.nickname(), request.introduction());
+    }
+
+    @Transactional
+    public void delete(Member member) {
+        member.exit();
     }
 
     @Transactional(readOnly = true)

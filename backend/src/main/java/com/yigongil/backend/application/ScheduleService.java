@@ -1,6 +1,6 @@
 package com.yigongil.backend.application;
 
-import com.yigongil.backend.domain.round.DatePublisher;
+import java.time.LocalDate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,16 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class ScheduleService {
 
     private final StudyService studyService;
-    private final DatePublisher datePublisher;
 
-    public ScheduleService(StudyService studyService, DatePublisher datePublisher) {
+    public ScheduleService(StudyService studyService) {
         this.studyService = studyService;
-        this.datePublisher = datePublisher;
     }
 
-    @Scheduled(cron = "${schedules.round-update}")
+    @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void proceedRoundPerDay() {
-        studyService.proceedRound(datePublisher.publish());
+        studyService.proceedRound(LocalDate.now());
     }
 }
