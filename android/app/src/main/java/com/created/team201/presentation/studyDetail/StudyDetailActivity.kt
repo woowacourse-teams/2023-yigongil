@@ -3,6 +3,7 @@ package com.created.team201.presentation.studyDetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -94,9 +95,17 @@ class StudyDetailActivity :
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_study_detail, menu)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            finish()
+        when (item.itemId) {
+            android.R.id.home -> finish()
+            R.id.menu_study_detail_report -> {
+                showToast(R.string.study_detail_not_yet)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
