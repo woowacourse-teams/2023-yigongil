@@ -62,7 +62,7 @@ class StudyManagementViewHolder(
             setEditNecessaryTodo()
         }
 
-        binding.tvItemStudyManagementEditOptinalTodo.setOnClickListener {
+        binding.tvItemStudyManagementEditOptionalTodo.setOnClickListener {
             setEditOptionalTodos()
         }
 
@@ -116,7 +116,7 @@ class StudyManagementViewHolder(
                     it.copy(viewType = OptionalTodoViewType.DISPLAY.viewType)
                 }
                 studyManagementOptionalTodoAdapter.submitList(updatedOptionalTodos)
-                binding.tvItemStudyManagementEditOptinalTodo.setText(R.string.study_management_edit_todo)
+                binding.tvItemStudyManagementEditOptionalTodo.setText(R.string.study_management_edit_todo)
             }
 
             OPTIONAL_TODO_EDIT -> {
@@ -125,7 +125,7 @@ class StudyManagementViewHolder(
                 }
                 updatedOptionalTodoUiModels = mutableListOf()
                 studyManagementOptionalTodoAdapter.submitList(updatedOptionalTodos)
-                binding.tvItemStudyManagementEditOptinalTodo.setText(R.string.study_management_edit_todo_done)
+                binding.tvItemStudyManagementEditOptionalTodo.setText(R.string.study_management_edit_todo_done)
             }
 
             else -> return
