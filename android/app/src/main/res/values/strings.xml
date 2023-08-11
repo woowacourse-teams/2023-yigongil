@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Team201</string>
+    <string name="app_name">201\nCreated</string>
 
     <!-- 툴바 공통 -->
     <string name="toolbar_back_text">뒤로가기</string>
@@ -8,6 +8,7 @@
     <string name="login_guide">로그인 후 이용이 가능합니다.</string>
     <string name="login_github_guide">깃허브로 시작하기</string>
     <string name="login_fail_message">로그인에 실패하였습니다.</string>
+    <string name="login_onBoarding_fail_message">내 소개 불러오기에 실패했습니다</string>
 
     <!-- 온보딩 뷰 -->
     <string name="onBoarding_title_text">나에 대해 소개해주세요!</string>
@@ -22,6 +23,7 @@
     <string name="onBoarding_unAvailable_nickname">닉네임은 2~8자 한글, 영문, 숫자, 언더바로 구성되어야합니다</string>
     <string name="onBoarding_available_nickname">사용가능한 닉네임입니다</string>
     <string name="onBoarding_duplicate_nickname">중복된 닉네임입니다</string>
+    <string name="onBoarding_toast_fail">소개 저장에 실패했습니다</string>
 
     <!--메인 뷰-->
     <string name="main_ic_home">홈</string>
@@ -51,6 +53,7 @@
     <string name="study_list_processing_date">시작일</string>
     <string name="study_list_item_date_format">일</string>
     <string name="study_list_item_week_format">주</string>
+    <string name="study_list_not_found">찾으시는 스터디가 없어요</string>
 
     <!--스터디 관리 탭-->
     <string name="study_manage_title">스터디 관리</string>
@@ -175,6 +178,16 @@
     <string name="setting_item_account_title">계정 관리</string>
     <string name="setting_item_policy">정책 및 약관</string>
     <string name="setting_item_logout">로그아웃</string>
+
+    <!-- 설정뷰 - 다이얼로그 -->
+    <string name="setting_dialog_logout_title">로그아웃</string>
+    <string name="setting_dialog_logout_content">정말로 로그아웃 하시겠어요?</string>
+    <string name="setting_dialog_withdraw_account_title">정말 탈퇴하시나요?</string>
+    <string name="setting_dialog_withdraw_account_content">서비스를 탈퇴하시면 스터디 이력, 업적 배지를 비롯한 모든 회원 정보가 삭제되며 다시 복구할 수 없습니다.</string>
+    <string name="setting_dialog_toast_withdraw_account_fail">서비스 탈퇴에 실패했습니다</string>
+    <string name="setting_dialog_btn_cancel_text">취소</string>
+    <string name="setting_dialog_btn_ok_text">예</string>
+    <string name="setting_toast_withdraw_account_success">회원 탈퇴가 완료되었습니다</string>
 
     <!-- 계정 관리 뷰 -->
     <string name="accountSetting_toolbar_title">계정 관리</string>
