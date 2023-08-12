@@ -4,7 +4,8 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.yigongil.backend.config.oauth.JwtTokenProvider;
-import com.yigongil.backend.request.ReportCreateRequest;
+import com.yigongil.backend.request.MemberReportCreateRequest;
+import com.yigongil.backend.request.StudyReportCreateRequest;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -25,14 +26,14 @@ public class ReportSteps {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    @Given("피신고자-{string}, 신고 제목-{string}, 내용-{string}, 문제발생일-{string}일 전으로 신고 정보를 작성한다.")
-    public void 신고_폼_작성(String reportedMember, String title, String content, String days) {
+    @Given("피신고자-{string}, 신고 제목-{string}, 내용-{string}, 문제발생일-{string}일 전으로 멤버 신고 정보를 작성한다.")
+    public void 멤버_신고_폼_작성(String reportedMember, String title, String content, String days) {
         String reportedMemberToken = (String) sharedContext.getParameter(reportedMember);
         Long reportedMemberId = jwtTokenProvider.parseToken(reportedMemberToken);
 
         LocalDate problemOccuredAt = LocalDate.now().minusDays(Long.parseLong(days));
 
-        ReportCreateRequest request = new ReportCreateRequest(
+        MemberReportCreateRequest request = new MemberReportCreateRequest(
                 reportedMemberId,
                 title,
                 content,
@@ -41,17 +42,46 @@ public class ReportSteps {
         sharedContext.setParameter(title, request);
     }
 
-    @When("{string}가 제목이 {string}인 신고 정보를 통해 신고 요청을 한다.")
+    @Given("신고 스터디 이름-{string}, 신고 제목-{string}, 내용-{string}, 문제발생일-{string}일 전으로 스터디 신고 정보를 작성한다.")
+    public void 스터디_신고_폼_작성(String reportedStudy, String title, String content, String days) {
+        Long reportedStudyId = Long.valueOf((String) sharedContext.getParameter(reportedStudy));
+        LocalDate problemOccuredAt = LocalDate.now().minusDays(Long.parseLong(days));
+
+        StudyReportCreateRequest request = new StudyReportCreateRequest(
+                reportedStudyId,
+                title,
+                content,
+                problemOccuredAt
+        );
+        sharedContext.setParameter(title, request);
+    }
+
+    @When("{string}가 제목이 {string}인 신고 정보를 통해 멤버 신고 요청을 한다.")
     public void 유저_신고(String reporter, String reportTitle) {
         String reporterToken = (String) sharedContext.getParameter(reporter);
-        ReportCreateRequest request = (ReportCreateRequest) sharedContext.getParameter(reportTitle);
+        MemberReportCreateRequest request = (MemberReportCreateRequest) sharedContext.getParameter(reportTitle);
 
         sharedContext.setResponse(given().log().all()
                                          .header(HttpHeaders.AUTHORIZATION, reporterToken)
                                          .contentType(MediaType.APPLICATION_JSON_VALUE)
                                          .body(request)
                                          .when()
-                                         .post("/v1/reports")
+                                         .post("/v1/reports/members")
+                                         .then().log().all()
+                                         .extract());
+    }
+
+    @When("{string}가 제목이 {string}인 신고 정보를 통해 스터디 신고 요청을 한다.")
+    public void 스터디_신고(String reporter, String reportTitle) {
+        String reporterToken = (String) sharedContext.getParameter(reporter);
+        StudyReportCreateRequest request = (StudyReportCreateRequest) sharedContext.getParameter(reportTitle);
+
+        sharedContext.setResponse(given().log().all()
+                                         .header(HttpHeaders.AUTHORIZATION, reporterToken)
+                                         .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                         .body(request)
+                                         .when()
+                                         .post("/v1/reports/studies")
                                          .then().log().all()
                                          .extract());
     }

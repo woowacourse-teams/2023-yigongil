@@ -43,6 +43,9 @@ public class DatabaseCleaner {
         entityManager.createNativeQuery("set foreign_key_checks = 0").executeUpdate();
 
         for (String table : tables) {
+            if (table.equals("study_report") || table.equals("member_report")) {
+                continue;
+            }
             entityManager.createNativeQuery("truncate table " + table).executeUpdate();
         }
 
