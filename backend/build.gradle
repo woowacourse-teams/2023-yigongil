@@ -61,6 +61,9 @@ dependencies {
     // slack alert
     implementation 'com.slack.api:slack-api-client:1.30.0'
     implementation 'com.github.maricn:logback-slack-appender:1.4.0'
+
+    // prometheus
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 }
 
 tasks.named('test') {
