@@ -19,13 +19,13 @@ class ReportTest {
         String invalidTitle = "민".repeat(31);
 
         // when
-        ThrowingCallable throwable = () -> Report.builder()
-                                                 .reporter(MemberFixture.김진우.toMember())
-                                                 .reported(MemberFixture.폰노이만.toMember())
-                                                 .title(invalidTitle)
-                                                 .content("내용")
-                                                 .problemOccurredAt(LocalDate.now())
-                                                 .build();
+        ThrowingCallable throwable = () -> MemberReport.builder()
+                                                       .reporter(MemberFixture.김진우.toMember())
+                                                       .reportedMember(MemberFixture.폰노이만.toMember())
+                                                       .title(invalidTitle)
+                                                       .content("내용")
+                                                       .problemOccurredAt(LocalDate.now())
+                                                       .build();
 
         // then
         assertThatThrownBy(throwable)
@@ -38,13 +38,13 @@ class ReportTest {
         String invalidContent = "민".repeat(201);
 
         // when
-        ThrowingCallable throwable = () -> Report.builder()
-                                                 .reporter(MemberFixture.김진우.toMember())
-                                                 .reported(MemberFixture.폰노이만.toMember())
-                                                 .title("제목")
-                                                 .content(invalidContent)
-                                                 .problemOccurredAt(LocalDate.now())
-                                                 .build();
+        ThrowingCallable throwable = () -> MemberReport.builder()
+                                                       .reporter(MemberFixture.김진우.toMember())
+                                                       .reportedMember(MemberFixture.폰노이만.toMember())
+                                                       .title("제목")
+                                                       .content(invalidContent)
+                                                       .problemOccurredAt(LocalDate.now())
+                                                       .build();
 
         // then
         assertThatThrownBy(throwable)
@@ -57,13 +57,13 @@ class ReportTest {
         Member member = MemberFixture.김진우.toMember();
 
         // when
-        ThrowingCallable throwable = () -> Report.builder()
-                                                 .reporter(member)
-                                                 .reported(member)
-                                                 .title("제목")
-                                                 .content("내용")
-                                                 .problemOccurredAt(LocalDate.now())
-                                                 .build();
+        ThrowingCallable throwable = () -> MemberReport.builder()
+                                                       .reporter(member)
+                                                       .reportedMember(member)
+                                                       .title("제목")
+                                                       .content("내용")
+                                                       .problemOccurredAt(LocalDate.now())
+                                                       .build();
 
         // then
         assertThatThrownBy(throwable)
