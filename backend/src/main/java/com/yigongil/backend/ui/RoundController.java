@@ -4,6 +4,7 @@ import com.yigongil.backend.application.RoundService;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.response.RoundResponse;
+import com.yigongil.backend.ui.doc.RoundApi;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/v1/studies/{studyId}/rounds/{roundId}")
 @RestController
-public class RoundController {
+public class RoundController implements RoundApi {
 
     private final RoundService roundService;
 

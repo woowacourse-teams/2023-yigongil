@@ -6,6 +6,15 @@ spring:
   profiles:
     active: local
 
+springdoc:
+  api-docs:
+    path: "/v1/api-docs"
+  swagger-ui:
+    disable-swagger-default-url: false
+    url: "/v1/api-docs"
+    path: "/v1/api"
+    display-request-duration: true
+
 ---
 
 spring:
@@ -47,3 +56,6 @@ oauth2:
 jwt:
   expiration: 60
   key: qkljwnqdjnqjkdnqdwkdkm31i4j1dasksmd
+
+slack:
+  webhook-url: http:locallocalclocal
