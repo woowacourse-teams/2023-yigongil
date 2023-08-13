@@ -11,7 +11,7 @@ public record MyProfileResponse(
         String githubId,
         @Schema(example = "http://jiwnkim.com/image")
         String profileImageUrl,
-        @Schema(example = "90.0134")
+        @Schema(example = "90.0")
         Double successRate,
         @Schema(example = "15")
         Integer successfulRoundCount,

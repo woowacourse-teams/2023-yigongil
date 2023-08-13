@@ -10,7 +10,7 @@ public record FinishedStudyResponse(
         String name,
         @Schema(example = "4")
         Integer averageTier,
-        @Schema(example = "23.08.12")
+        @Schema(example = "2023.08.12")
         LocalDate startAt,
         @Schema(example = "5")
         Integer totalRoundCount,

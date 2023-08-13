@@ -14,7 +14,7 @@ public record MyStudyResponse(
         String name,
         @Schema(example = "1")
         Integer averageTier,
-        @Schema(example = "23.08.30")
+        @Schema(example = "2023.08.30")
         LocalDate startAt,
         @Schema(example = "5")
         Integer totalRoundCount,

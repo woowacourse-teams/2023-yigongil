@@ -22,7 +22,7 @@ public record StudyDetailResponse(
         Long studyMasterId,
         @Schema(example = "1")
         Integer role,
-        @Schema(example = "23.08.12")
+        @Schema(example = "2023.08.12")
         LocalDate startAt,
         @Schema(example = "5")
         Integer totalRoundCount,

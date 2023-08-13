@@ -19,7 +19,7 @@ public record ReportCreateRequest(
         @NotBlank(message = "신고 내용이 공백입니다.")
         String content,
 
-        @Schema(description = "문제 발생일", example = "23.08.12")
+        @Schema(description = "문제 발생일", example = "2023.08.12")
         @PastOrPresent(message = "문제발생일이 미래의 날짜로 입력되었습니다.")
         LocalDate problemOccuredAt
 ) {

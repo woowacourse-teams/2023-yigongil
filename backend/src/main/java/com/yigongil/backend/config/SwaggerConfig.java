@@ -1,5 +1,7 @@
 package com.yigongil.backend.config;
 
+import static io.swagger.v3.oas.models.security.SecurityScheme.In.HEADER;
+
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -19,9 +21,11 @@ public class SwaggerConfig {
                 .version("v1");
 
         SecurityScheme securityScheme = new SecurityScheme()
+                .name("Authorization")
                 .type(Type.HTTP)
-                .scheme("Bearer")
-                .name("github");
+                .in(HEADER)
+                .bearerFormat("JWT")
+                .scheme("Bearer");
 
         Components components = new Components().addSecuritySchemes("token", securityScheme);
 

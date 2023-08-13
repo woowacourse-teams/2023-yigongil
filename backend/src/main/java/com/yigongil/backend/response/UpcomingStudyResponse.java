@@ -11,11 +11,12 @@ public record UpcomingStudyResponse(
         String name,
         @Schema(example = "2")
         Long roundId,
-        @Schema(example = "레스트 독스 마이그레이션")
+        
         TodoResponse necessaryTodo,
+
         @Schema(example = "3")
         Integer leftDays,
-        @Schema(example = "23.08.15")
+        @Schema(example = "2023.08.15")
         LocalDate nextDate,
         @Schema(example = "50")
         Integer memberNecessaryTodoProgressRate,

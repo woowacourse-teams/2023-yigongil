@@ -15,7 +15,7 @@ public record StudyUpdateRequest(
         @Positive(message = "스터디 멤버 정원은 음수일 수 없습니다.")
         Integer numberOfMaximumMembers,
 
-        @Schema(description = "예상 시작일", example = "24.9.10")
+        @Schema(description = "예상 시작일", example = "2024.9.10")
         @FutureOrPresent(message = "예상시작일은 과거로 설정할 수 없습니다.")
         LocalDate startAt,
 
