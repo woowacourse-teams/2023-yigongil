@@ -16,6 +16,9 @@ public class StudyReport extends Report {
     @ManyToOne(fetch = FetchType.LAZY)
     private Study reportedStudy;
 
+    protected StudyReport() {
+    }
+
     @Builder
     public StudyReport(
             Long id,

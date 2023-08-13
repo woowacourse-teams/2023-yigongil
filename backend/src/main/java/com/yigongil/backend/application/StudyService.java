@@ -132,8 +132,7 @@ public class StudyService {
 
     @Transactional(readOnly = true)
     public StudyDetailResponse findStudyDetailByStudyId(Member member, Long studyId) {
-        Study study = studyRepository.findById(studyId)
-                                     .orElseThrow(() -> new StudyNotFoundException("해당 스터디가 존재하지 않습니다", studyId));
+        Study study = findStudyById(studyId);
 
         List<Round> rounds = study.getRounds();
         Round currentRound = study.getCurrentRound();

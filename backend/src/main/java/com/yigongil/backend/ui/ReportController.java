@@ -22,7 +22,7 @@ public class ReportController {
         this.reportService = reportService;
     }
 
-    @PostMapping("/members")
+    @PostMapping("/by-member")
     public ResponseEntity<Void> createMemberReport(
             @Authorization Member reporter,
             @RequestBody @Valid MemberReportCreateRequest request
@@ -31,7 +31,7 @@ public class ReportController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/studies")
+    @PostMapping("/by-study")
     public ResponseEntity<Void> createStudyReport(
             @Authorization Member reporter,
             @RequestBody @Valid StudyReportCreateRequest request

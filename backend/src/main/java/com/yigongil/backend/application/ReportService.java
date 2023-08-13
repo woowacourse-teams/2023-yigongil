@@ -10,7 +10,6 @@ import com.yigongil.backend.request.StudyReportCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 @Service
 public class ReportService {
 
@@ -28,25 +27,31 @@ public class ReportService {
         this.studyService = studyService;
     }
 
+    @Transactional
     public void reportMember(Member reporter, MemberReportCreateRequest request) {
         Member reportedMember = memberService.findMemberById(request.reportedMemberId());
-        reportRepository.save(MemberReport.builder()
-                                                .reporter(reporter)
-                                                .reportedMember(reportedMember)
-                                                .title(request.title())
-                                                .content(request.content())
-                                                .problemOccurredAt(request.problemOccurredAt())
-                                                .build());
+        reportRepository.save(
+                MemberReport.builder()
+                            .reporter(reporter)
+                            .reportedMember(reportedMember)
+                            .title(request.title())
+                            .content(request.content())
+                            .problemOccurredAt(request.problemOccurredAt())
+                            .build()
+        );
     }
 
+    @Transactional
     public void reportStudy(Member reporter, StudyReportCreateRequest request) {
         Study reportedStudy = studyService.findStudyById(request.reportedStudyId());
-        reportRepository.save(StudyReport.builder()
-                                               .reporter(reporter)
-                                               .reportedStudy(reportedStudy)
-                                               .title(request.title())
-                                               .content(request.content())
-                                               .problemOccurredAt(request.problemOccurredAt())
-                                               .build());
+        reportRepository.save(
+                StudyReport.builder()
+                           .reporter(reporter)
+                           .reportedStudy(reportedStudy)
+                           .title(request.title())
+                           .content(request.content())
+                           .problemOccurredAt(request.problemOccurredAt())
+                           .build()
+        );
     }
 }
