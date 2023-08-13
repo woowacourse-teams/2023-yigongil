@@ -10,6 +10,7 @@ public record StudyReportCreateRequest(
         @Schema(description = "신고할 스터디 id", example = "1")
         @Positive(message = "신고할 스터디의 식별자는 양수만 입력 가능합니다.")
         Long reportedStudyId,
+
         @Schema(description = "신고 제목", example = "신고합니다")
         @NotBlank(message = "신고 제목이 공백입니다.")
         String title,
