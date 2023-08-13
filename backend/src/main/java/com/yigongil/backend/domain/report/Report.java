@@ -21,27 +21,27 @@ import lombok.Getter;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn
 @Entity
-public class Report extends BaseEntity {
+public abstract class Report extends BaseEntity {
 
-    static final int MIN_TITLE_LENGTH = 1;
-    static final int MAX_TITLE_LENGTH = 30;
-    static final int MAX_CONTENT_LENGTH = 200;
+    private static final int MIN_TITLE_LENGTH = 1;
+    private static final int MAX_TITLE_LENGTH = 30;
+    private static final int MAX_CONTENT_LENGTH = 200;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    Long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    Member reporter;
+    private Member reporter;
 
     @Column(nullable = false, length = 30)
-    String title;
+    private String title;
 
     @Column(nullable = false, length = 200)
-    String content;
+    private String content;
 
     @Column(nullable = false)
-    LocalDate problemOccurredAt;
+    private LocalDate problemOccurredAt;
 
     protected Report() {
     }
