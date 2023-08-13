@@ -8,6 +8,7 @@ import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
+import com.yigongil.backend.ui.doc.StudyApi;
 import java.net.URI;
 import java.util.List;
 import javax.validation.Valid;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/v1/studies")
 @RestController
-public class StudyController {
+public class StudyController implements StudyApi {
 
     private final StudyService studyService;
 

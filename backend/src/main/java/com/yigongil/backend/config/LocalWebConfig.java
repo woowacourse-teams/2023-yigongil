@@ -34,6 +34,9 @@ public class LocalWebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/v1/members/exists")
                 .excludePathPatterns("/v1/studies/recruiting/**")
                 .excludePathPatterns("/v1/fake/proceed")
+                .excludePathPatterns("/v1/api/**")
+                .excludePathPatterns("/v1/api-docs/**")
+                .excludePathPatterns("/v1/swagger-ui/**")
                 .order(2);
 
         registry.addInterceptor(loggingInterceptor)

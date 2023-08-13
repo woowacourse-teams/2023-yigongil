@@ -5,6 +5,7 @@ import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
+import com.yigongil.backend.ui.doc.TodoApi;
 import java.net.URI;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/v1/rounds/{roundId}")
 @RestController
-public class TodoController {
+public class TodoController implements TodoApi {
 
     private final TodoService todoService;
 

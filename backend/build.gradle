@@ -35,7 +35,7 @@ dependencies {
     testImplementation 'io.rest-assured:rest-assured:4.4.0'
 
     // swagger
-    implementation 'org.springdoc:springdoc-openapi-ui:1.6.15'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 
     // cucumber
     testImplementation 'io.cucumber:cucumber-java:7.12.1'

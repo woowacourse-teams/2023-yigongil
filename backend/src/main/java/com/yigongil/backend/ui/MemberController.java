@@ -8,6 +8,7 @@ import com.yigongil.backend.response.MyProfileResponse;
 import com.yigongil.backend.response.NicknameValidationResponse;
 import com.yigongil.backend.response.OnboardingCheckResponse;
 import com.yigongil.backend.response.ProfileResponse;
+import com.yigongil.backend.ui.doc.MemberApi;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/v1/members")
 @RestController
-public class MemberController {
+public class MemberController implements MemberApi {
 
     private final MemberService memberService;
 

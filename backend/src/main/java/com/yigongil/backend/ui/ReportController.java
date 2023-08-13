@@ -4,6 +4,7 @@ import com.yigongil.backend.application.ReportService;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.request.ReportCreateRequest;
+import com.yigongil.backend.ui.doc.ReportApi;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/v1/reports")
 @RestController
-public class ReportController {
+public class ReportController implements ReportApi {
 
     private final ReportService reportService;
 
