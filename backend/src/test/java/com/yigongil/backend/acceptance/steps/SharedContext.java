@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 @ScenarioScope
 public class SharedContext {
 
+    public static final String REFRESH_TOKEN_PARAMETER_KEY_SUFFIX = "Refresh Token";
+
     private ExtractableResponse<Response> response;
     private final Map<String, Object> parameters = new HashMap<>();
 

@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.application.MemberService;
 import com.yigongil.backend.config.LocalWebConfig;
 import com.yigongil.backend.config.auth.AuthContext;
-import com.yigongil.backend.config.oauth.JwtTokenProvider;
+import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.fixture.MemberFixture;

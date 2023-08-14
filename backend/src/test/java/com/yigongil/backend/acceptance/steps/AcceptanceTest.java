@@ -2,6 +2,7 @@ package com.yigongil.backend.acceptance.steps;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.BackendApplication;
+import com.yigongil.backend.config.auth.TokenTheftDetector;
 import io.cucumber.java.Before;
 import io.cucumber.spring.CucumberContextConfiguration;
 import io.restassured.RestAssured;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 
 @CucumberContextConfiguration
@@ -23,8 +25,12 @@ public class AcceptanceTest {
 
     @Autowired
     private DatabaseCleaner databaseCleaner;
+
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    ApplicationContext applicationContext;
 
     @Before
     public void before() {
@@ -33,6 +39,9 @@ public class AcceptanceTest {
                 new ObjectMapperConfig().jackson2ObjectMapperFactory(
                         (cls, charset) -> objectMapper
                 ));
+        TokenTheftDetector tokenTheftDetector = applicationContext.getBean(TokenTheftDetector.class);
+        tokenTheftDetector.getUpToDateTokens().clear();
+
         databaseCleaner.clean();
     }
 }

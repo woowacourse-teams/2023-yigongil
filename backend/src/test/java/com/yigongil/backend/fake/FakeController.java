@@ -1,7 +1,7 @@
 package com.yigongil.backend.fake;
 
 import com.yigongil.backend.application.StudyService;
-import com.yigongil.backend.config.oauth.JwtTokenProvider;
+import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.response.TokenResponse;
@@ -42,7 +42,7 @@ public class FakeController {
                               .build()
                 )
         ).getId();
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new TokenResponse(jwtTokenProvider.createToken(id)));
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new TokenResponse(jwtTokenProvider.createAccessToken(id), jwtTokenProvider.createRefreshToken(id)));
     }
 
     @PutMapping("/v1/fake/proceed")
