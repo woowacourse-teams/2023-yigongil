@@ -10,7 +10,6 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.response.TokenResponse;
 import io.jsonwebtoken.ExpiredJwtException;
-import java.net.URI;
 import java.util.Optional;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,7 +17,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class OauthService {
@@ -37,15 +35,8 @@ public class OauthService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    public URI getGithubRedirectUrl() {
-        return UriComponentsBuilder.fromUriString(githubClient.getLoginUri())
-                                   .queryParam("client_id", githubClient.getId())
-                                   .build()
-                                   .toUri();
-    }
-
     public TokenResponse login(String code) {
-        GithubAccessToken accessToken = requestAccessToken(code);
+        GithubAccessToken accessToken = requestGithubAccessToken(code);
 
         GithubProfileResponse profileResponse = requestGithubProfile(accessToken);
 
@@ -56,7 +47,6 @@ public class OauthService {
                         Member.builder()
                               .githubId(profileResponse.githubId())
                               .profileImageUrl(profileResponse.profileImageUrl())
-                              .tier(1)
                               .build()
                 )
         ).getId();
@@ -64,7 +54,7 @@ public class OauthService {
         return new TokenResponse(jwtTokenProvider.createToken(id));
     }
 
-    private GithubAccessToken requestAccessToken(String code) {
+    private GithubAccessToken requestGithubAccessToken(String code) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE);
