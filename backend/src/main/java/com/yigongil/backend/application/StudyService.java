@@ -118,6 +118,11 @@ public class StudyService {
         );
     }
 
+    public Study findStudyById(Long studyId) {
+        return studyRepository.findById(studyId)
+                              .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
+    }
+
     private void validateApplicantAlreadyExist(Member member, Study study) {
         boolean cannotApply = studyMemberRepository.existsByStudyIdAndMemberId(study.getId(), member.getId());
         if (cannotApply) {
@@ -127,8 +132,7 @@ public class StudyService {
 
     @Transactional(readOnly = true)
     public StudyDetailResponse findStudyDetailByStudyId(Member member, Long studyId) {
-        Study study = studyRepository.findById(studyId)
-                                     .orElseThrow(() -> new StudyNotFoundException("해당 스터디가 존재하지 않습니다", studyId));
+        Study study = findStudyById(studyId);
 
         List<Round> rounds = study.getRounds();
         Round currentRound = study.getCurrentRound();
@@ -278,10 +282,5 @@ public class StudyService {
                 request.periodOfRound(),
                 request.introduction()
         );
-    }
-
-    private Study findStudyById(Long studyId) {
-        return studyRepository.findById(studyId)
-                              .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
     }
 }

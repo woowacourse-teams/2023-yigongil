@@ -3,7 +3,8 @@ package com.yigongil.backend.ui;
 import com.yigongil.backend.application.ReportService;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.request.ReportCreateRequest;
+import com.yigongil.backend.request.MemberReportCreateRequest;
+import com.yigongil.backend.request.StudyReportCreateRequest;
 import com.yigongil.backend.ui.doc.ReportApi;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,21 @@ public class ReportController implements ReportApi {
         this.reportService = reportService;
     }
 
-    @PostMapping
-    public ResponseEntity<Void> createReport(
+    @PostMapping("/by-member")
+    public ResponseEntity<Void> createMemberReport(
             @Authorization Member reporter,
-            @RequestBody @Valid ReportCreateRequest request
+            @RequestBody @Valid MemberReportCreateRequest request
     ) {
-        reportService.report(reporter, request);
+        reportService.reportMember(reporter, request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/by-study")
+    public ResponseEntity<Void> createStudyReport(
+            @Authorization Member reporter,
+            @RequestBody @Valid StudyReportCreateRequest request
+    ) {
+        reportService.reportStudy(reporter, request);
         return ResponseEntity.ok().build();
     }
 }
