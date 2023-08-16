@@ -53,11 +53,15 @@ public class JwtTokenProvider {
     }
 
     public void detectTokenTheft(String tokenWithScheme) {
+        if (tokenWithScheme == null) {
+            throw new InvalidTokenException("토큰을 전송해주세요. 입력된 토큰: ", null);
+        }
+
         Long memberId = parseToken(tokenWithScheme);
         String token = tokenWithScheme.substring(SCHEME.length());
 
         if (tokenTheftDetector.isDetected(memberId, token)) {
-            throw new InvalidTokenException("토큰이 탈취되었습니다. ", tokenWithScheme);
+            throw new InvalidTokenException("토큰이 탈취되었습니다. 입력된 토큰: ", tokenWithScheme);
         }
     }
 

@@ -40,7 +40,7 @@ public class AcceptanceTest {
                         (cls, charset) -> objectMapper
                 ));
         TokenTheftDetector tokenTheftDetector = applicationContext.getBean(TokenTheftDetector.class);
-        tokenTheftDetector.getUpToDateTokens().clear();
+        tokenTheftDetector.getStoredTokens().clear();
 
         databaseCleaner.clean();
     }

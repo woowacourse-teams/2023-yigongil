@@ -66,4 +66,12 @@ class JwtTokenProviderTest {
                         .isInstanceOf(InvalidTokenException.class)
         );
     }
+
+    @Test
+    void 토큰이_null이면_예외를_던진다() {
+        assertAll(
+                () -> assertThatThrownBy(() -> tokenProvider.detectTokenTheft(null))
+                        .isInstanceOf(InvalidTokenException.class)
+        );
+    }
 }

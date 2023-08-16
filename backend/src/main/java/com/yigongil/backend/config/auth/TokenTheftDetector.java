@@ -1,9 +1,8 @@
 package com.yigongil.backend.config.auth;
 
+import com.yigongil.backend.exception.AuthorizationException;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 
@@ -11,19 +10,30 @@ import org.springframework.stereotype.Component;
 @Component
 public class TokenTheftDetector {
 
-    private final Map<Long, String> upToDateTokens = new ConcurrentHashMap<>();
+    private final Map<Long, String> storedTokens = new ConcurrentHashMap<>();
 
-    public boolean isDetected(Long memberId, @NotNull String inputToken) {
-        String upToDateToken = upToDateTokens.get(memberId);
+    public boolean isDetected(Long memberId, String inputToken) {
+        String storedToken = storedTokens.get(memberId);
 
-        if (Objects.equals(upToDateToken, inputToken)) {
+        validateNotNull(storedToken, inputToken);
+
+        if (storedToken.equals(inputToken)) {
             return false;
         }
-        upToDateTokens.remove(memberId);
+        storedTokens.remove(memberId);
         return true;
     }
 
+    private void validateNotNull(String storedToken, String inputToken) {
+        if (inputToken == null) {
+            throw new IllegalArgumentException("입력 토큰은 null일 수 없습니다");
+        }
+        if (storedToken == null) {
+            throw new AuthorizationException("로그인 이력이 없습니다. 로그인 정보: ", null);
+        }
+    }
+
     public void update(Long memberId, String token) {
-        upToDateTokens.put(memberId, token);
+        storedTokens.put(memberId, token);
     }
 }

@@ -30,8 +30,8 @@ public class LoginController implements LoginApi {
 
     @PostMapping("/tokens/refresh")
     public ResponseEntity<TokenResponse> refreshMemberToken(@RequestBody TokenRequest request) {
-        TokenResponse tokenResponse = authService.refresh(request);
-        return ResponseEntity.ok(tokenResponse);
+        TokenResponse response = authService.refresh(request);
+        return ResponseEntity.ok(response);
     }
 }
 
