@@ -87,15 +87,23 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
     fun report() {
         val targetId = intent.getLongExtra(KEY_TARGET_ID, NON_EXISTENCE_ID)
         when (ReportCategory.valueOf(intent.getIntExtra(KEY_CATEGORY, NON_EXISTENCE_CATEGORY))) {
-            ReportCategory.STUDY -> reportViewModel.reportStudy(targetId) {
-                showToast(R.string.report_report_successful_done)
-                finish()
-            }
+            ReportCategory.STUDY -> reportViewModel.reportStudy(
+                reportedStudyId = targetId,
+                notifySuccessfulReport = {
+                    showToast(R.string.report_successful_done)
+                    finish()
+                },
+                notifyUnsuccessfulReport = { showToast(R.string.report_fail) },
+            )
 
-            ReportCategory.USER -> reportViewModel.reportUser(targetId) {
-                showToast(R.string.report_report_successful_done)
-                finish()
-            }
+            ReportCategory.USER -> reportViewModel.reportUser(
+                reportedUserId = targetId,
+                notifySuccessfulReport = {
+                    showToast(R.string.report_successful_done)
+                    finish()
+                },
+                notifyUnsuccessfulReport = { showToast(R.string.report_fail) },
+            )
         }
     }
 

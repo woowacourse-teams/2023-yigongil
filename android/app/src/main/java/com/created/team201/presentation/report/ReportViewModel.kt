@@ -66,7 +66,11 @@ class ReportViewModel(
         return title.isNotBlank() && content.isNotBlank()
     }
 
-    fun reportUser(reportedUserId: Long, notifySuccessfulReport: () -> Unit) {
+    fun reportUser(
+        reportedUserId: Long,
+        notifySuccessfulReport: () -> Unit,
+        notifyUnsuccessfulReport: () -> Unit,
+    ) {
         viewModelScope.launch {
             runCatching {
                 if (isReporting) {
@@ -85,12 +89,17 @@ class ReportViewModel(
                 notifySuccessfulReport()
                 isReporting = false
             }.onFailure {
+                notifyUnsuccessfulReport()
                 isReporting = false
             }
         }
     }
 
-    fun reportStudy(reportedStudyId: Long, notifySuccessfulReport: () -> Unit) {
+    fun reportStudy(
+        reportedStudyId: Long,
+        notifySuccessfulReport: () -> Unit,
+        notifyUnsuccessfulReport: () -> Unit,
+    ) {
         viewModelScope.launch {
             runCatching {
                 if (isReporting) {
@@ -109,6 +118,7 @@ class ReportViewModel(
                 notifySuccessfulReport()
                 isReporting = false
             }.onFailure {
+                notifyUnsuccessfulReport()
                 isReporting = false
             }
         }

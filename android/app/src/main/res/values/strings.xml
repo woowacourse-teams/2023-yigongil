@@ -207,7 +207,8 @@
     <string name="report_content_hint">신고 내용을 입력해 주세요</string>
     <string name="report_calender_image_description">달력 날짜 선택</string>
     <string name="report_calender_selected_date_format">%d.%d.%d</string>
-    <string name="report_report_successful_done">신고 접수가 완료되었어요</string>
+    <string name="report_successful_done">신고 접수가 완료되었어요</string>
+    <string name="report_fail">예기치 못한 오류가 발생했어요</string>
 
     <!-- 채팅 뷰 -->
     <string name="chat_no_chat">아직 준비중인 기능이에요!\n조금만 기다려주세요!</string>
