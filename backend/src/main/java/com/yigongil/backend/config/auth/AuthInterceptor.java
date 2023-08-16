@@ -1,6 +1,5 @@
 package com.yigongil.backend.config.auth;
 
-import com.yigongil.backend.config.oauth.JwtTokenProvider;
 import com.yigongil.backend.exception.InvalidTokenException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

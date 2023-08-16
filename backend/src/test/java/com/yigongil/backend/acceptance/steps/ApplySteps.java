@@ -3,7 +3,7 @@ package com.yigongil.backend.acceptance.steps;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.yigongil.backend.config.oauth.JwtTokenProvider;
+import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import io.cucumber.java.en.Given;

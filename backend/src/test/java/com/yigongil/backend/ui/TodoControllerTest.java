@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.application.TodoService;
 import com.yigongil.backend.config.auth.AuthContext;
-import com.yigongil.backend.config.oauth.JwtTokenProvider;
+import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.request.TodoCreateRequest;

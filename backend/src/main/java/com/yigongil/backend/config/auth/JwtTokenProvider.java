@@ -1,18 +1,15 @@
-package com.yigongil.backend.config.oauth;
+package com.yigongil.backend.config.auth;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.exception.InvalidTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import java.io.IOException;
 import java.sql.Date;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Base64;
-import java.util.Map;
+import java.util.UUID;
 import javax.crypto.SecretKey;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,13 +23,15 @@ public class JwtTokenProvider {
 
     private final SecretKey secretKey;
     private final Long expired;
+    private final TokenTheftDetector tokenTheftDetector;
 
-    public JwtTokenProvider(@Value("${jwt.key}") String secretKey, @Value("${jwt.expiration}") Long expired) {
+    public JwtTokenProvider(@Value("${jwt.key}") String secretKey, @Value("${jwt.expiration}") Long expired, TokenTheftDetector tokenTheftDetector) {
         this.secretKey = Keys.hmacShaKeyFor(secretKey.getBytes());
         this.expired = expired;
+        this.tokenTheftDetector = tokenTheftDetector;
     }
 
-    public String createToken(Long id) {
+    public String createAccessToken(Long id) {
         Instant issuedAt = Instant.now();
         return SCHEME + Jwts.builder()
                             .setExpiration(Date.from(issuedAt.plus(expired, ChronoUnit.MINUTES)))
@@ -40,6 +39,30 @@ public class JwtTokenProvider {
                             .setSubject(String.valueOf(id))
                             .signWith(secretKey, SignatureAlgorithm.HS256)
                             .compact();
+    }
+
+    public String createRefreshToken(Long id) {
+        String refreshToken = Jwts.builder()
+                                  .setId(UUID.randomUUID().toString())
+                                  .setSubject(String.valueOf(id))
+                                  .signWith(secretKey, SignatureAlgorithm.HS256)
+                                  .compact();
+
+        tokenTheftDetector.update(id, refreshToken);
+        return SCHEME + refreshToken;
+    }
+
+    public void detectTokenTheft(String tokenWithScheme) {
+        if (tokenWithScheme == null) {
+            throw new InvalidTokenException("토큰을 전송해주세요. 입력된 토큰: ", null);
+        }
+
+        Long memberId = parseToken(tokenWithScheme);
+        String token = tokenWithScheme.substring(SCHEME.length());
+
+        if (tokenTheftDetector.isDetected(memberId, token)) {
+            throw new InvalidTokenException("토큰이 탈취되었습니다. 입력된 토큰: ", tokenWithScheme);
+        }
     }
 
     public Long parseToken(String token) {
@@ -54,16 +77,5 @@ public class JwtTokenProvider {
                               .getBody();
 
         return Long.parseLong(claims.getSubject());
-    }
-
-    public String renewToken(String previousToken) {
-        String payload = previousToken.split("\\.")[1];
-        try {
-            String id = (String) new ObjectMapper().readValue(Base64.getUrlDecoder().decode(payload), Map.class)
-                                                   .get("sub");
-            return createToken(Long.valueOf(id));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
