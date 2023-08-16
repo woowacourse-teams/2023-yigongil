@@ -1,6 +1,6 @@
 package com.created.team201.presentation.report.model
 
-data class ReportTargetUiModel(
+data class ReportUserUiModel(
     val reportedMemberId: Long,
     val title: String,
     val problemOccuredAt: String,

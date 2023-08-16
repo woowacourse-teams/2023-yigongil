@@ -84,12 +84,18 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
         }
     }
 
-    fun reportUser() {
-        reportViewModel.reportUser(
-            intent.getLongExtra(KEY_TARGET_ID, NON_EXISTENCE_ID),
-        ) {
-            showToast(R.string.report_report_successful_done)
-            finish()
+    fun report() {
+        val targetId = intent.getLongExtra(KEY_TARGET_ID, NON_EXISTENCE_ID)
+        when (ReportCategory.valueOf(intent.getIntExtra(KEY_CATEGORY, NON_EXISTENCE_CATEGORY))) {
+            ReportCategory.STUDY -> reportViewModel.reportStudy(targetId) {
+                showToast(R.string.report_report_successful_done)
+                finish()
+            }
+
+            ReportCategory.USER -> reportViewModel.reportUser(targetId) {
+                showToast(R.string.report_report_successful_done)
+                finish()
+            }
         }
     }
 
@@ -114,7 +120,9 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
         private const val MONTH_CALIBRATION_VALUE = 1
         private const val KEY_CATEGORY = "key_category"
         private const val KEY_TARGET_ID = "key_target_id"
+        private const val NON_EXISTENCE_CATEGORY = 0
         private const val NON_EXISTENCE_ID = 0L
+
         fun getIntent(context: Context, reportCategory: ReportCategory, targetId: Long): Intent =
             Intent(context, ReportActivity::class.java).apply {
                 putExtra(KEY_CATEGORY, reportCategory.index)

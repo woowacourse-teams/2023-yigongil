@@ -10,7 +10,7 @@ data class ReportUserRequestDto(
     @SerialName("title")
     val title: String,
     @SerialName("problemOccuredAt")
-    val problemOccuredAt: String,
+    val problemOccurredAt: String,
     @SerialName("content")
     val content: String,
 )
