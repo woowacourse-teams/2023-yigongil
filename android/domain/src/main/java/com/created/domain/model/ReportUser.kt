@@ -1,6 +1,6 @@
 package com.created.domain.model
 
-data class Report(
+data class ReportUser(
     val reportedMemberId: Long,
     val title: String,
     val problemOccuredAt: String,

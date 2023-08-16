@@ -1,7 +1,7 @@
 package com.created.team201.data.datasource.remote
 
-import com.created.domain.model.Report
+import com.created.domain.model.ReportUser
 
 interface ReportDataSource {
-    suspend fun reportUser(report: Report)
+    suspend fun reportUser(reportUser: ReportUser)
 }

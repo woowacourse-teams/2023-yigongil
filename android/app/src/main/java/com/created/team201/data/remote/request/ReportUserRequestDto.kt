@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ReportRequestDTO(
+data class ReportUserRequestDto(
     @SerialName("reportedMemberId")
     val reportedMemberId: Long,
     @SerialName("title")

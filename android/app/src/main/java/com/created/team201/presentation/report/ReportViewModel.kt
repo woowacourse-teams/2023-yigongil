@@ -6,7 +6,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.created.domain.model.Report
+import com.created.domain.model.ReportUser
 import com.created.domain.repository.ReportRepository
 import com.created.team201.data.datasource.remote.ReportDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
@@ -105,7 +105,7 @@ class ReportViewModel(
 
     private fun DateUiModel.toProblemOccurredAt(): String = DATE_FORMAT.format(year, month, day)
 
-    private fun ReportTargetUiModel.toDomain(): Report = Report(
+    private fun ReportTargetUiModel.toDomain(): ReportUser = ReportUser(
         reportedMemberId,
         title,
         problemOccuredAt,

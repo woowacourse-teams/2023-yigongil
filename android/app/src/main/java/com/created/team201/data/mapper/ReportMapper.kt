@@ -1,9 +1,9 @@
 package com.created.team201.data.mapper
 
-import com.created.domain.model.Report
-import com.created.team201.data.remote.request.ReportRequestDTO
+import com.created.domain.model.ReportUser
+import com.created.team201.data.remote.request.ReportUserRequestDto
 
-fun Report.toRequestDTO(): ReportRequestDTO = ReportRequestDTO(
+fun ReportUser.toRequestDTO(): ReportUserRequestDto = ReportUserRequestDto(
     reportedMemberId,
     title,
     problemOccuredAt,
