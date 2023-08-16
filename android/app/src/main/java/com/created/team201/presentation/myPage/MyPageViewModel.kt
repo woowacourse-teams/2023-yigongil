@@ -64,6 +64,13 @@ class MyPageViewModel(
     val isModifyEnabled: LiveData<Boolean>
         get() = _isModifyEnabled
 
+    fun resetModifyProfile() {
+        profile.value?.let {
+            _nickname.value = it.profileInformation.nickname
+            _introduction.value = it.profileInformation.introduction
+        }
+        _profile.value = profile.value
+    }
 
     fun loadProfile() {
         viewModelScope.launch {
@@ -86,6 +93,10 @@ class MyPageViewModel(
                 myPageRepository.patchMyProfile(newProfile.profileInformation)
                     .onSuccess {
                         _modifyProfileState.value = State.SUCCESS
+                        _profile.value = profile.value?.run {
+                            toDomain().updateProfileInformation(newProfile.profileInformation)
+                                .toUiModel()
+                        }
                     }.onFailure {
                         _modifyProfileState.value = State.FAIL
                     }

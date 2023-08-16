@@ -129,6 +129,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
 
                 FAIL -> {
                     showToast(getString(R.string.myPage_toast_modify_profile_failed))
+                    myPageViewModel.resetModifyProfile()
                 }
 
                 IDLE -> throw IllegalStateException()
