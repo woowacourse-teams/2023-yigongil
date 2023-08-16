@@ -60,6 +60,7 @@ class OnBoardingViewModel(
         get() = _isEnableSave
 
     fun setNickname(nickname: String) {
+        _nicknameState.value = NicknameState.UNAVAILABLE
         _nickname.value = NicknameUiModel(nickname)
     }
 

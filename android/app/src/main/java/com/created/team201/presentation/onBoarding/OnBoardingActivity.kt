@@ -3,6 +3,9 @@ package com.created.team201.presentation.onBoarding
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.MotionEvent
+import android.view.MotionEvent.ACTION_DOWN
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.created.team201.R
@@ -37,6 +40,19 @@ class OnBoardingActivity :
             if (focus) return@setOnFocusChangeListener
             viewModel.getAvailableNickname()
         }
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        if (ev.action == ACTION_DOWN &&
+            currentFocus == binding.etOnBoardingNickname ||
+            currentFocus == binding.etOnBoardingIntroduction
+        ) {
+            val imm: InputMethodManager =
+                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+        }
+
+        return super.dispatchTouchEvent(ev)
     }
 
     private fun setObserveOnBoardingResult() {
