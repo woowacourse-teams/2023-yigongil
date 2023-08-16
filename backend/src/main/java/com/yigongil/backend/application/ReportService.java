@@ -26,7 +26,7 @@ public class ReportService {
                                     .reported(reportedMember)
                                     .title(request.title())
                                     .content(request.content())
-                                    .problemOccurredAt(request.problemOccuredAt())
+                                    .problemOccurredAt(request.problemOccurredAt())
                                     .build());
     }
 }
