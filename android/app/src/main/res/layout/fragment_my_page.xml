@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:textView="http://schemas.android.com/tools"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:editText="http://schemas.android.com/tools"
+    xmlns:textView="http://schemas.android.com/tools">
 
     <data>
 
@@ -63,8 +63,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:shapeAppearanceOverlay="@style/circleImageView"
                     app:strokeColor="@color/grey02_78808B"
-                    app:strokeWidth="1dp"
-                    tools:src="@drawable/ic_launcher_foreground" />
+                    app:strokeWidth="1dp" />
 
                 <EditText
                     android:id="@+id/et_my_page_profile_nickname"
@@ -84,7 +83,8 @@
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/iv_my_page_profile"
-                    app:layout_constraintTop_toTopOf="@id/iv_my_page_profile" />
+                    app:layout_constraintTop_toTopOf="@id/iv_my_page_profile"
+                    editText:inputFilter="@{viewModel.getInputFilter()}" />
 
                 <TextView
                     android:id="@+id/tv_my_page_profile_id"
@@ -98,8 +98,7 @@
                     android:textColor="@color/grey02_78808B"
                     app:layout_constraintEnd_toEndOf="@id/et_my_page_profile_nickname"
                     app:layout_constraintStart_toStartOf="@id/et_my_page_profile_nickname"
-                    app:layout_constraintTop_toBottomOf="@id/et_my_page_profile_nickname"
-                    tools:text="jwkim1234" />
+                    app:layout_constraintTop_toBottomOf="@id/et_my_page_profile_nickname" />
 
                 <TextView
                     android:id="@+id/tv_my_page_nickname_validate_introduction"
@@ -129,8 +128,7 @@
                     android:textColor="@color/tv_color_disabled"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_my_page_nickname_validate_introduction"
-                    tools:text="@string/myPage_button_modify_profile" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_my_page_nickname_validate_introduction" />
 
                 <include
                     android:id="@+id/layout_my_page_study_success_rate"

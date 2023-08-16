@@ -1,5 +1,7 @@
 package com.created.team201.presentation.myPage
 
+import android.text.InputFilter
+import android.text.Spanned
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,6 +26,7 @@ import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
 import com.created.team201.util.addSourceList
 import kotlinx.coroutines.launch
+import java.util.regex.Pattern
 
 class MyPageViewModel(
     private val myPageRepository: MyPageRepository,
@@ -156,6 +159,27 @@ class MyPageViewModel(
         }
     }
 
+    fun getInputFilter(): Array<InputFilter> = arrayOf(
+        object : InputFilter {
+            override fun filter(
+                text: CharSequence,
+                start: Int,
+                end: Int,
+                dest: Spanned,
+                dStart: Int,
+                dEnd: Int,
+            ): CharSequence {
+                if (text.isBlank() || PATTERN_NICKNAME.matcher(text).matches()) {
+                    return text
+                }
+
+                _nicknameState.value = NicknameState.UNAVAILABLE
+                return ""
+            }
+        },
+        InputFilter.LengthFilter(MAX_NICKNAME_LENGTH),
+    )
+
     private fun isInitializeProfileInformation(): Boolean {
         if (profileType.value == ProfileType.VIEW) {
             return true
@@ -222,6 +246,10 @@ class MyPageViewModel(
     )
 
     companion object {
+        private val PATTERN_NICKNAME =
+            Pattern.compile("^[_a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\\u318D\\u119E\\u11A2\\u2022\\u2025a\\u00B7\\uFE55]+$")
+        private const val MAX_NICKNAME_LENGTH = 8
+
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 MyPageViewModel(
