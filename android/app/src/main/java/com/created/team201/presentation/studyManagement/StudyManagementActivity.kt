@@ -132,14 +132,6 @@ class StudyManagementActivity :
                 showAlertToast()
                 return studyManagementViewModel.todoState.value ?: NOTHING
             }
-            if (optionalTodoCount >= MAXIMUM_OPTIONAL_TODO_COUNT) {
-                Toast.makeText(
-                    this@StudyManagementActivity,
-                    getString(R.string.study_management_not_allowed_add_optional_todo),
-                    Toast.LENGTH_SHORT,
-                ).show()
-                return DEFAULT
-            }
             studyManagementViewModel.setTodoState(OPTIONAL_TODO_ADD)
             return OPTIONAL_TODO_ADD
         }
@@ -353,7 +345,6 @@ class StudyManagementActivity :
         private const val FIRST_ROUND = 1
         private const val CONVERT_TO_PAGE = 1
         private const val PAGE_INDEX_ZERO = 0
-        private const val MAXIMUM_OPTIONAL_TODO_COUNT = 4
         private const val KEY_ERROR_LONG = 0L
         private const val KEY_STUDY_ID = "KEY_STUDY_ID"
         private const val KEY_ROLE_INDEX = "KEY_ROLE_INDEX"
