@@ -38,9 +38,10 @@ class StudyManagementViewHolder(
 
     private fun setClickAddTodo() {
         binding.tvStudyManagementAddOptionalTodo.setOnClickListener {
-            val todoState = studyManagementClickListener.onClickGenerateOptionalTodo(
-                studyManagementOptionalTodoAdapter.itemCount,
-            )
+            if (studyManagementOptionalTodoAdapter.itemCount == 0) {
+                binding.tvItemStudyManagementEditOptionalTodo.setText(R.string.study_management_edit_todo)
+            }
+            val todoState = studyManagementClickListener.onClickGenerateOptionalTodo()
             if (todoState != OPTIONAL_TODO_ADD) {
                 return@setOnClickListener
             }

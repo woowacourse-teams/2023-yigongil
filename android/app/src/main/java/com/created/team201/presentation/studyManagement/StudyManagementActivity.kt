@@ -184,13 +184,12 @@ class StudyManagementActivity :
         }
     }
 
-    private fun showAlertToast(): TodoState {
+    private fun showAlertToast() {
         Toast.makeText(
             this@StudyManagementActivity,
             getString(R.string.study_management_not_allowed_another_edit),
             Toast.LENGTH_SHORT,
         ).show()
-        return DEFAULT
     }
 
     private fun updateTodoContent(

@@ -316,6 +316,9 @@ class StudyManagementViewModel(
         newOptionalTodos.removeIf {
             it.todo.todoId == optionalTodo.todo.todoId
         }
+        if (newOptionalTodos.isEmpty()) {
+            _todoState.value = DEFAULT
+        }
 
         viewModelScope.launch {
             kotlin.runCatching {
@@ -408,11 +411,11 @@ class StudyManagementViewModel(
     private fun ProfileInformation.toUiModel(): ProfileInformationUiModel =
         ProfileInformationUiModel(
             nickname = nickname.toUiModel(),
-            introduction = introduction
+            introduction = introduction,
         )
 
     private fun Nickname.toUiModel(): NicknameUiModel = NicknameUiModel(
-        nickname = nickname
+        nickname = nickname,
     )
 
     companion object {
