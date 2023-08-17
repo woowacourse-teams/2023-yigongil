@@ -20,6 +20,8 @@ import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
 import com.created.team201.presentation.studyList.adapter.StudyListAdapter
 import com.created.team201.presentation.updateStudy.UpdateStudyActivity
+import com.created.team201.util.FirebaseLogUtil
+import com.created.team201.util.FirebaseLogUtil.SCREEN_STUDY_LIST
 import kotlinx.coroutines.launch
 
 class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fragment_study_list) {
@@ -32,6 +34,17 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     }
     private var searchWord = ""
 
+    override fun onResume() {
+        super.onResume()
+
+        FirebaseLogUtil.logScreenEvent(
+            SCREEN_STUDY_LIST,
+            this@StudyListFragment.javaClass.simpleName
+        )
+
+        studyListViewModel.initPage()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -41,11 +54,6 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         setUpRefreshListener()
         setUpCreateStudyListener()
         setUpScrollListener()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        studyListViewModel.initPage()
     }
 
     private fun setUpToolbar() {

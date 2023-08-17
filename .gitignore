@@ -160,6 +160,8 @@ replay_pid*
 # Created by https://www.toptal.com/developers/gitignore/api/kotlin,android,androidstudio
 # Edit at https://www.toptal.com/developers/gitignore?templates=kotlin,android,androidstudio
 
+.DS_Store
+
 ### Android ###
 # Gradle files
 .gradle/
