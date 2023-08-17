@@ -8,11 +8,11 @@ import com.created.team201.data.remote.api.ReportService
 class ReportDataSourceImpl(
     private val reportService: ReportService,
 ) : ReportDataSource {
-    override suspend fun reportUser(reportUser: ReportUser) {
+    override suspend fun addUserReport(reportUser: ReportUser) {
         reportService.reportUser(reportUser.toRequestDto())
     }
 
-    override suspend fun reportStudy(reportStudy: ReportStudy) {
+    override suspend fun addStudyReport(reportStudy: ReportStudy) {
         reportService.reportStudy(reportStudy.toRequestDto())
     }
 }

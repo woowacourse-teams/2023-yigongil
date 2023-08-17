@@ -4,7 +4,7 @@ import com.created.domain.model.ReportStudy
 import com.created.domain.model.ReportUser
 
 interface ReportDataSource {
-    suspend fun reportUser(reportUser: ReportUser)
+    suspend fun addUserReport(reportUser: ReportUser)
 
-    suspend fun reportStudy(reportStudy: ReportStudy)
+    suspend fun addStudyReport(reportStudy: ReportStudy)
 }
