@@ -127,8 +127,9 @@ class StudyManagementActivity :
             studyManagementViewModel.updateTodoIsDone(isNecessary, todoId, isDone)
         }
 
-        override fun onClickGenerateOptionalTodo(optionalTodoCount: Int): TodoState {
+        override fun onClickGenerateOptionalTodo(): TodoState {
             if (studyManagementViewModel.todoState.value != DEFAULT) {
+                showAlertToast()
                 return studyManagementViewModel.todoState.value ?: NOTHING
             }
             if (optionalTodoCount >= MAXIMUM_OPTIONAL_TODO_COUNT) {
@@ -157,7 +158,10 @@ class StudyManagementActivity :
                     NECESSARY_TODO_EDIT
                 }
 
-                else -> NOTHING
+                else -> {
+                    showAlertToast()
+                    NOTHING
+                }
             }
         }
 
@@ -176,13 +180,25 @@ class StudyManagementActivity :
                     OPTIONAL_TODO_EDIT
                 }
 
-                else -> NOTHING
+                else -> {
+                    showAlertToast()
+                    NOTHING
+                }
             }
         }
 
         override fun onClickDeleteOptionalTodo(todo: OptionalTodoUiModel) {
             studyManagementViewModel.deleteTodo(todo)
         }
+    }
+
+    private fun showAlertToast(): TodoState {
+        Toast.makeText(
+            this@StudyManagementActivity,
+            getString(R.string.study_management_not_allowed_another_edit),
+            Toast.LENGTH_SHORT,
+        ).show()
+        return DEFAULT
     }
 
     private fun updateTodoContent(
