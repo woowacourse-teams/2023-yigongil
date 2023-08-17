@@ -13,7 +13,6 @@ import com.created.team201.application.Team201App
 import com.created.team201.data.datasource.local.OnBoardingIsDoneDataSourceImpl
 import com.created.team201.data.datasource.local.TokenDataSourceImpl
 import com.created.team201.data.datasource.remote.OnBoardingDataSourceImpl
-import com.created.team201.data.datasource.remote.login.AuthDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.AuthRepositoryImpl
 import com.created.team201.data.repository.OnBoardingRepositoryImpl
@@ -70,9 +69,7 @@ class SplashViewModel(
             initializer {
                 SplashViewModel(
                     AuthRepositoryImpl(
-                        AuthDataSourceImpl(
-                            NetworkServiceModule.authService,
-                        ),
+                        NetworkServiceModule.authService,
                         TokenDataSourceImpl(Team201App.provideTokenStorage()),
                     ),
                     OnBoardingRepositoryImpl(

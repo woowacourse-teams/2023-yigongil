@@ -8,11 +8,20 @@ class TokenDataSourceImpl(
         return tokenStorage.fetchToken(ACCESS_TOKEN) ?: throw IllegalStateException()
     }
 
+    override fun getRefreshToken(): String {
+        return tokenStorage.fetchToken(REFRESH_TOKEN) ?: throw IllegalStateException()
+    }
+
     override fun setAccessToken(token: String) {
         tokenStorage.putToken(ACCESS_TOKEN, token)
     }
 
+    override fun setRefreshToken(token: String) {
+        tokenStorage.putToken(REFRESH_TOKEN, token)
+    }
+
     companion object {
         private const val ACCESS_TOKEN = "ACCESS_TOKEN"
+        private const val REFRESH_TOKEN = "REFRESH_TOKEN"
     }
 }
