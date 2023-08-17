@@ -1,7 +1,17 @@
-# 2023-yigongil
+<div align="middle">
+
+  <img src="https://play-lh.googleusercontent.com/nQ17Eofw190EeWClSWr2-8XX8nF4xrfvHnOJ1M4VnXI78V-y4f3YxBfefJFaBoSAKsQ=w480-h960-rw" width="200px"/>
+
+
+<h1 align="middle">201 Created </h1>
 🔥열정있는 사람들과 💪성공적인 스터디를 ! 2️⃣0️⃣1️⃣
 
+<br>
+
 [플레이스토어에서 다운로드 하기](https://play.google.com/store/apps/details?id=com.created.team201)
+
+</div>
+<br>
 
 ---
 
