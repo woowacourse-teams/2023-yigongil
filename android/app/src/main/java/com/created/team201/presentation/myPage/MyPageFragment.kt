@@ -85,11 +85,19 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         myPageViewModel.modifyProfileState.observe(viewLifecycleOwner) { modifyProfileState ->
             when (modifyProfileState) {
                 SUCCESS -> {
-                    showToast(getString(R.string.myPage_toast_modify_profile_success))
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.myPage_toast_modify_profile_success),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
                 FAIL -> {
-                    showToast(getString(R.string.myPage_toast_modify_profile_failed))
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.myPage_toast_modify_profile_failed),
+                        Toast.LENGTH_SHORT
+                    ).show()
                     myPageViewModel.resetModifyProfile()
                 }
 
@@ -124,7 +132,11 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         object : MyPageDialogClickListener {
             override fun onCancelClick() {
                 myPageViewModel.loadProfile()
-                showToast(getString(R.string.myPage_toast_modify_profile_cancel))
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.myPage_toast_modify_profile_cancel),
+                    Toast.LENGTH_SHORT
+                ).show()
                 myPageViewModel.switchProfileType()
             }
 
@@ -133,9 +145,6 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                 myPageViewModel.switchProfileType()
             }
         }
-
-    private fun showToast(message: String) =
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     private fun setProfileView(enabled: Boolean) {
         binding.etMyPageProfileNickname.isEnabled = enabled
