@@ -14,6 +14,8 @@ import com.created.team201.presentation.myPage.MyPageViewModel.State.IDLE
 import com.created.team201.presentation.myPage.MyPageViewModel.State.SUCCESS
 import com.created.team201.presentation.myPage.model.ProfileType
 import com.created.team201.presentation.setting.SettingActivity
+import com.created.team201.util.FirebaseLogUtil
+import com.created.team201.util.FirebaseLogUtil.SCREEN_MY_PAGE
 
 class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
     private val myPageViewModel: MyPageViewModel by viewModels {
@@ -27,6 +29,12 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
             myPageViewModel.loadProfile()
             myPageViewModel.setProfileType(ProfileType.VIEW)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        FirebaseLogUtil.logScreenEvent(SCREEN_MY_PAGE, this@MyPageFragment.javaClass.simpleName)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
