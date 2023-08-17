@@ -133,7 +133,7 @@
             android:textAlignment="center"
             android:textAppearance="@style/button_sb18"
             android:textColor="@color/tv_color_disabled"
-            android:onClick="@{() -> activity.reportUser()}"
+            android:onClick="@{() -> activity.report()}"
             app:isEnabled="@{viewModel.isEnableReport()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
