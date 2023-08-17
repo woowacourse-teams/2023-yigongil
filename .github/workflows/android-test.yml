@@ -45,9 +45,9 @@ jobs:
         env:
           KEY_STORE: ${{ secrets.KEY_STORE }}
         run: |
-          echo -n "$KEY_STORE" > team201.jks
-          base64 -d -i team201.jks
-        working-directory: ${{ env.working-directory }}/app/keystore
+          echo -n "$KEY_STORE" > /app/keystore/team201.jks
+          base64 -d -i /app/keystore/team201.jks
+        working-directory: ${{ env.working-directory }}
 
       - name: keystore properties 생성
         run: touch keystore.properties
