@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
 import com.created.team201.R
@@ -43,13 +44,13 @@ class OnBoardingActivity :
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        if (ev.action == ACTION_DOWN &&
-            currentFocus == binding.etOnBoardingNickname ||
-            currentFocus == binding.etOnBoardingIntroduction
+        if (ev.action == ACTION_DOWN && currentFocus is EditText
         ) {
             val imm: InputMethodManager =
                 getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+
+            currentFocus?.clearFocus()
         }
 
         return super.dispatchTouchEvent(ev)
