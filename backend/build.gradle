@@ -64,6 +64,10 @@ dependencies {
 
     // prometheus
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
+    // aws
+    implementation platform('software.amazon.awssdk:bom:2.20.56')
+    implementation 'software.amazon.awssdk:cloudwatch'
 }
 
 tasks.named('test') {
