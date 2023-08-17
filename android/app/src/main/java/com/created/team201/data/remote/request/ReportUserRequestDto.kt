@@ -9,7 +9,7 @@ data class ReportUserRequestDto(
     val reportedMemberId: Long,
     @SerialName("title")
     val title: String,
-    @SerialName("problemOccuredAt")
+    @SerialName("problemOccurredAt")
     val problemOccurredAt: String,
     @SerialName("content")
     val content: String,
