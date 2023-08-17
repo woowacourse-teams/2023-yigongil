@@ -1,12 +1,10 @@
-package com.created.team201.data.remote.response
+package com.created.team201.data.remote.request
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AuthResponseDto(
-    @SerialName("accessToken")
-    val accessToken: String,
+data class RenewedAccessTokenRequestDTO(
     @SerialName("refreshToken")
     val refreshToken: String,
 )

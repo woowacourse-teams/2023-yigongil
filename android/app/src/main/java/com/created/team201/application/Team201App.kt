@@ -5,7 +5,6 @@ import android.content.Context
 import com.created.team201.data.datasource.local.OnBoardingIsDoneStorage
 import com.created.team201.data.datasource.local.TokenDataSourceImpl
 import com.created.team201.data.datasource.local.TokenStorage
-import com.created.team201.data.datasource.remote.login.AuthDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.remote.interceptor.AuthInterceptor
 import com.created.team201.data.repository.AuthRepositoryImpl
@@ -43,7 +42,7 @@ class Team201App : Application() {
         fun provideAuthInterceptor(): AuthInterceptor =
             AuthInterceptor(
                 AuthRepositoryImpl(
-                    authDataSource = AuthDataSourceImpl(NetworkServiceModule.authService),
+                    authService = NetworkServiceModule.authService,
                     tokenDataSource = TokenDataSourceImpl(provideTokenStorage()),
                 ),
             )
