@@ -108,28 +108,32 @@ class MyPageViewModel(
         }
     }
 
-    fun getAvailableNickname() {
-        viewModelScope.launch {
-            runCatching {
-                if (isSamePreviousNickname(nickname.value.nickname)) {
-                    _nicknameState.value = NicknameState.AVAILABLE
-                    return@launch
-                }
-                nickname.value.toDomain()
-            }.onSuccess {
-                myPageRepository.getAvailableNickname(it)
-                    .onSuccess { result ->
-                        when (result) {
-                            false -> _nicknameState.value = NicknameState.AVAILABLE
-                            true -> _nicknameState.value = NicknameState.DUPLICATE
-                        }
-                    }
-                    .onFailure {
-                        _nicknameState.value = NicknameState.UNAVAILABLE
-                    }
-            }.onFailure {
-                _nicknameState.value = NicknameState.UNAVAILABLE
+    fun checkAvailableNickname() {
+        runCatching {
+            if (isSamePreviousNickname(nickname.value.nickname)) {
+                _nicknameState.value = NicknameState.AVAILABLE
+                return
             }
+            nickname.value.toDomain()
+        }.onSuccess {
+            getAvailableNickname(it)
+        }.onFailure {
+            _nicknameState.value = NicknameState.UNAVAILABLE
+        }
+    }
+
+    private fun getAvailableNickname(nickname: Nickname) {
+        viewModelScope.launch {
+            myPageRepository.getAvailableNickname(nickname)
+                .onSuccess { result ->
+                    when (result) {
+                        false -> _nicknameState.value = NicknameState.AVAILABLE
+                        true -> _nicknameState.value = NicknameState.DUPLICATE
+                    }
+                }
+                .onFailure {
+                    _nicknameState.value = NicknameState.UNAVAILABLE
+                }
         }
     }
 

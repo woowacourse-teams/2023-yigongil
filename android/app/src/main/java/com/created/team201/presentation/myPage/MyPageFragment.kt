@@ -71,7 +71,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
     private fun setNicknameValidate() {
         binding.etMyPageProfileNickname.setOnFocusChangeListener { _, focus ->
             if (focus) return@setOnFocusChangeListener
-            myPageViewModel.getAvailableNickname()
+            myPageViewModel.checkAvailableNickname()
         }
     }
 
