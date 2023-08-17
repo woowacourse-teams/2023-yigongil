@@ -38,9 +38,8 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: keyStore 생성
-        run: touch team201.jks
-        working-directory: ${{ env.working-directory }}/app/keystore
+      - name: keyStore Directory 생성
+        run: touch ${{ env.working-directory }}/app/keystore
 
       - name: keyStore 세팅
         env:
