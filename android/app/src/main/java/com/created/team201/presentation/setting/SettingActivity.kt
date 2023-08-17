@@ -2,12 +2,16 @@ package com.created.team201.presentation.setting
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.browser.customtabs.CustomTabsIntent.SHARE_STATE_OFF
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.commit
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.created.team201.BuildConfig
 import com.created.team201.R
 import com.created.team201.databinding.ActivitySettingBinding
 import com.created.team201.presentation.accountSetting.AccountSettingActivity
@@ -37,7 +41,10 @@ class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activit
                         navigateToAccountSetting()
                     }
 
-                    SettingType.POLICY -> {}
+                    SettingType.POLICY -> {
+                        navigateToPolicy()
+                    }
+
                     SettingType.LOGOUT -> {
                         removeDialog()
                         showDialog(
@@ -114,6 +121,15 @@ class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activit
             LoginActivity.getIntent(this).also { it.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP },
         )
         finishAffinity()
+    }
+
+    private fun navigateToPolicy() {
+        CustomTabsIntent.Builder()
+            .setUrlBarHidingEnabled(true)
+            .setShowTitle(true)
+            .setShareState(SHARE_STATE_OFF)
+            .build()
+            .launchUrl(this, Uri.parse(BuildConfig.TEAM201_POLICY))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
