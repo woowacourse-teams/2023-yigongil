@@ -63,9 +63,9 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         if (ev.action == ACTION_DOWN && currentFocus is EditText) {
-            val imm: InputMethodManager =
+            val inputMethodManager: InputMethodManager =
                 getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+            inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
 
             currentFocus?.clearFocus()
         }
