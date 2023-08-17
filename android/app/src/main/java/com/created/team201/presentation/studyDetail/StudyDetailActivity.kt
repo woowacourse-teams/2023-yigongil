@@ -12,6 +12,8 @@ import com.created.team201.R
 import com.created.team201.databinding.ActivityStudyDetailBinding
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.profile.ProfileActivity
+import com.created.team201.presentation.report.ReportActivity
+import com.created.team201.presentation.report.model.ReportCategory
 import com.created.team201.presentation.studyDetail.StudyDetailState.Master
 import com.created.team201.presentation.studyDetail.adapter.StudyParticipantsAdapter
 import com.created.team201.presentation.studyDetail.model.PeriodFormat
@@ -104,7 +106,7 @@ class StudyDetailActivity :
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.menu_study_detail_report -> {
-                showToast(R.string.study_detail_not_yet)
+                startActivity(ReportActivity.getIntent(this, ReportCategory.STUDY, studyId))
             }
         }
         return super.onOptionsItemSelected(item)

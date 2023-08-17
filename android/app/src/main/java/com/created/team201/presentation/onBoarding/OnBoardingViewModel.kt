@@ -135,13 +135,14 @@ class OnBoardingViewModel(
 
     private fun isInitializeOnBoarding(): Boolean =
         nickname.value.nickname.isBlank().not() &&
-            nicknameState.value == NicknameState.AVAILABLE &&
-            introduction.value.isBlank().not()
+                nicknameState.value == NicknameState.AVAILABLE &&
+                introduction.value.isBlank().not()
 
     private fun NicknameUiModel.toDomain(): Nickname = Nickname(nickname = nickname)
 
     companion object {
-        private val PATTERN_NICKNAME = Pattern.compile("^[_a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ]+$")
+        private val PATTERN_NICKNAME =
+            Pattern.compile("^[_a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\\u318D\\u119E\\u11A2\\u2022\\u2025a\\u00B7\\uFE55]+$")
         private const val MAX_NICKNAME_LENGTH = 8
 
         val Factory: ViewModelProvider.Factory = viewModelFactory {

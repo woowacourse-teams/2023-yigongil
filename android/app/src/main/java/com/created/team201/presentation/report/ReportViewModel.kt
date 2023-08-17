@@ -6,13 +6,15 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.created.domain.model.Report
+import com.created.domain.model.ReportStudy
+import com.created.domain.model.ReportUser
 import com.created.domain.repository.ReportRepository
 import com.created.team201.data.datasource.remote.ReportDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.ReportRepositoryImpl
 import com.created.team201.presentation.report.model.DateUiModel
-import com.created.team201.presentation.report.model.ReportTargetUiModel
+import com.created.team201.presentation.report.model.ReportStudyUiModel
+import com.created.team201.presentation.report.model.ReportUserUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
 import kotlinx.coroutines.launch
@@ -64,7 +66,11 @@ class ReportViewModel(
         return title.isNotBlank() && content.isNotBlank()
     }
 
-    fun reportUser(targetId: Long, notifySuccessfulReport: () -> Unit) {
+    fun reportUser(
+        reportedUserId: Long,
+        notifySuccessfulReport: () -> Unit,
+        notifyUnsuccessfulReport: () -> Unit,
+    ) {
         viewModelScope.launch {
             runCatching {
                 if (isReporting) {
@@ -72,8 +78,8 @@ class ReportViewModel(
                 }
                 isReporting = true
                 reportRepository.reportUser(
-                    ReportTargetUiModel(
-                        reportedMemberId = targetId,
+                    ReportUserUiModel(
+                        reportedMemberId = reportedUserId,
                         title = title.value,
                         problemOccuredAt = selectedDate.value.toProblemOccurredAt(),
                         content = content.value,
@@ -83,6 +89,36 @@ class ReportViewModel(
                 notifySuccessfulReport()
                 isReporting = false
             }.onFailure {
+                notifyUnsuccessfulReport()
+                isReporting = false
+            }
+        }
+    }
+
+    fun reportStudy(
+        reportedStudyId: Long,
+        notifySuccessfulReport: () -> Unit,
+        notifyUnsuccessfulReport: () -> Unit,
+    ) {
+        viewModelScope.launch {
+            runCatching {
+                if (isReporting) {
+                    return@launch
+                }
+                isReporting = true
+                reportRepository.reportStudy(
+                    ReportStudyUiModel(
+                        reportedStudyId = reportedStudyId,
+                        title = title.value,
+                        problemOccurredAt = selectedDate.value.toProblemOccurredAt(),
+                        content = content.value,
+                    ).toDomain(),
+                )
+            }.onSuccess {
+                notifySuccessfulReport()
+                isReporting = false
+            }.onFailure {
+                notifyUnsuccessfulReport()
                 isReporting = false
             }
         }
@@ -105,10 +141,17 @@ class ReportViewModel(
 
     private fun DateUiModel.toProblemOccurredAt(): String = DATE_FORMAT.format(year, month, day)
 
-    private fun ReportTargetUiModel.toDomain(): Report = Report(
+    private fun ReportUserUiModel.toDomain(): ReportUser = ReportUser(
         reportedMemberId,
         title,
         problemOccuredAt,
+        content,
+    )
+
+    private fun ReportStudyUiModel.toDomain(): ReportStudy = ReportStudy(
+        reportedStudyId,
+        title,
+        problemOccurredAt,
         content,
     )
 

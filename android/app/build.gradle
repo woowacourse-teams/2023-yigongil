@@ -37,6 +37,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "TEAM201_GIT_HUB_URL", properties["GIT_HUB_URL"]
+        buildConfigField "String", "TEAM201_POLICY", properties["POLICY"]
     }
 
     buildTypes {
