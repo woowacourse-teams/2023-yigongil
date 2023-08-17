@@ -9,6 +9,8 @@ import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.home.adapter.DashboardAdapter
 import com.created.team201.presentation.home.model.TodoWithRoundIdUiModel
 import com.created.team201.presentation.studyManagement.StudyManagementActivity
+import com.created.team201.util.FirebaseLogUtil
+import com.created.team201.util.FirebaseLogUtil.SCREEN_HOME
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val homeViewModel: HomeViewModel by viewModels { HomeViewModel.Factory }
@@ -48,6 +50,9 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
     override fun onResume() {
         super.onResume()
+
+        FirebaseLogUtil.logScreenEvent(SCREEN_HOME, this@HomeFragment.javaClass.simpleName)
+
         homeViewModel.updateUserStudies()
     }
 

@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.CreateTodo
+import com.created.domain.model.Nickname
 import com.created.domain.model.PageIndex
 import com.created.domain.model.PeriodUnit
 import com.created.domain.model.Profile
+import com.created.domain.model.ProfileInformation
 import com.created.domain.model.Round
 import com.created.domain.model.RoundDetail
 import com.created.domain.model.StudyDetail
@@ -21,7 +23,9 @@ import com.created.team201.data.mapper.toDomain
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.StudyManagementRepositoryImpl
 import com.created.team201.presentation.home.model.TodoUiModel
+import com.created.team201.presentation.myPage.model.ProfileInformationUiModel
 import com.created.team201.presentation.myPage.model.ProfileUiModel
+import com.created.team201.presentation.onBoarding.model.NicknameUiModel
 import com.created.team201.presentation.studyList.model.PeriodUiModel
 import com.created.team201.presentation.studyManagement.TodoState.DEFAULT
 import com.created.team201.presentation.studyManagement.adapter.OptionalTodoViewType.DISPLAY
@@ -393,13 +397,22 @@ class StudyManagementViewModel(
     private fun Profile.toUiModel(): ProfileUiModel = ProfileUiModel(
         githubId,
         id,
-        introduction,
-        nickname,
+        profileInformation.toUiModel(),
         profileImageUrl,
         successRate,
         successfulRoundCount,
         tier,
         tierProgress,
+    )
+
+    private fun ProfileInformation.toUiModel(): ProfileInformationUiModel =
+        ProfileInformationUiModel(
+            nickname = nickname.toUiModel(),
+            introduction = introduction
+        )
+
+    private fun Nickname.toUiModel(): NicknameUiModel = NicknameUiModel(
+        nickname = nickname
     )
 
     companion object {

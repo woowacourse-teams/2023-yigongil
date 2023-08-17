@@ -5,14 +5,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.Member
+import com.created.domain.model.Nickname
 import com.created.domain.model.Profile
+import com.created.domain.model.ProfileInformation
 import com.created.domain.model.Role
 import com.created.domain.model.StudyDetail
 import com.created.domain.repository.StudyDetailRepository
 import com.created.team201.data.datasource.remote.StudyDetailDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.StudyDetailRepositoryImpl
+import com.created.team201.presentation.myPage.model.ProfileInformationUiModel
 import com.created.team201.presentation.myPage.model.ProfileUiModel
+import com.created.team201.presentation.onBoarding.model.NicknameUiModel
 import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
 import com.created.team201.presentation.studyDetail.model.StudyMemberUIModel
 import com.created.team201.util.NonNullLiveData
@@ -170,13 +174,22 @@ class StudyDetailViewModel private constructor(
     private fun Profile.toUiModel(): ProfileUiModel = ProfileUiModel(
         githubId,
         id,
-        introduction,
-        nickname,
+        profileInformation.toUiModel(),
         profileImageUrl,
         successRate,
         successfulRoundCount,
         tier,
         tierProgress,
+    )
+
+    private fun ProfileInformation.toUiModel(): ProfileInformationUiModel =
+        ProfileInformationUiModel(
+            nickname = nickname.toUiModel(),
+            introduction = introduction
+        )
+
+    private fun Nickname.toUiModel(): NicknameUiModel = NicknameUiModel(
+        nickname = nickname
     )
 
     companion object {

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:editText="http://schemas.android.com/tools"
+    xmlns:textView="http://schemas.android.com/tools">
 
     <data>
 
@@ -62,24 +63,28 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:shapeAppearanceOverlay="@style/circleImageView"
                     app:strokeColor="@color/grey02_78808B"
-                    app:strokeWidth="1dp"
-                    tools:src="@drawable/ic_launcher_foreground" />
+                    app:strokeWidth="1dp" />
 
-                <TextView
-                    android:id="@+id/tv_my_page_profile_nickname"
+                <EditText
+                    android:id="@+id/et_my_page_profile_nickname"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="12dp"
+                    android:background="@color/transparent"
                     android:ellipsize="end"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:maxLength="8"
                     android:maxLines="1"
-                    android:text="@{viewModel.profile.nickname}"
+                    android:onTextChanged="@{(text, start, before, count) -> viewModel.setNickname(text.toString())}"
+                    android:text="@{viewModel.profile.profileInformation.nickname.nickname}"
                     android:textAppearance="@style/name_sb20"
                     android:textColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/iv_my_page_profile"
                     app:layout_constraintTop_toTopOf="@id/iv_my_page_profile"
-                    tools:text="나는 김진우다" />
+                    editText:inputFilter="@{viewModel.getInputFilter()}" />
 
                 <TextView
                     android:id="@+id/tv_my_page_profile_id"
@@ -91,10 +96,23 @@
                     android:text="@{viewModel.profile.githubId}"
                     android:textAppearance="@style/text_r14"
                     android:textColor="@color/grey02_78808B"
-                    app:layout_constraintEnd_toEndOf="@id/tv_my_page_profile_nickname"
-                    app:layout_constraintStart_toStartOf="@id/tv_my_page_profile_nickname"
-                    app:layout_constraintTop_toBottomOf="@id/tv_my_page_profile_nickname"
-                    tools:text="jwkim1234" />
+                    app:layout_constraintEnd_toEndOf="@id/et_my_page_profile_nickname"
+                    app:layout_constraintStart_toStartOf="@id/et_my_page_profile_nickname"
+                    app:layout_constraintTop_toBottomOf="@id/et_my_page_profile_nickname" />
+
+                <TextView
+                    android:id="@+id/tv_my_page_nickname_validate_introduction"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:maxLines="1"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/description_r12"
+                    app:layout_constraintBottom_toTopOf="@id/tv_my_page_btn_modify_profile"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_my_page_profile"
+                    textView:nicknameState="@{viewModel.nicknameState}" />
 
                 <TextView
                     android:id="@+id/tv_my_page_btn_modify_profile"
@@ -102,16 +120,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="20dp"
-                    android:background="@drawable/bg_rectangle_only_radius_10dp"
-                    android:backgroundTint="@color/green01_4039D353"
+                    android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
+                    android:enabled="@{viewModel.isModifyEnabled}"
                     android:paddingVertical="14dp"
-                    android:text="@string/myPage_button_modify_profile"
                     android:textAlignment="center"
                     android:textAppearance="@style/button_sb18"
-                    android:textColor="@color/white01_66FFFFFF"
+                    android:textColor="@color/tv_color_disabled"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/iv_my_page_profile" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_my_page_nickname_validate_introduction" />
 
                 <include
                     android:id="@+id/layout_my_page_study_success_rate"
@@ -149,16 +166,22 @@
                     app:result="@{@string/profile_todo_success_rate_format(viewModel.profile.successfulRoundCount)}"
                     app:title="@{@string/myPage_todo_success_rate_title}" />
 
-                <TextView
-                    android:id="@+id/tv_my_page_profile_introduction"
+                <EditText
+                    android:id="@+id/et_my_page_profile_introduction"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="44dp"
                     android:background="@drawable/bg_rectangle_radius_5dp"
+                    android:hint="@string/onBoarding_introduction_hint_text"
+                    android:importantForAutofill="no"
+                    android:inputType="textMultiLine|textNoSuggestions"
+                    android:maxLength="200"
+                    android:onTextChanged="@{(text, start, before, count) -> viewModel.setIntroduction(text.toString())}"
                     android:padding="16dp"
-                    android:text="@{viewModel.profile.introduction}"
+                    android:text="@{viewModel.profile.profileInformation.introduction}"
                     android:textAppearance="@style/text_r16"
                     android:textColor="@color/white"
+                    android:textColorHint="@color/grey02_78808B"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

@@ -3,6 +3,7 @@ package com.created.domain.repository
 interface AuthRepository {
 
     val accessToken: String
+    val refreshToken: String
 
     suspend fun requestSignUp(token: String): Result<Unit>
 

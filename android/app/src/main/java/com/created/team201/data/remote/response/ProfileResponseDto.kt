@@ -10,7 +10,7 @@ data class ProfileResponseDto(
     @SerialName("githubId")
     val githubId: String,
     @SerialName("introduction")
-    val introduction: String?,
+    val introduction: String,
     @SerialName("nickname")
     val nickname: String,
     @SerialName("profileImageUrl")

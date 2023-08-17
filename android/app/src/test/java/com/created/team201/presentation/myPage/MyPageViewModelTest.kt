@@ -1,9 +1,13 @@
 package com.created.team201.presentation.myPage
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.created.domain.model.Nickname
 import com.created.domain.model.Profile
+import com.created.domain.model.ProfileInformation
 import com.created.domain.repository.MyPageRepository
+import com.created.team201.presentation.myPage.model.ProfileInformationUiModel
 import com.created.team201.presentation.myPage.model.ProfileUiModel
+import com.created.team201.presentation.onBoarding.model.NicknameUiModel
 import io.mockk.coEvery
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
@@ -42,7 +46,7 @@ class MyPageViewModelTest {
         coEvery { repository.getMyPage() } answers { Result.success(MyPageFixture.profile) }
 
         // when
-        viewModel.updateProfile()
+        viewModel.loadProfile()
 
         // then
         val expected = MyPageFixture.profile.toUiModel()
@@ -52,12 +56,21 @@ class MyPageViewModelTest {
     private fun Profile.toUiModel(): ProfileUiModel = ProfileUiModel(
         githubId = githubId,
         id = id,
-        introduction = introduction,
-        nickname = nickname,
+        profileInformation = profileInformation.toUiModel(),
         profileImageUrl = profileImageUrl,
         successRate = successRate,
         successfulRoundCount = successfulRoundCount,
         tier = tier,
         tierProgress = tierProgress,
+    )
+
+    private fun ProfileInformation.toUiModel(): ProfileInformationUiModel =
+        ProfileInformationUiModel(
+            nickname = nickname.toUiModel(),
+            introduction = introduction
+        )
+
+    private fun Nickname.toUiModel(): NicknameUiModel = NicknameUiModel(
+        nickname = nickname
     )
 }
