@@ -19,6 +19,17 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Cache Gradle
+      uses: actions/cache@v3
+      working-directory: ${{ env.working-directory }}
+      with:
+        path: |
+          ~/.gradle/chaches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
     
     - name: Java JDK 17 세팅
       uses: actions/setup-java@v3
@@ -37,6 +48,7 @@ jobs:
         GIT_HUB_URL: ${{ secrets.GIT_HUB_URL }}
       run: 
         echo -e "BASE_URL=\"$BASE_URL\"\n
+        POLICY=\"$POLICY\"\n
         GIT_HUB_URL=\"$GIT_HUB_URL\"" >> local.properties
       working-directory: ${{ env.working-directory }}
       
