@@ -38,6 +38,23 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
+      - name: keyStore 세팅
+        env:
+          KEY_STORE: ${{ secrets.KEY_STORE }}
+        run: echo -n "$KEY_STORE" > team201.jks | base64 -d -i  team201.jks
+        working-directory: ${{ env.working-directory }}/app/keystore
+
+      - name: keystore properties 생성
+        run: touch keystore.properties
+        working-directory: ${{ env.working-directory }}
+        
+      - name: keystore properties 세팅
+        env:
+          KEY_STORE_PROPERTIES: ${{ secrets.KEY_STORE_PROPERTIES }}
+        run:
+          echo -e "$KEY_STORE_PROPERTIES" >> keystore.properties
+        working-directory: ${{ env.working-directory }}
+
       - name: local properties 생성
         run: touch local.properties
         working-directory: ${{ env.working-directory }}
