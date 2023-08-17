@@ -1,7 +1,10 @@
 package com.created.domain.repository
 
-import com.created.domain.model.Report
+import com.created.domain.model.ReportStudy
+import com.created.domain.model.ReportUser
 
 interface ReportRepository {
-    suspend fun reportUser(report: Report)
+    suspend fun reportUser(reportUser: ReportUser)
+
+    suspend fun reportStudy(reportStudy: ReportStudy)
 }
