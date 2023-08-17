@@ -36,9 +36,8 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         setActionBar()
         initMyProfile()
         setNicknameValidate()
-        setObserveProfileType()
+        setMyPageObserve()
         setOnProfileModifyClick()
-        setObserveModifyProfile()
     }
 
 
@@ -76,6 +75,30 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         }
     }
 
+    private fun setMyPageObserve() {
+        myPageViewModel.profileType.observe(viewLifecycleOwner) { profileType ->
+            when (profileType) {
+                ProfileType.VIEW -> setProfileView(false)
+                ProfileType.MODIFY -> setProfileView(true)
+            }
+        }
+        myPageViewModel.modifyProfileState.observe(viewLifecycleOwner) { modifyProfileState ->
+            when (modifyProfileState) {
+                SUCCESS -> {
+                    showToast(getString(R.string.myPage_toast_modify_profile_success))
+                }
+
+                FAIL -> {
+                    showToast(getString(R.string.myPage_toast_modify_profile_failed))
+                    myPageViewModel.resetModifyProfile()
+                }
+
+                IDLE -> throw IllegalStateException()
+            }
+            myPageViewModel.loadProfile()
+        }
+    }
+
     private fun setOnProfileModifyClick() {
         binding.tvMyPageBtnModifyProfile.setOnClickListener {
             when (myPageViewModel.profileType.value) {
@@ -110,33 +133,6 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                 myPageViewModel.switchProfileType()
             }
         }
-
-    private fun setObserveProfileType() {
-        myPageViewModel.profileType.observe(viewLifecycleOwner) { profileType ->
-            when (profileType) {
-                ProfileType.VIEW -> setProfileView(false)
-                ProfileType.MODIFY -> setProfileView(true)
-            }
-        }
-    }
-
-    private fun setObserveModifyProfile() {
-        myPageViewModel.modifyProfileState.observe(viewLifecycleOwner) { modifyProfileState ->
-            when (modifyProfileState) {
-                SUCCESS -> {
-                    showToast(getString(R.string.myPage_toast_modify_profile_success))
-                }
-
-                FAIL -> {
-                    showToast(getString(R.string.myPage_toast_modify_profile_failed))
-                    myPageViewModel.resetModifyProfile()
-                }
-
-                IDLE -> throw IllegalStateException()
-            }
-            myPageViewModel.loadProfile()
-        }
-    }
 
     private fun showToast(message: String) =
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
