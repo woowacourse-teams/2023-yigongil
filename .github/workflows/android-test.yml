@@ -41,8 +41,8 @@ jobs:
       - name: keyStore 세팅
         env:
           KEY_STORE: ${{ secrets.KEY_STORE }}
-        run: echo -n "$KEY_STORE" > team201.jks | base64 -d -i  team201.jks
-        working-directory: ./android/app/keystore
+        run: echo -n "$KEY_STORE" > team201.jks | base64 -d -i /app/keystore/team201.jks
+        working-directory: ${{ env.working-directory }}
 
       - name: keystore properties 생성
         run: touch keystore.properties
