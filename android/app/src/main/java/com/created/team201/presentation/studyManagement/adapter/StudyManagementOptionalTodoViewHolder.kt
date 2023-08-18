@@ -15,8 +15,8 @@ class StudyManagementOptionalTodoViewHolder private constructor(
         binding.onClick = studyManagementClickListener
     }
 
-    fun bind(optionalTodoUiModel: OptionalTodoUiModel) {
-        (binding as ItemStudyManagementOptionalTodosBinding).optionalTodo = optionalTodoUiModel
+    override fun bind(item: OptionalTodoUiModel) {
+        (binding as ItemStudyManagementOptionalTodosBinding).optionalTodo = item
     }
 
     companion object {

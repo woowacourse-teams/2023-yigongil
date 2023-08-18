@@ -9,6 +9,7 @@ import com.created.team201.R
 import com.created.team201.databinding.ItemStudyManagementBinding
 import com.created.team201.presentation.studyManagement.StudyManagementClickListener
 import com.created.team201.presentation.studyManagement.StudyMemberClickListener
+import com.created.team201.presentation.studyManagement.TodoState
 import com.created.team201.presentation.studyManagement.TodoState.DEFAULT
 import com.created.team201.presentation.studyManagement.TodoState.NECESSARY_TODO_EDIT
 import com.created.team201.presentation.studyManagement.TodoState.OPTIONAL_TODO_ADD
@@ -38,9 +39,10 @@ class StudyManagementViewHolder(
 
     private fun setClickAddTodo() {
         binding.tvStudyManagementAddOptionalTodo.setOnClickListener {
-            val todoState = studyManagementClickListener.onClickGenerateOptionalTodo(
-                studyManagementOptionalTodoAdapter.itemCount,
-            )
+            if (studyManagementOptionalTodoAdapter.itemCount == 0) {
+                binding.tvItemStudyManagementEditOptionalTodo.setText(R.string.study_management_edit_todo)
+            }
+            val todoState = studyManagementClickListener.onClickGenerateOptionalTodo()
             if (todoState != OPTIONAL_TODO_ADD) {
                 return@setOnClickListener
             }
@@ -84,11 +86,20 @@ class StudyManagementViewHolder(
         }
     }
 
-    fun bind(studyManagementUIModel: StudyRoundDetailUiModel) {
+    fun bind(studyManagementUIModel: StudyRoundDetailUiModel, todoState: TodoState) {
         studyRoundDetail = studyManagementUIModel
         binding.studyManagement = studyManagementUIModel
         studyManagementMemberAdapter.submitList(studyManagementUIModel.studyMembers)
         studyManagementOptionalTodoAdapter.submitList(studyManagementUIModel.optionalTodos)
+        changeViewState(todoState)
+    }
+
+    private fun changeViewState(todoState: TodoState) {
+        when (todoState) {
+            DEFAULT -> binding.tvItemStudyManagementEditOptionalTodo.setText(R.string.study_management_edit_todo)
+            OPTIONAL_TODO_EDIT -> binding.tvItemStudyManagementEditOptionalTodo.setText(R.string.study_management_edit_todo_done)
+            else -> return
+        }
     }
 
     private fun setEditNecessaryTodo() {

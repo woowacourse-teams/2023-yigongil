@@ -44,6 +44,7 @@ android {
         release {
             minifyEnabled true
             debuggable false
+            shrinkResources true
 
             buildConfigField "String", "TEAM201_BASE_URL", properties["BASE_URL"]
 
@@ -54,6 +55,7 @@ android {
         debug {
             minifyEnabled false
             debuggable true
+            shrinkResources false
 
             buildConfigField "String", "TEAM201_BASE_URL", properties["BASE_TEST_URL"]
         }

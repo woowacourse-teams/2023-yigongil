@@ -146,7 +146,7 @@ class StudyManagementViewModel(
     }
 
     private fun addNecessaryTodo(todoContent: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             runCatching {
                 repository.createNecessaryTodo(currentRoundDetail.id, CreateTodo(todoContent))
             }.onSuccess { result ->
@@ -166,7 +166,7 @@ class StudyManagementViewModel(
     }
 
     private fun addOptionalTodo(todoContent: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             runCatching {
                 repository.createOptionalTodo(currentRoundDetail.id, CreateTodo(todoContent))
             }.onSuccess { result ->
@@ -213,7 +213,7 @@ class StudyManagementViewModel(
             isInitialized = true,
         )
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             runCatching {
                 repository.patchNecessaryTodoIsDone(
                     currentRoundDetail.id,
@@ -233,7 +233,7 @@ class StudyManagementViewModel(
 
     private fun updateOptionalTodoIsDone(todoId: Long, isDone: Boolean) {
         val newOptionalTodo = getNewOptionalTodo(todoId, isDone)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val optionalTodos = currentRoundDetail.optionalTodos.map { optionalTodo ->
                 optionalTodo.takeIf { it.todo.todoId != todoId } ?: newOptionalTodo
             }
@@ -269,7 +269,7 @@ class StudyManagementViewModel(
             todo = currentRoundDetail.necessaryTodo.todo.copy(content = todoContent),
         )
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             runCatching {
                 repository.patchNecessaryTodo(
                     currentRoundDetail.id,
@@ -294,7 +294,7 @@ class StudyManagementViewModel(
             it.copy(viewType = DISPLAY.viewType)
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             runCatching {
                 for (updatedTodo in updatedTodos) {
                     repository.patchOptionalTodo(currentRoundDetail.id, updatedTodo.todo.toDomain())
@@ -315,6 +315,9 @@ class StudyManagementViewModel(
         val newOptionalTodos = currentRoundDetail.optionalTodos.toMutableList()
         newOptionalTodos.removeIf {
             it.todo.todoId == optionalTodo.todo.todoId
+        }
+        if (newOptionalTodos.isEmpty()) {
+            _todoState.value = DEFAULT
         }
 
         viewModelScope.launch {
@@ -408,11 +411,11 @@ class StudyManagementViewModel(
     private fun ProfileInformation.toUiModel(): ProfileInformationUiModel =
         ProfileInformationUiModel(
             nickname = nickname.toUiModel(),
-            introduction = introduction
+            introduction = introduction,
         )
 
     private fun Nickname.toUiModel(): NicknameUiModel = NicknameUiModel(
-        nickname = nickname
+        nickname = nickname,
     )
 
     companion object {

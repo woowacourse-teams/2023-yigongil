@@ -109,6 +109,7 @@
     <string name="study_management_information_button_menu">스터디 정보</string>
     <string name="study_management_not_allowed_add_optional_todo">더이상 선택투두를 추가할 수 없습니다.</string>
     <string name="study_management_not_allowed_empty_content">투두를 입력해 주세요.</string>
+    <string name="study_management_not_allowed_another_edit">현재 투두 작성을 완료한 후 다시 시도해 주세요.</string>
     <string name="study_management_period_of_round">%d %s</string>
     <string name="study_management_deleted_member_alert">탈퇴한 회원입니다.</string>
     <string name="item_study_management_todo_description">투두 체크박스</string>
