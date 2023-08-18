@@ -146,7 +146,7 @@ class StudyManagementViewModel(
     }
 
     private fun addNecessaryTodo(todoContent: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             runCatching {
                 repository.createNecessaryTodo(currentRoundDetail.id, CreateTodo(todoContent))
             }.onSuccess { result ->
@@ -166,7 +166,7 @@ class StudyManagementViewModel(
     }
 
     private fun addOptionalTodo(todoContent: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             runCatching {
                 repository.createOptionalTodo(currentRoundDetail.id, CreateTodo(todoContent))
             }.onSuccess { result ->
@@ -213,7 +213,7 @@ class StudyManagementViewModel(
             isInitialized = true,
         )
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             runCatching {
                 repository.patchNecessaryTodoIsDone(
                     currentRoundDetail.id,
@@ -233,7 +233,7 @@ class StudyManagementViewModel(
 
     private fun updateOptionalTodoIsDone(todoId: Long, isDone: Boolean) {
         val newOptionalTodo = getNewOptionalTodo(todoId, isDone)
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val optionalTodos = currentRoundDetail.optionalTodos.map { optionalTodo ->
                 optionalTodo.takeIf { it.todo.todoId != todoId } ?: newOptionalTodo
             }
@@ -269,7 +269,7 @@ class StudyManagementViewModel(
             todo = currentRoundDetail.necessaryTodo.todo.copy(content = todoContent),
         )
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             runCatching {
                 repository.patchNecessaryTodo(
                     currentRoundDetail.id,
@@ -294,7 +294,7 @@ class StudyManagementViewModel(
             it.copy(viewType = DISPLAY.viewType)
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             runCatching {
                 for (updatedTodo in updatedTodos) {
                     repository.patchOptionalTodo(currentRoundDetail.id, updatedTodo.todo.toDomain())
