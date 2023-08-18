@@ -93,6 +93,9 @@ class StudyManagementActivity :
         studyManagementViewModel.studyRounds.observe(this) { studyRoundDetails ->
             studyManagementAdapter.submitList(studyRoundDetails)
         }
+        studyManagementViewModel.todoState.observe(this) { todoState ->
+            studyManagementAdapter.updateTodoState(todoState ?: NOTHING)
+        }
         binding.vpStudyManagement.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {

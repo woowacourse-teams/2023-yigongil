@@ -5,12 +5,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.created.team201.presentation.studyManagement.StudyManagementClickListener
 import com.created.team201.presentation.studyManagement.StudyMemberClickListener
+import com.created.team201.presentation.studyManagement.TodoState
 import com.created.team201.presentation.studyManagement.model.StudyRoundDetailUiModel
 
 class StudyManagementAdapter(
     private val studyManagementClickListener: StudyManagementClickListener,
     private val studyMemberClickListener: StudyMemberClickListener,
 ) : ListAdapter<StudyRoundDetailUiModel, StudyManagementViewHolder>(diffCallback) {
+
+    private lateinit var todoState: TodoState
 
     init {
         setHasStableIds(true)
@@ -29,7 +32,11 @@ class StudyManagementAdapter(
     }
 
     override fun onBindViewHolder(holder: StudyManagementViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), todoState)
+    }
+
+    fun updateTodoState(todoState: TodoState) {
+        this.todoState = todoState
     }
 
     companion object {
