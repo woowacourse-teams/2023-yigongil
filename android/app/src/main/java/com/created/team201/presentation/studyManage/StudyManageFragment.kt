@@ -3,7 +3,6 @@ package com.created.team201.presentation.studyManage
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView.OVER_SCROLL_NEVER
 import androidx.viewpager2.widget.ViewPager2
 import com.created.team201.R
@@ -20,7 +19,6 @@ import com.created.team201.util.FirebaseLogUtil.SCREEN_STUDY_MANAGE
 import com.created.team201.util.FirebaseLogUtil.SCREEN_STUDY_MANAGE_OPENED
 import com.created.team201.util.FirebaseLogUtil.SCREEN_STUDY_MANAGE_PARTICIPATED
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.launch
 
 class StudyManageFragment :
     BindingFragment<FragmentStudyManageBinding>(R.layout.fragment_study_manage) {
@@ -37,10 +35,16 @@ class StudyManageFragment :
 
         FirebaseLogUtil.logScreenEvent(
             SCREEN_STUDY_MANAGE,
-            this@StudyManageFragment.javaClass.simpleName
+            this@StudyManageFragment.javaClass.simpleName,
         )
+    }
 
-        studyManageViewModel.loadStudies()
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+
+        if (hidden.not()) {
+            studyManageViewModel.loadStudies()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,17 +53,8 @@ class StudyManageFragment :
         setUpViewPagerAdapter()
         setUpTabLayoutViewPagerConnection()
         setUpStudyManageObserve()
-        setUpRefreshListener()
         setupTabChanged()
-    }
-
-    private fun setUpRefreshListener() {
-        binding.srlStudyManage.setOnRefreshListener {
-            viewLifecycleOwner.lifecycleScope.launch {
-                studyManageViewModel.loadStudies()
-                binding.srlStudyManage.isRefreshing = false
-            }
-        }
+        studyManageViewModel.loadStudies()
     }
 
     private fun setUpViewPagerAdapter() {
@@ -92,14 +87,14 @@ class StudyManageFragment :
                             PARTICIPATED -> {
                                 FirebaseLogUtil.logScreenEvent(
                                     SCREEN_STUDY_MANAGE_PARTICIPATED,
-                                    this@StudyManageFragment.javaClass.simpleName
+                                    this@StudyManageFragment.javaClass.simpleName,
                                 )
                             }
 
                             OPENED -> {
                                 FirebaseLogUtil.logScreenEvent(
                                     SCREEN_STUDY_MANAGE_OPENED,
-                                    this@StudyManageFragment.javaClass.simpleName
+                                    this@StudyManageFragment.javaClass.simpleName,
                                 )
                             }
                         }

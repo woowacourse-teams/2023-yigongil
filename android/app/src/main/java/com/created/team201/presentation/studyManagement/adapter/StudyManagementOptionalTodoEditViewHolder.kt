@@ -22,9 +22,10 @@ class StudyManagementOptionalTodoEditViewHolder private constructor(
         binding.onClick = studyManagementClickListener
     }
 
-    fun bind(item: OptionalTodoUiModel) {
+    override fun bind(item: OptionalTodoUiModel) {
         optionalTodo = item
         (binding as ItemStudyManagementOptionalTodoEditBinding).optionalTodo = optionalTodo
+        binding.etItemStudyManagementOptionalTodoEdit.setText(item.todo.content)
     }
 
     companion object {

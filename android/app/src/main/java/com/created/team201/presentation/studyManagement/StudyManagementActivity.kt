@@ -93,6 +93,9 @@ class StudyManagementActivity :
         studyManagementViewModel.studyRounds.observe(this) { studyRoundDetails ->
             studyManagementAdapter.submitList(studyRoundDetails)
         }
+        studyManagementViewModel.todoState.observe(this) { todoState ->
+            studyManagementAdapter.updateTodoState(todoState ?: NOTHING)
+        }
         binding.vpStudyManagement.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
@@ -127,17 +130,10 @@ class StudyManagementActivity :
             studyManagementViewModel.updateTodoIsDone(isNecessary, todoId, isDone)
         }
 
-        override fun onClickGenerateOptionalTodo(optionalTodoCount: Int): TodoState {
+        override fun onClickGenerateOptionalTodo(): TodoState {
             if (studyManagementViewModel.todoState.value != DEFAULT) {
+                showAlertToast()
                 return studyManagementViewModel.todoState.value ?: NOTHING
-            }
-            if (optionalTodoCount >= MAXIMUM_OPTIONAL_TODO_COUNT) {
-                Toast.makeText(
-                    this@StudyManagementActivity,
-                    getString(R.string.study_management_not_allowed_add_optional_todo),
-                    Toast.LENGTH_SHORT,
-                ).show()
-                return DEFAULT
             }
             studyManagementViewModel.setTodoState(OPTIONAL_TODO_ADD)
             return OPTIONAL_TODO_ADD
@@ -157,7 +153,10 @@ class StudyManagementActivity :
                     NECESSARY_TODO_EDIT
                 }
 
-                else -> NOTHING
+                else -> {
+                    showAlertToast()
+                    NOTHING
+                }
             }
         }
 
@@ -176,13 +175,24 @@ class StudyManagementActivity :
                     OPTIONAL_TODO_EDIT
                 }
 
-                else -> NOTHING
+                else -> {
+                    showAlertToast()
+                    NOTHING
+                }
             }
         }
 
         override fun onClickDeleteOptionalTodo(todo: OptionalTodoUiModel) {
             studyManagementViewModel.deleteTodo(todo)
         }
+    }
+
+    private fun showAlertToast() {
+        Toast.makeText(
+            this@StudyManagementActivity,
+            getString(R.string.study_management_not_allowed_another_edit),
+            Toast.LENGTH_SHORT,
+        ).show()
     }
 
     private fun updateTodoContent(
@@ -337,7 +347,6 @@ class StudyManagementActivity :
         private const val FIRST_ROUND = 1
         private const val CONVERT_TO_PAGE = 1
         private const val PAGE_INDEX_ZERO = 0
-        private const val MAXIMUM_OPTIONAL_TODO_COUNT = 4
         private const val KEY_ERROR_LONG = 0L
         private const val KEY_STUDY_ID = "KEY_STUDY_ID"
         private const val KEY_ROLE_INDEX = "KEY_ROLE_INDEX"

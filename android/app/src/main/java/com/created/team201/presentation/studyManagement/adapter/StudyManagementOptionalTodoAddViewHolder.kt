@@ -20,8 +20,8 @@ class StudyManagementOptionalTodoAddViewHolder(
         }
     }
 
-    fun bind(optionalTodoUiModel: OptionalTodoUiModel) {
-        (binding as ItemStudyManagementOptionalTodoAddBinding).optionalTodo = optionalTodoUiModel
+    override fun bind(item: OptionalTodoUiModel) {
+        (binding as ItemStudyManagementOptionalTodoAddBinding).optionalTodo = item
     }
 
     companion object {
