@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
+import com.yigongil.backend.response.ProgressRateResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.TodoResponse;
 import io.cucumber.java.en.Given;
@@ -172,5 +173,28 @@ public class TodoSteps {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @When("이름이 {string}인 스터디의 찾은 회차 투두 진행률을 조회한다.")
+    public void 회차의_투두_진행률을_조회한다(String studyName) {
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .when()
+                                                        .get(
+                                                                "/v1/studies/" + sharedContext.getParameter(studyName)
+                                                                        + "/rounds/" + sharedContext.getParameter("roundId")
+                                                                        + "/progress-rate"
+                                                        )
+                                                        .then().log().all()
+                                                        .extract();
+
+        sharedContext.setResponse(response);
+    }
+
+    @Then("진행률이 {string}이다.")
+    public void 기대_진행률_검증(String progressRate) {
+        ProgressRateResponse response = sharedContext.getResponse()
+                                                     .as(ProgressRateResponse.class);
+
+        assertThat(response.progressRate()).isEqualTo(Integer.parseInt(progressRate));
     }
 }

@@ -11,6 +11,7 @@ import com.yigongil.backend.exception.NecessaryTodoAlreadyExistException;
 import com.yigongil.backend.exception.NotStudyMasterException;
 import com.yigongil.backend.exception.NotStudyMemberException;
 import com.yigongil.backend.fixture.RoundFixture;
+import com.yigongil.backend.fixture.RoundOfMemberFixture;
 import java.util.List;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Nested;
@@ -54,7 +55,7 @@ class RoundTest {
         @Test
         void 필수_투두가_존재하면_예외를_던진다() {
             //given
-            Round round = RoundFixture.아이디_삼_투두없는_라운드.toRoundWithContent("필수 투두");
+            Round round = RoundFixture.아이디없는_라운드.toRound();
 
             //then
             ThrowingCallable throwable = () -> round.createNecessaryTodo(round.getMaster(), "새로운 투두");
@@ -83,7 +84,7 @@ class RoundTest {
         @Test
         void 정상생성한다() {
             //given
-            Round round = RoundFixture.아이디_삼_투두없는_라운드.toRoundWithContent("필수 투두");
+            Round round = RoundFixture.아이디_삼_투두없는_라운드.toRound();
 
             //when
             OptionalTodo actual = round.createOptionalTodo(round.getMaster(), "선택 투두");
@@ -120,7 +121,7 @@ class RoundTest {
     @Test
     void 멤버의_필수_투두_완료여부를_반환한다() {
         //given
-        Round round = RoundFixture.아이디_삼_투두없는_라운드.toRoundWithContent("이번 필수 투두");
+        Round round = RoundFixture.아이디없는_라운드.toRound();
         Member master = round.getMaster();
 
         //when
@@ -128,5 +129,42 @@ class RoundTest {
 
         //then
         assertThat(round.isNecessaryToDoDone(master)).isTrue();
+    }
+
+    @Nested
+    class 투두_진행률_계산 {
+
+        @Test
+        void 멤버들의_진행률을_계산한다() {
+            //given
+            Round round = RoundFixture.아이디없는_라운드.toRoundWithRoundOfMember(
+                    RoundOfMemberFixture.노이만_라오멤,
+                    RoundOfMemberFixture.노이만_라오멤,
+                    RoundOfMemberFixture.노이만_라오멤
+            );
+            round.getRoundOfMembers().get(0).updateNecessaryTodoIsDone(true);
+
+            //when
+            int result = round.calculateProgress();
+
+            //then
+            assertThat(result).isEqualTo(33);
+        }
+
+        @Test
+        void 투두를_완료한_멤버가_없다() {
+            //given
+            Round round = RoundFixture.아이디없는_라운드.toRoundWithRoundOfMember(
+                    RoundOfMemberFixture.노이만_라오멤,
+                    RoundOfMemberFixture.노이만_라오멤,
+                    RoundOfMemberFixture.노이만_라오멤
+            );
+
+            //when
+            int result = round.calculateProgress();
+
+            //then
+            assertThat(result).isEqualTo(0);
+        }
     }
 }

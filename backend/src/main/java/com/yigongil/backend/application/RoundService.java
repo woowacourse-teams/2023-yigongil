@@ -5,7 +5,6 @@ import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
-import com.yigongil.backend.domain.roundofmember.RoundOfMemberRepository;
 import com.yigongil.backend.domain.roundofmember.RoundOfMembers;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
@@ -14,6 +13,7 @@ import com.yigongil.backend.exception.InvalidMemberInRoundException;
 import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.response.HomeResponse;
 import com.yigongil.backend.response.MemberOfRoundResponse;
+import com.yigongil.backend.response.ProgressRateResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.TodoResponse;
 import com.yigongil.backend.response.UpcomingStudyResponse;
@@ -28,23 +28,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoundService {
 
     private final RoundRepository roundRepository;
-    private final RoundOfMemberRepository roundOfMemberRepository;
     private final StudyRepository studyRepository;
 
     public RoundService(
             RoundRepository roundRepository,
-            RoundOfMemberRepository roundOfMemberRepository,
             StudyRepository studyRepository
     ) {
         this.roundRepository = roundRepository;
-        this.roundOfMemberRepository = roundOfMemberRepository;
         this.studyRepository = studyRepository;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public RoundResponse findRoundDetail(Member member, Long roundId) {
-        Round round = roundRepository.findById(roundId)
-                                     .orElseThrow(() -> new RoundNotFoundException("해당 회차를 찾을 수 없습니다", roundId));
+        Round round = findRoundById(roundId);
 
         List<RoundOfMember> roundOfMembers = round.getRoundOfMembers();
 
@@ -94,5 +90,16 @@ public class RoundService {
         }
 
         return HomeResponse.of(member, studies, upcomingStudyResponses);
+    }
+
+    @Transactional(readOnly = true)
+    public ProgressRateResponse findProgressRateByRound(Long roundId) {
+        Round round = findRoundById(roundId);
+        return new ProgressRateResponse(round.calculateProgress());
+    }
+
+    private Round findRoundById(Long roundId) {
+        return roundRepository.findById(roundId)
+                              .orElseThrow(() -> new RoundNotFoundException("해당 회차를 찾을 수 없습니다", roundId));
     }
 }

@@ -34,7 +34,8 @@ public class ProdWebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/v1/api/**")
                 .excludePathPatterns("/v1/api-docs/**")
                 .excludePathPatterns("/v1/swagger-ui/**")
-                .excludePathPatterns("/v1/actuator/**");
+                .excludePathPatterns("/v1/actuator/**")
+                .excludePathPatterns("/v1/studies/{id:[0-9\\d*}/rounds/{id:[0-9]\\d*}/progress-rate");
 
     }
 

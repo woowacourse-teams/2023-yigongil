@@ -5,6 +5,7 @@ import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public enum RoundFixture {
@@ -43,13 +44,18 @@ public enum RoundFixture {
                     .build();
     }
 
-    public Round toRoundWithContent(String content) {
+    public Round toRoundWithRoundOfMember(RoundOfMemberFixture... roundOfMemberFixtures) {
+        List<RoundOfMember> roundOfMembers = Arrays.stream(roundOfMemberFixtures)
+                                                   .map(RoundOfMemberFixture::toRoundOfMember)
+                                                   .toList();
         return Round.builder()
                     .id(id)
                     .necessaryToDoContent(content)
                     .roundNumber(roundNumber)
                     .master(master)
-                    .roundOfMembers(new ArrayList<>(List.of(RoundOfMemberFixture.김진우_라운드_삼.toRoundOfMember())))
+                    .endAt(LocalDateTime.now())
+                    .roundOfMembers(roundOfMembers)
                     .build();
     }
+
 }
