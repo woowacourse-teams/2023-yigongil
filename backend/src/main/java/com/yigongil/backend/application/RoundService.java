@@ -5,7 +5,6 @@ import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
-import com.yigongil.backend.domain.roundofmember.RoundOfMembers;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
@@ -70,7 +69,6 @@ public class RoundService {
         for (Study study : studies) {
             Round currentRound = study.getCurrentRound();
             RoundOfMember currentRoundOfMemberOwn = study.findCurrentRoundOfMemberBy(member);
-            RoundOfMembers currentRoundOfMembers = study.findCurrentRoundOfMembers();
 
             LocalDateTime endAt = currentRound.getEndAt();
             int leftDays = (int) ChronoUnit.DAYS.between(LocalDateTime.now(), endAt) + 1;
@@ -83,7 +81,7 @@ public class RoundService {
                             TodoResponse.fromNecessaryTodo(currentRoundOfMemberOwn, currentRound),
                             leftDays,
                             endAt.toLocalDate(),
-                            currentRoundOfMembers.calculateMembersProgress(),
+                            currentRound.calculateProgress(),
                             TodoResponse.fromOptionalTodo(currentRoundOfMemberOwn.getOptionalTodos())
                     )
             );
