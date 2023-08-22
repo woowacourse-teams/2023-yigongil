@@ -2,7 +2,6 @@ package com.yigongil.backend.application;
 
 import static com.yigongil.backend.domain.study.PageStrategy.ID_DESC;
 
-import com.yigongil.backend.application.studyevent.StudyStartedEvent;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.ProcessingStatus;
@@ -24,29 +23,24 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 @Service
 public class StudyService {
 
     private final StudyRepository studyRepository;
     private final StudyMemberRepository studyMemberRepository;
-    private final ApplicationEventPublisher publisher;
 
     public StudyService(
             StudyRepository studyRepository,
-            StudyMemberRepository studyMemberRepository,
-            ApplicationEventPublisher publisher
+            StudyMemberRepository studyMemberRepository
     ) {
         this.studyRepository = studyRepository;
         this.studyMemberRepository = studyMemberRepository;
-        this.publisher = publisher;
     }
 
     @Transactional
@@ -267,7 +261,6 @@ public class StudyService {
         study.validateMaster(member);
 
         study.startStudy();
-        publisher.publishEvent(new StudyStartedEvent(study));
     }
 
     @Transactional

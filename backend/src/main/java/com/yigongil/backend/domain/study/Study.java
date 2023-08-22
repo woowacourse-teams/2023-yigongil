@@ -12,7 +12,9 @@ import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.InvalidStudyNameLengthException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.Column;
@@ -208,8 +210,7 @@ public class Study extends BaseEntity {
     public void updateToNextRound() {
         int nextRoundNumber = currentRound.getRoundNumber() + 1;
         Optional<Round> nextRound = rounds.stream()
-                                          .filter(round -> round.getRoundNumber()
-                                                  == nextRoundNumber)
+                                          .filter(round -> round.getRoundNumber() == nextRoundNumber)
                                           .findFirst();
 
         nextRound.ifPresentOrElse(this::updateCurrentRound, this::finishStudy);
@@ -233,6 +234,16 @@ public class Study extends BaseEntity {
         }
         this.startAt = LocalDateTime.now();
         this.processingStatus = ProcessingStatus.PROCESSING;
+        initializeRoundsEndAt();
+    }
+
+    private void initializeRoundsEndAt() {
+        rounds.sort(Comparator.comparing(Round::getRoundNumber));
+        LocalDateTime date = LocalDateTime.of(startAt.toLocalDate(), LocalTime.MIN);
+        for (Round round : rounds) {
+            date = date.plusDays(calculateStudyPeriod());
+            round.updateEndAt(date);
+        }
     }
 
     public int calculateStudyPeriod() {
