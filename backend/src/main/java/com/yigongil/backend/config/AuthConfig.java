@@ -3,22 +3,18 @@ package com.yigongil.backend.config;
 import com.yigongil.backend.config.auth.AuthInterceptor;
 import com.yigongil.backend.config.auth.MemberArgumentResolver;
 import java.util.List;
-import org.springframework.boot.actuate.trace.http.InMemoryHttpTraceRepository;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Profile(value = {"prod", "dev"})
 @Configuration
-public class ProdWebConfig implements WebMvcConfigurer {
+public class AuthConfig implements WebMvcConfigurer {
 
     private final MemberArgumentResolver memberArgumentResolver;
     private final AuthInterceptor authInterceptor;
 
-    public ProdWebConfig(MemberArgumentResolver memberArgumentResolver, AuthInterceptor authInterceptor) {
+    public AuthConfig(MemberArgumentResolver memberArgumentResolver, AuthInterceptor authInterceptor) {
         this.memberArgumentResolver = memberArgumentResolver;
         this.authInterceptor = authInterceptor;
     }
@@ -35,17 +31,12 @@ public class ProdWebConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/v1/api-docs/**")
                 .excludePathPatterns("/v1/swagger-ui/**")
                 .excludePathPatterns("/v1/actuator/**")
-                .excludePathPatterns("/v1/studies/{id:[0-9\\d*}/rounds/{id:[0-9]\\d*}/progress-rate");
-
+                .excludePathPatterns("/v1/fake/proceed")
+                .excludePathPatterns("/v1/studies/{id:[0-9]\\d*}/rounds/{id:[0-9]\\d*}/progress-rate");
     }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(memberArgumentResolver);
-    }
-
-    @Bean
-    public InMemoryHttpTraceRepository inMemoryHttpTraceRepository() {
-        return new InMemoryHttpTraceRepository();
     }
 }
