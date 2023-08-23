@@ -192,9 +192,9 @@ class StudyTest {
 
         assertThat(rounds).map(Round::getEndAt)
                           .containsExactlyInAnyOrder(
-                                  LocalDate.now().atStartOfDay().plus(3L, ChronoUnit.DAYS),
-                                  LocalDate.now().atStartOfDay().plus(6L, ChronoUnit.DAYS),
-                                  LocalDate.now().atStartOfDay().plus(9L, ChronoUnit.DAYS)
+                                  LocalDate.now().atStartOfDay().plus(study.calculateStudyPeriod(), ChronoUnit.DAYS),
+                                  LocalDate.now().atStartOfDay().plus(study.calculateStudyPeriod() * 2L, ChronoUnit.DAYS),
+                                  LocalDate.now().atStartOfDay().plus(study.calculateStudyPeriod() * 3L, ChronoUnit.DAYS)
                           );
 
     }
