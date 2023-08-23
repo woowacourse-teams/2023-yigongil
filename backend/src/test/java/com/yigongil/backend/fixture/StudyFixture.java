@@ -55,7 +55,7 @@ public enum StudyFixture {
                     .periodUnit(periodUnit)
                     .numberOfMaximumMembers(numberOfMaximumMember)
                     .rounds(List.of(round, 아이디_사_투두없는_라운드.toRound(), 아이디_오_투두없는_라운드.toRound()))
-                    .currentRound(round)
+                    .currentRoundNumber(1)
                     .build();
     }
 

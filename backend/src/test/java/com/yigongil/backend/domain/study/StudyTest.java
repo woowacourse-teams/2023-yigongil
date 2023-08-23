@@ -36,11 +36,11 @@ class StudyTest {
     void 스터디를_다음_라운드로_넘기면_현재_라운드가_다음_라운드로_변한다() {
         // given
         Study study = StudyFixture.자바_스터디_진행중.toStudy();
-        Round currentRound = study.getCurrentRound();
+        Round currentRound = study.currentRound();
 
         // when
         study.updateToNextRound();
-        Round nextRound = study.getCurrentRound();
+        Round nextRound = study.currentRound();
 
         // then
         assertThat(nextRound.getRoundNumber()).isEqualTo(currentRound.getRoundNumber() + 1);
@@ -66,7 +66,7 @@ class StudyTest {
         Study study = StudyFixture.자바_스터디_모집중.toStudy();
         study.updateToNextRound();
         study.updateToNextRound();
-        List<Integer> expected = study.getCurrentRound()
+        List<Integer> expected = study.currentRound()
                                       .getRoundOfMembers()
                                       .stream()
                                       .map(RoundOfMember::getMember)
@@ -76,7 +76,7 @@ class StudyTest {
 
         // when
         study.updateToNextRound();
-        List<Integer> actual = study.getCurrentRound()
+        List<Integer> actual = study.currentRound()
                                     .getRoundOfMembers()
                                     .stream()
                                     .map(RoundOfMember::getMember)
@@ -91,7 +91,7 @@ class StudyTest {
     void 스터디의_현재_라운드가_종료되는_날이면_true를_반환한다() {
         // given
         Study study = StudyFixture.자바_스터디_진행중.toStudy();
-        Round currentRound = study.getCurrentRound();
+        Round currentRound = study.currentRound();
         LocalDateTime endAt = currentRound.getEndAt();
 
         // when
@@ -109,7 +109,7 @@ class StudyTest {
     void 스터디의_현재_라운드가_종료되는_날이_아니면_false를_반환한다() {
         // given
         Study study = StudyFixture.자바_스터디_진행중.toStudy();
-        Round currentRound = study.getCurrentRound();
+        Round currentRound = study.currentRound();
         LocalDateTime endAt = currentRound.getEndAt();
 
         // when
@@ -124,11 +124,11 @@ class StudyTest {
         // given
         Study study = StudyFixture.자바_스터디_모집중.toStudy();
         Member member = MemberFixture.폰노이만.toMember();
-        int sizeOfCurrentMembers = study.getCurrentRound().sizeOfCurrentMembers();
+        int sizeOfCurrentMembers = study.currentRound().sizeOfCurrentMembers();
 
         // when
         study.addMember(member);
-        int actual = study.getCurrentRound().sizeOfCurrentMembers();
+        int actual = study.currentRound().sizeOfCurrentMembers();
 
         // then
         assertThat(actual).isEqualTo(sizeOfCurrentMembers + 1);

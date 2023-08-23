@@ -52,7 +52,7 @@ public class Round extends BaseEntity {
 
     private LocalDateTime endAt;
 
-    @Cascade(CascadeType.PERSIST)
+    @Cascade(CascadeType.ALL)
     @OneToMany
     @JoinColumn(name = "round_id", nullable = false)
     private List<RoundOfMember> roundOfMembers = new ArrayList<>();

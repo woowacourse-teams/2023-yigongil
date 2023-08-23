@@ -27,6 +27,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -129,7 +130,7 @@ public class StudyService {
         Study study = findStudyById(studyId);
 
         List<Round> rounds = study.getRounds();
-        Round currentRound = study.getCurrentRound();
+        Round currentRound = study.currentRound();
 
         List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRoleNotAndStudyResult(studyId, Role.APPLICANT, StudyResult.NONE);
 
@@ -213,7 +214,7 @@ public class StudyService {
                             study.getTotalRoundCount(),
                             study.getPeriodUnit()
                                  .toStringFormat(study.getPeriodOfRound()),
-                            study.getCurrentRound()
+                            study.currentRound()
                                  .getRoundOfMembers()
                                  .size(),
                             study.getNumberOfMaximumMembers()
@@ -275,5 +276,15 @@ public class StudyService {
                 request.periodOfRound(),
                 request.introduction()
         );
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void deleteByMasterId(Long masterId) {
+        List<Study> studies = studyRepository.findAllByMasterIdAndProcessingStatus(masterId, ProcessingStatus.RECRUITING);
+        for (Study study : studies) {
+            study.removeRounds();
+            studyMemberRepository.deleteAllByStudyId(study.getId());
+        }
+        studyRepository.deleteAll(studies);
     }
 }

@@ -34,4 +34,6 @@ public interface StudyMemberRepository extends Repository<StudyMember, Long> {
     Long countByMemberIdAndStudyResult(Long memberId, StudyResult studyResult);
 
     void deleteAllByStudyIdAndRole(Long studyId, Role role);
+
+    void deleteAllByStudyId(Long studyId);
 }

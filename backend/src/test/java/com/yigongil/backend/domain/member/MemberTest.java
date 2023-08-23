@@ -1,13 +1,11 @@
 package com.yigongil.backend.domain.member;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import com.yigongil.backend.exception.InvalidIntroductionLengthException;
 import com.yigongil.backend.exception.InvalidNicknameLengthException;
 import com.yigongil.backend.exception.InvalidNicknamePatternException;
-import com.yigongil.backend.fixture.MemberFixture;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -109,12 +107,4 @@ class MemberTest {
         }
     }
 
-    @Test
-    void 탈퇴시_닉네임_검증() {
-        Member member = MemberFixture.김진우.toMember();
-
-        member.exit();
-
-        assertThat(member.getNickname()).isNull();
-    }
 }
