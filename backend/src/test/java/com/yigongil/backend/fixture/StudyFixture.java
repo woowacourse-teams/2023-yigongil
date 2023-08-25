@@ -8,6 +8,8 @@ import com.yigongil.backend.domain.study.PeriodUnit;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public enum StudyFixture {
@@ -54,6 +56,26 @@ public enum StudyFixture {
                     .numberOfMaximumMembers(numberOfMaximumMember)
                     .rounds(List.of(round, 아이디_사_투두없는_라운드.toRound(), 아이디_오_투두없는_라운드.toRound()))
                     .currentRound(round)
+                    .build();
+    }
+
+    public Study toStudyWithRounds(RoundFixture... roundFixtures) {
+        List<Round> rounds = new ArrayList<>(Arrays.stream(roundFixtures)
+                                                   .map(RoundFixture::toRound)
+                                                   .toList());
+
+        return Study.builder()
+                    .id(id)
+                    .startAt(startAt)
+                    .name(name)
+                    .introduction(introduction)
+                    .periodOfRound(periodOfRound)
+                    .processingStatus(processingStatus)
+                    .totalRoundCount(totalRoundCount)
+                    .periodUnit(periodUnit)
+                    .numberOfMaximumMembers(numberOfMaximumMember)
+                    .rounds(rounds)
+                    .currentRound(rounds.get(0))
                     .build();
     }
 }

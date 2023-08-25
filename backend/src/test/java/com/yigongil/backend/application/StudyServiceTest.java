@@ -19,7 +19,6 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator.ReplaceUnderscores;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationEventPublisher;
 
 @DisplayNameGeneration(ReplaceUnderscores.class)
 @DisplayName("StudyService 클래스의 ")
@@ -27,12 +26,10 @@ class StudyServiceTest {
 
     private final StudyRepository studyRepository = mock(StudyRepository.class);
     private final StudyMemberRepository studyMemberRepository = mock(StudyMemberRepository.class);
-    private final ApplicationEventPublisher publisher = mock(ApplicationEventPublisher.class);
 
     private final StudyService studyService = new StudyService(
             studyRepository,
-            studyMemberRepository,
-            publisher
+            studyMemberRepository
     );
 
     @Nested

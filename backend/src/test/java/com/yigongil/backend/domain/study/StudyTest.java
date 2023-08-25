@@ -10,8 +10,11 @@ import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.fixture.MemberFixture;
+import com.yigongil.backend.fixture.RoundFixture;
 import com.yigongil.backend.fixture.StudyFixture;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
@@ -174,5 +177,25 @@ class StudyTest {
         // then
         assertThatThrownBy(throwable)
                 .isInstanceOf(InvalidProcessingStatusException.class);
+    }
+
+    @Test
+    void 스터디를_시작하면_라운드가_업데이트된다() {
+        Study study = StudyFixture.자바_스터디_모집중_정원_2.toStudyWithRounds(
+                RoundFixture.아이디없는_라운드,
+                RoundFixture.아이디없는_라운드,
+                RoundFixture.아이디없는_라운드
+        );
+
+        study.startStudy();
+        List<Round> rounds = study.getRounds();
+
+        assertThat(rounds).map(Round::getEndAt)
+                          .containsExactlyInAnyOrder(
+                                  LocalDate.now().atStartOfDay().plus(study.calculateStudyPeriod(), ChronoUnit.DAYS),
+                                  LocalDate.now().atStartOfDay().plus(study.calculateStudyPeriod() * 2L, ChronoUnit.DAYS),
+                                  LocalDate.now().atStartOfDay().plus(study.calculateStudyPeriod() * 3L, ChronoUnit.DAYS)
+                          );
+
     }
 }

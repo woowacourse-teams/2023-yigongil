@@ -18,10 +18,8 @@ import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.TodoResponse;
 import com.yigongil.backend.response.UpcomingStudyResponse;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,15 +94,5 @@ public class RoundService {
         }
 
         return HomeResponse.of(member, studies, upcomingStudyResponses);
-    }
-
-    @Transactional
-    public void updateRoundsEndAt(List<Round> rounds, LocalDateTime studyStartAt, int period) {
-        rounds.sort(Comparator.comparing(Round::getRoundNumber));
-        LocalDateTime date = LocalDateTime.of(studyStartAt.toLocalDate(), LocalTime.MIN);
-        for (Round round : rounds) {
-            date = date.plusDays(period);
-            round.updateEndAt(date);
-        }
     }
 }
