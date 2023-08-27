@@ -281,4 +281,11 @@ public class StudySteps {
                 () -> assertThat(responses).hasSize(number)
         );
     }
+
+    @Then("스터디가 {int} 개 조회된다.")
+    public void 스터디가_int개_조회된다(int number) {
+        HomeResponse response = sharedContext.getResponse().as(HomeResponse.class);
+
+        assertThat(response.studies()).hasSize(number);
+    }
 }

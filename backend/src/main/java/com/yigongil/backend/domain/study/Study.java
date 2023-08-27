@@ -30,6 +30,8 @@ import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Entity
@@ -77,7 +79,8 @@ public class Study extends BaseEntity {
     private Integer currentRoundNumber;
 
     @Cascade(CascadeType.PERSIST)
-    @OneToMany(orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany
     @JoinColumn(name = "study_id", nullable = false)
     private List<Round> rounds = new ArrayList<>();
 
@@ -287,10 +290,6 @@ public class Study extends BaseEntity {
 
     public boolean isEnd() {
         return this.processingStatus == ProcessingStatus.END;
-    }
-
-    public void removeRounds() {
-        rounds.clear();
     }
 
     public Round currentRound() {

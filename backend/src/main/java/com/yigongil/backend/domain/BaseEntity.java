@@ -26,7 +26,7 @@ public abstract class BaseEntity {
     protected LocalDateTime updatedAt;
 
     @Transient
-    protected Collection<DomainEvent> domainEvents = new ArrayList<>();
+    private Collection<DomainEvent> domainEvents = new ArrayList<>();
 
     @DomainEvents
     public Collection<DomainEvent> events() {
@@ -36,6 +36,10 @@ public abstract class BaseEntity {
     @AfterDomainEventPublication
     public void clear() {
         domainEvents.clear();
+    }
+
+    protected void register(DomainEvent event) {
+        domainEvents.add(event);
     }
 
     public LocalDateTime getCreatedAt() {

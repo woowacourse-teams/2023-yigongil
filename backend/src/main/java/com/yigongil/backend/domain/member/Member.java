@@ -15,22 +15,23 @@ import lombok.Getter;
 import org.hibernate.annotations.SQLDelete;
 
 @Getter
-@SQLDelete(sql = """
-        update member 
-        set github_id = null,
-        nickname = null,
-        profile_image_url = null,
-        introduction = null,
-        deleted = true
-        where id = ?
-        """
-)
+@SQLDelete(sql = Member.DELETE_QUERY)
 @Entity
 public class Member extends BaseEntity {
 
     private static final int MASTER_NUMBER = 0;
     private static final int PARTICIPANT_NUMBER = 1;
     private static final int MAXIMUM_TIER = 5;
+
+    protected static final String DELETE_QUERY = """
+            update member
+            set github_id = null,
+            nickname = null,
+            profile_image_url = null,
+            introduction = null,
+            deleted = true
+            where id = ?
+            """;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -115,7 +116,7 @@ public class Member extends BaseEntity {
 
     @PreRemove
     public void registerDeleteEvent() {
-        domainEvents.add(new MemberDeleteEvent(id));
+        register(new MemberDeleteEvent(id));
     }
 
     @Override

@@ -6,11 +6,12 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
-public interface StudyRepository extends JpaRepository<Study, Long> {
+public interface StudyRepository extends Repository<Study, Long> {
 
     Study save(Study study);
 
@@ -35,7 +36,7 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
 
     @Query("""
             select distinct s from Study s
-            join s.rounds r
+            join fetch s.rounds r
             where r.master.id = :masterId
             and s.processingStatus = :status
             """)
@@ -44,11 +45,10 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
             @Param("status") ProcessingStatus status
     );
 
-//    @Modifying
-//    @Query("""
-//            delete from Study s
-//            where s in :studies
-//            """
-//    )
-//    void deleteAll(@Param("studies") List<Study> studies);
+    @Modifying
+    @Query("""
+            delete from Study s
+            where s in :studies
+            """)
+    void deleteAll(@Param("studies") Iterable<Study> studies);
 }

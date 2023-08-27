@@ -281,10 +281,6 @@ public class StudyService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void deleteByMasterId(Long masterId) {
         List<Study> studies = studyRepository.findAllByMasterIdAndProcessingStatus(masterId, ProcessingStatus.RECRUITING);
-        for (Study study : studies) {
-            study.removeRounds();
-            studyMemberRepository.deleteAllByStudyId(study.getId());
-        }
         studyRepository.deleteAll(studies);
     }
 }

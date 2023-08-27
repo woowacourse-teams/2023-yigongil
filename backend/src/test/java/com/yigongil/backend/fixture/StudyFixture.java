@@ -75,7 +75,6 @@ public enum StudyFixture {
                     .periodUnit(periodUnit)
                     .numberOfMaximumMembers(numberOfMaximumMember)
                     .rounds(rounds)
-                    .currentRound(rounds.get(0))
                     .build();
     }
 }
