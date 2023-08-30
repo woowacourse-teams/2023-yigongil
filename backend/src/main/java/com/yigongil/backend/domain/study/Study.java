@@ -42,7 +42,6 @@ public class Study extends BaseEntity {
     private static final int MIN_MEMBER_SIZE = 2;
     private static final int MAX_MEMBER_SIZE = 8;
 
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -197,10 +196,6 @@ public class Study extends BaseEntity {
         return currentRound().findRoundOfMemberBy(member);
     }
 
-    public RoundOfMembers findCurrentRoundOfMembers() {
-        return new RoundOfMembers(currentRound().getRoundOfMembers());
-    }
-  
     public boolean isCurrentRoundEndAt(LocalDate today) {
         return currentRound().isEndAt(today);
     }
