@@ -5,31 +5,30 @@ import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public enum RoundFixture {
 
-    아이디_삼_투두없는_라운드(3L, 1, null, MemberFixture.김진우.toMember(), null),
-    아이디_사_투두없는_라운드(4L, 2, null, MemberFixture.김진우.toMember(), null),
-    아이디_오_투두없는_라운드(5L, 3, null, MemberFixture.김진우.toMember(), null),
-    아이디없는_라운드(null, 1, "내용", MemberFixture.김진우.toMember(), null),
-    아이디없는_라운드2(null, 2, "내용", MemberFixture.김진우.toMember(), null),
-    아이디없는_라운드3(null, 3, "내용", MemberFixture.김진우.toMember(), null),
-    아이디없는_라운드4(null, 4, "내용", MemberFixture.김진우.toMember(), null),
+    아이디_삼_투두없는_라운드(3L, 2, null, MemberFixture.김진우.toMember()),
+    아이디_사_투두없는_라운드(4L, 3, null, MemberFixture.김진우.toMember()),
+    아이디_오_투두없는_라운드(5L, 4, null, MemberFixture.김진우.toMember()),
+    아이디없는_라운드(null, 1, "내용", MemberFixture.김진우.toMember()),
+    아이디없는_라운드2(null, 2, "내용", MemberFixture.김진우.toMember()),
+    아이디없는_라운드3(null, 3, "내용", MemberFixture.김진우.toMember()),
+    아이디없는_라운드4(null, 4, "내용", MemberFixture.김진우.toMember()),
     ;
 
     private final Long id;
     private final Integer roundNumber;
     private final String content;
     private final Member master;
-    private final List<RoundOfMember> roundOfMembers;
 
-    RoundFixture(Long id, Integer roundNumber, String content, Member master, List<RoundOfMember> roundOfMembers) {
+    RoundFixture(Long id, Integer roundNumber, String content, Member master) {
         this.id = id;
         this.roundNumber = roundNumber;
         this.content = content;
         this.master = master;
-        this.roundOfMembers = roundOfMembers;
     }
 
     public Round toRound() {
@@ -43,13 +42,17 @@ public enum RoundFixture {
                     .build();
     }
 
-    public Round toRoundWithContent(String content) {
+    public Round toRoundWithRoundOfMember(RoundOfMemberFixture... roundOfMemberFixtures) {
+        List<RoundOfMember> roundOfMembers = Arrays.stream(roundOfMemberFixtures)
+                                                   .map(RoundOfMemberFixture::toRoundOfMember)
+                                                   .toList();
         return Round.builder()
                     .id(id)
                     .necessaryToDoContent(content)
                     .roundNumber(roundNumber)
                     .master(master)
-                    .roundOfMembers(new ArrayList<>(List.of(RoundOfMemberFixture.김진우_라운드_삼.toRoundOfMember())))
+                    .endAt(LocalDateTime.now())
+                    .roundOfMembers(roundOfMembers)
                     .build();
     }
 }

@@ -212,6 +212,14 @@ public class Round extends BaseEntity {
         }
     }
 
+    public int calculateProgress() {
+        int doneCount = (int) roundOfMembers.stream()
+                                            .filter(RoundOfMember::isDone)
+                                            .count();
+
+        return doneCount * 100 / roundOfMembers.size();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
