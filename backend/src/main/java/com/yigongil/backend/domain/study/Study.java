@@ -4,7 +4,6 @@ import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
-import com.yigongil.backend.domain.roundofmember.RoundOfMembers;
 import com.yigongil.backend.exception.CannotStartException;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidNumberOfMaximumStudyMember;
@@ -197,10 +196,6 @@ public class Study extends BaseEntity {
 
     public RoundOfMember findCurrentRoundOfMemberBy(Member member) {
         return currentRound.findRoundOfMemberBy(member);
-    }
-
-    public RoundOfMembers findCurrentRoundOfMembers() {
-        return new RoundOfMembers(currentRound.getRoundOfMembers());
     }
 
     public boolean isCurrentRoundEndAt(LocalDate today) {
