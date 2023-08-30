@@ -49,3 +49,10 @@ Feature: 회원 탈퇴 관련 기능
 
     Then 스터디가 1 개 조회된다.
 
+  Scenario: 탈퇴한 회원의 프로필을 조회한다.
+    Given "jinwoo"의 깃허브 아이디로 회원가입을 한다.
+    Given "noiman"의 깃허브 아이디로 회원가입을 한다.
+    Given "jinwoo"가 회원 탈퇴한다.
+    When "noiman"이 "jinwoo"의 프로필을 조회한다.
+    Then 404 코드를 반환한다.
+
