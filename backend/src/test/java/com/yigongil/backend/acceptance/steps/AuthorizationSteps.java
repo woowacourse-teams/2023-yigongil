@@ -28,7 +28,7 @@ public class AuthorizationSteps {
 
     @When("{string}가 토큰이 만료되어 리프레시 토큰을 사용해 새 토큰을 받는다.")
     public void 토큰_리프레시(String githubId) throws JsonProcessingException {
-        TokenRequest request = new TokenRequest((String) sharedContext.getParameter(githubId + SharedContext.REFRESH_TOKEN_PARAMETER_KEY_SUFFIX));
+        TokenRequest request = new TokenRequest(sharedContext.getRefresh(githubId));
 
         ExtractableResponse<Response> response = given().log().all()
                                                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -41,8 +41,8 @@ public class AuthorizationSteps {
         sharedContext.setResponse(response);
         if (response.statusCode() < 300) {
             TokenResponse tokenResponse = response.as(TokenResponse.class);
-            sharedContext.setParameter(githubId, tokenResponse.accessToken());
-            sharedContext.setParameter(githubId + SharedContext.REFRESH_TOKEN_PARAMETER_KEY_SUFFIX, tokenResponse.refreshToken());
+            sharedContext.setTokens(githubId, tokenResponse.accessToken());
+            sharedContext.setRefresh(githubId, tokenResponse.refreshToken());
         }
     }
 
@@ -57,7 +57,7 @@ public class AuthorizationSteps {
 
     @Given("{string}가 {string}의 리프레시 토큰을 탈취하여 새 토큰을 받는다.")
     public void 토큰_탈취(String thief, String victim) throws JsonProcessingException {
-        TokenRequest request = new TokenRequest((String) sharedContext.getParameter(victim + SharedContext.REFRESH_TOKEN_PARAMETER_KEY_SUFFIX));
+        TokenRequest request = new TokenRequest(sharedContext.getRefresh(victim));
 
         TokenResponse response = given().log().all()
                                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -68,8 +68,8 @@ public class AuthorizationSteps {
                                         .extract()
                                         .as(TokenResponse.class);
 
-        sharedContext.setParameter(thief, response.accessToken());
-        sharedContext.setParameter(thief + SharedContext.REFRESH_TOKEN_PARAMETER_KEY_SUFFIX, response.refreshToken());
+        sharedContext.setTokens(thief, response.accessToken());
+        sharedContext.setRefresh(thief, response.refreshToken());
     }
 
     @Then("{string}가 인증에 실패한다.")
