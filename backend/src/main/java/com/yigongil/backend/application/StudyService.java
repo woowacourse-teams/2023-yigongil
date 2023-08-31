@@ -289,7 +289,7 @@ public class StudyService {
         List<Study> studies = studyRepository.findByMemberIdAndProcessingStatus(memberId, ProcessingStatus.RECRUITING);
         for (Study study : studies) {
             study.currentRound()
-                 .removeMember(memberId);
+                 .removeRoundOfMemberByMemberId(memberId);
         }
         studyMemberRepository.deleteByStudyInAndMemberId(studies, memberId);
     }

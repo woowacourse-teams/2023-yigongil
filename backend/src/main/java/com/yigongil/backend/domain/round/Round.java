@@ -154,11 +154,15 @@ public class Round extends BaseEntity {
         roundOfMembers.add(roundOfMember);
     }
 
-    public void removeMember(Long memberId) {
-        RoundOfMember member = roundOfMembers.stream()
-                                             .filter(roundOfMember -> roundOfMember.isMemberIdEquals(memberId))
-                                             .findFirst().get();
-        roundOfMembers.remove(member);
+    public void removeRoundOfMemberByMemberId(Long memberId) {
+        roundOfMembers.stream()
+                      .filter(roundOfMember -> roundOfMember.isMemberIdEquals(memberId))
+                      .findFirst().
+                      ifPresentOrElse(
+                              roundOfMembers::remove,
+                              () -> {
+                              }
+                      );
     }
 
     public int sizeOfCurrentMembers() {
