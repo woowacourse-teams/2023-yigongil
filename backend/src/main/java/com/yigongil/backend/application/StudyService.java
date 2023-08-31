@@ -279,8 +279,18 @@ public class StudyService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void deleteByMasterId(Long masterId) {
-        List<Study> studies = studyRepository.findAllByMasterIdAndProcessingStatus(masterId, ProcessingStatus.RECRUITING);
-        studyRepository.deleteAll(studies);
+    public void deleteStudyByMasterId(Long memberId) {
+        List<Study> studies = studyRepository.findAllByMasterIdAndProcessingStatus(memberId, ProcessingStatus.RECRUITING);
+        studyRepository.deleteAllByStudies(studies);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void removeDeletedMemberFromRecruitingStudy(Long memberId) {
+        List<Study> studies = studyRepository.findByMemberIdAndProcessingStatus(memberId, ProcessingStatus.RECRUITING);
+        for (Study study : studies) {
+            study.currentRound()
+                 .removeMember(memberId);
+        }
+        studyMemberRepository.deleteByStudyInAndMemberId(studies, memberId);
     }
 }

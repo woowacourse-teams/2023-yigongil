@@ -63,7 +63,7 @@ public class RoundService {
 
     @Transactional(readOnly = true)
     public HomeResponse findCurrentRoundOfStudies(Member member) {
-        List<Study> studies = studyRepository.findByMemberAndProcessingStatus(member, ProcessingStatus.PROCESSING);
+        List<Study> studies = studyRepository.findByMemberIdAndProcessingStatus(member.getId(), ProcessingStatus.PROCESSING);
         List<UpcomingStudyResponse> upcomingStudyResponses = new ArrayList<>();
 
         for (Study study : studies) {

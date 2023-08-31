@@ -56,7 +56,7 @@ public class Round extends BaseEntity {
 
     @Cascade(CascadeType.PERSIST)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "round_id", nullable = false)
     private List<RoundOfMember> roundOfMembers = new ArrayList<>();
 
@@ -152,6 +152,13 @@ public class Round extends BaseEntity {
                                                    .build();
 
         roundOfMembers.add(roundOfMember);
+    }
+
+    public void removeMember(Long memberId) {
+        RoundOfMember member = roundOfMembers.stream()
+                                             .filter(roundOfMember -> roundOfMember.isMemberIdEquals(memberId))
+                                             .findFirst().get();
+        roundOfMembers.remove(member);
     }
 
     public int sizeOfCurrentMembers() {

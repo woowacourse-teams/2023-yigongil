@@ -135,4 +135,8 @@ public class Member extends BaseEntity {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    public boolean isSameId(Long memberId) {
+        return id.equals(memberId);
+    }
 }

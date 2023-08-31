@@ -3,6 +3,7 @@ package com.yigongil.backend.acceptance.steps;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.SoftAssertions.assertSoftly;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,6 +16,7 @@ import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.RoundNumberResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
+import com.yigongil.backend.response.StudyMemberResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -287,5 +289,18 @@ public class StudySteps {
         HomeResponse response = sharedContext.getResponse().as(HomeResponse.class);
 
         assertThat(response.studies()).hasSize(number);
+    }
+
+    // TODO: 2023/08/31 id가져오는 pr 머지후에 테스트코드 수정
+    @Then("현재원이 {int} 명이고 {string}이 없다.")
+    public void 현재원_숫자와_탈퇴회원이_없는_것을_검증한다(int memberCount, String deletedMemberName) {
+        StudyDetailResponse response = sharedContext.getResponse().as(StudyDetailResponse.class);
+
+        assertSoftly(
+                softly -> {
+                    softly.assertThat(response.numberOfCurrentMembers()).isEqualTo(memberCount);
+                    softly.assertThat(response.members()).map(StudyMemberResponse::id).doesNotContain(5L);
+                }
+        );
     }
 }

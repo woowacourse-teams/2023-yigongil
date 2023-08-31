@@ -101,4 +101,8 @@ public class RoundOfMember extends BaseEntity {
     public void updateMemberTier() {
         member.upgradeTier();
     }
+
+    public boolean isMemberIdEquals(Long memberId) {
+        return member.isSameId(memberId);
+    }
 }

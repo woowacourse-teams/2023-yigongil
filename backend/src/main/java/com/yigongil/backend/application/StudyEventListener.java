@@ -15,6 +15,7 @@ public class StudyEventListener {
 
     @TransactionalEventListener
     public void listenMemberDeleteEvent(MemberDeleteEvent event) {
-        studyService.deleteByMasterId(event.memberId());
+        studyService.deleteStudyByMasterId(event.memberId());
+        studyService.removeDeletedMemberFromRecruitingStudy(event.memberId());
     }
 }

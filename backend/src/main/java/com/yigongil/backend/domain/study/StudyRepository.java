@@ -1,6 +1,5 @@
 package com.yigongil.backend.domain.study;
 
-import com.yigongil.backend.domain.member.Member;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -29,10 +28,10 @@ public interface StudyRepository extends Repository<Study, Long> {
                 join StudyMember sm
                 on s = sm.study
                 join fetch s.rounds
-                where sm.member = :member
+                where sm.member.id = :memberId
                 and s.processingStatus = :processingStatus
             """)
-    List<Study> findByMemberAndProcessingStatus(@Param("member") Member member, @Param("processingStatus") ProcessingStatus processingStatus);
+    List<Study> findByMemberIdAndProcessingStatus(@Param("memberId") Long memberId, @Param("processingStatus") ProcessingStatus processingStatus);
 
     @Query("""
             select distinct s from Study s
@@ -50,5 +49,5 @@ public interface StudyRepository extends Repository<Study, Long> {
             delete from Study s
             where s in :studies
             """)
-    void deleteAll(@Param("studies") Iterable<Study> studies);
+    void deleteAllByStudies(@Param("studies") List<Study> studies);
 }
