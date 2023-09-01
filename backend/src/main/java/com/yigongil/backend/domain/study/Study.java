@@ -292,4 +292,10 @@ public class Study extends BaseEntity {
                      .findAny()
                      .orElseThrow();
     }
+
+    public void removeAllRoundMemberByMemberId(Long memberId) {
+        for (Round round : rounds) {
+            round.removeRoundOfMemberByMemberId(memberId);
+        }
+    }
 }

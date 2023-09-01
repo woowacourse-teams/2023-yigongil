@@ -288,8 +288,7 @@ public class StudyService {
     public void removeDeletedMemberFromRecruitingStudy(Long memberId) {
         List<Study> studies = studyRepository.findByMemberIdAndProcessingStatus(memberId, ProcessingStatus.RECRUITING);
         for (Study study : studies) {
-            study.currentRound()
-                 .removeRoundOfMemberByMemberId(memberId);
+            study.removeAllRoundMemberByMemberId(memberId);
         }
         studyMemberRepository.deleteByStudyInAndMemberId(studies, memberId);
     }
