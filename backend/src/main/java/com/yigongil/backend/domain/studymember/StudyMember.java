@@ -2,6 +2,7 @@ package com.yigongil.backend.domain.studymember;
 
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.study.Study;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -68,6 +69,11 @@ public class StudyMember extends BaseEntity {
     }
 
     public void completeSuccessfully() {
+        int successfulRoundCount = (int) study.getRounds().stream()
+                                              .map(round -> round.findRoundOfMemberBy(member))
+                                              .filter(RoundOfMember::isDone)
+                                              .count();
+        member.addExperience(successfulRoundCount * (2 + 1 * study.calculateStudyPeriod()));
         this.studyResult = StudyResult.SUCCESS;
     }
 

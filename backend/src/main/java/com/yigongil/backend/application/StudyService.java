@@ -131,7 +131,7 @@ public class StudyService {
         List<Round> rounds = study.getRounds();
         Round currentRound = study.getCurrentRound();
 
-        List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRoleNotAndStudyResult(studyId, Role.APPLICANT, StudyResult.NONE);
+        List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRoleNot(studyId, Role.APPLICANT);
 
         Role role = studyMemberRepository.findByStudyIdAndMemberId(studyId, member.getId())
                                          .map(StudyMember::getRole)
@@ -172,7 +172,7 @@ public class StudyService {
 
         return new StudyMemberResponse(
                 member.getId(),
-                member.getTier(),
+                member.getTier().getOrder(),
                 member.getNickname(),
                 calculateSuccessRate(member),
                 member.getProfileImageUrl(),

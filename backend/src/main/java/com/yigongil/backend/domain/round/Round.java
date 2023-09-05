@@ -2,6 +2,7 @@ package com.yigongil.backend.domain.round;
 
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.member.Tier;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.exception.InvalidTodoLengthException;
@@ -135,7 +136,8 @@ public class Round extends BaseEntity {
     public int calculateAverageTier() {
         double averageTier = roundOfMembers.stream()
                                            .map(RoundOfMember::getMember)
-                                           .mapToInt(Member::getTier)
+                                           .mapToInt(Member::getExperience)
+                                           .map(experience -> Tier.getTier(experience).getOrder())
                                            .average()
                                            .orElseThrow(IllegalStateException::new);
 
@@ -201,12 +203,6 @@ public class Round extends BaseEntity {
                              .orElseThrow(
                                      () -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", member.getGithubId())
                              );
-    }
-
-    public void updateMembersTier() {
-        for (RoundOfMember roundOfMember : roundOfMembers) {
-            roundOfMember.updateMemberTier();
-        }
     }
 
     public int calculateProgress() {

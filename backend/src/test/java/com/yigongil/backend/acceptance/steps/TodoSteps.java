@@ -165,7 +165,7 @@ public class TodoSteps {
     public void 투두가_삭제된다() {
         RoundResponse response = sharedContext.getResponse().as(RoundResponse.class);
 
-        assertThat(response.optionalTodos()).hasSize(0);
+        assertThat(response.optionalTodos()).isEmpty();
     }
 
     @Then("권한 예외가 발생한다.")
@@ -196,5 +196,21 @@ public class TodoSteps {
                                                      .as(ProgressRateResponse.class);
 
         assertThat(response.progressRate()).isEqualTo(Integer.parseInt(progressRate));
+    }
+
+    @When("{string}가 찾은 회차의 필수 투두를 체크한다.")
+    public void 필수_투두를_체크한다(String githubId) throws JsonProcessingException {
+        TodoUpdateRequest request = new TodoUpdateRequest(true, null);
+
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                                        .body(objectMapper.writeValueAsString(request))
+                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(githubId))
+                                                        .when()
+                                                        .patch("/v1/rounds/" + sharedContext.getParameter("roundId") + "/todos/necessary")
+                                                        .then().log().all()
+                                                        .extract();
+
+        sharedContext.setResponse(response);
     }
 }

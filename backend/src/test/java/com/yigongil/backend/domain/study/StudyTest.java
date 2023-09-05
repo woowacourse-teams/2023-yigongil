@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
-import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.fixture.MemberFixture;
@@ -61,30 +60,14 @@ class StudyTest {
     }
 
     @Test
-    void 스터디를_성공적으로_완수하면_티어가_증가한다() {
+    void 스터디_최대_경험치를_계산한다() {
         // given
         Study study = StudyFixture.자바_스터디_모집중.toStudy();
-        study.updateToNextRound();
-        study.updateToNextRound();
-        List<Integer> expected = study.getCurrentRound()
-                                      .getRoundOfMembers()
-                                      .stream()
-                                      .map(RoundOfMember::getMember)
-                                      .map(Member::getTier)
-                                      .map(tier -> tier < 5 ? tier + 1 : tier)
-                                      .toList();
 
-        // when
-        study.updateToNextRound();
-        List<Integer> actual = study.getCurrentRound()
-                                    .getRoundOfMembers()
-                                    .stream()
-                                    .map(RoundOfMember::getMember)
-                                    .map(Member::getTier)
-                                    .toList();
+        int actual = study.calculateMaximumReward();
 
         // then
-        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).isEqualTo(65);
     }
 
     @Test
