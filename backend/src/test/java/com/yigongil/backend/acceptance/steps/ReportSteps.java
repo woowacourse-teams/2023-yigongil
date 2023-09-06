@@ -25,7 +25,7 @@ public class ReportSteps {
 
     @Given("피신고자-{string}, 신고 제목-{string}, 내용-{string}, 문제발생일-{string}일 전으로 멤버 신고 정보를 작성한다.")
     public void 멤버_신고_폼_작성(String reportedMember, String title, String content, String days) {
-        Long reportedMemberId = (Long) sharedContext.getParameter(reportedMember);
+        Long reportedMemberId = sharedContext.getId(reportedMember);
 
         LocalDate problemOccurredAt = LocalDate.now().minusDays(Long.parseLong(days));
 

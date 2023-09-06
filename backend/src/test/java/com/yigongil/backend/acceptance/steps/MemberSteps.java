@@ -28,7 +28,8 @@ public class MemberSteps {
 
     public MemberSteps(
             ObjectMapper objectMapper,
-            SharedContext sharedContext) {
+            SharedContext sharedContext
+    ) {
         this.objectMapper = objectMapper;
         this.sharedContext = sharedContext;
     }

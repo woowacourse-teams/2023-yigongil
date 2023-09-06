@@ -23,11 +23,11 @@ public class MyStudyFindSteps {
 
     @When("{string}의 모든 스터디를 조회한다.")
     public void 나의_스터디_조회(String githubId) {
-        String memberId = sharedContext.getToken(githubId);
+        String memberToken = sharedContext.getToken(githubId);
 
         ExtractableResponse<Response> response = given().log()
                                                         .all()
-                                                        .header(HttpHeaders.AUTHORIZATION, memberId)
+                                                        .header(HttpHeaders.AUTHORIZATION, memberToken)
                                                         .when()
                                                         .get("/v1/studies/my")
                                                         .then().log().all()

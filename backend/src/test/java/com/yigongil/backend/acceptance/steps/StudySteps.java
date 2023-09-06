@@ -93,6 +93,7 @@ public class StudySteps {
 
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(recruitingStudyResponses).isNotEmpty(),
                 () -> assertThat(recruitingStudyResponses).allMatch(isRecruitingPredicate)
         );
     }
@@ -143,7 +144,7 @@ public class StudySteps {
         RoundResponse round = sharedContext.getResponse()
                                            .as(RoundResponse.class);
 
-        Long masterId = (Long) sharedContext.getParameter(masterGithubId);
+        Long masterId = sharedContext.getId(masterGithubId);
 
         assertAll(
                 () -> assertThat(round.masterId()).isEqualTo(masterId),

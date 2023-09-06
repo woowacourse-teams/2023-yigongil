@@ -82,7 +82,7 @@ public class ApplySteps {
 
     @Then("{string}는 {string} 스터디의 스터디원으로 추가되어 있다.")
     public void 스터디원_추가_완료(String memberName, String studyName) {
-        Long memberId = (Long) sharedContext.getParameter(memberName);
+        Long memberId = sharedContext.getId(memberName);
 
         StudyDetailResponse response = sharedContext.getResponse()
                                                     .as(StudyDetailResponse.class);
