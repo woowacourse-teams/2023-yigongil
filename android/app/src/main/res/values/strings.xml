@@ -35,6 +35,9 @@
     <!-- 비회원 뷰 -->
     <string name="guest_information_title">로그인이 필요한 서비스입니다.</string>
 
+    <!-- 로그인 바텀 시트 다이얼로그 뷰 -->
+    <string name="loginBottomSheetFragment_information_title">로그인 이후 서비스 이용이 가능합니다.</string>
+
     <!--홈 탭-->
     <string name="home_essential_todo">필수투두</string>
     <string name="home_optional_todo">선택투두</string>

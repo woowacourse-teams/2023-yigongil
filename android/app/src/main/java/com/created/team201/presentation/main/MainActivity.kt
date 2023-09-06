@@ -66,7 +66,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     private fun showFragment(type: FragmentType) {
         val (fragment: Fragment, isCreated: Boolean) = findFragment(type) ?: createFragment(type)
 
-        supportFragmentManager.commit {
+        supportFragmentManager.commit(true) {
             setReorderingAllowed(true)
 
             if (isCreated) add(R.id.fcv_main, fragment, type.name)
@@ -107,7 +107,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
 
     private fun hideAllFragment() {
         supportFragmentManager.fragments.forEach { fragment ->
-            supportFragmentManager.commit {
+            supportFragmentManager.commit(true) {
                 hide(fragment)
             }
         }
