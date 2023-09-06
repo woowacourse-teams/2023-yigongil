@@ -5,7 +5,7 @@
     <string name="toolbar_back_text">뒤로가기</string>
 
     <!--로그인 뷰-->
-    <string name="login_guide">로그인 후 이용이 가능합니다.</string>
+    <string name="login_guest"><u>비회원으로 둘러보기</u></string>
     <string name="login_github_guide">깃허브로 시작하기</string>
     <string name="login_fail_message">로그인에 실패하였습니다.</string>
     <string name="login_onBoarding_fail_message">내 소개 불러오기에 실패했습니다</string>
