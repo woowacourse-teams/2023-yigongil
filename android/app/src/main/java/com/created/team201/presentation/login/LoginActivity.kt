@@ -26,6 +26,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        binding.onGuestClickListener = ::navigateToMain
         observeLoginState()
         observeOnBoardingDoneState()
         setClickEventOnLoginButton()

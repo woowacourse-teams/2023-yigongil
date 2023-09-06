@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="onGuestClickListener"
+            type="kotlin.jvm.functions.Function0" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -57,6 +60,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="44dp"
+            android:onClick="@{() -> onGuestClickListener.invoke()}"
             android:paddingVertical="10dp"
             android:text="@string/login_guest"
             android:textAlignment="center"
