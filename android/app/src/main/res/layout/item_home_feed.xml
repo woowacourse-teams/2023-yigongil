@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.created.team201.presentation.home.adapter.HomeViewState.Feed" />
+            type="com.created.team201.presentation.home.model.HomeViewState.Feed" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

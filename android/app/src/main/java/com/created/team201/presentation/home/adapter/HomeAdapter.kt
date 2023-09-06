@@ -4,26 +4,24 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.created.team201.presentation.home.adapter.HomeAdapter.FeedViewType.DASH_BOARD
-import com.created.team201.presentation.home.adapter.HomeAdapter.FeedViewType.FEED
-import com.created.team201.presentation.home.adapter.HomeViewState.DashBoard
-import com.created.team201.presentation.home.adapter.HomeViewState.Feed
-import com.created.team201.presentation.home.adapter.viewholder.DashboardViewHolder2
+import com.created.team201.presentation.home.adapter.viewholder.DashboardViewHolder
 import com.created.team201.presentation.home.adapter.viewholder.FeedViewHolder
+import com.created.team201.presentation.home.model.HomeViewState
+
 
 class HomeAdapter : ListAdapter<HomeViewState, RecyclerView.ViewHolder>(diffCallBack) {
 
     override fun getItemViewType(position: Int): Int {
         return when (currentList[position]) {
-            is Feed -> FEED.ordinal
-            is DashBoard -> DASH_BOARD.ordinal
+            is HomeViewState.Feed -> FeedViewType.FEED.ordinal
+            is HomeViewState.DashBoard -> FeedViewType.DASH_BOARD.ordinal
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (FeedViewType.get(viewType)) {
-            DASH_BOARD -> DashboardViewHolder2.from(parent)
-            FEED -> FeedViewHolder.from(parent)
+            FeedViewType.DASH_BOARD -> DashboardViewHolder.from(parent)
+            FeedViewType.FEED -> FeedViewHolder.from(parent)
         }
     }
 
@@ -31,8 +29,8 @@ class HomeAdapter : ListAdapter<HomeViewState, RecyclerView.ViewHolder>(diffCall
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is DashboardViewHolder2 -> holder.bind(getItem(position) as DashBoard)
-            is FeedViewHolder -> holder.bind(getItem(position) as Feed)
+            is DashboardViewHolder -> holder.bind(getItem(position) as HomeViewState.DashBoard)
+            is FeedViewHolder -> holder.bind(getItem(position) as HomeViewState.Feed)
         }
     }
 
@@ -52,11 +50,11 @@ class HomeAdapter : ListAdapter<HomeViewState, RecyclerView.ViewHolder>(diffCall
                     newItem: HomeViewState
                 ): Boolean =
                     when {
-                        (oldItem is Feed) and (newItem is Feed) ->
-                            (oldItem as Feed).content == (newItem as Feed).content
+                        (oldItem is HomeViewState.Feed) and (newItem is HomeViewState.Feed) ->
+                            (oldItem as HomeViewState.Feed).content == (newItem as HomeViewState.Feed).content
 
-                        (oldItem is DashBoard) and (newItem is DashBoard) ->
-                            (oldItem as DashBoard).mustDo == (newItem as DashBoard).mustDo
+                        (oldItem is HomeViewState.DashBoard) and (newItem is HomeViewState.DashBoard) ->
+                            (oldItem as HomeViewState.DashBoard).mustDo == (newItem as HomeViewState.DashBoard).mustDo
 
                         else -> false
                     }

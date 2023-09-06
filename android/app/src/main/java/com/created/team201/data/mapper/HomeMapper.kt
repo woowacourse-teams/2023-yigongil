@@ -7,7 +7,7 @@ import com.created.team201.data.remote.request.TodoRequestDto
 import com.created.team201.data.remote.response.StudyResponseDto
 import com.created.team201.data.remote.response.TodoResponseDto
 import com.created.team201.data.remote.response.UserStudiesResponseDto
-import com.created.team201.presentation.home.model.TodoUiModel
+import com.created.team201.presentation.studyManagement.model.TodoUiModel
 
 fun Todo.toRequestBody(isNecessary: Boolean): TodoRequestDto = TodoRequestDto(
     isNecessary = isNecessary,

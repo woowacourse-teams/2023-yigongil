@@ -1,4 +1,4 @@
-package com.created.team201.presentation.home.adapter
+package com.created.team201.presentation.home.model
 
 sealed interface HomeViewState {
     data class Feed(

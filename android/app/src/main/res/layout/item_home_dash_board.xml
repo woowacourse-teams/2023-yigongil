@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.created.team201.presentation.home.adapter.HomeViewState.DashBoard" />
+            type="com.created.team201.presentation.home.model.HomeViewState.DashBoard" />
 
     </data>
 

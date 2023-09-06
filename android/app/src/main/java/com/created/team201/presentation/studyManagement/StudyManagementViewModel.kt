@@ -22,7 +22,7 @@ import com.created.team201.data.datasource.remote.StudyManagementDataSourceImpl
 import com.created.team201.data.mapper.toDomain
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.StudyManagementRepositoryImpl
-import com.created.team201.presentation.home.model.TodoUiModel
+import com.created.team201.presentation.studyManagement.model.TodoUiModel
 import com.created.team201.presentation.myPage.model.ProfileInformationUiModel
 import com.created.team201.presentation.myPage.model.ProfileUiModel
 import com.created.team201.presentation.onBoarding.model.NicknameUiModel
@@ -365,7 +365,7 @@ class StudyManagementViewModel(
         optionalTodos = optionalTodos.map { it.toOptionalTodoUiModel() },
         studyMembers = members.map { it.toUiModel(masterId) },
 
-    )
+        )
 
     private fun String.toPeriodUiModel(): PeriodUiModel =
         PeriodUiModel(Character.getNumericValue(first()), PeriodUnit.valueOf(last()))

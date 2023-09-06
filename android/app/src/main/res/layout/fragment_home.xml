@@ -22,10 +22,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:visibility="gone"
             android:text="@string/home_no_study"
             android:textAppearance="@style/subtitle_r20"
             android:textColor="@color/grey02_78808B"
-            app:isVisible="@{!viewModel.studyExistence}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,37 +36,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_home_logo" />
 
-        <TextView
-            android:id="@+id/tv_home_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@{@string/home_welcome_phrase(viewModel.userName)}"
-            android:textAppearance="@style/title_sb22"
-            android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="@id/iv_home_logo"
-            app:layout_constraintTop_toBottomOf="@id/iv_home_logo" />
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vp_home"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_home"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="28dp"
-            android:layout_marginBottom="28dp"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:orientation="horizontal"
-            app:isVisible="@{viewModel.studyExistence}"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_home_title"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_home_logo"
+            tools:listitem="@layout/item_home_feed">
 
-        </androidx.viewpager2.widget.ViewPager2>
+        </androidx.recyclerview.widget.RecyclerView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

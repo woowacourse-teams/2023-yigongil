@@ -1,7 +1,5 @@
 package com.created.team201.presentation.studyManagement.model
 
-import com.created.team201.presentation.home.model.TodoUiModel
-
 data class OptionalTodoUiModel(
     val todo: TodoUiModel,
     val viewType: Int,
