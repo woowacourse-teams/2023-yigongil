@@ -23,7 +23,9 @@ public class AuthConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor)
                 .addPathPatterns("/v1/**")
-                .excludePathPatterns("/v1/login/**")
+                .excludePathPatterns("/v1/login/github/tokens")
+                .excludePathPatterns("/v1/login/tokens/refresh")
+                .excludePathPatterns("/v1/login/fake/tokens")
                 .excludePathPatterns("/v1/members/{id:[0-9]\\d*}")
                 .excludePathPatterns("/v1/members/exists")
                 .excludePathPatterns("/v1/studies/recruiting/**")
