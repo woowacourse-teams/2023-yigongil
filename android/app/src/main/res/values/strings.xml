@@ -32,6 +32,9 @@
     <string name="main_ic_chat">쪽지</string>
     <string name="main_ic_my_page">마이페이지</string>
 
+    <!-- 비회원 뷰 -->
+    <string name="guest_information_title">로그인이 필요한 서비스입니다.</string>
+
     <!--홈 탭-->
     <string name="home_essential_todo">필수투두</string>
     <string name="home_optional_todo">선택투두</string>

@@ -11,7 +11,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import com.created.team201.R
 import com.created.team201.databinding.ActivityOnBoardingBinding
-import com.created.team201.presentation.MainActivity
+import com.created.team201.presentation.main.MainActivity
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.State.FAIL
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.State.IDLE

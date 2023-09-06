@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.created.team201.R
 import com.created.team201.databinding.ActivitySplashBinding
-import com.created.team201.presentation.MainActivity
+import com.created.team201.presentation.main.MainActivity
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.login.LoginActivity
 import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
