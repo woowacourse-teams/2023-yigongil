@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black02_181B21">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_rectangle_radius_10dp_black01"
+        android:backgroundTint="@color/black01_0D1117"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_home_dash_board_next_study"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/home_dash_board_next_study"
+            android:textAppearance="@style/picker_sb18"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_home_dash_board_d_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:textAppearance="@style/title_sb22"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_home_dash_board_next_study"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_home_dash_board_next_study"
+            tools:text="D-33" />
+
+        <View
+            android:id="@+id/view_home_dash_board_border_first"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/black02_181B21"
+            app:layout_constraintTop_toBottomOf="@+id/tv_home_dash_board_next_study" />
+
+        <TextView
+            android:id="@+id/tv_home_dash_board_must_do_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/home_dash_board_must_do"
+            android:textAppearance="@style/text_m14"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="@+id/tv_home_dash_board_next_study"
+            app:layout_constraintTop_toBottomOf="@+id/view_home_dash_board_border_first" />
+
+        <View
+            android:id="@+id/view_home_dash_board_border_second"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/black02_181B21"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_home_dash_board_must_do_title" />
+
+        <TextView
+            android:id="@+id/tv_home_dash_board_must_do"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="20dp"
+            android:textAppearance="@style/text_r14"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_home_dash_board_border_second"
+            tools:text="아오귀찮아진짜개빡취네온사인아래에서" />
+
+        <TextView
+            android:id="@+id/tv_home_dash_board_enter_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_rectangle_radius_5dp_transparent"
+            android:backgroundTint="@color/black04_02040A"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="4dp"
+            android:text="@string/home_dash_board_enter_button"
+            android:textAppearance="@style/text_r14"
+            android:textColor="@color/black03_272C33"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_home_dash_board_must_do"
+            tools:text="@string/home_dash_board_enter_button" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
