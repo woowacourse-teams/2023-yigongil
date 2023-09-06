@@ -20,6 +20,8 @@ import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Entity
@@ -39,6 +41,7 @@ public class RoundOfMember extends BaseEntity {
     private boolean isDone;
 
     @Cascade(CascadeType.PERSIST)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "round_of_member_id")
     private List<OptionalTodo> optionalTodos = new ArrayList<>();
