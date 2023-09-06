@@ -20,7 +20,7 @@ import com.created.team201.presentation.MainActivity.FragmentType.STUDY_LIST
 import com.created.team201.presentation.MainActivity.FragmentType.STUDY_MANAGE
 import com.created.team201.presentation.chat.ChatFragment
 import com.created.team201.presentation.common.BindingActivity
-import com.created.team201.presentation.home.HomeFragment
+import com.created.team201.presentation.home.HomeFragment2
 import com.created.team201.presentation.myPage.MyPageFragment
 import com.created.team201.presentation.studyList.StudyListFragment
 import com.created.team201.presentation.studyManage.StudyManageFragment
@@ -75,7 +75,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
 
     private fun createFragment(type: FragmentType): Pair<Fragment, Boolean> {
         val fragment = when (type) {
-            HOME -> HomeFragment()
+            HOME -> HomeFragment2()
             STUDY_LIST -> StudyListFragment()
             STUDY_MANAGE -> StudyManageFragment()
             CHAT -> ChatFragment()

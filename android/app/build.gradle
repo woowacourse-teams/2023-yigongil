@@ -86,6 +86,9 @@ dependencies {
 
     // Test
     implementation 'androidx.test.ext:junit-ktx:1.1.5'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'androidx.arch.core:core-testing:2.2.0'
     testImplementation 'io.mockk:mockk:1.13.5'

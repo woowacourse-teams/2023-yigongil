@@ -5,7 +5,9 @@
 
     <data>
 
-
+        <variable
+            name="item"
+            type="com.created.team201.presentation.home.adapter.HomeViewState.Feed" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
+            android:text="@{item.userName}"
             android:textAppearance="@style/text_m14"
             android:textColor="@color/white"
             app:layout_constraintStart_toEndOf="@+id/cpi_home_feed_profile_image"
@@ -39,6 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
+            android:text="@{item.publishedDate}"
             android:textAppearance="@style/description_r10"
             android:textColor="@color/white01_66FFFFFF"
             app:layout_constraintStart_toStartOf="@+id/tv_home_feed_user_name"
@@ -62,6 +66,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_rectangle_radius_10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -80,7 +85,11 @@
                 android:id="@+id/et_home_feed_content"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@{item.content}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
