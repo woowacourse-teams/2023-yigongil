@@ -130,7 +130,7 @@ public class StudyService {
         Study study = findStudyById(studyId);
 
         List<Round> rounds = study.getRounds();
-        Round currentRound = study.currentRound();
+        Round currentRound = study.getCurrentRound();
 
         List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRoleNotAndStudyResult(studyId, Role.APPLICANT, StudyResult.NONE);
 
@@ -214,7 +214,7 @@ public class StudyService {
                             study.getTotalRoundCount(),
                             study.getPeriodUnit()
                                  .toStringFormat(study.getPeriodOfRound()),
-                            study.currentRound()
+                            study.getCurrentRound()
                                  .getRoundOfMembers()
                                  .size(),
                             study.getNumberOfMaximumMembers()

@@ -54,7 +54,7 @@ public record StudyDetailResponse(
                 study.getStartAt().toLocalDate(),
                 study.getTotalRoundCount(),
                 study.findPeriodOfRoundToString(),
-                study.currentRound().getRoundNumber(),
+                study.getCurrentRound().getRoundNumber(),
                 study.getIntroduction(),
                 studyMemberResponses,
                 RoundNumberResponse.from(rounds)

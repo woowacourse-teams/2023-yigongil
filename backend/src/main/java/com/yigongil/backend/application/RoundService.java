@@ -67,7 +67,7 @@ public class RoundService {
         List<UpcomingStudyResponse> upcomingStudyResponses = new ArrayList<>();
 
         for (Study study : studies) {
-            Round currentRound = study.currentRound();
+            Round currentRound = study.getCurrentRound();
             RoundOfMember currentRoundOfMemberOwn = study.findCurrentRoundOfMemberBy(member);
 
             LocalDateTime endAt = currentRound.getEndAt();
