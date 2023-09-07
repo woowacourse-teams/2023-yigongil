@@ -29,6 +29,7 @@
         android:id="@+id/cl_finished_study"
         android:layout_width="match_parent"
         android:padding="16dp"
+        android:layout_marginBottom="16dp"
         android:layout_height="wrap_content">
 
         <TextView
@@ -82,7 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:text="@{@string/study_list_member_format(finishedStudy.numberOfCurrentMembers,finishedStudy.numberOfMaximumMembers)}"
-            android:textAppearance="@style/text_r14"
+            android:textAppearance="@style/description_r12"
             android:textColor="@color/grey02_78808B"
             app:layout_constraintStart_toEndOf="@id/iv_finished_study_people_count_icon"
             app:layout_constraintTop_toTopOf="@id/tv_finished_study_description"
@@ -91,13 +92,13 @@
 
         <ImageView
             android:id="@+id/iv_finished_study_tier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="19dp"
             android:layout_marginStart="8dp"
             android:src="@drawable/ic_diamond_chip"
             app:glideSrc="@{tier.Companion.valueOf(finishedStudy.averageTier)}"
             app:layout_constraintStart_toEndOf="@id/iv_finished_study_tag"
-            app:layout_constraintTop_toTopOf="iv_finished_study_tag"
+            app:layout_constraintTop_toTopOf="@id/iv_finished_study_tag"
             app:layout_constraintBottom_toBottomOf="@id/iv_finished_study_tag"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

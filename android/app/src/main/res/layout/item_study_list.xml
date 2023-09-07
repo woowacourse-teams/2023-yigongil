@@ -34,9 +34,11 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_study_list"
+        android:background="@drawable/bg_rectangle_radius_5dp_transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
+        android:layout_marginBottom="16dp"
         android:onClick="@{() -> studyListClickListener.onClickStudySummary(studySummary.id)}">
 
         <TextView
@@ -59,7 +61,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:text="@{@string/study_list_information_format(startDateStringFormat[studyStatus.Companion.valueOf(studySummary.processingStatus).formatIndex], studySummary.date, studySummary.totalRound, studySummary.period.number, periodStringFormat[studySummary.period.unit.type])}"
-            android:textAppearance="@style/text_r14"
+            android:textAppearance="@style/description_r12"
             android:textColor="@color/grey02_78808B"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -83,14 +85,14 @@
             android:src="@drawable/ic_people_count"
             app:layout_constraintStart_toEndOf="@id/tv_study_list_description"
             app:layout_constraintTop_toTopOf="@id/tv_study_list_description"
-            app:layout_constraintBottom_toBottomOf="@id/tv_study_list_description"/>
+            app:layout_constraintBottom_toBottomOf="@id/tv_study_list_description" />
 
         <TextView
             android:id="@+id/tv_study_list_people_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{@string/study_list_member_format(studySummary.currentMember,studySummary.maximumMember)}"
-            android:textAppearance="@style/text_r14"
+            android:textAppearance="@style/description_r12"
             android:textColor="@color/grey02_78808B"
             android:layout_marginStart="4dp"
             app:layout_constraintStart_toEndOf="@id/iv_study_list_people_count_icon"
@@ -100,14 +102,14 @@
 
         <ImageView
             android:id="@+id/iv_study_list_tier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="19dp"
             android:src="@drawable/ic_diamond_chip"
             android:layout_marginStart="4dp"
             app:glideSrc="@{tier.Companion.valueOf(studySummary.tier)}"
             app:layout_constraintStart_toEndOf="@id/iv_study_list_tag"
             app:layout_constraintTop_toTopOf="@id/iv_study_list_tag"
-            app:layout_constraintBottom_toBottomOf="@id/iv_study_list_tag"/>
+            app:layout_constraintBottom_toBottomOf="@id/iv_study_list_tag" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

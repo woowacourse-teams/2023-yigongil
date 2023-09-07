@@ -6,13 +6,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
-import android.widget.LinearLayout.VERTICAL
 import android.widget.SearchView
 import android.widget.SearchView.OnQueryTextListener
-import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.R
 import com.created.team201.databinding.FragmentStudyListBinding
@@ -39,7 +36,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
         FirebaseLogUtil.logScreenEvent(
             SCREEN_STUDY_LIST,
-            this@StudyListFragment.javaClass.simpleName
+            this@StudyListFragment.javaClass.simpleName,
         )
 
         studyListViewModel.initPage()
@@ -129,14 +126,8 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     }
 
     private fun setUpStudyListSettings() {
-        val dividerItemDecoration = DividerItemDecoration(context, VERTICAL)
-        getDrawable(requireContext(), R.drawable.divider_recyclerview_line)?.let {
-            dividerItemDecoration.setDrawable(it)
-        }
-
         binding.rvStudyListList.apply {
             adapter = studyListAdapter
-            addItemDecoration(dividerItemDecoration)
             setHasFixedSize(true)
         }
     }
