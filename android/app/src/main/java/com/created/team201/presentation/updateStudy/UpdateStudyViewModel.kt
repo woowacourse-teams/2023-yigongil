@@ -30,6 +30,9 @@ class UpdateStudyViewModel(
     private val updateStudyRepository: UpdateStudyRepository,
     private val studyDetailRepository: StudyDetailRepository,
 ) : ViewModel() {
+    private lateinit var updateStudyViewMode: String
+    private var studyId: Long = -1L
+
     private val _name: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
     val name: NonNullLiveData<String>
         get() = _name
@@ -82,17 +85,26 @@ class UpdateStudyViewModel(
         }
     val isEnableFirstUpdateStudyNext: LiveData<Boolean> get() = _isEnableFirstUpdateStudyNext
 
+    fun setStudyId(id: Long) {
+        this.studyId = id
+    }
+
+    fun setUpdateStudyViewMode(mode: String) {
+        this.updateStudyViewMode = mode
+    }
+
     fun setViewState(studyId: Long) {
         viewModelScope.launch {
-            runCatching { studyDetailRepository.getStudyDetail(studyId) }
-                .onSuccess {
-                    _name.value = it.name
-                    _content.value = it.introduction
-                    _peopleCount.value = it.numberOfMaximumMembers
-                    _startDate.value = it.startAt
-                    _cycle.value = cycle.value.copy(date = getPeriod(it.periodOfRound))
-                    _period.value = it.totalRoundCount
-                }
+            runCatching {
+                studyDetailRepository.getStudyDetail(studyId)
+            }.onSuccess {
+                _name.value = it.name
+                _content.value = it.introduction
+                _peopleCount.value = it.numberOfMaximumMembers
+                _startDate.value = it.startAt
+                _cycle.value = cycle.value.copy(date = getPeriod(it.periodOfRound))
+                _period.value = it.totalRoundCount
+            }
         }
     }
 
@@ -119,6 +131,13 @@ class UpdateStudyViewModel(
 
     fun setPeriod(period: Int) {
         _period.value = period
+    }
+
+    fun updateStudy() {
+        when (updateStudyViewMode) {
+            EDIT_MODE -> editStudy(studyId)
+            CREATE_MODE -> createStudy()
+        }
     }
 
     fun editStudy(studyId: Long) {
@@ -189,6 +208,9 @@ class UpdateStudyViewModel(
     private fun Int.isNotZero(): Boolean = this != 0
 
     companion object {
+        const val CREATE_MODE = "CREATE_MODE"
+        const val EDIT_MODE = "EDIT_MODE"
+
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val createStudyRepository = UpdateStudyRepositoryImpl(

@@ -4,6 +4,9 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.created.team201.presentation.updateStudy.UpdateStudyViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,7 +49,9 @@
             android:inputType="textMultiLine|textNoSuggestions"
             android:maxLength="30"
             android:maxLines="3"
+            android:onTextChanged="@{(text, start, before, count) -> viewModel.setName(text.toString())}"
             android:padding="12dp"
+            android:text="@{viewModel.name}"
             android:textAppearance="@style/title_b20"
             android:textColor="@color/white"
             android:textColorHint="@color/grey02_78808B"
@@ -88,9 +93,11 @@
             android:hint="@string/updateStudy_study_hint_introduction"
             android:importantForAutofill="no"
             android:inputType="textMultiLine|textNoSuggestions"
-            android:maxLength="30"
-            android:maxLines="3"
+            android:maxLength="200"
+            android:maxLines="7"
+            android:onTextChanged="@{(text, start, before, count) -> viewModel.setIntroduction(text.toString())}"
             android:padding="12dp"
+            android:text="@{viewModel.content}"
             android:textAppearance="@style/text_r16"
             android:textColor="@color/white"
             android:textColorHint="@color/grey02_78808B"
@@ -105,7 +112,8 @@
             android:layout_marginBottom="28dp"
             android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
             android:paddingVertical="14dp"
-            android:text="@string/updateStudy_button_next"
+            android:enabled="@{viewModel.isEnableCreateStudy}"
+            android:text="@string/updateStudy_button_created"
             android:textAlignment="center"
             android:textAppearance="@style/button_sb20"
             android:textColor="@color/tv_color_disabled"
