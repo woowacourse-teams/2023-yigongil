@@ -276,4 +276,10 @@ public class StudyService {
                 request.introduction()
         );
     }
+
+    @Transactional
+    public void deleteByMasterId(Long masterId) {
+        List<Study> studies = studyRepository.findAllByMasterIdAndProcessingStatus(masterId, ProcessingStatus.RECRUITING);
+        studyRepository.deleteAll(studies);
+    }
 }
