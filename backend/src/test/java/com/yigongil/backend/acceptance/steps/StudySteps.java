@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.HomeResponse;
@@ -33,12 +32,10 @@ public class StudySteps {
 
     private final ObjectMapper objectMapper;
     private final SharedContext sharedContext;
-    private final JwtTokenProvider tokenProvider;
 
-    public StudySteps(ObjectMapper objectMapper, SharedContext sharedContext, JwtTokenProvider tokenProvider) {
+    public StudySteps(ObjectMapper objectMapper, SharedContext sharedContext) {
         this.objectMapper = objectMapper;
         this.sharedContext = sharedContext;
-        this.tokenProvider = tokenProvider;
     }
 
     @Given("{string}가 제목-{string}, 정원-{string}명, 예상시작일-{string}일 뒤, 총 회차-{string}회, 주기-{string}, 소개-{string}로 스터디를 개설한다.")
@@ -60,10 +57,10 @@ public class StudySteps {
                 periodOfRound,
                 introduction
         );
-        String memberId = (String) sharedContext.getParameter(masterGithubId);
+        String token = sharedContext.getToken(masterGithubId);
 
         String location = given().log().all()
-                                 .header(HttpHeaders.AUTHORIZATION, memberId)
+                                 .header(HttpHeaders.AUTHORIZATION, token)
                                  .contentType(MediaType.APPLICATION_JSON_VALUE)
                                  .body(objectMapper.writeValueAsString(request))
                                  .when()
@@ -96,6 +93,7 @@ public class StudySteps {
 
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(recruitingStudyResponses).isNotEmpty(),
                 () -> assertThat(recruitingStudyResponses).allMatch(isRecruitingPredicate)
         );
     }
@@ -103,7 +101,7 @@ public class StudySteps {
     @When("{string}가 스터디 상세 조회에서 이름이 {string}인 스터디를 조회한다.")
     public void 스터디_조회(String memberGithubId, String studyName) {
         ExtractableResponse<Response> response = given().log().all()
-                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(memberGithubId))
+                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(memberGithubId))
                                                         .when()
                                                         .get("/v1/studies/" + sharedContext.getParameter(studyName))
                                                         .then().log().all()
@@ -146,9 +144,10 @@ public class StudySteps {
         RoundResponse round = sharedContext.getResponse()
                                            .as(RoundResponse.class);
 
+        Long masterId = sharedContext.getId(masterGithubId);
+
         assertAll(
-                () -> assertThat(round.masterId()).isEqualTo(tokenProvider.parseToken(
-                        (String) sharedContext.getParameter(masterGithubId))),
+                () -> assertThat(round.masterId()).isEqualTo(masterId),
                 () -> assertThat(round.id()).isEqualTo(sharedContext.getParameter("roundId"))
         );
     }
@@ -156,12 +155,12 @@ public class StudySteps {
 
     @When("{string}가 이름이 {string}인 스터디의 {int} 회차를 찾는다.")
     public void 스터디_회차_조회(String memberGithubId, String studyName, int roundNumber) {
-        String memberId = (String) sharedContext.getParameter(memberGithubId);
+        String token = sharedContext.getToken(memberGithubId);
         String studyId = (String) sharedContext.getParameter(studyName);
 
         StudyDetailResponse studyDetailResponse = given().log().all()
                                                          .header(HttpHeaders.AUTHORIZATION,
-                                                                 memberId)
+                                                                 token)
                                                          .when()
                                                          .get("/v1/studies/" + studyId)
                                                          .then().log().all()
@@ -179,7 +178,7 @@ public class StudySteps {
         sharedContext.setParameter("roundId", roundId);
 
         ExtractableResponse<Response> response = given()
-                .header(HttpHeaders.AUTHORIZATION, memberId)
+                .header(HttpHeaders.AUTHORIZATION, token)
                 .when()
                 .get("/v1/studies/" + studyId + "/rounds/" + roundId)
                 .then().log().all()
@@ -190,11 +189,11 @@ public class StudySteps {
 
     @Given("{string}가 이름이 {string}인 스터디를 시작한다.")
     public void 스터디시작(String memberGithubId, String studyName) {
-        String memberId = (String) sharedContext.getParameter(memberGithubId);
+        String token = sharedContext.getToken(memberGithubId);
         String studyId = (String) sharedContext.getParameter(studyName);
 
         given().log().all()
-               .header(HttpHeaders.AUTHORIZATION, memberId)
+               .header(HttpHeaders.AUTHORIZATION, token)
                .when()
                .patch("/v1/studies/" + studyId + "/start")
                .then().log().all();
@@ -204,10 +203,10 @@ public class StudySteps {
 
     @When("{string}가 홈화면을 조회한다.")
     public void 현재_회차를_조회한다(String githubId) {
-        String memberId = (String) sharedContext.getParameter(githubId);
+        String token = sharedContext.getToken(githubId);
 
         ExtractableResponse<Response> response = given().log().all()
-                                                        .header(HttpHeaders.AUTHORIZATION, memberId)
+                                                        .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
                                                         .get("/v1/home/")
                                                         .then().log().all()
@@ -227,7 +226,7 @@ public class StudySteps {
             String updatePeriodOfRound,
             String updateIntroduction
     ) {
-        String memberId = (String) sharedContext.getParameter(masterGithubId);
+        String token = sharedContext.getToken(masterGithubId);
         String studyId = (String) sharedContext.getParameter(originalStudyName);
 
         StudyUpdateRequest request = new StudyUpdateRequest(
@@ -240,9 +239,8 @@ public class StudySteps {
         );
 
         given().log().all()
-               .header(HttpHeaders.AUTHORIZATION, memberId)
-               .contentType(
-                       MediaType.APPLICATION_JSON_VALUE)
+               .header(HttpHeaders.AUTHORIZATION, token)
+               .contentType(MediaType.APPLICATION_JSON_VALUE)
                .body(request)
                .when()
                .put("/v1/studies/{studyId}", studyId)
@@ -263,8 +261,10 @@ public class StudySteps {
     @When("{string}를 검색한다.")
     public void 검색한다(String search) {
         ExtractableResponse<Response> response = given().log().all()
+                                                        .queryParam("q", search)
+                                                        .queryParam("page", 0)
                                                         .when()
-                                                        .get("/v1/studies/recruiting/search?page=0&q=" + search)
+                                                        .get("/v1/studies/recruiting/search")
                                                         .then().log().all().extract();
 
         sharedContext.setResponse(response);
