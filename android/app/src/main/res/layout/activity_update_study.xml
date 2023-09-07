@@ -24,7 +24,7 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/tb_create_study"
+            android:id="@+id/tb_update_study"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/black01_0D1117"
@@ -37,13 +37,13 @@
             app:titleTextColor="@color/white" />
 
         <View
-            android:id="@+id/view_create_study_toolbar_border_line"
+            android:id="@+id/view_update_study_toolbar_border_line"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="@color/black02_181B21"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tb_create_study" />
+            app:layout_constraintTop_toBottomOf="@id/tb_update_study" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_create_study"
@@ -55,7 +55,7 @@
             android:padding="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_create_study_toolbar_border_line">
+            app:layout_constraintTop_toBottomOf="@id/view_update_study_toolbar_border_line">
 
             <EditText
                 android:id="@+id/et_create_study_name"
@@ -63,7 +63,7 @@
                 android:layout_height="80dp"
                 android:background="@android:color/transparent"
                 android:gravity="top"
-                android:hint="@string/createStudy_study_hint_name"
+                android:hint="@string/updateStudy_study_hint_name"
                 android:importantForAutofill="no"
                 android:inputType="textMultiLine|textNoSuggestions"
                 android:maxLength="30"
@@ -161,7 +161,7 @@
                 android:layout_height="120dp"
                 android:background="@android:color/transparent"
                 android:gravity="top"
-                android:hint="@string/createStudy_study_hint_introduction"
+                android:hint="@string/updateStudy_study_hint_introduction"
                 android:importantForAutofill="no"
                 android:inputType="textMultiLine|textNoSuggestions"
                 android:maxLength="200"
@@ -186,7 +186,7 @@
             android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
             android:enabled="@{viewModel.isEnableCreateStudy}"
             android:paddingVertical="14dp"
-            android:text="@string/createStudy_button_created"
+            android:text="@string/updateStudy_button_created"
             android:textAlignment="center"
             android:textAppearance="@style/button_sb20"
             android:textColor="@color/tv_color_disabled"

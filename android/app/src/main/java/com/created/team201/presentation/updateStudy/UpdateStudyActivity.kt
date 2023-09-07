@@ -57,14 +57,14 @@ class UpdateStudyActivity :
     private fun initView() {
         when (updateStudyViewMode) {
             EDIT_MODE -> {
-                binding.tbCreateStudy.title = getString(R.string.createStudy_toolbar_title_edit)
+                binding.tbUpdateStudy.title = getString(R.string.updateStudy_toolbar_title_edit)
 
                 if (studyId == -1L) throw IllegalArgumentException()
                 viewModel.setViewState(studyId)
             }
 
             CREATE_MODE ->
-                binding.tbCreateStudy.title = getString(R.string.createStudy_toolbar_title_create)
+                binding.tbUpdateStudy.title = getString(R.string.updateStudy_toolbar_title_create)
         }
     }
 
@@ -76,7 +76,7 @@ class UpdateStudyActivity :
     }
 
     private fun initActionBar() {
-        setSupportActionBar(binding.tbCreateStudy)
+        setSupportActionBar(binding.tbUpdateStudy)
         supportActionBar?.setHomeActionContentDescription(R.string.toolbar_back_text)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
@@ -87,7 +87,7 @@ class UpdateStudyActivity :
             when (studyState) {
                 is Success -> navigateToStudyDetail(studyState.studyId)
                 is FAIL -> {
-                    showToast(getString(R.string.createStudy_toast_fail))
+                    showToast(getString(R.string.updateStudy_toast_fail))
                     finish()
                 }
 
