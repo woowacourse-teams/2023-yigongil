@@ -134,6 +134,7 @@
     <string name="updateStudy_study_hint_name">제목을 입력해주세요.</string>
     <string name="updateStudy_study_hint_introduction">스터디를 소개해주세요.</string>
     <string name="updateStudy_button_created">작성완료</string>
+    <string name="updateStudy_button_next">다음</string>
 
     <string name="createStudy_tag_people_count">TAG_CREATE_STUDY_PEOPLE_COUNT</string>
     <string name="createStudy_tag_start_date">TAG_CREATE_STUDY_START_DATE</string>
@@ -142,6 +143,12 @@
 
     <string name="updateStudy_toast_success">스터디 개설에 성공했습니다</string>
     <string name="updateStudy_toast_fail">스터디 개설에 실패했습니다</string>
+
+    <!-- 스터디 개설 첫번째 프래그먼트 -->
+    <string name="first_update_study_people_count_title">몇 명이 스터디를 진행하나요?</string>
+    <string name="first_update_study_start_date_title">예상 시작일은 언제인가요?</string>
+    <string name="first_update_study_people_count_information">스터디는 최소 2명, 최대 8명까지 함께할 수 있어요!</string>
+    <string name="first_update_study_start_date_information">스터디를 언제 시작할 예정인지 알려주세요.\n오늘 날짜부터 3개월 이후까지만 설정 가능해요!</string>
 
     <!-- 스터디 개설 - 바텀 다이얼로그 뷰 -->
     <string name="bottomSheetFragment_peopleCount_title_text">인원 수</string>
