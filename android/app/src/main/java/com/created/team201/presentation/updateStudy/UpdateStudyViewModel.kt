@@ -74,6 +74,14 @@ class UpdateStudyViewModel(
 
     private var isOpenStudy: Boolean = false
 
+    private val _isEnableFirstUpdateStudyNext: MediatorLiveData<Boolean> =
+        MediatorLiveData<Boolean>().apply {
+            addSourceList(peopleCount, startDate) {
+                peopleCount.value.isNotZero() && startDate.value.isNotEmpty()
+            }
+        }
+    val isEnableFirstUpdateStudyNext: LiveData<Boolean> get() = _isEnableFirstUpdateStudyNext
+
     fun setViewState(studyId: Long) {
         viewModelScope.launch {
             runCatching { studyDetailRepository.getStudyDetail(studyId) }
