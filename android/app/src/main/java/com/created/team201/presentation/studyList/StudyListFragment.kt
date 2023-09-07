@@ -38,8 +38,6 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
             SCREEN_STUDY_LIST,
             this@StudyListFragment.javaClass.simpleName,
         )
-
-        studyListViewModel.initPage()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,6 +49,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         setUpRefreshListener()
         setUpCreateStudyListener()
         setUpScrollListener()
+        setUpStudyList()
     }
 
     private fun setUpToolbar() {
@@ -200,9 +199,14 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         binding.rvStudyListList.addOnScrollListener(onScrollListener)
     }
 
+    private fun setUpStudyList() {
+        studyListViewModel.initPage()
+    }
+
     private fun studyListClickListener() = object : StudyListClickListener {
         override fun onClickStudySummary(id: Long) {
             startActivity(StudyDetailActivity.getIntent(requireContext(), id))
+            activity?.overridePendingTransition(R.anim.right_in, R.anim.stay)
         }
     }
 

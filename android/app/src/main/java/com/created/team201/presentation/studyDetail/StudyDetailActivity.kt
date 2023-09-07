@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import com.created.team201.R
@@ -42,6 +43,7 @@ class StudyDetailActivity :
         observeCanStartStudy()
         observeParticipantsCount()
         setClickEventOnSub()
+        setBackPressed()
     }
 
     private fun setClickEventOnSub() {
@@ -104,7 +106,11 @@ class StudyDetailActivity :
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> finish()
+            android.R.id.home -> {
+                finish()
+                overridePendingTransition(R.anim.stay, R.anim.right_out)
+            }
+
             R.id.menu_study_detail_report -> {
                 startActivity(ReportActivity.getIntent(this, ReportCategory.STUDY, studyId))
             }
@@ -181,6 +187,16 @@ class StudyDetailActivity :
         studyDetailViewModel.canStudyStart.observe(this) { cantStartStudy ->
             binding.btnStudyDetailMain.isEnabled = cantStartStudy
         }
+    }
+
+    private fun setBackPressed() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+                overridePendingTransition(R.anim.stay, R.anim.right_out)
+            }
+        }
+        this.onBackPressedDispatcher.addCallback(this, callback)
     }
 
     private fun showToast(@StringRes stringRes: Int) =
