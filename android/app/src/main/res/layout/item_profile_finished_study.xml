@@ -28,55 +28,41 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_finished_study"
         android:layout_width="match_parent"
+        android:padding="16dp"
         android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/iv_finished_study_tier"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:src="@drawable/ic_diamond_24"
-            app:glideSrc="@{tier.Companion.valueOf(finishedStudy.averageTier)}"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_finished_study_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
             android:text="@{finishedStudy.name}"
             android:textAppearance="@style/text_sb16"
             android:textColor="@color/white"
-            app:layout_constraintStart_toEndOf="@id/iv_finished_study_tier"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="@id/tv_finished_study_description"
+            app:layout_constraintTop_toBottomOf="@id/tv_finished_study_description"
             tools:text="자바 스터디 2명 타세요 ~" />
 
         <TextView
             android:id="@+id/tv_finished_study_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="12dp"
             android:text="@{@string/item_profile_finished_study_information_format(finishedStudy.startAt, finishedStudy.totalRoundCount, finishedStudy.totalRoundCount, periodStringFormat[finishedStudy.periodOfRound.unit.type])}"
             android:textAppearance="@style/description_r12"
             android:textColor="@color/grey02_78808B"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tv_finished_study_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_finished_study_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="예상시작일 2023.07.02 · 총 8회차 · 7일(주기)" />
 
         <ImageView
             android:id="@+id/iv_finished_study_tag"
             android:layout_width="40dp"
             android:layout_height="19dp"
-            android:layout_marginStart="4dp"
+            app:layout_constraintStart_toStartOf="@id/tv_finished_study_description"
             app:glideSrc="@{finishedStudyStatus.Companion.imageOf(finishedStudy.isSucceed)}"
-            app:layout_constraintBottom_toBottomOf="@id/tv_finished_study_title"
-            app:layout_constraintStart_toEndOf="@id/tv_finished_study_title"
-            app:layout_constraintTop_toTopOf="@id/tv_finished_study_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_finished_study_title"
             tools:src="@drawable/ic_gathering" />
 
         <ImageView
@@ -85,22 +71,34 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:src="@drawable/ic_people_count"
-            app:layout_constraintBottom_toBottomOf="@id/tv_finished_study_people_count"
-            app:layout_constraintEnd_toStartOf="@id/tv_finished_study_people_count"
-            app:layout_constraintTop_toTopOf="@id/tv_finished_study_people_count" />
+            android:layout_marginStart="4dp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_finished_study_description"
+            app:layout_constraintStart_toEndOf="@id/tv_finished_study_description"
+            app:layout_constraintTop_toTopOf="@id/tv_finished_study_description" />
 
         <TextView
             android:id="@+id/tv_finished_study_people_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginStart="4dp"
             android:text="@{@string/study_list_member_format(finishedStudy.numberOfCurrentMembers,finishedStudy.numberOfMaximumMembers)}"
             android:textAppearance="@style/text_r14"
             android:textColor="@color/grey02_78808B"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_finished_study_people_count_icon"
+            app:layout_constraintTop_toTopOf="@id/tv_finished_study_description"
+            app:layout_constraintBottom_toBottomOf="@id/tv_finished_study_description"
             tools:text="3/5" />
+
+        <ImageView
+            android:id="@+id/iv_finished_study_tier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_diamond_chip"
+            app:glideSrc="@{tier.Companion.valueOf(finishedStudy.averageTier)}"
+            app:layout_constraintStart_toEndOf="@id/iv_finished_study_tag"
+            app:layout_constraintTop_toTopOf="iv_finished_study_tag"
+            app:layout_constraintBottom_toBottomOf="@id/iv_finished_study_tag"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

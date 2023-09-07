@@ -52,7 +52,7 @@
     <string name="study_list_item_sort_description">정렬</string>
     <string name="study_list_search_button_menu">검색</string>
     <string name="study_list_title">스터디 목록</string>
-    <string name="study_list_information_format">%s %s · 총 %d회차 · %d %s(주기)</string>
+    <string name="study_list_information_format">%s %s · 총 %d회차 · %d %s(주기) · </string>
     <string name="study_list_member_format">%d/%d</string>
     <string name="study_list_previous_date">예상시작일</string>
     <string name="study_list_processing_date">시작일</string>
@@ -189,7 +189,7 @@
     <string name="profile_study_success_rate">스터디 성공률</string>
     <string name="profile_todo_success_rate">필수투두 완료횟수</string>
     <string name="profile_unexpected_user_access_warning">존재하지 않는 사용자입니다.</string>
-    <string name="item_profile_finished_study_information_format">시작일 %s · 총 %d회차 · %d %s(주기)</string>
+    <string name="item_profile_finished_study_information_format">시작일 %s · 총 %d회차 · %d %s(주기) ·</string>
 
     <!-- 설정 뷰 -->
     <string name="setting_toolbar_title">설정</string>
