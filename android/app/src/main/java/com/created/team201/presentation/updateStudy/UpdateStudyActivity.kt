@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.created.team201.R
 import com.created.team201.databinding.ActivityUpdateStudyBinding
@@ -20,13 +21,18 @@ import com.created.team201.presentation.updateStudy.bottomSheet.CycleBottomSheet
 import com.created.team201.presentation.updateStudy.bottomSheet.PeopleCountBottomSheetFragment
 import com.created.team201.presentation.updateStudy.bottomSheet.PeriodBottomSheetFragment
 import com.created.team201.presentation.updateStudy.bottomSheet.StartDateBottomSheetFragment
+import com.created.team201.presentation.updateStudy.create.FirstUpdateStudyFragment
+import com.created.team201.presentation.updateStudy.create.FragmentType
+import com.created.team201.presentation.updateStudy.create.FragmentType.FIRST
+import com.created.team201.presentation.updateStudy.create.FragmentType.SECOND
+import com.created.team201.presentation.updateStudy.create.FragmentType.THIRD
+import com.created.team201.presentation.updateStudy.create.SecondUpdateStudyFragment
+import com.created.team201.presentation.updateStudy.create.ThirdUpdateStudyFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class UpdateStudyActivity :
     BindingActivity<ActivityUpdateStudyBinding>(R.layout.activity_update_study) {
     private val viewModel: UpdateStudyViewModel by viewModels { UpdateStudyViewModel.Factory }
-    private val updateStudyViewMode by lazy { intent.getStringExtra(VIEW_MODE) }
-    private val studyId by lazy { intent.getLongExtra(STUDY_KEY, -1L) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +40,9 @@ class UpdateStudyActivity :
         initBinding()
         initView()
         initActionBar()
+        showFragment(FIRST)
+
         setObserveCreateStudyResult()
-        setClickOnDoneButton()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -45,16 +52,59 @@ class UpdateStudyActivity :
         return super.dispatchTouchEvent(ev)
     }
 
-    private fun setClickOnDoneButton() {
-        binding.tvCreateStudyBtnDone.setOnClickListener {
-            when (updateStudyViewMode) {
-                EDIT_MODE -> viewModel.editStudy(studyId)
-                CREATE_MODE -> viewModel.createStudy()
+    private fun setProgressIndicator(type: FragmentType) {
+        binding.lpiUpdateStudyProgress.progress = when (type) {
+            FIRST -> 33
+            SECOND -> 66
+            THIRD -> 100
+        }
+    }
+
+    private fun showFragment(type: FragmentType) {
+        setProgressIndicator(type)
+
+        val (fragment: Fragment, isCreated: Boolean) = findFragment(
+            type
+        ) ?: createFragment(type)
+
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+
+            if (isCreated) add(R.id.fcv_update_study, fragment, type.name)
+
+            hideAllFragment()
+            show(fragment)
+        }
+    }
+
+    private fun createFragment(type: FragmentType): Pair<Fragment, Boolean> {
+        val fragment = when (type) {
+            FIRST -> FirstUpdateStudyFragment()
+            SECOND -> SecondUpdateStudyFragment()
+            THIRD -> ThirdUpdateStudyFragment()
+        }
+        return Pair(fragment, true)
+    }
+
+    private fun findFragment(type: FragmentType): Pair<Fragment, Boolean>? {
+        val fragment = supportFragmentManager.findFragmentByTag(type.name) ?: return null
+        return Pair(fragment, false)
+    }
+
+    private fun hideAllFragment() {
+        supportFragmentManager.fragments.forEach { fragment ->
+            supportFragmentManager.commit {
+                hide(fragment)
             }
         }
     }
 
     private fun initView() {
+        val updateStudyViewMode = intent.getStringExtra(VIEW_MODE) ?: VIEW_MODE
+        val studyId = intent.getLongExtra(STUDY_KEY, -1L)
+
+        viewModel.setUpdateStudyViewMode(updateStudyViewMode)
+        viewModel.setStudyId(studyId)
         when (updateStudyViewMode) {
             EDIT_MODE -> {
                 binding.tbUpdateStudy.title = getString(R.string.updateStudy_toolbar_title_edit)
