@@ -90,10 +90,10 @@ public class AuthorizationSteps {
 
     @When("{string}의 토큰으로 유효한 토큰인지 검사한다.")
     public void 토큰_검사(String githubId) {
-        String accessToken = (String) sharedContext.getParameter(githubId);
+        String token = sharedContext.getToken(githubId);
 
         ExtractableResponse<Response> response = given().log().all()
-                                                        .header(HttpHeaders.AUTHORIZATION, accessToken)
+                                                        .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
                                                         .get("/v1/login/tokens/validate")
                                                         .then().log().all()
@@ -110,13 +110,6 @@ public class AuthorizationSteps {
                                    .setSubject(String.valueOf(1L))
                                    .signWith(jwtTokenProvider.getSecretKey(), SignatureAlgorithm.HS256)
                                    .compact();
-        sharedContext.setParameter(githubId, token);
-    }
-
-    @Then("{int} 응답을 받는다.")
-    public void 응답_검사(int expected) {
-        ExtractableResponse<Response> response = sharedContext.getResponse();
-
-        assertThat(response.statusCode()).isEqualTo(expected);
+        sharedContext.setTokens(githubId, token);
     }
 }
