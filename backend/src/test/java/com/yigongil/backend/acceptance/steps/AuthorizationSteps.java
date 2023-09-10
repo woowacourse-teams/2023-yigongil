@@ -6,22 +6,31 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.request.TokenRequest;
 import com.yigongil.backend.response.TokenResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
 public class AuthorizationSteps {
 
+    private final JwtTokenProvider jwtTokenProvider;
     private final ObjectMapper objectMapper;
     private final SharedContext sharedContext;
 
-    public AuthorizationSteps(ObjectMapper objectMapper, SharedContext sharedContext) {
+    public AuthorizationSteps(JwtTokenProvider jwtTokenProvider, ObjectMapper objectMapper, SharedContext sharedContext) {
+        this.jwtTokenProvider = jwtTokenProvider;
         this.objectMapper = objectMapper;
         this.sharedContext = sharedContext;
     }
@@ -77,5 +86,30 @@ public class AuthorizationSteps {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @When("{string}의 토큰으로 유효한 토큰인지 검사한다.")
+    public void 토큰_검사(String githubId) {
+        String token = sharedContext.getToken(githubId);
+
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .header(HttpHeaders.AUTHORIZATION, token)
+                                                        .when()
+                                                        .get("/v1/login/tokens/validate")
+                                                        .then().log().all()
+                                                        .extract();
+
+        sharedContext.setResponse(response);
+    }
+
+    @Given("{string}의 토큰이 만료된다.")
+    public void 토큰_만료(String githubId) {
+        String token = "Bearer" + Jwts.builder()
+                                   .setExpiration(Date.from(Instant.now().plus(-1, ChronoUnit.MINUTES)))
+                                   .setIssuedAt(Date.from(Instant.now().plus(-5, ChronoUnit.MINUTES)))
+                                   .setSubject(String.valueOf(1L))
+                                   .signWith(jwtTokenProvider.getSecretKey(), SignatureAlgorithm.HS256)
+                                   .compact();
+        sharedContext.setTokens(githubId, token);
     }
 }
