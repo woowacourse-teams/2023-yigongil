@@ -106,7 +106,6 @@ public interface StudyApi {
     @SecurityRequirement(name = "token")
     @Operation(summary = "스터디 상세 조회")
     ResponseEntity<StudyDetailResponse> viewStudyDetail(
-            @Schema(hidden = true) Member member,
             @Parameter(description = "조회할 스터디 id", required = true) Long id
     );
 

@@ -21,6 +21,10 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (request.getMethod().equals("GET") && request.getRequestURI().matches("/v1/studies/[1-9]\\d*")) {
+            return true;
+        }
+
         if (authHeader == null) {
             throw new InvalidTokenException("인증 정보가 없습니다. 입력된 token: ", null);
         }
