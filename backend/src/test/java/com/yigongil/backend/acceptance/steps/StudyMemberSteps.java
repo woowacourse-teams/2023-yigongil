@@ -25,10 +25,6 @@ public class StudyMemberSteps {
 
     @Given("역할에 따른 코드 표")
     public void 역할_코드(Map<String, Integer> codeByRole) {
-        for (String role : codeByRole.keySet()) {
-            System.out.println("role = " + role);
-            System.out.println("codeByRole = " + codeByRole.get(role));
-        }
         this.codeByRole = codeByRole;
     }
 
@@ -55,25 +51,4 @@ public class StudyMemberSteps {
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
         assertThat(actualRoleCode).isEqualTo(expectedRoleCode);
     }
-
-
-//
-//    @Then("역할이 스터디장으로 조회된다.")
-//    public void 역할_스터디장_검증() {
-//        ExtractableResponse<Response> response = sharedContext.getResponse();
-//        StudyMemberRoleResponse studyMemberRole = response.as(StudyMemberRoleResponse.class);
-//
-//        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-//        assertThat(studyMemberRole.role()).isEqualTo(0);
-//    }
-//
-//    @Then("역할이 스터디 신청자로 조회된다.")
-//    public void 역할_스터디신청자_검증(Map<String, Integer> roleList) {
-//        System.out.println("roleList.size() = " + roleList.size());
-//        ExtractableResponse<Response> response = sharedContext.getResponse();
-//        StudyMemberRoleResponse studyMemberRole = response.as(StudyMemberRoleResponse.class);
-//
-//        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-//        assertThat(studyMemberRole.role()).isEqualTo(2);
-//    }
 }
