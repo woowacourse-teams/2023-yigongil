@@ -4,6 +4,7 @@ import com.yigongil.backend.application.StudyService;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.request.StudyUpdateRequest;
+import com.yigongil.backend.response.FeedPostsResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
@@ -125,6 +126,15 @@ public class StudyController implements StudyApi {
         studyService.startStudy(member, id);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/posts")
+    public ResponseEntity<FeedPostsResponse> findFeedPosts(
+            @PathVariable Long id,
+            int page
+    ) {
+        FeedPostsResponse response = studyService.findFeedPosts(id, page);
+        return ResponseEntity.ok(response);
     }
 }
 

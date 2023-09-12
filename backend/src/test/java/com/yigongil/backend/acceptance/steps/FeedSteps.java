@@ -6,13 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.yigongil.backend.request.CertificationFeedPostCreateRequest;
 import com.yigongil.backend.request.RegularFeedPostCreateRequest;
-import com.yigongil.backend.response.FeedPostResponse;
+import com.yigongil.backend.response.FeedPostsResponse;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
@@ -70,14 +68,13 @@ public class FeedSteps {
                                                         .all()
                                                         .statusCode(HttpStatus.OK.value())
                                                         .extract();
-        List<FeedPostResponse> feedPostResponses = response.as(new TypeRef<>() {
-        });
+        FeedPostsResponse feedPostsResponse = response.as(FeedPostsResponse.class);
 
         assertAll(
-                () -> assertThat(feedPostResponses).hasSize(1),
-                () -> assertThat(feedPostResponses.get(0).author().nickname()).isEqualTo(author),
-                () -> assertThat(feedPostResponses.get(0).content()).isEqualTo(content),
-                () -> assertThat(feedPostResponses.get(0).forCertification()).isFalse()
+                () -> assertThat(feedPostsResponse.regulars()).hasSize(1),
+                () -> assertThat(feedPostsResponse.certifications()).hasSize(0),
+                () -> assertThat(feedPostsResponse.regulars().get(0).author().nickname()).isEqualTo(author),
+                () -> assertThat(feedPostsResponse.regulars().get(0).content()).isEqualTo(content)
         );
     }
 
@@ -94,14 +91,13 @@ public class FeedSteps {
                                                         .all()
                                                         .statusCode(HttpStatus.OK.value())
                                                         .extract();
-        List<FeedPostResponse> feedPostResponses = response.as(new TypeRef<>() {
-        });
+        FeedPostsResponse feedPostsResponse = response.as(FeedPostsResponse.class);
 
         assertAll(
-                () -> assertThat(feedPostResponses).hasSize(1),
-                () -> assertThat(feedPostResponses.get(0).author().nickname()).isEqualTo(author),
-                () -> assertThat(feedPostResponses.get(0).content()).isEqualTo(content),
-                () -> assertThat(feedPostResponses.get(0).forCertification()).isTrue()
+                () -> assertThat(feedPostsResponse.regulars()).hasSize(0),
+                () -> assertThat(feedPostsResponse.certifications()).hasSize(1),
+                () -> assertThat(feedPostsResponse.certifications().get(0).author().nickname()).isEqualTo(author),
+                () -> assertThat(feedPostsResponse.certifications().get(0).content()).isEqualTo(content)
         );
     }
 }

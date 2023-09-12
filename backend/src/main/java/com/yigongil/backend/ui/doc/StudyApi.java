@@ -2,6 +2,7 @@ package com.yigongil.backend.ui.doc;
 
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.request.StudyUpdateRequest;
+import com.yigongil.backend.response.FeedPostsResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
@@ -173,5 +174,20 @@ public interface StudyApi {
     ResponseEntity<Void> startStudy(
             @Schema(hidden = true) Member member,
             @Parameter(description = "시작할 스터디 id", required = true) Long id
+    );
+
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "400"),
+                    @ApiResponse(responseCode = "401"),
+                    @ApiResponse(responseCode = "404")
+            }
+    )
+    @SecurityRequirement(name = "token")
+    @Operation(summary = "피드 조회")
+    ResponseEntity<FeedPostsResponse> findFeedPosts(
+            @Parameter(description = "조회할 스터디 id", required = true) Long id,
+            @Parameter(description = "페이지", required = true) int page
     );
 }

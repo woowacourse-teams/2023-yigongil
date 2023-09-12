@@ -2,6 +2,10 @@ package com.yigongil.backend.application;
 
 import static com.yigongil.backend.domain.study.PageStrategy.ID_DESC;
 
+import com.yigongil.backend.domain.feedpost.FeedPost;
+import com.yigongil.backend.domain.feedpost.FeedPostRepository;
+import com.yigongil.backend.domain.feedpost.certificationfeedpost.CertificationFeedRepository;
+import com.yigongil.backend.domain.feedpost.regularfeedpost.RegularFeedPostRepository;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.ProcessingStatus;
@@ -15,8 +19,11 @@ import com.yigongil.backend.exception.ApplicantAlreadyExistException;
 import com.yigongil.backend.exception.ApplicantNotFoundException;
 import com.yigongil.backend.exception.StudyNotFoundException;
 import com.yigongil.backend.request.StudyUpdateRequest;
+import com.yigongil.backend.response.CertificationFeedPostResponse;
+import com.yigongil.backend.response.FeedPostsResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
+import com.yigongil.backend.response.RegularFeedPostResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import java.time.LocalDate;
@@ -34,13 +41,21 @@ public class StudyService {
 
     private final StudyRepository studyRepository;
     private final StudyMemberRepository studyMemberRepository;
+    private final FeedPostRepository feedPostRepository;
+    private final CertificationFeedRepository certificationFeedPostRepository;
+    private final RegularFeedPostRepository regularFeedPostRepository;
 
     public StudyService(
             StudyRepository studyRepository,
-            StudyMemberRepository studyMemberRepository
+            StudyMemberRepository studyMemberRepository,
+            FeedPostRepository feedPostRepository, CertificationFeedRepository certificationFeedPostRepository,
+            RegularFeedPostRepository regularFeedPostRepository
     ) {
         this.studyRepository = studyRepository;
         this.studyMemberRepository = studyMemberRepository;
+        this.feedPostRepository = feedPostRepository;
+        this.certificationFeedPostRepository = certificationFeedPostRepository;
+        this.regularFeedPostRepository = regularFeedPostRepository;
     }
 
     @Transactional
@@ -221,6 +236,20 @@ public class StudyService {
             );
         }
         return response;
+    }
+
+    @Transactional
+    public FeedPostsResponse findFeedPosts(Long studyId, int page) {
+        Pageable pageable = PageRequest.of(page, ID_DESC.getSize(), ID_DESC.getSort());
+        Page<FeedPost> feedPosts = feedPostRepository.findAllByStudyId(studyId, pageable);
+        List<Long> recentPostIds = feedPosts.stream().map(FeedPost::getId).toList();
+        List<CertificationFeedPostResponse> certifications = certificationFeedPostRepository.findAllByIdIn(recentPostIds).stream()
+                                                                                            .map(CertificationFeedPostResponse::from)
+                                                                                            .toList();
+        List<RegularFeedPostResponse> regulars = regularFeedPostRepository.findAllByIdIn(recentPostIds).stream()
+                                                                          .map(RegularFeedPostResponse::from)
+                                                                          .toList();
+        return FeedPostsResponse.of(certifications, regulars);
     }
 
     @Transactional

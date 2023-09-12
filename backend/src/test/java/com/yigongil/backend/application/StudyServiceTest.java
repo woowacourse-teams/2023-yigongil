@@ -5,6 +5,9 @@ import static org.mockito.BDDMockito.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
+import com.yigongil.backend.domain.feedpost.FeedPostRepository;
+import com.yigongil.backend.domain.feedpost.certificationfeedpost.CertificationFeedRepository;
+import com.yigongil.backend.domain.feedpost.regularfeedpost.RegularFeedPostRepository;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
@@ -29,7 +32,10 @@ class StudyServiceTest {
 
     private final StudyService studyService = new StudyService(
             studyRepository,
-            studyMemberRepository
+            studyMemberRepository,
+            mock(FeedPostRepository.class),
+            mock(CertificationFeedRepository.class),
+            mock(RegularFeedPostRepository.class)
     );
 
     @Nested
