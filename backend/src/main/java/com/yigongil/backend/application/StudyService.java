@@ -34,6 +34,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import com.yigongil.backend.response.StudyMemberRoleResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -186,7 +188,7 @@ public class StudyService {
     }
 
     @Transactional(readOnly = true)
-    public StudyDetailResponse findStudyDetailByStudyId(Member member, Long studyId) {
+    public StudyDetailResponse findStudyDetailByStudyId(Long studyId) {
         Study study = findStudyById(studyId);
 
         List<Round> rounds = study.getRounds();
@@ -194,11 +196,7 @@ public class StudyService {
 
         List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRoleNotAndStudyResult(studyId, Role.APPLICANT, StudyResult.NONE);
 
-        Role role = studyMemberRepository.findByStudyIdAndMemberId(studyId, member.getId())
-                                         .map(StudyMember::getRole)
-                                         .orElse(Role.NO_ROLE);
-
-        return StudyDetailResponse.of(study, rounds, role, currentRound, createStudyMemberResponses(studyMembers));
+        return StudyDetailResponse.of(study, rounds, currentRound, createStudyMemberResponses(studyMembers));
     }
 
     @Transactional
@@ -342,5 +340,14 @@ public class StudyService {
     public void deleteByMasterId(Long masterId) {
         List<Study> studies = studyRepository.findAllByMasterIdAndProcessingStatus(masterId, ProcessingStatus.RECRUITING);
         studyRepository.deleteAll(studies);
+    }
+
+    @Transactional(readOnly = true)
+    public StudyMemberRoleResponse getMemberRoleOfStudy(Member member, Long studyId) {
+        Role role = studyMemberRepository.findByStudyIdAndMemberId(studyId, member.getId())
+                                         .map(StudyMember::getRole)
+                                         .orElse(Role.NO_ROLE);
+
+        return StudyMemberRoleResponse.from(role);
     }
 }

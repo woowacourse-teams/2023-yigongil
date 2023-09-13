@@ -9,6 +9,7 @@ import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
+import com.yigongil.backend.response.StudyMemberRoleResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -109,7 +110,6 @@ public interface StudyApi {
     @SecurityRequirement(name = "token")
     @Operation(summary = "스터디 상세 조회")
     ResponseEntity<StudyDetailResponse> viewStudyDetail(
-            @Schema(hidden = true) Member member,
             @Parameter(description = "조회할 스터디 id", required = true) Long id
     );
 
@@ -223,5 +223,18 @@ public interface StudyApi {
             @Schema(hidden = true) Member member,
             @Parameter(description = "피드가 등록되는 스터디 id", required = true) Long id,
             CertificationFeedPostCreateRequest request
+    );
+
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "401")
+            }
+    )
+    @SecurityRequirement(name = "token")
+    @Operation(summary = "스터디 멤버 역할 조회")
+    ResponseEntity<StudyMemberRoleResponse> getStudyMemberRole(
+            @Schema(hidden = true) Member member,
+            @Parameter(description = "멤버가 속해 있는 스터디 id", required = true) Long studyId
     );
 }
