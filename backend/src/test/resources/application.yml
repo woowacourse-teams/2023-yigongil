@@ -20,14 +20,13 @@ spring:
     hibernate:
       ddl-auto: create
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+  flyway:
+    enabled: false
 
 logging:
   level:
     org.hibernate.type: trace
     org.hibernate.sql: debug
-
-flyway:
-  enabled: false
 
 oauth2:
   github:
