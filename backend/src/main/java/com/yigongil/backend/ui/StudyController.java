@@ -7,6 +7,7 @@ import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.FeedPostsResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
+import com.yigongil.backend.response.RegularFeedPostResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.ui.doc.StudyApi;
@@ -135,6 +136,16 @@ public class StudyController implements StudyApi {
     ) {
         FeedPostsResponse response = studyService.findFeedPosts(id, page);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{id}/posts/regular")
+    public ResponseEntity<Void> createRegularFeedPost(
+            @Authorization Member member,
+            @PathVariable Long id,
+            RegularFeedPostResponse request
+    ) {
+        studyService.createRegularFeedPost(member, id, request);
+        return ResponseEntity.ok().build();
     }
 }
 

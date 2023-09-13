@@ -5,6 +5,7 @@ import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.FeedPostsResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
+import com.yigongil.backend.response.RegularFeedPostResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -189,5 +190,21 @@ public interface StudyApi {
     ResponseEntity<FeedPostsResponse> findFeedPosts(
             @Parameter(description = "조회할 스터디 id", required = true) Long id,
             @Parameter(description = "페이지", required = true) int page
+    );
+
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201"),
+                    @ApiResponse(responseCode = "400"),
+                    @ApiResponse(responseCode = "401"),
+                    @ApiResponse(responseCode = "404")
+            }
+    )
+    @SecurityRequirement(name = "token")
+    @Operation(summary = "피드 등록")
+    ResponseEntity<Void> createRegularFeedPost(
+            @Schema(hidden = true) Member member,
+            @Parameter(description = "피드가 등록되는 스터디 id", required = true) Long id,
+            RegularFeedPostResponse request
     );
 }

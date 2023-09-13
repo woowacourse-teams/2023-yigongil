@@ -14,6 +14,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -39,6 +40,26 @@ public abstract class FeedPost extends BaseEntity {
     private String imageUrl;
 
     private LocalDateTime createdAt;
+
+    protected FeedPost() {
+    }
+
+    @Builder
+    public FeedPost(
+            Long id,
+            Member author,
+            Study study,
+            String content,
+            String imageUrl,
+            LocalDateTime createdAt
+    ) {
+        this.id = id;
+        this.author = author;
+        this.study = study;
+        this.content = content;
+        this.imageUrl = imageUrl;
+        this.createdAt = createdAt;
+    }
 
     @Override
     public boolean equals(Object o) {

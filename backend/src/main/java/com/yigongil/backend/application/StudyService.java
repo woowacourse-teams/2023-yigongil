@@ -5,6 +5,7 @@ import static com.yigongil.backend.domain.study.PageStrategy.ID_DESC;
 import com.yigongil.backend.domain.feedpost.FeedPost;
 import com.yigongil.backend.domain.feedpost.FeedPostRepository;
 import com.yigongil.backend.domain.feedpost.certificationfeedpost.CertificationFeedRepository;
+import com.yigongil.backend.domain.feedpost.regularfeedpost.RegularFeedPost;
 import com.yigongil.backend.domain.feedpost.regularfeedpost.RegularFeedPostRepository;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
@@ -127,6 +128,17 @@ public class StudyService {
         );
     }
 
+    @Transactional
+    public void createRegularFeedPost(Member member, Long studyId, RegularFeedPostResponse request) {
+        RegularFeedPost regularFeedPost = RegularFeedPost.builder()
+                                                         .author(member)
+                                                         .study(findStudyById(studyId))
+                                                         .imageUrl(request.imageUrl())
+                                                         .content(request.content())
+                                                         .build();
+        regularFeedPostRepository.save(regularFeedPost);
+    }
+
     public Study findStudyById(Long studyId) {
         return studyRepository.findById(studyId)
                               .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
@@ -238,7 +250,7 @@ public class StudyService {
         return response;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public FeedPostsResponse findFeedPosts(Long studyId, int page) {
         Pageable pageable = PageRequest.of(page, ID_DESC.getSize(), ID_DESC.getSort());
         Page<FeedPost> feedPosts = feedPostRepository.findAllByStudyId(studyId, pageable);
