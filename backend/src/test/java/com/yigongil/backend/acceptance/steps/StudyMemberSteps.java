@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class StudyMemberSteps {
 
@@ -48,7 +49,9 @@ public class StudyMemberSteps {
         ExtractableResponse<Response> response = sharedContext.getResponse();
         int actualRoleCode = response.as(StudyMemberRoleResponse.class).role();
 
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-        assertThat(actualRoleCode).isEqualTo(expectedRoleCode);
+        assertAll(
+                () -> assertThat(actualRoleCode).isEqualTo(expectedRoleCode),
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value())
+        );
     }
 }
