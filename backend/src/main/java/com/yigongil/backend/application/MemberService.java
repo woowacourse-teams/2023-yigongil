@@ -100,7 +100,7 @@ public class MemberService {
 
     @Transactional
     public void delete(Member member) {
-        memberRepository.delete(member);
+        member.exit();
     }
 
     @Transactional(readOnly = true)

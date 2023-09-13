@@ -3,6 +3,7 @@ package com.yigongil.backend.acceptance.steps;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import io.cucumber.java.en.Given;
@@ -16,17 +17,19 @@ import org.springframework.http.HttpHeaders;
 public class ApplySteps {
 
     private final SharedContext sharedContext;
+    private final JwtTokenProvider tokenProvider;
 
-    public ApplySteps(SharedContext sharedContext) {
+    public ApplySteps(SharedContext sharedContext, JwtTokenProvider tokenProvider) {
         this.sharedContext = sharedContext;
+        this.tokenProvider = tokenProvider;
     }
 
     @Given("깃허브 아이디가 {string}인 멤버가 이름이 {string}스터디에 신청한다.")
     public void 스터디_신청(String githubId, String studyName) {
-        String token = sharedContext.getToken(githubId);
+        String memberId = (String) sharedContext.getParameter(githubId);
         ExtractableResponse<Response> response = given().log()
                                                         .all()
-                                                        .header(HttpHeaders.AUTHORIZATION, token)
+                                                        .header(HttpHeaders.AUTHORIZATION, memberId)
                                                         .when()
                                                         .post("/v1/studies/" + sharedContext.getParameter(studyName) + "/applicants")
                                                         .then()
@@ -42,7 +45,7 @@ public class ApplySteps {
         ExtractableResponse<Response> response =
                 given().log()
                        .all()
-                       .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(masterGithubId))
+                       .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(masterGithubId))
                        .when()
                        .get("/v1/studies/" + sharedContext.getParameter(studyName) + "/applicants")
                        .then()
@@ -70,9 +73,9 @@ public class ApplySteps {
 
         ExtractableResponse<Response> response =
                 given().log().all()
-                       .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(masterName))
+                       .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(masterName))
                        .when()
-                       .patch("/v1/studies/{studyId}/applicants/{memberId}", studyId, memberId)
+                       .patch("/v1/studies/{studyId}/applicants/{memberId}", studyId, tokenProvider.parseToken((String) memberId))
                        .then()
                        .log().all()
                        .extract();
@@ -82,14 +85,13 @@ public class ApplySteps {
 
     @Then("{string}는 {string} 스터디의 스터디원으로 추가되어 있다.")
     public void 스터디원_추가_완료(String memberName, String studyName) {
-        Long memberId = sharedContext.getId(memberName);
+        String token = String.valueOf(sharedContext.getParameter(memberName));
 
         StudyDetailResponse response = sharedContext.getResponse()
                                                     .as(StudyDetailResponse.class);
-
         List<StudyMemberResponse> studyMembers = response.members();
 
-        assertThat(studyMembers).anyMatch(member -> member.id().equals(memberId));
+        assertThat(studyMembers).anyMatch(member -> member.id().equals(tokenProvider.parseToken(token)));
     }
 
 
@@ -97,7 +99,7 @@ public class ApplySteps {
     public void 스터디_신청_취소(String applicantName, String studyName) {
         ExtractableResponse<Response> response =
                 given().log().all()
-                       .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(applicantName))
+                       .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(applicantName))
                        .when()
                        .delete("/v1/studies/{studyId}/applicants", sharedContext.getParameter(studyName))
                        .then().log().all()

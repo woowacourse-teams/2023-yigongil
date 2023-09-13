@@ -1,7 +1,6 @@
 package com.yigongil.backend.domain.member;
 
 import com.yigongil.backend.domain.BaseEntity;
-import com.yigongil.backend.domain.event.MemberDeleteEvent;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -9,29 +8,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.PreRemove;
 import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.annotations.SQLDelete;
 
 @Getter
-@SQLDelete(sql = Member.DELETE_QUERY)
 @Entity
 public class Member extends BaseEntity {
 
     private static final int MASTER_NUMBER = 0;
     private static final int PARTICIPANT_NUMBER = 1;
     private static final int MAXIMUM_TIER = 5;
-
-    protected static final String DELETE_QUERY = """
-            update member
-            set github_id = null,
-            nickname = null,
-            profile_image_url = null,
-            introduction = null,
-            deleted = true
-            where id = ?
-            """;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -56,6 +42,7 @@ public class Member extends BaseEntity {
 
     @Column(nullable = false)
     private boolean deleted;
+
 
     protected Member() {
     }
@@ -114,9 +101,12 @@ public class Member extends BaseEntity {
         }
     }
 
-    @PreRemove
-    public void registerDeleteEvent() {
-        register(new MemberDeleteEvent(id));
+    public void exit() {
+        this.githubId = null;
+        this.nickname = null;
+        this.profileImageUrl = null;
+        this.introduction = new Introduction(null);
+        this.deleted = true;
     }
 
     @Override

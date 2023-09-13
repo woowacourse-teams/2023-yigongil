@@ -3,6 +3,7 @@ package com.yigongil.backend.acceptance.steps;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.request.MemberReportCreateRequest;
 import com.yigongil.backend.request.StudyReportCreateRequest;
 import io.cucumber.java.en.Given;
@@ -18,43 +19,46 @@ import org.springframework.http.MediaType;
 public class ReportSteps {
 
     private final SharedContext sharedContext;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public ReportSteps(SharedContext sharedContext) {
+    public ReportSteps(SharedContext sharedContext, JwtTokenProvider jwtTokenProvider) {
         this.sharedContext = sharedContext;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Given("피신고자-{string}, 신고 제목-{string}, 내용-{string}, 문제발생일-{string}일 전으로 멤버 신고 정보를 작성한다.")
     public void 멤버_신고_폼_작성(String reportedMember, String title, String content, String days) {
-        Long reportedMemberId = sharedContext.getId(reportedMember);
+        String reportedMemberToken = (String) sharedContext.getParameter(reportedMember);
+        Long reportedMemberId = jwtTokenProvider.parseToken(reportedMemberToken);
 
-        LocalDate problemOccurredAt = LocalDate.now().minusDays(Long.parseLong(days));
+        LocalDate problemOccuredAt = LocalDate.now().minusDays(Long.parseLong(days));
 
         MemberReportCreateRequest request = new MemberReportCreateRequest(
                 reportedMemberId,
                 title,
                 content,
-                problemOccurredAt
+                problemOccuredAt
         );
         sharedContext.setParameter(title, request);
     }
 
     @Given("신고 스터디 이름-{string}, 신고 제목-{string}, 내용-{string}, 문제발생일-{string}일 전으로 스터디 신고 정보를 작성한다.")
     public void 스터디_신고_폼_작성(String reportedStudy, String title, String content, String days) {
-        Long reportedStudyId = sharedContext.getId(reportedStudy);
-        LocalDate problemOccurredAt = LocalDate.now().minusDays(Long.parseLong(days));
+        Long reportedStudyId = Long.valueOf((String) sharedContext.getParameter(reportedStudy));
+        LocalDate problemOccuredAt = LocalDate.now().minusDays(Long.parseLong(days));
 
         StudyReportCreateRequest request = new StudyReportCreateRequest(
                 reportedStudyId,
                 title,
                 content,
-                problemOccurredAt
+                problemOccuredAt
         );
         sharedContext.setParameter(title, request);
     }
 
     @When("{string}가 제목이 {string}인 신고 정보를 통해 멤버 신고 요청을 한다.")
     public void 유저_신고(String reporter, String reportTitle) {
-        String reporterToken = sharedContext.getToken(reporter);
+        String reporterToken = (String) sharedContext.getParameter(reporter);
         MemberReportCreateRequest request = (MemberReportCreateRequest) sharedContext.getParameter(reportTitle);
 
         sharedContext.setResponse(given().log().all()
@@ -69,7 +73,7 @@ public class ReportSteps {
 
     @When("{string}가 제목이 {string}인 신고 정보를 통해 스터디 신고 요청을 한다.")
     public void 스터디_신고(String reporter, String reportTitle) {
-        String reporterToken = sharedContext.getToken(reporter);
+        String reporterToken = (String) sharedContext.getParameter(reporter);
         StudyReportCreateRequest request = (StudyReportCreateRequest) sharedContext.getParameter(reportTitle);
 
         sharedContext.setResponse(given().log().all()

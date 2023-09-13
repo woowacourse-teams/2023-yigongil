@@ -37,7 +37,7 @@ public class TodoSteps {
         given().log().all()
                .contentType(MediaType.APPLICATION_JSON_VALUE)
                .body(objectMapper.writeValueAsString(request))
-               .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(studyMemberGithubId))
+               .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(studyMemberGithubId))
                .when()
                .post("/v1/rounds/" + sharedContext.getParameter("roundId") + "/todos/necessary")
                .then().log().all();
@@ -50,7 +50,7 @@ public class TodoSteps {
         ExtractableResponse<Response> response = given().log().all()
                                                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                                                         .body(objectMapper.writeValueAsString(request))
-                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(studyMemberGithubId))
+                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(studyMemberGithubId))
                                                         .when()
                                                         .post("/v1/rounds/" + sharedContext.getParameter("roundId") + "/todos/optional")
                                                         .then().log().all()
@@ -70,7 +70,7 @@ public class TodoSteps {
         ExtractableResponse<Response> response = given().log().all()
                                                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                                                         .body(objectMapper.writeValueAsString(request))
-                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(githubId))
+                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(githubId))
                                                         .when()
                                                         .patch("/v1/rounds/" + sharedContext.getParameter("roundId") + "/todos/necessary")
                                                         .then().log().all()
@@ -89,7 +89,7 @@ public class TodoSteps {
         ExtractableResponse<Response> response = given().log().all()
                                                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                                                         .body(objectMapper.writeValueAsString(request))
-                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(githubId))
+                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(githubId))
                                                         .when()
                                                         .patch("/v1/rounds/"
                                                                 + sharedContext.getParameter("roundId")
@@ -104,7 +104,7 @@ public class TodoSteps {
     @When("{string}가 찾은 회차에서 등록한 선택 투두를 삭제한다.")
     public void 투두를_삭제한다(String githubId) {
         ExtractableResponse<Response> response = given().log().all()
-                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(githubId))
+                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(githubId))
                                                         .when()
                                                         .delete("/v1/rounds/" +
                                                                 sharedContext.getParameter("roundId") +

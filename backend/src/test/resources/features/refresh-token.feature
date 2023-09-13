@@ -18,14 +18,3 @@ Feature: 리프레시 토큰을 통해 새로운 액세스 토큰, 리프레시 
     Then "jinwoo"가 인증에 실패한다.
     When "yujamint"가 토큰이 만료되어 리프레시 토큰을 사용해 새 토큰을 받는다.
     Then "yujamint"가 인증에 실패한다.
-
-  Scenario: 유효한 토큰이라면 200 응답을 받는다.
-    Given "jinwoo"의 깃허브 아이디로 회원가입을 한다.
-    When "jinwoo"의 토큰으로 유효한 토큰인지 검사한다.
-    Then 200 응답을 받는다.
-
-  Scenario: 유효하지 않은 토큰이라면 401 응답을 받는다.
-    Given "jinwoo"의 깃허브 아이디로 회원가입을 한다.
-    Given "jinwoo"의 토큰이 만료된다.
-    When "jinwoo"의 토큰으로 유효한 토큰인지 검사한다.
-    Then 401 응답을 받는다.

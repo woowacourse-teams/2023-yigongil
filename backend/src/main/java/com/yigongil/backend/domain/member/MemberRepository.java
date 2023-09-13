@@ -12,6 +12,4 @@ public interface MemberRepository extends Repository<Member, Long> {
     Member save(Member member);
 
     boolean existsByNickname(Nickname nickname);
-
-    void delete(Member member);
 }
