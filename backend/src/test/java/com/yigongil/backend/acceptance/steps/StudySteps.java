@@ -98,12 +98,11 @@ public class StudySteps {
         );
     }
 
-    @When("{string}가 스터디 상세 조회에서 이름이 {string}인 스터디를 조회한다.")
-    public void 스터디_조회(String memberGithubId, String studyName) {
+    @When("스터디 상세 조회에서 이름이 {string}인 스터디를 조회한다.")
+    public void 스터디_조회(String studyName) {
         ExtractableResponse<Response> response = given().log().all()
-                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(memberGithubId))
                                                         .when()
-                                                        .get("/v1/studies/" + sharedContext.getParameter(studyName))
+                                                        .get("/v1/studies/" + sharedContext.getId(studyName))
                                                         .then().log().all()
                                                         .extract();
 
