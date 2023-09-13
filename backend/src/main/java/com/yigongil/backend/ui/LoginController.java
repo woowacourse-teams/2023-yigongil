@@ -28,6 +28,11 @@ public class LoginController implements LoginApi {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/tokens/validate")
+    public ResponseEntity<Void> validateToken() {
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/tokens/refresh")
     public ResponseEntity<TokenResponse> refreshMemberToken(@RequestBody TokenRequest request) {
         TokenResponse response = authService.refresh(request);

@@ -1,4 +1,4 @@
-Feature: 유저를 신고한다
+Feature: 신고 기능
 
   Scenario: 정상적으로 다른 유저를 신고한다
     Given "jinwoo"의 깃허브 아이디로 회원가입을 한다.
