@@ -14,7 +14,7 @@ alter table study
     drop column current_round_id;
 
 alter table optional_todo
-    drop constraint FKjnishr4h1qsdfa5q0a2b40dd;
+    drop constraint FKjnishr4h1qlmtna5q0a2b40dd;
 
 alter table optional_todo
     add constraint FKjnishr4h1qsdfa5q0a2b40dd
@@ -26,7 +26,7 @@ alter table round
     drop constraint FK41ah5maxtjcdgiohmdr2s9fai;
 
 alter table round
-    add constraint FK41ah5maxtsdfiohmdr2s9fai
+    add constraint FK41ah5maxtjcdgiohmdr2s9fai
         foreign key (study_id)
             references study (id)
             on delete cascade;
