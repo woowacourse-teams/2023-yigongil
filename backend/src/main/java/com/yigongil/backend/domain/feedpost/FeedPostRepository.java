@@ -7,4 +7,6 @@ import org.springframework.data.repository.Repository;
 public interface FeedPostRepository extends Repository<FeedPost, Long> {
 
     Page<FeedPost> findAllByStudyId(Long studyId, Pageable pageable);
+
+    FeedPost save(FeedPost feedPost);
 }

@@ -1,11 +1,12 @@
 package com.yigongil.backend.ui.doc;
 
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.request.CertificationFeedPostCreateRequest;
+import com.yigongil.backend.request.RegularFeedPostCreateRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.FeedPostsResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
-import com.yigongil.backend.response.RegularFeedPostResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -194,17 +195,33 @@ public interface StudyApi {
 
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "201"),
+                    @ApiResponse(responseCode = "200"),
                     @ApiResponse(responseCode = "400"),
                     @ApiResponse(responseCode = "401"),
                     @ApiResponse(responseCode = "404")
             }
     )
     @SecurityRequirement(name = "token")
-    @Operation(summary = "피드 등록")
+    @Operation(summary = "일반 피드 등록")
     ResponseEntity<Void> createRegularFeedPost(
             @Schema(hidden = true) Member member,
             @Parameter(description = "피드가 등록되는 스터디 id", required = true) Long id,
-            RegularFeedPostResponse request
+            RegularFeedPostCreateRequest request
+    );
+
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "400"),
+                    @ApiResponse(responseCode = "401"),
+                    @ApiResponse(responseCode = "404")
+            }
+    )
+    @SecurityRequirement(name = "token")
+    @Operation(summary = "인증 피드 등록")
+    ResponseEntity<Void> createCertificationFeedPost(
+            @Schema(hidden = true) Member member,
+            @Parameter(description = "피드가 등록되는 스터디 id", required = true) Long id,
+            CertificationFeedPostCreateRequest request
     );
 }

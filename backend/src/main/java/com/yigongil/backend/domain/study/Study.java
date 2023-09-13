@@ -287,6 +287,10 @@ public class Study extends BaseEntity {
         return this.processingStatus == ProcessingStatus.END;
     }
 
+    public void completeRound(Member member) {
+        getCurrentRound().completeRound(member);
+    }
+
     public Round getCurrentRound() {
         return rounds.stream()
                      .filter(round -> round.getRoundNumber().equals(currentRoundNumber))

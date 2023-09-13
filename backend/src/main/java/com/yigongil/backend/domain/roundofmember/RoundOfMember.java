@@ -68,6 +68,10 @@ public class RoundOfMember extends BaseEntity {
         return optionalTodo;
     }
 
+    public void completeRound() {
+        updateNecessaryTodoIsDone(true);
+    }
+
     public void updateNecessaryTodoIsDone(boolean isDone) {
         this.isDone = isDone;
     }

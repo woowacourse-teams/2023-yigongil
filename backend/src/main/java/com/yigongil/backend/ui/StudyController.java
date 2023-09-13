@@ -3,11 +3,12 @@ package com.yigongil.backend.ui;
 import com.yigongil.backend.application.StudyService;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.request.CertificationFeedPostCreateRequest;
+import com.yigongil.backend.request.RegularFeedPostCreateRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.FeedPostsResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
-import com.yigongil.backend.response.RegularFeedPostResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.ui.doc.StudyApi;
@@ -142,9 +143,19 @@ public class StudyController implements StudyApi {
     public ResponseEntity<Void> createRegularFeedPost(
             @Authorization Member member,
             @PathVariable Long id,
-            RegularFeedPostResponse request
+            @RequestBody RegularFeedPostCreateRequest request
     ) {
         studyService.createRegularFeedPost(member, id, request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/posts/certification")
+    public ResponseEntity<Void> createCertificationFeedPost(
+            @Authorization Member member,
+            @PathVariable Long id,
+            @RequestBody CertificationFeedPostCreateRequest request
+    ) {
+        studyService.createCertificationFeedPost(member, id, request);
         return ResponseEntity.ok().build();
     }
 }
