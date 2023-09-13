@@ -14,8 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Entity
@@ -30,7 +28,6 @@ public class StudyMember extends BaseEntity {
     private Member member;
 
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(nullable = false)
     private Study study;
 

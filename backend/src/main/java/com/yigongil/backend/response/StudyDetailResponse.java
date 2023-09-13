@@ -2,8 +2,8 @@ package com.yigongil.backend.response;
 
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.Study;
+import com.yigongil.backend.domain.studymember.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,6 +20,8 @@ public record StudyDetailResponse(
         Integer numberOfMaximumMembers,
         @Schema(example = "1")
         Long studyMasterId,
+        @Schema(example = "1")
+        Integer role,
         @Schema(example = "2023.08.12")
         LocalDate startAt,
         @Schema(example = "5")
@@ -37,6 +39,7 @@ public record StudyDetailResponse(
     public static StudyDetailResponse of(
             Study study,
             List<Round> rounds,
+            Role role,
             Round currentRound,
             List<StudyMemberResponse> studyMemberResponses
     ) {
@@ -47,6 +50,7 @@ public record StudyDetailResponse(
                 currentRound.getRoundOfMembers().size(),
                 study.getNumberOfMaximumMembers(),
                 currentRound.getMaster().getId(),
+                role.getCode(),
                 study.getStartAt().toLocalDate(),
                 study.getTotalRoundCount(),
                 study.findPeriodOfRoundToString(),

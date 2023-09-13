@@ -28,8 +28,6 @@ import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Entity
@@ -55,7 +53,6 @@ public class Round extends BaseEntity {
     private LocalDateTime endAt;
 
     @Cascade(CascadeType.PERSIST)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany
     @JoinColumn(name = "round_id", nullable = false)
     private List<RoundOfMember> roundOfMembers = new ArrayList<>();

@@ -33,11 +33,11 @@ public class StudyProgressStep {
 
     @When("{string}가 {string} 스터디를 조회한다.")
     public void 스터디_조회(String memberGithubId, String studyName) {
-        String token = sharedContext.getToken(memberGithubId);
+        String memberId = (String) sharedContext.getParameter(memberGithubId);
         String studyId = (String) sharedContext.getParameter(studyName);
 
         ExtractableResponse<Response> response = given()
-                .header(HttpHeaders.AUTHORIZATION, token)
+                .header(HttpHeaders.AUTHORIZATION, memberId)
                 .when()
                 .get("/v1/studies/" + studyId)
                 .then()
