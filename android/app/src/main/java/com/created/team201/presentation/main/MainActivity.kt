@@ -17,6 +17,7 @@ import com.created.team201.databinding.ActivityMainBinding
 import com.created.team201.presentation.chat.ChatFragment
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.guest.GuestFragment
+import com.created.team201.presentation.guest.GuestViewModel
 import com.created.team201.presentation.home.HomeFragment
 import com.created.team201.presentation.main.MainActivity.FragmentType.CHAT
 import com.created.team201.presentation.main.MainActivity.FragmentType.GUEST
@@ -33,10 +34,26 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         MainViewModel.Factory
     }
 
+    private val guestViewModel: GuestViewModel by viewModels {
+        GuestViewModel.Factory
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setObserveGuestRefreshState()
         setBottomNavigationView()
+
+    }
+
+    private fun setObserveGuestRefreshState() {
+        guestViewModel.refreshState.observe(this) { isRefresh ->
+            if (isRefresh) {
+                val itemId = binding.bnvMain.selectedItemId
+                val fragmentType = FragmentType.valueOf(itemId)
+                showFragment(fragmentType)
+            }
+        }
     }
 
     private fun setBottomNavigationView() {

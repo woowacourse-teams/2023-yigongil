@@ -8,22 +8,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.created.team201.R
 import com.created.team201.databinding.FragmentLoginBottomSheetBinding
 import com.created.team201.presentation.common.BindingBottomSheetFragment
-import com.created.team201.presentation.login.LoginViewModel
-import com.created.team201.presentation.login.LoginViewModel.State.FAIL
-import com.created.team201.presentation.login.LoginViewModel.State.IDLE
-import com.created.team201.presentation.login.LoginViewModel.State.SUCCESS
+import com.created.team201.presentation.guest.GuestViewModel
+import com.created.team201.presentation.guest.GuestViewModel.State.FAIL
+import com.created.team201.presentation.guest.GuestViewModel.State.IDLE
+import com.created.team201.presentation.guest.GuestViewModel.State.SUCCESS
 import com.created.team201.presentation.onBoarding.OnBoardingActivity
 import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
 import com.created.team201.util.auth.CustomTabLauncherActivity
 
 class LoginBottomSheetFragment :
     BindingBottomSheetFragment<FragmentLoginBottomSheetBinding>(R.layout.fragment_login_bottom_sheet) {
-    private val loginViewModel: LoginViewModel by viewModels {
-        LoginViewModel.Factory
+    private val guestViewModel: GuestViewModel by activityViewModels {
+        GuestViewModel.Factory
     }
 
     override fun onCreateView(
@@ -52,9 +52,9 @@ class LoginBottomSheetFragment :
     }
 
     private fun setObserveLoginState() {
-        loginViewModel.signUpState.observe(viewLifecycleOwner) { loginState ->
+        guestViewModel.signUpState.observe(viewLifecycleOwner) { loginState ->
             when (loginState) {
-                SUCCESS -> loginViewModel.getIsOnboardingDone()
+                SUCCESS -> guestViewModel.getIsOnboardingDone()
                 FAIL -> Toast.makeText(
                     requireContext(),
                     getString(R.string.login_fail_message),
@@ -68,10 +68,11 @@ class LoginBottomSheetFragment :
 
 
     private fun setObserveOnBoardingDoneState() {
-        loginViewModel.onBoardingDoneState.observe(this) { onBoardingDoneState ->
+        guestViewModel.onBoardingDoneState.observe(this) { onBoardingDoneState ->
             when (onBoardingDoneState) {
                 is OnBoardingDoneState.Success -> {
                     if (onBoardingDoneState.isDone) {
+                        guestViewModel.refresh()
                         this.dismiss()
                         return@observe
                     }
@@ -111,7 +112,7 @@ class LoginBottomSheetFragment :
             val oauthToken = resultData.getString(CustomTabLauncherActivity.GIT_OAUTH_TOKEN_KEY)
                 ?: throw IllegalArgumentException()
 
-            loginViewModel.signUp(oauthToken)
+            guestViewModel.signUp(oauthToken)
         }
     }
 

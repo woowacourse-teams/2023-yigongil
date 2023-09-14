@@ -10,9 +10,9 @@ import com.created.team201.data.datasource.local.TokenDataSourceImpl
 import com.created.team201.data.repository.GuestRepositoryImpl
 
 class MainViewModel(
-    private val mainRepository: GuestRepository,
+    private val guestRepository: GuestRepository,
 ) : ViewModel() {
-    val isGuest: Boolean get() = mainRepository.getIsGuest()
+    val isGuest: Boolean get() = guestRepository.getIsGuest()
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
