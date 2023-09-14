@@ -45,6 +45,9 @@
     <string name="home_date">다음 스터디까지 D - %d (%s)</string>
     <string name="home_welcome_phrase">%s님\n오늘 잔디는 심으셨나요?</string>
     <string name="home_no_study">참여중인 스터디가 없어요!\n스터디를 개설/참여 해볼까요?</string>
+    <string name="home_dash_board_enter_button">Must Do 인증하기</string>
+    <string name="home_dash_board_must_do">Must Do.</string>
+    <string name="home_dash_board_next_study">다음 스터디까지</string>
 
 
     <!--BASE ERROR-->
@@ -227,5 +230,6 @@
 
     <!-- 채팅 뷰 -->
     <string name="chat_no_chat">아직 준비중인 기능이에요!\n조금만 기다려주세요!</string>
+
 
 </resources>

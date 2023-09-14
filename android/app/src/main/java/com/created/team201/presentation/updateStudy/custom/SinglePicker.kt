@@ -28,7 +28,7 @@ class SinglePicker @JvmOverloads constructor(
                     getInteger(R.styleable.SinglePicker_minValue, DEFAULT_VALUE)
                 binding.npSinglePicker.maxValue =
                     getInteger(R.styleable.SinglePicker_maxValue, DEFAULT_VALUE)
-                binding.tvSinglePicker.text = getString(R.styleable.SinglePicker_singlePickerTitle)
+                binding.tvSinglePicker.text = getString(R.styleable.SinglePicker_android_title)
             }.also {
                 recycle()
             }

@@ -20,29 +20,35 @@ object NetworkModule {
     private const val READ_TIMEOUT = 15L
     private const val TAG_HTTP_LOG = "Http_Log"
 
-    val authRetrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(TEAM201_BASE_URL)
-        .addConverterFactory(Json.asConverterFactory(CONTENT_TYPE.toMediaType()))
-        .build()
+    val authRetrofit: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(TEAM201_BASE_URL)
+            .addConverterFactory(Json.asConverterFactory(CONTENT_TYPE.toMediaType()))
+            .build()
+    }
 
-    private val client = OkHttpClient.Builder().apply {
-        connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
-        writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
-        readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
-        addInterceptor(createHttpLoggingInterceptor())
-        addInterceptor(Team201App.provideAuthInterceptor())
-    }.build()
+    private val client by lazy {
+        OkHttpClient.Builder().apply {
+            connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+            writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
+            readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+            addInterceptor(createHttpLoggingInterceptor())
+            addInterceptor(Team201App.provideAuthInterceptor())
+        }.build()
+    }
 
     private fun createHttpLoggingInterceptor(): HttpLoggingInterceptor =
         HttpLoggingInterceptor { message ->
             Log.d(TAG_HTTP_LOG, message)
         }.apply { setLevel(HttpLoggingInterceptor.Level.BODY) }
 
-    val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(TEAM201_BASE_URL)
-        .addConverterFactory(Json.asConverterFactory(CONTENT_TYPE.toMediaType()))
-        .client(client)
-        .build()
+    val retrofit: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl(TEAM201_BASE_URL)
+            .addConverterFactory(Json.asConverterFactory(CONTENT_TYPE.toMediaType()))
+            .client(client)
+            .build()
+    }
 
     inline fun <reified T> create(): T = when (T::class) {
         AuthService::class -> authRetrofit.create(T::class.java)
