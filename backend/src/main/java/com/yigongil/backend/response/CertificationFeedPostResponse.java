@@ -1,7 +1,9 @@
 package com.yigongil.backend.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yigongil.backend.domain.feedpost.certificationfeedpost.CertificationFeedPost;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDateTime;
 
 public record CertificationFeedPostResponse(
         @Schema(example = "1")
@@ -15,8 +17,9 @@ public record CertificationFeedPostResponse(
         Integer likeCount,
         @Schema(example = "3")
         Integer commentCount,
-        @Schema(example = "2021.08.12T12:00:00")
-        java.time.LocalDateTime createdAt
+        @Schema(example = "2021.08.12 12:00:00")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm:ss", timezone = "Asia/Seoul")
+        LocalDateTime createdAt
 ) {
 
     public static CertificationFeedPostResponse from(CertificationFeedPost certificationFeedPost) {
