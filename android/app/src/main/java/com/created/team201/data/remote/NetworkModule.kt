@@ -4,6 +4,7 @@ import android.util.Log
 import com.created.team201.BuildConfig.TEAM201_BASE_URL
 import com.created.team201.application.Team201App
 import com.created.team201.data.remote.api.AuthService
+import com.created.team201.data.remote.api.StudyListService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -50,7 +51,8 @@ object NetworkModule {
     }
 
     inline fun <reified T> create(): T = when (T::class) {
-        AuthService::class -> authRetrofit.create<T>(T::class.java)
-        else -> retrofit.create<T>(T::class.java)
+        AuthService::class -> authRetrofit.create(T::class.java)
+        StudyListService::class -> authRetrofit.create(T::class.java)
+        else -> retrofit.create(T::class.java)
     }
 }

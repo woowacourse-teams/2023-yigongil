@@ -11,8 +11,8 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import com.created.team201.R
 import com.created.team201.databinding.ActivityOnBoardingBinding
-import com.created.team201.presentation.MainActivity
 import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.main.MainActivity
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.State.FAIL
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.State.IDLE
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.State.SUCCESS
@@ -83,7 +83,7 @@ class OnBoardingActivity :
     companion object {
         fun getIntent(context: Context): Intent =
             Intent(context, OnBoardingActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK + Intent.FLAG_ACTIVITY_CLEAR_TASK + Intent.FLAG_ACTIVITY_CLEAR_TOP
             }
     }
 }

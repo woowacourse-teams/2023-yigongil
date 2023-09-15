@@ -10,13 +10,16 @@ import android.widget.LinearLayout.VERTICAL
 import android.widget.SearchView
 import android.widget.SearchView.OnQueryTextListener
 import androidx.core.content.ContextCompat.getDrawable
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.R
 import com.created.team201.databinding.FragmentStudyListBinding
 import com.created.team201.presentation.common.BindingFragment
+import com.created.team201.presentation.guest.bottomSheet.LoginBottomSheetFragment
+import com.created.team201.presentation.main.MainViewModel
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
 import com.created.team201.presentation.studyList.adapter.StudyListAdapter
 import com.created.team201.presentation.updateStudy.UpdateStudyActivity
@@ -26,9 +29,15 @@ import kotlinx.coroutines.launch
 
 class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fragment_study_list) {
 
-    private val studyListViewModel: StudyListViewModel by viewModels {
+    private val studyListViewModel: StudyListViewModel by activityViewModels {
         StudyListViewModel.Factory
     }
+
+    private val mainViewModel: MainViewModel by activityViewModels {
+        MainViewModel.Factory
+    }
+
+
     private val studyListAdapter: StudyListAdapter by lazy {
         StudyListAdapter(studyListClickListener())
     }
@@ -160,6 +169,11 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
     private fun setUpCreateStudyListener() {
         binding.fabStudyListCreateButton.setOnClickListener {
+            if (mainViewModel.isGuest) {
+                showLoginBottomSheetDialog()
+                return@setOnClickListener
+            }
+
             startActivity(
                 UpdateStudyActivity.getIntent(
                     context = requireContext(),
@@ -167,6 +181,22 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
                     studyId = null,
                 ),
             )
+        }
+    }
+
+    private fun showLoginBottomSheetDialog() {
+        removeAllFragment()
+        LoginBottomSheetFragment().show(
+            childFragmentManager,
+            LoginBottomSheetFragment.TAG_LOGIN_BOTTOM_SHEET
+        )
+    }
+
+    private fun removeAllFragment() {
+        childFragmentManager.fragments.forEach {
+            childFragmentManager.commit {
+                remove(it)
+            }
         }
     }
 
