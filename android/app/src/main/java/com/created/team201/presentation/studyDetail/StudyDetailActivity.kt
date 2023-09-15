@@ -121,7 +121,15 @@ class StudyDetailActivity :
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.menu_study_detail_report -> {
-                startActivity(ReportActivity.getIntent(this, ReportCategory.STUDY, studyId))
+                when (studyDetailViewModel.state.value) {
+                    is Guest -> {
+                        showLoginBottomSheetDialog()
+                    }
+
+                    else -> {
+                        startActivity(ReportActivity.getIntent(this, ReportCategory.STUDY, studyId))
+                    }
+                }
             }
         }
         return super.onOptionsItemSelected(item)
