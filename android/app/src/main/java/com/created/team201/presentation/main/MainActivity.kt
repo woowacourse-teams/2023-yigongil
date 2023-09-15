@@ -24,10 +24,8 @@ import com.created.team201.presentation.main.MainActivity.FragmentType.GUEST
 import com.created.team201.presentation.main.MainActivity.FragmentType.HOME
 import com.created.team201.presentation.main.MainActivity.FragmentType.MY_PAGE
 import com.created.team201.presentation.main.MainActivity.FragmentType.STUDY_LIST
-import com.created.team201.presentation.main.MainActivity.FragmentType.STUDY_MANAGE
 import com.created.team201.presentation.myPage.MyPageFragment
 import com.created.team201.presentation.studyList.StudyListFragment
-import com.created.team201.presentation.studyManage.StudyManageFragment
 
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val mainViewModel: MainViewModel by viewModels {
@@ -65,7 +63,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         when (FragmentType.valueOf(item.itemId)) {
             HOME -> showOriginOrGuest(HOME)
             STUDY_LIST -> showFragment(STUDY_LIST)
-            STUDY_MANAGE -> showOriginOrGuest(STUDY_MANAGE)
             CHAT -> showOriginOrGuest(CHAT)
             MY_PAGE -> showOriginOrGuest(MY_PAGE)
             else -> throw IllegalStateException()
@@ -110,7 +107,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
             GUEST -> GuestFragment()
             HOME -> HomeFragment()
             STUDY_LIST -> StudyListFragment()
-            STUDY_MANAGE -> StudyManageFragment()
             CHAT -> ChatFragment()
             MY_PAGE -> MyPageFragment()
         }
@@ -134,7 +130,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         GUEST(-1),
         HOME(R.id.menu_home),
         STUDY_LIST(R.id.menu_study_list),
-        STUDY_MANAGE(R.id.menu_study_manage),
         CHAT(R.id.menu_chat),
         MY_PAGE(R.id.menu_my_page),
         ;
