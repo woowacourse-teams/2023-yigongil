@@ -8,6 +8,8 @@ interface StudyDetailDataSource {
 
     suspend fun getStudyDetail(studyId: Long): StudyDetailResponseDto
 
+    suspend fun getStudyMemberRole(studyId: Long): Int
+
     suspend fun getStudyApplicants(studyId: Long): List<MemberResponseDto>
 
     suspend fun participateStudy(studyId: Long)

@@ -12,6 +12,10 @@ class StudyDetailDataSourceImpl(
         return studyDetailService.getStudyDetail(studyId)
     }
 
+    override suspend fun getStudyMemberRole(studyId: Long): Int {
+        return studyDetailService.getStudyMemberRole(studyId).role
+    }
+
     override suspend fun getStudyApplicants(studyId: Long): List<MemberResponseDto> {
         return studyDetailService.getStudyApplicants(studyId)
     }
