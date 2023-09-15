@@ -2,14 +2,9 @@ package com.yigongil.backend.application;
 
 import static com.yigongil.backend.domain.study.PageStrategy.ID_DESC;
 
-import com.yigongil.backend.domain.feedpost.FeedPost;
-import com.yigongil.backend.domain.feedpost.FeedPostRepository;
-import com.yigongil.backend.domain.feedpost.certificationfeedpost.CertificationFeedPost;
-import com.yigongil.backend.domain.feedpost.certificationfeedpost.CertificationFeedRepository;
-import com.yigongil.backend.domain.feedpost.regularfeedpost.RegularFeedPost;
-import com.yigongil.backend.domain.feedpost.regularfeedpost.RegularFeedPostRepository;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
+import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
@@ -23,19 +18,17 @@ import com.yigongil.backend.exception.StudyNotFoundException;
 import com.yigongil.backend.request.CertificationFeedPostCreateRequest;
 import com.yigongil.backend.request.RegularFeedPostCreateRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
-import com.yigongil.backend.response.CertificationFeedPostResponse;
-import com.yigongil.backend.response.FeedPostsResponse;
+import com.yigongil.backend.response.CertificationResponse;
+import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
-import com.yigongil.backend.response.RegularFeedPostResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
+import com.yigongil.backend.response.StudyMemberRoleResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import com.yigongil.backend.response.StudyMemberRoleResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -47,21 +40,19 @@ public class StudyService {
 
     private final StudyRepository studyRepository;
     private final StudyMemberRepository studyMemberRepository;
-    private final FeedPostRepository feedPostRepository;
-    private final CertificationFeedRepository certificationFeedPostRepository;
-    private final RegularFeedPostRepository regularFeedPostRepository;
+    private final CertificationService certificationService;
+    private final FeedService feedService;
 
     public StudyService(
             StudyRepository studyRepository,
             StudyMemberRepository studyMemberRepository,
-            FeedPostRepository feedPostRepository, CertificationFeedRepository certificationFeedPostRepository,
-            RegularFeedPostRepository regularFeedPostRepository
+            CertificationService certificationService,
+            FeedService feedService
     ) {
         this.studyRepository = studyRepository;
         this.studyMemberRepository = studyMemberRepository;
-        this.feedPostRepository = feedPostRepository;
-        this.certificationFeedPostRepository = certificationFeedPostRepository;
-        this.regularFeedPostRepository = regularFeedPostRepository;
+        this.certificationService = certificationService;
+        this.feedService = feedService;
     }
 
     @Transactional
@@ -134,45 +125,15 @@ public class StudyService {
     }
 
     @Transactional
-    public void createRegularFeedPost(Member member, Long studyId, RegularFeedPostCreateRequest request) {
-        RegularFeedPost regularFeedPost = RegularFeedPost.builder()
-                                                         .author(member)
-                                                         .study(findStudyById(studyId))
-                                                         .imageUrl(request.imageUrl())
-                                                         .content(request.content())
-                                                         .build();
-        feedPostRepository.save(regularFeedPost);
+    public void createFeedPost(Member member, Long studyId, RegularFeedPostCreateRequest request) {
+        final Study study = findStudyById(studyId);
+        feedService.createFeedPost(member, study, request);
     }
 
     @Transactional
-    public void createCertificationFeedPost(Member member, Long id, CertificationFeedPostCreateRequest request) {
+    public Long createCertification(Member member, Long id, CertificationFeedPostCreateRequest request) {
         Study study = findStudyById(id);
-        CertificationFeedPost feedPost = CertificationFeedPost.builder()
-                                                              .author(member)
-                                                              .study(study)
-                                                              .round(study.getCurrentRound())
-                                                              .content(request.content())
-                                                              .imageUrl(request.imageUrl())
-                                                              .build();
-        feedPostRepository.save(feedPost);
-        study.completeRound(member);
-    }
-
-    @Transactional(readOnly = true)
-    public FeedPostsResponse findFeedPosts(Long studyId, int page) {
-        Pageable pageable = PageRequest.of(page, ID_DESC.getSize(), ID_DESC.getSort());
-
-        Page<FeedPost> feedPosts = feedPostRepository.findAllByStudyId(studyId, pageable);
-        List<Long> recentPostIds = feedPosts.stream()
-                                            .map(FeedPost::getId)
-                                            .toList();
-        List<CertificationFeedPostResponse> certifications = certificationFeedPostRepository.findAllByIdIn(recentPostIds).stream()
-                                                                                            .map(CertificationFeedPostResponse::from)
-                                                                                            .toList();
-        List<RegularFeedPostResponse> regulars = regularFeedPostRepository.findAllByIdIn(recentPostIds).stream()
-                                                                          .map(RegularFeedPostResponse::from)
-                                                                          .toList();
-        return FeedPostsResponse.of(certifications, regulars);
+        return certificationService.createCertification(study, member, request).getId();
     }
 
     public Study findStudyById(Long studyId) {
@@ -349,5 +310,16 @@ public class StudyService {
                                          .orElse(Role.NO_ROLE);
 
         return StudyMemberRoleResponse.from(role);
+    }
+
+    @Transactional(readOnly = true)
+    public MembersCertificationResponse findAllMembersCertification(Member member, Long studyId) {
+        Study study = findStudyById(studyId);
+        final List<RoundOfMember> roundOfMembers = study.getCurrentRoundOfMembers();
+        return MembersCertificationResponse.of(member, roundOfMembers);
+    }
+
+    public CertificationResponse findCertification(Long certificationId) {
+        return CertificationResponse.from(certificationService.findById(certificationId));
     }
 }

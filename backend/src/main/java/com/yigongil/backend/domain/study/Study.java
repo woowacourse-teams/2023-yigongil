@@ -291,6 +291,10 @@ public class Study extends BaseEntity {
         getCurrentRound().completeRound(member);
     }
 
+    public List<RoundOfMember> getCurrentRoundOfMembers() {
+        return getCurrentRound().getRoundOfMembers();
+    }
+
     public Round getCurrentRound() {
         return rounds.stream()
                      .filter(round -> round.getRoundNumber().equals(currentRoundNumber))

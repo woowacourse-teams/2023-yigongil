@@ -1,11 +1,14 @@
 package com.yigongil.backend.domain.feedpost.certificationfeedpost;
 
-import com.yigongil.backend.domain.feedpost.FeedPost;
+import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.Study;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.Builder;
@@ -13,17 +16,33 @@ import lombok.Getter;
 
 @Getter
 @Entity
-public class CertificationFeedPost extends FeedPost {
+public class Certification extends BaseEntity {
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "author_id")
+    private Member author;
+
+    @ManyToOne
+    @JoinColumn(name = "study_id")
+    private Study study;
+
+    private String content;
+
+    private String imageUrl;
 
     @ManyToOne
     @JoinColumn(name = "round_id")
     private Round round;
 
-    protected CertificationFeedPost() {
+    protected Certification() {
     }
 
     @Builder
-    public CertificationFeedPost(
+    public Certification(
             Long id,
             Member author,
             Study study,
@@ -32,7 +51,12 @@ public class CertificationFeedPost extends FeedPost {
             String imageUrl,
             LocalDateTime createdAt
     ) {
-        super(id, author, study, content, imageUrl, createdAt);
+        this.id = id;
+        this.author = author;
+        this.study = study;
+        this.content = content;
+        this.imageUrl = imageUrl;
+        this.createdAt = createdAt;
         this.round = round;
     }
 }

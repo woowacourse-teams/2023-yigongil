@@ -23,10 +23,7 @@ public class DatabaseCleaner {
         this.tables = entityManager.getMetamodel().getEntities().stream()
                                    .filter(entityType -> entityType.getJavaType().getSuperclass()
                                                                    .getSimpleName()
-                                                                   .equals("BaseEntity") ||
-                                           entityType.getJavaType().getSuperclass()
-                                                     .getSimpleName()
-                                                     .equals("FeedPost"))
+                                                                   .equals("BaseEntity"))
                                    .map(EntityType::getName)
                                    .map(this::toSnake)
                                    .toList();

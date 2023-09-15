@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yigongil.backend.application.CertificationService;
+import com.yigongil.backend.application.FeedService;
 import com.yigongil.backend.application.StudyService;
 import com.yigongil.backend.application.TodoService;
 import com.yigongil.backend.config.auth.AuthContext;
@@ -47,6 +49,12 @@ class StudyControllerTest {
 
     @MockBean
     private MemberRepository memberRepository;
+
+    @MockBean
+    private FeedService feedService;
+
+    @MockBean
+    private CertificationService certificationService;
 
     @MockBean
     private AuthContext authContext;

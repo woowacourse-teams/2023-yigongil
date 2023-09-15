@@ -34,6 +34,10 @@ public class SharedContext {
         parameters.put(key, jwtTokenProvider.parseToken(token));
     }
 
+    public void setEntityId(String key, String value) {
+        parameters.put(key, value);
+    }
+
     public void setRefresh(String key, String refreshToken) {
         parameters.put(key + REFRESH_TOKEN_PARAMETER_KEY_SUFFIX, refreshToken);
     }

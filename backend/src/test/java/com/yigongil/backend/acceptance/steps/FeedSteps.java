@@ -6,11 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.yigongil.backend.request.CertificationFeedPostCreateRequest;
 import com.yigongil.backend.request.RegularFeedPostCreateRequest;
-import com.yigongil.backend.response.FeedPostsResponse;
+import com.yigongil.backend.response.CertificationResponse;
+import com.yigongil.backend.response.FeedPostResponse;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 
@@ -32,7 +34,7 @@ public class FeedSteps {
                .contentType("application/json")
                .body(request)
                .when()
-               .post("/v1/studies/" + sharedContext.getParameter(studyName) + "/posts/regular")
+               .post("/v1/studies/" + sharedContext.getParameter(studyName) + "/feeds")
                .then()
                .log()
                .all()
@@ -44,17 +46,20 @@ public class FeedSteps {
 
         String token = sharedContext.getToken(githubId);
         CertificationFeedPostCreateRequest request = new CertificationFeedPostCreateRequest(content, "https://yigongil.png");
-        given().log()
-               .all()
-               .header(HttpHeaders.AUTHORIZATION, token)
-               .contentType("application/json")
-               .body(request)
-               .when()
-               .post("/v1/studies/" + sharedContext.getParameter(studyName) + "/posts/certification")
-               .then()
-               .log()
-               .all()
-               .statusCode(HttpStatus.OK.value());
+        final ExtractableResponse<Response> response = given().log()
+                                                              .all()
+                                                              .header(HttpHeaders.AUTHORIZATION, token)
+                                                              .contentType("application/json")
+                                                              .body(request)
+                                                              .when()
+                                                              .post("/v1/studies/" + sharedContext.getParameter(studyName) + "/certifications")
+                                                              .then()
+                                                              .log()
+                                                              .all()
+                                                              .statusCode(HttpStatus.CREATED.value())
+                                                              .extract();
+        final String location = response.header("Location");
+        sharedContext.setEntityId("certificationId", location.substring(location.lastIndexOf("/") + 1));
     }
 
     @Then("{string}가 {string}스터디 피드에서 {string}의 {string} 글을 확인할 수 있다.")
@@ -64,42 +69,40 @@ public class FeedSteps {
                                                         .all()
                                                         .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
-                                                        .get("/v1/studies/" + sharedContext.getParameter(studyName) + "/posts?page=0")
+                                                        .get("/v1/studies/" + sharedContext.getParameter(studyName) + "/feeds?page=0")
                                                         .then()
                                                         .log()
                                                         .all()
                                                         .statusCode(HttpStatus.OK.value())
                                                         .extract();
-        FeedPostsResponse feedPostsResponse = response.as(FeedPostsResponse.class);
+        List<FeedPostResponse> responses = response.jsonPath().getList(".", FeedPostResponse.class);
 
         assertAll(
-                () -> assertThat(feedPostsResponse.regulars()).hasSize(1),
-                () -> assertThat(feedPostsResponse.certifications()).hasSize(0),
-                () -> assertThat(feedPostsResponse.regulars().get(0).author().nickname()).isEqualTo(author),
-                () -> assertThat(feedPostsResponse.regulars().get(0).content()).isEqualTo(content)
+                () -> assertThat(responses).hasSize(1),
+                () -> assertThat(responses.get(0).author().nickname()).isEqualTo(author),
+                () -> assertThat(responses.get(0).content()).isEqualTo(content)
         );
     }
 
     @Then("{string}가 {string}스터디 피드에서 {string}의 {string}의 인증 글을 확인할 수 있다.")
     public void 스터디_피드에서_인증_글을_확인_할_수_있다(String githubId, String studyName, String author, String content) {
         String token = sharedContext.getToken(githubId);
+        Long certificationId = sharedContext.getId("certificationId");
         ExtractableResponse<Response> response = given().log()
                                                         .all()
                                                         .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
-                                                        .get("/v1/studies/" + sharedContext.getParameter(studyName) + "/posts?page=0")
+                                                        .get("/v1/studies/" + sharedContext.getParameter(studyName) + "/certifications/" + certificationId)
                                                         .then()
                                                         .log()
                                                         .all()
                                                         .statusCode(HttpStatus.OK.value())
                                                         .extract();
-        FeedPostsResponse feedPostsResponse = response.as(FeedPostsResponse.class);
 
+        CertificationResponse certificationResponse = response.as(CertificationResponse.class);
         assertAll(
-                () -> assertThat(feedPostsResponse.regulars()).hasSize(0),
-                () -> assertThat(feedPostsResponse.certifications()).hasSize(1),
-                () -> assertThat(feedPostsResponse.certifications().get(0).author().nickname()).isEqualTo(author),
-                () -> assertThat(feedPostsResponse.certifications().get(0).content()).isEqualTo(content)
+                () -> assertThat(certificationResponse.author().nickname()).isEqualTo(author),
+                () -> assertThat(certificationResponse.content()).isEqualTo(content)
         );
     }
 }
