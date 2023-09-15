@@ -209,6 +209,11 @@ class StudyDetailActivity :
     }
 
     override fun onUserClick(memberId: Long) {
+        if (studyDetailViewModel.state.value is Guest) {
+            startActivity(ProfileActivity.getIntent(this, memberId))
+            return
+        }
+
         if (studyDetailViewModel.myProfile.id == memberId) {
             return
         }

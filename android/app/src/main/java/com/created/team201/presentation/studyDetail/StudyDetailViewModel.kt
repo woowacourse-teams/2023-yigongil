@@ -63,6 +63,7 @@ class StudyDetailViewModel private constructor(
 
     fun refresh(studyId: Long) {
         viewModelScope.launch {
+            getMyProfile()
             studyDetailRepository.getStudyMemberRole(studyId)
                 .onSuccess {
                     val role = Role.valueOf(it)
@@ -76,7 +77,6 @@ class StudyDetailViewModel private constructor(
         // isGuest
         viewModelScope.launch {
             runCatching {
-                getMyProfile()
                 studyDetailRepository.getStudyDetail(studyId)
             }.onSuccess { studyDetail ->
                 when (isGuest) {
@@ -90,6 +90,7 @@ class StudyDetailViewModel private constructor(
                     }
 
                     false -> {
+                        getMyProfile()
                         studyDetailRepository.getStudyMemberRole(studyId)
                             .onSuccess { role ->
                                 val studyDetailUIModel =
