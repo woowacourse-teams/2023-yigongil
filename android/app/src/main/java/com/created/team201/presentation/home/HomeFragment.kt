@@ -8,7 +8,6 @@ import com.created.team201.databinding.FragmentHomeBinding
 import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.home.adapter.DashboardAdapter
 import com.created.team201.presentation.home.model.TodoWithRoundIdUiModel
-import com.created.team201.presentation.studyManagement.StudyManagementActivity
 import com.created.team201.util.FirebaseLogUtil
 import com.created.team201.util.FirebaseLogUtil.SCREEN_HOME
 
@@ -32,12 +31,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         }
 
         override fun clickOnStudyCard(studyId: Long) {
-            navigateToStudyDetailActivity(studyId)
         }
-    }
-
-    private fun navigateToStudyDetailActivity(studyId: Long) {
-        startActivity(StudyManagementActivity.getIntent(requireContext(), studyId))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
