@@ -8,7 +8,7 @@ interface StudyDetailRepository {
 
     suspend fun getStudyDetail(studyId: Long): StudyDetail
 
-    suspend fun getStudyMemberRole(studyId: Long): Int
+    suspend fun getStudyMemberRole(studyId: Long): Result<Int>
 
     suspend fun getStudyApplicants(studyId: Long): List<Member>
 

@@ -14,8 +14,10 @@ class StudyDetailRepositoryImpl(
         return studyDetailDataSource.getStudyDetail(studyId).toDomain()
     }
 
-    override suspend fun getStudyMemberRole(studyId: Long): Int {
-        return studyDetailDataSource.getStudyMemberRole(studyId)
+    override suspend fun getStudyMemberRole(studyId: Long): Result<Int> {
+        return runCatching {
+            studyDetailDataSource.getStudyMemberRole(studyId)
+        }
     }
 
     override suspend fun participateStudy(studyId: Long) {
