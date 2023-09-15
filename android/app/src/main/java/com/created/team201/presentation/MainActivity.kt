@@ -17,13 +17,11 @@ import com.created.team201.presentation.MainActivity.FragmentType.CHAT
 import com.created.team201.presentation.MainActivity.FragmentType.HOME
 import com.created.team201.presentation.MainActivity.FragmentType.MY_PAGE
 import com.created.team201.presentation.MainActivity.FragmentType.STUDY_LIST
-import com.created.team201.presentation.MainActivity.FragmentType.STUDY_MANAGE
 import com.created.team201.presentation.chat.ChatFragment
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.home.HomeFragment
 import com.created.team201.presentation.myPage.MyPageFragment
 import com.created.team201.presentation.studyList.StudyListFragment
-import com.created.team201.presentation.studyManage.StudyManageFragment
 
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +39,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         when (FragmentType.valueOf(item.itemId)) {
             HOME -> showFragment(HOME)
             STUDY_LIST -> showFragment(STUDY_LIST)
-            STUDY_MANAGE -> showFragment(STUDY_MANAGE)
             CHAT -> showFragment(CHAT)
             MY_PAGE -> showFragment(MY_PAGE)
         }
@@ -77,7 +74,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         val fragment = when (type) {
             HOME -> HomeFragment()
             STUDY_LIST -> StudyListFragment()
-            STUDY_MANAGE -> StudyManageFragment()
             CHAT -> ChatFragment()
             MY_PAGE -> MyPageFragment()
         }
@@ -100,7 +96,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     private enum class FragmentType(@IdRes private val resId: Int) {
         HOME(R.id.menu_home),
         STUDY_LIST(R.id.menu_study_list),
-        STUDY_MANAGE(R.id.menu_study_manage),
         CHAT(R.id.menu_chat),
         MY_PAGE(R.id.menu_my_page),
         ;
