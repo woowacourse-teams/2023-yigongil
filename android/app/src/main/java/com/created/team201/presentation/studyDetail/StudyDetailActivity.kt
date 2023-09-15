@@ -235,7 +235,7 @@ class StudyDetailActivity :
 
     private fun observeStartStudy() {
         studyDetailViewModel.isStartStudy.observe(this) { _ ->
-
+            finish()
         }
     }
 
