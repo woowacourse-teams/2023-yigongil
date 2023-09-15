@@ -13,6 +13,7 @@ import com.created.domain.model.Role
 import com.created.team201.R
 import com.created.team201.databinding.ActivityStudyDetailBinding
 import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.guest.GuestViewModel
 import com.created.team201.presentation.guest.bottomSheet.LoginBottomSheetFragment
 import com.created.team201.presentation.profile.ProfileActivity
 import com.created.team201.presentation.report.ReportActivity
@@ -28,6 +29,8 @@ class StudyDetailActivity :
     BindingActivity<ActivityStudyDetailBinding>(R.layout.activity_study_detail),
     StudyMemberClickListener {
     private val studyDetailViewModel: StudyDetailViewModel by viewModels { StudyDetailViewModel.Factory }
+    private val guestViewModel: GuestViewModel by viewModels { GuestViewModel.Factory }
+
     private val studyId: Long by lazy { intent.getLongExtra(KEY_STUDY_ID, NON_EXISTENCE_STUDY_ID) }
     private val studyPeopleAdapter by lazy { StudyParticipantsAdapter(this) }
 
@@ -40,6 +43,7 @@ class StudyDetailActivity :
         validateStudyId()
         initStudyParticipantsList()
         initStudyDetailInformation()
+        observeGuestState()
         observeStudyDetailParticipants()
         observeStartStudy()
         observeCanStartStudy()
@@ -121,6 +125,18 @@ class StudyDetailActivity :
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun observeGuestState() {
+        guestViewModel.refreshState.observe(this) { signUpGuestState ->
+            when (signUpGuestState) {
+                true -> {
+                    studyDetailViewModel.refresh(studyId)
+                }
+
+                false -> Unit
+            }
+        }
     }
 
     private fun observeStudyDetailParticipants() {

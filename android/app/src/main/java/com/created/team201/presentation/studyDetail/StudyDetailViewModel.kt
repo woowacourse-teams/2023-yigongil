@@ -59,7 +59,18 @@ class StudyDetailViewModel private constructor(
     val studyMemberCount: NonNullLiveData<Int> get() = _studyMemberCount
     lateinit var myProfile: ProfileUiModel
 
-    val isGuest: Boolean get() = guestRepository.getIsGuest()
+    private val isGuest: Boolean get() = guestRepository.getIsGuest()
+
+    fun refresh(studyId: Long) {
+        viewModelScope.launch {
+            studyDetailRepository.getStudyMemberRole(studyId)
+                .onSuccess {
+                    val role = Role.valueOf(it)
+                    _study.value = study.value.copy(role = role)
+                    _state.value = role.toStudyDetailState(study.value.canStartStudy)
+                }
+        }
+    }
 
     fun fetchStudyDetail(studyId: Long, notifyInvalidStudy: () -> Unit) {
         // isGuest
