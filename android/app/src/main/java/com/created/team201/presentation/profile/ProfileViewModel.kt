@@ -13,9 +13,13 @@ import com.created.domain.model.Period
 import com.created.domain.model.Profile
 import com.created.domain.model.ProfileInformation
 import com.created.domain.model.UserProfile
+import com.created.domain.repository.GuestRepository
 import com.created.domain.repository.ProfileRepository
+import com.created.team201.application.Team201App
+import com.created.team201.data.datasource.local.TokenDataSourceImpl
 import com.created.team201.data.datasource.remote.ProfileDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
+import com.created.team201.data.repository.GuestRepositoryImpl
 import com.created.team201.data.repository.ProfileRepositoryImpl
 import com.created.team201.presentation.myPage.model.ProfileInformationUiModel
 import com.created.team201.presentation.myPage.model.ProfileUiModel
@@ -27,9 +31,12 @@ import kotlinx.coroutines.launch
 
 class ProfileViewModel(
     private val profileRepository: ProfileRepository,
+    private val guestRepository: GuestRepository,
 ) : ViewModel() {
     private val _profile: MutableLiveData<UserProfileUiModel> = MutableLiveData()
     val profile: LiveData<UserProfileUiModel> get() = _profile
+
+    val isGuest: Boolean get() = guestRepository.getIsGuest()
 
     fun initProfile(userId: Long) {
         viewModelScope.launch {
@@ -87,6 +94,9 @@ class ProfileViewModel(
                 ProfileViewModel(
                     profileRepository = ProfileRepositoryImpl(
                         ProfileDataSourceImpl(NetworkServiceModule.profileService),
+                    ),
+                    guestRepository = GuestRepositoryImpl(
+                        TokenDataSourceImpl(Team201App.provideTokenStorage())
                     ),
                 )
             }

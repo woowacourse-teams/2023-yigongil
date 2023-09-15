@@ -20,6 +20,7 @@ import com.created.team201.presentation.report.model.ReportCategory
 class ProfileActivity : BindingActivity<ActivityProfileBinding>(R.layout.activity_profile) {
 
     private val profileViewModel: ProfileViewModel by viewModels { ProfileViewModel.Factory }
+
     private val finishedStudyAdapter: FinishedStudyAdapter by lazy { FinishedStudyAdapter() }
     private val userId: Long by lazy { intent.getLongExtra(KEY_USER_ID, NON_EXISTENCE_USER_ID) }
 
@@ -89,6 +90,15 @@ class ProfileActivity : BindingActivity<ActivityProfileBinding>(R.layout.activit
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.menu_profile_report -> {
+                if (profileViewModel.isGuest) {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.guest_toast_can_not_report),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return true
+                }
+
                 startActivity(ReportActivity.getIntent(this, ReportCategory.USER, userId))
             }
         }
