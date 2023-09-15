@@ -54,10 +54,10 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
     }
 
     private fun observeGuestState() {
-        loginViewModel.signUpGuestState.observe(this) { guestState ->
-            when (guestState) {
+        loginViewModel.signUpGuestState.observe(this) { signUpGuestState ->
+            when (signUpGuestState) {
                 SUCCESS -> navigateToMain()
-                FAIL -> {}
+                FAIL -> Unit
                 IDLE -> throw IllegalStateException()
             }
         }
