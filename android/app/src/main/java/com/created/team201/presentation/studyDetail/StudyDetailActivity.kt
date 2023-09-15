@@ -8,12 +8,16 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
+import androidx.fragment.app.commit
+import com.created.domain.model.Role
 import com.created.team201.R
 import com.created.team201.databinding.ActivityStudyDetailBinding
 import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.guest.bottomSheet.LoginBottomSheetFragment
 import com.created.team201.presentation.profile.ProfileActivity
 import com.created.team201.presentation.report.ReportActivity
 import com.created.team201.presentation.report.model.ReportCategory
+import com.created.team201.presentation.studyDetail.StudyDetailState.Guest
 import com.created.team201.presentation.studyDetail.StudyDetailState.Master
 import com.created.team201.presentation.studyDetail.adapter.StudyParticipantsAdapter
 import com.created.team201.presentation.studyDetail.model.PeriodFormat
@@ -45,8 +49,16 @@ class StudyDetailActivity :
 
     private fun setClickEventOnSub() {
         binding.btnStudyDetailSub.setOnClickListener {
-            if (studyDetailViewModel.state.value is Master) {
-                navigateToEditStudyView()
+            when (studyDetailViewModel.state.value) {
+                is Master -> {
+                    navigateToEditStudyView()
+                }
+
+                is Guest -> {
+                    showLoginBottomSheetDialog()
+                }
+
+                else -> Unit
             }
         }
     }
@@ -124,9 +136,20 @@ class StudyDetailActivity :
         return getString(stringRes, periodOfCount.dropLast(STRING_LAST_INDEX).toInt())
     }
 
-    fun initMainButtonOnClick(isMaster: Boolean) {
-        if (isMaster) return onMasterClickMainButton()
-        return onNothingClickMainButton()
+    fun initMainButtonOnClick(role: Role) {
+        when (role) {
+            Role.MASTER -> {
+                onMasterClickMainButton()
+            }
+
+            Role.GUEST -> {
+                showLoginBottomSheetDialog()
+            }
+
+            else -> {
+                onNothingClickMainButton()
+            }
+        }
     }
 
     private fun onMasterClickMainButton() {
@@ -135,6 +158,22 @@ class StudyDetailActivity :
 
     private fun onNothingClickMainButton() {
         studyDetailViewModel.participateStudy(studyId)
+    }
+
+    private fun showLoginBottomSheetDialog() {
+        removeAllFragment()
+        LoginBottomSheetFragment().show(
+            supportFragmentManager,
+            LoginBottomSheetFragment.TAG_LOGIN_BOTTOM_SHEET
+        )
+    }
+
+    private fun removeAllFragment() {
+        supportFragmentManager.fragments.forEach {
+            supportFragmentManager.commit {
+                remove(it)
+            }
+        }
     }
 
     override fun onAcceptApplicantClick(memberId: Long) {
