@@ -1,6 +1,5 @@
-package com.created.team201.presentation.login
+package com.created.team201.presentation.guest
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.repository.AuthRepository
-import com.created.domain.repository.GuestRepository
 import com.created.domain.repository.OnBoardingRepository
 import com.created.team201.application.Team201App
 import com.created.team201.data.datasource.local.OnBoardingIsDoneDataSourceImpl
@@ -17,26 +15,28 @@ import com.created.team201.data.datasource.local.TokenDataSourceImpl
 import com.created.team201.data.datasource.remote.OnBoardingDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.AuthRepositoryImpl
-import com.created.team201.data.repository.GuestRepositoryImpl
 import com.created.team201.data.repository.OnBoardingRepositoryImpl
-import com.created.team201.presentation.login.LoginViewModel.State.FAIL
-import com.created.team201.presentation.login.LoginViewModel.State.SUCCESS
+import com.created.team201.presentation.guest.GuestViewModel.State.FAIL
+import com.created.team201.presentation.guest.GuestViewModel.State.SUCCESS
 import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
 import kotlinx.coroutines.launch
 
-class LoginViewModel(
-    private val guestRepository: GuestRepository,
+class GuestViewModel(
     private val authRepository: AuthRepository,
     private val onBoardingRepository: OnBoardingRepository,
 ) : ViewModel() {
     private val _signUpState: MutableLiveData<State> = MutableLiveData()
     val signUpState: LiveData<State> get() = _signUpState
 
-    private val _signUpGuestState: MutableLiveData<State> = MutableLiveData()
-    val signUpGuestState: LiveData<State> get() = _signUpGuestState
-
     private val _onBoardingDoneState: MutableLiveData<OnBoardingDoneState> = MutableLiveData()
     val onBoardingDoneState: LiveData<OnBoardingDoneState> get() = _onBoardingDoneState
+
+    private val _refreshState: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    val refreshState: LiveData<Boolean> get() = _refreshState
+
+    fun refresh() {
+        _refreshState.value = true
+    }
 
     fun signUp(token: String) {
         viewModelScope.launch {
@@ -45,7 +45,6 @@ class LoginViewModel(
                     _signUpState.value = SUCCESS
                 }.onFailure {
                     _signUpState.value = FAIL
-                    Log.e("FAIL_ERROR", "SIGN_UP : ${it.message}")
                 }
         }
     }
@@ -61,11 +60,6 @@ class LoginViewModel(
         }
     }
 
-    fun signUpGuest() {
-        guestRepository.signUpGuest()
-        _signUpGuestState.value = SUCCESS
-    }
-
     sealed interface State {
         object SUCCESS : State
         object FAIL : State
@@ -75,13 +69,12 @@ class LoginViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                LoginViewModel(
-                    GuestRepositoryImpl(
-                        TokenDataSourceImpl(Team201App.provideTokenStorage()),
-                    ),
+                GuestViewModel(
                     AuthRepositoryImpl(
                         NetworkServiceModule.authService,
-                        TokenDataSourceImpl(Team201App.provideTokenStorage()),
+                        TokenDataSourceImpl(
+                            Team201App.provideTokenStorage(),
+                        ),
                     ),
                     OnBoardingRepositoryImpl(
                         OnBoardingIsDoneDataSourceImpl(

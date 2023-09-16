@@ -3,6 +3,9 @@ package com.created.team201.data.datasource.local
 class TokenDataSourceImpl(
     private val tokenStorage: TokenStorage,
 ) : TokenDataSource {
+    override fun getIsGuest(): Boolean {
+        return tokenStorage.isGuest(REFRESH_TOKEN)
+    }
 
     override fun getAccessToken(): String {
         return tokenStorage.fetchToken(ACCESS_TOKEN) ?: throw IllegalStateException()
