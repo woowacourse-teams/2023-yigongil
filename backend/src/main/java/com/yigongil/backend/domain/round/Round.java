@@ -213,6 +213,10 @@ public class Round extends BaseEntity {
         return doneCount * 100 / roundOfMembers.size();
     }
 
+    public boolean isSuccess(Member member) {
+        return findRoundOfMemberBy(member).isDone();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

@@ -285,4 +285,10 @@ public class Study extends BaseEntity {
     public boolean isEnd() {
         return this.processingStatus == ProcessingStatus.END;
     }
+
+    public int calculateSuccessfulRoundCount(Member member) {
+        return (int) rounds.stream()
+                           .filter(round -> round.isSuccess(member))
+                           .count();
+    }
 }

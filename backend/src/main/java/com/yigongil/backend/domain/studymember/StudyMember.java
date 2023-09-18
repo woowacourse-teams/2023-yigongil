@@ -2,7 +2,6 @@ package com.yigongil.backend.domain.studymember;
 
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.study.Study;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +19,7 @@ import lombok.Getter;
 @Entity
 public class StudyMember extends BaseEntity {
 
-    private static final int REWARD_BASE_UNIT = 1;
+    private static final int EXPERIENCE_BASE_UNIT = 1;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -71,17 +70,11 @@ public class StudyMember extends BaseEntity {
     }
 
     public void completeSuccessfully() {
-        int successfulRoundCount = (int) study.getRounds().stream()
-                                              .map(round -> round.findRoundOfMemberBy(member))
-                                              .filter(RoundOfMember::isDone)
-                                              .count();
-        int defaultRoundReward = REWARD_BASE_UNIT * 2;
-        int additionalRewardOfPeriodLength = REWARD_BASE_UNIT * study.calculateStudyPeriod();
-        member.addExperience(successfulRoundCount * (defaultRoundReward + additionalRewardOfPeriodLength));
+        int successfulRoundCount = study.calculateSuccessfulRoundCount(member);
+        int defaultRoundExperience = EXPERIENCE_BASE_UNIT * 2;
+        int additionalExperienceOfPeriodLength = EXPERIENCE_BASE_UNIT * study.calculateStudyPeriod();
+        int totalExperience = successfulRoundCount * (defaultRoundExperience + additionalExperienceOfPeriodLength);
+        member.addExperience(totalExperience);
         this.studyResult = StudyResult.SUCCESS;
-    }
-
-    public boolean equalsMember(Member member) {
-        return this.member.equals(member);
     }
 }

@@ -1,6 +1,7 @@
 package com.yigongil.backend.domain.member;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import lombok.Getter;
 
 @Getter
@@ -24,7 +25,7 @@ public enum Tier {
     public static Tier getTier(int experience) {
         return Arrays.stream(Tier.values())
                      .filter(tier -> tier.isBiggerExperience(experience))
-                     .findFirst()
+                     .min(Comparator.comparing(Tier::getOrder))
                      .orElse(DIAMOND);
     }
 
