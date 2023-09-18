@@ -18,17 +18,17 @@ public record FeedPostResponse(
         LocalDateTime createdAt
 ) {
 
-    public static FeedPostResponse from(FeedPost regularFeedPost) {
+    public static FeedPostResponse from(FeedPost feedPost) {
         return new FeedPostResponse(
-                regularFeedPost.getId(),
+                feedPost.getId(),
                 new SimpleMemberResponse(
-                        regularFeedPost.getAuthor().getId(),
-                        regularFeedPost.getAuthor().getNickname(),
-                        regularFeedPost.getAuthor().getProfileImageUrl()
+                        feedPost.getAuthor().getId(),
+                        feedPost.getAuthor().getNickname(),
+                        feedPost.getAuthor().getProfileImageUrl()
                 ),
-                regularFeedPost.getImageUrl(),
-                regularFeedPost.getContent(),
-                regularFeedPost.getCreatedAt()
+                feedPost.getImageUrl(),
+                feedPost.getContent(),
+                feedPost.getCreatedAt()
         );
     }
 }

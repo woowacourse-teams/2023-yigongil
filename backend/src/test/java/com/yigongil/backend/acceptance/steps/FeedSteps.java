@@ -4,8 +4,8 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.yigongil.backend.request.CertificationFeedPostCreateRequest;
-import com.yigongil.backend.request.RegularFeedPostCreateRequest;
+import com.yigongil.backend.request.CertificationCreateRequest;
+import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
 import io.cucumber.java.en.Then;
@@ -15,6 +15,7 @@ import io.restassured.response.Response;
 import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 public class FeedSteps {
 
@@ -27,7 +28,7 @@ public class FeedSteps {
     @When("{string}가 {string}스터디 피드에 {string}의 글을 작성한다.")
     public void 스터디_피드에_일반_글을_작성_한다(String githubId, String studyName, String content) {
         String token = sharedContext.getToken(githubId);
-        RegularFeedPostCreateRequest request = new RegularFeedPostCreateRequest(content, "https://yigongil.png");
+        FeedPostCreateRequest request = new FeedPostCreateRequest(content, "https://yigongil.png");
         given().log()
                .all()
                .header(HttpHeaders.AUTHORIZATION, token)
@@ -45,7 +46,7 @@ public class FeedSteps {
     public void 스터디_피드에_인증_글을_작성_한다(String githubId, String studyName, String content) {
 
         String token = sharedContext.getToken(githubId);
-        CertificationFeedPostCreateRequest request = new CertificationFeedPostCreateRequest(content, "https://yigongil.png");
+        CertificationCreateRequest request = new CertificationCreateRequest(content, "https://yigongil.png");
         final ExtractableResponse<Response> response = given().log()
                                                               .all()
                                                               .header(HttpHeaders.AUTHORIZATION, token)

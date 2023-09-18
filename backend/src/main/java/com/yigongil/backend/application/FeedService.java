@@ -5,8 +5,7 @@ import com.yigongil.backend.domain.feedpost.FeedPostRepository;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.PageStrategy;
 import com.yigongil.backend.domain.study.Study;
-import com.yigongil.backend.request.RegularFeedPostCreateRequest;
-import com.yigongil.backend.response.FeedPostResponse;
+import com.yigongil.backend.request.FeedPostCreateRequest;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +20,7 @@ public class FeedService {
     }
 
     @Transactional
-    public void createFeedPost(Member member, Study study, RegularFeedPostCreateRequest request) {
+    public void createFeedPost(Member member, Study study, FeedPostCreateRequest request) {
         FeedPost regularFeedPost = FeedPost.builder()
                                            .author(member)
                                            .study(study)
@@ -32,10 +31,8 @@ public class FeedService {
     }
 
     @Transactional(readOnly = true)
-    public List<FeedPostResponse> findFeedPosts(Long studyId, int page) {
+    public List<FeedPost> findFeedPosts(Long studyId, int page) {
         return feedPostRepository.findAllByStudyId(studyId, PageStrategy.defaultPageStrategy(page))
-                                 .stream()
-                                 .map(FeedPostResponse::from)
                                  .toList();
     }
 }

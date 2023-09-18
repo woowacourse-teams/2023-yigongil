@@ -1,8 +1,8 @@
 package com.yigongil.backend.ui.doc;
 
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.request.CertificationFeedPostCreateRequest;
-import com.yigongil.backend.request.RegularFeedPostCreateRequest;
+import com.yigongil.backend.request.CertificationCreateRequest;
+import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
@@ -208,7 +208,7 @@ public interface StudyApi {
     ResponseEntity<Void> createFeedPost(
             @Schema(hidden = true) Member member,
             @Parameter(description = "피드가 등록되는 스터디 id", required = true) Long id,
-            RegularFeedPostCreateRequest request
+            FeedPostCreateRequest request
     );
 
     @ApiResponses(
@@ -224,7 +224,7 @@ public interface StudyApi {
     ResponseEntity<Void> createCertification(
             @Schema(hidden = true) Member member,
             @Parameter(description = "피드가 등록되는 스터디 id", required = true) Long id,
-            CertificationFeedPostCreateRequest request
+            CertificationCreateRequest request
     );
 
     @ApiResponses(

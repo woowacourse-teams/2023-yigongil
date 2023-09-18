@@ -16,7 +16,8 @@ public record MemberCertificationResponse(
                                      roundOfMember.getMember().getId(),
                                      roundOfMember.getMember().getNickname(),
                                      roundOfMember.getMember().getProfileImageUrl(),
-                                     roundOfMember.isDone()))
+                                     roundOfMember.isDone())
+                             )
                              .toList();
     }
 }

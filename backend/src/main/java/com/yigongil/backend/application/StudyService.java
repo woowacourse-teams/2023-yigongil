@@ -15,10 +15,11 @@ import com.yigongil.backend.domain.studymember.StudyResult;
 import com.yigongil.backend.exception.ApplicantAlreadyExistException;
 import com.yigongil.backend.exception.ApplicantNotFoundException;
 import com.yigongil.backend.exception.StudyNotFoundException;
-import com.yigongil.backend.request.CertificationFeedPostCreateRequest;
-import com.yigongil.backend.request.RegularFeedPostCreateRequest;
+import com.yigongil.backend.request.CertificationCreateRequest;
+import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.CertificationResponse;
+import com.yigongil.backend.response.FeedPostResponse;
 import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
@@ -125,13 +126,13 @@ public class StudyService {
     }
 
     @Transactional
-    public void createFeedPost(Member member, Long studyId, RegularFeedPostCreateRequest request) {
+    public void createFeedPost(Member member, Long studyId, FeedPostCreateRequest request) {
         final Study study = findStudyById(studyId);
         feedService.createFeedPost(member, study, request);
     }
 
     @Transactional
-    public Long createCertification(Member member, Long id, CertificationFeedPostCreateRequest request) {
+    public Long createCertification(Member member, Long id, CertificationCreateRequest request) {
         Study study = findStudyById(id);
         return certificationService.createCertification(study, member, request).getId();
     }
@@ -321,5 +322,12 @@ public class StudyService {
 
     public CertificationResponse findCertification(Long certificationId) {
         return CertificationResponse.from(certificationService.findById(certificationId));
+    }
+
+    public List<FeedPostResponse> findFeedPosts(Long id, int page) {
+        return feedService.findFeedPosts(id, page)
+                          .stream()
+                          .map(FeedPostResponse::from)
+                          .toList();
     }
 }

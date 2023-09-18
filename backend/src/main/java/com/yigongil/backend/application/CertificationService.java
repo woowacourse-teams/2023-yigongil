@@ -4,7 +4,7 @@ import com.yigongil.backend.domain.feedpost.certificationfeedpost.Certification;
 import com.yigongil.backend.domain.feedpost.certificationfeedpost.CertificationRepository;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.Study;
-import com.yigongil.backend.request.CertificationFeedPostCreateRequest;
+import com.yigongil.backend.request.CertificationCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +18,7 @@ public class CertificationService {
     }
 
     @Transactional
-    public Certification createCertification(Study study, Member member, CertificationFeedPostCreateRequest request) {
+    public Certification createCertification(Study study, Member member, CertificationCreateRequest request) {
         Certification feedPost = Certification.builder()
                                               .author(member)
                                               .study(study)

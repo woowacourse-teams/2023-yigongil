@@ -1,11 +1,10 @@
 package com.yigongil.backend.ui;
 
-import com.yigongil.backend.application.FeedService;
 import com.yigongil.backend.application.StudyService;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.request.CertificationFeedPostCreateRequest;
-import com.yigongil.backend.request.RegularFeedPostCreateRequest;
+import com.yigongil.backend.request.CertificationCreateRequest;
+import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
@@ -36,11 +35,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudyController implements StudyApi {
 
     private final StudyService studyService;
-    private final FeedService feedService;
 
-    public StudyController(StudyService studyService, FeedService feedService) {
+    public StudyController(StudyService studyService) {
         this.studyService = studyService;
-        this.feedService = feedService;
     }
 
     @PostMapping
@@ -138,7 +135,7 @@ public class StudyController implements StudyApi {
             @PathVariable Long id,
             int page
     ) {
-        List<FeedPostResponse> response = feedService.findFeedPosts(id, page);
+        List<FeedPostResponse> response = studyService.findFeedPosts(id, page);
         return ResponseEntity.ok(response);
     }
 
@@ -146,7 +143,7 @@ public class StudyController implements StudyApi {
     public ResponseEntity<Void> createFeedPost(
             @Authorization Member member,
             @PathVariable Long id,
-            @RequestBody RegularFeedPostCreateRequest request
+            @RequestBody FeedPostCreateRequest request
     ) {
         studyService.createFeedPost(member, id, request);
         return ResponseEntity.ok().build();
@@ -156,7 +153,7 @@ public class StudyController implements StudyApi {
     public ResponseEntity<Void> createCertification(
             @Authorization Member member,
             @PathVariable Long id,
-            @RequestBody CertificationFeedPostCreateRequest request
+            @RequestBody CertificationCreateRequest request
     ) {
         Long certificationId = studyService.createCertification(member, id, request);
         return ResponseEntity.created(URI.create("/v1/studies/" + id + "/certifications/" + certificationId)).build();
