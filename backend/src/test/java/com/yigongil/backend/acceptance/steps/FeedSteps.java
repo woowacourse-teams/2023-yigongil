@@ -31,7 +31,7 @@ public class FeedSteps {
         given().log()
                .all()
                .header(HttpHeaders.AUTHORIZATION, token)
-               .contentType("application/json")
+               .contentType(MediaType.APPLICATION_JSON_VALUE)
                .body(request)
                .when()
                .post("/v1/studies/" + sharedContext.getParameter(studyName) + "/feeds")
