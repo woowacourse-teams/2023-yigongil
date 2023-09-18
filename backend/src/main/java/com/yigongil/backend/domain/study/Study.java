@@ -41,7 +41,6 @@ public class Study extends BaseEntity {
     private static final int MAX_NAME_LENGTH = 30;
     private static final int MIN_MEMBER_SIZE = 2;
     private static final int MAX_MEMBER_SIZE = 8;
-    private static final int REWARD_BASE_UNIT = 1;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -99,7 +98,8 @@ public class Study extends BaseEntity {
             Integer periodOfRound,
             Round currentRound,
             List<Round> rounds,
-            PeriodUnit periodUnit) {
+            PeriodUnit periodUnit
+    ) {
         name = name.strip();
         validateNumberOfMaximumMembers(numberOfMaximumMembers);
         validateName(name);
@@ -164,10 +164,6 @@ public class Study extends BaseEntity {
         study.rounds = Round.of(totalRoundCount, master);
         study.currentRound = study.rounds.get(0);
         return study;
-    }
-
-    public int calculateMaximumReward() {
-        return (REWARD_BASE_UNIT * 2) + REWARD_BASE_UNIT * periodUnit.calculatePeriodOfRoundInDays(periodOfRound) * totalRoundCount;
     }
 
     public Integer calculateAverageTier() {

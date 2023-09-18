@@ -60,17 +60,6 @@ class StudyTest {
     }
 
     @Test
-    void 스터디_최대_경험치를_계산한다() {
-        // given
-        Study study = StudyFixture.자바_스터디_모집중.toStudy();
-
-        int actual = study.calculateMaximumReward();
-
-        // then
-        assertThat(actual).isEqualTo(65);
-    }
-
-    @Test
     void 스터디의_현재_라운드가_종료되는_날이면_true를_반환한다() {
         // given
         Study study = StudyFixture.자바_스터디_진행중.toStudy();

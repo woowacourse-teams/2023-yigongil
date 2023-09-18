@@ -20,6 +20,8 @@ import lombok.Getter;
 @Entity
 public class StudyMember extends BaseEntity {
 
+    private static final int REWARD_BASE_UNIT = 1;
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -73,7 +75,9 @@ public class StudyMember extends BaseEntity {
                                               .map(round -> round.findRoundOfMemberBy(member))
                                               .filter(RoundOfMember::isDone)
                                               .count();
-        member.addExperience(successfulRoundCount * (2 + 1 * study.calculateStudyPeriod()));
+        int defaultRoundReward = REWARD_BASE_UNIT * 2;
+        int additionalRewardOfPeriodLength = REWARD_BASE_UNIT * study.calculateStudyPeriod();
+        member.addExperience(successfulRoundCount * (defaultRoundReward + additionalRewardOfPeriodLength));
         this.studyResult = StudyResult.SUCCESS;
     }
 

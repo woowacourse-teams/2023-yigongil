@@ -1,8 +1,11 @@
 package com.yigongil.backend.domain.member;
 
 import java.util.Arrays;
+import lombok.Getter;
 
+@Getter
 public enum Tier {
+
     BRONZE(10, 1),
     SILVER(30, 2),
     GOLD(60, 3),
@@ -39,9 +42,5 @@ public enum Tier {
 
     public boolean isBiggerExperience(int experience) {
         return experience < this.upperBoundExperience;
-    }
-
-    public int getOrder() {
-        return order;
     }
 }
