@@ -8,6 +8,7 @@ import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
+import com.yigongil.backend.response.StudyMemberRoleResponse;
 import com.yigongil.backend.ui.doc.StudyApi;
 import java.net.URI;
 import java.util.List;
@@ -82,11 +83,8 @@ public class StudyController implements StudyApi {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StudyDetailResponse> viewStudyDetail(
-            @Authorization Member member,
-            @PathVariable Long id
-    ) {
-        StudyDetailResponse response = studyService.findStudyDetailByStudyId(member, id);
+    public ResponseEntity<StudyDetailResponse> viewStudyDetail(@PathVariable Long id) {
+        StudyDetailResponse response = studyService.findStudyDetailByStudyId(id);
         return ResponseEntity.ok(response);
     }
 
@@ -125,6 +123,15 @@ public class StudyController implements StudyApi {
         studyService.startStudy(member, id);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{studyId}/members/role")
+    public ResponseEntity<StudyMemberRoleResponse> getStudyMemberRole(
+            @Authorization Member member,
+            @PathVariable Long studyId
+    ) {
+        StudyMemberRoleResponse response = studyService.getMemberRoleOfStudy(member, studyId);
+        return ResponseEntity.ok(response);
     }
 }
 

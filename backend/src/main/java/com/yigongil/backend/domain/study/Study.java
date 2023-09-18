@@ -20,17 +20,17 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Entity
@@ -74,10 +74,11 @@ public class Study extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private PeriodUnit periodUnit;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private Round currentRound;
+    @Column(nullable = false)
+    private Integer currentRoundNumber;
 
     @Cascade(CascadeType.PERSIST)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany
     @JoinColumn(name = "study_id", nullable = false)
     private List<Round> rounds = new ArrayList<>();
@@ -96,7 +97,7 @@ public class Study extends BaseEntity {
             LocalDateTime endAt,
             Integer totalRoundCount,
             Integer periodOfRound,
-            Round currentRound,
+            Integer currentRoundNumber,
             List<Round> rounds,
             PeriodUnit periodUnit
     ) {
@@ -113,7 +114,7 @@ public class Study extends BaseEntity {
         this.totalRoundCount = totalRoundCount;
         this.periodOfRound = periodOfRound;
         this.periodUnit = periodUnit;
-        this.currentRound = currentRound;
+        this.currentRoundNumber = currentRoundNumber == null ? 1 : currentRoundNumber;
         this.rounds = rounds == null ? new ArrayList<>() : rounds;
     }
 
@@ -162,12 +163,11 @@ public class Study extends BaseEntity {
                            .processingStatus(ProcessingStatus.RECRUITING)
                            .build();
         study.rounds = Round.of(totalRoundCount, master);
-        study.currentRound = study.rounds.get(0);
         return study;
     }
 
     public Integer calculateAverageTier() {
-        return currentRound.calculateAverageTier();
+        return getCurrentRound().calculateAverageTier();
     }
 
     public void addMember(Member member) {
@@ -186,23 +186,23 @@ public class Study extends BaseEntity {
     }
 
     public int sizeOfCurrentMembers() {
-        return currentRound.sizeOfCurrentMembers();
+        return getCurrentRound().sizeOfCurrentMembers();
     }
 
     public void validateMaster(Member candidate) {
-        currentRound.validateMaster(candidate);
+        getCurrentRound().validateMaster(candidate);
     }
 
     public RoundOfMember findCurrentRoundOfMemberBy(Member member) {
-        return currentRound.findRoundOfMemberBy(member);
+        return getCurrentRound().findRoundOfMemberBy(member);
     }
 
     public boolean isCurrentRoundEndAt(LocalDate today) {
-        return currentRound.isEndAt(today);
+        return getCurrentRound().isEndAt(today);
     }
 
     public void updateToNextRound() {
-        int nextRoundNumber = currentRound.getRoundNumber() + 1;
+        int nextRoundNumber = getCurrentRound().getRoundNumber() + 1;
         Optional<Round> nextRound = rounds.stream()
                                           .filter(round -> round.getRoundNumber() == nextRoundNumber)
                                           .findFirst();
@@ -211,7 +211,7 @@ public class Study extends BaseEntity {
     }
 
     private void updateCurrentRound(Round upcomingRound) {
-        this.currentRound = upcomingRound;
+        this.currentRoundNumber++;
     }
 
     private void finishStudy() {
@@ -248,7 +248,7 @@ public class Study extends BaseEntity {
     }
 
     public Member getMaster() {
-        return currentRound.getMaster();
+        return getCurrentRound().getMaster();
     }
 
     public void updateInformation(
@@ -290,5 +290,11 @@ public class Study extends BaseEntity {
         return (int) rounds.stream()
                            .filter(round -> round.isSuccess(member))
                            .count();
+  
+    public Round getCurrentRound() {
+        return rounds.stream()
+                     .filter(round -> round.getRoundNumber().equals(currentRoundNumber))
+                     .findAny()
+                     .orElseThrow();
     }
 }

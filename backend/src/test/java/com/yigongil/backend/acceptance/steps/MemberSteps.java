@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.request.ProfileUpdateRequest;
 import com.yigongil.backend.response.NicknameValidationResponse;
 import com.yigongil.backend.response.OnboardingCheckResponse;
@@ -26,16 +25,13 @@ public class MemberSteps {
 
     private final ObjectMapper objectMapper;
     private final SharedContext sharedContext;
-    private final JwtTokenProvider jwtTokenProvider;
 
     public MemberSteps(
             ObjectMapper objectMapper,
-            SharedContext sharedContext,
-            JwtTokenProvider jwtTokenProvider
+            SharedContext sharedContext
     ) {
         this.objectMapper = objectMapper;
         this.sharedContext = sharedContext;
-        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Given("{string}의 깃허브 아이디로 회원가입을 한다.")
@@ -47,8 +43,9 @@ public class MemberSteps {
                                              .extract()
                                              .as(TokenResponse.class);
 
-        sharedContext.setParameter(githubId, tokenResponse.accessToken());
-        sharedContext.setParameter(githubId + SharedContext.REFRESH_TOKEN_PARAMETER_KEY_SUFFIX, tokenResponse.refreshToken());
+        sharedContext.setTokens(githubId, tokenResponse.accessToken());
+        sharedContext.setId(githubId, tokenResponse.accessToken());
+        sharedContext.setRefresh(githubId, tokenResponse.refreshToken());
     }
 
     @When("{string}가 닉네임 {string}과 간단 소개{string}으로 수정한다.")
@@ -60,7 +57,7 @@ public class MemberSteps {
         ProfileUpdateRequest request = new ProfileUpdateRequest(nickname, introduction);
 
         ExtractableResponse<Response> response = given().log().all()
-                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(memberGithubId))
+                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(memberGithubId))
                                                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                                                         .body(objectMapper.writeValueAsString(request))
                                                         .when()
@@ -75,7 +72,7 @@ public class MemberSteps {
     public void profile_확인(String githubId, String nickname, String introduction) {
         ProfileResponse response = given()
                 .when()
-                .get("/v1/members/" + jwtTokenProvider.parseToken((String) sharedContext.getParameter(githubId)))
+                .get("/v1/members/" + sharedContext.getParameter(githubId))
                 .then()
                 .extract()
                 .as(ProfileResponse.class);
@@ -88,7 +85,7 @@ public class MemberSteps {
 
     @When("{string}가 회원 탈퇴한다.")
     public void 회원이_탈퇴한다(String githubId) {
-        Object token = sharedContext.getParameter(githubId);
+        String token = sharedContext.getToken(githubId);
 
         given().log().all()
                .header(HttpHeaders.AUTHORIZATION, token)
@@ -99,7 +96,7 @@ public class MemberSteps {
 
     @When("{string}가 마이페이지를 조회한다.")
     public void 마이페이지를_조회한다(String githubId) {
-        Object token = sharedContext.getParameter(githubId);
+        String token = sharedContext.getToken(githubId);
 
         ExtractableResponse<Response> response = given().log().all()
                                                         .header(HttpHeaders.AUTHORIZATION, token)
@@ -128,7 +125,7 @@ public class MemberSteps {
     @Then("{string}의 온보딩 상태가 완료로 변경된다.")
     public void 온보딩_상태_검증(String githubId) {
         ExtractableResponse<Response> response = given().log().all()
-                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(githubId))
+                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(githubId))
                                                         .when()
                                                         .get("v1/members/check-onboarding-is-done")
                                                         .then().log().all()
@@ -140,7 +137,7 @@ public class MemberSteps {
 
     @Then("{string}가 회원 탈퇴 상태이다.")
     public void 회원_탈퇴한_상태이다(String githubId) {
-        Long id = jwtTokenProvider.parseToken((String) sharedContext.getParameter(githubId));
+        Long id = sharedContext.getId(githubId);
         StudyDetailResponse response = sharedContext.getResponse().as(StudyDetailResponse.class);
 
         Boolean deleted = response.members().stream()
@@ -153,10 +150,10 @@ public class MemberSteps {
 
     @When("{string}이 {string}의 프로필을 조회한다.")
     public void 프로필을_조회한다(String githubId1, String githubId2) {
-        Long id = jwtTokenProvider.parseToken((String) sharedContext.getParameter(githubId2));
+        Long id = sharedContext.getId(githubId2);
 
         ExtractableResponse<Response> response = given().log().all()
-                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(githubId1))
+                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(githubId1))
                                                         .when()
                                                         .get("/v1/members/" + id)
                                                         .then().log().all()
