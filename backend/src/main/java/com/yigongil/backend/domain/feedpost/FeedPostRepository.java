@@ -1,12 +1,22 @@
 package com.yigongil.backend.domain.feedpost;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
+import org.springframework.data.repository.query.Param;
 
 public interface FeedPostRepository extends Repository<FeedPost, Long> {
 
-    Page<FeedPost> findAllByStudyId(Long studyId, Pageable pageable);
+    @Query("""
+                select fp from FeedPost fp
+                where fp.study.id = :studyId
+                and fp.id < :oldestFeedPostId
+                order by fp.id desc
+            """)
+    List<FeedPost> findAllByStudyIdStartWithOldestFeedPostId(
+            @Param("studyId") Long studyId,
+            @Param("oldestFeedPostId") Long oldestFeedPostId
+    );
 
     FeedPost save(FeedPost feedPost);
 }

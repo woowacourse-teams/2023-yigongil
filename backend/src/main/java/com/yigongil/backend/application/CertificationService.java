@@ -1,7 +1,7 @@
 package com.yigongil.backend.application;
 
-import com.yigongil.backend.domain.feedpost.certificationfeedpost.Certification;
-import com.yigongil.backend.domain.feedpost.certificationfeedpost.CertificationRepository;
+import com.yigongil.backend.domain.certification.Certification;
+import com.yigongil.backend.domain.certification.CertificationRepository;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.request.CertificationCreateRequest;

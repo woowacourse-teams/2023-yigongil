@@ -70,7 +70,7 @@ public class FeedSteps {
                                                         .all()
                                                         .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
-                                                        .get("/v1/studies/" + sharedContext.getParameter(studyName) + "/feeds?page=0")
+                                                        .get("/v1/studies/" + sharedContext.getParameter(studyName) + "/feeds")
                                                         .then()
                                                         .log()
                                                         .all()

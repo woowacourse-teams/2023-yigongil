@@ -324,8 +324,8 @@ public class StudyService {
         return CertificationResponse.from(certificationService.findById(certificationId));
     }
 
-    public List<FeedPostResponse> findFeedPosts(Long id, int page) {
-        return feedService.findFeedPosts(id, page)
+    public List<FeedPostResponse> findFeedPosts(Long id, Long oldestFeedPostId) {
+        return feedService.findFeedPosts(id, oldestFeedPostId)
                           .stream()
                           .map(FeedPostResponse::from)
                           .toList();

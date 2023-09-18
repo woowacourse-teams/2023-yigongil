@@ -1,4 +1,4 @@
-package com.yigongil.backend.domain.feedpost.certificationfeedpost;
+package com.yigongil.backend.domain.certification;
 
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;

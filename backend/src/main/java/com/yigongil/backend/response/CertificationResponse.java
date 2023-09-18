@@ -1,7 +1,7 @@
 package com.yigongil.backend.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.yigongil.backend.domain.feedpost.certificationfeedpost.Certification;
+import com.yigongil.backend.domain.certification.Certification;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 

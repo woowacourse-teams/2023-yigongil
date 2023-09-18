@@ -17,6 +17,7 @@ import com.yigongil.backend.response.StudyMemberRoleResponse;
 import com.yigongil.backend.ui.doc.StudyApi;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -133,9 +134,12 @@ public class StudyController implements StudyApi {
     @GetMapping("/{id}/feeds")
     public ResponseEntity<List<FeedPostResponse>> findFeedPosts(
             @PathVariable Long id,
-            int page
+            @RequestParam Optional<Long> oldestFeedPostId
     ) {
-        List<FeedPostResponse> response = studyService.findFeedPosts(id, page);
+        List<FeedPostResponse> response = studyService.findFeedPosts(
+                id,
+                oldestFeedPostId.orElse(Long.MAX_VALUE)
+        );
         return ResponseEntity.ok(response);
     }
 

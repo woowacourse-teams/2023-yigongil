@@ -3,7 +3,6 @@ package com.yigongil.backend.application;
 import com.yigongil.backend.domain.feedpost.FeedPost;
 import com.yigongil.backend.domain.feedpost.FeedPostRepository;
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.study.PageStrategy;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.request.FeedPostCreateRequest;
 import java.util.List;
@@ -31,8 +30,7 @@ public class FeedService {
     }
 
     @Transactional(readOnly = true)
-    public List<FeedPost> findFeedPosts(Long studyId, int page) {
-        return feedPostRepository.findAllByStudyId(studyId, PageStrategy.defaultPageStrategy(page))
-                                 .toList();
+    public List<FeedPost> findFeedPosts(Long studyId, Long oldestFeedPostId) {
+        return feedPostRepository.findAllByStudyIdStartWithOldestFeedPostId(studyId, oldestFeedPostId);
     }
 }
