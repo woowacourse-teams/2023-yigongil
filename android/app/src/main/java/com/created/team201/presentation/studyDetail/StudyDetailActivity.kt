@@ -234,8 +234,11 @@ class StudyDetailActivity :
     }
 
     private fun observeStartStudy() {
-        studyDetailViewModel.isStartStudy.observe(this) { _ ->
-            finish()
+        studyDetailViewModel.isStartStudy.observe(this) { isStartStudy ->
+            when (isStartStudy) {
+                true -> finish()
+                false -> Unit
+            }
         }
     }
 
