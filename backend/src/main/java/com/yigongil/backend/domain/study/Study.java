@@ -290,6 +290,7 @@ public class Study extends BaseEntity {
         return (int) rounds.stream()
                            .filter(round -> round.isSuccess(member))
                            .count();
+    }
   
     public Round getCurrentRound() {
         return rounds.stream()

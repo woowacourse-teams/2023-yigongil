@@ -108,13 +108,6 @@ public class Member extends BaseEntity {
         return introduction.getIntroduction();
     }
 
-    public void exit() {
-        this.githubId = null;
-        this.nickname = null;
-        this.profileImageUrl = null;
-        this.introduction = new Introduction(null);
-        this.deleted = true;
-
     @PreRemove
     public void registerDeleteEvent() {
         register(new MemberDeleteEvent(id));
