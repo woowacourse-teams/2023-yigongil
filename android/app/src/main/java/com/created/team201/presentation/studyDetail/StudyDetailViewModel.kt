@@ -99,6 +99,8 @@ class StudyDetailViewModel private constructor(
                                         role = Role.valueOf(role)
                                     )
                                 setStudyDetail(studyDetailUIModel, studyId)
+                            }.onFailure {
+                                notifyInvalidStudy()
                             }
                     }
                 }
