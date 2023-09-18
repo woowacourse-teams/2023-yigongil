@@ -205,7 +205,7 @@ public class TodoSteps {
         ExtractableResponse<Response> response = given().log().all()
                                                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                                                         .body(objectMapper.writeValueAsString(request))
-                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getParameter(githubId))
+                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(githubId))
                                                         .when()
                                                         .patch("/v1/rounds/" + sharedContext.getParameter("roundId") + "/todos/necessary")
                                                         .then().log().all()
