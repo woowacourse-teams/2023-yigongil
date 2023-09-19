@@ -33,12 +33,15 @@
     <string name="main_ic_my_page">마이페이지</string>
 
     <!--홈 탭-->
+    <string name="home_study_list_must_do">Must Do</string>
+    <string name="home_study_list_guide">Must Do를 인증하면 잔디씨앗을 드려요! \n스터디를 완주하면 잔디를 심어드려요!</string>
+    <string name="home_no_study">참여중인 스터디가 없어요!\n스터디를 개설/참여 해볼까요?</string>
+    <!--정리 필요-->
     <string name="home_essential_todo">필수투두</string>
     <string name="home_optional_todo">선택투두</string>
     <string name="home_progress_rate">스터디원 필수투두 진행률 %d%%</string>
     <string name="home_date">다음 스터디까지 D - %d (%s)</string>
     <string name="home_welcome_phrase">%s님\n오늘 잔디는 심으셨나요?</string>
-    <string name="home_no_study">참여중인 스터디가 없어요!\n스터디를 개설/참여 해볼까요?</string>
     <string name="home_dash_board_enter_button">Must Do 인증하기</string>
     <string name="home_dash_board_must_do">Must Do.</string>
     <string name="home_dash_board_d_day">D - %d</string>
