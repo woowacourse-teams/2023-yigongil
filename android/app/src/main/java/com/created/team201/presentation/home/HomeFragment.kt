@@ -10,11 +10,12 @@ import com.created.team201.R
 import com.created.team201.databinding.FragmentHomeBinding
 import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.home.adapter.HomeAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val homeAdapter: HomeAdapter by lazy { HomeAdapter() }
     private val homeViewModel: HomeViewModel by viewModels()
@@ -23,9 +24,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         super.onViewCreated(view, savedInstanceState)
 
         setupAdapter()
-        collectWithLifecycle(homeViewModel.homeViewState) {
-            homeAdapter.submitList(it)
-        }
+    
     }
 
     private fun setupAdapter() {
