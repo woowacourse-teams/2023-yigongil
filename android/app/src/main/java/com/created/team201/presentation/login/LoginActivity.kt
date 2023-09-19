@@ -10,11 +10,11 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import com.created.team201.R
 import com.created.team201.databinding.ActivityLoginBinding
-import com.created.team201.presentation.MainActivity
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.login.LoginViewModel.State.FAIL
 import com.created.team201.presentation.login.LoginViewModel.State.IDLE
 import com.created.team201.presentation.login.LoginViewModel.State.SUCCESS
+import com.created.team201.presentation.main.MainActivity
 import com.created.team201.presentation.onBoarding.OnBoardingActivity
 import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
 import com.created.team201.util.auth.CustomTabLauncherActivity
@@ -26,9 +26,16 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        initBinding()
         observeLoginState()
+        observeGuestState()
         observeOnBoardingDoneState()
         setClickEventOnLoginButton()
+    }
+
+    private fun initBinding() {
+        binding.lifecycleOwner = this
+        binding.viewModel = loginViewModel
     }
 
     private fun observeLoginState() {
@@ -41,6 +48,16 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_lo
                     Toast.LENGTH_SHORT,
                 ).show()
 
+                IDLE -> throw IllegalStateException()
+            }
+        }
+    }
+
+    private fun observeGuestState() {
+        loginViewModel.signUpGuestState.observe(this) { signUpGuestState ->
+            when (signUpGuestState) {
+                SUCCESS -> navigateToMain()
+                FAIL -> Unit
                 IDLE -> throw IllegalStateException()
             }
         }
