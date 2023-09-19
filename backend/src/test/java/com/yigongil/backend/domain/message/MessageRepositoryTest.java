@@ -45,7 +45,7 @@ class MessageRepositoryTest {
         messageRepository.save(new Message(null, 김진우, 노이만, "Hello, world!"));
         messageRepository.save(new Message(null, 노이만, 김진우, "Hello, world!"));
 
-        List<MessageSenderReceiverDto> result = messageRepository.findBySenderOrReceiverOrderByIdDesc(김진우);
+        List<MessageSenderReceiverDto> result = messageRepository.findBySenderOrReceiver(김진우);
 
         assertThat(result).hasSize(2);
     }
@@ -56,7 +56,7 @@ class MessageRepositoryTest {
         messageRepository.save(new Message(null, 김진우, 노이만, "Hello, world!"));
         messageRepository.save(new Message(null, 노이만, 김진우, "Hello, world!"));
 
-        List<MessageSenderReceiverDto> result = messageRepository.findBySenderOrReceiverOrderByIdDesc(김진우);
+        List<MessageSenderReceiverDto> result = messageRepository.findBySenderOrReceiver(김진우);
 
         assertThat(result).hasSize(2);
     }
@@ -70,7 +70,7 @@ class MessageRepositoryTest {
         messageRepository.save(new Message(null, 노이만, 김진우, "Hello, world!"));
         messageRepository.save(new Message(null, 파울러, 김진우, "Hello, world!"));
 
-        List<MessageSenderReceiverDto> result = messageRepository.findBySenderOrReceiverOrderByIdDesc(김진우);
+        List<MessageSenderReceiverDto> result = messageRepository.findBySenderOrReceiver(김진우);
 
         assertThat(result).hasSize(3);
     }
@@ -85,7 +85,7 @@ class MessageRepositoryTest {
         messageRepository.save(new Message(null, 파울러, 김진우, "Hello, world!"));
         messageRepository.save(new Message(null, 노이만, 파울러, "Hello, world!"));
 
-        List<MessageSenderReceiverDto> result = messageRepository.findBySenderOrReceiverOrderByIdDesc(김진우);
+        List<MessageSenderReceiverDto> result = messageRepository.findBySenderOrReceiver(김진우);
 
         assertThat(result).hasSize(3);
     }

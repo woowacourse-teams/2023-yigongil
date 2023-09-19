@@ -12,12 +12,11 @@ public interface MessageRepository extends Repository<Message, Long> {
     Message save(Message message);
 
     @Query("""
-                        select m.sender as sender, m.receiver as receiver
+                        select distinct m.sender as sender, m.receiver as receiver
                         from Message m
-                        group by m.sender, m.receiver
-                        having m.sender = :member or m.receiver = :member
+                        where m.sender = :member or m.receiver = :member
             """)
-    List<MessageSenderReceiverDto> findBySenderOrReceiverOrderByIdDesc(Member member);
+    List<MessageSenderReceiverDto> findBySenderOrReceiver(Member member);
 
     @Query("""
                         select m.content as content, m.createdAt as createdAt,
