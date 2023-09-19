@@ -22,7 +22,7 @@ public interface StudyMemberRepository extends Repository<StudyMember, Long> {
     List<StudyMember> findAllByMemberId(Long memberId);
 
     @EntityGraph(attributePaths = "member")
-    List<StudyMember> findAllByStudyIdAndRoleNotAndStudyResult(Long studyId, Role role, StudyResult studyResult);
+    List<StudyMember> findAllByStudyIdAndRoleNot(Long studyId, Role role);
 
     @EntityGraph(attributePaths = "study")
     List<StudyMember> findAllByMemberIdAndRoleNotAndStudyResult(Long memberId, Role role, StudyResult studyResult);

@@ -11,9 +11,7 @@ public record UpcomingStudyResponse(
         String name,
         @Schema(example = "2")
         Long roundId,
-        
         TodoResponse necessaryTodo,
-
         @Schema(example = "3")
         Integer leftDays,
         @Schema(example = "2023.08.15")

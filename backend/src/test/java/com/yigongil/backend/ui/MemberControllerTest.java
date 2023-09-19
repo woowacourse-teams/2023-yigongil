@@ -77,7 +77,7 @@ class MemberControllerTest {
                         0.0,
                         0,
                         0,
-                        member.getTier(),
+                        member.getExperience(),
                         member.getIntroduction(),
                         Collections.emptyList()
                 )
