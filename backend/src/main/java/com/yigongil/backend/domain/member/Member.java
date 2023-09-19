@@ -46,7 +46,7 @@ public class Member extends BaseEntity {
     private String profileImageUrl;
 
     @Column(nullable = false)
-    private Integer tier;
+    private int experience;
 
     @Embedded
     private Introduction introduction;
@@ -66,7 +66,7 @@ public class Member extends BaseEntity {
             String githubId,
             String nickname,
             String profileImageUrl,
-            Integer tier,
+            int experience,
             String introduction,
             boolean isOnboardingDone,
             boolean deleted
@@ -75,7 +75,7 @@ public class Member extends BaseEntity {
         this.githubId = githubId;
         this.nickname = new Nickname(nickname);
         this.profileImageUrl = profileImageUrl;
-        this.tier = tier == null ? 1 : tier;
+        this.experience = experience;
         this.introduction = new Introduction(introduction);
         this.isOnboardingDone = isOnboardingDone;
         this.deleted = deleted;
@@ -108,15 +108,21 @@ public class Member extends BaseEntity {
         return introduction.getIntroduction();
     }
 
-    public void upgradeTier() {
-        if (tier < MAXIMUM_TIER) {
-            tier++;
-        }
-    }
-
     @PreRemove
     public void registerDeleteEvent() {
         register(new MemberDeleteEvent(id));
+    }
+
+    public void addExperience(int exp) {
+        this.experience += exp;
+    }
+
+    public int calculateProgress() {
+        return getTier().calculateProgress(experience);
+    }
+
+    public Tier getTier() {
+        return Tier.getTier(experience);
     }
 
     @Override
@@ -124,11 +130,10 @@ public class Member extends BaseEntity {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof Member member)) {
             return false;
         }
-        Member member = (Member) o;
-        return id.equals(member.id);
+        return id.equals(member.getId());
     }
 
     @Override

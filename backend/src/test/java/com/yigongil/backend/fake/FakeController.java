@@ -47,7 +47,9 @@ public class FakeController {
 
     @PutMapping("/v1/fake/proceed")
     public ResponseEntity<Void> proceed(@RequestParam Integer days) {
-        studyService.proceedRound(LocalDate.now().plusDays(days));
+        for (int i = 1; i <= days; i++) {
+            studyService.proceedRound(LocalDate.now().plusDays(i));
+        }
         return ResponseEntity.ok().build();
     }
 }

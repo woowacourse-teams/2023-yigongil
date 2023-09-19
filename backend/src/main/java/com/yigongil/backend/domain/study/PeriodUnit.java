@@ -22,6 +22,10 @@ public enum PeriodUnit {
         this.unitNumber = unitNumber;
     }
 
+    public int calculatePeriodOfRoundInDays(int periodOfRound) {
+        return unitNumber * periodOfRound;
+    }
+
     public static Integer getPeriodNumber(String input) {
         validateFormat(input);
         return Integer.parseInt(input.substring(0, input.length() - 1));

@@ -216,7 +216,6 @@ public class Study extends BaseEntity {
 
     private void finishStudy() {
         this.processingStatus = ProcessingStatus.END;
-        getCurrentRound().updateMembersTier();
     }
 
     public void startStudy() {
@@ -295,6 +294,12 @@ public class Study extends BaseEntity {
         return getCurrentRound().getRoundOfMembers();
     }
 
+    public int calculateSuccessfulRoundCount(Member member) {
+        return (int) rounds.stream()
+                           .filter(round -> round.isSuccess(member))
+                           .count();
+    }
+  
     public Round getCurrentRound() {
         return rounds.stream()
                      .filter(round -> round.getRoundNumber().equals(currentRoundNumber))
