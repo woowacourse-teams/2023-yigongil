@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.firebase.crashlytics'
     id 'com.google.gms.google-services'
+    id 'com.google.dagger.hilt.android'
     id 'org.jetbrains.kotlin.plugin.serialization' version "1.8.22"
     id 'com.google.firebase.appdistribution'
 }
@@ -142,5 +143,9 @@ dependencies {
 
     // EncryptedSharedPreferences
     implementation "androidx.security:security-crypto-ktx:1.1.0-alpha06"
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:2.44"
+    kapt "com.google.dagger:hilt-compiler:2.44"
 
 }
