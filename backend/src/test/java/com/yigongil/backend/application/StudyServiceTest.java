@@ -29,7 +29,9 @@ class StudyServiceTest {
 
     private final StudyService studyService = new StudyService(
             studyRepository,
-            studyMemberRepository
+            studyMemberRepository,
+            mock(CertificationService.class),
+            mock(FeedService.class)
     );
 
     @Nested
