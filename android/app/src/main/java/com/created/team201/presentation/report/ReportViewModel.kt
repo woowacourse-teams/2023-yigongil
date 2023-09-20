@@ -11,7 +11,7 @@ import com.created.domain.model.ReportUser
 import com.created.domain.repository.ReportRepository
 import com.created.team201.data.datasource.remote.ReportDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.ReportRepositoryImpl
+import com.created.team201.data.repository.DefaultReportRepository
 import com.created.team201.presentation.report.model.DateUiModel
 import com.created.team201.presentation.report.model.ReportStudyUiModel
 import com.created.team201.presentation.report.model.ReportUserUiModel
@@ -164,7 +164,7 @@ class ReportViewModel(
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                val repository = ReportRepositoryImpl(
+                val repository = DefaultReportRepository(
                     ReportDataSourceImpl(
                         NetworkServiceModule.reportService,
                     ),

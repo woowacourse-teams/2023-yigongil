@@ -6,8 +6,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.repository.GuestRepository
 import com.created.team201.application.Team201App
-import com.created.team201.data.datasource.local.TokenDataSourceImpl
-import com.created.team201.data.repository.GuestRepositoryImpl
+import com.created.team201.data.datasource.local.DefaultTokenDataSource
+import com.created.team201.data.repository.DefaultGuestRepository
 
 class MainViewModel(
     private val guestRepository: GuestRepository,
@@ -18,8 +18,8 @@ class MainViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 MainViewModel(
-                    GuestRepositoryImpl(
-                        TokenDataSourceImpl(Team201App.provideTokenStorage())
+                    DefaultGuestRepository(
+                        DefaultTokenDataSource(Team201App.provideTokenStorage())
                     )
                 )
             }

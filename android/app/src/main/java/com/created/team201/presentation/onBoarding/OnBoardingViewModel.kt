@@ -15,10 +15,10 @@ import com.created.domain.model.Nickname
 import com.created.domain.model.OnBoarding
 import com.created.domain.repository.OnBoardingRepository
 import com.created.team201.application.Team201App
-import com.created.team201.data.datasource.local.OnBoardingIsDoneDataSourceImpl
+import com.created.team201.data.datasource.local.DefaultOnBoardingDataSource
 import com.created.team201.data.datasource.remote.OnBoardingDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.OnBoardingRepositoryImpl
+import com.created.team201.data.repository.DefaultOnBoardingRepository
 import com.created.team201.presentation.onBoarding.model.NicknameState
 import com.created.team201.presentation.onBoarding.model.NicknameUiModel
 import com.created.team201.util.NonNullLiveData
@@ -148,8 +148,8 @@ class OnBoardingViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 OnBoardingViewModel(
-                    OnBoardingRepositoryImpl(
-                        OnBoardingIsDoneDataSourceImpl(
+                    DefaultOnBoardingRepository(
+                        DefaultOnBoardingDataSource(
                             Team201App.provideOnBoardingIsDoneStorage(),
                         ),
                         OnBoardingDataSourceImpl(NetworkServiceModule.onBoardingService),

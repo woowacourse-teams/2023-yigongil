@@ -17,8 +17,8 @@ import com.created.domain.repository.UpdateStudyRepository
 import com.created.team201.data.datasource.remote.StudyDetailDataSourceImpl
 import com.created.team201.data.datasource.remote.UpdateStudyDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.StudyDetailRepositoryImpl
-import com.created.team201.data.repository.UpdateStudyRepositoryImpl
+import com.created.team201.data.repository.DefaultStudyDetailRepository
+import com.created.team201.data.repository.DefaultUpdateStudyRepository
 import com.created.team201.presentation.updateStudy.model.PeriodUiModel
 import com.created.team201.presentation.updateStudy.model.UpdateStudyUiModel
 import com.created.team201.util.NonNullLiveData
@@ -183,12 +183,12 @@ class UpdateStudyViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val createStudyRepository = UpdateStudyRepositoryImpl(
+                val createStudyRepository = DefaultUpdateStudyRepository(
                     UpdateStudyDataSourceImpl(
                         NetworkServiceModule.updateStudyService,
                     ),
                 )
-                val studyDetailRepository = StudyDetailRepositoryImpl(
+                val studyDetailRepository = DefaultStudyDetailRepository(
                     StudyDetailDataSourceImpl(
                         NetworkServiceModule.studyDetailService,
                     ),

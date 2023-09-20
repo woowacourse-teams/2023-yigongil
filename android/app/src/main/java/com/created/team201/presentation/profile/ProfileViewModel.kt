@@ -16,7 +16,7 @@ import com.created.domain.model.UserProfile
 import com.created.domain.repository.ProfileRepository
 import com.created.team201.data.datasource.remote.ProfileDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.ProfileRepositoryImpl
+import com.created.team201.data.repository.DefaultProfileRepository
 import com.created.team201.presentation.myPage.model.ProfileInformationUiModel
 import com.created.team201.presentation.myPage.model.ProfileUiModel
 import com.created.team201.presentation.onBoarding.model.NicknameUiModel
@@ -85,7 +85,7 @@ class ProfileViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 ProfileViewModel(
-                    profileRepository = ProfileRepositoryImpl(
+                    profileRepository = DefaultProfileRepository(
                         ProfileDataSourceImpl(NetworkServiceModule.profileService),
                     ),
                 )

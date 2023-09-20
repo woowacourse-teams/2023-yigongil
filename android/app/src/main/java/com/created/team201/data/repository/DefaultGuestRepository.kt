@@ -3,7 +3,7 @@ package com.created.team201.data.repository
 import com.created.domain.repository.GuestRepository
 import com.created.team201.data.datasource.local.TokenDataSource
 
-class GuestRepositoryImpl(
+class DefaultGuestRepository(
     private val tokenDataSource: TokenDataSource,
 ) : GuestRepository {
     override fun signUpGuest() {

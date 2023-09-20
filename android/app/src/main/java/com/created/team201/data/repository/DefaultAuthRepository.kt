@@ -5,7 +5,7 @@ import com.created.team201.data.datasource.local.TokenDataSource
 import com.created.team201.data.remote.api.AuthService
 import com.created.team201.data.remote.request.RenewedAccessTokenRequestDTO
 
-class AuthRepositoryImpl(
+class DefaultAuthRepository(
     private val authService: AuthService,
     private val tokenDataSource: TokenDataSource,
 ) : AuthRepository {

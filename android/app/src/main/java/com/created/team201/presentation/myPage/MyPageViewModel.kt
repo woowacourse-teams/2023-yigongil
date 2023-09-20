@@ -16,7 +16,7 @@ import com.created.domain.model.ProfileInformation
 import com.created.domain.repository.MyPageRepository
 import com.created.team201.data.datasource.remote.MyPageDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.MyPageRepositoryImpl
+import com.created.team201.data.repository.DefaultMyPageRepository
 import com.created.team201.presentation.myPage.model.ProfileInformationUiModel
 import com.created.team201.presentation.myPage.model.ProfileType
 import com.created.team201.presentation.myPage.model.ProfileUiModel
@@ -257,7 +257,7 @@ class MyPageViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 MyPageViewModel(
-                    myPageRepository = MyPageRepositoryImpl(
+                    myPageRepository = DefaultMyPageRepository(
                         MyPageDataSourceImpl(NetworkServiceModule.myPageService),
                     ),
                 )

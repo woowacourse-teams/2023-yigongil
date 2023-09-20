@@ -14,7 +14,7 @@ import com.created.domain.model.StudySummary
 import com.created.domain.repository.StudyListRepository
 import com.created.team201.data.datasource.remote.StudyListDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.StudyListRepositoryImpl
+import com.created.team201.data.repository.DefaultStudyListRepository
 import com.created.team201.presentation.studyList.model.PeriodUiModel
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 import com.created.team201.util.NonNullLiveData
@@ -151,7 +151,7 @@ class StudyListViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 StudyListViewModel(
-                    StudyListRepositoryImpl(
+                    DefaultStudyListRepository(
                         StudyListDataSourceImpl(
                             NetworkServiceModule.studyListService,
                         ),

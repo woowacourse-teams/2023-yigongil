@@ -13,7 +13,7 @@ import com.created.domain.model.StudyDetail
 import com.created.domain.repository.StudyDetailRepository
 import com.created.team201.data.datasource.remote.StudyDetailDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.StudyDetailRepositoryImpl
+import com.created.team201.data.repository.DefaultStudyDetailRepository
 import com.created.team201.presentation.myPage.model.ProfileInformationUiModel
 import com.created.team201.presentation.myPage.model.ProfileUiModel
 import com.created.team201.presentation.onBoarding.model.NicknameUiModel
@@ -196,7 +196,7 @@ class StudyDetailViewModel private constructor(
         val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                val repository = StudyDetailRepositoryImpl(
+                val repository = DefaultStudyDetailRepository(
                     StudyDetailDataSourceImpl(
                         NetworkServiceModule.studyDetailService,
                     ),

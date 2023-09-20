@@ -1,6 +1,6 @@
 package com.created.team201.data.datasource.local
 
-class TokenDataSourceImpl(
+class DefaultTokenDataSource(
     private val tokenStorage: TokenStorage,
 ) : TokenDataSource {
     override fun getIsGuest(): Boolean {

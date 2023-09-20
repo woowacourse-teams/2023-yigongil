@@ -4,7 +4,7 @@ import com.created.domain.model.UpdateStudy
 import com.created.domain.repository.UpdateStudyRepository
 import com.created.team201.data.datasource.remote.UpdateStudyDataSource
 
-class UpdateStudyRepositoryImpl(
+class DefaultUpdateStudyRepository(
     private val updateStudyDataSource: UpdateStudyDataSource,
 ) : UpdateStudyRepository {
     override suspend fun createStudy(updateStudy: UpdateStudy): Result<Long> {

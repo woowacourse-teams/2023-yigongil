@@ -2,7 +2,7 @@ package com.created.team201.data.repository
 
 import com.created.domain.repository.OnBoardingRepository
 import com.created.team201.data.MockServiceModule
-import com.created.team201.data.datasource.local.OnBoardingIsDoneDataSource
+import com.created.team201.data.datasource.local.OnBoardingDataSource
 import com.created.team201.data.datasource.remote.OnBoardingDataSourceImpl
 import com.created.team201.data.remote.api.OnBoardingService
 import com.created.team201.presentation.onBoarding.OnBoardingFixture
@@ -17,16 +17,16 @@ import org.junit.Test
 
 class OnBoardingRepositoryTest {
     private val service: OnBoardingService = MockServiceModule.onBoardingService
-    private lateinit var onBoardingIsDoneDataSource: OnBoardingIsDoneDataSource
+    private lateinit var onBoardingDataSource: OnBoardingDataSource
 
     private lateinit var repository: OnBoardingRepository
 
     @Before
     fun setupRepository() {
-        onBoardingIsDoneDataSource = mockk()
+        onBoardingDataSource = mockk()
         repository =
-            OnBoardingRepositoryImpl(
-                onBoardingIsDoneDataSource = onBoardingIsDoneDataSource,
+            DefaultOnBoardingRepository(
+                onBoardingIsDoneDataSource = onBoardingDataSource,
                 onBoardingDataSource = OnBoardingDataSourceImpl(service)
             )
     }
@@ -52,12 +52,12 @@ class OnBoardingRepositoryTest {
     fun `내부 저장소에 온보딩 완료 여부가 없거나 false라면 서버에서 온보딩 완료 여부를 확인한다`() = runTest {
         // given
         every {
-            onBoardingIsDoneDataSource.getOnBoardingIsDone()
+            onBoardingDataSource.getOnBoardingIsDone()
         } returns false
 
         val isDone = slot<Boolean>()
         every {
-            onBoardingIsDoneDataSource.setOnBoardingIsDone(capture(isDone))
+            onBoardingDataSource.setOnBoardingIsDone(capture(isDone))
         } answers { isDone.captured = true }
 
         // when

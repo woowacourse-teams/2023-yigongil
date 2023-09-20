@@ -7,7 +7,7 @@ import com.created.domain.repository.MyPageRepository
 import com.created.team201.data.datasource.remote.MyPageDataSource
 import com.created.team201.data.mapper.toDomain
 
-class MyPageRepositoryImpl(
+class DefaultMyPageRepository(
     private val myPageDataSource: MyPageDataSource,
 ) : MyPageRepository {
     override suspend fun getMyPage(): Result<Profile> =

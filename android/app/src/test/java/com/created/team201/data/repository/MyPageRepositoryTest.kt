@@ -13,7 +13,7 @@ import org.junit.Test
 class MyPageRepositoryTest {
     private val service: MyPageService = MockServiceModule.myPageService
 
-    private val repository: MyPageRepository = MyPageRepositoryImpl(MyPageDataSourceImpl(service))
+    private val repository: MyPageRepository = DefaultMyPageRepository(MyPageDataSourceImpl(service))
 
     @ExperimentalCoroutinesApi
     @Test

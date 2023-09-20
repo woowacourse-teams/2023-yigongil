@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
-class OnBoardingIsDoneStorage(context: Context) {
+class OnBoardingStorage(context: Context) {
 
     private val masterKey: MasterKey = MasterKey.Builder(context)
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -33,12 +33,12 @@ class OnBoardingIsDoneStorage(context: Context) {
         private const val FILE_NAME = "TEAM201_STORAGE_ONBOARDING"
 
         @Volatile
-        private var instance: OnBoardingIsDoneStorage? = null
+        private var instance: OnBoardingStorage? = null
 
-        fun getInstance(context: Context): OnBoardingIsDoneStorage {
+        fun getInstance(context: Context): OnBoardingStorage {
             synchronized(this) {
                 instance?.let { return it }
-                return OnBoardingIsDoneStorage(context).also { instance = it }
+                return OnBoardingStorage(context).also { instance = it }
             }
         }
     }

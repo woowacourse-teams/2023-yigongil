@@ -12,13 +12,13 @@ import com.created.domain.repository.AuthRepository
 import com.created.domain.repository.GuestRepository
 import com.created.domain.repository.OnBoardingRepository
 import com.created.team201.application.Team201App
-import com.created.team201.data.datasource.local.OnBoardingIsDoneDataSourceImpl
-import com.created.team201.data.datasource.local.TokenDataSourceImpl
+import com.created.team201.data.datasource.local.DefaultOnBoardingDataSource
+import com.created.team201.data.datasource.local.DefaultTokenDataSource
 import com.created.team201.data.datasource.remote.OnBoardingDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.AuthRepositoryImpl
-import com.created.team201.data.repository.GuestRepositoryImpl
-import com.created.team201.data.repository.OnBoardingRepositoryImpl
+import com.created.team201.data.repository.DefaultAuthRepository
+import com.created.team201.data.repository.DefaultGuestRepository
+import com.created.team201.data.repository.DefaultOnBoardingRepository
 import com.created.team201.presentation.login.LoginViewModel.State.FAIL
 import com.created.team201.presentation.login.LoginViewModel.State.SUCCESS
 import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
@@ -76,15 +76,15 @@ class LoginViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 LoginViewModel(
-                    GuestRepositoryImpl(
-                        TokenDataSourceImpl(Team201App.provideTokenStorage()),
+                    DefaultGuestRepository(
+                        DefaultTokenDataSource(Team201App.provideTokenStorage()),
                     ),
-                    AuthRepositoryImpl(
+                    DefaultAuthRepository(
                         NetworkServiceModule.authService,
-                        TokenDataSourceImpl(Team201App.provideTokenStorage()),
+                        DefaultTokenDataSource(Team201App.provideTokenStorage()),
                     ),
-                    OnBoardingRepositoryImpl(
-                        OnBoardingIsDoneDataSourceImpl(
+                    DefaultOnBoardingRepository(
+                        DefaultOnBoardingDataSource(
                             Team201App.provideOnBoardingIsDoneStorage(),
                         ),
                         OnBoardingDataSourceImpl(

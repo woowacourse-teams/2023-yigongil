@@ -5,7 +5,7 @@ import com.created.domain.repository.StudyListRepository
 import com.created.team201.data.datasource.remote.StudyListDataSource
 import com.created.team201.data.mapper.toDomain
 
-class StudyListRepositoryImpl(
+class DefaultStudyListRepository(
     private val studyListDataSource: StudyListDataSource,
 ) : StudyListRepository {
 

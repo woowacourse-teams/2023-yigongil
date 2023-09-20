@@ -14,7 +14,7 @@ class UpdateStudyRepositoryTest {
     private val service: UpdateStudyService = MockServiceModule.updateStudyService
 
     private val repository: UpdateStudyRepository =
-        UpdateStudyRepositoryImpl(UpdateStudyDataSourceImpl(service))
+        DefaultUpdateStudyRepository(UpdateStudyDataSourceImpl(service))
 
     @ExperimentalCoroutinesApi
     @Test

@@ -5,7 +5,7 @@ import com.created.domain.repository.ProfileRepository
 import com.created.team201.data.datasource.remote.ProfileDataSource
 import com.created.team201.data.mapper.toDomain
 
-class ProfileRepositoryImpl(
+class DefaultProfileRepository(
     private val profileDataSource: ProfileDataSource,
 ) : ProfileRepository {
     override suspend fun getProfile(userId: Long): UserProfile {

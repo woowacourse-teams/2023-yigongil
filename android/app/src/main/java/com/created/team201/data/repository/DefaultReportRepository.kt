@@ -5,7 +5,7 @@ import com.created.domain.model.ReportUser
 import com.created.domain.repository.ReportRepository
 import com.created.team201.data.datasource.remote.ReportDataSource
 
-class ReportRepositoryImpl(
+class DefaultReportRepository(
     private val reportDataSource: ReportDataSource,
 ) : ReportRepository {
     override suspend fun reportUser(reportUser: ReportUser) {
