@@ -6,8 +6,9 @@ import com.created.domain.model.ProfileInformation
 import com.created.domain.repository.MyPageRepository
 import com.created.team201.data.datasource.remote.MyPageDataSource
 import com.created.team201.data.mapper.toDomain
+import javax.inject.Inject
 
-class DefaultMyPageRepository(
+class DefaultMyPageRepository @Inject constructor(
     private val myPageDataSource: MyPageDataSource,
 ) : MyPageRepository {
     override suspend fun getMyPage(): Result<Profile> =

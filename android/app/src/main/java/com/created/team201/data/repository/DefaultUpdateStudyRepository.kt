@@ -3,8 +3,9 @@ package com.created.team201.data.repository
 import com.created.domain.model.UpdateStudy
 import com.created.domain.repository.UpdateStudyRepository
 import com.created.team201.data.datasource.remote.UpdateStudyDataSource
+import javax.inject.Inject
 
-class DefaultUpdateStudyRepository(
+class DefaultUpdateStudyRepository @Inject constructor(
     private val updateStudyDataSource: UpdateStudyDataSource,
 ) : UpdateStudyRepository {
     override suspend fun createStudy(updateStudy: UpdateStudy): Result<Long> {

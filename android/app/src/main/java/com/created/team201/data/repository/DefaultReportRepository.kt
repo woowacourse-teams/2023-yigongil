@@ -4,8 +4,9 @@ import com.created.domain.model.ReportStudy
 import com.created.domain.model.ReportUser
 import com.created.domain.repository.ReportRepository
 import com.created.team201.data.datasource.remote.ReportDataSource
+import javax.inject.Inject
 
-class DefaultReportRepository(
+class DefaultReportRepository @Inject constructor(
     private val reportDataSource: ReportDataSource,
 ) : ReportRepository {
     override suspend fun reportUser(reportUser: ReportUser) {
