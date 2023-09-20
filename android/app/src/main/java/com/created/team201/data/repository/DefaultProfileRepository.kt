@@ -4,8 +4,9 @@ import com.created.domain.model.UserProfile
 import com.created.domain.repository.ProfileRepository
 import com.created.team201.data.datasource.remote.ProfileDataSource
 import com.created.team201.data.mapper.toDomain
+import javax.inject.Inject
 
-class DefaultProfileRepository(
+class DefaultProfileRepository @Inject constructor(
     private val profileDataSource: ProfileDataSource,
 ) : ProfileRepository {
     override suspend fun getProfile(userId: Long): UserProfile {

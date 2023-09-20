@@ -4,8 +4,9 @@ import com.created.domain.repository.SettingRepository
 import com.created.team201.data.datasource.local.OnBoardingDataSource
 import com.created.team201.data.datasource.local.TokenDataSource
 import com.created.team201.data.datasource.remote.SettingDataSource
+import javax.inject.Inject
 
-class DefaultSettingRepository(
+class DefaultSettingRepository @Inject constructor(
     private val onBoardingDataSource: OnBoardingDataSource,
     private val settingDataSource: SettingDataSource,
     private val tokenDataSource: TokenDataSource,

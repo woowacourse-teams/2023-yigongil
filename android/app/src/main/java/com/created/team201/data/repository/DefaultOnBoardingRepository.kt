@@ -3,13 +3,13 @@ package com.created.team201.data.repository
 import com.created.domain.model.Nickname
 import com.created.domain.model.OnBoarding
 import com.created.domain.repository.OnBoardingRepository
-import com.created.team201.data.datasource.local.OnBoardingDataSource
-import com.created.team201.data.datasource.remote.OnBoardingDataSource
 import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
-class DefaultOnBoardingRepository(
+
+class DefaultOnBoardingRepository @Inject constructor(
     private val onBoardingIsDoneDataSource: com.created.team201.data.datasource.local.OnBoardingDataSource,
-    private val onBoardingDataSource: OnBoardingDataSource,
+    private val onBoardingDataSource: com.created.team201.data.datasource.remote.OnBoardingDataSource,
 ) : OnBoardingRepository {
     override suspend fun getIsOnboardingDone(): Result<Boolean> {
         return runCatching {

@@ -4,23 +4,22 @@ import android.app.DatePickerDialog
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.ReportStudy
 import com.created.domain.model.ReportUser
 import com.created.domain.repository.ReportRepository
-import com.created.team201.data.datasource.remote.ReportDataSourceImpl
-import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.DefaultReportRepository
 import com.created.team201.presentation.report.model.DateUiModel
 import com.created.team201.presentation.report.model.ReportStudyUiModel
 import com.created.team201.presentation.report.model.ReportUserUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import javax.inject.Inject
 
-class ReportViewModel(
+@HiltViewModel
+class ReportViewModel @Inject constructor(
     private val reportRepository: ReportRepository,
 ) : ViewModel() {
 
@@ -159,18 +158,6 @@ class ReportViewModel(
         private const val EMPTY_STRING = ""
         private const val NEW_LINE = "/n"
         private const val DATE_FORMAT = "%04d.%02d.%02d"
-
         private const val MONTH_CALIBRATION_VALUE = 1
-        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                val repository = DefaultReportRepository(
-                    ReportDataSourceImpl(
-                        NetworkServiceModule.reportService,
-                    ),
-                )
-                return ReportViewModel(repository) as T
-            }
-        }
     }
 }

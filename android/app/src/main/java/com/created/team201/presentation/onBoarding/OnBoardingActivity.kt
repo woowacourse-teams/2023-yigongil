@@ -16,13 +16,12 @@ import com.created.team201.presentation.main.MainActivity
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.State.FAIL
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.State.IDLE
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.State.SUCCESS
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OnBoardingActivity :
     BindingActivity<ActivityOnBoardingBinding>(R.layout.activity_on_boarding) {
-    private val viewModel: OnBoardingViewModel by viewModels {
-        OnBoardingViewModel.Factory
-    }
-
+    private val viewModel: OnBoardingViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -83,7 +82,8 @@ class OnBoardingActivity :
     companion object {
         fun getIntent(context: Context): Intent =
             Intent(context, OnBoardingActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK + Intent.FLAG_ACTIVITY_CLEAR_TASK + Intent.FLAG_ACTIVITY_CLEAR_TOP
+                flags =
+                    Intent.FLAG_ACTIVITY_NEW_TASK + Intent.FLAG_ACTIVITY_CLEAR_TASK + Intent.FLAG_ACTIVITY_CLEAR_TOP
             }
     }
 }

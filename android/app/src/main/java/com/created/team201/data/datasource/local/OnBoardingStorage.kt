@@ -4,8 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import javax.inject.Inject
 
-class OnBoardingStorage(context: Context) {
+class OnBoardingStorage @Inject constructor(context: Context) {
 
     private val masterKey: MasterKey = MasterKey.Builder(context)
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -31,15 +32,5 @@ class OnBoardingStorage(context: Context) {
 
     companion object {
         private const val FILE_NAME = "TEAM201_STORAGE_ONBOARDING"
-
-        @Volatile
-        private var instance: OnBoardingStorage? = null
-
-        fun getInstance(context: Context): OnBoardingStorage {
-            synchronized(this) {
-                instance?.let { return it }
-                return OnBoardingStorage(context).also { instance = it }
-            }
-        }
     }
 }

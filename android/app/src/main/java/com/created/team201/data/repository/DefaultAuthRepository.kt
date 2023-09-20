@@ -4,8 +4,9 @@ import com.created.domain.repository.AuthRepository
 import com.created.team201.data.datasource.local.TokenDataSource
 import com.created.team201.data.remote.api.AuthService
 import com.created.team201.data.remote.request.RenewedAccessTokenRequestDTO
+import javax.inject.Inject
 
-class DefaultAuthRepository(
+class DefaultAuthRepository @Inject constructor(
     private val authService: AuthService,
     private val tokenDataSource: TokenDataSource,
 ) : AuthRepository {

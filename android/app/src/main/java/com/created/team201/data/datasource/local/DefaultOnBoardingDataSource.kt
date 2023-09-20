@@ -1,6 +1,8 @@
 package com.created.team201.data.datasource.local
 
-class DefaultOnBoardingDataSource(
+import javax.inject.Inject
+
+class DefaultOnBoardingDataSource @Inject constructor(
     private val onBoardingStorage: OnBoardingStorage,
 ) : OnBoardingDataSource {
     override fun getOnBoardingIsDone(): Boolean {

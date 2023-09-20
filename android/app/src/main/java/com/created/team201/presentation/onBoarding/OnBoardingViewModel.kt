@@ -7,27 +7,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.model.Nickname
 import com.created.domain.model.OnBoarding
 import com.created.domain.repository.OnBoardingRepository
-import com.created.team201.application.Team201App
-import com.created.team201.data.datasource.local.DefaultOnBoardingDataSource
-import com.created.team201.data.datasource.remote.OnBoardingDataSourceImpl
-import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.DefaultOnBoardingRepository
 import com.created.team201.presentation.onBoarding.model.NicknameState
 import com.created.team201.presentation.onBoarding.model.NicknameUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
 import com.created.team201.util.addSourceList
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
+import javax.inject.Inject
 
-class OnBoardingViewModel(
+@HiltViewModel
+class OnBoardingViewModel @Inject constructor(
     private val onBoardingRepository: OnBoardingRepository,
 ) : ViewModel() {
     private val _nickname: NonNullMutableLiveData<NicknameUiModel> = NonNullMutableLiveData(
@@ -144,18 +139,5 @@ class OnBoardingViewModel(
         private val PATTERN_NICKNAME =
             Pattern.compile("^[_a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\\u318D\\u119E\\u11A2\\u2022\\u2025a\\u00B7\\uFE55]+$")
         private const val MAX_NICKNAME_LENGTH = 8
-
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                OnBoardingViewModel(
-                    DefaultOnBoardingRepository(
-                        DefaultOnBoardingDataSource(
-                            Team201App.provideOnBoardingIsDoneStorage(),
-                        ),
-                        OnBoardingDataSourceImpl(NetworkServiceModule.onBoardingService),
-                    ),
-                )
-            }
-        }
     }
 }

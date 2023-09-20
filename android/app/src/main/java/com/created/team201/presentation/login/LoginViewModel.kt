@@ -4,27 +4,17 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.repository.AuthRepository
 import com.created.domain.repository.GuestRepository
 import com.created.domain.repository.OnBoardingRepository
-import com.created.team201.application.Team201App
-import com.created.team201.data.datasource.local.DefaultOnBoardingDataSource
-import com.created.team201.data.datasource.local.DefaultTokenDataSource
-import com.created.team201.data.datasource.remote.OnBoardingDataSourceImpl
-import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.DefaultAuthRepository
-import com.created.team201.data.repository.DefaultGuestRepository
-import com.created.team201.data.repository.DefaultOnBoardingRepository
 import com.created.team201.presentation.login.LoginViewModel.State.FAIL
 import com.created.team201.presentation.login.LoginViewModel.State.SUCCESS
 import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel(
+class LoginViewModel @Inject constructor(
     private val guestRepository: GuestRepository,
     private val authRepository: AuthRepository,
     private val onBoardingRepository: OnBoardingRepository,
@@ -70,29 +60,5 @@ class LoginViewModel(
         object SUCCESS : State
         object FAIL : State
         object IDLE : State
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                LoginViewModel(
-                    DefaultGuestRepository(
-                        DefaultTokenDataSource(Team201App.provideTokenStorage()),
-                    ),
-                    DefaultAuthRepository(
-                        NetworkServiceModule.authService,
-                        DefaultTokenDataSource(Team201App.provideTokenStorage()),
-                    ),
-                    DefaultOnBoardingRepository(
-                        DefaultOnBoardingDataSource(
-                            Team201App.provideOnBoardingIsDoneStorage(),
-                        ),
-                        OnBoardingDataSourceImpl(
-                            NetworkServiceModule.onBoardingService,
-                        ),
-                    ),
-                )
-            }
-        }
     }
 }
