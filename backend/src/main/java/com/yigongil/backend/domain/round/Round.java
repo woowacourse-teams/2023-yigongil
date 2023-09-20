@@ -147,6 +147,10 @@ public class Round extends BaseEntity {
         return (int) Math.round(averageTier);
     }
 
+    public void completeRound(Member member) {
+        findRoundOfMemberBy(member).completeRound();
+    }
+
     public void addMember(Member member) {
         RoundOfMember roundOfMember = RoundOfMember.builder()
                                                    .member(member)
