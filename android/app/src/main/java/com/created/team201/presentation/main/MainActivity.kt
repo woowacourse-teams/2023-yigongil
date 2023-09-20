@@ -26,7 +26,9 @@ import com.created.team201.presentation.main.MainActivity.FragmentType.MY_PAGE
 import com.created.team201.presentation.main.MainActivity.FragmentType.STUDY_LIST
 import com.created.team201.presentation.myPage.MyPageFragment
 import com.created.team201.presentation.studyList.StudyListFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val mainViewModel: MainViewModel by viewModels {
         MainViewModel.Factory

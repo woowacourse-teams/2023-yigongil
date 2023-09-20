@@ -1,7 +1,7 @@
 package com.created.team201.data.datasource.remote
 
-import com.created.domain.model.ProfileInformation
 import com.created.domain.model.Nickname
+import com.created.domain.model.ProfileInformation
 import com.created.team201.data.mapper.toRequestDto
 import com.created.team201.data.remote.api.MyPageService
 import com.created.team201.data.remote.response.MyPageResponseDto

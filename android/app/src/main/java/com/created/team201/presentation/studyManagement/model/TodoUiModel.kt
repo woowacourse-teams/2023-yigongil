@@ -1,4 +1,4 @@
-package com.created.team201.presentation.home.model
+package com.created.team201.presentation.studyManagement.model
 
 data class TodoUiModel(
     val todoId: Long,
