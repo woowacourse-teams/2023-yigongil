@@ -1,10 +1,11 @@
 package com.created.team201.data.di
 
 import android.util.Log
+import com.created.domain.repository.AuthRepository
 import com.created.team201.BuildConfig.TEAM201_BASE_URL
-import com.created.team201.application.Team201App
 import com.created.team201.data.di.qualifier.AuthRetrofit
 import com.created.team201.data.di.qualifier.DefaultRetrofit
+import com.created.team201.data.remote.interceptor.AuthInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -31,6 +32,10 @@ object NetworkModule2 {
             Log.d(TAG_HTTP_LOG, message)
         }.apply { setLevel(HttpLoggingInterceptor.Level.BODY) }
 
+    @Singleton
+    @Provides
+    fun provideAuthInterceptor(authRepository: AuthRepository): AuthInterceptor =
+        AuthInterceptor(authRepository)
 
     @Singleton
     @Provides
@@ -51,11 +56,12 @@ object NetworkModule2 {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder().apply {
-        connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
-        writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
-        readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
-        addInterceptor(loggingInterceptor)
-        addInterceptor(Team201App.provideAuthInterceptor())
-    }.build()
+    fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient =
+        OkHttpClient.Builder().apply {
+            connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+            writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
+            readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
+            addInterceptor(loggingInterceptor)
+            addInterceptor(authInterceptor)
+        }.build()
 }
