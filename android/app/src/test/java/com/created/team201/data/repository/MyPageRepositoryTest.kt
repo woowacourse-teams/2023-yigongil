@@ -2,7 +2,6 @@ package com.created.team201.data.repository
 
 import com.created.domain.repository.MyPageRepository
 import com.created.team201.data.MockServiceModule
-import com.created.team201.data.datasource.remote.MyPageDataSourceImpl
 import com.created.team201.data.remote.api.MyPageService
 import com.created.team201.presentation.myPage.MyPageFixture
 import junit.framework.TestCase.assertEquals
@@ -14,7 +13,7 @@ class MyPageRepositoryTest {
     private val service: MyPageService = MockServiceModule.myPageService
 
     private val repository: MyPageRepository =
-        DefaultMyPageRepository(MyPageDataSourceImpl(service))
+        DefaultMyPageRepository(service)
 
     @ExperimentalCoroutinesApi
     @Test

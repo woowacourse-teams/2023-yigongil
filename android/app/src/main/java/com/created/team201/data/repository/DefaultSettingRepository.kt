@@ -3,12 +3,12 @@ package com.created.team201.data.repository
 import com.created.domain.repository.SettingRepository
 import com.created.team201.data.datasource.local.OnBoardingDataSource
 import com.created.team201.data.datasource.local.TokenDataSource
-import com.created.team201.data.datasource.remote.SettingDataSource
+import com.created.team201.data.remote.api.SettingService
 import javax.inject.Inject
 
 class DefaultSettingRepository @Inject constructor(
     private val onBoardingDataSource: OnBoardingDataSource,
-    private val settingDataSource: SettingDataSource,
+    private val settingService: SettingService,
     private val tokenDataSource: TokenDataSource,
 ) : SettingRepository {
     override fun logout() {
@@ -17,7 +17,7 @@ class DefaultSettingRepository @Inject constructor(
 
     override suspend fun requestWithdrawAccount(): Result<Unit> {
         return runCatching {
-            settingDataSource.requestWithdrawAccount()
+            settingService.requestWithdrawAccount()
             tokenDataSource.setAccessToken("")
             onBoardingDataSource.setOnBoardingIsDone(false)
         }

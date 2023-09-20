@@ -2,7 +2,6 @@ package com.created.team201.data.repository
 
 import com.created.domain.repository.UpdateStudyRepository
 import com.created.team201.data.MockServiceModule
-import com.created.team201.data.datasource.remote.UpdateStudyDataSourceImpl
 import com.created.team201.data.remote.api.UpdateStudyService
 import com.created.team201.presentation.updateStudy.UpdateStudyFixture
 import junit.framework.TestCase.assertEquals
@@ -14,7 +13,7 @@ class UpdateStudyRepositoryTest {
     private val service: UpdateStudyService = MockServiceModule.updateStudyService
 
     private val repository: UpdateStudyRepository =
-        DefaultUpdateStudyRepository(UpdateStudyDataSourceImpl(service))
+        DefaultUpdateStudyRepository(service)
 
     @ExperimentalCoroutinesApi
     @Test

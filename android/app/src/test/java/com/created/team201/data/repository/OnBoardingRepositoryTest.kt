@@ -3,7 +3,6 @@ package com.created.team201.data.repository
 import com.created.domain.repository.OnBoardingRepository
 import com.created.team201.data.MockServiceModule
 import com.created.team201.data.datasource.local.OnBoardingDataSource
-import com.created.team201.data.datasource.remote.OnBoardingDataSourceImpl
 import com.created.team201.data.remote.api.OnBoardingService
 import com.created.team201.presentation.onBoarding.OnBoardingFixture
 import io.mockk.every
@@ -26,8 +25,8 @@ class OnBoardingRepositoryTest {
         onBoardingDataSource = mockk()
         repository =
             DefaultOnBoardingRepository(
-                onBoardingIsDoneDataSource = onBoardingDataSource,
-                onBoardingDataSource = OnBoardingDataSourceImpl(service)
+                onBoardingDataSource = onBoardingDataSource,
+                onBoardingService = service
             )
     }
 
