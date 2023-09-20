@@ -21,7 +21,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule2 {
+object NetworkModule {
     private const val CONTENT_TYPE = "application/json"
     private const val CONNECT_TIMEOUT = 15L
     private const val WRITE_TIMEOUT = 15L
