@@ -1,6 +1,6 @@
-package com.created.team201.presentation.home.model
+package com.created.team201.presentation.home.uiState
 
-data class UserStudy(
+data class UserStudyUiState(
     val studyId: Int,
     val isMaster: Boolean,
     val studyName: String,

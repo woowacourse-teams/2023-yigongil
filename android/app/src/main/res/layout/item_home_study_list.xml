@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.created.team201.presentation.home.model.UserStudy" />
+            type="com.created.team201.presentation.home.uiState.UserStudyUiState" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,7 +41,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    app:isVisible="@{item.isMaster}"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_home_study_list_study_name"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tv_home_study_list_study_name"

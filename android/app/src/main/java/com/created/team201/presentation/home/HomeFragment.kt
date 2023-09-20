@@ -7,11 +7,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.created.team201.R
+import com.created.team201.data.mapper.toUserStudyUiState
 import com.created.team201.databinding.FragmentHomeBinding
 import com.created.team201.presentation.common.BindingFragment
+import com.created.team201.presentation.home.HomeViewModel.HomeUiState.FAIL
+import com.created.team201.presentation.home.HomeViewModel.HomeUiState.IDLE
+import com.created.team201.presentation.home.HomeViewModel.HomeUiState.SUCCESS
 import com.created.team201.presentation.home.adapter.HomeAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -24,24 +27,28 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         super.onViewCreated(view, savedInstanceState)
 
         setupAdapter()
+        collectUiState()
+    }
 
+    private fun collectUiState() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.uiState.collectLatest { uiState ->
+                    when (uiState) {
+                        is SUCCESS -> homeAdapter.submitList(uiState.homeStudies.toUserStudyUiState())
+                        is FAIL -> {
+                            // 에러처리
+                        }
+
+                        is IDLE -> throw IllegalStateException()
+                    }
+                }
+            }
+        }
     }
 
     private fun setupAdapter() {
         binding.rvHome.adapter = homeAdapter
         binding.rvHome.setHasFixedSize(true)
-    }
-
-    private inline fun <T> collectWithLifecycle(
-        flow: Flow<T>,
-        crossinline action: (T) -> Unit,
-    ) {
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                flow.collectLatest { value ->
-                    action(value)
-                }
-            }
-        }
     }
 }
