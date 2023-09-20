@@ -1,5 +1,7 @@
 package com.created.team201.data.di
 
+import com.created.team201.data.di.qualifier.AuthRetrofit
+import com.created.team201.data.di.qualifier.DefaultRetrofit
 import com.created.team201.data.remote.api.AuthService
 import com.created.team201.data.remote.api.HomeService
 import com.created.team201.data.remote.api.MyPageService
@@ -23,53 +25,53 @@ object ServiceModule {
 
     @Singleton
     @Provides
-    fun provideOnBoardingService(retrofit: Retrofit): OnBoardingService =
+    fun provideOnBoardingService(@AuthRetrofit retrofit: Retrofit): OnBoardingService =
         retrofit.create(OnBoardingService::class.java)
 
 
     @Singleton
     @Provides
-    fun provideStudyListService(retrofit: Retrofit): StudyListService =
+    fun provideStudyListService(@AuthRetrofit retrofit: Retrofit): StudyListService =
         retrofit.create(StudyListService::class.java)
 
     @Singleton
     @Provides
-    fun provideUpdateStudyService(retrofit: Retrofit): UpdateStudyService =
+    fun provideUpdateStudyService(@AuthRetrofit retrofit: Retrofit): UpdateStudyService =
         retrofit.create(UpdateStudyService::class.java)
 
     @Singleton
     @Provides
-    fun provideHomeService(retrofit: Retrofit): HomeService =
+    fun provideHomeService(@AuthRetrofit retrofit: Retrofit): HomeService =
         retrofit.create(HomeService::class.java)
 
     @Singleton
     @Provides
-    fun provideMyPageService(retrofit: Retrofit): MyPageService =
+    fun provideMyPageService(@AuthRetrofit retrofit: Retrofit): MyPageService =
         retrofit.create(MyPageService::class.java)
 
     @Singleton
     @Provides
-    fun provideStudyDetailService(retrofit: Retrofit): StudyDetailService =
+    fun provideStudyDetailService(@AuthRetrofit retrofit: Retrofit): StudyDetailService =
         retrofit.create(StudyDetailService::class.java)
 
     @Singleton
     @Provides
-    fun provideProfileService(retrofit: Retrofit): ProfileService =
+    fun provideProfileService(@AuthRetrofit retrofit: Retrofit): ProfileService =
         retrofit.create(ProfileService::class.java)
 
     @Singleton
     @Provides
-    fun provideAuthService(retrofit: Retrofit): AuthService =
+    fun provideAuthService(@DefaultRetrofit retrofit: Retrofit): AuthService =
         retrofit.create(AuthService::class.java)
 
     @Singleton
     @Provides
-    fun provideReportService(retrofit: Retrofit): ReportService =
+    fun provideReportService(@AuthRetrofit retrofit: Retrofit): ReportService =
         retrofit.create(ReportService::class.java)
 
 
     @Singleton
     @Provides
-    fun provideSettingService(retrofit: Retrofit): SettingService =
+    fun provideSettingService(@AuthRetrofit retrofit: Retrofit): SettingService =
         retrofit.create(SettingService::class.java)
 }

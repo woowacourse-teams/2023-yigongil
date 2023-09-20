@@ -11,9 +11,11 @@ import com.created.domain.repository.OnBoardingRepository
 import com.created.team201.presentation.login.LoginViewModel.State.FAIL
 import com.created.team201.presentation.login.LoginViewModel.State.SUCCESS
 import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class LoginViewModel @Inject constructor(
     private val guestRepository: GuestRepository,
     private val authRepository: AuthRepository,
