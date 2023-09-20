@@ -1,6 +1,8 @@
 package com.created.team201.data.datasource.local
 
-class DefaultTokenDataSource(
+import javax.inject.Inject
+
+class DefaultTokenDataSource @Inject constructor(
     private val tokenStorage: TokenStorage,
 ) : TokenDataSource {
     override fun getIsGuest(): Boolean {

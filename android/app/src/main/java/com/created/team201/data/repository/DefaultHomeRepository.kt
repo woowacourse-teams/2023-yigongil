@@ -6,6 +6,4 @@ import javax.inject.Inject
 
 class DefaultHomeRepository @Inject constructor(
     private val homeService: HomeService,
-) : HomeRepository {
-
-}
+) : HomeRepository
