@@ -10,7 +10,6 @@ import com.created.team201.data.remote.interceptor.AuthInterceptor
 import com.created.team201.data.repository.AuthRepositoryImpl
 import dagger.hilt.android.HiltAndroidApp
 
-@HiltAndroidApp
 class Team201App : Application() {
 
     init {

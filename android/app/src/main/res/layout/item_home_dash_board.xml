@@ -5,10 +5,6 @@
 
     <data>
 
-        <variable
-            name="item"
-            type="com.created.team201.presentation.home.model.HomeViewState.DashBoard" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,7 +45,7 @@
                 android:layout_marginEnd="20dp"
                 android:textAppearance="@style/title_sb22"
                 android:textColor="@color/white"
-                android:text="@{@string/home_dash_board_d_day(item.dDay)}"
+
                 app:layout_constraintBottom_toBottomOf="@+id/tv_home_dash_board_next_study"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tv_home_dash_board_next_study"
@@ -95,7 +91,7 @@
                 android:layout_marginEnd="20dp"
                 android:textAppearance="@style/text_r14"
                 android:textColor="@color/white"
-                android:text="@{item.mustDo}"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view_home_dash_board_border_second"
