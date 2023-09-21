@@ -34,7 +34,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         binding.vm = homeViewModel
     }
 
-    private fun navigateToThreadActivity(studyId: Int) {
+    private fun navigateToThreadActivity(studyId: Long) {
         startActivity(ThreadActivity.getIntent(requireContext(), studyId))
     }
 
