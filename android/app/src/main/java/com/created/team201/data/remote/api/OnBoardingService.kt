@@ -9,14 +9,14 @@ import retrofit2.http.PATCH
 import retrofit2.http.Query
 
 interface OnBoardingService {
-    @GET("/v1/members/check-onboarding-is-done")
+    @GET("v1/members/check-onboarding-is-done")
     suspend fun getIsOnboardingDone(): IsOnBoardingDoneResponseDto
 
-    @GET("/v1/members/exists?")
+    @GET("v1/members/exists?")
     suspend fun getAvailableNickname(
         @Query("nickname") nickname: String,
     ): NicknameResponseDto
 
-    @PATCH("/v1/members")
+    @PATCH("v1/members")
     suspend fun patchOnBoarding(@Body onBoardingRequestDto: OnBoardingRequestDto)
 }
