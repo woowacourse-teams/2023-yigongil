@@ -9,22 +9,30 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
+import androidx.fragment.app.commit
+import com.created.domain.model.Role
 import com.created.team201.R
 import com.created.team201.databinding.ActivityStudyDetailBinding
 import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.guest.GuestViewModel
+import com.created.team201.presentation.guest.bottomSheet.LoginBottomSheetFragment
 import com.created.team201.presentation.profile.ProfileActivity
 import com.created.team201.presentation.report.ReportActivity
 import com.created.team201.presentation.report.model.ReportCategory
+import com.created.team201.presentation.studyDetail.StudyDetailState.Guest
 import com.created.team201.presentation.studyDetail.StudyDetailState.Master
 import com.created.team201.presentation.studyDetail.adapter.StudyParticipantsAdapter
 import com.created.team201.presentation.studyDetail.model.PeriodFormat
 import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
 import com.created.team201.presentation.updateStudy.UpdateStudyActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StudyDetailActivity :
     BindingActivity<ActivityStudyDetailBinding>(R.layout.activity_study_detail),
     StudyMemberClickListener {
-    private val studyDetailViewModel: StudyDetailViewModel by viewModels { StudyDetailViewModel.Factory }
+    private val studyDetailViewModel: StudyDetailViewModel by viewModels()
+    private val guestViewModel: GuestViewModel by viewModels()
     private val studyId: Long by lazy { intent.getLongExtra(KEY_STUDY_ID, NON_EXISTENCE_STUDY_ID) }
     private val studyPeopleAdapter by lazy { StudyParticipantsAdapter(this) }
 
@@ -37,6 +45,7 @@ class StudyDetailActivity :
         validateStudyId()
         initStudyParticipantsList()
         initStudyDetailInformation()
+        observeGuestState()
         observeStudyDetailParticipants()
         observeStartStudy()
         observeCanStartStudy()
@@ -47,8 +56,10 @@ class StudyDetailActivity :
 
     private fun setClickEventOnSub() {
         binding.btnStudyDetailSub.setOnClickListener {
-            if (studyDetailViewModel.state.value is Master) {
-                navigateToEditStudyView()
+            when (studyDetailViewModel.state.value) {
+                is Master -> navigateToEditStudyView()
+                is Guest -> showLoginBottomSheetDialog()
+                else -> Unit
             }
         }
     }
@@ -111,10 +122,23 @@ class StudyDetailActivity :
             }
 
             R.id.menu_study_detail_report -> {
-                startActivity(ReportActivity.getIntent(this, ReportCategory.STUDY, studyId))
+                when (studyDetailViewModel.state.value) {
+                    is Guest -> showLoginBottomSheetDialog()
+                    else ->
+                        startActivity(ReportActivity.getIntent(this, ReportCategory.STUDY, studyId))
+                }
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun observeGuestState() {
+        guestViewModel.refreshState.observe(this) { signUpGuestState ->
+            when (signUpGuestState) {
+                true -> studyDetailViewModel.refresh(studyId)
+                false -> Unit
+            }
+        }
     }
 
     private fun observeStudyDetailParticipants() {
@@ -130,9 +154,12 @@ class StudyDetailActivity :
         return getString(stringRes, periodOfCount.dropLast(STRING_LAST_INDEX).toInt())
     }
 
-    fun initMainButtonOnClick(isMaster: Boolean) {
-        if (isMaster) return onMasterClickMainButton()
-        return onNothingClickMainButton()
+    fun initMainButtonOnClick(role: Role) {
+        when (role) {
+            Role.MASTER -> onMasterClickMainButton()
+            Role.GUEST -> showLoginBottomSheetDialog()
+            else -> onNothingClickMainButton()
+        }
     }
 
     private fun onMasterClickMainButton() {
@@ -141,6 +168,22 @@ class StudyDetailActivity :
 
     private fun onNothingClickMainButton() {
         studyDetailViewModel.participateStudy(studyId)
+    }
+
+    private fun showLoginBottomSheetDialog() {
+        removeAllFragment()
+        LoginBottomSheetFragment().show(
+            supportFragmentManager,
+            LoginBottomSheetFragment.TAG_LOGIN_BOTTOM_SHEET
+        )
+    }
+
+    private fun removeAllFragment() {
+        supportFragmentManager.fragments.forEach {
+            supportFragmentManager.commit {
+                remove(it)
+            }
+        }
     }
 
     override fun onAcceptApplicantClick(memberId: Long) {
@@ -152,6 +195,11 @@ class StudyDetailActivity :
     }
 
     override fun onUserClick(memberId: Long) {
+        if (studyDetailViewModel.state.value is Guest) {
+            startActivity(ProfileActivity.getIntent(this, memberId))
+            return
+        }
+
         if (studyDetailViewModel.myProfile.id == memberId) {
             return
         }
@@ -172,7 +220,13 @@ class StudyDetailActivity :
     }
 
     private fun observeStartStudy() {
-        studyDetailViewModel.isStartStudy.observe(this) { _ ->
+        studyDetailViewModel.isStartStudy.observe(this) { isStartStudy ->
+            when (isStartStudy) {
+                true -> finish()
+                false -> Unit
+            }
+            studyDetailViewModel.isStartStudy.observe(this) { _ ->
+            }
         }
     }
 

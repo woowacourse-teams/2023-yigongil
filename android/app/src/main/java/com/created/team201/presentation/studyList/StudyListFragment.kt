@@ -23,17 +23,14 @@ import com.created.team201.presentation.studyList.model.StudyStatus
 import com.created.team201.presentation.updateStudy.UpdateStudyActivity
 import com.created.team201.util.FirebaseLogUtil
 import com.created.team201.util.FirebaseLogUtil.SCREEN_STUDY_LIST
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fragment_study_list) {
 
-    private val studyListViewModel: StudyListViewModel by activityViewModels {
-        StudyListViewModel.Factory
-    }
-
-    private val mainViewModel: MainViewModel by activityViewModels {
-        MainViewModel.Factory
-    }
+    private val studyListViewModel: StudyListViewModel by activityViewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private val studyListAdapter: StudyListAdapter by lazy {
         StudyListAdapter(studyListClickListener())

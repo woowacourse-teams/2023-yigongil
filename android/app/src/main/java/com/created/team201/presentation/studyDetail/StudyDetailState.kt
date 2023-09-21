@@ -54,4 +54,16 @@ sealed class StudyDetailState(
             subButtonSrc = R.drawable.ic_dm,
             mainButtonIsEnabled = !isFullMember,
         )
+
+    data class Guest(private val isFullMember: Boolean) : StudyDetailState(
+        appBarTitle = R.string.study_detail_app_bar_title,
+        mainButtonText = if (isFullMember) {
+            R.string.study_detail_notify_cant_participant
+        } else {
+            R.string.study_detail_study_capacity
+        },
+        mainButtonTextColor = R.color.white,
+        subButtonSrc = R.drawable.ic_info,
+        mainButtonIsEnabled = !isFullMember,
+    )
 }

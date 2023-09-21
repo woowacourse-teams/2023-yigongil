@@ -3,26 +3,23 @@ package com.created.team201.presentation.studyList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.RecyclerView
 import com.created.domain.model.Page
 import com.created.domain.model.Period
 import com.created.domain.model.StudySummary
 import com.created.domain.repository.StudyListRepository
-import com.created.team201.data.datasource.remote.StudyListDataSourceImpl
-import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.StudyListRepositoryImpl
 import com.created.team201.presentation.studyList.model.PeriodUiModel
 import com.created.team201.presentation.studyList.model.StudyStatus
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class StudyListViewModel(
+@HiltViewModel
+class StudyListViewModel @Inject constructor(
     private val studyListRepository: StudyListRepository,
 ) : ViewModel() {
 
@@ -148,17 +145,4 @@ class StudyListViewModel(
     private fun Period.toUiModel(): PeriodUiModel =
         PeriodUiModel(date, unit)
 
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                StudyListViewModel(
-                    StudyListRepositoryImpl(
-                        StudyListDataSourceImpl(
-                            NetworkServiceModule.studyListService,
-                        ),
-                    ),
-                )
-            }
-        }
-    }
 }

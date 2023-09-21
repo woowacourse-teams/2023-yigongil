@@ -12,10 +12,12 @@ import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
 import com.created.team201.presentation.splash.SplashViewModel.State.FAIL
 import com.created.team201.presentation.splash.SplashViewModel.State.IDLE
 import com.created.team201.presentation.splash.SplashViewModel.State.SUCCESS
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_splash) {
-    private val splashViewModel by viewModels<SplashViewModel> { SplashViewModel.Factory }
+    private val splashViewModel: SplashViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
