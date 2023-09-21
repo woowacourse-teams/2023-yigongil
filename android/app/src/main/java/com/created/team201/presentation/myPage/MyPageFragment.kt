@@ -16,11 +16,11 @@ import com.created.team201.presentation.myPage.model.ProfileType
 import com.created.team201.presentation.setting.SettingActivity
 import com.created.team201.util.FirebaseLogUtil
 import com.created.team201.util.FirebaseLogUtil.SCREEN_MY_PAGE
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
-    private val myPageViewModel: MyPageViewModel by viewModels {
-        MyPageViewModel.Factory
-    }
+    private val myPageViewModel: MyPageViewModel by viewModels()
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)

@@ -3,25 +3,18 @@ package com.created.team201.presentation.splash
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.repository.AuthRepository
 import com.created.domain.repository.OnBoardingRepository
-import com.created.team201.application.Team201App
-import com.created.team201.data.datasource.local.OnBoardingIsDoneDataSourceImpl
-import com.created.team201.data.datasource.local.TokenDataSourceImpl
-import com.created.team201.data.datasource.remote.OnBoardingDataSourceImpl
-import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.AuthRepositoryImpl
-import com.created.team201.data.repository.OnBoardingRepositoryImpl
 import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
 import com.created.team201.presentation.splash.SplashViewModel.State.FAIL
 import com.created.team201.presentation.splash.SplashViewModel.State.SUCCESS
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SplashViewModel(
+@HiltViewModel
+class SplashViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val onBoardingRepository: OnBoardingRepository,
 ) : ViewModel() {
@@ -62,26 +55,5 @@ class SplashViewModel(
         object SUCCESS : State
         object FAIL : State
         object IDLE : State
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SplashViewModel(
-                    AuthRepositoryImpl(
-                        NetworkServiceModule.authService,
-                        TokenDataSourceImpl(Team201App.provideTokenStorage()),
-                    ),
-                    OnBoardingRepositoryImpl(
-                        OnBoardingIsDoneDataSourceImpl(
-                            Team201App.provideOnBoardingIsDoneStorage(),
-                        ),
-                        OnBoardingDataSourceImpl(
-                            NetworkServiceModule.onBoardingService,
-                        ),
-                    ),
-                )
-            }
-        }
     }
 }

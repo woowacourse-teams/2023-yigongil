@@ -24,13 +24,14 @@ import com.created.team201.presentation.studyDetail.adapter.StudyParticipantsAda
 import com.created.team201.presentation.studyDetail.model.PeriodFormat
 import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
 import com.created.team201.presentation.updateStudy.UpdateStudyActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class StudyDetailActivity :
     BindingActivity<ActivityStudyDetailBinding>(R.layout.activity_study_detail),
     StudyMemberClickListener {
-    private val studyDetailViewModel: StudyDetailViewModel by viewModels { StudyDetailViewModel.Factory }
-    private val guestViewModel: GuestViewModel by viewModels { GuestViewModel.Factory }
-
+    private val studyDetailViewModel: StudyDetailViewModel by viewModels()
+    private val guestViewModel: GuestViewModel by viewModels()
     private val studyId: Long by lazy { intent.getLongExtra(KEY_STUDY_ID, NON_EXISTENCE_STUDY_ID) }
     private val studyPeopleAdapter by lazy { StudyParticipantsAdapter(this) }
 

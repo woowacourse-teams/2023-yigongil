@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.created.team201.presentation.home.model.UserStudy" />
+            type="com.created.domain.model.UserStudy" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,7 +41,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    app:isVisible="@{item.isMaster}"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_home_study_list_study_name"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tv_home_study_list_study_name"
@@ -58,7 +57,7 @@
                     android:ellipsize="end"
                     android:ems="7"
                     android:maxLines="1"
-                    android:text="@{item.studyName}"
+                    android:text="@{item.name}"
                     android:textAppearance="@style/name_sb20"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"

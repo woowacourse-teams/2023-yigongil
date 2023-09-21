@@ -3,10 +3,7 @@ package com.created.team201.presentation.profile
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.model.FinishedStudy
 import com.created.domain.model.Nickname
 import com.created.domain.model.Period
@@ -15,21 +12,18 @@ import com.created.domain.model.ProfileInformation
 import com.created.domain.model.UserProfile
 import com.created.domain.repository.GuestRepository
 import com.created.domain.repository.ProfileRepository
-import com.created.team201.application.Team201App
-import com.created.team201.data.datasource.local.TokenDataSourceImpl
-import com.created.team201.data.datasource.remote.ProfileDataSourceImpl
-import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.GuestRepositoryImpl
-import com.created.team201.data.repository.ProfileRepositoryImpl
 import com.created.team201.presentation.myPage.model.ProfileInformationUiModel
 import com.created.team201.presentation.myPage.model.ProfileUiModel
 import com.created.team201.presentation.onBoarding.model.NicknameUiModel
 import com.created.team201.presentation.profile.model.FinishedStudyUiModel
 import com.created.team201.presentation.profile.model.UserProfileUiModel
 import com.created.team201.presentation.studyList.model.PeriodUiModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ProfileViewModel(
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val guestRepository: GuestRepository,
 ) : ViewModel() {
@@ -87,19 +81,4 @@ class ProfileViewModel(
     )
 
     private fun Period.toUiModel(): PeriodUiModel = PeriodUiModel(number = date, unit = unit)
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                ProfileViewModel(
-                    profileRepository = ProfileRepositoryImpl(
-                        ProfileDataSourceImpl(NetworkServiceModule.profileService),
-                    ),
-                    guestRepository = GuestRepositoryImpl(
-                        TokenDataSourceImpl(Team201App.provideTokenStorage())
-                    ),
-                )
-            }
-        }
-    }
 }

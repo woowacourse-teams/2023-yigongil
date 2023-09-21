@@ -2,10 +2,7 @@ package com.created.team201.presentation.studyDetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.model.Nickname
 import com.created.domain.model.Profile
 import com.created.domain.model.ProfileInformation
@@ -13,12 +10,6 @@ import com.created.domain.model.Role
 import com.created.domain.model.StudyDetail
 import com.created.domain.repository.GuestRepository
 import com.created.domain.repository.StudyDetailRepository
-import com.created.team201.application.Team201App
-import com.created.team201.data.datasource.local.TokenDataSourceImpl
-import com.created.team201.data.datasource.remote.StudyDetailDataSourceImpl
-import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.GuestRepositoryImpl
-import com.created.team201.data.repository.StudyDetailRepositoryImpl
 import com.created.team201.presentation.myPage.model.ProfileInformationUiModel
 import com.created.team201.presentation.myPage.model.ProfileUiModel
 import com.created.team201.presentation.onBoarding.model.NicknameUiModel
@@ -27,9 +18,12 @@ import com.created.team201.presentation.studyDetail.model.StudyMemberUIModel
 import com.created.team201.presentation.studyDetail.model.StudyMemberUIModel.Companion.toUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class StudyDetailViewModel private constructor(
+@HiltViewModel
+class StudyDetailViewModel @Inject constructor(
     private val studyDetailRepository: StudyDetailRepository,
     private val guestRepository: GuestRepository,
 ) : ViewModel() {
@@ -74,7 +68,6 @@ class StudyDetailViewModel private constructor(
     }
 
     fun fetchStudyDetail(studyId: Long, notifyInvalidStudy: () -> Unit) {
-        // isGuest
         viewModelScope.launch {
             runCatching {
                 studyDetailRepository.getStudyDetail(studyId)
@@ -216,20 +209,4 @@ class StudyDetailViewModel private constructor(
     private fun Nickname.toUiModel(): NicknameUiModel = NicknameUiModel(
         nickname = nickname
     )
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val studyDetailRepository = StudyDetailRepositoryImpl(
-                    studyDetailDataSource = StudyDetailDataSourceImpl(
-                        NetworkServiceModule.studyDetailService,
-                    ),
-                )
-                val guestRepository = GuestRepositoryImpl(
-                    tokenDataSource = TokenDataSourceImpl(Team201App.provideTokenStorage())
-                )
-                StudyDetailViewModel(studyDetailRepository, guestRepository)
-            }
-        }
-    }
 }

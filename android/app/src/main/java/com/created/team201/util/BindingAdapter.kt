@@ -4,6 +4,8 @@ import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.created.team201.presentation.home.HomeViewModel.*
+import com.created.team201.presentation.home.HomeViewModel.UserStudyState.*
 
 object BindingAdapter {
 
@@ -23,12 +25,6 @@ object BindingAdapter {
             true -> view.visibility = View.GONE
             false -> view.visibility = View.VISIBLE
         }
-    }
-
-    @JvmStatic
-    @BindingAdapter("isSelected")
-    fun isSelected(view: View, isSelected: Boolean) {
-        view.isSelected = isSelected
     }
 
     @JvmStatic
@@ -52,6 +48,15 @@ object BindingAdapter {
             Glide.with(imageview.context)
                 .load(it)
                 .into(imageview)
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("hasStudy")
+    fun setVisibleOfHome(view: View, userStudyState: UserStudyState?) {
+        when (userStudyState is UserStudyState.Nothing) {
+            true -> view.visibility = View.VISIBLE
+            false -> view.visibility = View.GONE
         }
     }
 }
