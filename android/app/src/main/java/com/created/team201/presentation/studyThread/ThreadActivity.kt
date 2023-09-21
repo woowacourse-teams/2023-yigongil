@@ -42,7 +42,7 @@ class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_
     companion object {
         private const val STUDY_ID = "STUDY_ID"
 
-        fun getIntent(context: Context, studyId: Int): Intent =
+        fun getIntent(context: Context, studyId: Long): Intent =
             Intent(context, ThreadActivity::class.java).apply {
                 putExtra(STUDY_ID, studyId)
             }
