@@ -15,6 +15,12 @@ class DefaultStudyDetailRepository @Inject constructor(
         return studyDetailService.getStudyDetail(studyId).toDomain()
     }
 
+    override suspend fun getStudyMemberRole(studyId: Long): Result<Int> {
+        return runCatching {
+            studyDetailService.getStudyMemberRole(studyId).role
+        }
+    }
+
     override suspend fun participateStudy(studyId: Long) {
         studyDetailService.participateStudy(studyId)
     }

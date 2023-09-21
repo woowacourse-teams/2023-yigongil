@@ -1,7 +1,6 @@
 package com.created.team201.data.mapper
 
 import com.created.domain.model.Member
-import com.created.domain.model.Role
 import com.created.domain.model.Round
 import com.created.domain.model.StudyDetail
 import com.created.team201.data.remote.response.MemberResponseDto
@@ -15,10 +14,9 @@ fun StudyDetailResponseDto.toDomain(): StudyDetail = StudyDetail(
     numberOfCurrentMembers = this.numberOfCurrentMembers,
     numberOfMaximumMembers = this.numberOfMaximumMembers,
     studyMasterId = this.studyMasterId,
-    role = Role.valueOf(this.role),
-    startAt = this.startAt,
+    startDate = this.startAt,
     totalRoundCount = this.totalRoundCount,
-    periodOfRound = this.periodOfRound,
+    cycle = this.periodOfRound,
     currentRound = this.currentRound,
     introduction = this.introduction,
     members = this.members.map { it.toDomain() },

@@ -76,8 +76,8 @@ class UpdateStudyViewModel @Inject constructor(
                     _name.value = it.name
                     _content.value = it.introduction
                     _peopleCount.value = it.numberOfMaximumMembers
-                    _startDate.value = it.startAt
-                    _cycle.value = cycle.value.copy(date = getPeriod(it.periodOfRound))
+                    _startDate.value = it.startDate
+                    _cycle.value = cycle.value.copy(date = getPeriod(it.cycle))
                     _period.value = it.totalRoundCount
                 }
         }

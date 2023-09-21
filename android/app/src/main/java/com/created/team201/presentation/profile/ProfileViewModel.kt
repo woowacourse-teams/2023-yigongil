@@ -10,6 +10,7 @@ import com.created.domain.model.Period
 import com.created.domain.model.Profile
 import com.created.domain.model.ProfileInformation
 import com.created.domain.model.UserProfile
+import com.created.domain.repository.GuestRepository
 import com.created.domain.repository.ProfileRepository
 import com.created.team201.presentation.myPage.model.ProfileInformationUiModel
 import com.created.team201.presentation.myPage.model.ProfileUiModel
@@ -24,9 +25,12 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
+    private val guestRepository: GuestRepository,
 ) : ViewModel() {
     private val _profile: MutableLiveData<UserProfileUiModel> = MutableLiveData()
     val profile: LiveData<UserProfileUiModel> get() = _profile
+
+    val isGuest: Boolean get() = guestRepository.getIsGuest()
 
     fun initProfile(userId: Long) {
         viewModelScope.launch {
