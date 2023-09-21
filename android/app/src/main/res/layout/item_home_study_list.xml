@@ -8,6 +8,10 @@
         <variable
             name="item"
             type="com.created.domain.model.UserStudy" />
+
+        <variable
+            name="onClick"
+            type="kotlin.jvm.functions.Function1" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,6 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_rectangle_radius_10dp_top"
+                android:onClick="@{() -> onClick.invoke(item.studyId)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -41,6 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    app:isMaster="@{item.isMaster}"
                     app:layout_constraintBottom_toBottomOf="@+id/tv_home_study_list_study_name"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tv_home_study_list_study_name"
@@ -57,7 +63,7 @@
                     android:ellipsize="end"
                     android:ems="7"
                     android:maxLines="1"
-                    android:text="@{item.name}"
+                    android:text="@{item.studyName}"
                     android:textAppearance="@style/name_sb20"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -95,6 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
+                android:text="@{@string/home_study_list_date(item.leftDays)}"
                 android:textAppearance="@style/text_m14"
                 android:textColor="@color/grey07_6D7681"
                 app:layout_constraintBottom_toBottomOf="@+id/tv_home_study_list_must_do"
@@ -159,6 +166,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
+                android:text="@{@string/home_study_list_grass_count(item.grassSeedsCount)}"
                 android:textAppearance="@style/text_m14"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_home_study_list_grass_seed"

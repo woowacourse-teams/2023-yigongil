@@ -59,4 +59,13 @@ object BindingAdapter {
             false -> view.visibility = View.GONE
         }
     }
+
+    @JvmStatic
+    @BindingAdapter("isMaster")
+    fun setVisibleOfHomeStudy(view: View, isMaster: Boolean) {
+        when (isMaster) {
+            true -> view.visibility = View.VISIBLE
+            false -> view.visibility = View.GONE
+        }
+    }
 }

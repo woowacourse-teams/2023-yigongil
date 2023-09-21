@@ -7,7 +7,7 @@ import com.created.domain.model.UserStudy
 
 
 class HomeAdapter(
-    private val onClick: () -> Unit
+    private val onClick: (studyId: Int) -> Unit
 ) : ListAdapter<UserStudy, HomeViewHolder>(diffCallBack) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
@@ -25,7 +25,7 @@ class HomeAdapter(
                     oldItem: UserStudy,
                     newItem: UserStudy
                 ): Boolean {
-                    return oldItem.userId == newItem.userId
+                    return oldItem.studyId == newItem.studyId
                 }
 
                 override fun areContentsTheSame(

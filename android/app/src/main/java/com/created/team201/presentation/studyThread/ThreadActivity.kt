@@ -1,5 +1,7 @@
 package com.created.team201.presentation.studyThread
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.created.team201.R
@@ -35,5 +37,14 @@ class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_
         binding.rvThread.setHasFixedSize(true)
         binding.rvMustDo.adapter = mustDoAdapter
         binding.rvMustDo.setHasFixedSize(true)
+    }
+
+    companion object {
+        private const val STUDY_ID = "STUDY_ID"
+
+        fun getIntent(context: Context, studyId: Int): Intent =
+            Intent(context, ThreadActivity::class.java).apply {
+                putExtra(STUDY_ID, studyId)
+            }
     }
 }
