@@ -8,6 +8,8 @@
         <item name="android:textColor">@color/white</item>
         <item name="chipStartPadding">4dp</item>
         <item name="chipEndPadding">4dp</item>
+        <item name="checkedIconEnabled">false</item>
+        <item name="checkedIcon">@null</item>
         <item name="chipStrokeColor">@color/grey03_595959</item>
         <item name="chipBackgroundColor">@color/chip_color_checked</item>
         <item name="chipSurfaceColor">@color/transparent</item>

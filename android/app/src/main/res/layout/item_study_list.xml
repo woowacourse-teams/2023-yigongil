@@ -78,7 +78,7 @@
             app:layout_constraintTop_toTopOf="@id/iv_study_list_average_tier"
             app:layout_constraintStart_toEndOf="@id/tv_study_list_average_tier_description"
             app:layout_constraintEnd_toStartOf="@id/iv_study_list_people_count_icon"
-            tools:isOver="@{studyStatus.Companion.valueOf(studySummary.processingStatus)}"
+            tools:isOver="@{studySummary.processingStatus}"
             tools:text="자바 스터디 2명 타세요 ~" />
 
         <TextView
@@ -86,7 +86,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:text="@{@string/study_list_information_format(startDateStringFormat[studyStatus.Companion.valueOf(studySummary.processingStatus).formatIndex], studySummary.date)}"
+            android:text="@{@string/study_list_information_format(startDateStringFormat[studySummary.processingStatus.formatIndex], studySummary.date)}"
             android:textAppearance="@style/description_r12"
             android:textColor="@color/grey02_78808B"
             app:layout_constraintStart_toStartOf="@id/tv_study_list_title"
@@ -98,7 +98,7 @@
             android:id="@+id/iv_study_list_tag"
             android:layout_width="40dp"
             android:layout_height="19dp"
-            app:glideSrc="@{studyStatus.Companion.imageOf(studySummary.processingStatus)}"
+            app:glideSrc="@{studySummary.processingStatus.resId}"
             android:layout_marginBottom="8dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/tv_study_list_people_count"

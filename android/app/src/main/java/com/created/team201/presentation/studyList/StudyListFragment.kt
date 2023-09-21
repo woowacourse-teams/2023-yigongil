@@ -19,6 +19,7 @@ import com.created.team201.presentation.guest.bottomSheet.LoginBottomSheetFragme
 import com.created.team201.presentation.main.MainViewModel
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
 import com.created.team201.presentation.studyList.adapter.StudyListAdapter
+import com.created.team201.presentation.studyList.model.StudyStatus
 import com.created.team201.presentation.updateStudy.UpdateStudyActivity
 import com.created.team201.util.FirebaseLogUtil
 import com.created.team201.util.FirebaseLogUtil.SCREEN_STUDY_LIST
@@ -51,16 +52,17 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setUpToolbar()
-        setUpStudyListSettings()
-        setUpDataObserve()
-        setUpRefreshListener()
-        setUpCreateStudyListener()
-        setUpScrollListener()
-        setUpStudyList()
+        setupToolbar()
+        setupStudyListSettings()
+        setupDataObserve()
+        setupRefreshListener()
+        setupCreateStudyListener()
+        setupScrollListener()
+        setupStudyList()
+        setupStudyListFilter()
     }
 
-    private fun setUpToolbar() {
+    private fun setupToolbar() {
         val menu = binding.tbStudyList.menu
         val searchItem = menu.findItem(R.id.menu_study_list_search)
         val searchView = searchItem.actionView as SearchView
@@ -132,14 +134,14 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         })
     }
 
-    private fun setUpStudyListSettings() {
+    private fun setupStudyListSettings() {
         binding.rvStudyListList.apply {
             adapter = studyListAdapter
             setHasFixedSize(true)
         }
     }
 
-    private fun setUpDataObserve() {
+    private fun setupDataObserve() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.studyListViewModel = studyListViewModel
         studyListViewModel.studySummaries.observe(viewLifecycleOwner) {
@@ -147,7 +149,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         }
     }
 
-    private fun setUpRefreshListener() {
+    private fun setupRefreshListener() {
         binding.srlStudyList.setOnRefreshListener {
             viewLifecycleOwner.lifecycleScope.launch {
                 studyListViewModel.refreshPage()
@@ -156,7 +158,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         }
     }
 
-    private fun setUpCreateStudyListener() {
+    private fun setupCreateStudyListener() {
         binding.fabStudyListCreateButton.setOnClickListener {
             if (mainViewModel.isGuest) {
                 showLoginBottomSheetDialog()
@@ -189,7 +191,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         }
     }
 
-    private fun setUpScrollListener() {
+    private fun setupScrollListener() {
         val onScrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 studyListViewModel.updateScrollState(newState)
@@ -228,7 +230,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         binding.rvStudyListList.addOnScrollListener(onScrollListener)
     }
 
-    private fun setUpStudyList() {
+    private fun setupStudyList() {
         studyListViewModel.initPage()
     }
 
@@ -236,6 +238,43 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         override fun onClickStudySummary(id: Long) {
             startActivity(StudyDetailActivity.getIntent(requireContext(), id))
             activity?.overridePendingTransition(R.anim.right_in, R.anim.stay)
+        }
+    }
+
+    private fun setupStudyListFilter() {
+        binding.cgStudyList.setOnCheckedStateChangeListener { group, _ ->
+            studyListViewModel.studySummaries.value?.let { studyList ->
+                when (group.checkedChipId) {
+                    binding.chipStudyListWaiting.id -> {
+                        studyListAdapter.submitList(studyList.filter { study ->
+                            study.processingStatus == StudyStatus.WAITING
+                        })
+                        return@let
+                    }
+
+                    binding.chipStudyListProcessing.id -> {
+                        studyListAdapter.submitList(studyList.filter { study ->
+                            study.processingStatus == StudyStatus.PROCESSING
+                        })
+                        return@let
+                    }
+
+                    binding.chipStudyListRecruiting.id -> {
+                        studyListAdapter.submitList(studyList.filter { study ->
+                            study.processingStatus == StudyStatus.RECRUITING
+                        })
+                        return@let
+                    }
+
+                    binding.chipStudyListEnd.id -> {
+                        studyListAdapter.submitList(studyList.filter { study ->
+                            study.processingStatus == StudyStatus.END
+                        })
+                        return@let
+                    }
+                }
+                studyListAdapter.submitList(studyList)
+            }
         }
     }
 

@@ -16,6 +16,7 @@ import com.created.team201.data.datasource.remote.StudyListDataSourceImpl
 import com.created.team201.data.remote.NetworkServiceModule
 import com.created.team201.data.repository.StudyListRepositoryImpl
 import com.created.team201.presentation.studyList.model.PeriodUiModel
+import com.created.team201.presentation.studyList.model.StudyStatus
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
@@ -134,7 +135,7 @@ class StudyListViewModel(
     private fun StudySummary.toUiModel(): StudySummaryUiModel =
         StudySummaryUiModel(
             id,
-            processingStatus,
+            StudyStatus.valueOf(processingStatus),
             tier,
             title,
             date,

@@ -2,7 +2,7 @@ package com.created.team201.presentation.studyList.model
 
 data class StudySummaryUiModel(
     val id: Long,
-    val processingStatus: Int,
+    val processingStatus: StudyStatus,
     val averageTier: Int,
     val name: String,
     val date: String,

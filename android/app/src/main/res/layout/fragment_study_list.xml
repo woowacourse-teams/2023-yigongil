@@ -38,41 +38,53 @@
             android:background="@color/black02_181B21"
             app:layout_constraintTop_toBottomOf="@id/tb_study_list" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/cg_study_list"
+        <HorizontalScrollView
+            android:id="@+id/hsv_study_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="8dp"
-            android:paddingTop="8dp"
+            android:paddingHorizontal="16dp"
+            android:scrollbars="none"
             app:layout_constraintBottom_toTopOf="@id/srl_study_list"
-            app:layout_constraintTop_toBottomOf="@id/view_study_list_toolbar_boarder_line"
-            app:singleSelection="true">
+            app:layout_constraintTop_toBottomOf="@id/view_study_list_toolbar_boarder_line">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_study_list_open"
-                style="@style/chip_study_list"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cg_study_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/study_list_chip_open"
-                app:chipIconEnabled="false" />
+                android:paddingTop="8dp"
+                app:singleSelection="true">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_study_list_close"
-                style="@style/chip_study_list"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/study_list_chip_close"
-                app:chipIconEnabled="false" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_study_list_recruiting"
+                    style="@style/chip_study_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/study_list_chip_recruiting" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chip_study_list_apply"
-                style="@style/chip_study_list"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/study_list_chip_apply"
-                app:chipIconEnabled="false" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_study_list_processing"
+                    style="@style/chip_study_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/study_list_chip_processing" />
 
-        </com.google.android.material.chip.ChipGroup>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_study_list_end"
+                    style="@style/chip_study_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/study_list_chip_end" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_study_list_waiting"
+                    style="@style/chip_study_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/study_list_chip_waiting" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </HorizontalScrollView>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srl_study_list"
@@ -83,7 +95,7 @@
             app:layout_constraintBottom_toTopOf="@id/pb_study_list_load"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cg_study_list">
+            app:layout_constraintTop_toBottomOf="@id/hsv_study_list">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_study_list_list"
