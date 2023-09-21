@@ -19,7 +19,7 @@ fun RoundDetailResponseDto.toDomain(): RoundDetail = RoundDetail(
     optionalTodos = optionalTodos.map { it.toDomain() },
     members = members.map { it.toDomain() },
 
-)
+    )
 
 fun StudyMemberResponseDto.toDomain(): StudyMember = StudyMember(
     id = id,
