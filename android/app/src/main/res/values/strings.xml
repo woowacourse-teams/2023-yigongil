@@ -5,7 +5,7 @@
     <string name="toolbar_back_text">뒤로가기</string>
 
     <!--로그인 뷰-->
-    <string name="login_guide">로그인 후 이용이 가능합니다.</string>
+    <string name="login_guest"><u>비회원으로 둘러보기</u></string>
     <string name="login_github_guide">깃허브로 시작하기</string>
     <string name="login_fail_message">로그인에 실패하였습니다.</string>
     <string name="login_onBoarding_fail_message">내 소개 불러오기에 실패했습니다</string>
@@ -32,15 +32,25 @@
     <string name="main_ic_chat">쪽지</string>
     <string name="main_ic_my_page">마이페이지</string>
 
+    <!-- 비회원 뷰 -->
+    <string name="guest_information_title">로그인이 필요한 서비스입니다.</string>
+
+    <!-- 로그인 바텀 시트 다이얼로그 뷰 -->
+    <string name="loginBottomSheetFragment_information_title">로그인 이후 서비스 이용이 가능합니다.</string>
+
     <!--홈 탭-->
+    <string name="home_study_list_must_do">Must Do</string>
+    <string name="home_study_list_guide">Must Do를 인증하면 잔디씨앗을 드려요! \n스터디를 완주하면 잔디를 심어드려요!</string>
+    <string name="home_no_study">참여중인 스터디가 없어요!\n스터디를 개설/참여 해볼까요?</string>
+    <!--정리 필요-->
     <string name="home_essential_todo">필수투두</string>
     <string name="home_optional_todo">선택투두</string>
     <string name="home_progress_rate">스터디원 필수투두 진행률 %d%%</string>
     <string name="home_date">다음 스터디까지 D - %d (%s)</string>
     <string name="home_welcome_phrase">%s님\n오늘 잔디는 심으셨나요?</string>
-    <string name="home_no_study">참여중인 스터디가 없어요!\n스터디를 개설/참여 해볼까요?</string>
     <string name="home_dash_board_enter_button">Must Do 인증하기</string>
     <string name="home_dash_board_must_do">Must Do.</string>
+    <string name="home_dash_board_d_day">D - %d</string>
     <string name="home_dash_board_next_study">다음 스터디까지</string>
 
 

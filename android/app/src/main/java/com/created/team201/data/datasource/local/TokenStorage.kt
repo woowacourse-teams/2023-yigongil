@@ -29,6 +29,10 @@ class TokenStorage(context: Context) {
         return storage.getString(key, null)
     }
 
+    fun isGuest(key: String): Boolean {
+        return storage.getString(key, null).isNullOrEmpty()
+    }
+
     companion object {
         private const val FILE_NAME = "TEAM201_STORAGE"
 
