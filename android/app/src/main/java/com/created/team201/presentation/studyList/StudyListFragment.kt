@@ -234,7 +234,6 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private fun studyListClickListener() = object : StudyListClickListener {
         override fun onClickStudySummary(id: Long) {
             startActivity(StudyDetailActivity.getIntent(requireContext(), id))
-            activity?.overridePendingTransition(R.anim.right_in, R.anim.stay)
         }
     }
 
@@ -243,30 +242,38 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
             studyListViewModel.studySummaries.value?.let { studyList ->
                 when (group.checkedChipId) {
                     binding.chipStudyListWaiting.id -> {
-                        studyListAdapter.submitList(studyList.filter { study ->
-                            study.processingStatus == StudyStatus.WAITING
-                        })
+                        studyListAdapter.submitList(
+                            studyList.filter { study ->
+                                study.processingStatus == StudyStatus.WAITING
+                            },
+                        )
                         return@let
                     }
 
                     binding.chipStudyListProcessing.id -> {
-                        studyListAdapter.submitList(studyList.filter { study ->
-                            study.processingStatus == StudyStatus.PROCESSING
-                        })
+                        studyListAdapter.submitList(
+                            studyList.filter { study ->
+                                study.processingStatus == StudyStatus.PROCESSING
+                            },
+                        )
                         return@let
                     }
 
                     binding.chipStudyListRecruiting.id -> {
-                        studyListAdapter.submitList(studyList.filter { study ->
-                            study.processingStatus == StudyStatus.RECRUITING
-                        })
+                        studyListAdapter.submitList(
+                            studyList.filter { study ->
+                                study.processingStatus == StudyStatus.RECRUITING
+                            },
+                        )
                         return@let
                     }
 
                     binding.chipStudyListEnd.id -> {
-                        studyListAdapter.submitList(studyList.filter { study ->
-                            study.processingStatus == StudyStatus.END
-                        })
+                        studyListAdapter.submitList(
+                            studyList.filter { study ->
+                                study.processingStatus == StudyStatus.END
+                            },
+                        )
                         return@let
                     }
                 }
