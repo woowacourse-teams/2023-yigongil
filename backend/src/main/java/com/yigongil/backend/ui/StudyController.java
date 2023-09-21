@@ -3,7 +3,12 @@ package com.yigongil.backend.ui;
 import com.yigongil.backend.application.StudyService;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.request.CertificationCreateRequest;
+import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
+import com.yigongil.backend.response.CertificationResponse;
+import com.yigongil.backend.response.FeedPostResponse;
+import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
@@ -12,6 +17,7 @@ import com.yigongil.backend.response.StudyMemberRoleResponse;
 import com.yigongil.backend.ui.doc.StudyApi;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -123,6 +129,55 @@ public class StudyController implements StudyApi {
         studyService.startStudy(member, id);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/feeds")
+    public ResponseEntity<List<FeedPostResponse>> findFeedPosts(
+            @PathVariable Long id,
+            @RequestParam Optional<Long> oldestFeedPostId
+    ) {
+        List<FeedPostResponse> response = studyService.findFeedPosts(
+                id,
+                oldestFeedPostId.orElse(Long.MAX_VALUE)
+        );
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/{id}/feeds")
+    public ResponseEntity<Void> createFeedPost(
+            @Authorization Member member,
+            @PathVariable Long id,
+            @RequestBody FeedPostCreateRequest request
+    ) {
+        studyService.createFeedPost(member, id, request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/certifications")
+    public ResponseEntity<Void> createCertification(
+            @Authorization Member member,
+            @PathVariable Long id,
+            @RequestBody CertificationCreateRequest request
+    ) {
+        Long certificationId = studyService.createCertification(member, id, request);
+        return ResponseEntity.created(URI.create("/v1/studies/" + id + "/certifications/" + certificationId)).build();
+    }
+
+    @GetMapping("/{id}/certifications")
+    public ResponseEntity<MembersCertificationResponse> findAllMembersCertification(
+            @Authorization Member member,
+            @PathVariable Long id
+    ) {
+        MembersCertificationResponse response = studyService.findAllMembersCertification(member, id);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}/certifications/{certificationId}")
+    public ResponseEntity<CertificationResponse> findMemberCertification(
+            @PathVariable Long certificationId
+    ) {
+        CertificationResponse response = studyService.findCertification(certificationId);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{studyId}/members/role")

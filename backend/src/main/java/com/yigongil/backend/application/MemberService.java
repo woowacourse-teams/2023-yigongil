@@ -50,8 +50,8 @@ public class MemberService {
                 member.getProfileImageUrl(),
                 studyService.calculateSuccessRate(member),
                 calculateNumberOfSuccessRounds(member),
-                99, // TODO: 2023/07/27 티어 진행률은 추후 티어 진행 알고리즘 회의 후 추가
-                member.getTier(),
+                member.calculateProgress(),
+                member.getTier().getOrder(),
                 member.getIntroduction(),
                 finishedStudyResponses
         );

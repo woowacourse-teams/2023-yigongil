@@ -4,6 +4,7 @@ import static com.yigongil.backend.domain.study.PageStrategy.ID_DESC;
 
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
+import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
@@ -14,17 +15,21 @@ import com.yigongil.backend.domain.studymember.StudyResult;
 import com.yigongil.backend.exception.ApplicantAlreadyExistException;
 import com.yigongil.backend.exception.ApplicantNotFoundException;
 import com.yigongil.backend.exception.StudyNotFoundException;
+import com.yigongil.backend.request.CertificationCreateRequest;
+import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
+import com.yigongil.backend.response.CertificationResponse;
+import com.yigongil.backend.response.FeedPostResponse;
+import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
+import com.yigongil.backend.response.StudyMemberRoleResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import com.yigongil.backend.response.StudyMemberRoleResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,13 +41,19 @@ public class StudyService {
 
     private final StudyRepository studyRepository;
     private final StudyMemberRepository studyMemberRepository;
+    private final CertificationService certificationService;
+    private final FeedService feedService;
 
     public StudyService(
             StudyRepository studyRepository,
-            StudyMemberRepository studyMemberRepository
+            StudyMemberRepository studyMemberRepository,
+            CertificationService certificationService,
+            FeedService feedService
     ) {
         this.studyRepository = studyRepository;
         this.studyMemberRepository = studyMemberRepository;
+        this.certificationService = certificationService;
+        this.feedService = feedService;
     }
 
     @Transactional
@@ -114,6 +125,18 @@ public class StudyService {
         );
     }
 
+    @Transactional
+    public void createFeedPost(Member member, Long studyId, FeedPostCreateRequest request) {
+        final Study study = findStudyById(studyId);
+        feedService.createFeedPost(member, study, request);
+    }
+
+    @Transactional
+    public Long createCertification(Member member, Long id, CertificationCreateRequest request) {
+        Study study = findStudyById(id);
+        return certificationService.createCertification(study, member, request).getId();
+    }
+
     public Study findStudyById(Long studyId) {
         return studyRepository.findById(studyId)
                               .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
@@ -133,7 +156,7 @@ public class StudyService {
         List<Round> rounds = study.getRounds();
         Round currentRound = study.getCurrentRound();
 
-        List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRoleNotAndStudyResult(studyId, Role.APPLICANT, StudyResult.NONE);
+        List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRoleNot(studyId, Role.APPLICANT);
 
         return StudyDetailResponse.of(study, rounds, currentRound, createStudyMemberResponses(studyMembers));
     }
@@ -170,7 +193,7 @@ public class StudyService {
 
         return new StudyMemberResponse(
                 member.getId(),
-                member.getTier(),
+                member.getTier().getOrder(),
                 member.getNickname(),
                 calculateSuccessRate(member),
                 member.getProfileImageUrl(),
@@ -288,5 +311,23 @@ public class StudyService {
                                          .orElse(Role.NO_ROLE);
 
         return StudyMemberRoleResponse.from(role);
+    }
+
+    @Transactional(readOnly = true)
+    public MembersCertificationResponse findAllMembersCertification(Member member, Long studyId) {
+        Study study = findStudyById(studyId);
+        final List<RoundOfMember> roundOfMembers = study.getCurrentRoundOfMembers();
+        return MembersCertificationResponse.of(member, roundOfMembers);
+    }
+
+    public CertificationResponse findCertification(Long certificationId) {
+        return CertificationResponse.from(certificationService.findById(certificationId));
+    }
+
+    public List<FeedPostResponse> findFeedPosts(Long id, Long oldestFeedPostId) {
+        return feedService.findFeedPosts(id, oldestFeedPostId)
+                          .stream()
+                          .map(FeedPostResponse::from)
+                          .toList();
     }
 }

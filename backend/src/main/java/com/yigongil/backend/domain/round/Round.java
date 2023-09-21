@@ -2,6 +2,7 @@ package com.yigongil.backend.domain.round;
 
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.member.Tier;
 import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.exception.InvalidTodoLengthException;
@@ -138,11 +139,16 @@ public class Round extends BaseEntity {
     public int calculateAverageTier() {
         double averageTier = roundOfMembers.stream()
                                            .map(RoundOfMember::getMember)
-                                           .mapToInt(Member::getTier)
+                                           .mapToInt(Member::getExperience)
+                                           .map(experience -> Tier.getTier(experience).getOrder())
                                            .average()
                                            .orElseThrow(IllegalStateException::new);
 
         return (int) Math.round(averageTier);
+    }
+
+    public void completeRound(Member member) {
+        findRoundOfMemberBy(member).completeRound();
     }
 
     public void addMember(Member member) {
@@ -206,18 +212,20 @@ public class Round extends BaseEntity {
                              );
     }
 
-    public void updateMembersTier() {
-        for (RoundOfMember roundOfMember : roundOfMembers) {
-            roundOfMember.updateMemberTier();
-        }
-    }
-
     public int calculateProgress() {
         int doneCount = (int) roundOfMembers.stream()
                                             .filter(RoundOfMember::isDone)
                                             .count();
 
         return doneCount * 100 / roundOfMembers.size();
+    }
+
+    public boolean isSuccess(Member member) {
+        return findRoundOfMemberBy(member).isDone();
+    }
+
+    public boolean isMaster(Member member) {
+        return master.equals(member);
     }
 
     @Override

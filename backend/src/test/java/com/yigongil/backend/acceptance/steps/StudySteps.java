@@ -9,11 +9,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.StudyUpdateRequest;
-import com.yigongil.backend.response.HomeResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.RoundNumberResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
+import com.yigongil.backend.response.UpcomingStudyResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -252,9 +252,9 @@ public class StudySteps {
     public void 스터디_회차_업데이트_검증() {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
-        HomeResponse homeResponse = response.as(HomeResponse.class);
+        List<UpcomingStudyResponse> homeResponse = response.jsonPath().getList(".", UpcomingStudyResponse.class);
 
-        assertThat(homeResponse.studies().get(0).nextDate()).isNotNull();
+        assertThat(homeResponse.get(0).leftDays()).isNotNull();
     }
 
     @When("{string}를 검색한다.")
@@ -283,8 +283,10 @@ public class StudySteps {
 
     @Then("스터디가 {int} 개 조회된다.")
     public void 스터디가_int개_조회된다(int number) {
-        HomeResponse response = sharedContext.getResponse().as(HomeResponse.class);
+        List<UpcomingStudyResponse> response = sharedContext.getResponse()
+                                                            .jsonPath()
+                                                            .getList(".", UpcomingStudyResponse.class);
 
-        assertThat(response.studies()).hasSize(number);
+        assertThat(response).hasSize(number);
     }
 }
