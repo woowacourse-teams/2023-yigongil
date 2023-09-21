@@ -10,7 +10,7 @@ data class HomeStudyResponseDto(
     @SerialName("name")
     val studyName: String,
     @SerialName("todoContent")
-    val mustDo: String,
+    val mustDo: String?,
     @SerialName("leftDays")
     val leftDays: Int,
     @SerialName("grassCount")

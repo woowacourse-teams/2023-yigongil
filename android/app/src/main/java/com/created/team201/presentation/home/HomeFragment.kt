@@ -50,5 +50,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
     private fun setupAdapter() {
         binding.rvHome.adapter = homeAdapter
+        binding.rvHome.setHasFixedSize(true)
     }
 }
