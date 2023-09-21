@@ -11,6 +11,7 @@ import com.created.team201.data.remote.api.ReportService
 import com.created.team201.data.remote.api.SettingService
 import com.created.team201.data.remote.api.StudyDetailService
 import com.created.team201.data.remote.api.StudyListService
+import com.created.team201.data.remote.api.ThreadService
 import com.created.team201.data.remote.api.UpdateStudyService
 import dagger.Module
 import dagger.Provides
@@ -69,9 +70,13 @@ object ServiceModule {
     fun provideReportService(@AuthRetrofit retrofit: Retrofit): ReportService =
         retrofit.create(ReportService::class.java)
 
-
     @Singleton
     @Provides
     fun provideSettingService(@AuthRetrofit retrofit: Retrofit): SettingService =
         retrofit.create(SettingService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideThreadService(@AuthRetrofit retrofit: Retrofit): ThreadService =
+        retrofit.create(ThreadService::class.java)
 }
