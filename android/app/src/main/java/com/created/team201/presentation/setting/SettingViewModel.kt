@@ -3,20 +3,14 @@ package com.created.team201.presentation.setting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.repository.SettingRepository
-import com.created.team201.application.Team201App
-import com.created.team201.data.datasource.local.OnBoardingIsDoneDataSourceImpl
-import com.created.team201.data.datasource.local.TokenDataSourceImpl
-import com.created.team201.data.datasource.remote.SettingDataSourceImpl
-import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.SettingRepositoryImpl
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SettingViewModel(
+@HiltViewModel
+class SettingViewModel @Inject constructor(
     private val settingRepository: SettingRepository,
 ) : ViewModel() {
     private val _isWithdrawAccountState: MutableLiveData<State> = MutableLiveData()
@@ -42,19 +36,5 @@ class SettingViewModel(
         object SUCCESS : State
         object FAIL : State
         object IDLE : State
-    }
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SettingViewModel(
-                    SettingRepositoryImpl(
-                        OnBoardingIsDoneDataSourceImpl(Team201App.provideOnBoardingIsDoneStorage()),
-                        SettingDataSourceImpl(NetworkServiceModule.settingService),
-                        TokenDataSourceImpl(Team201App.provideTokenStorage()),
-                    ),
-                )
-            }
-        }
     }
 }
