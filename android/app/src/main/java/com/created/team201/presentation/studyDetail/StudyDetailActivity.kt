@@ -19,7 +19,6 @@ import com.created.team201.presentation.studyDetail.StudyDetailState.Master
 import com.created.team201.presentation.studyDetail.adapter.StudyParticipantsAdapter
 import com.created.team201.presentation.studyDetail.model.PeriodFormat
 import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
-import com.created.team201.presentation.studyManagement.StudyManagementActivity
 import com.created.team201.presentation.updateStudy.UpdateStudyActivity
 
 class StudyDetailActivity :
@@ -173,13 +172,7 @@ class StudyDetailActivity :
     }
 
     private fun observeStartStudy() {
-        studyDetailViewModel.isStartStudy.observe(this) { isStartStudy ->
-            if (isStartStudy) {
-                startActivity(
-                    StudyManagementActivity.getIntent(this, studyId, ROLE_INDEX_STUDY_MASTER),
-                )
-                finish()
-            }
+        studyDetailViewModel.isStartStudy.observe(this) { _ ->
         }
     }
 
@@ -203,7 +196,6 @@ class StudyDetailActivity :
         Toast.makeText(this, getString(stringRes), Toast.LENGTH_SHORT).show()
 
     companion object {
-        private const val ROLE_INDEX_STUDY_MASTER = 0
         private const val NON_EXISTENCE_STUDY_ID = 0L
         private const val STRING_LAST_INDEX = 1
         private const val KEY_STUDY_ID = "KEY_STUDY_ID"

@@ -24,7 +24,7 @@ class Calendar @JvmOverloads constructor(
 
     val value: String
         get() = binding.calendar.selectedDate?.date?.format(DateTimeFormatter.ofPattern(dateFormat))
-            ?: ""
+            ?: LocalDate.now().format(DateTimeFormatter.ofPattern(dateFormat))
 
     private var maximumMonthRange: Long = 1
     private val maximumDate: LocalDate by lazy {

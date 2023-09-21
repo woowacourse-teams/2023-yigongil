@@ -121,5 +121,10 @@
         <item name="android:textSize">12dp</item>
     </style>
 
+    <style name="description_m10">
+        <item name="fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">10dp</item>
+    </style>
+
 
 </resources>
