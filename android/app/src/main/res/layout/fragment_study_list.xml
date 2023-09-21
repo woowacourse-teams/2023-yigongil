@@ -43,9 +43,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingHorizontal="8dp"
-            android:paddingVertical="8dp"
+            android:paddingTop="8dp"
             app:layout_constraintBottom_toTopOf="@id/srl_study_list"
-            app:layout_constraintTop_toBottomOf="@id/view_study_list_toolbar_boarder_line">
+            app:layout_constraintTop_toBottomOf="@id/view_study_list_toolbar_boarder_line"
+            app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_study_list_open"
