@@ -9,7 +9,7 @@ fun HomeStudyResponseDto.toUserStudy(): UserStudy =
         isMaster = isMaster,
         studyId = studyId,
         studyName = studyName,
-        mustDo = mustDo,
+        mustDo = mustDo ?: "",
         leftDays = leftDays,
         grassSeedsCount = grassSeedsCount,
     )
