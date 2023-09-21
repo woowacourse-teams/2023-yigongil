@@ -193,10 +193,6 @@ public class Study extends BaseEntity {
         getCurrentRound().validateMaster(candidate);
     }
 
-    public RoundOfMember findCurrentRoundOfMemberBy(Member member) {
-        return getCurrentRound().findRoundOfMemberBy(member);
-    }
-
     public boolean isCurrentRoundEndAt(LocalDate today) {
         return getCurrentRound().isEndAt(today);
     }
@@ -299,11 +295,15 @@ public class Study extends BaseEntity {
                            .filter(round -> round.isSuccess(member))
                            .count();
     }
-  
+
     public Round getCurrentRound() {
         return rounds.stream()
                      .filter(round -> round.getRoundNumber().equals(currentRoundNumber))
                      .findAny()
                      .orElseThrow();
+    }
+
+    public boolean isMaster(Member member) {
+        return getCurrentRound().isMaster(member);
     }
 }

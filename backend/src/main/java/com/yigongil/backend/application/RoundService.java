@@ -8,9 +8,9 @@ import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
+import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.exception.InvalidMemberInRoundException;
 import com.yigongil.backend.exception.RoundNotFoundException;
-import com.yigongil.backend.response.HomeResponse;
 import com.yigongil.backend.response.MemberOfRoundResponse;
 import com.yigongil.backend.response.ProgressRateResponse;
 import com.yigongil.backend.response.RoundResponse;
@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RoundService {
 
+    private static final int DATE_ADJUST_NUMBER = 1;
     private final RoundRepository roundRepository;
     private final StudyRepository studyRepository;
 
@@ -54,7 +55,7 @@ public class RoundService {
         return new RoundResponse(
                 roundId,
                 round.getMaster().getId(),
-                member.isSameWithMaster(round.getMaster()),
+                round.isMaster(member) ? Role.MASTER.getCode() : Role.STUDY_MEMBER.getCode(),
                 TodoResponse.fromNecessaryTodo(roundByMember, round),
                 TodoResponse.fromOptionalTodo(optionalTodos),
                 MemberOfRoundResponse.from(roundOfMembers)
@@ -62,32 +63,29 @@ public class RoundService {
     }
 
     @Transactional(readOnly = true)
-    public HomeResponse findCurrentRoundOfStudies(Member member) {
+    public List<UpcomingStudyResponse> findCurrentRoundOfStudies(Member member) {
         List<Study> studies = studyRepository.findByMemberAndProcessingStatus(member, ProcessingStatus.PROCESSING);
         List<UpcomingStudyResponse> upcomingStudyResponses = new ArrayList<>();
 
         for (Study study : studies) {
             Round currentRound = study.getCurrentRound();
-            RoundOfMember currentRoundOfMemberOwn = study.findCurrentRoundOfMemberBy(member);
 
             LocalDateTime endAt = currentRound.getEndAt();
-            int leftDays = (int) ChronoUnit.DAYS.between(LocalDateTime.now(), endAt) + 1;
+            int leftDays = (int) ChronoUnit.DAYS.between(LocalDateTime.now(), endAt) + DATE_ADJUST_NUMBER;
 
             upcomingStudyResponses.add(
                     new UpcomingStudyResponse(
                             study.getId(),
                             study.getName(),
-                            currentRound.getId(),
-                            TodoResponse.fromNecessaryTodo(currentRoundOfMemberOwn, currentRound),
+                            currentRound.getNecessaryToDoContent(),
                             leftDays,
-                            endAt.toLocalDate(),
                             currentRound.calculateProgress(),
-                            TodoResponse.fromOptionalTodo(currentRoundOfMemberOwn.getOptionalTodos())
+                            study.isMaster(member)
                     )
             );
         }
 
-        return HomeResponse.of(member, studies, upcomingStudyResponses);
+        return upcomingStudyResponses;
     }
 
     @Transactional(readOnly = true)

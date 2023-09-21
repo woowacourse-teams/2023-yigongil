@@ -224,6 +224,10 @@ public class Round extends BaseEntity {
         return findRoundOfMemberBy(member).isDone();
     }
 
+    public boolean isMaster(Member member) {
+        return master.equals(member);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

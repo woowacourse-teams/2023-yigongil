@@ -87,13 +87,6 @@ public class Member extends BaseEntity {
         this.isOnboardingDone = true;
     }
 
-    public int isSameWithMaster(Member master) {
-        if (this.equals(master)) {
-            return MASTER_NUMBER;
-        }
-        return PARTICIPANT_NUMBER;
-    }
-
     public String getNickname() {
         if (this.nickname == null) {
             return null;
