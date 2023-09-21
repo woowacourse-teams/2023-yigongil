@@ -8,10 +8,10 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface UpdateStudyService {
-    @POST("/v1/studies")
+    @POST("v1/studies")
     suspend fun createStudy(@Body createStudy: UpdateStudyRequestDto): Response<Unit>
 
-    @PUT("/v1/studies/{studyId}")
+    @PUT("v1/studies/{studyId}")
     suspend fun editStudy(
         @Path("studyId") studyId: Long,
         @Body createStudy: UpdateStudyRequestDto,

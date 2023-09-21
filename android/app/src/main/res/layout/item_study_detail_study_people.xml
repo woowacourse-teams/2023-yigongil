@@ -38,8 +38,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginStart="6dp"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="@+id/fl_item_study_detail_profile_image"
             app:layout_constraintStart_toEndOf="@id/fl_item_study_detail_profile_image"
             app:layout_constraintTop_toTopOf="@+id/fl_item_study_detail_profile_image">

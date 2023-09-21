@@ -19,9 +19,11 @@ import com.created.team201.presentation.onBoarding.OnBoardingActivity
 import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
 import com.created.team201.util.auth.CustomTabLauncherActivity
 import com.created.team201.util.auth.CustomTabLauncherActivity.Companion.GIT_OAUTH_TOKEN_KEY
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity : BindingActivity<ActivityLoginBinding>(R.layout.activity_login) {
-    private val loginViewModel by viewModels<LoginViewModel> { LoginViewModel.Factory }
+    private val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

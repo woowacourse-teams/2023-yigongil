@@ -47,9 +47,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:paddingStart="12dp"
             android:text="@{result}"
             android:textAlignment="center"
-            android:paddingStart="12dp"
             android:textAppearance="@style/title_b20"
             android:textColor="@color/green08_A2FF86"
             tools:text="70.2%" />

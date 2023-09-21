@@ -30,13 +30,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
-    private val mainViewModel: MainViewModel by viewModels {
-        MainViewModel.Factory
-    }
-
-    private val guestViewModel: GuestViewModel by viewModels {
-        GuestViewModel.Factory
-    }
+    private val mainViewModel: MainViewModel by viewModels()
+    private val guestViewModel: GuestViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
