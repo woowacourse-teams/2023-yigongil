@@ -23,7 +23,6 @@ Feature: 회원 탈퇴 관련 기능
     Given 깃허브 아이디가 "mint"인 멤버가 이름이 "자바1"스터디에 신청한다.
     Given "jinwoo"가 "mint"의 "자바1" 스터디 신청을 수락한다.
     Given "jinwoo"가 이름이 "자바1"인 스터디의 1 회차를 찾는다.
-    Given "jinwoo"가 찾은 회차에 "<투두 내용>"로 선택 투두를 추가한다.
     Given "jinwoo"가 회원 탈퇴한다.
 
     When "mint"가 "자바1" 스터디를 조회한다.

@@ -1,10 +1,8 @@
 package com.yigongil.backend.response;
 
-import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 
 public record TodoResponse(
         @Schema(example = "1")
@@ -21,19 +19,5 @@ public record TodoResponse(
                 round.getNecessaryToDoContent(),
                 roundByMember.isDone()
         );
-    }
-
-    public static TodoResponse fromOptionalTodo(OptionalTodo optionalTodo) {
-        return new TodoResponse(
-                optionalTodo.getId(),
-                optionalTodo.getContent(),
-                optionalTodo.isDone()
-        );
-    }
-
-    public static List<TodoResponse> fromOptionalTodo(List<OptionalTodo> optionalTodos) {
-        return optionalTodos.stream()
-                            .map(TodoResponse::fromOptionalTodo)
-                            .toList();
     }
 }

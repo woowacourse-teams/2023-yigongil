@@ -3,13 +3,11 @@ package com.yigongil.backend.ui;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.BDDMockito.willReturn;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -70,7 +68,7 @@ class TodoControllerTest {
 
         willDoNothing().given(todoService).createNecessaryTodo(MemberFixture.김진우.toMember(), 1L, request);
 
-        mockMvc.perform(post("/v1/rounds/1/todos/necessary")
+        mockMvc.perform(post("/v1/rounds/1/todos")
                        .header(HttpHeaders.AUTHORIZATION, "1")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(request)))
@@ -84,7 +82,7 @@ class TodoControllerTest {
 
         willDoNothing().given(todoService).updateNecessaryTodo(MemberFixture.김진우.toMember(), 1L, request);
 
-        mockMvc.perform(patch("/v1/rounds/1/todos/necessary")
+        mockMvc.perform(patch("/v1/rounds/1/todos")
                        .header(HttpHeaders.AUTHORIZATION, "1")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(request)))
@@ -92,37 +90,5 @@ class TodoControllerTest {
                .andExpect(status().isNoContent());
 
         verify(todoService, only()).updateNecessaryTodo(MemberFixture.김진우.toMember(), 1L, request);
-    }
-
-
-    @Test
-    void 선택_투두를_생성한다() throws Exception {
-        TodoCreateRequest request = new TodoCreateRequest("첫 투두");
-
-        willReturn(1L).given(todoService).createOptionalTodo(MemberFixture.김진우.toMember(), 1L, request);
-
-        mockMvc.perform(post("/v1/rounds/1/todos/optional")
-                       .header(HttpHeaders.AUTHORIZATION, "1")
-                       .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(request)))
-               .andDo(print())
-               .andExpect(status().isCreated())
-               .andExpect(header().exists(HttpHeaders.LOCATION));
-    }
-
-    @Test
-    void 선택_투두를_업데이트한다() throws Exception {
-        TodoUpdateRequest request = new TodoUpdateRequest(true, "수정");
-
-        willDoNothing().given(todoService).updateOptionalTodo(MemberFixture.김진우.toMember(), 1L, 1L, request);
-
-        mockMvc.perform(patch("/v1/rounds/1/todos/optional/1")
-                       .header(HttpHeaders.AUTHORIZATION, "1")
-                       .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(request)))
-               .andDo(print())
-               .andExpect(status().isNoContent());
-
-        verify(todoService, only()).updateOptionalTodo(MemberFixture.김진우.toMember(), 1L, 1L, request);
     }
 }

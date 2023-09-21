@@ -11,7 +11,6 @@ public record RoundResponse(
         @Schema(example = "0")
         Integer role,
         TodoResponse necessaryTodo,
-        List<TodoResponse> optionalTodos,
         List<MemberOfRoundResponse> members
 ) {
 
