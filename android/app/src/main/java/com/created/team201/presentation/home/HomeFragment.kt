@@ -11,6 +11,7 @@ import com.created.team201.databinding.FragmentHomeBinding
 import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.home.HomeViewModel.UserStudyState.Joined
 import com.created.team201.presentation.home.adapter.HomeAdapter
+import com.created.team201.presentation.studyThread.ThreadActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -33,8 +34,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         binding.vm = homeViewModel
     }
 
-    private fun navigateToThreadActivity() {
-
+    private fun navigateToThreadActivity(studyId: Int) {
+        startActivity(ThreadActivity.getIntent(requireContext(), studyId))
     }
 
     private fun collectUiState() {

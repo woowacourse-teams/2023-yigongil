@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class HomeStudyResponseDto(
     @SerialName("id")
-    val userId: Int,
+    val studyId: Int,
     @SerialName("name")
-    val name: String,
+    val studyName: String,
     @SerialName("todoContent")
     val mustDo: String,
     @SerialName("leftDays")

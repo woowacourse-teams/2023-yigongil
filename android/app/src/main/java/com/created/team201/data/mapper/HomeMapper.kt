@@ -7,8 +7,8 @@ import com.created.team201.data.remote.response.HomeStudyResponseDto
 fun HomeStudyResponseDto.toUserStudy(): UserStudy =
     UserStudy(
         isMaster = isMaster,
-        userId = userId,
-        name = name,
+        studyId = studyId,
+        studyName = studyName,
         mustDo = mustDo,
         leftDays = leftDays,
         grassSeedsCount = grassSeedsCount,
