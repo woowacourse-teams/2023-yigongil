@@ -8,6 +8,7 @@ import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
+import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.exception.InvalidMemberInRoundException;
 import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.response.MemberOfRoundResponse;
@@ -25,8 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RoundService {
 
-    private static final int MASTER_RESPONSE = 0;
-    private static final int PARTICIPANT_RESPONSE = 1;
+    private static final int DATE_ADJUST_NUMBER = 1;
     private final RoundRepository roundRepository;
     private final StudyRepository studyRepository;
 
@@ -55,7 +55,7 @@ public class RoundService {
         return new RoundResponse(
                 roundId,
                 round.getMaster().getId(),
-                round.isMaster(member) ? MASTER_RESPONSE : PARTICIPANT_RESPONSE,
+                round.isMaster(member) ? Role.MASTER.getCode() : Role.STUDY_MEMBER.getCode(),
                 TodoResponse.fromNecessaryTodo(roundByMember, round),
                 TodoResponse.fromOptionalTodo(optionalTodos),
                 MemberOfRoundResponse.from(roundOfMembers)
@@ -71,7 +71,7 @@ public class RoundService {
             Round currentRound = study.getCurrentRound();
 
             LocalDateTime endAt = currentRound.getEndAt();
-            int leftDays = (int) ChronoUnit.DAYS.between(LocalDateTime.now(), endAt) + PARTICIPANT_RESPONSE;
+            int leftDays = (int) ChronoUnit.DAYS.between(LocalDateTime.now(), endAt) + DATE_ADJUST_NUMBER;
 
             upcomingStudyResponses.add(
                     new UpcomingStudyResponse(
