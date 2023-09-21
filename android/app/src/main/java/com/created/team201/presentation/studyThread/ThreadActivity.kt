@@ -35,6 +35,7 @@ class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_
         binding.ivThreadBackButton.setOnClickListener {
             finish()
         }
+
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 threadViewModel.uiState.collectLatest { uiState ->
