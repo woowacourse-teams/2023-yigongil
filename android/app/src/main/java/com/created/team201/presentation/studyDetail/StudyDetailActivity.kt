@@ -55,14 +55,8 @@ class StudyDetailActivity :
     private fun setClickEventOnSub() {
         binding.btnStudyDetailSub.setOnClickListener {
             when (studyDetailViewModel.state.value) {
-                is Master -> {
-                    navigateToEditStudyView()
-                }
-
-                is Guest -> {
-                    showLoginBottomSheetDialog()
-                }
-
+                is Master -> navigateToEditStudyView()
+                is Guest -> showLoginBottomSheetDialog()
                 else -> Unit
             }
         }
@@ -123,13 +117,9 @@ class StudyDetailActivity :
             android.R.id.home -> finish()
             R.id.menu_study_detail_report -> {
                 when (studyDetailViewModel.state.value) {
-                    is Guest -> {
-                        showLoginBottomSheetDialog()
-                    }
-
-                    else -> {
+                    is Guest -> showLoginBottomSheetDialog()
+                    else ->
                         startActivity(ReportActivity.getIntent(this, ReportCategory.STUDY, studyId))
-                    }
                 }
             }
         }
@@ -139,10 +129,7 @@ class StudyDetailActivity :
     private fun observeGuestState() {
         guestViewModel.refreshState.observe(this) { signUpGuestState ->
             when (signUpGuestState) {
-                true -> {
-                    studyDetailViewModel.refresh(studyId)
-                }
-
+                true -> studyDetailViewModel.refresh(studyId)
                 false -> Unit
             }
         }
@@ -163,17 +150,9 @@ class StudyDetailActivity :
 
     fun initMainButtonOnClick(role: Role) {
         when (role) {
-            Role.MASTER -> {
-                onMasterClickMainButton()
-            }
-
-            Role.GUEST -> {
-                showLoginBottomSheetDialog()
-            }
-
-            else -> {
-                onNothingClickMainButton()
-            }
+            Role.MASTER -> onMasterClickMainButton()
+            Role.GUEST -> showLoginBottomSheetDialog()
+            else -> onNothingClickMainButton()
         }
     }
 
