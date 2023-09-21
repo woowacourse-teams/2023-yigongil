@@ -29,6 +29,11 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         collectUiState()
     }
 
+    override fun onResume() {
+        super.onResume()
+        homeViewModel.updateUserStudy()
+    }
+
     private fun setupViewModel() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = homeViewModel
