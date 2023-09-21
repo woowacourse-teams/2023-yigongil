@@ -5,16 +5,16 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class HomeStudyResponseDto(
-    @SerialName("isMaster")
-    val isMaster: Boolean,
-    @SerialName("grassCount")
-    val grassCount: Int,
     @SerialName("id")
-    val id: Int,
-    @SerialName("leftDays")
-    val leftDays: Int,
+    val userId: Int,
     @SerialName("name")
     val name: String,
     @SerialName("todoContent")
-    val todoContent: String
+    val mustDo: String,
+    @SerialName("leftDays")
+    val leftDays: Int,
+    @SerialName("grassCount")
+    val grassSeedsCount: Int,
+    @SerialName("isMaster")
+    val isMaster: Boolean
 )

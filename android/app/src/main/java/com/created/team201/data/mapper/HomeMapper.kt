@@ -1,29 +1,15 @@
 package com.created.team201.data.mapper
 
 import com.created.domain.model.UserStudy
-import com.created.team201.data.remote.response.HomeResponseDto
-import com.created.team201.presentation.home.uiState.UserStudyUiState
+import com.created.team201.data.remote.response.HomeStudyResponseDto
 
 
-fun HomeResponseDto.toUserStudy(): List<UserStudy> = this.studies.map { study ->
+fun HomeStudyResponseDto.toUserStudy(): UserStudy =
     UserStudy(
-        isMaster = study.isMaster,
-        grassCount = study.grassCount,
-        id = study.id,
-        leftDays = study.leftDays,
-        name = study.name,
-        todoContent = study.todoContent
+        isMaster = isMaster,
+        userId = userId,
+        name = name,
+        mustDo = mustDo,
+        leftDays = leftDays,
+        grassSeedsCount = grassSeedsCount,
     )
-}
-
-fun List<UserStudy>.toUserStudyUiState(): List<UserStudyUiState> =
-    this.map { study ->
-        UserStudyUiState(
-            studyId = study.id,
-            isMaster = study.isMaster,
-            studyName = study.name,
-            dDay = study.leftDays,
-            mustDo = study.todoContent,
-            grassSeed = study.grassCount
-        )
-    }

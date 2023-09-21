@@ -1,15 +1,16 @@
 package com.created.team201.presentation.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.UserStudy
 import com.created.domain.repository.HomeRepository
-import com.created.team201.presentation.home.HomeViewModel.HomeUiState.FAIL
-import com.created.team201.presentation.home.HomeViewModel.HomeUiState.SUCCESS
+import com.created.team201.presentation.home.HomeViewModel.UserStudyState.Idle
+import com.created.team201.presentation.home.HomeViewModel.UserStudyState.Joined
+import com.created.team201.presentation.home.HomeViewModel.UserStudyState.Nothing
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,29 +19,32 @@ class HomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<HomeUiState> = MutableStateFlow(SUCCESS(emptyList()))
-    val uiState: StateFlow<HomeUiState> get() = _uiState
+    private val _userStudyUiState: MutableStateFlow<UserStudyState> = MutableStateFlow(Idle)
+    val userStudyUiState: StateFlow<UserStudyState> get() = _userStudyUiState
 
     init {
-        updateUserStudies()
+        updateUserStudy()
     }
 
-    private fun updateUserStudies() {
+    private fun updateUserStudy() {
         viewModelScope.launch {
             runCatching {
                 homeRepository.getUserStudies()
             }.onSuccess { userStudies ->
-                _uiState.update { SUCCESS(userStudies) }
-            }.onFailure { error -> _uiState.update { FAIL(error) } }
+                when (userStudies.isEmpty()) {
+                    true -> _userStudyUiState.value = Nothing
+                    false -> _userStudyUiState.value = Joined(userStudies)
+                }
+            }.onFailure { Log.d("error-HomeViewModel", it.message.toString()) }
         }
     }
 
-    sealed interface HomeUiState {
-        data class SUCCESS(
-            val homeStudies: List<UserStudy>
-        ) : HomeUiState
+    sealed interface UserStudyState {
+        data class Joined(
+            val userStudies: List<UserStudy>
+        ) : UserStudyState
 
-        data class FAIL(val error: Throwable) : HomeUiState
-        object IDLE : HomeUiState
+        object Nothing : UserStudyState
+        object Idle : UserStudyState
     }
 }

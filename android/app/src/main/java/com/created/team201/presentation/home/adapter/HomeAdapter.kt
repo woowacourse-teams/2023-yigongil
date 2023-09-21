@@ -3,13 +3,15 @@ package com.created.team201.presentation.home.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.created.team201.presentation.home.uiState.UserStudyUiState
+import com.created.domain.model.UserStudy
 
 
-class HomeAdapter : ListAdapter<UserStudyUiState, HomeViewHolder>(diffCallBack) {
+class HomeAdapter(
+    private val onClick: () -> Unit
+) : ListAdapter<UserStudy, HomeViewHolder>(diffCallBack) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
-        return HomeViewHolder.from(parent)
+        return HomeViewHolder.from(parent, onClick)
     }
 
     override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
@@ -18,21 +20,20 @@ class HomeAdapter : ListAdapter<UserStudyUiState, HomeViewHolder>(diffCallBack) 
 
     companion object {
         private val diffCallBack =
-            object : DiffUtil.ItemCallback<UserStudyUiState>() {
+            object : DiffUtil.ItemCallback<UserStudy>() {
                 override fun areItemsTheSame(
-                    oldItem: UserStudyUiState,
-                    newItem: UserStudyUiState
+                    oldItem: UserStudy,
+                    newItem: UserStudy
                 ): Boolean {
-                    return oldItem.studyId == newItem.studyId
+                    return oldItem.userId == newItem.userId
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: UserStudyUiState,
-                    newItem: UserStudyUiState
+                    oldItem: UserStudy,
+                    newItem: UserStudy
                 ): Boolean {
                     return oldItem == newItem
                 }
             }
     }
 }
-

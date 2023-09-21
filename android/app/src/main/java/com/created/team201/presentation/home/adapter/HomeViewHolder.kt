@@ -3,25 +3,30 @@ package com.created.team201.presentation.home.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.created.domain.model.UserStudy
 import com.created.team201.databinding.ItemHomeStudyListBinding
-import com.created.team201.presentation.home.uiState.UserStudyUiState
 
 class HomeViewHolder(
-    private val binding: ItemHomeStudyListBinding
+    private val binding: ItemHomeStudyListBinding,
+    onClick: () -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(userStudy: UserStudyUiState) {
+    init {
+        binding.clHomeStudyListTop.setOnClickListener { onClick() }
+    }
+
+    fun bind(userStudy: UserStudy) {
         binding.item = userStudy
     }
 
     companion object {
-        fun from(parent: ViewGroup): HomeViewHolder =
+        fun from(parent: ViewGroup, onClick: () -> Unit): HomeViewHolder =
             HomeViewHolder(
                 ItemHomeStudyListBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
-                ),
+                ), onClick
             )
     }
 }

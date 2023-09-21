@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="viewModel"
+            name="vm"
             type="com.created.team201.presentation.home.HomeViewModel" />
 
     </data>
@@ -25,7 +25,7 @@
             android:text="@string/home_no_study"
             android:textAppearance="@style/subtitle_r20"
             android:textColor="@color/grey02_78808B"
-            android:visibility="gone"
+            app:hasStudy="@{vm.userStudyUiState}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

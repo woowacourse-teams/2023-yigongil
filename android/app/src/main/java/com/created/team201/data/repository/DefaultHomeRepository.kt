@@ -10,5 +10,5 @@ class DefaultHomeRepository @Inject constructor(
     private val homeService: HomeService,
 ) : HomeRepository {
     override suspend fun getUserStudies(): List<UserStudy> =
-        homeService.getUserStudies().toUserStudy()
+        homeService.getUserStudies().map { it.toUserStudy() }
 }
