@@ -62,10 +62,10 @@
     <string name="error_baseFragment">"[ERROR]Binding no initialization"</string>
 
     <!--스터디 목록 탭-->
-    <string name="study_list_chip_recruiting">모집중인 스터디</string>
-    <string name="study_list_chip_processing">진행중인 스터디</string>
-    <string name="study_list_chip_end">종료된 스터디</string>
-    <string name="study_list_chip_waiting">대기중인 스터디</string>
+    <string name="study_list_chip_recruiting">모집중</string>
+    <string name="study_list_chip_processing">진행중</string>
+    <string name="study_list_chip_end">종료</string>
+    <string name="study_list_chip_waiting">대기중</string>
     <string name="study_list_create">스터디 만들기</string>
     <string name="study_list_item_sort_description">정렬</string>
     <string name="study_list_search_button_menu">검색</string>

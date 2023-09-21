@@ -59,28 +59,36 @@
                     style="@style/chip_study_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/study_list_chip_recruiting" />
+                    android:text="@string/study_list_chip_recruiting"
+                    android:textColor="@color/chip_text_color_checked_recruiting"
+                    app:chipBackgroundColor="@color/chip_color_checked_recruiting" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_study_list_processing"
                     style="@style/chip_study_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/study_list_chip_processing" />
+                    android:text="@string/study_list_chip_processing"
+                    android:textColor="@color/chip_text_color_checked_processing"
+                    app:chipBackgroundColor="@color/chip_color_checked_processing" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_study_list_end"
                     style="@style/chip_study_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/study_list_chip_end" />
+                    android:text="@string/study_list_chip_end"
+                    android:textColor="@color/chip_text_color_checked_end"
+                    app:chipBackgroundColor="@color/chip_color_checked_end" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_study_list_waiting"
                     style="@style/chip_study_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/study_list_chip_waiting" />
+                    android:text="@string/study_list_chip_waiting"
+                    android:textColor="@color/chip_text_color_checked_waiting"
+                    app:chipBackgroundColor="@color/chip_color_checked_waiting" />
 
             </com.google.android.material.chip.ChipGroup>
 
