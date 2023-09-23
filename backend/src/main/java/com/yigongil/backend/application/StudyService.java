@@ -19,13 +19,14 @@ import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.CertificationResponse;
-import com.yigongil.backend.response.FeedPostResponse;
 import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.response.StudyMemberRoleResponse;
+import com.yigongil.backend.response.feed.FeedPageResponse;
+import com.yigongil.backend.response.feed.FeedPostResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -324,10 +325,13 @@ public class StudyService {
         return CertificationResponse.from(certificationService.findById(certificationId));
     }
 
-    public List<FeedPostResponse> findFeedPosts(Long id, Long oldestFeedPostId) {
-        return feedService.findFeedPosts(id, oldestFeedPostId)
-                          .stream()
-                          .map(FeedPostResponse::from)
-                          .toList();
+    public FeedPageResponse findFeedPosts(Long id, Long oldestFeedPostId) {
+        Study study = findStudyById(id);
+        List<FeedPostResponse> feeds = feedService.findFeedPosts(id, oldestFeedPostId)
+                                                  .stream()
+                                                  .map(FeedPostResponse::from)
+                                                  .toList();
+
+        return new FeedPageResponse(study.getName(), feeds);
     }
 }

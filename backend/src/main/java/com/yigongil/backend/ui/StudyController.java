@@ -7,13 +7,13 @@ import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.CertificationResponse;
-import com.yigongil.backend.response.FeedPostResponse;
 import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.response.StudyMemberRoleResponse;
+import com.yigongil.backend.response.feed.FeedPageResponse;
 import com.yigongil.backend.ui.doc.StudyApi;
 import java.net.URI;
 import java.util.List;
@@ -132,11 +132,11 @@ public class StudyController implements StudyApi {
     }
 
     @GetMapping("/{id}/feeds")
-    public ResponseEntity<List<FeedPostResponse>> findFeedPosts(
+    public ResponseEntity<FeedPageResponse> findFeedPosts(
             @PathVariable Long id,
             @RequestParam Optional<Long> oldestFeedPostId
     ) {
-        List<FeedPostResponse> response = studyService.findFeedPosts(
+        FeedPageResponse response = studyService.findFeedPosts(
                 id,
                 oldestFeedPostId.orElse(Long.MAX_VALUE)
         );

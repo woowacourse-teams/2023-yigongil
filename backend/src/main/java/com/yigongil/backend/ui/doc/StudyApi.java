@@ -5,13 +5,13 @@ import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.CertificationResponse;
-import com.yigongil.backend.response.FeedPostResponse;
 import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.response.StudyMemberRoleResponse;
+import com.yigongil.backend.response.feed.FeedPageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.headers.Header;
@@ -191,7 +191,7 @@ public interface StudyApi {
     )
     @SecurityRequirement(name = "token")
     @Operation(summary = "피드 조회")
-    ResponseEntity<List<FeedPostResponse>> findFeedPosts(
+    ResponseEntity<FeedPageResponse> findFeedPosts(
             @Parameter(description = "조회할 스터디 id", required = true) Long id,
             @Parameter(description = "마지막으로 본 피드의 아이디, 첫 요청에서는 필요 없음", allowEmptyValue = true) Optional<Long> oldestFeedPostId
     );
