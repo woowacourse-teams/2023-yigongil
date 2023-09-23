@@ -149,10 +149,8 @@ class StudyDetailActivity :
     }
 
     override fun onUserClick(memberId: Long) {
-        if (studyDetailViewModel.myProfile.id == memberId) {
-            return
-        }
-        startActivity(ProfileActivity.getIntent(this, memberId))
+        val isMyProfile = studyDetailViewModel.myProfile.id == memberId
+        startActivity(ProfileActivity.getIntent(this, memberId, isMyProfile))
     }
 
     private fun observeParticipantsCount() {
