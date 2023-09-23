@@ -2,7 +2,6 @@ package com.yigongil.backend.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.BDDMockito.willReturn;
 
@@ -105,19 +104,14 @@ class TodoServiceTest {
             //given
             willReturn(Optional.of(round)).given(roundRepository).findById(3L);
 
-            TodoUpdateRequest request = new TodoUpdateRequest(true, "hey");
+            TodoUpdateRequest request = new TodoUpdateRequest("hey");
             round.createNecessaryTodo(member, "기존 투두");
 
             //when
             todoService.updateNecessaryTodo(member, round.getId(), request);
 
             //then
-            assertAll(
-                    () -> assertThat(round.getNecessaryToDoContent()).isEqualTo(
-                            request.content()),
-                    () -> assertThat(round.findRoundOfMemberBy(member).isDone()).isEqualTo(
-                            request.isDone())
-            );
+            assertThat(round.getNecessaryToDoContent()).isEqualTo(request.content());
         }
     }
 }

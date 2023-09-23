@@ -2,7 +2,6 @@ package com.yigongil.backend.acceptance.steps;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,10 +41,9 @@ public class TodoSteps {
                .then().log().all();
     }
 
-    @When("{string}가 찾은 회차의 필수 투두를 수정 내용 {string}, {string}으로 수정한다.")
-    public void 필수투두의_수정_내용을_입력한다(String githubId, String isDone, String content) throws JsonProcessingException {
+    @When("{string}가 찾은 회차의 필수 투두를 수정 내용 {string}으로 수정한다.")
+    public void 필수투두의_수정_내용을_입력한다(String githubId, String content) throws JsonProcessingException {
         TodoUpdateRequest request = new TodoUpdateRequest(
-                Boolean.parseBoolean(isDone),
                 content
         );
 
@@ -68,14 +66,11 @@ public class TodoSteps {
         assertThat(response.necessaryTodo().content()).isEqualTo(content);
     }
 
-    @Then("수정된 내용 {string}, {string} 이 필수 투두에 반영된다.")
-    public void 수정된_내용이_투두에_반영된다(String isDone, String content) {
+    @Then("수정된 내용 {string} 이 필수 투두에 반영된다.")
+    public void 수정된_내용이_투두에_반영된다(String content) {
         RoundResponse response = sharedContext.getResponse().as(RoundResponse.class);
 
-        assertAll(
-                () -> assertThat(response.necessaryTodo().isDone()).isEqualTo(Boolean.valueOf(isDone)),
-                () -> assertThat(response.necessaryTodo().content()).isEqualTo(content)
-        );
+        assertThat(response.necessaryTodo().content()).isEqualTo(content);
     }
 
     @Then("투두를 수정할 수 없다.")
@@ -113,21 +108,5 @@ public class TodoSteps {
                                                      .as(ProgressRateResponse.class);
 
         assertThat(response.progressRate()).isEqualTo(Integer.parseInt(progressRate));
-    }
-
-    @When("{string}가 찾은 회차의 필수 투두를 체크한다.")
-    public void 필수_투두를_체크한다(String githubId) throws JsonProcessingException {
-        TodoUpdateRequest request = new TodoUpdateRequest(true, null);
-
-        ExtractableResponse<Response> response = given().log().all()
-                                                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                                                        .body(objectMapper.writeValueAsString(request))
-                                                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(githubId))
-                                                        .when()
-                                                        .patch("/v1/rounds/" + sharedContext.getParameter("roundId") + "/todos")
-                                                        .then().log().all()
-                                                        .extract();
-
-        sharedContext.setResponse(response);
     }
 }

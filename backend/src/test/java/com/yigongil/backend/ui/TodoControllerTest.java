@@ -78,7 +78,7 @@ class TodoControllerTest {
 
     @Test
     void 필수_투두를_업데이트한다() throws Exception {
-        TodoUpdateRequest request = new TodoUpdateRequest(true, "수정");
+        TodoUpdateRequest request = new TodoUpdateRequest("수정");
 
         willDoNothing().given(todoService).updateNecessaryTodo(MemberFixture.김진우.toMember(), 1L, request);
 

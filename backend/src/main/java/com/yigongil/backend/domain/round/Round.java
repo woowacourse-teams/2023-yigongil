@@ -141,6 +141,9 @@ public class Round extends BaseEntity {
     }
 
     public void completeRound(Member member) {
+        if (necessaryToDoContent == null) {
+            throw new NecessaryTodoNotExistException("필수 투두가 생성되지 않았습니다.", String.valueOf(id));
+        }
         findRoundOfMemberBy(member).completeRound();
     }
 

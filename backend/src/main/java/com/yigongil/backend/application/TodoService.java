@@ -29,9 +29,6 @@ public class TodoService {
     @Transactional
     public void updateNecessaryTodo(Member member, Long roundId, TodoUpdateRequest request) {
         Round round = findRoundById(roundId);
-        if (request.isDone() != null) {
-            round.updateNecessaryTodoIsDone(member, request.isDone());
-        }
         if (request.content() != null) {
             round.updateNecessaryTodoContent(member, request.content());
         }
