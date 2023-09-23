@@ -196,10 +196,8 @@ class StudyDetailActivity :
             return
         }
 
-        if (studyDetailViewModel.myProfile.id == memberId) {
-            return
-        }
-        startActivity(ProfileActivity.getIntent(this, memberId))
+        val isMyProfile = studyDetailViewModel.myProfile.id == memberId
+        startActivity(ProfileActivity.getIntent(this, memberId, isMyProfile))
     }
 
     private fun observeParticipantsCount() {
