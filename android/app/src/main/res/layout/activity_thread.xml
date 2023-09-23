@@ -75,6 +75,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rv_must_do"
+            app:reverseLayout="true"
             tools:itemCount="2"
             tools:listitem="@layout/item_thread_comment" />
 
@@ -100,6 +101,7 @@
             android:hint="잡담 및 질답하기"
             android:inputType="text"
             android:padding="8dp"
+            android:text="@={vm.message}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iv_thread_direct_button"
             app:layout_constraintStart_toStartOf="parent" />

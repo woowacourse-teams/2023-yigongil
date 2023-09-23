@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="item"
+            type="com.created.domain.model.Feeds" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,6 +27,7 @@
                 android:layout_height="36dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="12dp"
+                app:glideCircleImageUrl="@{item.author.profileImageUrl}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,6 +38,7 @@
                 android:layout_marginStart="12dp"
                 android:textAppearance="@style/text_m14"
                 android:textColor="@color/white"
+                android:text="@{item.author.nickname}"
                 app:layout_constraintBottom_toTopOf="@+id/tv_thread_comment_past_time"
                 app:layout_constraintStart_toEndOf="@+id/fl_item_thread_comment_profile_image"
                 app:layout_constraintTop_toTopOf="@+id/fl_item_thread_comment_profile_image"
@@ -67,6 +73,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="20dp"
+                android:text="@{item.content}"
                 android:textAppearance="@style/subtitle_r20"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/view_thread_comment_border"
