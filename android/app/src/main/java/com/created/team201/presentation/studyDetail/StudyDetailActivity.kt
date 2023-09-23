@@ -48,7 +48,9 @@ class StudyDetailActivity :
         binding.btnStudyDetailSub.setOnClickListener {
             if (studyDetailViewModel.state.value is Master) {
                 navigateToEditStudyView()
+                return@setOnClickListener
             }
+            showToast(R.string.study_detail_button_preparing_service)
         }
     }
 
