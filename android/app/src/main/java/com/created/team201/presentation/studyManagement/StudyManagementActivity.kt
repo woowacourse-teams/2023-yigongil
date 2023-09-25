@@ -232,12 +232,8 @@ class StudyManagementActivity :
                 toastDeletedMember()
                 return
             }
-
-            if (studyManagementViewModel.myProfile.id == id) {
-                return
-            } else {
-                startActivity(ProfileActivity.getIntent(this@StudyManagementActivity, id))
-            }
+            val isMyProfile = studyManagementViewModel.myProfile.id == id
+            startActivity(ProfileActivity.getIntent(this@StudyManagementActivity, id, isMyProfile))
         }
     }
 

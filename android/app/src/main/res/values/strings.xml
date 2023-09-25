@@ -78,6 +78,7 @@
     <string name="study_detail_study_people">스터디원</string>
     <string name="study_detail_study_capacity">참여하기(%d/%d)</string>
     <string name="study_detail_button_start_study">시작하기(%d/%d)</string>
+    <string name="study_detail_button_preparing_service">아직 준비중인 기능입니다</string>
     <string name="study_detail_dm_button_content_description">스터디장에게 문의하기</string>
     <string name="study_detail_study_accept_waiting">수락을 기다리고 있어요</string>
     <string name="study_detail_study_start_waiting">시작을 기다리고 있어요</string>

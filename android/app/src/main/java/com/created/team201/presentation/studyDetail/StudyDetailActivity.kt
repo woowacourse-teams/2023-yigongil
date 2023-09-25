@@ -48,7 +48,9 @@ class StudyDetailActivity :
         binding.btnStudyDetailSub.setOnClickListener {
             if (studyDetailViewModel.state.value is Master) {
                 navigateToEditStudyView()
+                return@setOnClickListener
             }
+            showToast(R.string.study_detail_button_preparing_service)
         }
     }
 
@@ -147,10 +149,8 @@ class StudyDetailActivity :
     }
 
     override fun onUserClick(memberId: Long) {
-        if (studyDetailViewModel.myProfile.id == memberId) {
-            return
-        }
-        startActivity(ProfileActivity.getIntent(this, memberId))
+        val isMyProfile = studyDetailViewModel.myProfile.id == memberId
+        startActivity(ProfileActivity.getIntent(this, memberId, isMyProfile))
     }
 
     private fun observeParticipantsCount() {
