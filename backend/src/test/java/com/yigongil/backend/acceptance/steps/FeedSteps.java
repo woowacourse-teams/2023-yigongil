@@ -7,11 +7,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.response.CertificationResponse;
-import com.yigongil.backend.response.feed.FeedPageResponse;
+import com.yigongil.backend.response.FeedPostResponse;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -75,12 +76,12 @@ public class FeedSteps {
                                                         .all()
                                                         .statusCode(HttpStatus.OK.value())
                                                         .extract();
-        FeedPageResponse feedPageResponse = response.as(FeedPageResponse.class);
+        List<FeedPostResponse> responses = response.jsonPath().getList(".", FeedPostResponse.class);
 
         assertAll(
-                () -> assertThat(feedPageResponse.feeds()).hasSize(1),
-                () -> assertThat(feedPageResponse.feeds().get(0).author().nickname()).isEqualTo(author),
-                () -> assertThat(feedPageResponse.feeds().get(0).content()).isEqualTo(content)
+                () -> assertThat(responses).hasSize(1),
+                () -> assertThat(responses.get(0).author().nickname()).isEqualTo(author),
+                () -> assertThat(responses.get(0).content()).isEqualTo(content)
         );
     }
 

@@ -1,8 +1,7 @@
-package com.yigongil.backend.response.feed;
+package com.yigongil.backend.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yigongil.backend.domain.feedpost.FeedPost;
-import com.yigongil.backend.response.SimpleMemberResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 
