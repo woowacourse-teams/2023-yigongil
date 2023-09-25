@@ -1,7 +1,6 @@
 package com.yigongil.backend.application;
 
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
@@ -50,14 +49,11 @@ public class RoundService {
                               .findAny()
                               .orElseThrow(() -> new InvalidMemberInRoundException("해당 스터디에 존재하지 않는 회원입니다.", member.getId()));
 
-        List<OptionalTodo> optionalTodos = roundByMember.getOptionalTodos();
-
         return new RoundResponse(
                 roundId,
                 round.getMaster().getId(),
                 round.isMaster(member) ? Role.MASTER.getCode() : Role.STUDY_MEMBER.getCode(),
                 TodoResponse.fromNecessaryTodo(roundByMember, round),
-                TodoResponse.fromOptionalTodo(optionalTodos),
                 MemberOfRoundResponse.from(roundOfMembers)
         );
     }

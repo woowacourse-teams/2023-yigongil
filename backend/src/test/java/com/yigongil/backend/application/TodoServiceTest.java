@@ -2,14 +2,10 @@ package com.yigongil.backend.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willReturn;
 
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
-import com.yigongil.backend.domain.optionaltodo.OptionalTodoRepository;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
@@ -18,7 +14,6 @@ import com.yigongil.backend.exception.NecessaryTodoAlreadyExistException;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
@@ -39,23 +34,16 @@ class TodoServiceTest {
     @Mock
     private RoundRepository roundRepository;
 
-    @Mock
-    private OptionalTodoRepository optionalTodoRepository;
-
     private Member member;
     private Round round;
-    private OptionalTodo todo;
     private RoundOfMember roundOfMember;
 
     @BeforeEach
     void setUp() {
         member = MemberFixture.김진우.toMember();
-        todo = OptionalTodo.builder()
-                           .id(1L)
-                           .content("투두").build();
+
         roundOfMember = RoundOfMember.builder()
                                      .member(member)
-                                     .optionalTodos(new ArrayList<>(List.of(todo)))
                                      .build();
         round = Round.builder()
                      .id(3L)
@@ -116,53 +104,14 @@ class TodoServiceTest {
             //given
             willReturn(Optional.of(round)).given(roundRepository).findById(3L);
 
-            TodoUpdateRequest request = new TodoUpdateRequest(true, "hey");
+            TodoUpdateRequest request = new TodoUpdateRequest("hey");
             round.createNecessaryTodo(member, "기존 투두");
 
             //when
             todoService.updateNecessaryTodo(member, round.getId(), request);
 
             //then
-            assertAll(
-                    () -> assertThat(round.getNecessaryToDoContent()).isEqualTo(
-                            request.content()),
-                    () -> assertThat(round.findRoundOfMemberBy(member).isDone()).isEqualTo(
-                            request.isDone())
-            );
-        }
-    }
-
-    @Nested
-    class 선택_투두 {
-
-        @Test
-        void 투두를_생성한다() {
-            //given
-            willReturn(Optional.of(round)).given(roundRepository).findById(3L);
-            willReturn(todo).given(optionalTodoRepository).save(any());
-
-            TodoCreateRequest request = new TodoCreateRequest("선택 투두");
-
-            //when
-            //then
-            assertDoesNotThrow(() -> todoService.createOptionalTodo(member, 3L, request));
-        }
-
-        @Test
-        void 투두를_수정한다() {
-            //given
-            willReturn(Optional.of(round)).given(roundRepository).findById(1L);
-
-            TodoUpdateRequest request = new TodoUpdateRequest(true, "수정된 내용");
-
-            //when
-            todoService.updateOptionalTodo(member, 1L, todo.getId(), request);
-
-            //then
-            assertAll(
-                    () -> assertThat(todo.getContent()).isEqualTo(request.content()),
-                    () -> assertThat(todo.isDone()).isEqualTo(request.isDone())
-            );
+            assertThat(round.getNecessaryToDoContent()).isEqualTo(request.content());
         }
     }
 }
