@@ -55,6 +55,3 @@ oauth2:
 jwt:
   expiration: 60
   key: qkljwnqdjnqjkdnqdwkdkm31i4j1dasksmd
-
-slack:
-  webhook-url: http:locallocalclocal

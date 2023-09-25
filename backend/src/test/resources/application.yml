@@ -41,7 +41,3 @@ oauth2:
 jwt:
   expiration: 5
   key: qkljwnqdjnqjkdnqdwkdkm31i4j1dasksmdasdsadsasdafef113
-
-
-slack:
-  webhook-url: http://ignore
