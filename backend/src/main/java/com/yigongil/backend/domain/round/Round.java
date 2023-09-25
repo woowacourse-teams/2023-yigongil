@@ -3,7 +3,6 @@ package com.yigongil.backend.domain.round;
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.Tier;
-import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NecessaryTodoAlreadyExistException;
@@ -117,12 +116,6 @@ public class Round extends BaseEntity {
         throw new NotStudyMasterException("필수 투두를 수정할 권한이 없습니다.", member.getNickname());
     }
 
-    public OptionalTodo createOptionalTodo(Member author, String content) {
-        validateTodoLength(content);
-        RoundOfMember targetRoundOfMember = findRoundOfMemberBy(author);
-        return targetRoundOfMember.createOptionalTodo(content);
-    }
-
     private void validateTodoLength(String content) {
         int contentLength = content.length();
         if (contentLength > MAX_TODO_CONTENT_LENGTH || contentLength < MIN_TODO_CONTENT_LENGTH) {
@@ -148,6 +141,9 @@ public class Round extends BaseEntity {
     }
 
     public void completeRound(Member member) {
+        if (necessaryToDoContent == null) {
+            throw new NecessaryTodoNotExistException("필수 투두가 생성되지 않았습니다.", String.valueOf(id));
+        }
         findRoundOfMemberBy(member).completeRound();
     }
 
@@ -189,18 +185,6 @@ public class Round extends BaseEntity {
 
     public void updateEndAt(LocalDateTime endAt) {
         this.endAt = LocalDateTime.of(endAt.toLocalDate(), LocalTime.MIN);
-    }
-
-    public void updateOptionalTodoContent(Member member, Long todoId, String content) {
-        findRoundOfMemberBy(member).updateOptionalTodoContent(todoId, content);
-    }
-
-    public void updateOptionalTodoIsDone(Member member, Long todoId, boolean isDone) {
-        findRoundOfMemberBy(member).updateOptionalTodoIsDone(todoId, isDone);
-    }
-
-    public void deleteOptionalTodo(Member member, Long todoId) {
-        findRoundOfMemberBy(member).removeOptionalTodoById(todoId);
     }
 
     public RoundOfMember findRoundOfMemberBy(Member member) {

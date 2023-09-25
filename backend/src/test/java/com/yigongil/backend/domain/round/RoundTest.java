@@ -2,17 +2,13 @@ package com.yigongil.backend.domain.round;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NecessaryTodoAlreadyExistException;
 import com.yigongil.backend.exception.NotStudyMasterException;
-import com.yigongil.backend.exception.NotStudyMemberException;
 import com.yigongil.backend.fixture.RoundFixture;
 import com.yigongil.backend.fixture.RoundOfMemberFixture;
-import java.util.List;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -78,46 +74,6 @@ class RoundTest {
         }
     }
 
-    @Nested
-    class 선택_투두_생성 {
-
-        @Test
-        void 정상생성한다() {
-            //given
-            Round round = RoundFixture.아이디_삼_투두없는_라운드.toRound();
-
-            //when
-            OptionalTodo actual = round.createOptionalTodo(round.getMaster(), "선택 투두");
-
-            //when
-            List<OptionalTodo> optionalTodos = round.findRoundOfMemberBy(round.getMaster()).getOptionalTodos();
-            assertAll(
-                    () -> assertThat(optionalTodos).hasSize(1),
-                    () -> assertThat(optionalTodos.get(0)).usingRecursiveComparison()
-                                                          .ignoringFields("id")
-                                                          .isEqualTo(actual)
-            );
-        }
-
-        @Test
-        void 스터디_구성원이_아니라면_예외를_던진다() {
-            //given
-            Round round = RoundFixture.아이디_삼_투두없는_라운드.toRound();
-            Member stranger = Member.builder()
-                                    .id(3L)
-                                    .nickname("예외_유저")
-                                    .introduction("소")
-                                    .build();
-
-            //when
-            ThrowingCallable throwable = () -> round.createOptionalTodo(stranger, "선택 투두");
-
-            //then
-            assertThatThrownBy(throwable)
-                    .isInstanceOf(NotStudyMemberException.class);
-        }
-    }
-
     @Test
     void 멤버의_필수_투두_완료여부를_반환한다() {
         //given
@@ -164,7 +120,7 @@ class RoundTest {
             int result = round.calculateProgress();
 
             //then
-            assertThat(result).isEqualTo(0);
+            assertThat(result).isZero();
         }
     }
 }

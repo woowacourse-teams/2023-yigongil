@@ -8,6 +8,8 @@ import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
+import com.yigongil.backend.response.MemberCertificationResponse;
+import com.yigongil.backend.response.MembersCertificationResponse;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.ExtractableResponse;
@@ -105,5 +107,36 @@ public class FeedSteps {
                 () -> assertThat(certificationResponse.author().nickname()).isEqualTo(author),
                 () -> assertThat(certificationResponse.content()).isEqualTo(content)
         );
+    }
+
+    @When("{string}가 {string} 스터디의 인증 목록을 조회한다.")
+    public void 인증_목록을_조회한다(String githubId, String studyName) {
+
+        String token = sharedContext.getToken(githubId);
+        Object studyId = sharedContext.getParameter(studyName);
+
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                                        .header(HttpHeaders.AUTHORIZATION, token)
+                                                        .when()
+                                                        .get("/v1/studies/" + studyId + "/certifications")
+                                                        .then().log().all()
+                                                        .extract();
+        sharedContext.setResponse(response);
+    }
+
+    @Then("인증이 {int} 개 올라왔다.")
+    public void 인증_개수_검증(int count) {
+        MembersCertificationResponse response = sharedContext.getResponse().as(MembersCertificationResponse.class);
+
+        long result = response.others().stream()
+                              .filter(MemberCertificationResponse::isCertified)
+                              .count();
+
+        if (response.me().isCertified()) {
+            result++;
+        }
+
+        assertThat(result).isEqualTo(count);
     }
 }
