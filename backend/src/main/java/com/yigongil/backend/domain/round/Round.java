@@ -60,6 +60,8 @@ public class Round extends BaseEntity {
     @JoinColumn(name = "round_id", nullable = false)
     private List<RoundOfMember> roundOfMembers = new ArrayList<>();
 
+    private Integer weekNumber;
+
     protected Round() {
     }
 

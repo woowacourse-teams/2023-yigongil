@@ -11,16 +11,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 
-public interface StudyRepository extends Repository<Study, Long> {
+public interface StudyRepository extends Repository<StudyV1, Long> {
 
     Study save(Study study);
 
     @EntityGraph(attributePaths = {"rounds"})
-    Optional<Study> findById(Long studyId);
+    Optional<StudyV1> findById(Long studyId);
 
-    Page<Study> findAllByProcessingStatus(ProcessingStatus processingStatus, Pageable pageable);
+    Page<StudyV1> findAllByProcessingStatus(ProcessingStatus processingStatus, Pageable pageable);
 
-    Page<Study> findAllByProcessingStatusAndNameContainingIgnoreCase(ProcessingStatus processingStatus, String word, Pageable pageable);
+    Page<StudyV1> findAllByProcessingStatusAndNameContainingIgnoreCase(ProcessingStatus processingStatus, String word, Pageable pageable);
 
     List<Study> findAllByProcessingStatus(ProcessingStatus processingStatus);
 

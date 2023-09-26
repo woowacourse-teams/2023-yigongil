@@ -4,28 +4,28 @@ import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
-import com.yigongil.backend.exception.CannotStartException;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidNumberOfMaximumStudyMember;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.InvalidStudyNameLengthException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -34,7 +34,9 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Entity
-public class Study extends BaseEntity {
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "version", discriminatorType = DiscriminatorType.INTEGER)
+public abstract class Study extends BaseEntity {
 
     private static final int ONE_MEMBER = 1;
     private static final int MIN_NAME_LENGTH = 1;
@@ -59,35 +61,23 @@ public class Study extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private ProcessingStatus processingStatus;
 
-    @Column(nullable = false)
     private LocalDateTime startAt;
 
     private LocalDateTime endAt;
 
     @Column(nullable = false)
-    private Integer totalRoundCount;
-
-    @Column(nullable = false)
-    private Integer periodOfRound;
-
-    @Column(nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private PeriodUnit periodUnit;
-
-    @Column(nullable = false)
-    private Integer currentRoundNumber;
+    protected Integer currentRoundNumber;
 
     @Cascade(CascadeType.PERSIST)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany
     @JoinColumn(name = "study_id", nullable = false)
-    private List<Round> rounds = new ArrayList<>();
+    protected List<Round> rounds = new ArrayList<>();
 
     protected Study() {
     }
 
-    @Builder
-    public Study(
+    protected Study(
             Long id,
             String name,
             String introduction,
@@ -95,11 +85,8 @@ public class Study extends BaseEntity {
             ProcessingStatus processingStatus,
             LocalDateTime startAt,
             LocalDateTime endAt,
-            Integer totalRoundCount,
-            Integer periodOfRound,
             Integer currentRoundNumber,
-            List<Round> rounds,
-            PeriodUnit periodUnit
+            List<Round> rounds
     ) {
         name = name.strip();
         validateNumberOfMaximumMembers(numberOfMaximumMembers);
@@ -111,9 +98,6 @@ public class Study extends BaseEntity {
         this.processingStatus = processingStatus;
         this.startAt = startAt;
         this.endAt = endAt;
-        this.totalRoundCount = totalRoundCount;
-        this.periodOfRound = periodOfRound;
-        this.periodUnit = periodUnit;
         this.currentRoundNumber = currentRoundNumber == null ? 1 : currentRoundNumber;
         this.rounds = rounds == null ? new ArrayList<>() : rounds;
     }
@@ -141,29 +125,6 @@ public class Study extends BaseEntity {
                     ), nameLength
             );
         }
-    }
-
-    public static Study initializeStudyOf(
-            String name,
-            String introduction,
-            Integer numberOfMaximumMembers,
-            LocalDateTime startAt,
-            Integer totalRoundCount,
-            String periodOfRound,
-            Member master
-    ) {
-        Study study = Study.builder()
-                           .name(name)
-                           .numberOfMaximumMembers(numberOfMaximumMembers)
-                           .startAt(startAt)
-                           .totalRoundCount(totalRoundCount)
-                           .periodOfRound(PeriodUnit.getPeriodNumber(periodOfRound))
-                           .periodUnit(PeriodUnit.getPeriodUnit(periodOfRound))
-                           .introduction(introduction)
-                           .processingStatus(ProcessingStatus.RECRUITING)
-                           .build();
-        study.rounds = Round.of(totalRoundCount, master);
-        return study;
     }
 
     public Integer calculateAverageTier() {
@@ -214,60 +175,11 @@ public class Study extends BaseEntity {
         this.processingStatus = ProcessingStatus.END;
     }
 
-    public void startStudy() {
-        if (processingStatus != ProcessingStatus.RECRUITING) {
-            throw new CannotStartException("시작할 수 없는 상태입니다.", id);
-        }
-        if (sizeOfCurrentMembers() == ONE_MEMBER) {
-            throw new CannotStartException("시작할 수 없는 상태입니다.", id);
-        }
-        this.startAt = LocalDateTime.now();
-        this.processingStatus = ProcessingStatus.PROCESSING;
-        initializeRoundsEndAt();
-    }
-
-    private void initializeRoundsEndAt() {
-        rounds.sort(Comparator.comparing(Round::getRoundNumber));
-        LocalDateTime date = LocalDateTime.of(startAt.toLocalDate(), LocalTime.MIN);
-        for (Round round : rounds) {
-            date = date.plusDays(calculateStudyPeriod());
-            round.updateEndAt(date);
-        }
-    }
-
-    public int calculateStudyPeriod() {
-        return periodOfRound * periodUnit.getUnitNumber();
-    }
-
-    public String findPeriodOfRoundToString() {
-        return periodUnit.toStringFormat(periodOfRound);
-    }
-
     public Member getMaster() {
         return getCurrentRound().getMaster();
     }
 
-    public void updateInformation(
-            Member member,
-            String name,
-            Integer numberOfMaximumMembers,
-            LocalDateTime startAt,
-            Integer totalRoundCount,
-            String periodOfRound,
-            String introduction
-    ) {
-        validateMaster(member);
-        validateStudyProcessingStatus();
-        this.name = name;
-        this.numberOfMaximumMembers = numberOfMaximumMembers;
-        this.startAt = startAt;
-        this.totalRoundCount = totalRoundCount;
-        this.periodOfRound = PeriodUnit.getPeriodNumber(periodOfRound);
-        this.periodUnit = PeriodUnit.getPeriodUnit(periodOfRound);
-        this.introduction = introduction;
-    }
-
-    private void validateStudyProcessingStatus() {
+    protected void validateStudyProcessingStatus() {
         if (!isRecruiting()) {
             throw new InvalidProcessingStatusException("현재 스터디의 상태가 모집중이 아닙니다.",
                     processingStatus.name());
@@ -305,5 +217,14 @@ public class Study extends BaseEntity {
 
     public boolean isMaster(Member member) {
         return getCurrentRound().isMaster(member);
+    }
+
+    protected void updateInformation(String name, Integer numberOfMaximumMembers, LocalDateTime startAt, String introduction) {
+        validateName(name);
+        validateNumberOfMaximumMembers(numberOfMaximumMembers);
+        this.name = name;
+        this.numberOfMaximumMembers = numberOfMaximumMembers;
+        this.startAt = startAt;
+        this.introduction = introduction;
     }
 }

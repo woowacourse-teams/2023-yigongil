@@ -8,6 +8,7 @@ import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.PeriodUnit;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
+import com.yigongil.backend.domain.study.StudyV1;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,19 +44,19 @@ public enum StudyFixture {
         this.numberOfMaximumMember = numberOfMaximumMember;
     }
 
-    public Study toStudy() {
-        return Study.builder()
-                    .id(id)
-                    .startAt(startAt)
-                    .name(name)
-                    .introduction(introduction)
-                    .periodOfRound(periodOfRound)
-                    .processingStatus(processingStatus)
-                    .totalRoundCount(totalRoundCount)
-                    .periodUnit(periodUnit)
-                    .numberOfMaximumMembers(numberOfMaximumMember)
-                    .rounds(List.of(아이디없는_라운드.toRound(), 아이디없는_라운드2.toRound(), 아이디없는_라운드3.toRound()))
-                    .build();
+    public StudyV1 toStudy() {
+        return StudyV1.builder()
+                      .id(id)
+                      .startAt(startAt)
+                      .name(name)
+                      .introduction(introduction)
+                      .periodOfRound(periodOfRound)
+                      .processingStatus(processingStatus)
+                      .totalRoundCount(totalRoundCount)
+                      .periodUnit(periodUnit)
+                      .numberOfMaximumMembers(numberOfMaximumMember)
+                      .rounds(List.of(아이디없는_라운드.toRound(), 아이디없는_라운드2.toRound(), 아이디없는_라운드3.toRound()))
+                      .build();
     }
 
     public Study toStudyWithRounds(RoundFixture... roundFixtures) {
@@ -63,7 +64,7 @@ public enum StudyFixture {
                                                    .map(RoundFixture::toRound)
                                                    .toList());
 
-        return Study.builder()
+        return StudyV1.builder()
                     .id(id)
                     .startAt(startAt)
                     .name(name)

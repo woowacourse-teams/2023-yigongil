@@ -1,6 +1,6 @@
 package com.yigongil.backend.response;
 
-import com.yigongil.backend.domain.study.Study;
+import com.yigongil.backend.domain.study.StudyV1;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 
@@ -25,7 +25,7 @@ public record RecruitingStudyResponse(
         Integer numberOfMaximumMembers
 ) {
 
-    public static RecruitingStudyResponse from(Study study) {
+    public static RecruitingStudyResponse from(StudyV1 study) {
         return new RecruitingStudyResponse(
                 study.getId(),
                 study.getProcessingStatus().getCode(),

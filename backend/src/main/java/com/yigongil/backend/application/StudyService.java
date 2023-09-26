@@ -8,6 +8,7 @@ import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
+import com.yigongil.backend.domain.study.StudyV1;
 import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
@@ -58,7 +59,7 @@ public class StudyService {
 
     @Transactional
     public Long create(Member member, StudyUpdateRequest request) {
-        Study study = Study.initializeStudyOf(
+        Study study = StudyV1.initializeStudyOf(
                 request.name(),
                 request.introduction(),
                 request.numberOfMaximumMembers(),
@@ -86,7 +87,7 @@ public class StudyService {
     public List<RecruitingStudyResponse> findRecruitingStudies(int page) {
         Pageable pageable = PageRequest.of(page, ID_DESC.getSize(), ID_DESC.getSort());
 
-        Page<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.RECRUITING, pageable);
+        Page<StudyV1> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.RECRUITING, pageable);
         return toRecruitingStudyResponse(studies);
 
     }
@@ -94,7 +95,7 @@ public class StudyService {
     @Transactional(readOnly = true)
     public List<RecruitingStudyResponse> findRecruitingStudiesWithSearch(int page, String word) {
         Pageable pageable = PageRequest.of(page, ID_DESC.getSize(), ID_DESC.getSort());
-        Page<Study> studies = studyRepository.findAllByProcessingStatusAndNameContainingIgnoreCase(
+        Page<StudyV1> studies = studyRepository.findAllByProcessingStatusAndNameContainingIgnoreCase(
                 ProcessingStatus.RECRUITING,
                 word,
                 pageable
@@ -102,7 +103,7 @@ public class StudyService {
         return toRecruitingStudyResponse(studies);
     }
 
-    private List<RecruitingStudyResponse> toRecruitingStudyResponse(Page<Study> studies) {
+    private List<RecruitingStudyResponse> toRecruitingStudyResponse(Page<StudyV1> studies) {
         return studies.get()
                       .map(RecruitingStudyResponse::from)
                       .toList();
@@ -137,7 +138,7 @@ public class StudyService {
         return certificationService.createCertification(study, member, request).getId();
     }
 
-    public Study findStudyById(Long studyId) {
+    public StudyV1 findStudyById(Long studyId) {
         return studyRepository.findById(studyId)
                               .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
     }
@@ -151,7 +152,7 @@ public class StudyService {
 
     @Transactional(readOnly = true)
     public StudyDetailResponse findStudyDetailByStudyId(Long studyId) {
-        Study study = findStudyById(studyId);
+        StudyV1 study = findStudyById(studyId);
 
         List<Round> rounds = study.getRounds();
         Round currentRound = study.getCurrentRound();
@@ -220,7 +221,7 @@ public class StudyService {
 
         List<MyStudyResponse> response = new ArrayList<>();
         for (StudyMember studyMember : studyMembers) {
-            Study study = studyMember.getStudy();
+            StudyV1 study = (StudyV1) studyMember.getStudy();
             response.add(
                     new MyStudyResponse(
                             study.getId(),
@@ -286,7 +287,7 @@ public class StudyService {
 
     @Transactional
     public void update(Member member, Long studyId, StudyUpdateRequest request) {
-        Study study = findStudyById(studyId);
+        StudyV1 study = findStudyById(studyId);
         study.updateInformation(
                 member,
                 request.name(),
