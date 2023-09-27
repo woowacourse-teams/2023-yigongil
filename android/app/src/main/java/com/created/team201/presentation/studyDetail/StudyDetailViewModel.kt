@@ -2,29 +2,30 @@ package com.created.team201.presentation.studyDetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.created.domain.model.Member
 import com.created.domain.model.Nickname
 import com.created.domain.model.Profile
 import com.created.domain.model.ProfileInformation
 import com.created.domain.model.Role
 import com.created.domain.model.StudyDetail
+import com.created.domain.repository.GuestRepository
 import com.created.domain.repository.StudyDetailRepository
-import com.created.team201.data.datasource.remote.StudyDetailDataSourceImpl
-import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.StudyDetailRepositoryImpl
 import com.created.team201.presentation.myPage.model.ProfileInformationUiModel
 import com.created.team201.presentation.myPage.model.ProfileUiModel
 import com.created.team201.presentation.onBoarding.model.NicknameUiModel
 import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
 import com.created.team201.presentation.studyDetail.model.StudyMemberUIModel
+import com.created.team201.presentation.studyDetail.model.StudyMemberUIModel.Companion.toUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class StudyDetailViewModel private constructor(
+@HiltViewModel
+class StudyDetailViewModel @Inject constructor(
     private val studyDetailRepository: StudyDetailRepository,
+    private val guestRepository: GuestRepository,
 ) : ViewModel() {
 
     private val _study: NonNullMutableLiveData<StudyDetailUIModel> =
@@ -52,22 +53,65 @@ class StudyDetailViewModel private constructor(
     val studyMemberCount: NonNullLiveData<Int> get() = _studyMemberCount
     lateinit var myProfile: ProfileUiModel
 
+    private val isGuest: Boolean get() = guestRepository.getIsGuest()
+
+    fun refresh(studyId: Long) {
+        viewModelScope.launch {
+            getMyProfile()
+            studyDetailRepository.getStudyMemberRole(studyId)
+                .onSuccess {
+                    val role = Role.valueOf(it)
+                    _study.value = study.value.copy(role = role)
+                    _state.value = role.toStudyDetailState(study.value.canStartStudy)
+                }
+        }
+    }
+
     fun fetchStudyDetail(studyId: Long, notifyInvalidStudy: () -> Unit) {
         viewModelScope.launch {
             runCatching {
-                getMyProfile()
-                studyDetailRepository.getStudyDetail(studyId).toUIModel()
-            }.onSuccess {
-                _study.value = it
-                _studyParticipants.value = it.studyMembers
-                _isFullMember.value = it.peopleCount == it.memberCount
-                _state.value = it.role.toStudyDetailState(it.canStartStudy)
-                _studyMemberCount.value = it.memberCount
-                _canStudyStart.value = it.canStartStudy
-                if (it.role == Role.MASTER) fetchApplicants(studyId)
+                studyDetailRepository.getStudyDetail(studyId)
+            }.onSuccess { studyDetail ->
+                when (isGuest) {
+                    true -> {
+                        val studyDetailUIModel =
+                            StudyDetailUIModel.createFromStudyDetailRole(
+                                studyDetail = studyDetail,
+                                role = Role.GUEST
+                            )
+                        setStudyDetail(studyDetailUIModel, studyId)
+                    }
+
+                    false -> {
+                        getMyProfile()
+                        studyDetailRepository.getStudyMemberRole(studyId)
+                            .onSuccess { role ->
+                                val studyDetailUIModel =
+                                    StudyDetailUIModel.createFromStudyDetailRole(
+                                        studyDetail = studyDetail,
+                                        role = Role.valueOf(role)
+                                    )
+                                setStudyDetail(studyDetailUIModel, studyId)
+                            }.onFailure {
+                                notifyInvalidStudy()
+                            }
+                    }
+                }
             }.onFailure {
                 notifyInvalidStudy()
             }
+        }
+    }
+
+    private fun setStudyDetail(studyDetailUIModel: StudyDetailUIModel, studyId: Long) {
+        with(studyDetailUIModel) {
+            _study.value = this
+            _studyParticipants.value = studyMembers
+            _isFullMember.value = peopleCount == memberCount
+            _state.value = this.role.toStudyDetailState(canStartStudy)
+            _studyMemberCount.value = memberCount
+            _canStudyStart.value = canStartStudy
+            if (this.role == Role.MASTER) fetchApplicants(studyId)
         }
     }
 
@@ -100,7 +144,7 @@ class StudyDetailViewModel private constructor(
                 _studyParticipants.value =
                     _studyParticipants.value.plus(
                         members.map {
-                            it.toUIModel(
+                            it.toUiModel(
                                 study.value.studyMasterId,
                                 true,
                             )
@@ -137,38 +181,12 @@ class StudyDetailViewModel private constructor(
         }
     }
 
-    private fun StudyDetail.toUIModel(): StudyDetailUIModel = StudyDetailUIModel(
-        studyMasterId = studyMasterId,
-        isMaster = role == Role.MASTER,
-        title = this.name,
-        introduction = this.introduction,
-        peopleCount = this.numberOfMaximumMembers,
-        role = this.role,
-        startDate = this.startAt,
-        period = this.totalRoundCount.toString(),
-        cycle = this.periodOfRound,
-        memberCount = this.members.size,
-        canStartStudy = StudyDetail.canStartStudy(this.numberOfCurrentMembers),
-        studyMembers = this.members.map { it.toUIModel(this.studyMasterId, isApplicant = false) },
-    )
-
-    private fun Member.toUIModel(studyMasterId: Long, isApplicant: Boolean): StudyMemberUIModel =
-        StudyMemberUIModel(
-            id = id,
-            isMaster = this.id == studyMasterId,
-            isApplicant = isApplicant,
-            profileImageUrl = this.profileImage,
-            name = this.nickname,
-            successRate = this.successRate.toInt(),
-            tier = this.tier,
-            isDeleted = this.isDeleted,
-        )
-
     private fun Role.toStudyDetailState(canStartStudy: Boolean): StudyDetailState = when (this) {
         Role.MASTER -> StudyDetailState.Master(canStartStudy)
         Role.MEMBER -> StudyDetailState.Member
         Role.APPLICANT -> StudyDetailState.Applicant
         Role.NOTHING -> StudyDetailState.Nothing(isFullMember.value)
+        Role.GUEST -> StudyDetailState.Guest(isFullMember.value)
     }
 
     private fun Profile.toUiModel(): ProfileUiModel = ProfileUiModel(
@@ -191,18 +209,4 @@ class StudyDetailViewModel private constructor(
     private fun Nickname.toUiModel(): NicknameUiModel = NicknameUiModel(
         nickname = nickname
     )
-
-    companion object {
-        val Factory: ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                val repository = StudyDetailRepositoryImpl(
-                    StudyDetailDataSourceImpl(
-                        NetworkServiceModule.studyDetailService,
-                    ),
-                )
-                return StudyDetailViewModel(repository) as T
-            }
-        }
-    }
 }

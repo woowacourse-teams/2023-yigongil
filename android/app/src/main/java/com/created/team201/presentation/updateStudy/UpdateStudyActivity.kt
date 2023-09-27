@@ -21,10 +21,12 @@ import com.created.team201.presentation.updateStudy.bottomSheet.PeopleCountBotto
 import com.created.team201.presentation.updateStudy.bottomSheet.PeriodBottomSheetFragment
 import com.created.team201.presentation.updateStudy.bottomSheet.StartDateBottomSheetFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class UpdateStudyActivity :
     BindingActivity<ActivityUpdateStudyBinding>(R.layout.activity_update_study) {
-    private val viewModel: UpdateStudyViewModel by viewModels { UpdateStudyViewModel.Factory }
+    private val viewModel: UpdateStudyViewModel by viewModels()
     private val updateStudyViewMode by lazy { intent.getStringExtra(VIEW_MODE) }
     private val studyId by lazy { intent.getLongExtra(STUDY_KEY, -1L) }
 

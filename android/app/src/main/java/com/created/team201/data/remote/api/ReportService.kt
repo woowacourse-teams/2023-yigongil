@@ -6,12 +6,12 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface ReportService {
-    @POST("/v1/reports/by-member")
+    @POST("v1/reports/by-member")
     suspend fun reportUser(
         @Body report: ReportUserRequestDto,
     )
 
-    @POST("/v1/reports/by-study")
+    @POST("v1/reports/by-study")
     suspend fun reportStudy(
         @Body report: ReportStudyRequestDto,
     )

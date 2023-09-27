@@ -20,12 +20,11 @@ import com.created.team201.presentation.login.LoginActivity
 import com.created.team201.presentation.setting.adapter.SettingAdapter
 import com.created.team201.presentation.setting.model.SettingType
 import com.created.team201.presentation.setting.model.SettingUiModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activity_setting) {
-    private val viewModel: SettingViewModel by viewModels {
-        SettingViewModel.Factory
-    }
-
+    private val viewModel: SettingViewModel by viewModels()
     private val settingItems: List<SettingUiModel> by lazy {
         resources.getStringArray(R.array.settingItems).mapIndexed { index, setting ->
             SettingUiModel(index.toLong(), setting)

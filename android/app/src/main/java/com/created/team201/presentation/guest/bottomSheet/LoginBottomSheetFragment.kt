@@ -19,12 +19,12 @@ import com.created.team201.presentation.guest.GuestViewModel.State.SUCCESS
 import com.created.team201.presentation.onBoarding.OnBoardingActivity
 import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
 import com.created.team201.util.auth.CustomTabLauncherActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginBottomSheetFragment :
     BindingBottomSheetFragment<FragmentLoginBottomSheetBinding>(R.layout.fragment_login_bottom_sheet) {
-    private val guestViewModel: GuestViewModel by activityViewModels {
-        GuestViewModel.Factory
-    }
+    private val guestViewModel: GuestViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
