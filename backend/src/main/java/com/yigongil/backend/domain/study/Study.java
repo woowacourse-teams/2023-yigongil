@@ -193,10 +193,6 @@ public class Study extends BaseEntity {
         getCurrentRound().validateMaster(candidate);
     }
 
-    public RoundOfMember findCurrentRoundOfMemberBy(Member member) {
-        return getCurrentRound().findRoundOfMemberBy(member);
-    }
-
     public boolean isCurrentRoundEndAt(LocalDate today) {
         return getCurrentRound().isEndAt(today);
     }
@@ -216,7 +212,6 @@ public class Study extends BaseEntity {
 
     private void finishStudy() {
         this.processingStatus = ProcessingStatus.END;
-        getCurrentRound().updateMembersTier();
     }
 
     public void startStudy() {
@@ -287,10 +282,28 @@ public class Study extends BaseEntity {
         return this.processingStatus == ProcessingStatus.END;
     }
 
+    public void completeRound(Member member) {
+        getCurrentRound().completeRound(member);
+    }
+
+    public List<RoundOfMember> getCurrentRoundOfMembers() {
+        return getCurrentRound().getRoundOfMembers();
+    }
+
+    public int calculateSuccessfulRoundCount(Member member) {
+        return (int) rounds.stream()
+                           .filter(round -> round.isSuccess(member))
+                           .count();
+    }
+
     public Round getCurrentRound() {
         return rounds.stream()
                      .filter(round -> round.getRoundNumber().equals(currentRoundNumber))
                      .findAny()
                      .orElseThrow();
+    }
+
+    public boolean isMaster(Member member) {
+        return getCurrentRound().isMaster(member);
     }
 }

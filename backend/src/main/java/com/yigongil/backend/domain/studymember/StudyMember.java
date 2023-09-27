@@ -21,6 +21,8 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 public class StudyMember extends BaseEntity {
 
+    private static final int EXPERIENCE_BASE_UNIT = 1;
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -71,10 +73,11 @@ public class StudyMember extends BaseEntity {
     }
 
     public void completeSuccessfully() {
+        int successfulRoundCount = study.calculateSuccessfulRoundCount(member);
+        int defaultRoundExperience = EXPERIENCE_BASE_UNIT * 2;
+        int additionalExperienceOfPeriodLength = EXPERIENCE_BASE_UNIT * study.calculateStudyPeriod();
+        int totalExperience = successfulRoundCount * (defaultRoundExperience + additionalExperienceOfPeriodLength);
+        member.addExperience(totalExperience);
         this.studyResult = StudyResult.SUCCESS;
-    }
-
-    public boolean equalsMember(Member member) {
-        return this.member.equals(member);
     }
 }
