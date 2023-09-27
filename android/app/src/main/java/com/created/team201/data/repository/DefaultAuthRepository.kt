@@ -18,7 +18,7 @@ class DefaultAuthRepository @Inject constructor(
         return runCatching {
             val tokens = authService.getTokens(token)
             tokenDataSource.setAccessToken(tokens.accessToken)
-            tokenDataSource.setRefreshToken(tokens.accessToken)
+            tokenDataSource.setRefreshToken(tokens.refreshToken)
         }
     }
 

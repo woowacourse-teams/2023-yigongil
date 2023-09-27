@@ -20,7 +20,7 @@ interface AuthService {
         @Body refreshToken: RenewedAccessTokenRequestDTO,
     ): AuthResponseDto
 
-    @GET("v1/home")
+    @GET("v1/login/tokens/validate")
     suspend fun getLoginValidity(
         @Header("Authorization") accessToken: String,
     )
