@@ -19,7 +19,7 @@ import lombok.Getter;
 
 @Getter
 @DiscriminatorValue(value = "V1")
-@Entity
+@Entity(name = "study_v1")
 public class StudyV1 extends Study {
 
 

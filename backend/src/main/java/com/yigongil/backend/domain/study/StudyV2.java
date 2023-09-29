@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @Getter
 @DiscriminatorValue(value = "V2")
-@Entity
+@Entity(name = "study_v2")
 public class StudyV2 extends Study {
 
     private Integer roundsPerWeek;
