@@ -33,29 +33,11 @@ public class DatabaseCleaner {
                 if (strategy == InheritanceType.SINGLE_TABLE) {
                     continue;
                 }
-                tables.add(toSnake(entity.getSimpleName().toLowerCase()));
+                tables.add(toSnake(entity.getSimpleName()));
                 continue;
             }
             tables.add(toSnake(entity.getSimpleName()));
         }
-
-        System.out.println("tables = " + tables);
-//        List<String> l = clazz.stream()
-//                              .filter(aClass -> !aClass.getSuperclass().isAnnotationPresent(Inheritance.class))
-//                              .map(Class::getSimpleName)
-//                              .map(this::toSnake)
-//                              .toList();
-//        tables.addAll(l);
-//        tables.add("studyv1");
-//        tables.add("studyv2");
-
-//        this.tables = entityManager.getMetamodel().getEntities().stream()
-//                                   .filter(entityType -> entityType.getJavaType().getSuperclass()
-//                                                                   .getSimpleName()
-//                                                                   .equals("BaseEntity"))
-//                                   .map(EntityType::getName)
-//                                   .map(this::toSnake)
-//                                   .toList();
     }
 
     private String toSnake(String camel) {
