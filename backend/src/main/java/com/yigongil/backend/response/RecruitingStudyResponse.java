@@ -1,6 +1,7 @@
 package com.yigongil.backend.response;
 
 import com.yigongil.backend.domain.study.Study;
+import com.yigongil.backend.domain.study.StudyV1;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 
@@ -26,16 +27,17 @@ public record RecruitingStudyResponse(
 ) {
 
     public static RecruitingStudyResponse from(Study study) {
+        StudyV1 studyV1 = (StudyV1) study;
         return new RecruitingStudyResponse(
-                study.getId(),
-                study.getProcessingStatus().getCode(),
-                study.getName(),
-                study.calculateAverageTier(),
-                study.getStartAt().toLocalDate(),
-                study.getTotalRoundCount(),
-                study.getPeriodUnit().toStringFormat(study.getPeriodOfRound()),
-                study.sizeOfCurrentMembers(),
-                study.getNumberOfMaximumMembers()
+                studyV1.getId(),
+                studyV1.getProcessingStatus().getCode(),
+                studyV1.getName(),
+                studyV1.calculateAverageTier(),
+                studyV1.getStartAt().toLocalDate(),
+                studyV1.getTotalRoundCount(),
+                studyV1.getPeriodUnit().toStringFormat(studyV1.getPeriodOfRound()),
+                studyV1.sizeOfCurrentMembers(),
+                studyV1.getNumberOfMaximumMembers()
         );
     }
 }

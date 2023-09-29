@@ -67,17 +67,7 @@ public class MemberService {
 
     private FinishedStudyResponse createFinishedStudyResponse(StudyMember studyMember) {
         Study study = studyMember.getStudy();
-        return new FinishedStudyResponse(
-                study.getId(),
-                study.getName(),
-                study.calculateAverageTier(),
-                study.getStartAt().toLocalDate(),
-                study.getTotalRoundCount(),
-                study.getPeriodUnit().toStringFormat(study.getPeriodOfRound()),
-                study.sizeOfCurrentMembers(),
-                study.getNumberOfMaximumMembers(),
-                studyMember.isSuccess()
-        );
+        return FinishedStudyResponse.from(study, studyMember);
     }
 
     private int calculateNumberOfSuccessRounds(Member member) {

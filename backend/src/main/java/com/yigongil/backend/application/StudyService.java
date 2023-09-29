@@ -8,6 +8,7 @@ import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
+import com.yigongil.backend.domain.study.StudyV1;
 import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
@@ -58,7 +59,7 @@ public class StudyService {
 
     @Transactional
     public Long create(Member member, StudyUpdateRequest request) {
-        Study study = Study.initializeStudyOf(
+        Study study = StudyV1.initializeStudyOf(
                 request.name(),
                 request.introduction(),
                 request.numberOfMaximumMembers(),
@@ -222,23 +223,7 @@ public class StudyService {
         for (StudyMember studyMember : studyMembers) {
             Study study = studyMember.getStudy();
             response.add(
-                    new MyStudyResponse(
-                            study.getId(),
-                            study.getProcessingStatus()
-                                 .getCode(),
-                            studyMember.getRole()
-                                       .getCode(),
-                            study.getName(),
-                            study.calculateAverageTier(),
-                            study.getStartAt().toLocalDate(),
-                            study.getTotalRoundCount(),
-                            study.getPeriodUnit()
-                                 .toStringFormat(study.getPeriodOfRound()),
-                            study.getCurrentRound()
-                                 .getRoundOfMembers()
-                                 .size(),
-                            study.getNumberOfMaximumMembers()
-                    )
+                    MyStudyResponse.from(study, studyMember)
             );
         }
         return response;

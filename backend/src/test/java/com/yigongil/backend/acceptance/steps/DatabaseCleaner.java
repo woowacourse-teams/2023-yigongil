@@ -1,8 +1,11 @@
 package com.yigongil.backend.acceptance.steps;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.PersistenceContext;
 import javax.persistence.metamodel.EntityType;
 import org.springframework.context.annotation.Profile;
@@ -16,17 +19,43 @@ public class DatabaseCleaner {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private List<String> tables;
+    private List<String> tables = new ArrayList<>();
 
     @PostConstruct
     public void init() {
-        this.tables = entityManager.getMetamodel().getEntities().stream()
-                                   .filter(entityType -> entityType.getJavaType().getSuperclass()
-                                                                   .getSimpleName()
-                                                                   .equals("BaseEntity"))
-                                   .map(EntityType::getName)
-                                   .map(this::toSnake)
-                                   .toList();
+        List<? extends Class<?>> entities = entityManager.getMetamodel().getEntities().stream()
+                                                         .map(EntityType::getJavaType)
+                                                         .toList();
+        for (Class<?> entity : entities) {
+            if (entity.getSuperclass().isAnnotationPresent(Inheritance.class)) {
+                Inheritance inheritance = entity.getSuperclass().getAnnotation(Inheritance.class);
+                InheritanceType strategy = inheritance.strategy();
+                if (strategy == InheritanceType.SINGLE_TABLE) {
+                    continue;
+                }
+                tables.add(toSnake(entity.getSimpleName().toLowerCase()));
+                continue;
+            }
+            tables.add(toSnake(entity.getSimpleName()));
+        }
+
+        System.out.println("tables = " + tables);
+//        List<String> l = clazz.stream()
+//                              .filter(aClass -> !aClass.getSuperclass().isAnnotationPresent(Inheritance.class))
+//                              .map(Class::getSimpleName)
+//                              .map(this::toSnake)
+//                              .toList();
+//        tables.addAll(l);
+//        tables.add("studyv1");
+//        tables.add("studyv2");
+
+//        this.tables = entityManager.getMetamodel().getEntities().stream()
+//                                   .filter(entityType -> entityType.getJavaType().getSuperclass()
+//                                                                   .getSimpleName()
+//                                                                   .equals("BaseEntity"))
+//                                   .map(EntityType::getName)
+//                                   .map(this::toSnake)
+//                                   .toList();
     }
 
     private String toSnake(String camel) {
