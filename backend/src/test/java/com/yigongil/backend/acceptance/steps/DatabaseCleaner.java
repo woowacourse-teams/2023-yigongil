@@ -33,11 +33,12 @@ public class DatabaseCleaner {
                 if (strategy == InheritanceType.SINGLE_TABLE) {
                     continue;
                 }
-                tables.add(toSnake(entity.getSimpleName()));
+                tables.add(toSnake(entity.getSimpleName().toLowerCase()));
                 continue;
             }
             tables.add(toSnake(entity.getSimpleName()));
         }
+        System.out.println("tables = " + tables);
     }
 
     private String toSnake(String camel) {
