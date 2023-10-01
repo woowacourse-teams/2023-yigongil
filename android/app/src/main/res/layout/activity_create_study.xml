@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/tb_create_study"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/black01_0D1117"
+            android:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/header_sb16"
+            app:titleTextColor="@color/white" />
+
+        <View
+            android:id="@+id/view_create_study_toolbar_border_line"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/black02_181B21"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_create_study" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/lpi_create_study_progress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:indicatorColor="@color/green02_E639D353"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_create_study_toolbar_border_line"
+            app:trackColor="@color/transparent"
+            tools:progress="33" />
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fcv_create_study"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/lpi_create_study_progress" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
