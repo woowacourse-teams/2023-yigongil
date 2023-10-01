@@ -1,11 +1,13 @@
 package com.created.team201.presentation.studyDetail.model
 
 import com.created.domain.model.Role
+import com.created.domain.model.StudyDetail
+import com.created.team201.presentation.studyDetail.model.StudyMemberUIModel.Companion.toUiModel
 
 data class StudyDetailUIModel(
     val studyMasterId: Long,
     val isMaster: Boolean,
-    val title: String,
+    val name: String,
     val introduction: String,
     val peopleCount: Int,
     val role: Role,
@@ -20,7 +22,7 @@ data class StudyDetailUIModel(
         val INVALID_STUDY_DETAIL = StudyDetailUIModel(
             studyMasterId = 0,
             isMaster = false,
-            title = "",
+            name = "",
             introduction = "",
             peopleCount = 0,
             role = Role.NOTHING,
@@ -31,5 +33,26 @@ data class StudyDetailUIModel(
             canStartStudy = false,
             studyMembers = listOf(),
         )
+
+        fun createFromStudyDetailRole(studyDetail: StudyDetail, role: Role): StudyDetailUIModel =
+            StudyDetailUIModel(
+                studyMasterId = studyDetail.studyMasterId,
+                isMaster = role == Role.MASTER,
+                name = studyDetail.name,
+                introduction = studyDetail.introduction,
+                peopleCount = studyDetail.numberOfMaximumMembers,
+                role = role,
+                startDate = studyDetail.startDate,
+                period = studyDetail.totalRoundCount.toString(),
+                cycle = studyDetail.cycle,
+                memberCount = studyDetail.numberOfCurrentMembers,
+                canStartStudy = StudyDetail.canStartStudy(studyDetail.numberOfCurrentMembers),
+                studyMembers = studyDetail.members.map {
+                    it.toUiModel(
+                        studyDetail.studyMasterId,
+                        isApplicant = false
+                    )
+                },
+            )
     }
 }

@@ -11,12 +11,12 @@ import com.created.team201.presentation.updateStudy.UpdateStudyViewModel
 import com.created.team201.presentation.updateStudy.bottomSheet.PeopleCountBottomSheetFragment
 import com.created.team201.presentation.updateStudy.bottomSheet.StartDateBottomSheetFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FirstUpdateStudyFragment :
     BindingFragment<FragmentFirstUpdateStudyBinding>(R.layout.fragment_first_update_study) {
-    private val updateStudyViewModel: UpdateStudyViewModel by activityViewModels {
-        UpdateStudyViewModel.Factory
-    }
+    private val updateStudyViewModel: UpdateStudyViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

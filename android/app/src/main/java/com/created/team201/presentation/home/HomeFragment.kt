@@ -3,72 +3,52 @@ package com.created.team201.presentation.home
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.created.team201.R
 import com.created.team201.databinding.FragmentHomeBinding
 import com.created.team201.presentation.common.BindingFragment
-import com.created.team201.presentation.home.adapter.DashboardAdapter
-import com.created.team201.presentation.home.model.TodoWithRoundIdUiModel
-import com.created.team201.presentation.studyManagement.StudyManagementActivity
-import com.created.team201.util.FirebaseLogUtil
-import com.created.team201.util.FirebaseLogUtil.SCREEN_HOME
+import com.created.team201.presentation.home.HomeViewModel.UserStudyState.Joined
+import com.created.team201.presentation.home.adapter.HomeAdapter
+import com.created.team201.presentation.studyThread.ThreadActivity
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
-    private val homeViewModel: HomeViewModel by viewModels { HomeViewModel.Factory }
-    private val dashboardAdapter: DashboardAdapter by lazy {
-        DashboardAdapter(implementClickListener())
-    }
-    private val customViewPager: CustomViewPager by lazy {
-        CustomViewPager(binding, requireContext())
-    }
-
-    private fun implementClickListener() = object : HomeClickListener {
-
-        override fun clickOnNecessaryTodoCheck(todo: TodoWithRoundIdUiModel, isDone: Boolean) {
-            homeViewModel.updateNecessaryTodo(todo, !isDone)
-        }
-
-        override fun clickOnOptionalTodoCheck(todo: TodoWithRoundIdUiModel, isDone: Boolean) {
-            homeViewModel.updateOptionalTodo(todo, !isDone)
-        }
-
-        override fun clickOnStudyCard(studyId: Long) {
-            navigateToStudyDetailActivity(studyId)
-        }
-    }
-
-    private fun navigateToStudyDetailActivity(studyId: Long) {
-        startActivity(StudyManagementActivity.getIntent(requireContext(), studyId))
-    }
+    private val homeAdapter: HomeAdapter by lazy { HomeAdapter(::navigateToThreadActivity) }
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bindViewModel()
-        initAdapter()
-        observeUserStudies()
+        setupAdapter()
+        setupViewModel()
+        collectUiState()
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        FirebaseLogUtil.logScreenEvent(SCREEN_HOME, this@HomeFragment.javaClass.simpleName)
-
-        homeViewModel.updateUserStudies()
-    }
-
-    private fun bindViewModel() {
-        binding.viewModel = homeViewModel
+    private fun setupViewModel() {
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.vm = homeViewModel
     }
 
-    private fun initAdapter() {
-        customViewPager.setCustomViewPager()
-        binding.vpHome.adapter = dashboardAdapter
+    private fun navigateToThreadActivity(studyId: Int) {
+        startActivity(ThreadActivity.getIntent(requireContext(), studyId))
     }
 
-    private fun observeUserStudies() {
-        homeViewModel.userStudies.observe(viewLifecycleOwner) { studyList ->
-            dashboardAdapter.submitList(studyList)
+    private fun collectUiState() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.userStudyUiState.collectLatest { uiState ->
+                    if (uiState is Joined) homeAdapter.submitList(uiState.userStudies)
+                }
+            }
         }
+    }
+
+    private fun setupAdapter() {
+        binding.rvHome.adapter = homeAdapter
     }
 }

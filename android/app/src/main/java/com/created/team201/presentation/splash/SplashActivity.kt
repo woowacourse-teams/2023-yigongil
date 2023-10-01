@@ -5,17 +5,19 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.created.team201.R
 import com.created.team201.databinding.ActivitySplashBinding
-import com.created.team201.presentation.MainActivity
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.login.LoginActivity
+import com.created.team201.presentation.main.MainActivity
 import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
 import com.created.team201.presentation.splash.SplashViewModel.State.FAIL
 import com.created.team201.presentation.splash.SplashViewModel.State.IDLE
 import com.created.team201.presentation.splash.SplashViewModel.State.SUCCESS
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_splash) {
-    private val splashViewModel by viewModels<SplashViewModel> { SplashViewModel.Factory }
+    private val splashViewModel: SplashViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

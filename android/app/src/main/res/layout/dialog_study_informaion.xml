@@ -13,8 +13,8 @@
             type="List&lt;String>" />
 
         <variable
-            name="studyInformation"
-            type="com.created.team201.presentation.studyManagement.model.StudyManagementInformationUiModel" />
+            name="studyDetail"
+            type="com.created.team201.presentation.studyDetail.model.StudyDetailUIModel" />
 
     </data>
 
@@ -38,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:text="@{studyInformation.name}"
+                android:text="@{studyDetail.name}"
                 android:textAppearance="@style/title_b20"
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 app:buttonName="@string/icon_text_button_name_people_count"
                 app:iconResource="@drawable/ic_people_capacity"
-                app:information="@{@string/icon_text_button_formatter_information_people_count(studyInformation.numberOfMaximumMembers)}"
+                app:information="@{@string/icon_text_button_formatter_information_people_count(studyDetail.memberCount)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/itb_study_information_start_date"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 app:buttonName="@string/icon_text_button_name_start_date"
                 app:iconResource="@drawable/ic_start_date"
-                app:information="@{studyInformation.startAt}"
+                app:information="@{studyDetail.startDate}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/itb_study_information_period"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 app:buttonName="@string/icon_text_button_name_period"
                 app:iconResource="@drawable/ic_period"
-                app:information="@{@string/study_detail_period_format(String.valueOf(studyInformation.totalRoundCount))}"
+                app:information="@{@string/study_detail_period_format(String.valueOf(studyDetail.period))}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/itb_study_information_cycle"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -102,7 +102,6 @@
                 android:layout_height="wrap_content"
                 app:buttonName="@string/icon_text_button_name_cycle"
                 app:iconResource="@drawable/ic_cycle"
-                app:information="@{@string/study_management_period_of_round(studyInformation.periodOfRound.number, periodStringFormat[studyInformation.periodOfRound.unit.type])}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -118,7 +117,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/bg_rectangle_radius_5dp"
             android:padding="16dp"
-            android:text="@{studyInformation.introduction}"
+            android:text="@{studyDetail.introduction}"
             android:textAppearance="@style/text_r16"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"

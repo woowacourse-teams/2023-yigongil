@@ -4,8 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import javax.inject.Inject
 
-class TokenStorage(context: Context) {
+class TokenStorage @Inject constructor(context: Context) {
 
     private val masterKey: MasterKey = MasterKey.Builder(context)
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
@@ -29,17 +30,11 @@ class TokenStorage(context: Context) {
         return storage.getString(key, null)
     }
 
+    fun isGuest(key: String): Boolean {
+        return storage.getString(key, null).isNullOrEmpty()
+    }
+
     companion object {
         private const val FILE_NAME = "TEAM201_STORAGE"
-
-        @Volatile
-        private var instance: TokenStorage? = null
-
-        fun getInstance(context: Context): TokenStorage {
-            synchronized(this) {
-                instance?.let { return it }
-                return TokenStorage(context).also { instance = it }
-            }
-        }
     }
 }

@@ -11,10 +11,6 @@
         android:title="@string/main_ic_study_list" />
 
     <item
-        android:id="@+id/menu_study_manage"
-        android:icon="@drawable/ic_study_manage"
-        android:title="@string/main_ic_study_manage" />
-    <item
         android:id="@+id/menu_chat"
         android:icon="@drawable/ic_chat"
         android:title="@string/main_ic_chat" />

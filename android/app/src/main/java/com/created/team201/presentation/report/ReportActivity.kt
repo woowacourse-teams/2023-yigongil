@@ -14,11 +14,13 @@ import com.created.team201.databinding.ActivityReportBinding
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.report.model.DateUiModel
 import com.created.team201.presentation.report.model.ReportCategory
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
+@AndroidEntryPoint
 class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_report) {
 
-    private val reportViewModel: ReportViewModel by viewModels { ReportViewModel.Factory }
+    private val reportViewModel: ReportViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

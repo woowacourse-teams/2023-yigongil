@@ -17,12 +17,12 @@ import com.created.team201.presentation.setting.SettingViewModel
 import com.created.team201.presentation.setting.SettingViewModel.State.FAIL
 import com.created.team201.presentation.setting.SettingViewModel.State.IDLE
 import com.created.team201.presentation.setting.SettingViewModel.State.SUCCESS
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AccountSettingActivity :
     BindingActivity<ActivityAccountSettingBinding>(R.layout.activity_account_setting) {
-    private val viewModel: SettingViewModel by viewModels {
-        SettingViewModel.Factory
-    }
+    private val viewModel: SettingViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

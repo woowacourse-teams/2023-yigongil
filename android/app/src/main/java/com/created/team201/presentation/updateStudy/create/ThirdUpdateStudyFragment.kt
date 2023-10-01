@@ -7,12 +7,12 @@ import com.created.team201.R
 import com.created.team201.databinding.FragmentThirdUpdateStudyBinding
 import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.updateStudy.UpdateStudyViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ThirdUpdateStudyFragment :
     BindingFragment<FragmentThirdUpdateStudyBinding>(R.layout.fragment_third_update_study) {
-    private val updateStudyViewModel: UpdateStudyViewModel by activityViewModels {
-        UpdateStudyViewModel.Factory
-    }
+    private val updateStudyViewModel: UpdateStudyViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

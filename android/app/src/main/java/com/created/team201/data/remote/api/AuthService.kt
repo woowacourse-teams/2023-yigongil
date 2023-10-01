@@ -10,17 +10,17 @@ import retrofit2.http.Query
 
 interface AuthService {
 
-    @GET("/v1/login/github/tokens?")
+    @GET("v1/login/github/tokens?")
     suspend fun getTokens(
         @Query("code") oauthToken: String,
     ): AuthResponseDto
 
-    @POST("/v1/login/tokens/refresh")
+    @POST("v1/login/tokens/refresh")
     suspend fun postRenewedAccessToken(
         @Body refreshToken: RenewedAccessTokenRequestDTO,
     ): AuthResponseDto
 
-    @GET("/v1/home")
+    @GET("v1/login/tokens/validate")
     suspend fun getLoginValidity(
         @Header("Authorization") accessToken: String,
     )

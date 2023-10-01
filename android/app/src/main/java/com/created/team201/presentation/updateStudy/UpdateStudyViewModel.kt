@@ -4,29 +4,24 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.model.Period
 import com.created.domain.model.PeriodUnit
 import com.created.domain.model.StudyDetail.Companion.getPeriod
 import com.created.domain.model.UpdateStudy
 import com.created.domain.repository.StudyDetailRepository
 import com.created.domain.repository.UpdateStudyRepository
-import com.created.team201.data.datasource.remote.StudyDetailDataSourceImpl
-import com.created.team201.data.datasource.remote.UpdateStudyDataSourceImpl
-import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.StudyDetailRepositoryImpl
-import com.created.team201.data.repository.UpdateStudyRepositoryImpl
 import com.created.team201.presentation.updateStudy.model.PeriodUiModel
 import com.created.team201.presentation.updateStudy.model.UpdateStudyUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
 import com.created.team201.util.addSourceList
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class UpdateStudyViewModel(
+@HiltViewModel
+class UpdateStudyViewModel @Inject constructor(
     private val updateStudyRepository: UpdateStudyRepository,
     private val studyDetailRepository: StudyDetailRepository,
 ) : ViewModel() {
@@ -95,16 +90,15 @@ class UpdateStudyViewModel(
 
     fun setViewState(studyId: Long) {
         viewModelScope.launch {
-            runCatching {
-                studyDetailRepository.getStudyDetail(studyId)
-            }.onSuccess {
-                _name.value = it.name
-                _content.value = it.introduction
-                _peopleCount.value = it.numberOfMaximumMembers
-                _startDate.value = it.startAt
-                _cycle.value = cycle.value.copy(date = getPeriod(it.periodOfRound))
-                _period.value = it.totalRoundCount
-            }
+            runCatching { studyDetailRepository.getStudyDetail(studyId) }
+                .onSuccess {
+                    _name.value = it.name
+                    _content.value = it.introduction
+                    _peopleCount.value = it.numberOfMaximumMembers
+                    _startDate.value = it.startDate
+                    _cycle.value = cycle.value.copy(date = getPeriod(it.cycle))
+                    _period.value = it.totalRoundCount
+                }
         }
     }
 
@@ -210,21 +204,5 @@ class UpdateStudyViewModel(
     companion object {
         const val CREATE_MODE = "CREATE_MODE"
         const val EDIT_MODE = "EDIT_MODE"
-
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val createStudyRepository = UpdateStudyRepositoryImpl(
-                    UpdateStudyDataSourceImpl(
-                        NetworkServiceModule.updateStudyService,
-                    ),
-                )
-                val studyDetailRepository = StudyDetailRepositoryImpl(
-                    StudyDetailDataSourceImpl(
-                        NetworkServiceModule.studyDetailService,
-                    ),
-                )
-                UpdateStudyViewModel(createStudyRepository, studyDetailRepository)
-            }
-        }
     }
 }

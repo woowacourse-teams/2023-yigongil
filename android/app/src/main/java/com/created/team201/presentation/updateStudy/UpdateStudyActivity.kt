@@ -29,10 +29,12 @@ import com.created.team201.presentation.updateStudy.create.FragmentType.THIRD
 import com.created.team201.presentation.updateStudy.create.SecondUpdateStudyFragment
 import com.created.team201.presentation.updateStudy.create.ThirdUpdateStudyFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class UpdateStudyActivity :
     BindingActivity<ActivityUpdateStudyBinding>(R.layout.activity_update_study) {
-    private val viewModel: UpdateStudyViewModel by viewModels { UpdateStudyViewModel.Factory }
+    private val viewModel: UpdateStudyViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
