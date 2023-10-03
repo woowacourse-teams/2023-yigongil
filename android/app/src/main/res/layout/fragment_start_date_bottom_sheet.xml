@@ -49,7 +49,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_create_study_start_date" />
 
-        <com.created.team201.presentation.updateStudy.custom.Calendar
+        <com.created.team201.presentation.studyDetail.custom.Calendar
             android:id="@+id/calendar_create_study_start_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

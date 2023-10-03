@@ -7,7 +7,7 @@ import com.created.team201.R
 import com.created.team201.databinding.FragmentCycleBottomSheetBinding
 import com.created.team201.presentation.common.BindingBottomSheetFragment
 import com.created.team201.presentation.updateStudy.UpdateStudyViewModel
-import com.created.team201.presentation.updateStudy.custom.MultiPickerChangeListener
+import com.created.team201.presentation.studyDetail.custom.MultiPickerChangeListener
 
 class CycleBottomSheetFragment :
     BindingBottomSheetFragment<FragmentCycleBottomSheetBinding>(R.layout.fragment_cycle_bottom_sheet) {

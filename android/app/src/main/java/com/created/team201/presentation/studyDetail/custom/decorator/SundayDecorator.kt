@@ -1,4 +1,4 @@
-package com.created.team201.presentation.updateStudy.custom.decorator
+package com.created.team201.presentation.studyDetail.custom.decorator
 
 import android.graphics.Color
 import android.text.style.ForegroundColorSpan
@@ -8,14 +8,14 @@ import com.prolificinteractive.materialcalendarview.DayViewFacade
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 
-class SaturdayDecorator(private val maxDate: LocalDate) : DayViewDecorator {
+class SundayDecorator(private val maxDate: LocalDate) : DayViewDecorator {
     override fun shouldDecorate(day: CalendarDay): Boolean {
-        val saturday = day.date.with(DayOfWeek.SATURDAY).dayOfMonth
-        return saturday == day.day && LocalDate.now()
+        val sunday = day.date.with(DayOfWeek.SUNDAY).dayOfMonth
+        return sunday == day.day && LocalDate.now()
             .isBefore(day.date) && maxDate.isAfter(day.date)
     }
 
     override fun decorate(view: DayViewFacade) {
-        view.addSpan(ForegroundColorSpan(Color.BLUE))
+        view.addSpan(ForegroundColorSpan(Color.RED))
     }
 }

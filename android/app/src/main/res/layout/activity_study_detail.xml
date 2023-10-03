@@ -76,7 +76,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_study_detail_title" />
 
-            <com.created.team201.presentation.updateStudy.custom.IconTextButton
+            <com.created.team201.presentation.studyDetail.custom.IconTextButton
                 android:id="@+id/itb_study_detail_capacity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/view_study_detail_information_divider" />
 
-            <com.created.team201.presentation.updateStudy.custom.IconTextButton
+            <com.created.team201.presentation.studyDetail.custom.IconTextButton
                 android:id="@+id/itb_study_detail_start_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
                 app:layout_constraintStart_toEndOf="@id/itb_study_detail_capacity"
                 app:layout_constraintTop_toBottomOf="@id/view_study_detail_information_divider" />
 
-            <com.created.team201.presentation.updateStudy.custom.IconTextButton
+            <com.created.team201.presentation.studyDetail.custom.IconTextButton
                 android:id="@+id/itb_study_detail_period"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -115,7 +115,7 @@
                 app:layout_constraintStart_toEndOf="@id/itb_study_detail_start_date"
                 app:layout_constraintTop_toBottomOf="@id/view_study_detail_information_divider" />
 
-            <com.created.team201.presentation.updateStudy.custom.IconTextButton
+            <com.created.team201.presentation.studyDetail.custom.IconTextButton
                 android:id="@+id/itb_study_detail_cycle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

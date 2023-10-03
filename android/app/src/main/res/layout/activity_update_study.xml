@@ -67,8 +67,8 @@
             app:layout_constraintTop_toBottomOf="@id/lpi_update_study_progress" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:visibility="gone">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -113,7 +113,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/et_create_study_name" />
 
-                <com.created.team201.presentation.updateStudy.custom.IconTextButton
+                <com.created.team201.presentation.studyDetail.custom.IconTextButton
                     android:id="@+id/itb_create_study_people_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/itb_create_study_start_date" />
 
-                <com.created.team201.presentation.updateStudy.custom.IconTextButton
+                <com.created.team201.presentation.studyDetail.custom.IconTextButton
                     android:id="@+id/itb_create_study_start_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -142,7 +142,7 @@
                     app:layout_constraintTop_toBottomOf="@id/view_create_study_name_between_button"
                     app:layout_constraintVertical_chainStyle="spread" />
 
-                <com.created.team201.presentation.updateStudy.custom.IconTextButton
+                <com.created.team201.presentation.studyDetail.custom.IconTextButton
                     android:id="@+id/itb_create_study_cycle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -155,7 +155,7 @@
                     app:layout_constraintStart_toEndOf="@id/itb_create_study_start_date"
                     app:layout_constraintTop_toTopOf="@id/itb_create_study_start_date" />
 
-                <com.created.team201.presentation.updateStudy.custom.IconTextButton
+                <com.created.team201.presentation.studyDetail.custom.IconTextButton
                     android:id="@+id/itb_create_study_period"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

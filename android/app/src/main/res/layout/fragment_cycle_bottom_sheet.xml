@@ -10,7 +10,7 @@
 
         <variable
             name="changeListener"
-            type="com.created.team201.presentation.updateStudy.custom.MultiPickerChangeListener" />
+            type="com.created.team201.presentation.studyDetail.custom.MultiPickerChangeListener" />
 
         <variable
             name="onCancelClickListener"
@@ -56,7 +56,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_create_study_cycle" />
 
-        <com.created.team201.presentation.updateStudy.custom.MultiPicker
+        <com.created.team201.presentation.studyDetail.custom.MultiPicker
             android:id="@+id/mp_cycle"
             changeListener="@{changeListener}"
             android:layout_width="match_parent"
