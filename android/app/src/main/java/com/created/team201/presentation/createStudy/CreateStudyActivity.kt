@@ -3,6 +3,7 @@ package com.created.team201.presentation.createStudy
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
@@ -12,6 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import com.created.team201.R
 import com.created.team201.databinding.ActivityCreateStudyBinding
 import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.createStudy.model.FragmentState.FirstFragment
+import com.created.team201.presentation.createStudy.model.FragmentState.SecondFragment
 import com.created.team201.presentation.createStudy.model.FragmentType
 import com.created.team201.presentation.createStudy.model.FragmentType.FIRST
 import com.created.team201.presentation.createStudy.model.FragmentType.SECOND
@@ -47,6 +50,20 @@ class CreateStudyActivity :
         supportActionBar?.setHomeActionContentDescription(R.string.toolbar_back_text)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (createStudyViewModel.fragmentState.value) {
+            is FirstFragment -> {
+                finish()
+                true
+            }
+
+            is SecondFragment -> {
+                createStudyViewModel.navigateToBefore()
+                true
+            }
+        }
     }
 
     private fun setProgressIndicator(type: FragmentType) {

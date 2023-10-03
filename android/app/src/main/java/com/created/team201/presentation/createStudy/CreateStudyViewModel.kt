@@ -74,6 +74,16 @@ class CreateStudyViewModel @Inject constructor(
         }
     }
 
+    fun navigateToBefore() {
+        when (_fragmentState.value) {
+            is SecondFragment -> {
+                _fragmentState.value = FirstFragment
+            }
+
+            else -> Unit
+        }
+    }
+
     fun createStudy() {
         if (isOpenStudy) return
         isOpenStudy = true
