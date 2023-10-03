@@ -148,11 +148,8 @@
     <string name="create_study_button_next">다음</string>
     <string name="create_study_button_done">작성완료</string>
 
-    <string name="createStudy_tag_people_count">TAG_CREATE_STUDY_PEOPLE_COUNT</string>
-    <string name="createStudy_tag_start_date">TAG_CREATE_STUDY_START_DATE</string>
-    <string name="createStudy_tag_study_date">TAG_CREATE_STUDY_STUDY_DATE</string>
-    <string name="createStudy_tag_period">TAG_CREATE_STUDY_PERIOD</string>
-    <string name="createStudy_tag_cycle">TAG_CREATE_STUDY_CYCLE</string>
+    <string name="create_study_tag_people_count">TAG_CREATE_STUDY_PEOPLE_COUNT</string>
+    <string name="create_study_tag_study_date">TAG_CREATE_STUDY_STUDY_DATE</string>
 
     <!-- 스터디 개설 첫번째 프래그먼트 -->
     <string name="first_create_study_people_count_title">스터디는 몇 명과 함께하시나요?</string>

@@ -48,11 +48,11 @@ class FirstCreateStudyFragment :
 
     private fun createBottomSheetFragment(tag: String): BottomSheetDialogFragment? {
         return when (tag) {
-            getString(R.string.createStudy_tag_people_count) -> {
+            getString(R.string.create_study_tag_people_count) -> {
                 PeopleCountBottomSheetFragment()
             }
 
-            getString(R.string.createStudy_tag_study_date) -> {
+            getString(R.string.create_study_tag_study_date) -> {
                 StudyDateBottomSheetFragment()
             }
 
