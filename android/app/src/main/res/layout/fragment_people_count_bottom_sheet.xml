@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.created.team201.presentation.updateStudy.UpdateStudyViewModel" />
+            type="com.created.team201.presentation.createStudy.CreateStudyViewModel" />
 
         <variable
             name="onCancelClickListener"
@@ -43,7 +43,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginVertical="20dp"
-            android:text="@string/bottomSheetFragment_peopleCount_title_text"
+            android:text="@string/bottom_sheet_fragment_people_count_title_text"
             android:textAlignment="center"
             android:textAppearance="@style/picker_sb18"
             android:textColor="@color/white"
@@ -75,7 +75,7 @@
             android:backgroundTint="@color/green01_4039D353"
             android:onClick="@{() -> onCancelClickListener.invoke()}"
             android:paddingVertical="10dp"
-            android:text="@string/bottomSheetFragment_button_name_cancel"
+            android:text="@string/bottom_sheet_fragment_button_name_cancel"
             android:textAlignment="center"
             android:textAppearance="@style/button_sb18"
             android:textColor="@color/white01_66FFFFFF"
@@ -93,7 +93,7 @@
             android:backgroundTint="@color/green02_E639D353"
             android:onClick="@{() -> onSaveClickListener.invoke()}"
             android:paddingVertical="10dp"
-            android:text="@string/bottomSheetFragment_button_name_save"
+            android:text="@string/bottom_sheet_fragment_button_name_save"
             android:textAlignment="center"
             android:textAppearance="@style/button_sb18"
             android:textColor="@color/white"

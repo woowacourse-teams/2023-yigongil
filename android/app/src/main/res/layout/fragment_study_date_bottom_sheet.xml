@@ -6,11 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.created.team201.presentation.updateStudy.UpdateStudyViewModel" />
-
-        <variable
-            name="changeListener"
-            type="com.created.team201.presentation.updateStudy.custom.MultiPickerChangeListener" />
+            type="com.created.team201.presentation.createStudy.CreateStudyViewModel" />
 
         <variable
             name="onCancelClickListener"
@@ -32,7 +28,7 @@
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View
-            android:id="@+id/view_create_study_cycle"
+            android:id="@+id/view_create_study_study_date"
             android:layout_width="0dp"
             android:layout_height="5dp"
             android:background="@drawable/bg_rectangle_radius_5dp"
@@ -43,37 +39,34 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_cycle_bottom_sheet_title"
+            android:id="@+id/tv_study_date_bottom_sheet_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginVertical="20dp"
-            android:text="@string/bottom_sheet_fragment_cycle_title_text"
+            android:text="@string/bottom_sheet_fragment_study_date_title_text"
             android:textAlignment="center"
             android:textAppearance="@style/picker_sb18"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@id/mp_cycle"
+            app:layout_constraintBottom_toTopOf="@id/sp_study_date"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_create_study_cycle" />
+            app:layout_constraintTop_toBottomOf="@id/view_create_study_study_date" />
 
-        <com.created.team201.presentation.updateStudy.custom.MultiPicker
-            android:id="@+id/mp_cycle"
-            changeListener="@{changeListener}"
-            android:layout_width="match_parent"
+        <com.created.team201.presentation.updateStudy.custom.SinglePicker
+            android:id="@+id/sp_study_date"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:title="@string/single_picker_text_study_date"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_cycle_bottom_sheet_title"
-            app:leftMaxValue="14"
-            app:leftMinValue="1"
-            app:leftValue="@{viewModel.cycle.date}"
-            app:rightDisplayNames="@array/multiPickerDisplayNames"
-            app:rightMaxValue="1"
-            app:rightMinValue="0"
-            app:rightValue="@{viewModel.cycle.unit.type}" />
+            app:layout_constraintTop_toBottomOf="@id/tv_study_date_bottom_sheet_title"
+            app:maxValue="8"
+            app:minValue="2"
+            app:value="@{viewModel.peopleCount}" />
 
         <TextView
-            android:id="@+id/tv_cycle_bottom_sheet_btn_cancel"
+            android:id="@+id/tv_study_date_bottom_sheet_btn_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
@@ -87,12 +80,12 @@
             android:textAppearance="@style/button_sb18"
             android:textColor="@color/white01_66FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_cycle_bottom_sheet_btn_save"
+            app:layout_constraintEnd_toStartOf="@id/tv_study_date_bottom_sheet_btn_save"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mp_cycle" />
+            app:layout_constraintTop_toBottomOf="@id/sp_study_date" />
 
         <TextView
-            android:id="@+id/tv_cycle_bottom_sheet_btn_save"
+            android:id="@+id/tv_study_date_bottom_sheet_btn_save"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="18dp"
@@ -104,10 +97,10 @@
             android:textAlignment="center"
             android:textAppearance="@style/button_sb18"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@id/tv_cycle_bottom_sheet_btn_cancel"
+            app:layout_constraintBottom_toBottomOf="@id/tv_study_date_bottom_sheet_btn_cancel"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_cycle_bottom_sheet_btn_cancel"
-            app:layout_constraintTop_toTopOf="@id/tv_cycle_bottom_sheet_btn_cancel" />
+            app:layout_constraintStart_toEndOf="@id/tv_study_date_bottom_sheet_btn_cancel"
+            app:layout_constraintTop_toTopOf="@id/tv_study_date_bottom_sheet_btn_cancel" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
