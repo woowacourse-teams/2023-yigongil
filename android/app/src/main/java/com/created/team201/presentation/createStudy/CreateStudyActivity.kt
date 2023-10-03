@@ -68,8 +68,8 @@ class CreateStudyActivity :
 
     private fun setProgressIndicator(type: FragmentType) {
         binding.lpiCreateStudyProgress.progress = when (type) {
-            FIRST -> 33
-            SECOND -> 66
+            FIRST -> PROGRESS_FIRST
+            SECOND -> PROGRESS_SECOND
         }
     }
 
@@ -120,6 +120,9 @@ class CreateStudyActivity :
     }
 
     companion object {
+        private const val PROGRESS_FIRST = 33
+        private const val PROGRESS_SECOND = 66
+
         fun getIntent(context: Context): Intent =
             Intent(context, CreateStudyActivity::class.java)
     }
