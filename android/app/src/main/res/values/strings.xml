@@ -150,14 +150,18 @@
 
     <string name="create_study_tag_people_count">TAG_CREATE_STUDY_PEOPLE_COUNT</string>
     <string name="create_study_tag_study_date">TAG_CREATE_STUDY_STUDY_DATE</string>
+    <string name="create_study_tag_cycle">TAG_CREATE_STUDY_CYCLE</string>
 
     <!-- 스터디 개설 첫번째 프래그먼트 -->
     <string name="first_create_study_people_count_title">스터디는 몇 명과 함께하시나요?</string>
     <string name="first_create_study_people_count_information">모집인원을 알려주세요!\n최소 2명, 최대 8명까지 함께할 수 있습니다.</string>
     <string name="first_create_study_study_date_title">스터디는 몇 주간 진행하시나요?</string>
     <string name="first_create_study_study_date_information">스터디가 진행되는 기간을 대략적으로 알려주세요!\n기간이 지나도 스터디가 종료되지는 않습니다.</string>
+    <string name="first_create_study_cycle_title">한 주에 몇 회 진행되나요?</string>
+    <string name="first_create_study_cycle_information">진행될 스터디가 한 주에 몇 회 진행되는지 알려주세요!\n정확한 요일은 스터디가 시작될 때 입력할 수 있습니다.</string>
     <string name="first_create_study_formatter_information_people_count">%d 명</string>
     <string name="first_create_study_formatter_information_study_date">약 %d주간 진행</string>
+    <string name="first_create_study_formatter_information_cycle">%d 회</string>
 
     <!-- 스터디 개설 두번째 프래그먼트 -->
     <string name="second_create_study_study_name_title">스터디 이름은 무엇인가요?</string>
@@ -171,7 +175,7 @@
     <string name="bottom_sheet_fragment_people_count_title_text">인원 수</string>
     <string name="bottom_sheet_fragment_study_date_title_text">예상 스터디 기간</string>
     <string name="bottom_sheet_fragment_startDate_title_text">예상 시작일</string>
-    <string name="bottom_sheet_fragment_cycle_title_text">스터디 주기</string>
+    <string name="bottom_sheet_fragment_cycle_title_text">스터디 진행 횟수</string>
     <string name="bottom_sheet_fragment_period_title_text">스터디 기간</string>
     <string name="bottom_sheet_fragment_button_name_cancel">취소</string>
     <string name="bottom_sheet_fragment_button_name_save">저장</string>
@@ -179,7 +183,7 @@
     <!-- 싱글 피커 커스텀 뷰 -->
     <string name="single_picker_text_people_count">명</string>
     <string name="single_picker_text_study_date">주</string>
-    <string name="single_picker_text_period">회차</string>
+    <string name="single_picker_text_cycle">회</string>
 
     <!-- 캘린더 선택 커스텀 뷰-->
     <string name="calendar_formatter_information_date">yyyy.MM.dd</string>

@@ -5,4 +5,5 @@ data class CreateStudyUiModel(
     val introduction: String,
     val peopleCount: Int,
     val studyDate: Int,
+    val cycle: Int,
 )

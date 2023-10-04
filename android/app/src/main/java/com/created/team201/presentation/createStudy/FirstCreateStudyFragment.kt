@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import com.created.team201.R
 import com.created.team201.databinding.FragmentFirstCreateStudyBinding
 import com.created.team201.presentation.common.BindingFragment
+import com.created.team201.presentation.createStudy.bottomSheet.CycleBottomSheetFragment
 import com.created.team201.presentation.createStudy.bottomSheet.PeopleCountBottomSheetFragment
 import com.created.team201.presentation.createStudy.bottomSheet.StudyDateBottomSheetFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -54,6 +55,10 @@ class FirstCreateStudyFragment :
 
             getString(R.string.create_study_tag_study_date) -> {
                 StudyDateBottomSheetFragment()
+            }
+
+            getString(R.string.create_study_tag_cycle) -> {
+                CycleBottomSheetFragment()
             }
 
             else -> {

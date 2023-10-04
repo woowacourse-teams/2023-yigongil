@@ -29,6 +29,9 @@ class CreateStudyViewModel @Inject constructor(
     private val _studyDate: MutableStateFlow<Int> = MutableStateFlow(DEFAULT_INT_VALUE)
     val studyDate: StateFlow<Int> get() = _studyDate.asStateFlow()
 
+    private val _cycle: MutableStateFlow<Int> = MutableStateFlow(DEFAULT_INT_VALUE)
+    val cycle: StateFlow<Int> get() = _cycle.asStateFlow()
+
     private val _studyName: MutableStateFlow<String> = MutableStateFlow(DEFAULT_STRING_VALUE)
     val studyName: StateFlow<String> get() = _studyName.asStateFlow()
 
@@ -37,8 +40,8 @@ class CreateStudyViewModel @Inject constructor(
     val studyIntroduction: StateFlow<String> get() = _studyIntroduction.asStateFlow()
 
     val isEnableFirstCreateStudyNext: Flow<Boolean> =
-        combine(peopleCount, studyDate) { peopleCount, studyDate ->
-            return@combine peopleCount != DEFAULT_INT_VALUE && studyDate != DEFAULT_INT_VALUE
+        combine(peopleCount, studyDate, cycle) { peopleCount, studyDate, cycle ->
+            return@combine peopleCount != DEFAULT_INT_VALUE && studyDate != DEFAULT_INT_VALUE && cycle != DEFAULT_INT_VALUE
         }
 
     val isEnableSecondCreateStudyNext: Flow<Boolean> =
@@ -54,6 +57,10 @@ class CreateStudyViewModel @Inject constructor(
 
     fun setStudyDate(studyDate: Int) {
         _studyDate.value = studyDate
+    }
+
+    fun setCycle(cycle: Int) {
+        _cycle.value = cycle
     }
 
     fun setStudyName(studyName: String) {
@@ -93,6 +100,7 @@ class CreateStudyViewModel @Inject constructor(
                 introduction = studyIntroduction.value,
                 peopleCount = peopleCount.value,
                 studyDate = studyDate.value,
+                cycle = cycle.value,
             ).apply {
                 // TODO 스터디 생성 통신
             }
