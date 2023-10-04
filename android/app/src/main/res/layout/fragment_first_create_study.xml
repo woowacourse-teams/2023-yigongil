@@ -53,14 +53,15 @@
             android:onClick="@{() -> onInputClickListener.invoke(@string/create_study_tag_people_count)}"
             android:paddingHorizontal="20dp"
             android:paddingVertical="16dp"
-            android:text="@{viewModel.peopleCount == -1 ? null : @string/first_create_study_formatter_information_people_count(viewModel.peopleCount.intValue())}"
             android:textAppearance="@style/text_r16"
             android:textColor="@color/white"
             app:drawableEndCompat="@drawable/ic_people_capacity"
             app:drawableTint="@color/white"
             app:layout_constraintEnd_toEndOf="@id/tv_first_create_study_people_count_information"
             app:layout_constraintStart_toStartOf="@id/tv_first_create_study_people_count_information"
-            app:layout_constraintTop_toBottomOf="@id/tv_first_create_study_people_count_information" />
+            app:layout_constraintTop_toBottomOf="@id/tv_first_create_study_people_count_information"
+            app:textFormatter="@{@string/first_create_study_formatter_information_people_count}"
+            app:textIntValue="@{viewModel.peopleCount}" />
 
         <TextView
             android:id="@+id/tv_first_create_study_study_date_title"
@@ -97,14 +98,15 @@
             android:onClick="@{() -> onInputClickListener.invoke(@string/create_study_tag_study_date)}"
             android:paddingHorizontal="20dp"
             android:paddingVertical="16dp"
-            android:text="@{viewModel.studyDate == -1 ? null : @string/first_create_study_formatter_information_study_date(viewModel.studyDate.intValue())}"
             android:textAppearance="@style/text_r16"
             android:textColor="@color/white"
             app:drawableEndCompat="@drawable/ic_period"
             app:drawableTint="@color/white"
             app:layout_constraintEnd_toEndOf="@id/tv_first_create_study_study_date_information"
             app:layout_constraintStart_toStartOf="@id/tv_first_create_study_study_date_information"
-            app:layout_constraintTop_toBottomOf="@id/tv_first_create_study_study_date_information" />
+            app:layout_constraintTop_toBottomOf="@id/tv_first_create_study_study_date_information"
+            app:textFormatter="@{@string/first_create_study_formatter_information_study_date}"
+            app:textIntValue="@{viewModel.studyDate}" />
 
         <TextView
             android:id="@+id/tv_first_create_study_cycle_title"
@@ -141,14 +143,15 @@
             android:onClick="@{() -> onInputClickListener.invoke(@string/create_study_tag_cycle)}"
             android:paddingHorizontal="20dp"
             android:paddingVertical="16dp"
-            android:text="@{viewModel.cycle == -1 ? null : @string/first_create_study_formatter_information_cycle(viewModel.cycle.intValue())}"
             android:textAppearance="@style/text_r16"
             android:textColor="@color/white"
             app:drawableEndCompat="@drawable/ic_period"
             app:drawableTint="@color/white"
             app:layout_constraintEnd_toEndOf="@id/tv_first_create_study_cycle_information"
             app:layout_constraintStart_toStartOf="@id/tv_first_create_study_cycle_information"
-            app:layout_constraintTop_toBottomOf="@id/tv_first_create_study_cycle_information" />
+            app:layout_constraintTop_toBottomOf="@id/tv_first_create_study_cycle_information"
+            app:textFormatter="@{@string/first_create_study_formatter_information_cycle}"
+            app:textIntValue="@{viewModel.cycle}" />
 
         <TextView
             android:id="@+id/tv_first_create_study_btn_next"
