@@ -63,7 +63,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_study_date_bottom_sheet_title"
             app:maxValue="8"
             app:minValue="2"
-            app:value="@{viewModel.peopleCount}" />
+            app:value="@{viewModel.studyDate}" />
 
         <TextView
             android:id="@+id/tv_study_date_bottom_sheet_btn_cancel"
