@@ -36,8 +36,10 @@ class SinglePicker @JvmOverloads constructor(
     }
 
     fun setValue(value: Int) {
-        if (value == 0) return
-        binding.npSinglePicker.value = value
+        binding.npSinglePicker.value =
+            if (value in (binding.npSinglePicker.minValue..binding.npSinglePicker.maxValue))
+                value
+            else binding.npSinglePicker.minValue
     }
 
     companion object {
