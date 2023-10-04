@@ -38,11 +38,12 @@
             android:id="@+id/lpi_create_study_progress"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:indicatorColor="@color/green02_E639D353"
+            app:indicatorColor="@color/green07_0E4429"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_create_study_toolbar_border_line"
             app:trackColor="@color/transparent"
+            app:trackThickness="2dp"
             tools:progress="33" />
 
         <androidx.fragment.app.FragmentContainerView
