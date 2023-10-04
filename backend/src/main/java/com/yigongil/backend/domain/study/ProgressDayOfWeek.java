@@ -13,9 +13,9 @@ public class ProgressDayOfWeek {
     private ProgressDayOfWeekKey id;
 
     @ManyToOne
-    @MapsId("studyId")  // This maps the studyId attribute of embedded id
+    @MapsId("studyId")
     @JoinColumn(name = "study_id")
-    private StudyV2 studyV2;
+    private Study study;
 
 }
 

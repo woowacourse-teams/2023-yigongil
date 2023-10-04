@@ -1,8 +1,9 @@
 package com.yigongil.backend.response;
 
 import com.yigongil.backend.domain.round.Round;
-import com.yigongil.backend.domain.study.StudyV1;
+import com.yigongil.backend.domain.study.Study;
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public record StudyDetailResponse(
 ) {
 
     public static StudyDetailResponse of(
-            StudyV1 study,
+            Study study,
             List<Round> rounds,
             Round currentRound,
             List<StudyMemberResponse> studyMemberResponses

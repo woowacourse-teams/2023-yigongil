@@ -14,18 +14,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -34,9 +31,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "version", discriminatorType = DiscriminatorType.INTEGER)
-public abstract class Study extends BaseEntity {
+public class Study extends BaseEntity {
 
     private static final int ONE_MEMBER = 1;
     private static final int MIN_NAME_LENGTH = 1;
@@ -66,18 +61,22 @@ public abstract class Study extends BaseEntity {
     private LocalDateTime endAt;
 
     @Column(nullable = false)
-    protected Integer currentRoundNumber;
+    private int minimumWeeks;
+
+    @Column(nullable = false)
+    private Integer currentRoundNumber;
 
     @Cascade(CascadeType.PERSIST)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany
     @JoinColumn(name = "study_id", nullable = false)
-    protected List<Round> rounds = new ArrayList<>();
+    private List<Round> rounds = new ArrayList<>();
 
     protected Study() {
     }
 
-    protected Study(
+    @Builder
+    public Study(
             Long id,
             String name,
             String introduction,
@@ -100,6 +99,29 @@ public abstract class Study extends BaseEntity {
         this.endAt = endAt;
         this.currentRoundNumber = currentRoundNumber == null ? 1 : currentRoundNumber;
         this.rounds = rounds == null ? new ArrayList<>() : rounds;
+    }
+
+    public static Study initializeStudyOf(
+        String name,
+        String introduction,
+        Integer numberOfMaximumMembers,
+        LocalDateTime startAt,
+        Integer totalRoundCount,
+        String periodOfRound,
+        Member master
+    ) {
+        Study study = Study.builder()
+                             .name(name)
+                             .numberOfMaximumMembers(numberOfMaximumMembers)
+                             .startAt(startAt)
+                             .totalRoundCount(totalRoundCount)
+                             .periodOfRound(PeriodUnit.getPeriodNumber(periodOfRound))
+                             .periodUnit(PeriodUnit.getPeriodUnit(periodOfRound))
+                             .introduction(introduction)
+                             .processingStatus(ProcessingStatus.RECRUITING)
+                             .build();
+        study.rounds = Round.of(totalRoundCount, master);
+        return study;
     }
 
     private void validateNumberOfMaximumMembers(Integer numberOfMaximumMembers) {
@@ -219,9 +241,11 @@ public abstract class Study extends BaseEntity {
         return getCurrentRound().isMaster(member);
     }
 
-    protected void updateInformation(String name, Integer numberOfMaximumMembers, LocalDateTime startAt, String introduction) {
+    protected void updateInformation(Member member, String name, Integer numberOfMaximumMembers, LocalDateTime startAt, String introduction) {
         validateName(name);
         validateNumberOfMaximumMembers(numberOfMaximumMembers);
+        validateMaster(member);
+        validateStudyProcessingStatus();
         this.name = name;
         this.numberOfMaximumMembers = numberOfMaximumMembers;
         this.startAt = startAt;

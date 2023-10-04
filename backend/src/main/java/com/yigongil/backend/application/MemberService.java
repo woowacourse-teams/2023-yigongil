@@ -4,7 +4,6 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.domain.member.Nickname;
 import com.yigongil.backend.domain.study.Study;
-import com.yigongil.backend.domain.study.StudyV1;
 import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
 import com.yigongil.backend.exception.MemberNotFoundException;
@@ -67,7 +66,7 @@ public class MemberService {
     }
 
     private FinishedStudyResponse createFinishedStudyResponse(StudyMember studyMember) {
-        StudyV1 study = (StudyV1) studyMember.getStudy();
+        Study study = studyMember.getStudy();
         return new FinishedStudyResponse(
                 study.getId(),
                 study.getName(),
