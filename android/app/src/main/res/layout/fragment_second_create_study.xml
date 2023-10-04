@@ -12,12 +12,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/tv_second_create_study_study_name_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:text="@string/second_create_study_study_name_title"
             android:textAppearance="@style/title_sb22"
             android:textColor="@color/white"
@@ -112,9 +113,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="28dp"
             android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
+            android:onClick="@{() -> viewModel.createStudy()}"
             android:paddingVertical="14dp"
             android:text="@string/create_study_button_done"
-            android:onClick="@{() -> viewModel.createStudy()}"
             android:textAlignment="center"
             android:textAppearance="@style/button_sb20"
             android:textColor="@color/tv_color_disabled"
