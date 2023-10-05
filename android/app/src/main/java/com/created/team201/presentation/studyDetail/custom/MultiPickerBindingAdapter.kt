@@ -1,4 +1,4 @@
-package com.created.team201.presentation.updateStudy.custom
+package com.created.team201.presentation.studyDetail.custom
 
 import androidx.databinding.BindingAdapter
 

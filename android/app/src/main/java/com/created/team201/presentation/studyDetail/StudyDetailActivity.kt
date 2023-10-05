@@ -23,7 +23,6 @@ import com.created.team201.presentation.studyDetail.StudyDetailState.Master
 import com.created.team201.presentation.studyDetail.adapter.StudyParticipantsAdapter
 import com.created.team201.presentation.studyDetail.model.PeriodFormat
 import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
-import com.created.team201.presentation.updateStudy.UpdateStudyActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -55,7 +54,11 @@ class StudyDetailActivity :
     private fun setClickEventOnSub() {
         binding.btnStudyDetailSub.setOnClickListener {
             when (studyDetailViewModel.state.value) {
-                is Master -> navigateToEditStudyView()
+                is Master -> {
+                    showToast(R.string.study_detail_button_preparing_service)
+                    navigateToEditStudyView()
+                }
+
                 is Guest -> showLoginBottomSheetDialog()
                 else -> Unit
             }
@@ -63,13 +66,7 @@ class StudyDetailActivity :
     }
 
     private fun navigateToEditStudyView() {
-        startActivity(
-            UpdateStudyActivity.getIntent(
-                context = this,
-                viewMode = UpdateStudyActivity.EDIT_MODE,
-                studyId = studyId,
-            ),
-        )
+        // TODO 스터디 수정 뷰 어떻게 할건지 논의 후 화면 이동
     }
 
     private fun initViewModel() {

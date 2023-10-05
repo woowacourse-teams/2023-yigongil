@@ -1,4 +1,4 @@
-package com.created.team201.presentation.updateStudy.custom
+package com.created.team201.presentation.studyDetail.custom
 
 import android.content.Context
 import android.util.AttributeSet
@@ -36,8 +36,10 @@ class SinglePicker @JvmOverloads constructor(
     }
 
     fun setValue(value: Int) {
-        if (value == 0) return
-        binding.npSinglePicker.value = value
+        binding.npSinglePicker.value =
+            if (value in (binding.npSinglePicker.minValue..binding.npSinglePicker.maxValue))
+                value
+            else binding.npSinglePicker.minValue
     }
 
     companion object {
