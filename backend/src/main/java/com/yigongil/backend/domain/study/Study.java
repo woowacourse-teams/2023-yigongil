@@ -61,7 +61,10 @@ public class Study extends BaseEntity {
     private LocalDateTime endAt;
 
     @Column(nullable = false)
-    private int minimumWeeks;
+    private Integer minimumWeeks;
+
+    @Column(nullable = false)
+    private Integer progressDaysPerWeek;
 
     @Column(nullable = false)
     private Integer currentRoundNumber;

@@ -2,11 +2,13 @@ ALTER TABLE round
     ADD COLUMN week_number integer;
 ALTER TABLE study
     ADD COLUMN minimum_weeks integer NOT NULL;
+ALTER TABLE study
+    ADD COLUMN progress_days_per_week integer NOT NULL;
 
 create table progress_day_of_week
 (
     study_id             bigint  not null,
-    progress_day_of_week integer not null,
+    progress_day_of_week VARCHAR(32) not null,
     primary key (study_id, progress_day_of_week)
 );
 
