@@ -8,26 +8,19 @@ import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidNumberOfMaximumStudyMember;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.InvalidStudyNameLengthException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Entity
@@ -38,6 +31,7 @@ public class Study extends BaseEntity {
     private static final int MAX_NAME_LENGTH = 30;
     private static final int MIN_MEMBER_SIZE = 2;
     private static final int MAX_MEMBER_SIZE = 8;
+    private static final int INITIAL_ROUND_COUNT = 2;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -109,21 +103,16 @@ public class Study extends BaseEntity {
         String introduction,
         Integer numberOfMaximumMembers,
         LocalDateTime startAt,
-        Integer totalRoundCount,
-        String periodOfRound,
         Member master
     ) {
         Study study = Study.builder()
                              .name(name)
                              .numberOfMaximumMembers(numberOfMaximumMembers)
                              .startAt(startAt)
-                             .totalRoundCount(totalRoundCount)
-                             .periodOfRound(PeriodUnit.getPeriodNumber(periodOfRound))
-                             .periodUnit(PeriodUnit.getPeriodUnit(periodOfRound))
                              .introduction(introduction)
                              .processingStatus(ProcessingStatus.RECRUITING)
                              .build();
-        study.rounds = Round.of(totalRoundCount, master);
+        study.rounds = Round.of(INITIAL_ROUND_COUNT, master);
         return study;
     }
 
@@ -244,7 +233,7 @@ public class Study extends BaseEntity {
         return getCurrentRound().isMaster(member);
     }
 
-    protected void updateInformation(Member member, String name, Integer numberOfMaximumMembers, LocalDateTime startAt, String introduction) {
+    public void updateInformation(Member member, String name, Integer numberOfMaximumMembers, LocalDateTime startAt, String introduction) {
         validateName(name);
         validateNumberOfMaximumMembers(numberOfMaximumMembers);
         validateMaster(member);
@@ -254,4 +243,5 @@ public class Study extends BaseEntity {
         this.startAt = startAt;
         this.introduction = introduction;
     }
+
 }

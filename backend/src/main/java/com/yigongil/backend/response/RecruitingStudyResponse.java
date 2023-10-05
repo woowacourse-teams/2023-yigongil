@@ -15,10 +15,6 @@ public record RecruitingStudyResponse(
         Integer averageTier,
         @Schema(example = "2023.08.13")
         LocalDate startAt,
-        @Schema(example = "10")
-        Integer totalRoundCount,
-        @Schema(example = "3d")
-        String periodOfRound,
         @Schema(example = "6")
         Integer numberOfCurrentMembers,
         @Schema(example = "6")
@@ -32,8 +28,6 @@ public record RecruitingStudyResponse(
                 study.getName(),
                 study.calculateAverageTier(),
                 study.getStartAt().toLocalDate(),
-                study.getTotalRoundCount(),
-                study.getPeriodUnit().toStringFormat(study.getPeriodOfRound()),
                 study.sizeOfCurrentMembers(),
                 study.getNumberOfMaximumMembers()
         );

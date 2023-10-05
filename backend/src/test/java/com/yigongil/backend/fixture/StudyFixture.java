@@ -14,29 +14,25 @@ import java.util.List;
 
 public enum StudyFixture {
 
-    자바_스터디_진행중(1L, LocalDateTime.now(), "자바", "스터디소개", 3, ProcessingStatus.PROCESSING, 3, 4),
-    자바_스터디_모집중(1L, LocalDateTime.now(), "자바", "스터디소개", 3, ProcessingStatus.RECRUITING, 3, 4),
-    자바_스터디_모집중_정원_2(1L, LocalDateTime.now(), "자바", "스터디소개", 3, ProcessingStatus.RECRUITING, 3, 2),
+    자바_스터디_진행중(1L, LocalDateTime.now(), "자바", "스터디소개", ProcessingStatus.PROCESSING, 4),
+    자바_스터디_모집중(1L, LocalDateTime.now(), "자바", "스터디소개", ProcessingStatus.RECRUITING, 4),
+    자바_스터디_모집중_정원_2(1L, LocalDateTime.now(), "자바", "스터디소개", ProcessingStatus.RECRUITING, 2),
     ;
 
     private final Long id;
     private final LocalDateTime startAt;
     private final String name;
     private final String introduction;
-    private final Integer periodOfRound;
     private final ProcessingStatus processingStatus;
-    private final Integer totalRoundCount;
     private final Integer numberOfMaximumMember;
 
-    StudyFixture(Long id, LocalDateTime startAt, String name, String introduction, Integer periodOfRound,
-            ProcessingStatus processingStatus, Integer totalRoundCount, Integer numberOfMaximumMember) {
+    StudyFixture(Long id, LocalDateTime startAt, String name, String introduction,
+                 ProcessingStatus processingStatus, Integer numberOfMaximumMember) {
         this.id = id;
         this.startAt = startAt;
         this.name = name;
         this.introduction = introduction;
-        this.periodOfRound = periodOfRound;
         this.processingStatus = processingStatus;
-        this.totalRoundCount = totalRoundCount;
         this.numberOfMaximumMember = numberOfMaximumMember;
     }
 
@@ -46,9 +42,7 @@ public enum StudyFixture {
                     .startAt(startAt)
                     .name(name)
                     .introduction(introduction)
-                    .periodOfRound(periodOfRound)
                     .processingStatus(processingStatus)
-                    .totalRoundCount(totalRoundCount)
                     .numberOfMaximumMembers(numberOfMaximumMember)
                     .rounds(List.of(아이디없는_라운드.toRound(), 아이디없는_라운드2.toRound(), 아이디없는_라운드3.toRound()))
                     .build();
@@ -64,9 +58,7 @@ public enum StudyFixture {
                     .startAt(startAt)
                     .name(name)
                     .introduction(introduction)
-                    .periodOfRound(periodOfRound)
                     .processingStatus(processingStatus)
-                    .totalRoundCount(totalRoundCount)
                     .numberOfMaximumMembers(numberOfMaximumMember)
                     .rounds(rounds)
                     .build();
