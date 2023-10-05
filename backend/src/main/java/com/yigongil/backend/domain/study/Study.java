@@ -4,10 +4,7 @@ import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
-import com.yigongil.backend.exception.InvalidMemberSizeException;
-import com.yigongil.backend.exception.InvalidNumberOfMaximumStudyMember;
-import com.yigongil.backend.exception.InvalidProcessingStatusException;
-import com.yigongil.backend.exception.InvalidStudyNameLengthException;
+import com.yigongil.backend.exception.*;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.Cascade;
@@ -18,7 +15,9 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -244,4 +243,23 @@ public class Study extends BaseEntity {
         this.introduction = introduction;
     }
 
+    public void startStudy() {
+        if (processingStatus != ProcessingStatus.RECRUITING) {
+            throw new CannotStartException("시작할 수 없는 상태입니다.", id);
+        }
+        if (sizeOfCurrentMembers() == ONE_MEMBER) {
+            throw new CannotStartException("시작할 수 없는 상태입니다.", id);
+        }
+        this.startAt = LocalDateTime.now();
+        this.processingStatus = ProcessingStatus.PROCESSING;
+        initializeRoundsEndAt();
+    }
+
+    private void initializeRoundsEndAt() {
+        rounds.sort(Comparator.comparing(Round::getRoundNumber));
+        LocalDateTime date = LocalDateTime.of(startAt.toLocalDate(), LocalTime.MIN);
+        for (Round round : rounds) {
+            // TODO: 10/5/23 진행하고자 하는 요일들로 초기화 필요
+        }
+    }
 }
