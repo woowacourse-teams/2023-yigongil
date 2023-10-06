@@ -2,14 +2,19 @@ package com.created.team201.presentation.createStudy
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.created.team201.presentation.createStudy.model.CreateStudyUiModel
+import com.created.domain.model.CreateStudy
+import com.created.domain.repository.CreateStudyRepository
+import com.created.team201.presentation.createStudy.model.CreateStudyUiState
 import com.created.team201.presentation.createStudy.model.FragmentState
 import com.created.team201.presentation.createStudy.model.FragmentState.FirstFragment
 import com.created.team201.presentation.createStudy.model.FragmentState.SecondFragment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -17,7 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateStudyViewModel @Inject constructor(
-
+    private val createStudyRepository: CreateStudyRepository,
 ) : ViewModel() {
     private val _fragmentState: MutableStateFlow<FragmentState> =
         MutableStateFlow(FirstFragment)
@@ -48,6 +53,9 @@ class CreateStudyViewModel @Inject constructor(
         combine(studyName, studyIntroduction) { studyName, studyIntroduction ->
             return@combine studyName.isNotBlankAndEmpty() && studyIntroduction.isNotBlankAndEmpty()
         }
+
+    private val _createStudyUiState: MutableSharedFlow<CreateStudyUiState> = MutableSharedFlow()
+    val createStudyUiState: SharedFlow<CreateStudyUiState> get() = _createStudyUiState.asSharedFlow()
 
     private var isOpenStudy: Boolean = false
 
@@ -95,15 +103,20 @@ class CreateStudyViewModel @Inject constructor(
         if (isOpenStudy) return
         isOpenStudy = true
         viewModelScope.launch {
-            CreateStudyUiModel(
+            val study = CreateStudy(
                 name = studyName.value.trim(),
                 introduction = studyIntroduction.value,
                 peopleCount = peopleCount.value,
                 studyDate = studyDate.value,
-                cycle = cycle.value,
-            ).apply {
-                // TODO 스터디 생성 통신
-            }
+                numberOfStudyPerWeek = cycle.value,
+            )
+            createStudyRepository.createStudy(study)
+                .onSuccess {
+                    _createStudyUiState.emit(CreateStudyUiState.Success)
+                }
+                .onFailure {
+                    _createStudyUiState.emit(CreateStudyUiState.Fail)
+                }
         }
     }
 

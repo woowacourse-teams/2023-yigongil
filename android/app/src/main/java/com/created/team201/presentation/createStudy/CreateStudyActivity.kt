@@ -6,19 +6,25 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import com.created.team201.R
 import com.created.team201.databinding.ActivityCreateStudyBinding
 import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.createStudy.model.CreateStudyUiState.Fail
+import com.created.team201.presentation.createStudy.model.CreateStudyUiState.Idle
+import com.created.team201.presentation.createStudy.model.CreateStudyUiState.Success
 import com.created.team201.presentation.createStudy.model.FragmentState.FirstFragment
 import com.created.team201.presentation.createStudy.model.FragmentState.SecondFragment
 import com.created.team201.presentation.createStudy.model.FragmentType
 import com.created.team201.presentation.createStudy.model.FragmentType.FIRST
 import com.created.team201.presentation.createStudy.model.FragmentType.SECOND
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -32,6 +38,7 @@ class CreateStudyActivity :
         initBinding()
         initActionBar()
         setupCollectCreateStudyState()
+        setupCollectCreateStudyUiState()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -71,6 +78,31 @@ class CreateStudyActivity :
             FIRST -> PROGRESS_FIRST
             SECOND -> PROGRESS_SECOND
         }
+    }
+
+    private fun setupCollectCreateStudyUiState() {
+        lifecycleScope.launch {
+            createStudyViewModel.createStudyUiState.collectLatest { createStudyUiState ->
+                when (createStudyUiState) {
+                    is Success -> {
+                        // TODO 어디로 갈건데?
+                        showToast(R.string.create_study_toast_create_study_success)
+                        finish()
+                    }
+
+                    is Fail -> {
+                        showToast(R.string.create_study_toast_create_study_fail)
+                        finish()
+                    }
+
+                    is Idle -> throw IllegalArgumentException()
+                }
+            }
+        }
+    }
+
+    private fun showToast(@StringRes messageRes: Int) {
+        Toast.makeText(this, getString(messageRes), Toast.LENGTH_SHORT).show()
     }
 
     private fun setupCollectCreateStudyState() {
