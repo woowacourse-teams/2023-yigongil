@@ -55,6 +55,15 @@
                 app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_study_list_all"
+                    style="@style/chip_study_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/study_list_chip_all"
+                    android:textColor="@color/chip_text_color_checked_end"
+                    app:chipBackgroundColor="@color/chip_color_checked_end" />
+
+                <com.google.android.material.chip.Chip
                     android:id="@+id/chip_study_list_recruiting"
                     style="@style/chip_study_list"
                     android:layout_width="wrap_content"
@@ -71,15 +80,6 @@
                     android:text="@string/study_list_chip_processing"
                     android:textColor="@color/chip_text_color_checked_processing"
                     app:chipBackgroundColor="@color/chip_color_checked_processing" />
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/chip_study_list_end"
-                    style="@style/chip_study_list"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/study_list_chip_end"
-                    android:textColor="@color/chip_text_color_checked_end"
-                    app:chipBackgroundColor="@color/chip_color_checked_end" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_study_list_waiting"
