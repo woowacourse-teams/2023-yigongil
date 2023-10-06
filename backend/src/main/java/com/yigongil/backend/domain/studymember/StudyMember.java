@@ -75,7 +75,8 @@ public class StudyMember extends BaseEntity {
     public void completeSuccessfully() {
         int successfulRoundCount = study.calculateSuccessfulRoundCount(member);
         int defaultRoundExperience = EXPERIENCE_BASE_UNIT * 2;
-        int additionalExperienceOfPeriodLength = EXPERIENCE_BASE_UNIT * study.calculateStudyPeriod();
+        int additionalExperienceOfPeriodLength = EXPERIENCE_BASE_UNIT * 1;
+        // TODO: 10/5/23 기존의 스터디 주기(일 수)만큼 곱했었던 로직 변경이 필요함. 일단 1을 곱하는 것으로 수정
         int totalExperience = successfulRoundCount * (defaultRoundExperience + additionalExperienceOfPeriodLength);
         member.addExperience(totalExperience);
         this.studyResult = StudyResult.SUCCESS;

@@ -63,8 +63,6 @@ public class StudyService {
                 request.introduction(),
                 request.numberOfMaximumMembers(),
                 request.startAt().atStartOfDay(),
-                request.totalRoundCount(),
-                request.periodOfRound(),
                 member
         );
 
@@ -231,9 +229,6 @@ public class StudyService {
                             study.getName(),
                             study.calculateAverageTier(),
                             study.getStartAt().toLocalDate(),
-                            study.getTotalRoundCount(),
-                            study.getPeriodUnit()
-                                 .toStringFormat(study.getPeriodOfRound()),
                             study.getCurrentRound()
                                  .getRoundOfMembers()
                                  .size(),
@@ -292,8 +287,6 @@ public class StudyService {
                 request.name(),
                 request.numberOfMaximumMembers(),
                 request.startAt().atStartOfDay(),
-                request.totalRoundCount(),
-                request.periodOfRound(),
                 request.introduction()
         );
     }

@@ -72,8 +72,6 @@ public class MemberService {
                 study.getName(),
                 study.calculateAverageTier(),
                 study.getStartAt().toLocalDate(),
-                study.getTotalRoundCount(),
-                study.getPeriodUnit().toStringFormat(study.getPeriodOfRound()),
                 study.sizeOfCurrentMembers(),
                 study.getNumberOfMaximumMembers(),
                 studyMember.isSuccess()

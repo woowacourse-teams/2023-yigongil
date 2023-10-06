@@ -22,10 +22,6 @@ public record StudyDetailResponse(
         Long studyMasterId,
         @Schema(example = "2023.08.12")
         LocalDate startAt,
-        @Schema(example = "5")
-        Integer totalRoundCount,
-        @Schema(example = "1w")
-        String periodOfRound,
         @Schema(example = "1")
         Integer currentRound,
         @Schema(example = "코틀린으로 다 뿌수는 스터디입니다")
@@ -48,8 +44,6 @@ public record StudyDetailResponse(
                 study.getNumberOfMaximumMembers(),
                 currentRound.getMaster().getId(),
                 study.getStartAt().toLocalDate(),
-                study.getTotalRoundCount(),
-                study.findPeriodOfRoundToString(),
                 study.getCurrentRound().getRoundNumber(),
                 study.getIntroduction(),
                 studyMemberResponses,

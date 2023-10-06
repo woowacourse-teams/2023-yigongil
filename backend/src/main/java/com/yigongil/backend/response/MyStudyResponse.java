@@ -16,10 +16,6 @@ public record MyStudyResponse(
         Integer averageTier,
         @Schema(example = "2023.08.30")
         LocalDate startAt,
-        @Schema(example = "5")
-        Integer totalRoundCount,
-        @Schema(example = "1d")
-        String periodOfRound,
         @Schema(example = "3")
         Integer numberOfCurrentMembers,
         @Schema(example = "5")
