@@ -6,12 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.created.domain.model.Page
-import com.created.domain.model.Period
 import com.created.domain.model.StudySummary
 import com.created.domain.repository.StudyListRepository
-import com.created.team201.presentation.studyList.model.PeriodUiModel
-import com.created.team201.presentation.studyList.model.StudyStatus
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel
+import com.created.team201.presentation.studyList.model.StudySummaryUiModel.Companion.toUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -128,21 +126,4 @@ class StudyListViewModel @Inject constructor(
 
     private fun List<StudySummary>.toUiModel(): List<StudySummaryUiModel> =
         this.map { it.toUiModel() }
-
-    private fun StudySummary.toUiModel(): StudySummaryUiModel =
-        StudySummaryUiModel(
-            id,
-            StudyStatus.valueOf(processingStatus),
-            tier,
-            title,
-            date,
-            totalRound,
-            period.toUiModel(),
-            currentMember,
-            maximumMember,
-        )
-
-    private fun Period.toUiModel(): PeriodUiModel =
-        PeriodUiModel(date, unit)
-
 }
