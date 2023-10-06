@@ -86,7 +86,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:text="@{@string/study_list_information_format(startDateStringFormat[studySummary.processingStatus.formatIndex], studySummary.date)}"
+            android:text="@{@string/study_list_information_format(studySummary.createdAt)}"
             android:textAppearance="@style/description_r12"
             android:textColor="@color/grey02_78808B"
             app:layout_constraintStart_toStartOf="@id/tv_study_list_title"

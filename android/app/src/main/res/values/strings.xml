@@ -70,7 +70,7 @@
     <string name="study_list_item_sort_description">정렬</string>
     <string name="study_list_search_button_menu">검색</string>
     <string name="study_list_title">스터디 목록</string>
-    <string name="study_list_information_format">%s %s</string>
+    <string name="study_list_information_format">개설일 %s</string>
     <string name="study_list_member_format">%d/%d</string>
     <string name="study_list_previous_date">예상시작일</string>
     <string name="study_list_processing_date">시작일</string>
