@@ -34,11 +34,23 @@ class DefaultThreadRepository @Inject constructor(
         emit(feeds)
     }.flowOn(Dispatchers.IO)
 
-    override fun getMustDo(studyId: Long): Flow<List<MustDo>> = flow {
+    override fun getMustDoCertification(studyId: Long): Flow<List<MustDo>> = flow {
         val mustDoCertification = threadService.getMustDoCertification(studyId = studyId)
         val membersMustDoCertification =
             listOf(mustDoCertification.me.toMustDo()) + mustDoCertification.others.map { it.toMustDo() }
 
         emit(membersMustDoCertification)
     }.flowOn(Dispatchers.IO)
+
+    override fun postMustDoCertification(studyId: Long) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getStudyInfo(studyId: Long) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getMustDo(studyId: Long) {
+        TODO("Not yet implemented")
+    }
 }

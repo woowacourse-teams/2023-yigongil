@@ -8,7 +8,13 @@ interface ThreadRepository {
 
     suspend fun postFeeds(studyId: Long, content: String, image: String?): Result<Unit>
 
-    fun getMustDo(studyId: Long): Flow<List<MustDo>>
-
     fun getFeeds(studyId: Long): Flow<List<Feeds>>
+
+    fun getMustDoCertification(studyId: Long): Flow<List<MustDo>>
+
+    fun postMustDoCertification(studyId: Long)
+
+    fun getStudyInfo(studyId: Long)
+
+    fun getMustDo(studyId: Long)
 }
