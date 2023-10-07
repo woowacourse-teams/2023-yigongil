@@ -73,7 +73,8 @@ class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_
     }
 
     private fun setupView() {
-        threadViewModel.apply {
+        with(threadViewModel) {
+            updateStudyId(studyId)
             updateMustDoCertification()
             updateFeeds()
         }
@@ -81,9 +82,7 @@ class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_
 
     private fun bindViewModel() {
         binding.lifecycleOwner = this
-        binding.vm = threadViewModel.apply {
-            updateStudyId(studyId)
-        }
+        binding.vm = threadViewModel
     }
 
     private fun attachAdapter() {

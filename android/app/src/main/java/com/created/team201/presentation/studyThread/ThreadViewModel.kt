@@ -8,6 +8,7 @@ import com.created.team201.presentation.studyThread.uiState.MustDoCertificationU
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,11 +24,11 @@ class ThreadViewModel @Inject constructor(
 
     private val _mustDoUiState: MutableStateFlow<MustDoCertificationUiState> =
         MutableStateFlow(MustDoCertificationUiState.Loading)
-    val mustDoUiState: StateFlow<MustDoCertificationUiState> get() = _mustDoUiState
+    val mustDoUiState: StateFlow<MustDoCertificationUiState> get() = _mustDoUiState.asStateFlow()
 
     private val _feedsUiState: MutableStateFlow<FeedsUiState> =
         MutableStateFlow(FeedsUiState.Loading)
-    val feedsUiState: StateFlow<FeedsUiState> get() = _feedsUiState
+    val feedsUiState: StateFlow<FeedsUiState> get() = _feedsUiState.asStateFlow()
 
     fun updateStudyId(id: Long) {
         studyId.value = id
@@ -35,7 +36,7 @@ class ThreadViewModel @Inject constructor(
 
     fun updateMustDoCertification() {
         viewModelScope.launch {
-            threadRepository.getMustDo(studyId.value).collectLatest {
+            threadRepository.getMustDoCertification(studyId.value).collectLatest {
                 _mustDoUiState.value = MustDoCertificationUiState.Success(it)
             }
         }
