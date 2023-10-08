@@ -1,5 +1,6 @@
-package com.yigongil.backend.domain.study;
+package com.yigongil.backend.domain.study.studyquery;
 
+import com.yigongil.backend.domain.study.Study;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.springframework.data.domain.Pageable;

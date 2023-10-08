@@ -1,5 +1,6 @@
-package com.yigongil.backend.domain.study;
+package com.yigongil.backend.domain.study.studyquery;
 
+import com.yigongil.backend.domain.study.ProcessingStatus;
 import org.springframework.stereotype.Component;
 
 @Component

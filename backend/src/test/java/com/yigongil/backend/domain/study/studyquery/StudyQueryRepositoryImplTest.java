@@ -1,8 +1,11 @@
-package com.yigongil.backend.domain.study;
+package com.yigongil.backend.domain.study.studyquery;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.yigongil.backend.config.JpaConfig;
+import com.yigongil.backend.domain.study.PageStrategy;
+import com.yigongil.backend.domain.study.Study;
+import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.fixture.StudyFixture;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +88,7 @@ class StudyQueryRepositoryImplTest {
         for (int i = 0; i < 5; i++) {
             studyRepository.save(StudyFixture.자바_스터디_모집중_정원_2.toStudyWithoutId());
         }
-        Slice<Study> result = studyRepository.findStudiesByConditions(null, "recruiting", PageStrategy.defaultPageStrategy(0));
+        Slice<Study> result = studyRepository.findStudiesByConditions(null, "recruiting정", PageStrategy.defaultPageStrategy(0));
 
         assertThat(result).hasSize(5);
     }

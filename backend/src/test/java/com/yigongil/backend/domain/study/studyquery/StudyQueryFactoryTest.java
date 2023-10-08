@@ -1,4 +1,4 @@
-package com.yigongil.backend.domain.study;
+package com.yigongil.backend.domain.study.studyquery;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

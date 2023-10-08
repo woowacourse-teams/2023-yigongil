@@ -1,6 +1,7 @@
 package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.study.studyquery.StudyQueryRepository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
