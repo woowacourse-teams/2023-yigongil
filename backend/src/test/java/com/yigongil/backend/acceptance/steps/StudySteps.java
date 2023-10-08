@@ -9,9 +9,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.StudyUpdateRequest;
-import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.RoundNumberResponse;
 import com.yigongil.backend.response.RoundResponse;
+import com.yigongil.backend.response.StudyDataInListResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.UpcomingStudyResponse;
 import io.cucumber.java.en.Given;
@@ -87,14 +87,14 @@ public class StudySteps {
     public void 모집_중인_스터디를_확인할_수_있다() {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
-        List<RecruitingStudyResponse> recruitingStudyResponses = response.jsonPath()
-                                                                         .getList(".", RecruitingStudyResponse.class);
-        Predicate<RecruitingStudyResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
+        List<StudyDataInListResponse> studyInfoRespons = response.jsonPath()
+                                                                 .getList(".", StudyDataInListResponse.class);
+        Predicate<StudyDataInListResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
 
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(recruitingStudyResponses).isNotEmpty(),
-                () -> assertThat(recruitingStudyResponses).allMatch(isRecruitingPredicate)
+                () -> assertThat(studyInfoRespons).isNotEmpty(),
+                () -> assertThat(studyInfoRespons).allMatch(isRecruitingPredicate)
         );
     }
 
@@ -126,15 +126,15 @@ public class StudySteps {
     public void 모집_중인_스터디를_확인할수_있다(int totalCount, int acceptedCount) {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
-        List<RecruitingStudyResponse> recruitingStudyResponses = response.jsonPath()
-                                                                         .getList(".", RecruitingStudyResponse.class);
+        List<StudyDataInListResponse> studyInfoRespons = response.jsonPath()
+                                                                 .getList(".", StudyDataInListResponse.class);
 
-        Predicate<RecruitingStudyResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
+        Predicate<StudyDataInListResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
 
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(recruitingStudyResponses).allMatch(isRecruitingPredicate),
-                () -> assertThat(recruitingStudyResponses).hasSize(acceptedCount)
+                () -> assertThat(studyInfoRespons).allMatch(isRecruitingPredicate),
+                () -> assertThat(studyInfoRespons).hasSize(acceptedCount)
         );
     }
 
@@ -271,12 +271,12 @@ public class StudySteps {
 
     @Then("결과가 모두 {string}를 포함하고 {int} 개가 조회된다.")
     public void 결과가_모두_검색어를_포함한다(String search, int number) {
-        List<RecruitingStudyResponse> responses = sharedContext.getResponse()
+        List<StudyDataInListResponse> responses = sharedContext.getResponse()
                                                                .jsonPath()
-                                                               .getList(".", RecruitingStudyResponse.class);
+                                                               .getList(".", StudyDataInListResponse.class);
 
         assertAll(
-                () -> assertThat(responses).map(RecruitingStudyResponse::name).allMatch(name -> name.contains(search)),
+                () -> assertThat(responses).map(StudyDataInListResponse::name).allMatch(name -> name.contains(search)),
                 () -> assertThat(responses).hasSize(number)
         );
     }

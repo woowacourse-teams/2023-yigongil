@@ -10,7 +10,7 @@ import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
 import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
-import com.yigongil.backend.response.RecruitingStudyResponse;
+import com.yigongil.backend.response.StudyDataInListResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.response.StudyMemberRoleResponse;
@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/v1/studies")
+@RequestMapping("/studies")
 @RestController
 public class StudyController implements StudyApi {
 
@@ -94,18 +94,13 @@ public class StudyController implements StudyApi {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/recruiting")
-    public ResponseEntity<List<RecruitingStudyResponse>> findRecruitingStudies(int page) {
-        List<RecruitingStudyResponse> response = studyService.findRecruitingStudies(page);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/recruiting/search")
-    public ResponseEntity<List<RecruitingStudyResponse>> findRecruitingStudiesWithSearch(
-            int page,
-            @RequestParam(name = "q") String word
+    @GetMapping
+    public ResponseEntity<List<StudyDataInListResponse>> findStudies(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "all") String status
     ) {
-        List<RecruitingStudyResponse> response = studyService.findRecruitingStudiesWithSearch(page, word);
+        List<StudyDataInListResponse> response = studyService.findStudies(page, search, status);
         return ResponseEntity.ok(response);
     }
 
