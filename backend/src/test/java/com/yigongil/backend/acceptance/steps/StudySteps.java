@@ -1,7 +1,6 @@
 package com.yigongil.backend.acceptance.steps;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -64,7 +63,7 @@ public class StudySteps {
                                  .contentType(MediaType.APPLICATION_JSON_VALUE)
                                  .body(objectMapper.writeValueAsString(request))
                                  .when()
-                                 .post("/v1/studies")
+                                 .post("/studies")
                                  .then().log().all()
                                  .extract()
                                  .header(HttpHeaders.LOCATION);
@@ -76,9 +75,12 @@ public class StudySteps {
 
     @When("모집 중인 스터디 탭을 클릭한다.")
     public void 모집_중인_스터디를_요청한다() {
-        ExtractableResponse<Response> response = when().get("/v1/studies/recruiting?page=0")
-                                                       .then().log().all()
-                                                       .extract();
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .param("status", "recruiting")
+                                                        .when()
+                                                        .get("/studies")
+                                                        .then().log().all()
+                                                        .extract();
 
         sharedContext.setResponse(response);
     }
@@ -102,7 +104,7 @@ public class StudySteps {
     public void 스터디_조회(String studyName) {
         ExtractableResponse<Response> response = given().log().all()
                                                         .when()
-                                                        .get("/v1/studies/" + sharedContext.getId(studyName))
+                                                        .get("/studies/" + sharedContext.getId(studyName))
                                                         .then().log().all()
                                                         .extract();
 
@@ -161,7 +163,7 @@ public class StudySteps {
                                                          .header(HttpHeaders.AUTHORIZATION,
                                                                  token)
                                                          .when()
-                                                         .get("/v1/studies/" + studyId)
+                                                         .get("/studies/" + studyId)
                                                          .then().log().all()
                                                          .extract()
                                                          .as(StudyDetailResponse.class);
@@ -179,7 +181,7 @@ public class StudySteps {
         ExtractableResponse<Response> response = given()
                 .header(HttpHeaders.AUTHORIZATION, token)
                 .when()
-                .get("/v1/studies/" + studyId + "/rounds/" + roundId)
+                .get("/studies/" + studyId + "/rounds/" + roundId)
                 .then().log().all()
                 .extract();
 
@@ -194,7 +196,7 @@ public class StudySteps {
         given().log().all()
                .header(HttpHeaders.AUTHORIZATION, token)
                .when()
-               .patch("/v1/studies/" + studyId + "/start")
+               .patch("/studies/" + studyId + "/start")
                .then().log().all();
 
         sharedContext.setParameter("currentRoundNumber", 1);
@@ -207,7 +209,7 @@ public class StudySteps {
         ExtractableResponse<Response> response = given().log().all()
                                                         .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
-                                                        .get("/v1/home/")
+                                                        .get("/home/")
                                                         .then().log().all()
                                                         .extract();
 
@@ -242,7 +244,7 @@ public class StudySteps {
                .contentType(MediaType.APPLICATION_JSON_VALUE)
                .body(request)
                .when()
-               .put("/v1/studies/{studyId}", studyId)
+               .put("/studies/{studyId}", studyId)
                .then().log().all();
 
         sharedContext.setParameter(updateStudyName, studyId);
@@ -263,7 +265,7 @@ public class StudySteps {
                                                         .queryParam("q", search)
                                                         .queryParam("page", 0)
                                                         .when()
-                                                        .get("/v1/studies/recruiting/search")
+                                                        .get("/studies/recruiting/search")
                                                         .then().log().all().extract();
 
         sharedContext.setResponse(response);

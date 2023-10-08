@@ -47,7 +47,7 @@ public class StudyController implements StudyApi {
             @RequestBody @Valid StudyUpdateRequest request
     ) {
         Long studyId = studyService.create(member, request);
-        return ResponseEntity.created(URI.create("/v1/studies/" + studyId)).build();
+        return ResponseEntity.created(URI.create("/studies/" + studyId)).build();
     }
 
     @PutMapping("/{studyId}")
@@ -155,7 +155,7 @@ public class StudyController implements StudyApi {
             @RequestBody CertificationCreateRequest request
     ) {
         Long certificationId = studyService.createCertification(member, id, request);
-        return ResponseEntity.created(URI.create("/v1/studies/" + id + "/certifications/" + certificationId)).build();
+        return ResponseEntity.created(URI.create("/studies/" + id + "/certifications/" + certificationId)).build();
     }
 
     @GetMapping("/{id}/certifications")

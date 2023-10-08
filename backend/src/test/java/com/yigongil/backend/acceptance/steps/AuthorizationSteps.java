@@ -43,7 +43,7 @@ public class AuthorizationSteps {
                                                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                                                         .when()
                                                         .body(objectMapper.writeValueAsString(request))
-                                                        .post("/v1/login/tokens/refresh")
+                                                        .post("/login/tokens/refresh")
                                                         .then().log().all()
                                                         .extract();
 
@@ -72,7 +72,7 @@ public class AuthorizationSteps {
                                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                                         .when()
                                         .body(objectMapper.writeValueAsString(request))
-                                        .post("/v1/login/tokens/refresh")
+                                        .post("/login/tokens/refresh")
                                         .then().log().all()
                                         .extract()
                                         .as(TokenResponse.class);
@@ -95,7 +95,7 @@ public class AuthorizationSteps {
         ExtractableResponse<Response> response = given().log().all()
                                                         .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
-                                                        .get("/v1/login/tokens/validate")
+                                                        .get("/login/tokens/validate")
                                                         .then().log().all()
                                                         .extract();
 
@@ -105,11 +105,11 @@ public class AuthorizationSteps {
     @Given("{string}의 토큰이 만료된다.")
     public void 토큰_만료(String githubId) {
         String token = "Bearer" + Jwts.builder()
-                                   .setExpiration(Date.from(Instant.now().plus(-1, ChronoUnit.MINUTES)))
-                                   .setIssuedAt(Date.from(Instant.now().plus(-5, ChronoUnit.MINUTES)))
-                                   .setSubject(String.valueOf(1L))
-                                   .signWith(jwtTokenProvider.getSecretKey(), SignatureAlgorithm.HS256)
-                                   .compact();
+                                      .setExpiration(Date.from(Instant.now().plus(-1, ChronoUnit.MINUTES)))
+                                      .setIssuedAt(Date.from(Instant.now().plus(-5, ChronoUnit.MINUTES)))
+                                      .setSubject(String.valueOf(1L))
+                                      .signWith(jwtTokenProvider.getSecretKey(), SignatureAlgorithm.HS256)
+                                      .compact();
         sharedContext.setTokens(githubId, token);
     }
 }

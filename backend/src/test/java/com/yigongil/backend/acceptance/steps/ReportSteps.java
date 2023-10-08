@@ -62,7 +62,7 @@ public class ReportSteps {
                                          .contentType(MediaType.APPLICATION_JSON_VALUE)
                                          .body(request)
                                          .when()
-                                         .post("/v1/reports/by-member")
+                                         .post("/reports/by-member")
                                          .then().log().all()
                                          .extract());
     }
@@ -77,7 +77,7 @@ public class ReportSteps {
                                          .contentType(MediaType.APPLICATION_JSON_VALUE)
                                          .body(request)
                                          .when()
-                                         .post("/v1/reports/by-study")
+                                         .post("/reports/by-study")
                                          .then().log().all()
                                          .extract());
     }

@@ -37,7 +37,7 @@ public class TodoSteps {
                .body(objectMapper.writeValueAsString(request))
                .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(studyMemberGithubId))
                .when()
-               .post("/v1/rounds/" + sharedContext.getParameter("roundId") + "/todos")
+               .post("/rounds/" + sharedContext.getParameter("roundId") + "/todos")
                .then().log().all();
     }
 
@@ -52,7 +52,7 @@ public class TodoSteps {
                                                         .body(objectMapper.writeValueAsString(request))
                                                         .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(githubId))
                                                         .when()
-                                                        .patch("/v1/rounds/" + sharedContext.getParameter("roundId") + "/todos")
+                                                        .patch("/rounds/" + sharedContext.getParameter("roundId") + "/todos")
                                                         .then().log().all()
                                                         .extract();
 
@@ -92,7 +92,7 @@ public class TodoSteps {
         ExtractableResponse<Response> response = given().log().all()
                                                         .when()
                                                         .get(
-                                                                "/v1/studies/" + sharedContext.getParameter(studyName)
+                                                                "/studies/" + sharedContext.getParameter(studyName)
                                                                         + "/rounds/" + sharedContext.getParameter("roundId")
                                                                         + "/progress-rate"
                                                         )

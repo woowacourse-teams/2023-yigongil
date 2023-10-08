@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/v1/rounds/{roundId}")
+@RequestMapping("/rounds/{roundId}")
 @RestController
 public class TodoController implements TodoApi {
 
