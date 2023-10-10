@@ -4,7 +4,6 @@ import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.Study;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public record StudyDetailResponse(
@@ -20,8 +19,6 @@ public record StudyDetailResponse(
         Integer numberOfMaximumMembers,
         @Schema(example = "1")
         Long studyMasterId,
-        @Schema(example = "2023.08.12")
-        LocalDate startAt,
         @Schema(example = "1")
         Integer currentRound,
         @Schema(example = "코틀린으로 다 뿌수는 스터디입니다")
@@ -43,7 +40,6 @@ public record StudyDetailResponse(
                 currentRound.getRoundOfMembers().size(),
                 study.getNumberOfMaximumMembers(),
                 currentRound.getMaster().getId(),
-                study.getStartAt().toLocalDate(),
                 study.getCurrentRound().getRoundNumber(),
                 study.getIntroduction(),
                 studyMemberResponses,

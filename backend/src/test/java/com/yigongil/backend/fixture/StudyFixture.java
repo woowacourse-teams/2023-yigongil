@@ -43,25 +43,23 @@ public enum StudyFixture {
     public Study toStudy() {
         return Study.builder()
                     .id(id)
-                    .startAt(startAt)
                     .name(name)
                     .introduction(introduction)
                     .processingStatus(processingStatus)
                     .numberOfMaximumMembers(numberOfMaximumMember)
                     .rounds(List.of(아이디없는_라운드.toRound(), 아이디없는_라운드2.toRound(), 아이디없는_라운드3.toRound()))
-                    .meetingDaysPerWeek(meetingDaysPerWeek)
+                    .meetingDaysCountPerWeek(meetingDaysPerWeek)
                     .minimumWeeks(minimumWeeks)
                     .build();
     }
 
     public Study toStudyWithoutId() {
         return Study.builder()
-                    .startAt(startAt)
                     .name(name)
                     .introduction(introduction)
                     .processingStatus(processingStatus)
                     .numberOfMaximumMembers(numberOfMaximumMember)
-                    .meetingDaysPerWeek(meetingDaysPerWeek)
+                    .meetingDaysCountPerWeek(meetingDaysPerWeek)
                     .minimumWeeks(minimumWeeks)
                     .build();
     }
@@ -73,7 +71,6 @@ public enum StudyFixture {
 
         return Study.builder()
                     .id(id)
-                    .startAt(startAt)
                     .name(name)
                     .introduction(introduction)
                     .processingStatus(processingStatus)

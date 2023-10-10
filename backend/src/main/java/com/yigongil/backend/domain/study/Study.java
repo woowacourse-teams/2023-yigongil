@@ -11,7 +11,6 @@ import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.InvalidStudyNameLengthException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -60,15 +59,13 @@ public class Study extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private ProcessingStatus processingStatus;
 
-    private LocalDateTime startAt;
-
     private LocalDateTime endAt;
 
     @Column(nullable = false)
     private Integer minimumWeeks;
 
     @Column(nullable = false)
-    private Integer meetingDaysPerWeek;
+    private Integer meetingDaysCountPerWeek;
 
     @Column(nullable = false)
     private Integer currentRoundNumber;
@@ -89,10 +86,9 @@ public class Study extends BaseEntity {
             String introduction,
             Integer numberOfMaximumMembers,
             ProcessingStatus processingStatus,
-            LocalDateTime startAt,
             LocalDateTime endAt,
             Integer minimumWeeks,
-            Integer meetingDaysPerWeek,
+            Integer meetingDaysCountPerWeek,
             Integer currentRoundNumber,
             List<Round> rounds
     ) {
@@ -104,25 +100,26 @@ public class Study extends BaseEntity {
         this.introduction = introduction;
         this.numberOfMaximumMembers = numberOfMaximumMembers;
         this.processingStatus = processingStatus;
-        this.startAt = startAt;
         this.endAt = endAt;
         this.currentRoundNumber = currentRoundNumber == null ? 1 : currentRoundNumber;
         this.rounds = rounds == null ? new ArrayList<>() : rounds;
         this.minimumWeeks = minimumWeeks;
-        this.meetingDaysPerWeek = meetingDaysPerWeek;
+        this.meetingDaysCountPerWeek = meetingDaysCountPerWeek;
     }
 
     public static Study initializeStudyOf(
             String name,
             String introduction,
             Integer numberOfMaximumMembers,
-            LocalDateTime startAt,
+            Integer meetingDaysCountPerWeek,
+            Integer minimumWeeks,
             Member master
     ) {
         Study study = Study.builder()
                            .name(name)
                            .numberOfMaximumMembers(numberOfMaximumMembers)
-                           .startAt(startAt)
+                           .meetingDaysCountPerWeek(meetingDaysCountPerWeek)
+                           .minimumWeeks(minimumWeeks)
                            .introduction(introduction)
                            .processingStatus(ProcessingStatus.RECRUITING)
                            .build();
@@ -247,15 +244,23 @@ public class Study extends BaseEntity {
         return getCurrentRound().isMaster(member);
     }
 
-    public void updateInformation(Member member, String name, Integer numberOfMaximumMembers, LocalDateTime startAt, String introduction) {
+    public void updateInformation(
+            Member member,
+            String name,
+            Integer numberOfMaximumMembers,
+            String introduction,
+            Integer minimumWeeks,
+            Integer meetingDaysCountPerWeek
+    ) {
         validateName(name);
         validateNumberOfMaximumMembers(numberOfMaximumMembers);
         validateMaster(member);
         validateStudyProcessingStatus();
         this.name = name;
         this.numberOfMaximumMembers = numberOfMaximumMembers;
-        this.startAt = startAt;
         this.introduction = introduction;
+        this.minimumWeeks = minimumWeeks;
+        this.meetingDaysCountPerWeek = meetingDaysCountPerWeek;
     }
 
     public void startStudy() {
@@ -265,14 +270,12 @@ public class Study extends BaseEntity {
         if (sizeOfCurrentMembers() == ONE_MEMBER) {
             throw new CannotStartException("시작할 수 없는 상태입니다.", id);
         }
-        this.startAt = LocalDateTime.now();
         this.processingStatus = ProcessingStatus.PROCESSING;
         initializeRoundsEndAt();
     }
 
     private void initializeRoundsEndAt() {
         rounds.sort(Comparator.comparing(Round::getRoundNumber));
-        LocalDateTime date = LocalDateTime.of(startAt.toLocalDate(), LocalTime.MIN);
         for (Round round : rounds) {
             // TODO: 10/5/23 진행하고자 하는 요일들로 초기화 필요
         }

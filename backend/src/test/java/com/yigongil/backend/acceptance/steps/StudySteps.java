@@ -51,9 +51,8 @@ public class StudySteps {
         StudyUpdateRequest request = new StudyUpdateRequest(
                 name,
                 Integer.parseInt(numberOfMaximumMembers),
-                startAt,
-                Integer.parseInt(totalRoundCount),
-                periodOfRound,
+                7,
+                3,
                 introduction
         );
         String token = sharedContext.getToken(masterGithubId);
@@ -233,9 +232,8 @@ public class StudySteps {
         StudyUpdateRequest request = new StudyUpdateRequest(
                 updateStudyName,
                 Integer.parseInt(updateNumberOfMaximumMembers),
-                LocalDate.now().plus(Long.parseLong(updateStartAt), ChronoUnit.DAYS),
-                Integer.parseInt(updateTotalRoundCount),
-                updatePeriodOfRound,
+                7,
+                3,
                 updateIntroduction
         );
 
@@ -265,7 +263,7 @@ public class StudySteps {
                                                         .queryParam("q", search)
                                                         .queryParam("page", 0)
                                                         .when()
-                                                        .get("/studies/recruiting/search")
+                                                        .get("/v1/studies/recruiting/search")
                                                         .then().log().all().extract();
 
         sharedContext.setResponse(response);

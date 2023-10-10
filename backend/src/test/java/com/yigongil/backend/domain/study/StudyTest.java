@@ -1,5 +1,9 @@
 package com.yigongil.backend.domain.study;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
@@ -7,15 +11,10 @@ import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.fixture.RoundFixture;
 import com.yigongil.backend.fixture.StudyFixture;
-import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
-import org.junit.jupiter.api.Test;
-
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
+import org.junit.jupiter.api.Test;
 
 class StudyTest {
 
@@ -128,8 +127,9 @@ class StudyTest {
                 study.getMaster(),
                 "이름 수정",
                 5,
-                LocalDateTime.now(),
-                "소개"
+                "소개",
+                7,
+                3
         );
 
         // then

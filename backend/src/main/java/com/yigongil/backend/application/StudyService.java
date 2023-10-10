@@ -60,7 +60,8 @@ public class StudyService {
                 request.name(),
                 request.introduction(),
                 request.numberOfMaximumMembers(),
-                request.startAt().atStartOfDay(),
+                request.minimumWeeks(),
+                request.meetingDaysCountPerWeek(),
                 member
         );
 
@@ -214,7 +215,6 @@ public class StudyService {
                                        .getCode(),
                             study.getName(),
                             study.calculateAverageTier(),
-                            study.getStartAt().toLocalDate(),
                             study.getCurrentRound()
                                  .getRoundOfMembers()
                                  .size(),
@@ -272,8 +272,9 @@ public class StudyService {
                 member,
                 request.name(),
                 request.numberOfMaximumMembers(),
-                request.startAt().atStartOfDay(),
-                request.introduction()
+                request.introduction(),
+                request.minimumWeeks(),
+                request.meetingDaysCountPerWeek()
         );
     }
 
