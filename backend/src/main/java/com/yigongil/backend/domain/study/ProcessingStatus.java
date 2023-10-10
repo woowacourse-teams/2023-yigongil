@@ -6,10 +6,11 @@ import lombok.Getter;
 
 @Getter
 public enum ProcessingStatus {
+    ALL(3),
     RECRUITING(0),
     PROCESSING(1),
     END(2),
-    ALL(3);
+    ;
 
     private final int code;
 
