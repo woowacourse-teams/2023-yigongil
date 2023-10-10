@@ -22,7 +22,7 @@ public enum PageStrategy {
         return PageRequest.of(page, ID_DESC.getSize(), ID_DESC.getSort());
     }
 
-    public static class Constants {
+    private static class Constants {
 
         public static final int PAGE_SIZE = 30;
     }

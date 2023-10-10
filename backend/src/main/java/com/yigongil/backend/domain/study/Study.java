@@ -4,15 +4,11 @@ import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
-import com.yigongil.backend.exception.*;
-import lombok.Builder;
-import lombok.Getter;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import javax.persistence.*;
+import com.yigongil.backend.exception.CannotStartException;
+import com.yigongil.backend.exception.InvalidMemberSizeException;
+import com.yigongil.backend.exception.InvalidNumberOfMaximumStudyMember;
+import com.yigongil.backend.exception.InvalidProcessingStatusException;
+import com.yigongil.backend.exception.InvalidStudyNameLengthException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,6 +16,21 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import lombok.Builder;
+import lombok.Getter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Entity
@@ -57,7 +68,7 @@ public class Study extends BaseEntity {
     private Integer minimumWeeks;
 
     @Column(nullable = false)
-    private Integer progressDaysPerWeek;
+    private Integer meetingDaysPerWeek;
 
     @Column(nullable = false)
     private Integer currentRoundNumber;
@@ -80,6 +91,8 @@ public class Study extends BaseEntity {
             ProcessingStatus processingStatus,
             LocalDateTime startAt,
             LocalDateTime endAt,
+            Integer minimumWeeks,
+            Integer meetingDaysPerWeek,
             Integer currentRoundNumber,
             List<Round> rounds
     ) {
@@ -95,22 +108,24 @@ public class Study extends BaseEntity {
         this.endAt = endAt;
         this.currentRoundNumber = currentRoundNumber == null ? 1 : currentRoundNumber;
         this.rounds = rounds == null ? new ArrayList<>() : rounds;
+        this.minimumWeeks = minimumWeeks;
+        this.meetingDaysPerWeek = meetingDaysPerWeek;
     }
 
     public static Study initializeStudyOf(
-        String name,
-        String introduction,
-        Integer numberOfMaximumMembers,
-        LocalDateTime startAt,
-        Member master
+            String name,
+            String introduction,
+            Integer numberOfMaximumMembers,
+            LocalDateTime startAt,
+            Member master
     ) {
         Study study = Study.builder()
-                             .name(name)
-                             .numberOfMaximumMembers(numberOfMaximumMembers)
-                             .startAt(startAt)
-                             .introduction(introduction)
-                             .processingStatus(ProcessingStatus.RECRUITING)
-                             .build();
+                           .name(name)
+                           .numberOfMaximumMembers(numberOfMaximumMembers)
+                           .startAt(startAt)
+                           .introduction(introduction)
+                           .processingStatus(ProcessingStatus.RECRUITING)
+                           .build();
         study.rounds = Round.of(INITIAL_ROUND_COUNT, master);
         return study;
     }

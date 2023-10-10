@@ -22,19 +22,20 @@ public class AuthConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor)
-                .addPathPatterns("/v1/**")
-                .excludePathPatterns("/v1/login/github/tokens")
-                .excludePathPatterns("/v1/login/tokens/refresh")
-                .excludePathPatterns("/v1/login/fake/tokens")
-                .excludePathPatterns("/v1/members/{id:[0-9]\\d*}")
-                .excludePathPatterns("/v1/members/exists")
-                .excludePathPatterns("/v1/studies/recruiting/**")
+                .addPathPatterns("/**")
+                .excludePathPatterns("/login/github/tokens")
+                .excludePathPatterns("/login/tokens/refresh")
+                .excludePathPatterns("/login/fake/tokens")
+                .excludePathPatterns("/members/{id:[0-9]\\d*}")
+                .excludePathPatterns("/members/exists")
+                .excludePathPatterns("/studies")
                 .excludePathPatterns("/api/**")
                 .excludePathPatterns("/api-docs/**")
                 .excludePathPatterns("/swagger-ui/**")
-                .excludePathPatterns("/v1/actuator/**")
-                .excludePathPatterns("/v1/fake/proceed")
-                .excludePathPatterns("/v1/studies/{id:[0-9]\\d*}/rounds/{id:[0-9]\\d*}/progress-rate");
+                .excludePathPatterns("/actuator/**")
+                .excludePathPatterns("/fake/proceed")
+                .excludePathPatterns("/studies/{id:[0-9]\\d*}/rounds/{id:[0-9]\\d*}/progress-rate");
+
     }
 
     @Override

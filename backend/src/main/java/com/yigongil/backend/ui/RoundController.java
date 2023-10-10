@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/v1/studies/{studyId}/rounds/{roundId}")
+@RequestMapping("/studies/{studyId}/rounds/{roundId}")
 @RestController
 public class RoundController implements RoundApi {
 

@@ -1,10 +1,9 @@
 package com.yigongil.backend.application;
 
-import static com.yigongil.backend.domain.study.PageStrategy.ID_DESC;
-
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
+import com.yigongil.backend.domain.study.PageStrategy;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
@@ -22,17 +21,16 @@ import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
 import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
-import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
+import com.yigongil.backend.response.StudyListItemResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.response.StudyMemberRoleResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,28 +79,16 @@ public class StudyService {
     }
 
     @Transactional(readOnly = true)
-    public List<RecruitingStudyResponse> findRecruitingStudies(int page) {
-        Pageable pageable = PageRequest.of(page, ID_DESC.getSize(), ID_DESC.getSort());
+    public List<StudyListItemResponse> findStudies(int page, String search, ProcessingStatus status) {
+        Pageable pageable = PageStrategy.defaultPageStrategy(page);
 
-        Page<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.RECRUITING, pageable);
-        return toRecruitingStudyResponse(studies);
-
-    }
-
-    @Transactional(readOnly = true)
-    public List<RecruitingStudyResponse> findRecruitingStudiesWithSearch(int page, String word) {
-        Pageable pageable = PageRequest.of(page, ID_DESC.getSize(), ID_DESC.getSort());
-        Page<Study> studies = studyRepository.findAllByProcessingStatusAndNameContainingIgnoreCase(
-                ProcessingStatus.RECRUITING,
-                word,
-                pageable
-        );
+        Slice<Study> studies = studyRepository.findStudiesByConditions(search, status, pageable);
         return toRecruitingStudyResponse(studies);
     }
 
-    private List<RecruitingStudyResponse> toRecruitingStudyResponse(Page<Study> studies) {
+    private List<StudyListItemResponse> toRecruitingStudyResponse(Slice<Study> studies) {
         return studies.get()
-                      .map(RecruitingStudyResponse::from)
+                      .map(StudyListItemResponse::from)
                       .toList();
     }
 

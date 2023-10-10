@@ -1,7 +1,6 @@
 package com.yigongil.backend.acceptance.steps;
 
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -9,10 +8,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.StudyUpdateRequest;
-import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.RoundNumberResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
+import com.yigongil.backend.response.StudyListItemResponse;
 import com.yigongil.backend.response.UpcomingStudyResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -64,7 +63,7 @@ public class StudySteps {
                                  .contentType(MediaType.APPLICATION_JSON_VALUE)
                                  .body(objectMapper.writeValueAsString(request))
                                  .when()
-                                 .post("/v1/studies")
+                                 .post("/studies")
                                  .then().log().all()
                                  .extract()
                                  .header(HttpHeaders.LOCATION);
@@ -76,9 +75,12 @@ public class StudySteps {
 
     @When("모집 중인 스터디 탭을 클릭한다.")
     public void 모집_중인_스터디를_요청한다() {
-        ExtractableResponse<Response> response = when().get("/v1/studies/recruiting?page=0")
-                                                       .then().log().all()
-                                                       .extract();
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .param("status", "recruiting")
+                                                        .when()
+                                                        .get("/studies")
+                                                        .then().log().all()
+                                                        .extract();
 
         sharedContext.setResponse(response);
     }
@@ -87,14 +89,14 @@ public class StudySteps {
     public void 모집_중인_스터디를_확인할_수_있다() {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
-        List<RecruitingStudyResponse> recruitingStudyResponses = response.jsonPath()
-                                                                         .getList(".", RecruitingStudyResponse.class);
-        Predicate<RecruitingStudyResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
+        List<StudyListItemResponse> studyInfoRespons = response.jsonPath()
+                                                               .getList(".", StudyListItemResponse.class);
+        Predicate<StudyListItemResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
 
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(recruitingStudyResponses).isNotEmpty(),
-                () -> assertThat(recruitingStudyResponses).allMatch(isRecruitingPredicate)
+                () -> assertThat(studyInfoRespons).isNotEmpty(),
+                () -> assertThat(studyInfoRespons).allMatch(isRecruitingPredicate)
         );
     }
 
@@ -102,7 +104,7 @@ public class StudySteps {
     public void 스터디_조회(String studyName) {
         ExtractableResponse<Response> response = given().log().all()
                                                         .when()
-                                                        .get("/v1/studies/" + sharedContext.getId(studyName))
+                                                        .get("/studies/" + sharedContext.getId(studyName))
                                                         .then().log().all()
                                                         .extract();
 
@@ -126,15 +128,15 @@ public class StudySteps {
     public void 모집_중인_스터디를_확인할수_있다(int totalCount, int acceptedCount) {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
-        List<RecruitingStudyResponse> recruitingStudyResponses = response.jsonPath()
-                                                                         .getList(".", RecruitingStudyResponse.class);
+        List<StudyListItemResponse> studyInfoRespons = response.jsonPath()
+                                                               .getList(".", StudyListItemResponse.class);
 
-        Predicate<RecruitingStudyResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
+        Predicate<StudyListItemResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
 
         assertAll(
                 () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(recruitingStudyResponses).allMatch(isRecruitingPredicate),
-                () -> assertThat(recruitingStudyResponses).hasSize(acceptedCount)
+                () -> assertThat(studyInfoRespons).allMatch(isRecruitingPredicate),
+                () -> assertThat(studyInfoRespons).hasSize(acceptedCount)
         );
     }
 
@@ -161,7 +163,7 @@ public class StudySteps {
                                                          .header(HttpHeaders.AUTHORIZATION,
                                                                  token)
                                                          .when()
-                                                         .get("/v1/studies/" + studyId)
+                                                         .get("/studies/" + studyId)
                                                          .then().log().all()
                                                          .extract()
                                                          .as(StudyDetailResponse.class);
@@ -179,7 +181,7 @@ public class StudySteps {
         ExtractableResponse<Response> response = given()
                 .header(HttpHeaders.AUTHORIZATION, token)
                 .when()
-                .get("/v1/studies/" + studyId + "/rounds/" + roundId)
+                .get("/studies/" + studyId + "/rounds/" + roundId)
                 .then().log().all()
                 .extract();
 
@@ -194,7 +196,7 @@ public class StudySteps {
         given().log().all()
                .header(HttpHeaders.AUTHORIZATION, token)
                .when()
-               .patch("/v1/studies/" + studyId + "/start")
+               .patch("/studies/" + studyId + "/start")
                .then().log().all();
 
         sharedContext.setParameter("currentRoundNumber", 1);
@@ -207,7 +209,7 @@ public class StudySteps {
         ExtractableResponse<Response> response = given().log().all()
                                                         .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
-                                                        .get("/v1/home/")
+                                                        .get("/home/")
                                                         .then().log().all()
                                                         .extract();
 
@@ -242,7 +244,7 @@ public class StudySteps {
                .contentType(MediaType.APPLICATION_JSON_VALUE)
                .body(request)
                .when()
-               .put("/v1/studies/{studyId}", studyId)
+               .put("/studies/{studyId}", studyId)
                .then().log().all();
 
         sharedContext.setParameter(updateStudyName, studyId);
@@ -263,7 +265,7 @@ public class StudySteps {
                                                         .queryParam("q", search)
                                                         .queryParam("page", 0)
                                                         .when()
-                                                        .get("/v1/studies/recruiting/search")
+                                                        .get("/studies/recruiting/search")
                                                         .then().log().all().extract();
 
         sharedContext.setResponse(response);
@@ -271,12 +273,12 @@ public class StudySteps {
 
     @Then("결과가 모두 {string}를 포함하고 {int} 개가 조회된다.")
     public void 결과가_모두_검색어를_포함한다(String search, int number) {
-        List<RecruitingStudyResponse> responses = sharedContext.getResponse()
-                                                               .jsonPath()
-                                                               .getList(".", RecruitingStudyResponse.class);
+        List<StudyListItemResponse> responses = sharedContext.getResponse()
+                                                             .jsonPath()
+                                                             .getList(".", StudyListItemResponse.class);
 
         assertAll(
-                () -> assertThat(responses).map(RecruitingStudyResponse::name).allMatch(name -> name.contains(search)),
+                () -> assertThat(responses).map(StudyListItemResponse::name).allMatch(name -> name.contains(search)),
                 () -> assertThat(responses).hasSize(number)
         );
     }

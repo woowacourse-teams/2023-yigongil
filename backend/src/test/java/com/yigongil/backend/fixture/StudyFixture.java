@@ -14,9 +14,9 @@ import java.util.List;
 
 public enum StudyFixture {
 
-    자바_스터디_진행중(1L, LocalDateTime.now(), "자바", "스터디소개", ProcessingStatus.PROCESSING, 4),
-    자바_스터디_모집중(1L, LocalDateTime.now(), "자바", "스터디소개", ProcessingStatus.RECRUITING, 4),
-    자바_스터디_모집중_정원_2(1L, LocalDateTime.now(), "자바", "스터디소개", ProcessingStatus.RECRUITING, 2),
+    자바_스터디_진행중(1L, LocalDateTime.now(), "자바", "스터디소개", ProcessingStatus.PROCESSING, 4, 2, 4),
+    자바_스터디_모집중(1L, LocalDateTime.now(), "자바", "스터디소개", ProcessingStatus.RECRUITING, 4, 2, 4),
+    자바_스터디_모집중_정원_2(1L, LocalDateTime.now(), "자바", "스터디소개", ProcessingStatus.RECRUITING, 2, 2, 4),
     ;
 
     private final Long id;
@@ -25,15 +25,19 @@ public enum StudyFixture {
     private final String introduction;
     private final ProcessingStatus processingStatus;
     private final Integer numberOfMaximumMember;
+    private final Integer meetingDaysPerWeek;
+    private final Integer minimumWeeks;
 
     StudyFixture(Long id, LocalDateTime startAt, String name, String introduction,
-                 ProcessingStatus processingStatus, Integer numberOfMaximumMember) {
+            ProcessingStatus processingStatus, Integer numberOfMaximumMember, Integer meetingDaysPerWeek, Integer minimumWeeks) {
         this.id = id;
         this.startAt = startAt;
         this.name = name;
         this.introduction = introduction;
         this.processingStatus = processingStatus;
         this.numberOfMaximumMember = numberOfMaximumMember;
+        this.meetingDaysPerWeek = meetingDaysPerWeek;
+        this.minimumWeeks = minimumWeeks;
     }
 
     public Study toStudy() {
@@ -45,6 +49,20 @@ public enum StudyFixture {
                     .processingStatus(processingStatus)
                     .numberOfMaximumMembers(numberOfMaximumMember)
                     .rounds(List.of(아이디없는_라운드.toRound(), 아이디없는_라운드2.toRound(), 아이디없는_라운드3.toRound()))
+                    .meetingDaysPerWeek(meetingDaysPerWeek)
+                    .minimumWeeks(minimumWeeks)
+                    .build();
+    }
+
+    public Study toStudyWithoutId() {
+        return Study.builder()
+                    .startAt(startAt)
+                    .name(name)
+                    .introduction(introduction)
+                    .processingStatus(processingStatus)
+                    .numberOfMaximumMembers(numberOfMaximumMember)
+                    .meetingDaysPerWeek(meetingDaysPerWeek)
+                    .minimumWeeks(minimumWeeks)
                     .build();
     }
 

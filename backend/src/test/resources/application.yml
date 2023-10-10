@@ -18,7 +18,7 @@ spring:
         format_sql: true
         show_sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   flyway:
     enabled: false

@@ -1,6 +1,7 @@
 package com.yigongil.backend.ui.doc;
 
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
@@ -8,8 +9,8 @@ import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
 import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
-import com.yigongil.backend.response.RecruitingStudyResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
+import com.yigongil.backend.response.StudyListItemResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.response.StudyMemberRoleResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -122,23 +123,11 @@ public interface StudyApi {
                     @ApiResponse(responseCode = "400", content = @Content)
             }
     )
-    @SecurityRequirement(name = "token")
-    @Operation(summary = "모집중인 스터디 조회")
-    ResponseEntity<List<RecruitingStudyResponse>> findRecruitingStudies(
-            @Parameter(description = "페이지", required = true) int page
-    );
-
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200"),
-                    @ApiResponse(responseCode = "400", content = @Content)
-            }
-    )
-    @SecurityRequirement(name = "token")
-    @Operation(summary = "모집중인 스터디 검색")
-    ResponseEntity<List<RecruitingStudyResponse>> findRecruitingStudiesWithSearch(
+    @Operation(summary = "스터디 목록 조회 및 검색")
+    ResponseEntity<List<StudyListItemResponse>> findStudies(
             @Parameter(description = "페이지", required = true) int page,
-            @Parameter(name = "q", description = "검색", required = true) String word
+            @Parameter(description = "검색어") String search,
+            @Parameter(description = "스터디 상태 필터링") ProcessingStatus status
     );
 
     @ApiResponses(

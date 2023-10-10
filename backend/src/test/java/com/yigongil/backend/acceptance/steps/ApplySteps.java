@@ -28,7 +28,7 @@ public class ApplySteps {
                                                         .all()
                                                         .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
-                                                        .post("/v1/studies/" + sharedContext.getParameter(studyName) + "/applicants")
+                                                        .post("/studies/" + sharedContext.getParameter(studyName) + "/applicants")
                                                         .then()
                                                         .log()
                                                         .all()
@@ -44,7 +44,7 @@ public class ApplySteps {
                        .all()
                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(masterGithubId))
                        .when()
-                       .get("/v1/studies/" + sharedContext.getParameter(studyName) + "/applicants")
+                       .get("/studies/" + sharedContext.getParameter(studyName) + "/applicants")
                        .then()
                        .log()
                        .all()
@@ -72,7 +72,7 @@ public class ApplySteps {
                 given().log().all()
                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(masterName))
                        .when()
-                       .patch("/v1/studies/{studyId}/applicants/{memberId}", studyId, memberId)
+                       .patch("/studies/{studyId}/applicants/{memberId}", studyId, memberId)
                        .then()
                        .log().all()
                        .extract();
@@ -99,7 +99,7 @@ public class ApplySteps {
                 given().log().all()
                        .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(applicantName))
                        .when()
-                       .delete("/v1/studies/{studyId}/applicants", sharedContext.getParameter(studyName))
+                       .delete("/studies/{studyId}/applicants", sharedContext.getParameter(studyName))
                        .then().log().all()
                        .extract();
 

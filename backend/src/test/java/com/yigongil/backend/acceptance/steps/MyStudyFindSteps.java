@@ -29,7 +29,7 @@ public class MyStudyFindSteps {
                                                         .all()
                                                         .header(HttpHeaders.AUTHORIZATION, memberToken)
                                                         .when()
-                                                        .get("/v1/studies/my")
+                                                        .get("/studies/my")
                                                         .then().log().all()
                                                         .extract();
         sharedContext.setResponse(response);

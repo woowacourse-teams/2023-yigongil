@@ -4,7 +4,7 @@ import com.yigongil.backend.domain.study.Study;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 
-public record RecruitingStudyResponse(
+public record StudyListItemResponse(
         @Schema(example = "2")
         Long id,
         @Schema(example = "1")
@@ -14,22 +14,28 @@ public record RecruitingStudyResponse(
         @Schema(example = "2")
         Integer averageTier,
         @Schema(example = "2023.08.13")
-        LocalDate startAt,
+        LocalDate createdAt,
         @Schema(example = "6")
         Integer numberOfCurrentMembers,
         @Schema(example = "6")
-        Integer numberOfMaximumMembers
+        Integer numberOfMaximumMembers,
+        @Schema(example = "2")
+        Integer meetingDaysPerWeek,
+        @Schema(example = "8")
+        Integer minimumWeeks
 ) {
 
-    public static RecruitingStudyResponse from(Study study) {
-        return new RecruitingStudyResponse(
+    public static StudyListItemResponse from(Study study) {
+        return new StudyListItemResponse(
                 study.getId(),
                 study.getProcessingStatus().getCode(),
                 study.getName(),
                 study.calculateAverageTier(),
-                study.getStartAt().toLocalDate(),
+                study.getCreatedAt().toLocalDate(),
                 study.sizeOfCurrentMembers(),
-                study.getNumberOfMaximumMembers()
+                study.getNumberOfMaximumMembers(),
+                study.getMeetingDaysPerWeek(),
+                study.getMinimumWeeks()
         );
     }
 }
