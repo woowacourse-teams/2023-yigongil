@@ -35,6 +35,7 @@ public class AuthConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/actuator/**")
                 .excludePathPatterns("/fake/proceed")
                 .excludePathPatterns("/studies/{id:[0-9]\\d*}/rounds/{id:[0-9]\\d*}/progress-rate");
+
     }
 
     @Override
