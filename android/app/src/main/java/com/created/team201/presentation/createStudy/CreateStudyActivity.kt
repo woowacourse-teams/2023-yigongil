@@ -152,8 +152,8 @@ class CreateStudyActivity :
     }
 
     companion object {
-        private const val PROGRESS_FIRST = 33
-        private const val PROGRESS_SECOND = 66
+        private const val PROGRESS_FIRST = 50
+        private const val PROGRESS_SECOND = 100
 
         fun getIntent(context: Context): Intent =
             Intent(context, CreateStudyActivity::class.java)
