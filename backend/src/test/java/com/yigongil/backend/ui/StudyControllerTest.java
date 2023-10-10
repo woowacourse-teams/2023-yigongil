@@ -79,9 +79,8 @@ class StudyControllerTest {
         StudyUpdateRequest request = new StudyUpdateRequest(
                 "자바",
                 5,
-                startAt,
-                14,
-                "1w",
+                7,
+                3,
                 "안녕"
         );
 
@@ -102,9 +101,8 @@ class StudyControllerTest {
         StudyUpdateRequest request = new StudyUpdateRequest(
                 "자바",
                 5,
-                pastDate,
-                14,
-                "1w",
+                7,
+                3,
                 "안녕"
         );
 

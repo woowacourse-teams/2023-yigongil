@@ -34,7 +34,7 @@ public record StudyListItemResponse(
                 study.getCreatedAt().toLocalDate(),
                 study.sizeOfCurrentMembers(),
                 study.getNumberOfMaximumMembers(),
-                study.getMeetingDaysPerWeek(),
+                study.getMeetingDaysCountPerWeek(),
                 study.getMinimumWeeks()
         );
     }

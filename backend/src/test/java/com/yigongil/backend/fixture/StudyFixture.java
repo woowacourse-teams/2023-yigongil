@@ -1,9 +1,17 @@
 package com.yigongil.backend.fixture;
 
+import static com.yigongil.backend.fixture.RoundFixture.아이디없는_라운드;
+import static com.yigongil.backend.fixture.RoundFixture.아이디없는_라운드2;
+import static com.yigongil.backend.fixture.RoundFixture.아이디없는_라운드3;
+
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public enum StudyFixture {
 
@@ -12,7 +20,6 @@ public enum StudyFixture {
     ;
 
     private final Long id;
-    private final LocalDateTime startAt;
     private final String name;
     private final String introduction;
     private final ProcessingStatus processingStatus;
@@ -23,7 +30,6 @@ public enum StudyFixture {
     StudyFixture(Long id, LocalDateTime startAt, String name, String introduction,
             ProcessingStatus processingStatus, Integer numberOfMaximumMember, Integer meetingDaysPerWeek, Integer minimumWeeks) {
         this.id = id;
-        this.startAt = startAt;
         this.name = name;
         this.introduction = introduction;
         this.processingStatus = processingStatus;
@@ -35,13 +41,13 @@ public enum StudyFixture {
     public Study toStudy() {
         return Study.builder()
                     .id(id)
-                    .startAt(startAt)
                     .name(name)
                     .introduction(introduction)
                     .master(MemberFixture.김진우.toMember())
                     .processingStatus(processingStatus)
                     .numberOfMaximumMembers(numberOfMaximumMember)
-                    .meetingDaysPerWeek(meetingDaysPerWeek)
+                    .rounds(List.of(아이디없는_라운드.toRound(), 아이디없는_라운드2.toRound(), 아이디없는_라운드3.toRound()))
+                    .meetingDaysCountPerWeek(meetingDaysPerWeek)
                     .minimumWeeks(minimumWeeks)
                     .build();
     }
@@ -49,14 +55,28 @@ public enum StudyFixture {
     public Study toStudyWithMaster(Member master) {
         return Study.builder()
                     .id(id)
-                    .startAt(startAt)
                     .name(name)
                     .introduction(introduction)
                     .master(master)
                     .processingStatus(processingStatus)
                     .numberOfMaximumMembers(numberOfMaximumMember)
-                    .meetingDaysPerWeek(meetingDaysPerWeek)
+                    .meetingDaysCountPerWeek(meetingDaysPerWeek)
                     .minimumWeeks(minimumWeeks)
+                    .build();
+    }
+
+    public Study toStudyWithRounds(RoundFixture... roundFixtures) {
+        List<Round> rounds = new ArrayList<>(Arrays.stream(roundFixtures)
+                                                   .map(RoundFixture::toRound)
+                                                   .toList());
+
+        return Study.builder()
+                    .id(id)
+                    .name(name)
+                    .introduction(introduction)
+                    .processingStatus(processingStatus)
+                    .numberOfMaximumMembers(numberOfMaximumMember)
+                    .rounds(rounds)
                     .build();
     }
 }
