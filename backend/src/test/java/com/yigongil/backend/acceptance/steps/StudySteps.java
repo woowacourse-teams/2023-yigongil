@@ -258,10 +258,10 @@ public class StudySteps {
     @When("{string}를 검색한다.")
     public void 검색한다(String search) {
         ExtractableResponse<Response> response = given().log().all()
-                                                        .queryParam("q", search)
+                                                        .queryParam("search", search)
                                                         .queryParam("page", 0)
                                                         .when()
-                                                        .get("/studies/recruiting/search")
+                                                        .get("/studies")
                                                         .then().log().all().extract();
 
         sharedContext.setResponse(response);
