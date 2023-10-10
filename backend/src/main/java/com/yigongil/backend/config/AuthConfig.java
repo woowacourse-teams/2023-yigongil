@@ -29,9 +29,9 @@ public class AuthConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/v1/members/{id:[0-9]\\d*}")
                 .excludePathPatterns("/v1/members/exists")
                 .excludePathPatterns("/v1/studies/recruiting/**")
-                .excludePathPatterns("/v1/api/**")
-                .excludePathPatterns("/v1/api-docs/**")
-                .excludePathPatterns("/v1/swagger-ui/**")
+                .excludePathPatterns("/api/**")
+                .excludePathPatterns("/api-docs/**")
+                .excludePathPatterns("/swagger-ui/**")
                 .excludePathPatterns("/v1/actuator/**")
                 .excludePathPatterns("/v1/fake/proceed")
                 .excludePathPatterns("/v1/studies/{id:[0-9]\\d*}/rounds/{id:[0-9]\\d*}/progress-rate");

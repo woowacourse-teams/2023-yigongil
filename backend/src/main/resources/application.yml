@@ -8,10 +8,10 @@ spring:
 
 springdoc:
   api-docs:
-    path: "/v1/api-docs"
+    path: "/api-docs"
   swagger-ui:
-    url: "/v1/api-docs"
-    path: "/v1/api"
+    url: "/api-docs"
+    path: "/api"
     display-request-duration: true
 
 ---
@@ -55,3 +55,6 @@ oauth2:
 jwt:
   expiration: 60
   key: qkljwnqdjnqjkdnqdwkdkm31i4j1dasksmd
+
+swagger:
+  server-url: "https://localhost:8080/v1"
