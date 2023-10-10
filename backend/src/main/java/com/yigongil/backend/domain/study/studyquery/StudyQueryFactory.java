@@ -35,7 +35,7 @@ public class StudyQueryFactory {
         }
 
         public StudyQueryBuilder status(ProcessingStatus param) {
-            if (param == null || param == ProcessingStatus.ALL) {
+            if (hasNoStatusCondition(param)) {
                 return this;
             }
             if (hasCondition) {
@@ -45,6 +45,10 @@ public class StudyQueryFactory {
             query += "where s.processingStatus = '" + param.name() + "' ";
             hasCondition = true;
             return this;
+        }
+
+        private boolean hasNoStatusCondition(ProcessingStatus param) {
+            return param == null || param == ProcessingStatus.ALL;
         }
 
         public StudyQueryBuilder sort(String param) {
