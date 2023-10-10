@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.created.domain.repository.ThreadRepository
 import com.created.team201.presentation.studyThread.uiState.FeedsUiState
 import com.created.team201.presentation.studyThread.uiState.MustDoCertificationUiState
+import com.created.team201.presentation.studyThread.uiState.MustDoCertificationUiState.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +24,7 @@ class ThreadViewModel @Inject constructor(
     val message: MutableStateFlow<String> = MutableStateFlow("")
 
     private val _mustDoUiState: MutableStateFlow<MustDoCertificationUiState> =
-        MutableStateFlow(MustDoCertificationUiState.Loading)
+        MutableStateFlow(Loading)
     val mustDoUiState: StateFlow<MustDoCertificationUiState> get() = _mustDoUiState.asStateFlow()
 
     private val _feedsUiState: MutableStateFlow<FeedsUiState> =
@@ -37,7 +38,7 @@ class ThreadViewModel @Inject constructor(
     fun updateMustDoCertification() {
         viewModelScope.launch {
             threadRepository.getMustDoCertification(studyId.value).collectLatest {
-                _mustDoUiState.value = MustDoCertificationUiState.Success(it)
+                _mustDoUiState.value = Success(it)
             }
         }
     }
