@@ -21,8 +21,8 @@ import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
 import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
-import com.yigongil.backend.response.StudyDataInListResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
+import com.yigongil.backend.response.StudyListItemResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.response.StudyMemberRoleResponse;
 import java.time.LocalDate;
@@ -79,16 +79,16 @@ public class StudyService {
     }
 
     @Transactional(readOnly = true)
-    public List<StudyDataInListResponse> findStudies(int page, String search, String status) {
+    public List<StudyListItemResponse> findStudies(int page, String search, String status) {
         Pageable pageable = PageStrategy.defaultPageStrategy(page);
 
         Slice<Study> studies = studyRepository.findStudiesByConditions(search, status, pageable);
         return toRecruitingStudyResponse(studies);
     }
 
-    private List<StudyDataInListResponse> toRecruitingStudyResponse(Slice<Study> studies) {
+    private List<StudyListItemResponse> toRecruitingStudyResponse(Slice<Study> studies) {
         return studies.get()
-                      .map(StudyDataInListResponse::from)
+                      .map(StudyListItemResponse::from)
                       .toList();
     }
 

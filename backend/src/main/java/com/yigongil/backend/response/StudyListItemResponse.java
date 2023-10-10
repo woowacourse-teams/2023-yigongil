@@ -4,7 +4,7 @@ import com.yigongil.backend.domain.study.Study;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 
-public record StudyDataInListResponse(
+public record StudyListItemResponse(
         @Schema(example = "2")
         Long id,
         @Schema(example = "1")
@@ -25,8 +25,8 @@ public record StudyDataInListResponse(
         Integer minimumWeeks
 ) {
 
-    public static StudyDataInListResponse from(Study study) {
-        return new StudyDataInListResponse(
+    public static StudyListItemResponse from(Study study) {
+        return new StudyListItemResponse(
                 study.getId(),
                 study.getProcessingStatus().getCode(),
                 study.getName(),

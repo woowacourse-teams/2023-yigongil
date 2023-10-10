@@ -8,8 +8,8 @@ import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
 import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
-import com.yigongil.backend.response.StudyDataInListResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
+import com.yigongil.backend.response.StudyListItemResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.response.StudyMemberRoleResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -123,7 +123,7 @@ public interface StudyApi {
             }
     )
     @Operation(summary = "스터디 목록 조회 및 검색")
-    ResponseEntity<List<StudyDataInListResponse>> findStudies(
+    ResponseEntity<List<StudyListItemResponse>> findStudies(
             @Parameter(description = "페이지", required = true) int page,
             @Parameter(description = "검색어") String search,
             @Parameter(description = "스터디 상태 필터링") String status

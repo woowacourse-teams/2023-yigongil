@@ -10,8 +10,8 @@ import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
 import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
-import com.yigongil.backend.response.StudyDataInListResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
+import com.yigongil.backend.response.StudyListItemResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.response.StudyMemberRoleResponse;
 import com.yigongil.backend.ui.doc.StudyApi;
@@ -95,12 +95,12 @@ public class StudyController implements StudyApi {
     }
 
     @GetMapping
-    public ResponseEntity<List<StudyDataInListResponse>> findStudies(
+    public ResponseEntity<List<StudyListItemResponse>> findStudies(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) String search,
             @RequestParam(defaultValue = "all") String status
     ) {
-        List<StudyDataInListResponse> response = studyService.findStudies(page, search, status);
+        List<StudyListItemResponse> response = studyService.findStudies(page, search, status);
         return ResponseEntity.ok(response);
     }
 
