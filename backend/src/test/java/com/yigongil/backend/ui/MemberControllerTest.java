@@ -83,7 +83,7 @@ class MemberControllerTest {
                 )
         );
 
-        mockMvc.perform(get("/v1/members/1"))
+        mockMvc.perform(get("/members/1"))
                .andDo(print())
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.nickname").value(member.getNickname()))
@@ -100,7 +100,7 @@ class MemberControllerTest {
         given(memberRepository.findByIdAndDeletedFalse(1L)).willReturn(Optional.of(MemberFixture.김진우.toMember()));
         given(authContext.getMemberId()).willReturn(1L);
 
-        mockMvc.perform(patch("/v1/members")
+        mockMvc.perform(patch("/members")
                        .contentType(MediaType.APPLICATION_JSON)
                        .header(HttpHeaders.AUTHORIZATION, "Bearer 1")
                        .content(objectMapper.writeValueAsString(request)))
@@ -115,7 +115,7 @@ class MemberControllerTest {
         final String existNickname = "jinwoo";
         given(memberService.existsByNickname(existNickname)).willReturn(new NicknameValidationResponse(true));
 
-        mockMvc.perform(get("/v1/members/exists?nickname={nickname}", existNickname))
+        mockMvc.perform(get("/members/exists?nickname={nickname}", existNickname))
                .andDo(print())
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.exists").value(true));

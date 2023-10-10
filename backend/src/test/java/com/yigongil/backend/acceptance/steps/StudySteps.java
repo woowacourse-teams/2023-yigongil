@@ -259,7 +259,7 @@ public class StudySteps {
                                                         .queryParam("q", search)
                                                         .queryParam("page", 0)
                                                         .when()
-                                                        .get("/v1/studies/recruiting/search")
+                                                        .get("/studies/recruiting/search")
                                                         .then().log().all().extract();
 
         sharedContext.setResponse(response);

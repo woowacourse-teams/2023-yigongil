@@ -11,7 +11,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
 
-    private static final Pattern STUDY_DETAIL_REQUEST_PATTERN = Pattern.compile("/v1/studies/[1-9]\\d*");
+    private static final Pattern STUDY_DETAIL_REQUEST_PATTERN = Pattern.compile("/studies/[1-9]\\d*");
 
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthContext authContext;
