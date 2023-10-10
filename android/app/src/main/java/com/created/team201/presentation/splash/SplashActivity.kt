@@ -43,11 +43,10 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
         splashViewModel.onBoardingDoneState.observe(this@SplashActivity) { onBoardingState ->
             when (onBoardingState) {
                 is OnBoardingDoneState.Success -> {
-                    if (onBoardingState.isDone) {
-                        navigateToMain()
-                        return@observe
+                    when (onBoardingState.isDone) {
+                        true -> navigateToMain()
+                        false -> navigateToLogin()
                     }
-                    navigateToLogin()
                 }
 
                 OnBoardingDoneState.FAIL -> navigateToLogin()

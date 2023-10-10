@@ -1,5 +1,7 @@
 package com.created.domain.repository
 
+import com.created.domain.model.response.NetworkResponse
+
 interface AuthRepository {
 
     val accessToken: String
@@ -7,7 +9,7 @@ interface AuthRepository {
 
     suspend fun requestSignUp(token: String): Result<Unit>
 
-    suspend fun requestSignIn(): Result<Unit>
+    suspend fun requestSignIn(): NetworkResponse<Unit>
 
-    suspend fun renewAccessToken()
+    suspend fun renewAccessToken(): NetworkResponse<Unit>
 }

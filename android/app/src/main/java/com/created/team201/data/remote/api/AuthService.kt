@@ -1,5 +1,6 @@
 package com.created.team201.data.remote.api
 
+import com.created.domain.model.response.NetworkResponse
 import com.created.team201.data.remote.request.RenewedAccessTokenRequestDTO
 import com.created.team201.data.remote.response.AuthResponseDto
 import retrofit2.http.Body
@@ -18,10 +19,10 @@ interface AuthService {
     @POST("v1/login/tokens/refresh")
     suspend fun postRenewedAccessToken(
         @Body refreshToken: RenewedAccessTokenRequestDTO,
-    ): AuthResponseDto
+    ): NetworkResponse<AuthResponseDto>
 
     @GET("v1/login/tokens/validate")
     suspend fun getLoginValidity(
         @Header("Authorization") accessToken: String,
-    )
+    ): NetworkResponse<Unit>
 }
