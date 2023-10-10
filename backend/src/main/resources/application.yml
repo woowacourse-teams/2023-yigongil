@@ -55,3 +55,6 @@ oauth2:
 jwt:
   expiration: 60
   key: qkljwnqdjnqjkdnqdwkdkm31i4j1dasksmd
+
+swagger:
+  server-url: "https://localhost:8080/v1"
