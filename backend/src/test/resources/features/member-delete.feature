@@ -45,6 +45,7 @@ Feature: 회원 탈퇴 관련 기능
     Given "jinwoo"가 회원 탈퇴한다.
 
     When "mint"가 홈화면을 조회한다.
+    # Round.endAt이 초기화되지 않아서 실패
 
     Then 스터디가 1 개 조회된다.
 

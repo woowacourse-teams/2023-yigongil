@@ -204,7 +204,7 @@ public class StudySteps {
         ExtractableResponse<Response> response = given().log().all()
                                                         .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
-                                                        .get("/home/")
+                                                        .get("/home")
                                                         .then().log().all()
                                                         .extract();
 
