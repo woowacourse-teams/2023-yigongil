@@ -1,5 +1,6 @@
 package com.yigongil.backend.domain.study;
 
+import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import java.util.Arrays;
 import lombok.Getter;
 
@@ -16,11 +17,10 @@ public enum ProcessingStatus {
         this.code = code;
     }
 
-    public static void validate(String target) {
-        Arrays.stream(ProcessingStatus.values())
-              .filter(status -> status.name().equalsIgnoreCase(target))
-              .findAny()
-              .orElseThrow(RuntimeException::new);
-        // TODO: 2023/10/08 예외처리
+    public static ProcessingStatus of(String target) {
+        return Arrays.stream(ProcessingStatus.values())
+                     .filter(status -> status.name().equalsIgnoreCase(target))
+                     .findAny()
+                     .orElseThrow(() -> new InvalidProcessingStatusException(target));
     }
 }

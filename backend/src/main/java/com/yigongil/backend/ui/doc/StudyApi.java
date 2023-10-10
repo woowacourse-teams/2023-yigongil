@@ -1,6 +1,7 @@
 package com.yigongil.backend.ui.doc;
 
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
@@ -126,7 +127,7 @@ public interface StudyApi {
     ResponseEntity<List<StudyListItemResponse>> findStudies(
             @Parameter(description = "페이지", required = true) int page,
             @Parameter(description = "검색어") String search,
-            @Parameter(description = "스터디 상태 필터링") String status
+            @Parameter(description = "스터디 상태 필터링") ProcessingStatus status
     );
 
     @ApiResponses(

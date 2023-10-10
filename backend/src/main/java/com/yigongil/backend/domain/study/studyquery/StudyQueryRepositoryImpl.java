@@ -1,5 +1,6 @@
 package com.yigongil.backend.domain.study.studyquery;
 
+import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -20,7 +21,7 @@ public class StudyQueryRepositoryImpl implements StudyQueryRepository {
     }
 
     @Override
-    public Slice<Study> findStudiesByConditions(String search, String status, Pageable page) {
+    public Slice<Study> findStudiesByConditions(String search, ProcessingStatus status, Pageable page) {
         String sort = String.join(" ", page.getSort().toString().split(": "));
 
         String jpql = studyQueryFactory.builder()

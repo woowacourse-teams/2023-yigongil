@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.yigongil.backend.config.JpaConfig;
 import com.yigongil.backend.domain.study.PageStrategy;
+import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.fixture.StudyFixture;
@@ -28,7 +29,7 @@ class StudyQueryRepositoryImplTest {
         for (int i = 0; i < 2; i++) {
             studyRepository.save(StudyFixture.자바_스터디_모집중_정원_2.toStudyWithoutId());
         }
-        Slice<Study> result = studyRepository.findStudiesByConditions(null, "all", PageStrategy.defaultPageStrategy(0));
+        Slice<Study> result = studyRepository.findStudiesByConditions(null, ProcessingStatus.ALL, PageStrategy.defaultPageStrategy(0));
 
         assertThat(result).hasSize(2);
     }
@@ -38,7 +39,7 @@ class StudyQueryRepositoryImplTest {
         for (int i = 0; i < 50; i++) {
             studyRepository.save(StudyFixture.자바_스터디_모집중_정원_2.toStudyWithoutId());
         }
-        Slice<Study> result = studyRepository.findStudiesByConditions(null, "all", PageStrategy.defaultPageStrategy(0));
+        Slice<Study> result = studyRepository.findStudiesByConditions(null, ProcessingStatus.ALL, PageStrategy.defaultPageStrategy(0));
 
         assertThat(result).hasSize(30);
     }
@@ -48,7 +49,7 @@ class StudyQueryRepositoryImplTest {
         for (int i = 0; i < 50; i++) {
             studyRepository.save(StudyFixture.자바_스터디_모집중_정원_2.toStudyWithoutId());
         }
-        Slice<Study> result = studyRepository.findStudiesByConditions(null, "all", PageStrategy.defaultPageStrategy(1));
+        Slice<Study> result = studyRepository.findStudiesByConditions(null, ProcessingStatus.ALL, PageStrategy.defaultPageStrategy(1));
 
         assertThat(result).hasSize(20);
     }
@@ -58,7 +59,7 @@ class StudyQueryRepositoryImplTest {
         for (int i = 0; i < 2; i++) {
             studyRepository.save(StudyFixture.자바_스터디_모집중_정원_2.toStudyWithoutId());
         }
-        Slice<Study> result = studyRepository.findStudiesByConditions("모던", "all", PageStrategy.defaultPageStrategy(0));
+        Slice<Study> result = studyRepository.findStudiesByConditions("모던", ProcessingStatus.ALL, PageStrategy.defaultPageStrategy(0));
 
         assertThat(result).isEmpty();
     }
@@ -68,7 +69,7 @@ class StudyQueryRepositoryImplTest {
         for (int i = 0; i < 5; i++) {
             studyRepository.save(StudyFixture.자바_스터디_모집중_정원_2.toStudyWithoutId());
         }
-        Slice<Study> result = studyRepository.findStudiesByConditions("자바", "all", PageStrategy.defaultPageStrategy(0));
+        Slice<Study> result = studyRepository.findStudiesByConditions("자바", ProcessingStatus.ALL, PageStrategy.defaultPageStrategy(0));
 
         assertThat(result).hasSize(5);
     }
@@ -78,7 +79,7 @@ class StudyQueryRepositoryImplTest {
         for (int i = 0; i < 5; i++) {
             studyRepository.save(StudyFixture.자바_스터디_모집중_정원_2.toStudyWithoutId());
         }
-        Slice<Study> result = studyRepository.findStudiesByConditions(null, "end", PageStrategy.defaultPageStrategy(0));
+        Slice<Study> result = studyRepository.findStudiesByConditions(null, ProcessingStatus.END, PageStrategy.defaultPageStrategy(0));
 
         assertThat(result).isEmpty();
     }
@@ -88,7 +89,7 @@ class StudyQueryRepositoryImplTest {
         for (int i = 0; i < 5; i++) {
             studyRepository.save(StudyFixture.자바_스터디_모집중_정원_2.toStudyWithoutId());
         }
-        Slice<Study> result = studyRepository.findStudiesByConditions(null, "recruiting정", PageStrategy.defaultPageStrategy(0));
+        Slice<Study> result = studyRepository.findStudiesByConditions(null, ProcessingStatus.RECRUITING, PageStrategy.defaultPageStrategy(0));
 
         assertThat(result).hasSize(5);
     }

@@ -3,6 +3,7 @@ package com.yigongil.backend.ui;
 import com.yigongil.backend.application.StudyService;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
@@ -98,7 +99,7 @@ public class StudyController implements StudyApi {
     public ResponseEntity<List<StudyListItemResponse>> findStudies(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) String search,
-            @RequestParam(defaultValue = "all") String status
+            @RequestParam(defaultValue = "all") ProcessingStatus status
     ) {
         List<StudyListItemResponse> response = studyService.findStudies(page, search, status);
         return ResponseEntity.ok(response);

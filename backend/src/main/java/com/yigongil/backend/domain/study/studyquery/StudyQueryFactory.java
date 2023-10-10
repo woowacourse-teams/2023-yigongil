@@ -34,19 +34,15 @@ public class StudyQueryFactory {
             return this;
         }
 
-        public StudyQueryBuilder status(String param) {
-            if (param == null) {
-                return this;
-            }
-            ProcessingStatus.validate(param);
-            if (param.equals("all")) {
+        public StudyQueryBuilder status(ProcessingStatus param) {
+            if (param == null || param == ProcessingStatus.ALL) {
                 return this;
             }
             if (hasCondition) {
-                query += "and s.processingStatus = '" + param.toUpperCase() + "' ";
+                query += "and s.processingStatus = '" + param.name() + "' ";
                 return this;
             }
-            query += "where s.processingStatus = '" + param.toUpperCase() + "' ";
+            query += "where s.processingStatus = '" + param.name() + "' ";
             hasCondition = true;
             return this;
         }

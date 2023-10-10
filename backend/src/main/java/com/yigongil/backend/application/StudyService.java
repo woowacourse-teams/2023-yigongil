@@ -79,7 +79,7 @@ public class StudyService {
     }
 
     @Transactional(readOnly = true)
-    public List<StudyListItemResponse> findStudies(int page, String search, String status) {
+    public List<StudyListItemResponse> findStudies(int page, String search, ProcessingStatus status) {
         Pageable pageable = PageStrategy.defaultPageStrategy(page);
 
         Slice<Study> studies = studyRepository.findStudiesByConditions(search, status, pageable);

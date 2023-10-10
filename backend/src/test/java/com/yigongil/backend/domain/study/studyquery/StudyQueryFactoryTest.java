@@ -2,6 +2,7 @@ package com.yigongil.backend.domain.study.studyquery;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.yigongil.backend.domain.study.ProcessingStatus;
 import org.junit.jupiter.api.Test;
 
 class StudyQueryFactoryTest {
@@ -21,7 +22,7 @@ class StudyQueryFactoryTest {
     @Test
     void 조건이_두개인_쿼리_생성() {
         String java = studyQueryFactory.builder()
-                                       .status("processing")
+                                       .status(ProcessingStatus.PROCESSING)
                                        .search("java")
                                        .sort("id desc")
                                        .build();
@@ -33,7 +34,7 @@ class StudyQueryFactoryTest {
     void 조건이_두개인_쿼리_생성_순서를_바꿔서_검증() {
         String java = studyQueryFactory.builder()
                                        .search("java")
-                                       .status("processing")
+                                       .status(ProcessingStatus.PROCESSING)
                                        .sort("id desc")
                                        .build();
 
