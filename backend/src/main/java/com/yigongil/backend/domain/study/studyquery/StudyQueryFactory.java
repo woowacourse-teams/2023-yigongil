@@ -35,6 +35,9 @@ public class StudyQueryFactory {
         }
 
         public StudyQueryBuilder status(String param) {
+            if (param == null) {
+                return this;
+            }
             ProcessingStatus.validate(param);
             if (param.equals("all")) {
                 return this;
