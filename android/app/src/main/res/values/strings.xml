@@ -4,6 +4,11 @@
     <!-- 툴바 공통 -->
     <string name="toolbar_back_text">뒤로가기</string>
 
+    <!-- 스플레시 뷰 인 앱 업데이트 다이얼로그 -->
+    <string name="in_app_update_dialog_title">업데이트 안내</string>
+    <string name="in_app_update_dialog_content">새 버전이 있습니다. 원활한 앱 사용을 위해 최신 버전 업데이트를 권장합니다.\n업데이트 하시겠습니까?</string>
+    <string name="in_app_update_dialog_btn_ok_text">업데이트 하기</string>
+
     <!--로그인 뷰-->
     <string name="login_guest"><u>비회원으로 둘러보기</u></string>
     <string name="login_github_guide">깃허브로 시작하기</string>

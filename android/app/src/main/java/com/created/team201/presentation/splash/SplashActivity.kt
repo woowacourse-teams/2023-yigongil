@@ -1,7 +1,10 @@
 package com.created.team201.presentation.splash
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import com.created.team201.R
 import com.created.team201.databinding.ActivitySplashBinding
@@ -12,6 +15,9 @@ import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
 import com.created.team201.presentation.splash.SplashViewModel.State.FAIL
 import com.created.team201.presentation.splash.SplashViewModel.State.IDLE
 import com.created.team201.presentation.splash.SplashViewModel.State.SUCCESS
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,8 +28,44 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        observeLoginState()
-        observeOnBoardingDoneState()
+        verifyAppVersion()
+    }
+
+    private fun verifyAppVersion() {
+        val appUpdateManager = AppUpdateManagerFactory.create(this)
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
+            appUpdateInfo.updatePriority()
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
+                appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+            ) {
+                showInAppUpdateDialog()
+            } else {
+                observeLoginState()
+                observeOnBoardingDoneState()
+            }
+        }
+        appUpdateManager.appUpdateInfo.addOnFailureListener { e ->
+            Log.d("App Update Manager", "$e")
+            observeLoginState()
+            observeOnBoardingDoneState()
+        }
+    }
+
+    private fun showInAppUpdateDialog() {
+        InAppUpdateDialog(
+            context = this,
+            getString(R.string.in_app_update_dialog_title),
+            getString(R.string.in_app_update_dialog_content),
+            object : InAppUpdateDialogClickListener {
+                override fun onOkClick() {
+                    navigateToPlayStore()
+                }
+
+                override fun onCancelClick() {
+                    finishAffinity()
+                }
+            }
+        ).show()
     }
 
     private fun observeLoginState() {
@@ -56,6 +98,11 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
         }
     }
 
+    private fun navigateToPlayStore() {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(URI_MARKET_FORMAT.format(packageName))))
+        finish()
+    }
+
     private fun navigateToMain() {
         startActivity(MainActivity.getIntent(this))
         finish()
@@ -64,5 +111,9 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
     private fun navigateToLogin() {
         startActivity(LoginActivity.getIntent(this))
         finish()
+    }
+
+    companion object {
+        private const val URI_MARKET_FORMAT = "market://details?id=%s"
     }
 }

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_rectangle_radius_10dp"
+        android:minWidth="300dp"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/tv_dialog_in_app_update_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/title_b20"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="변경사항 저장" />
+
+        <TextView
+            android:id="@+id/tv_dialog_in_app_update_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textAppearance="@style/text_r16"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_dialog_in_app_update_title"
+            tools:text="저장하시겠습니까?" />
+
+        <TextView
+            android:id="@+id/tv_dialog_in_app_update_btn_ok"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="38dp"
+            android:background="@drawable/bg_rectangle_only_radius_10dp"
+            android:backgroundTint="@color/green02_E639D353"
+            android:paddingVertical="10dp"
+            android:text="@string/in_app_update_dialog_btn_ok_text"
+            android:textAlignment="center"
+            android:textAppearance="@style/text_r16"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_dialog_in_app_update_content" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
