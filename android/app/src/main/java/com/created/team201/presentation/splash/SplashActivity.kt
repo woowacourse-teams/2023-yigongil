@@ -56,15 +56,7 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
             context = this,
             getString(R.string.in_app_update_dialog_title),
             getString(R.string.in_app_update_dialog_content),
-            object : InAppUpdateDialogClickListener {
-                override fun onOkClick() {
-                    navigateToPlayStore()
-                }
-
-                override fun onCancelClick() {
-                    finishAffinity()
-                }
-            }
+            ::navigateToPlayStore,
         ).show()
     }
 

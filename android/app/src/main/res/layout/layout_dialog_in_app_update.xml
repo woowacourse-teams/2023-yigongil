@@ -8,8 +8,8 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@drawable/bg_rectangle_radius_10dp"
         android:minWidth="300dp"
         android:padding="20dp">
@@ -18,38 +18,38 @@
             android:id="@+id/tv_dialog_in_app_update_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:paddingHorizontal="4dp"
             android:textAppearance="@style/title_b20"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="변경사항 저장" />
+            tools:text="@string/in_app_update_dialog_title" />
 
         <TextView
             android:id="@+id/tv_dialog_in_app_update_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:paddingHorizontal="4dp"
             android:textAppearance="@style/text_r16"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_dialog_in_app_update_title"
-            tools:text="저장하시겠습니까?" />
+            tools:text="@string/in_app_update_dialog_content" />
 
         <TextView
             android:id="@+id/tv_dialog_in_app_update_btn_ok"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginTop="38dp"
-            android:background="@drawable/bg_rectangle_only_radius_10dp"
-            android:backgroundTint="@color/green02_E639D353"
+            android:layout_marginTop="28dp"
             android:paddingVertical="10dp"
             android:text="@string/in_app_update_dialog_btn_ok_text"
             android:textAlignment="center"
-            android:textAppearance="@style/text_r16"
-            android:textColor="@color/white"
+            android:textAppearance="@style/text_sb16"
+            android:textColor="@color/green05_3AD353"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_dialog_in_app_update_content" />

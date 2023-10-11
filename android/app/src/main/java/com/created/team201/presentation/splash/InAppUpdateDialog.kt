@@ -5,16 +5,16 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDialog
-import com.created.team201.databinding.LayoutDialogMyPageBinding
+import com.created.team201.databinding.LayoutDialogInAppUpdateBinding
 
 class InAppUpdateDialog(
     context: Context,
     private val title: String,
     private val content: String,
-    private val inAppUpdateDialogClickListener: InAppUpdateDialogClickListener,
+    private val onUpdateClick: () -> Unit,
 ) : AppCompatDialog(context) {
-    private val binding: LayoutDialogMyPageBinding by lazy {
-        LayoutDialogMyPageBinding.inflate(layoutInflater)
+    private val binding: LayoutDialogInAppUpdateBinding by lazy {
+        LayoutDialogInAppUpdateBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +22,6 @@ class InAppUpdateDialog(
         setContentView(binding.root)
 
         initDialog()
-        setCancelClickListener()
         setOkClickListener()
     }
 
@@ -32,20 +31,13 @@ class InAppUpdateDialog(
             setCanceledOnTouchOutside(false)
             setCancelable(false)
         }
-        binding.tvDialogSettingTitle.text = title
-        binding.tvDialogSettingContent.text = content
-    }
-
-    private fun setCancelClickListener() {
-        binding.tvDialogSettingBtnCancel.setOnClickListener {
-            inAppUpdateDialogClickListener.onCancelClick()
-            dismiss()
-        }
+        binding.tvDialogInAppUpdateTitle.text = title
+        binding.tvDialogInAppUpdateContent.text = content
     }
 
     private fun setOkClickListener() {
-        binding.tvDialogSettingBtnOk.setOnClickListener {
-            inAppUpdateDialogClickListener.onOkClick()
+        binding.tvDialogInAppUpdateBtnOk.setOnClickListener {
+            onUpdateClick.invoke()
             dismiss()
         }
     }
