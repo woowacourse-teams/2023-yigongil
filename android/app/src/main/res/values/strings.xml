@@ -258,4 +258,13 @@
     <!-- 채팅 뷰 -->
     <string name="chat_no_chat">아직 준비중인 기능이에요!\n조금만 기다려주세요!</string>
 
+    <!-- 요일 선택기 뷰 -->
+    <string name="monday">월</string>
+    <string name="tuesday">화</string>
+    <string name="wednesday">수</string>
+    <string name="thursday">목</string>
+    <string name="friday">금</string>
+    <string name="saturday">토</string>
+    <string name="sunday">일</string>
+
 </resources>
