@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.created.team201.presentation.studyDetail.StudyDetailViewModel" />
+
+        <variable
+            name="onCancelClickListener"
+            type="kotlin.jvm.functions.Function0" />
+
+        <variable
+            name="onStartClickListener"
+            type="kotlin.jvm.functions.Function0" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_bottom_sheet_top_radius_20dp"
+        android:backgroundTint="@color/black02_181B21"
+        android:padding="16dp"
+        app:behavior_draggable="false"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:id="@+id/view_study_start_decorator"
+            android:layout_width="0dp"
+            android:layout_height="5dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            android:backgroundTint="@color/grey02_78808B"
+            app:layout_constraintDimensionRatio="W, 10:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_study_start_bottom_sheet_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:text="@string/start_study_bottom_sheet_dialog_fragment_title"
+            android:textAlignment="center"
+            android:textAppearance="@style/picker_sb18"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/dows_study_start_bottom_sheet_day_of_week_selector"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_study_start_decorator" />
+
+        <com.created.team201.presentation.common.customview.dayofselector.DayOfWeekSelector
+            android:id="@+id/dows_study_start_bottom_sheet_day_of_week_selector"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="24dp"
+            app:canMultipleSelect="true"
+            app:layout_constraintTop_toBottomOf="@id/tv_study_start_bottom_sheet_title" />
+
+        <ImageView
+            android:id="@+id/tv_study_start_bottom_sheet_btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:onClick="@{() -> onCancelClickListener.invoke()}"
+            android:src="@drawable/ic_close"
+            android:text="@string/bottom_sheet_fragment_button_name_cancel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_study_start_bottom_sheet_btn_start"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/btn_rectangle_radius_10dp"
+            android:enabled="false"
+            android:gravity="center"
+            android:onClick="@{() -> onStartClickListener.invoke()}"
+            android:text="@string/start_study_bottom_sheet_dialog_fragment_button_start"
+            android:textAlignment="center"
+            android:textAppearance="@style/button_sb18"
+            android:textColor="@color/green09_799E82"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dows_study_start_bottom_sheet_day_of_week_selector" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
