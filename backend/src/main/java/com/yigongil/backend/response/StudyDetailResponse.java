@@ -3,7 +3,6 @@ package com.yigongil.backend.response;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.Study;
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -33,21 +32,20 @@ public record StudyDetailResponse(
     public static StudyDetailResponse of(
             Study study,
             List<Round> rounds,
-            Round currentRound,
             List<StudyMemberResponse> studyMemberResponses
     ) {
         return new StudyDetailResponse(
                 study.getId(),
                 study.getProcessingStatus().getCode(),
                 study.getName(),
-                currentRound.getRoundOfMembers().size(),
+                study.sizeOfCurrentMembers(),
                 study.getNumberOfMaximumMembers(),
-                currentRound.getMaster().getId(),
+                study.getMaster().getId(),
                 study.getStartAt().toLocalDate(),
-                study.getCurrentRound().getRoundNumber(),
+                study.getCurrentRound().getId().intValue(), // TODO: 2021/08/12 currentRound 무슨 정보 줄 지 결정
                 study.getIntroduction(),
                 studyMemberResponses,
-                RoundNumberResponse.from(rounds)
+                RoundNumberResponse.from(rounds) // TODO: 2021/08/12 이건뭐지
         );
     }
 }

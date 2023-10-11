@@ -1,25 +1,32 @@
 package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.domain.BaseEntity;
+import com.yigongil.backend.domain.meetingdayoftheweek.MeetingDayOfTheWeek;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
+import com.yigongil.backend.domain.studymember.Role;
+import com.yigongil.backend.domain.studymember.StudyMember;
+import com.yigongil.backend.domain.studymember.StudyResult;
+import com.yigongil.backend.exception.ApplicantAlreadyExistException;
 import com.yigongil.backend.exception.CannotStartException;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidNumberOfMaximumStudyMember;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.InvalidStudyNameLengthException;
+import com.yigongil.backend.exception.NotStudyMasterException;
+import com.yigongil.backend.exception.RoundNotFoundException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,6 +49,7 @@ public class Study extends BaseEntity {
     private static final int MIN_MEMBER_SIZE = 2;
     private static final int MAX_MEMBER_SIZE = 8;
     private static final int INITIAL_ROUND_COUNT = 2;
+    private static final int FIRST_WEEK = 1;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -64,14 +72,22 @@ public class Study extends BaseEntity {
 
     private LocalDateTime endAt;
 
-    @Column(nullable = false)
+    @Cascade(CascadeType.PERSIST)
+    @OneToMany(mappedBy = "study", orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<MeetingDayOfTheWeek> meetingDaysOfTheWeek = new ArrayList<>();
+
     private Integer minimumWeeks;
 
-    @Column(nullable = false)
     private Integer meetingDaysPerWeek;
 
-    @Column(nullable = false)
-    private Integer currentRoundNumber;
+    @Column
+    private Long currentRoundNumber;
+
+
+    @Cascade(CascadeType.PERSIST)
+    @OneToMany(mappedBy = "study", orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<StudyMember> studyMembers = new ArrayList<>();
+
 
     @Cascade(CascadeType.PERSIST)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -91,9 +107,10 @@ public class Study extends BaseEntity {
             ProcessingStatus processingStatus,
             LocalDateTime startAt,
             LocalDateTime endAt,
+            Member master,
             Integer minimumWeeks,
             Integer meetingDaysPerWeek,
-            Integer currentRoundNumber,
+            Long currentRoundNumber,
             List<Round> rounds
     ) {
         name = name.strip();
@@ -106,7 +123,13 @@ public class Study extends BaseEntity {
         this.processingStatus = processingStatus;
         this.startAt = startAt;
         this.endAt = endAt;
-        this.currentRoundNumber = currentRoundNumber == null ? 1 : currentRoundNumber;
+        this.currentRoundNumber = currentRoundNumber;
+        this.studyMembers.add(StudyMember.builder()
+                                         .study(this)
+                                         .role(Role.MASTER)
+                                         .member(master)
+                                         .studyResult(StudyResult.NONE)
+                                         .build());
         this.rounds = rounds == null ? new ArrayList<>() : rounds;
         this.minimumWeeks = minimumWeeks;
         this.meetingDaysPerWeek = meetingDaysPerWeek;
@@ -119,15 +142,14 @@ public class Study extends BaseEntity {
             LocalDateTime startAt,
             Member master
     ) {
-        Study study = Study.builder()
-                           .name(name)
-                           .numberOfMaximumMembers(numberOfMaximumMembers)
-                           .startAt(startAt)
-                           .introduction(introduction)
-                           .processingStatus(ProcessingStatus.RECRUITING)
-                           .build();
-        study.rounds = Round.of(INITIAL_ROUND_COUNT, master);
-        return study;
+        return Study.builder()
+                    .name(name)
+                    .numberOfMaximumMembers(numberOfMaximumMembers)
+                    .startAt(startAt)
+                    .introduction(introduction)
+                    .processingStatus(ProcessingStatus.RECRUITING)
+                    .master(master)
+                    .build();
     }
 
     private void validateNumberOfMaximumMembers(Integer numberOfMaximumMembers) {
@@ -156,16 +178,22 @@ public class Study extends BaseEntity {
     }
 
     public Integer calculateAverageTier() {
-        return getCurrentRound().calculateAverageTier();
+        return (int) studyMembers.stream()
+                                 .filter(StudyMember::isStudyMember)
+                                 .map(StudyMember::getMember)
+                                 .mapToInt(member -> member.getTier().getOrder())
+                                 .average()
+                                 .orElseThrow();
     }
 
-    public void addMember(Member member) {
+    public void permit(Member applicant, Member master) {
         validateStudyProcessingStatus();
-        validateMemberSize();
+        validateMaster(master);
 
-        for (Round round : rounds) {
-            round.addMember(member);
-        }
+        studyMembers.stream()
+                    .filter(studyMember -> studyMember.getMember().equals(applicant))
+                    .findAny()
+                    .ifPresent(StudyMember::participate);
     }
 
     public void validateMemberSize() {
@@ -175,36 +203,109 @@ public class Study extends BaseEntity {
     }
 
     public int sizeOfCurrentMembers() {
-        return getCurrentRound().sizeOfCurrentMembers();
-    }
-
-    public void validateMaster(Member candidate) {
-        getCurrentRound().validateMaster(candidate);
+        return (int) studyMembers.stream()
+                                 .filter(StudyMember::isStudyMember)
+                                 .count();
     }
 
     public boolean isCurrentRoundEndAt(LocalDate today) {
         return getCurrentRound().isEndAt(today);
     }
 
-    public void updateToNextRound() {
-        int nextRoundNumber = getCurrentRound().getRoundNumber() + 1;
-        Optional<Round> nextRound = rounds.stream()
-                                          .filter(round -> round.getRoundNumber() == nextRoundNumber)
-                                          .findFirst();
+    public void start(Member member, List<DayOfWeek> daysOfTheWeek, LocalDateTime startAt) {
+        validateMaster(member);
+        if (processingStatus != ProcessingStatus.RECRUITING) {
+            throw new CannotStartException("이미 진행중이거나 종료된 스터디입니다.", id);
+        }
+        if (sizeOfCurrentMembers() == ONE_MEMBER) {
+            throw new CannotStartException("스터디의 멤버가 한 명일 때는 시작할 수 없습니다.", id);
+        }
+        this.startAt = startAt;
+        this.processingStatus = ProcessingStatus.PROCESSING;
+        initializeMeetingDaysOfTheWeek(daysOfTheWeek);
+        initializeRounds(startAt.toLocalDate());
+    }
 
-        nextRound.ifPresentOrElse(this::updateCurrentRound, this::finishStudy);
+    private void initializeMeetingDaysOfTheWeek(List<DayOfWeek> daysOfTheWeek) {
+        this.meetingDaysOfTheWeek.addAll(daysOfTheWeek.stream()
+                                                      .map(dayOfTheWeek -> MeetingDayOfTheWeek.builder()
+                                                                                              .dayOfWeek(dayOfTheWeek)
+                                                                                              .study(this)
+                                                                                              .build())
+                                                      .toList());
+    }
+
+    private void initializeRounds(LocalDate startAt) {
+        this.rounds.addAll(createRoundsOfFirstWeek(startAt));
+        this.rounds.addAll(createRoundsOf(FIRST_WEEK + 1));
+        rounds.get(0).proceed();
+    }
+
+    private List<Round> createRoundsOfFirstWeek(final LocalDate startAt) {
+        List<Round> rounds = meetingDaysOfTheWeek.stream()
+                                                 .filter(meetingDayOfTheWeek -> meetingDayOfTheWeek.comesNext(startAt.getDayOfWeek()))
+                                                 .map(meetingDayOfTheWeek -> Round.of(meetingDayOfTheWeek, this, FIRST_WEEK))
+                                                 .toList();
+        if (rounds.isEmpty()) {
+            rounds = createRoundsOf(FIRST_WEEK);
+        }
+        return rounds;
+    }
+
+    public void validateMaster(Member candidate) {
+        Member master = getMaster();
+        if (master.getId().equals(candidate.getId())) {
+            return;
+        }
+        throw new NotStudyMasterException("필수 투두를 수정할 권한이 없습니다.", candidate.getNickname());
+    }
+
+    public void updateToNextRound() {
+        Round nextRound = findUpcomingRoundOf(getCurrentRound().getWeekNumber());
+
+        if (nextRound.isSameWeek(getCurrentRound().getWeekNumber() + 1)) {
+            rounds.addAll(createRoundsOf(nextRound.getWeekNumber() + 1));
+        }
+        updateCurrentRound(nextRound);
     }
 
     private void updateCurrentRound(Round upcomingRound) {
-        this.currentRoundNumber++;
+        upcomingRound.proceed();
+        getCurrentRound().finish();
     }
 
-    private void finishStudy() {
+    private Round findUpcomingRoundOf(int weekNumber) {
+        return rounds.stream()
+                     .filter(round -> round.isSameWeek(weekNumber) && round.isNextDayOfWeek(getCurrentRound().getDayOFWeek()))
+                     .findFirst()
+                     .orElseGet(() -> findFirstRoundOf(weekNumber + 1));
+    }
+
+    private Round findFirstRoundOf(int nextWeekNumber) {
+        return rounds.stream()
+                     .filter(round -> round.isSameWeek(nextWeekNumber) && round.isSameDayOfWeek(findFirstMeetingDayOfTheWeek()))
+                     .findAny()
+                     .orElseThrow(() -> new RoundNotFoundException("다음 주차의 라운드가 존재하지 않습니다.", getCurrentRound().getWeekNumber()));
+    }
+
+    private MeetingDayOfTheWeek findFirstMeetingDayOfTheWeek() {
+        return meetingDaysOfTheWeek.stream()
+                                   .min(Comparator.comparing(MeetingDayOfTheWeek::getOrder))
+                                   .orElseThrow();
+    }
+
+    public void finishStudy(Member master) {
+        validateMaster(master);
+        studyMembers.forEach(StudyMember::completeSuccessfully);
         this.processingStatus = ProcessingStatus.END;
     }
 
     public Member getMaster() {
-        return getCurrentRound().getMaster();
+        return studyMembers.stream()
+                           .filter(StudyMember::isMaster)
+                           .map(StudyMember::getMember)
+                           .findAny()
+                           .orElseThrow();
     }
 
     protected void validateStudyProcessingStatus() {
@@ -238,9 +339,9 @@ public class Study extends BaseEntity {
 
     public Round getCurrentRound() {
         return rounds.stream()
-                     .filter(round -> round.getRoundNumber().equals(currentRoundNumber))
+                     .filter(Round::isInProgress)
                      .findAny()
-                     .orElseThrow();
+                     .orElseThrow(() -> new RoundNotFoundException("현재 진행중인 라운드가 없습니다.", -1));
     }
 
     public boolean isMaster(Member member) {
@@ -258,23 +359,31 @@ public class Study extends BaseEntity {
         this.introduction = introduction;
     }
 
-    public void startStudy() {
-        if (processingStatus != ProcessingStatus.RECRUITING) {
-            throw new CannotStartException("시작할 수 없는 상태입니다.", id);
-        }
-        if (sizeOfCurrentMembers() == ONE_MEMBER) {
-            throw new CannotStartException("시작할 수 없는 상태입니다.", id);
-        }
-        this.startAt = LocalDateTime.now();
-        this.processingStatus = ProcessingStatus.PROCESSING;
-        initializeRoundsEndAt();
+    private List<Round> createRoundsOf(Integer weekNumber) {
+        return meetingDaysOfTheWeek.stream()
+                                   .map(meetingDayOfTheWeek -> Round.of(meetingDayOfTheWeek, this, weekNumber))
+                                   .toList();
     }
 
-    private void initializeRoundsEndAt() {
-        rounds.sort(Comparator.comparing(Round::getRoundNumber));
-        LocalDateTime date = LocalDateTime.of(startAt.toLocalDate(), LocalTime.MIN);
-        for (Round round : rounds) {
-            // TODO: 10/5/23 진행하고자 하는 요일들로 초기화 필요
+    public void apply(Member member) {
+        validateMemberSize();
+        validateApplicant(member);
+        studyMembers.add(StudyMember.builder()
+                                    .study(this)
+                                    .role(Role.APPLICANT)
+                                    .member(member)
+                                    .studyResult(StudyResult.NONE)
+                                    .build());
+    }
+
+    private void validateApplicant(Member member) {
+        if (isAlreadyExist(member)) {
+            throw new ApplicantAlreadyExistException("스터디에 신청할 수 없는 멤버입니다.", String.valueOf(member.getId()));
         }
+    }
+
+    private boolean isAlreadyExist(Member member) {
+        return studyMembers.stream()
+                           .anyMatch(studyMember -> studyMember.getMember().equals(member));
     }
 }

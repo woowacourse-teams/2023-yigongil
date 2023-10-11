@@ -2,6 +2,8 @@ package com.yigongil.backend.domain.roundofmember;
 
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.study.Study;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -38,6 +40,16 @@ public class RoundOfMember extends BaseEntity {
         this.id = id;
         this.member = member;
         this.isDone = isDone;
+    }
+
+    public static List<RoundOfMember> from(Study study) {
+        return study.getStudyMembers()
+                    .stream()
+                    .map(studyMember -> RoundOfMember.builder()
+                                                     .member(studyMember.getMember())
+                                                     .isDone(false)
+                                                     .build())
+                    .toList();
     }
 
     public void completeRound() {

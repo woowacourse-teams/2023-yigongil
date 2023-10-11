@@ -11,11 +11,11 @@ import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
 import com.yigongil.backend.domain.studymember.StudyResult;
-import com.yigongil.backend.exception.ApplicantAlreadyExistException;
 import com.yigongil.backend.exception.ApplicantNotFoundException;
 import com.yigongil.backend.exception.StudyNotFoundException;
 import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;
+import com.yigongil.backend.request.StudyStartRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
@@ -25,9 +25,10 @@ import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyListItemResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.response.StudyMemberRoleResponse;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -56,6 +57,12 @@ public class StudyService {
 
     @Transactional
     public Long create(Member member, StudyUpdateRequest request) {
+        Study study = createStudy(request, member);
+
+        return study.getId();
+    }
+
+    private Study createStudy(StudyUpdateRequest request, Member member) {
         Study study = Study.initializeStudyOf(
                 request.name(),
                 request.introduction(),
@@ -63,19 +70,8 @@ public class StudyService {
                 request.startAt().atStartOfDay(),
                 member
         );
-
         studyRepository.save(study);
-
-        StudyMember studyMember = StudyMember.builder()
-                                             .study(study)
-                                             .member(member)
-                                             .role(Role.MASTER)
-                                             .studyResult(StudyResult.NONE)
-                                             .build();
-
-        studyMemberRepository.save(studyMember);
-
-        return study.getId();
+        return study;
     }
 
     @Transactional(readOnly = true)
@@ -95,18 +91,7 @@ public class StudyService {
     @Transactional
     public void apply(Member member, Long studyId) {
         Study study = findStudyById(studyId);
-
-        study.validateMemberSize();
-        validateApplicantAlreadyExist(member, study);
-
-        studyMemberRepository.save(
-                StudyMember.builder()
-                           .study(study)
-                           .member(member)
-                           .role(Role.APPLICANT)
-                           .studyResult(StudyResult.NONE)
-                           .build()
-        );
+        study.apply(member);
     }
 
     @Transactional
@@ -126,13 +111,6 @@ public class StudyService {
                               .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
     }
 
-    private void validateApplicantAlreadyExist(Member member, Study study) {
-        boolean cannotApply = studyMemberRepository.existsByStudyIdAndMemberId(study.getId(), member.getId());
-        if (cannotApply) {
-            throw new ApplicantAlreadyExistException("스터디에 신청할 수 없는 멤버입니다.", String.valueOf(member.getId()));
-        }
-    }
-
     @Transactional(readOnly = true)
     public StudyDetailResponse findStudyDetailByStudyId(Long studyId) {
         Study study = findStudyById(studyId);
@@ -142,7 +120,7 @@ public class StudyService {
 
         List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRoleNot(studyId, Role.APPLICANT);
 
-        return StudyDetailResponse.of(study, rounds, currentRound, createStudyMemberResponses(studyMembers));
+        return StudyDetailResponse.of(study, rounds, createStudyMemberResponses(studyMembers));
     }
 
     @Transactional
@@ -150,10 +128,7 @@ public class StudyService {
         StudyMember studyMember = findApplicantByMemberIdAndStudyId(memberId, studyId);
         Study study = studyMember.getStudy();
 
-        study.validateMaster(master);
-
-        study.addMember(studyMember.getMember());
-        studyMember.participate();
+        study.permit(studyMember.getMember(), master);
     }
 
     @Transactional(readOnly = true)
@@ -215,9 +190,7 @@ public class StudyService {
                             study.getName(),
                             study.calculateAverageTier(),
                             study.getStartAt().toLocalDate(),
-                            study.getCurrentRound()
-                                 .getRoundOfMembers()
-                                 .size(),
+                            study.sizeOfCurrentMembers(),
                             study.getNumberOfMaximumMembers()
                     )
             );
@@ -248,21 +221,25 @@ public class StudyService {
         studies.stream()
                .filter(study -> study.isCurrentRoundEndAt(today))
                .forEach(Study::updateToNextRound);
-
-        studies.stream()
-               .filter(Study::isEnd)
-               .map(endedStudy -> studyMemberRepository.findAllByStudyId(endedStudy.getId()))
-               .flatMap(Collection::stream)
-               .forEach(StudyMember::completeSuccessfully);
     }
 
     @Transactional
-    public void startStudy(Member member, Long studyId) {
-        studyMemberRepository.deleteAllByStudyIdAndRole(studyId, Role.APPLICANT);
-        Study study = findStudyById(studyId);
-        study.validateMaster(member);
+    public void start(Member member, Long studyId, StudyStartRequest request) {
+        deleteLeftApplicants(studyId);
+        List<DayOfWeek> meetingDaysOfTheWeek = createDayOfWeek(request.meetingDaysOfTheWeek());
 
-        study.startStudy();
+        Study study = findStudyById(studyId);
+        study.start(member, meetingDaysOfTheWeek, LocalDateTime.now());
+    }
+
+    private void deleteLeftApplicants(final Long studyId) {
+        studyMemberRepository.deleteAllByStudyIdAndRole(studyId, Role.APPLICANT);
+    }
+
+    private List<DayOfWeek> createDayOfWeek(List<String> daysOfTheWeek) {
+        return daysOfTheWeek.stream()
+                            .map(DayOfWeek::valueOf)
+                            .toList();
     }
 
     @Transactional

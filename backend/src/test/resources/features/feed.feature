@@ -9,7 +9,7 @@ Feature: 피드 조회 기능
     Given 깃허브 아이디가 "yujamint"인 멤버가 이름이 "자바1"스터디에 신청한다.
     Given "jinwoo"가 "yujamint"의 "자바1" 스터디 신청을 수락한다.
 
-    Given "jinwoo"가 이름이 "자바1"인 스터디를 시작한다.
+    Given "jinwoo"가 이름이 "자바1"인 스터디를 "MONDAY"에 진행되도록 하여 시작한다.
 
     When "jinwoo"가 "자바1"스터디 피드에 "내용"의 글을 작성한다.
     Then "yujamint"가 "자바1"스터디 피드에서 "jinwoo"의 "내용" 글을 확인할 수 있다.
@@ -23,7 +23,7 @@ Feature: 피드 조회 기능
     Given 깃허브 아이디가 "yujamint"인 멤버가 이름이 "자바1"스터디에 신청한다.
     Given "jinwoo"가 "yujamint"의 "자바1" 스터디 신청을 수락한다.
 
-    Given "jinwoo"가 이름이 "자바1"인 스터디를 시작한다.
+    Given "jinwoo"가 이름이 "자바1"인 스터디를 "MONDAY"에 진행되도록 하여 시작한다.
     Given "jinwoo"가 이름이 "자바1"인 스터디의 1 회차를 찾는다.
     Given "jinwoo"가 찾은 회차에 "<투두 내용>"로 필수 투두를 추가한다.
 
@@ -40,7 +40,7 @@ Feature: 피드 조회 기능
     Given 깃허브 아이디가 "yujamint"인 멤버가 이름이 "자바1"스터디에 신청한다.
     Given "jinwoo"가 "yujamint"의 "자바1" 스터디 신청을 수락한다.
 
-    Given "jinwoo"가 이름이 "자바1"인 스터디를 시작한다.
+    Given "jinwoo"가 이름이 "자바1"인 스터디를 "MONDAY"에 진행되도록 하여 시작한다.
     Given "jinwoo"가 이름이 "자바1"인 스터디의 1 회차를 찾는다.
     Given "jinwoo"가 찾은 회차에 "<투두 내용>"로 필수 투두를 추가한다.
 
@@ -62,7 +62,7 @@ Feature: 피드 조회 기능
     Given 깃허브 아이디가 "yujamint"인 멤버가 이름이 "자바1"스터디에 신청한다.
     Given "jinwoo"가 "yujamint"의 "자바1" 스터디 신청을 수락한다.
 
-    Given "jinwoo"가 이름이 "자바1"인 스터디를 시작한다.
+    Given "jinwoo"가 이름이 "자바1"인 스터디를 "MONDAY"에 진행되도록 하여 시작한다.
     Given "jinwoo"가 이름이 "자바1"인 스터디의 1 회차를 찾는다.
     Given "jinwoo"가 찾은 회차에 "<투두 내용>"로 필수 투두를 추가한다.
 

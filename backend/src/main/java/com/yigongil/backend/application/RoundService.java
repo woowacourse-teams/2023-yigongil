@@ -15,8 +15,7 @@ import com.yigongil.backend.response.ProgressRateResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.TodoResponse;
 import com.yigongil.backend.response.UpcomingStudyResponse;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RoundService {
 
-    private static final int DATE_ADJUST_NUMBER = 1;
     private final RoundRepository roundRepository;
     private final StudyRepository studyRepository;
 
@@ -66,8 +64,7 @@ public class RoundService {
         for (Study study : studies) {
             Round currentRound = study.getCurrentRound();
 
-            LocalDateTime endAt = currentRound.getEndAt();
-            int leftDays = (int) ChronoUnit.DAYS.between(LocalDateTime.now(), endAt) + DATE_ADJUST_NUMBER;
+            int leftDays = currentRound.calculateLeftDaysFrom(LocalDate.now());
 
             upcomingStudyResponses.add(
                     new UpcomingStudyResponse(
