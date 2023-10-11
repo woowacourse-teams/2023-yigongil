@@ -68,7 +68,7 @@ class TodoControllerTest {
 
         willDoNothing().given(todoService).createNecessaryTodo(MemberFixture.김진우.toMember(), 1L, request);
 
-        mockMvc.perform(post("/v1/rounds/1/todos")
+        mockMvc.perform(post("/rounds/1/todos")
                        .header(HttpHeaders.AUTHORIZATION, "1")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(request)))
@@ -82,7 +82,7 @@ class TodoControllerTest {
 
         willDoNothing().given(todoService).updateNecessaryTodo(MemberFixture.김진우.toMember(), 1L, request);
 
-        mockMvc.perform(patch("/v1/rounds/1/todos")
+        mockMvc.perform(patch("/rounds/1/todos")
                        .header(HttpHeaders.AUTHORIZATION, "1")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(request)))

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.domain.study.ProcessingStatus;
+import com.yigongil.backend.request.StudyStartRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.RoundNumberResponse;
 import com.yigongil.backend.response.RoundResponse;
@@ -19,7 +20,7 @@ import io.cucumber.java.en.When;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -47,7 +48,7 @@ public class StudySteps {
             String periodOfRound,
             String introduction
     ) throws JsonProcessingException {
-        LocalDate startAt = LocalDate.now().plus(Long.parseLong(leftDays), ChronoUnit.DAYS);
+        LocalDate startAt = LocalDate.now().plusDays(Long.parseLong(leftDays));
         StudyUpdateRequest request = new StudyUpdateRequest(
                 name,
                 Integer.parseInt(numberOfMaximumMembers),
@@ -188,13 +189,16 @@ public class StudySteps {
         sharedContext.setResponse(response);
     }
 
-    @Given("{string}가 이름이 {string}인 스터디를 시작한다.")
-    public void 스터디시작(String memberGithubId, String studyName) {
+    @Given("{string}가 이름이 {string}인 스터디를 {string}에 진행되도록 하여 시작한다.")
+    public void 스터디_시작(String memberGithubId, String studyName, String days) {
         String token = sharedContext.getToken(memberGithubId);
         String studyId = (String) sharedContext.getParameter(studyName);
+        StudyStartRequest request = new StudyStartRequest(Arrays.stream(days.split(",")).map(String::strip).toList());
 
         given().log().all()
                .header(HttpHeaders.AUTHORIZATION, token)
+               .contentType(MediaType.APPLICATION_JSON_VALUE)
+               .body(request)
                .when()
                .patch("/studies/" + studyId + "/start")
                .then().log().all();
@@ -233,7 +237,7 @@ public class StudySteps {
         StudyUpdateRequest request = new StudyUpdateRequest(
                 updateStudyName,
                 Integer.parseInt(updateNumberOfMaximumMembers),
-                LocalDate.now().plus(Long.parseLong(updateStartAt), ChronoUnit.DAYS),
+                LocalDate.now().plusDays(Long.parseLong(updateStartAt)),
                 Integer.parseInt(updateTotalRoundCount),
                 updatePeriodOfRound,
                 updateIntroduction
@@ -250,13 +254,13 @@ public class StudySteps {
         sharedContext.setParameter(updateStudyName, studyId);
     }
 
-    @Then("스터디의 남은 날짜가 null이 아니다.")
+    @Then("스터디의 남은 날짜가 0이상 6 이하이다.")
     public void 스터디_회차_업데이트_검증() {
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
         List<UpcomingStudyResponse> homeResponse = response.jsonPath().getList(".", UpcomingStudyResponse.class);
 
-        assertThat(homeResponse.get(0).leftDays()).isNotNull();
+        assertThat(homeResponse.get(0).leftDays()).isBetween(0, 6);
     }
 
     @When("{string}를 검색한다.")
@@ -290,5 +294,10 @@ public class StudySteps {
                                                             .getList(".", UpcomingStudyResponse.class);
 
         assertThat(response).hasSize(number);
+    }
+
+    @When("{string}가 {string} 스터디를 종료한다.")
+    public void 스터디_종료(String githubId, String studyName) {
+        // TODO: 2021/08/12 스터디 종료
     }
 }

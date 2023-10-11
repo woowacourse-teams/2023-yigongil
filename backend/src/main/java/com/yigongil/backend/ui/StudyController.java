@@ -6,6 +6,7 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;
+import com.yigongil.backend.request.StudyStartRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
@@ -121,8 +122,12 @@ public class StudyController implements StudyApi {
     }
 
     @PatchMapping("/{id}/start")
-    public ResponseEntity<Void> startStudy(@Authorization Member member, @PathVariable Long id) {
-        studyService.startStudy(member, id);
+    public ResponseEntity<Void> startStudy(
+            @Authorization Member member,
+            @PathVariable Long id,
+            @RequestBody StudyStartRequest studyStartRequest
+    ) {
+        studyService.start(member, id, studyStartRequest);
 
         return ResponseEntity.ok().build();
     }

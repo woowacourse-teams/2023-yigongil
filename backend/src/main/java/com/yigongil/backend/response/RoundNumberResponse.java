@@ -12,7 +12,7 @@ public record RoundNumberResponse(
 ) {
 
     public static RoundNumberResponse from(Round round) {
-        return new RoundNumberResponse(round.getId(), round.getRoundNumber());
+        return new RoundNumberResponse(round.getId(), round.getId().intValue());
     }
 
     public static List<RoundNumberResponse> from(List<Round> rounds) {

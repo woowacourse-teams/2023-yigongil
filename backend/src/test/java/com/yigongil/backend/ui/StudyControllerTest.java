@@ -21,7 +21,6 @@ import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.ui.exceptionhandler.InternalServerErrorMessageConverter;
 import com.yigongil.backend.utils.querycounter.ApiQueryCounter;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import org.apache.http.HttpHeaders;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,7 +75,7 @@ class StudyControllerTest {
 
     @Test
     void 스터디를_개설한다() throws Exception {
-        LocalDate startAt = LocalDate.now().plus(5L, ChronoUnit.MONTHS);
+        LocalDate startAt = LocalDate.now().plusMonths(5L);
         StudyUpdateRequest request = new StudyUpdateRequest(
                 "자바",
                 5,
@@ -88,13 +87,13 @@ class StudyControllerTest {
 
         willReturn(1L).given(studyService).create(MemberFixture.김진우.toMember(), request);
 
-        mockMvc.perform(post("/v1/studies")
+        mockMvc.perform(post("/studies")
                        .header(HttpHeaders.AUTHORIZATION, "1")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(request)))
                .andDo(print())
                .andExpect(status().isCreated())
-               .andExpect(header().string(HttpHeaders.LOCATION, "/v1/studies/1"));
+               .andExpect(header().string(HttpHeaders.LOCATION, "/studies/1"));
     }
 
     @Test
@@ -111,7 +110,7 @@ class StudyControllerTest {
 
         willReturn(1L).given(studyService).create(MemberFixture.김진우.toMember(), request);
 
-        mockMvc.perform(post("/v1/studies")
+        mockMvc.perform(post("/studies")
                        .header(HttpHeaders.AUTHORIZATION, "1")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(request)))

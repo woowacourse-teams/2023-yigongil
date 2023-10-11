@@ -4,6 +4,7 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;
+import com.yigongil.backend.request.StudyStartRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
@@ -167,7 +168,8 @@ public interface StudyApi {
     @Operation(summary = "스터디 시작")
     ResponseEntity<Void> startStudy(
             @Schema(hidden = true) Member member,
-            @Parameter(description = "시작할 스터디 id", required = true) Long id
+            @Parameter(description = "시작할 스터디 id", required = true) Long id,
+            StudyStartRequest studyStartRequest
     );
 
     @ApiResponses(

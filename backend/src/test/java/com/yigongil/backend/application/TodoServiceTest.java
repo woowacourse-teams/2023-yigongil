@@ -48,7 +48,6 @@ class TodoServiceTest {
         round = Round.builder()
                      .id(3L)
                      .roundOfMembers(List.of(roundOfMember))
-                     .roundNumber(1)
                      .master(member)
                      .necessaryToDoContent(null)
                      .build();
