@@ -94,7 +94,7 @@
     <string name="study_detail_app_bar_study_master_title">개설한 스터디 관리하기</string>
     <string name="study_detail_study_people">스터디원</string>
     <string name="study_detail_study_capacity">참여하기(%d/%d)</string>
-    <string name="study_detail_button_start_study">시작하기(%d/%d)</string>
+    <string name="study_detail_button_start_study">요일 선택하기(%d/%d)</string>
     <string name="study_detail_button_preparing_service">아직 준비중인 기능입니다</string>
     <string name="study_detail_dm_button_content_description">스터디장에게 문의하기</string>
     <string name="study_detail_study_accept_waiting">수락을 기다리고 있어요</string>
