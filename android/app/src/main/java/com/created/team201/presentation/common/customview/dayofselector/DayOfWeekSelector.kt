@@ -77,20 +77,22 @@ class DayOfWeekSelector @JvmOverloads constructor(
     }
 
     private fun setupDayClickListeners() {
-        dayTextViews.values.forEach { textView ->
-            textView.setOnClickListener { it ->
-                val clickedDay: DayOfWeek = textViewDays[it] ?: throw NullPointerException()
+        dayTextViews.values.forEach { dayTextView ->
+            dayTextView.setOnClickListener { it ->
+                val clickedDay: DayOfWeek =
+                    requireNotNull(textViewDays[it]) { "$it 에 해당하는 요일이 존재하지 않습니다." }
                 if (canMultiSelect) {
-                    selectDayTextView(textView)
+                    selectDayTextView(dayTextView)
                     dayOnClick?.onClick(clickedDay)
                     return@setOnClickListener
                 }
 
                 if (it.isSelected) return@setOnClickListener
 
-                selectDayTextView(textView)
+                selectDayTextView(dayTextView)
+
                 dayTextViews.values
-                    .filterNot { it == textView }
+                    .filterNot { it == dayTextView }
                     .forEach { it.isSelected = false }
                 dayOnClick?.onClick(clickedDay)
             }
@@ -120,8 +122,8 @@ class DayOfWeekSelector @JvmOverloads constructor(
 
     fun selectDays(days: List<DayOfWeek>) {
         days.forEach { day ->
-            val textView: TextView = dayTextViews[day]
-                ?: throw NullPointerException("$day 에 해당하는 TextView가 존재하지 않습니다.")
+            val textView: TextView =
+                requireNotNull(dayTextViews[day]) { "$day 에 해당하는 TextView가 존재하지 않습니다." }
 
             textView.isSelected = !(textView.isSelected)
         }
@@ -133,7 +135,7 @@ class DayOfWeekSelector @JvmOverloads constructor(
 
     fun getSelectedDays(): List<DayOfWeek> {
         val selectedDayTextViews: List<TextView> = dayTextViews.values.filter { it.isSelected }
-        return selectedDayTextViews.map { textViewDays[it] ?: throw NullPointerException() }
+        return selectedDayTextViews.map { requireNotNull(textViewDays[it]) { "$it 에 해당하는 요일이 존재하지 않습니다." } }
     }
 
     fun setDayOnClickListener(dayOnClickListener: DayOnClickListener) {
