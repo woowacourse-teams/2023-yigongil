@@ -9,7 +9,7 @@ import com.created.team201.databinding.FragmentStudyStartBottomSheetBinding
 import com.created.team201.presentation.common.BindingBottomSheetFragment
 import com.created.team201.presentation.studyDetail.StudyDetailViewModel
 
-class StudyStartBottomSheetFragment(private val studyId: Long) :
+class StudyStartBottomSheetFragment :
     BindingBottomSheetFragment<FragmentStudyStartBottomSheetBinding>(
         R.layout.fragment_study_start_bottom_sheet,
     ) {
@@ -43,12 +43,37 @@ class StudyStartBottomSheetFragment(private val studyId: Long) :
     }
 
     private fun onStartButtonClick() {
-        // studyDetailViewModel.startStudy(studyId) ToDo: 서버 연결 필요
+//        val studyId = arguments?.getLong(KEY_STUDY_ID) ?: INVALID_STUDY_ID
+//        validateStudyId(studyId)
+//        studyDetailViewModel.startStudy(studyId) ToDo: 서버 연결시 수정
         Toast.makeText(
             context,
             binding.dowsStudyStartBottomSheetDayOfWeekSelector.getSelectedDays().toString(),
             Toast.LENGTH_SHORT,
         ).show()
         dismiss()
+    }
+
+    private fun validateStudyId(studyId: Long) {
+        if (studyId == INVALID_STUDY_ID) {
+            Toast.makeText(
+                context,
+                getString(R.string.study_start_bottom_sheet_dialog_fragment_not_valid_study),
+                Toast.LENGTH_SHORT,
+            ).show()
+            dismiss()
+        }
+    }
+
+    companion object {
+        private const val KEY_STUDY_ID: String = "KEY_STUDY_ID"
+        private const val INVALID_STUDY_ID: Long = 0L
+
+        fun newInstance(studyId: Long): StudyStartBottomSheetFragment =
+            StudyStartBottomSheetFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(KEY_STUDY_ID, studyId)
+                }
+            }
     }
 }

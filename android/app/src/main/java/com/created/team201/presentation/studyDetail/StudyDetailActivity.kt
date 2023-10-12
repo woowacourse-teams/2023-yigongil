@@ -155,7 +155,7 @@ class StudyDetailActivity :
     }
 
     private fun onMasterClickMainButton() {
-        val studyStartBottomSheetFragment = StudyStartBottomSheetFragment(studyId)
+        val studyStartBottomSheetFragment = StudyStartBottomSheetFragment.newInstance(studyId)
         studyStartBottomSheetFragment.show(
             supportFragmentManager,
             studyStartBottomSheetFragment.tag,

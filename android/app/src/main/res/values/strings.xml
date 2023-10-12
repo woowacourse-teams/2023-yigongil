@@ -112,6 +112,7 @@
     <!-- 스터디 상세보기 - 시작하기 바텀시트 다이얼로그 프래그먼트 -->
     <string name="start_study_bottom_sheet_dialog_fragment_title">스터디 요일</string>
     <string name="start_study_bottom_sheet_dialog_fragment_button_start">시작하기</string>
+    <string name="study_start_bottom_sheet_dialog_fragment_not_valid_study">유효하지 않은 스터디입니다.</string>
 
     <!--스터디 관리하기 뷰-->
     <string name="study_management_app_bar_title_is_study_participant">참여한 스터디 관리하기</string>
