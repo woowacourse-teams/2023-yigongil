@@ -34,7 +34,6 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
     private fun verifyAppVersion() {
         val appUpdateManager = AppUpdateManagerFactory.create(this)
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
-            appUpdateInfo.updatePriority()
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
                 appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
             ) {
