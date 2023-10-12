@@ -270,7 +270,7 @@ public class StudyService {
     public MembersCertificationResponse findAllMembersCertification(Member member, Long studyId) {
         Study study = findStudyById(studyId);
         final List<RoundOfMember> roundOfMembers = study.getCurrentRoundOfMembers();
-        return MembersCertificationResponse.of(study.getName(), member, roundOfMembers);
+        return MembersCertificationResponse.of(study.getName(), study.getCurrentRound().getWeekNumber(), member, roundOfMembers);
     }
 
     public CertificationResponse findCertification(Long certificationId) {

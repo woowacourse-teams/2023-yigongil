@@ -172,13 +172,15 @@ public class StudySteps {
                                                          .extract()
                                                          .as(StudyDetailResponse.class);
 
-        Long roundId = studyDetailResponse.rounds()
-                                          .stream()
-                                          .filter(round -> Objects.equals(round.number(),
-                                                  roundNumber))
-                                          .findFirst()
-                                          .map(RoundNumberResponse::id)
-                                          .get();
+        // TODO: 10/12/23 투두 생성, 주별 머스트두 생성 기능 생기면 맞게 수정하기
+        Long roundId = 1L;
+//        Long roundId = studyDetailResponse.rounds()
+//                                          .stream()
+//                                          .filter(round -> Objects.equals(round.number(),
+//                                                  roundNumber))
+//                                          .findFirst()
+//                                          .map(RoundNumberResponse::id)
+//                                          .get();
 
         sharedContext.setParameter("roundId", roundId);
 
