@@ -35,31 +35,11 @@ class StudyStartBottomSheetFragment(private val studyId: Long) :
                 binding.dowsStudyStartBottomSheetDayOfWeekSelector.getSelectedDaysSize()
 
             if (selectedDaysSize > 0) {
-                enableStudyStartButton()
+                binding.tvStudyStartBottomSheetBtnStart.isEnabled = true
                 return@setDayOnClickListener
             }
-            disableStudyStartButton()
+            binding.tvStudyStartBottomSheetBtnStart.isEnabled = false
         }
-    }
-
-    private fun enableStudyStartButton() {
-        binding.tvStudyStartBottomSheetBtnStart.isEnabled = true
-        binding.tvStudyStartBottomSheetBtnStart.setTextColor(
-            resources.getColor(
-                R.color.white,
-                null,
-            ),
-        )
-    }
-
-    private fun disableStudyStartButton() {
-        binding.tvStudyStartBottomSheetBtnStart.isEnabled = false
-        binding.tvStudyStartBottomSheetBtnStart.setTextColor(
-            resources.getColor(
-                R.color.green09_799E82,
-                null,
-            ),
-        )
     }
 
     private fun onStartButtonClick() {

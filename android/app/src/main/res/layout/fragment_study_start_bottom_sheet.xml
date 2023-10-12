@@ -83,7 +83,7 @@
             android:text="@string/start_study_bottom_sheet_dialog_fragment_button_start"
             android:textAlignment="center"
             android:textAppearance="@style/button_sb18"
-            android:textColor="@color/green09_799E82"
+            android:textColor="@drawable/selector_study_start_bottom_sheet_btn_start_text_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dows_study_start_bottom_sheet_day_of_week_selector" />
