@@ -21,25 +21,19 @@ class NetworkResponseCall<T : Any>(
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 if (response.isSuccessful) {
-                    response.body()?.let { responseBody ->
-                        callback.onResponse(
-                            this@NetworkResponseCall,
-                            Response.success(NetworkResponse.Success(responseBody)),
-                        )
-                    } ?: run {
-                        @Suppress("UNCHECKED_CAST")
-                        callback.onResponse(
-                            this@NetworkResponseCall,
-                            Response.success(NetworkResponse.Success(Unit as T)),
-                        )
-                    }
+                    @Suppress("UNCHECKED_CAST")
+                    val responseBody = response.body() ?: Unit as T
+                    callback.onResponse(
+                        this@NetworkResponseCall,
+                        Response.success(NetworkResponse.Success(responseBody)),
+                    )
                 } else {
                     callback.onResponse(
                         this@NetworkResponseCall,
                         Response.success(
                             NetworkResponse.Failure(
                                 response.code(),
-                                response.errorBody()?.string()
+                                response.errorBody()?.string(),
                             ),
                         ),
                     )
