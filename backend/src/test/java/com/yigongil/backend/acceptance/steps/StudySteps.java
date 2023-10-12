@@ -294,4 +294,40 @@ public class StudySteps {
     public void 스터디_종료(String githubId, String studyName) {
         // TODO: 2021/08/12 스터디 종료
     }
+
+    @When("{string}이 지원한 스터디 목록을 조회한다.")
+    public void 지원한_스터디_목록을_조회한다(String githubId) {
+        String token = sharedContext.getToken(githubId);
+
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .header(HttpHeaders.AUTHORIZATION, token)
+                                                        .when()
+                                                        .get("/studies/applied")
+                                                        .then().log().all()
+                                                        .extract();
+
+        sharedContext.setResponse(response);
+    }
+
+    @Then("{int} 개의 스터디를 확인할 수 있다.")
+    public void 스터디_n개를_확인할_수_있다(int count) {
+        List<StudyListItemResponse> response = sharedContext.getResponse().jsonPath().getList(".", StudyListItemResponse.class);
+
+        assertThat(response).hasSize(count);
+    }
+
+    @When("{string}이 지원한 스터디 목록을 {string} 검색어와 조회한다.")
+    public void 지원한_스터디를_검색한다(String githubId, String search) {
+        String token = sharedContext.getToken(githubId);
+
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .param("search", search)
+                                                        .header(HttpHeaders.AUTHORIZATION, token)
+                                                        .when()
+                                                        .get("/studies/applied")
+                                                        .then().log().all()
+                                                        .extract();
+
+        sharedContext.setResponse(response);
+    }
 }

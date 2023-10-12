@@ -25,15 +25,16 @@ import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyListItemResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.response.StudyMemberRoleResponse;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class StudyService {
@@ -83,12 +84,6 @@ public class StudyService {
         return toRecruitingStudyResponse(studies);
     }
 
-    private List<StudyListItemResponse> toRecruitingStudyResponse(Slice<Study> studies) {
-        return studies.get()
-                      .map(StudyListItemResponse::from)
-                      .toList();
-    }
-
     @Transactional
     public void apply(Member member, Long studyId) {
         Study study = findStudyById(studyId);
@@ -109,7 +104,7 @@ public class StudyService {
 
     public Study findStudyById(Long studyId) {
         return studyRepository.findById(studyId)
-                              .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
+                .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
     }
 
     @Transactional(readOnly = true)
@@ -143,8 +138,8 @@ public class StudyService {
 
     private List<StudyMemberResponse> createStudyMemberResponses(List<StudyMember> studyMembers) {
         return studyMembers.stream()
-                           .map(this::createStudyMemberResponse)
-                           .toList();
+                .map(this::createStudyMemberResponse)
+                .toList();
     }
 
 
@@ -185,9 +180,9 @@ public class StudyService {
                     new MyStudyResponse(
                             study.getId(),
                             study.getProcessingStatus()
-                                 .getCode(),
+                                    .getCode(),
                             studyMember.getRole()
-                                       .getCode(),
+                                    .getCode(),
                             study.getName(),
                             study.calculateAverageTier(),
                             study.sizeOfCurrentMembers(),
@@ -219,8 +214,8 @@ public class StudyService {
         List<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.PROCESSING);
 
         studies.stream()
-               .filter(study -> study.isCurrentRoundEndAt(today))
-               .forEach(Study::updateToNextRound);
+                .filter(study -> study.isCurrentRoundEndAt(today))
+                .forEach(Study::updateToNextRound);
     }
 
     @Transactional
@@ -238,8 +233,8 @@ public class StudyService {
 
     private List<DayOfWeek> createDayOfWeek(List<String> daysOfTheWeek) {
         return daysOfTheWeek.stream()
-                            .map(DayOfWeek::valueOf)
-                            .toList();
+                .map(DayOfWeek::valueOf)
+                .toList();
     }
 
     @Transactional
@@ -264,8 +259,8 @@ public class StudyService {
     @Transactional(readOnly = true)
     public StudyMemberRoleResponse getMemberRoleOfStudy(Member member, Long studyId) {
         Role role = studyMemberRepository.findByStudyIdAndMemberId(studyId, member.getId())
-                                         .map(StudyMember::getRole)
-                                         .orElse(Role.NO_ROLE);
+                .map(StudyMember::getRole)
+                .orElse(Role.NO_ROLE);
 
         return StudyMemberRoleResponse.from(role);
     }
@@ -283,8 +278,21 @@ public class StudyService {
 
     public List<FeedPostResponse> findFeedPosts(Long id, Long oldestFeedPostId) {
         return feedService.findFeedPosts(id, oldestFeedPostId)
-                          .stream()
-                          .map(FeedPostResponse::from)
-                          .toList();
+                .stream()
+                .map(FeedPostResponse::from)
+                .toList();
+    }
+
+    public List<StudyListItemResponse> findAppliedStudies(Member member, int page, String search) {
+        Pageable pageable = PageStrategy.defaultPageStrategy(page);
+
+        Slice<Study> studies = studyRepository.findStudiesApplied(member.getId(), search, Role.APPLICANT, pageable);
+        return toRecruitingStudyResponse(studies);
+    }
+
+    private List<StudyListItemResponse> toRecruitingStudyResponse(Slice<Study> studies) {
+        return studies.get()
+                .map(StudyListItemResponse::from)
+                .toList();
     }
 }
