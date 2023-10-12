@@ -19,7 +19,6 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -38,23 +37,20 @@ public class StudySteps {
         this.sharedContext = sharedContext;
     }
 
-    @Given("{string}가 제목-{string}, 정원-{string}명, 예상시작일-{string}일 뒤, 총 회차-{string}회, 주기-{string}, 소개-{string}로 스터디를 개설한다.")
+    @Given("{string}가 제목-{string}, 정원-{string}명, 최소 주차-{string}주, 주당 진행 횟수-{string}회, 소개-{string}로 스터디를 개설한다.")
     public void 스터디를_개설한다(
             String masterGithubId,
             String name,
             String numberOfMaximumMembers,
-            String leftDays,
-            String totalRoundCount,
-            String periodOfRound,
+            String minimumWeeks,
+            String meetingDaysCountPerWeek,
             String introduction
     ) throws JsonProcessingException {
-        LocalDate startAt = LocalDate.now().plusDays(Long.parseLong(leftDays));
         StudyUpdateRequest request = new StudyUpdateRequest(
                 name,
                 Integer.parseInt(numberOfMaximumMembers),
-                startAt,
-                Integer.parseInt(totalRoundCount),
-                periodOfRound,
+                Integer.parseInt(minimumWeeks),
+                Integer.parseInt(meetingDaysCountPerWeek),
                 introduction
         );
         String token = sharedContext.getToken(masterGithubId);
@@ -213,22 +209,21 @@ public class StudySteps {
         ExtractableResponse<Response> response = given().log().all()
                                                         .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
-                                                        .get("/home/")
+                                                        .get("/home")
                                                         .then().log().all()
                                                         .extract();
 
         sharedContext.setResponse(response);
     }
 
-    @Given("{string}가 {string} 스터디의 정보를 제목-{string}, 정원-{string}명, 예상시작일-{string}일 뒤, 총 회차-{string}회, 주기-{string}, 소개-{string}로 수정한다.")
+    @Given("{string}가 {string} 스터디의 정보를 제목-{string}, 정원-{string}명, 최소 주차-{string}주, 주당 진행 횟수-{string}회, 소개-{string}로 수정한다.")
     public void 스터디_정보_수정(
             String masterGithubId,
             String originalStudyName,
             String updateStudyName,
             String updateNumberOfMaximumMembers,
-            String updateStartAt,
-            String updateTotalRoundCount,
-            String updatePeriodOfRound,
+            String updateMinimumWeeks,
+            String updateMeetingDaysCountPerWeek,
             String updateIntroduction
     ) {
         String token = sharedContext.getToken(masterGithubId);
@@ -237,9 +232,8 @@ public class StudySteps {
         StudyUpdateRequest request = new StudyUpdateRequest(
                 updateStudyName,
                 Integer.parseInt(updateNumberOfMaximumMembers),
-                LocalDate.now().plusDays(Long.parseLong(updateStartAt)),
-                Integer.parseInt(updateTotalRoundCount),
-                updatePeriodOfRound,
+                Integer.parseInt(updateMinimumWeeks),
+                Integer.parseInt(updateMeetingDaysCountPerWeek),
                 updateIntroduction
         );
 
@@ -266,10 +260,10 @@ public class StudySteps {
     @When("{string}를 검색한다.")
     public void 검색한다(String search) {
         ExtractableResponse<Response> response = given().log().all()
-                                                        .queryParam("q", search)
+                                                        .queryParam("search", search)
                                                         .queryParam("page", 0)
                                                         .when()
-                                                        .get("/studies/recruiting/search")
+                                                        .get("/studies")
                                                         .then().log().all().extract();
 
         sharedContext.setResponse(response);

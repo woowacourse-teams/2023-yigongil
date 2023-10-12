@@ -68,21 +68,20 @@ public class Study extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private ProcessingStatus processingStatus;
 
-    private LocalDateTime startAt;
-
     private LocalDateTime endAt;
 
     @Cascade(CascadeType.PERSIST)
     @OneToMany(mappedBy = "study", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<MeetingDayOfTheWeek> meetingDaysOfTheWeek = new ArrayList<>();
 
+    @Column(nullable = false)
     private Integer minimumWeeks;
 
-    private Integer meetingDaysPerWeek;
+    @Column(nullable = false)
+    private Integer meetingDaysCountPerWeek;
 
     @Column
     private Long currentRoundNumber;
-
 
     @Cascade(CascadeType.PERSIST)
     @OneToMany(mappedBy = "study", orphanRemoval = true, fetch = FetchType.LAZY)
@@ -105,11 +104,10 @@ public class Study extends BaseEntity {
             String introduction,
             Integer numberOfMaximumMembers,
             ProcessingStatus processingStatus,
-            LocalDateTime startAt,
             LocalDateTime endAt,
             Member master,
             Integer minimumWeeks,
-            Integer meetingDaysPerWeek,
+            Integer meetingDaysCountPerWeek,
             Long currentRoundNumber,
             List<Round> rounds
     ) {
@@ -121,7 +119,6 @@ public class Study extends BaseEntity {
         this.introduction = introduction;
         this.numberOfMaximumMembers = numberOfMaximumMembers;
         this.processingStatus = processingStatus;
-        this.startAt = startAt;
         this.endAt = endAt;
         this.currentRoundNumber = currentRoundNumber;
         this.studyMembers.add(StudyMember.builder()
@@ -132,24 +129,26 @@ public class Study extends BaseEntity {
                                          .build());
         this.rounds = rounds == null ? new ArrayList<>() : rounds;
         this.minimumWeeks = minimumWeeks;
-        this.meetingDaysPerWeek = meetingDaysPerWeek;
+        this.meetingDaysCountPerWeek = meetingDaysCountPerWeek;
     }
 
     public static Study initializeStudyOf(
             String name,
             String introduction,
             Integer numberOfMaximumMembers,
-            LocalDateTime startAt,
+            Integer meetingDaysCountPerWeek,
+            Integer minimumWeeks,
             Member master
     ) {
         return Study.builder()
-                    .name(name)
-                    .numberOfMaximumMembers(numberOfMaximumMembers)
-                    .startAt(startAt)
-                    .introduction(introduction)
-                    .processingStatus(ProcessingStatus.RECRUITING)
-                    .master(master)
-                    .build();
+                           .name(name)
+                           .numberOfMaximumMembers(numberOfMaximumMembers)
+                           .meetingDaysCountPerWeek(meetingDaysCountPerWeek)
+                           .minimumWeeks(minimumWeeks)
+                           .introduction(introduction)
+                           .processingStatus(ProcessingStatus.RECRUITING)
+                           .master(master)
+                           .build();
     }
 
     private void validateNumberOfMaximumMembers(Integer numberOfMaximumMembers) {
@@ -220,7 +219,6 @@ public class Study extends BaseEntity {
         if (sizeOfCurrentMembers() == ONE_MEMBER) {
             throw new CannotStartException("스터디의 멤버가 한 명일 때는 시작할 수 없습니다.", id);
         }
-        this.startAt = startAt;
         this.processingStatus = ProcessingStatus.PROCESSING;
         initializeMeetingDaysOfTheWeek(daysOfTheWeek);
         initializeRounds(startAt.toLocalDate());
@@ -348,15 +346,23 @@ public class Study extends BaseEntity {
         return getCurrentRound().isMaster(member);
     }
 
-    public void updateInformation(Member member, String name, Integer numberOfMaximumMembers, LocalDateTime startAt, String introduction) {
+    public void updateInformation(
+            Member member,
+            String name,
+            Integer numberOfMaximumMembers,
+            String introduction,
+            Integer minimumWeeks,
+            Integer meetingDaysCountPerWeek
+    ) {
         validateName(name);
         validateNumberOfMaximumMembers(numberOfMaximumMembers);
         validateMaster(member);
         validateStudyProcessingStatus();
         this.name = name;
         this.numberOfMaximumMembers = numberOfMaximumMembers;
-        this.startAt = startAt;
         this.introduction = introduction;
+        this.minimumWeeks = minimumWeeks;
+        this.meetingDaysCountPerWeek = meetingDaysCountPerWeek;
     }
 
     private List<Round> createRoundsOf(Integer weekNumber) {

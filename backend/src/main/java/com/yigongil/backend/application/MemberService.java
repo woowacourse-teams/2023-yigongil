@@ -71,7 +71,6 @@ public class MemberService {
                 study.getId(),
                 study.getName(),
                 study.calculateAverageTier(),
-                study.getStartAt().toLocalDate(),
                 study.sizeOfCurrentMembers(),
                 study.getNumberOfMaximumMembers(),
                 studyMember.isSuccess()

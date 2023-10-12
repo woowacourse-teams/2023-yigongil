@@ -11,7 +11,6 @@ import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.fixture.StudyFixture;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +39,8 @@ class StudyTest {
 
             @BeforeEach
             void setUp() {
-                study.start(study.getMaster(), List.of(DayOfWeek.MONDAY), LOCAL_DATE_OF_MONDAY.atStartOfDay());
+                study.start(study.getMaster(), List.of(DayOfWeek.MONDAY),
+                        LOCAL_DATE_OF_MONDAY.atStartOfDay());
             }
 
             @Test
@@ -95,8 +95,9 @@ class StudyTest {
                         study.getMaster(),
                         "이름 수정",
                         5,
-                        LocalDateTime.now(),
-                        "소개"
+                        "소개",
+                        7,
+                        3
                 );
 
                 // then
@@ -105,11 +106,11 @@ class StudyTest {
             }
         }
 
-
         @Test
         void 스터디를_다음_라운드로_넘기면_현재_라운드가_다음_라운드로_변한다() {
             // given
-            study.start(study.getMaster(), List.of(DayOfWeek.TUESDAY, DayOfWeek.THURSDAY), LOCAL_DATE_OF_MONDAY.atStartOfDay());
+            study.start(study.getMaster(), List.of(DayOfWeek.TUESDAY, DayOfWeek.THURSDAY),
+                    LOCAL_DATE_OF_MONDAY.atStartOfDay());
             Round currentRound = study.getCurrentRound();
 
             // when
@@ -119,6 +120,7 @@ class StudyTest {
             // then
             assertThat(nextRound.isNextDayOfWeek(currentRound.getDayOFWeek())).isTrue();
         }
+
     }
 
     @Test
