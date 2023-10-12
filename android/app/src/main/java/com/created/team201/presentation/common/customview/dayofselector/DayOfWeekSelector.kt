@@ -143,7 +143,7 @@ class DayOfWeekSelector @JvmOverloads constructor(
     }
 
     fun getSelectedDaysSize(): Int {
-        return dayTextViews.values.filter { it.isSelected }.size
+        return dayTextViews.values.count { it.isSelected }
     }
 
     companion object {
