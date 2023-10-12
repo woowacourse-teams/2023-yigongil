@@ -136,8 +136,8 @@ public class Study extends BaseEntity {
             String name,
             String introduction,
             Integer numberOfMaximumMembers,
-            Integer meetingDaysCountPerWeek,
             Integer minimumWeeks,
+            Integer meetingDaysCountPerWeek,
             Member master
     ) {
         return Study.builder()

@@ -39,19 +39,19 @@ public class StudySteps {
 
     @Given("{string}가 제목-{string}, 정원-{string}명, 최소 주차-{string}주, 주당 진행 횟수-{string}회, 소개-{string}로 스터디를 개설한다.")
     public void 스터디를_개설한다(
-            String masterGithubId,
-            String name,
-            String numberOfMaximumMembers,
-            String minimumWeeks,
-            String meetingDaysCountPerWeek,
-            String introduction
+        String masterGithubId,
+        String name,
+        String numberOfMaximumMembers,
+        String minimumWeeks,
+        String meetingDaysCountPerWeek,
+        String introduction
     ) throws JsonProcessingException {
         StudyUpdateRequest request = new StudyUpdateRequest(
-                name,
-                Integer.parseInt(numberOfMaximumMembers),
-                Integer.parseInt(minimumWeeks),
-                Integer.parseInt(meetingDaysCountPerWeek),
-                introduction
+            name,
+            Integer.parseInt(numberOfMaximumMembers),
+            Integer.parseInt(minimumWeeks),
+            Integer.parseInt(meetingDaysCountPerWeek),
+            introduction
         );
         String token = sharedContext.getToken(masterGithubId);
 
@@ -91,9 +91,9 @@ public class StudySteps {
         Predicate<StudyListItemResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
 
         assertAll(
-                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(studyInfoRespons).isNotEmpty(),
-                () -> assertThat(studyInfoRespons).allMatch(isRecruitingPredicate)
+            () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+            () -> assertThat(studyInfoRespons).isNotEmpty(),
+            () -> assertThat(studyInfoRespons).allMatch(isRecruitingPredicate)
         );
     }
 
@@ -108,16 +108,23 @@ public class StudySteps {
         sharedContext.setResponse(response);
     }
 
-    @Then("스터디 상세조회 결과가 제목-{string}, 정원-{string}로 조회된다.")
-    public void 스터디상세_조회에서_해당_스터디를_확인할_수_있다(String studyName, String maximumNumber) {
+    @Then("스터디 상세조회 결과가 제목-{string}, 정원-{int}, 최소 주차-{int}주, 주당 진행 횟수-{int}회, 소개-{string}로 조회된다.")
+    public void 스터디상세_조회에서_해당_스터디를_확인할_수_있다(
+        String studyName,
+        int maximumNumber,
+        int minimumWeeks,
+        int meetingDaysCountPerWeek,
+        String introduction
+    ) {
         StudyDetailResponse response = sharedContext.getResponse()
                                                     .as(StudyDetailResponse.class);
 
         assertAll(
-                () -> assertThat(response.name()).isEqualTo(studyName),
-                () -> assertThat(
-                        response.numberOfMaximumMembers()).isEqualTo(Integer.parseInt(maximumNumber)
-                )
+            () -> assertThat(response.name()).isEqualTo(studyName),
+            () -> assertThat(response.numberOfMaximumMembers()).isEqualTo(maximumNumber),
+            () -> assertThat(response.introduction()).isEqualTo(introduction),
+            () -> assertThat(response.meetingDaysCountPerWeek()).isEqualTo(meetingDaysCountPerWeek),
+            () -> assertThat(response.minimumWeeks()).isEqualTo(minimumWeeks)
         );
     }
 
@@ -131,9 +138,9 @@ public class StudySteps {
         Predicate<StudyListItemResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
 
         assertAll(
-                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
-                () -> assertThat(studyInfoRespons).allMatch(isRecruitingPredicate),
-                () -> assertThat(studyInfoRespons).hasSize(acceptedCount)
+            () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+            () -> assertThat(studyInfoRespons).allMatch(isRecruitingPredicate),
+            () -> assertThat(studyInfoRespons).hasSize(acceptedCount)
         );
     }
 
@@ -145,8 +152,8 @@ public class StudySteps {
         Long masterId = sharedContext.getId(masterGithubId);
 
         assertAll(
-                () -> assertThat(round.masterId()).isEqualTo(masterId),
-                () -> assertThat(round.id()).isEqualTo(sharedContext.getParameter("roundId"))
+            () -> assertThat(round.masterId()).isEqualTo(masterId),
+            () -> assertThat(round.id()).isEqualTo(sharedContext.getParameter("roundId"))
         );
     }
 
@@ -218,23 +225,23 @@ public class StudySteps {
 
     @Given("{string}가 {string} 스터디의 정보를 제목-{string}, 정원-{string}명, 최소 주차-{string}주, 주당 진행 횟수-{string}회, 소개-{string}로 수정한다.")
     public void 스터디_정보_수정(
-            String masterGithubId,
-            String originalStudyName,
-            String updateStudyName,
-            String updateNumberOfMaximumMembers,
-            String updateMinimumWeeks,
-            String updateMeetingDaysCountPerWeek,
-            String updateIntroduction
+        String masterGithubId,
+        String originalStudyName,
+        String updateStudyName,
+        String updateNumberOfMaximumMembers,
+        String updateMinimumWeeks,
+        String updateMeetingDaysCountPerWeek,
+        String updateIntroduction
     ) {
         String token = sharedContext.getToken(masterGithubId);
         String studyId = (String) sharedContext.getParameter(originalStudyName);
 
         StudyUpdateRequest request = new StudyUpdateRequest(
-                updateStudyName,
-                Integer.parseInt(updateNumberOfMaximumMembers),
-                Integer.parseInt(updateMinimumWeeks),
-                Integer.parseInt(updateMeetingDaysCountPerWeek),
-                updateIntroduction
+            updateStudyName,
+            Integer.parseInt(updateNumberOfMaximumMembers),
+            Integer.parseInt(updateMinimumWeeks),
+            Integer.parseInt(updateMeetingDaysCountPerWeek),
+            updateIntroduction
         );
 
         given().log().all()
