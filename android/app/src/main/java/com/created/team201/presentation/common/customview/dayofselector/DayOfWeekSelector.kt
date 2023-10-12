@@ -2,9 +2,11 @@ package com.created.team201.presentation.common.customview.dayofselector
 
 import android.content.Context
 import android.content.res.TypedArray
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.children
@@ -57,24 +59,22 @@ class DayOfWeekSelector @JvmOverloads constructor(
 
         if (canMultiSelect) {
             dayTextViews.values.forEach {
-                it.background = ResourcesCompat.getDrawable(
-                    resources,
-                    R.drawable.bg_day_of_week_selector_multi_select,
-                    null,
-                )
+                it.background = getBackground(R.drawable.bg_day_of_week_selector_multi_select)
             }
         } else {
             dayTextViews.values.forEach {
-                it.background = ResourcesCompat.getDrawable(
-                    resources,
-                    R.drawable.bg_day_of_week_selector_single_select,
-                    null,
-                )
+                it.background = getBackground(R.drawable.bg_day_of_week_selector_single_select)
             }
         }
 
         typedArray.recycle()
     }
+
+    private fun getBackground(@DrawableRes id: Int): Drawable? = ResourcesCompat.getDrawable(
+        resources,
+        id,
+        null,
+    )
 
     private fun setupDayClickListeners() {
         dayTextViews.values.forEach { dayTextView ->
