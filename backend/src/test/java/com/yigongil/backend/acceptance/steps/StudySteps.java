@@ -216,12 +216,14 @@ public class StudySteps {
         sharedContext.setResponse(response);
     }
 
-    @Given("{string}가 {string} 스터디의 정보를 제목-{string}, 정원-{string}명, 예상시작일-{string}일 뒤, 총 회차-{string}회, 주기-{string}, 소개-{string}로 수정한다.")
+    @Given("{string}가 {string} 스터디의 정보를 제목-{string}, 정원-{string}명, 최소 주차-{string}주, 주당 진행 횟수-{string}회, 소개-{string}로 수정한다.")
     public void 스터디_정보_수정(
             String masterGithubId,
             String originalStudyName,
             String updateStudyName,
             String updateNumberOfMaximumMembers,
+            String updateMinimumWeeks,
+            String updateMeetingDaysCountPerWeek,
             String updateIntroduction
     ) {
         String token = sharedContext.getToken(masterGithubId);
@@ -230,8 +232,8 @@ public class StudySteps {
         StudyUpdateRequest request = new StudyUpdateRequest(
                 updateStudyName,
                 Integer.parseInt(updateNumberOfMaximumMembers),
-                7,
-                3,
+                Integer.parseInt(updateMinimumWeeks),
+                Integer.parseInt(updateMeetingDaysCountPerWeek),
                 updateIntroduction
         );
 

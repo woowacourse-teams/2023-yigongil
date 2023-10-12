@@ -1,9 +1,5 @@
 package com.yigongil.backend.fixture;
 
-import static com.yigongil.backend.fixture.RoundFixture.아이디없는_라운드;
-import static com.yigongil.backend.fixture.RoundFixture.아이디없는_라운드2;
-import static com.yigongil.backend.fixture.RoundFixture.아이디없는_라운드3;
-
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.ProcessingStatus;
@@ -46,7 +42,6 @@ public enum StudyFixture {
                     .master(MemberFixture.김진우.toMember())
                     .processingStatus(processingStatus)
                     .numberOfMaximumMembers(numberOfMaximumMember)
-                    .rounds(List.of(아이디없는_라운드.toRound(), 아이디없는_라운드2.toRound(), 아이디없는_라운드3.toRound()))
                     .meetingDaysCountPerWeek(meetingDaysPerWeek)
                     .minimumWeeks(minimumWeeks)
                     .build();
