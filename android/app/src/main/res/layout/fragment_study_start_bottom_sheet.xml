@@ -54,10 +54,12 @@
 
         <com.created.team201.presentation.common.customview.dayofselector.DayOfWeekSelector
             android:id="@+id/dows_study_start_bottom_sheet_day_of_week_selector"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginTop="24dp"
             app:canMultipleSelect="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_study_start_bottom_sheet_title" />
 
         <ImageView
