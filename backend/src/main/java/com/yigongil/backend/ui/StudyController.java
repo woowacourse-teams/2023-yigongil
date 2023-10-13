@@ -199,6 +199,14 @@ public class StudyController implements StudyApi {
     ) {
         List<StudyListItemResponse> response = studyService.findAppliedStudies(member, page, search);
         return ResponseEntity.ok(response);
+
+    @PatchMapping("/{studyId}/end")
+    public ResponseEntity<Void> endStudy(
+            @Authorization Member member,
+            @PathVariable Long studyId
+    ) {
+        studyService.finish(member, studyId);
+        return ResponseEntity.ok().build();
     }
 }
 

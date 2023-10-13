@@ -1,9 +1,7 @@
 package com.yigongil.backend.response;
 
-import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.Study;
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.util.List;
 
 public record StudyDetailResponse(
@@ -20,16 +18,16 @@ public record StudyDetailResponse(
         @Schema(example = "1")
         Long studyMasterId,
         @Schema(example = "1")
-        Integer currentRound,
+        Integer meetingDaysCountPerWeek,
+        @Schema(example = "7")
+        Integer minimumWeeks,
         @Schema(example = "코틀린으로 다 뿌수는 스터디입니다")
         String introduction,
-        List<StudyMemberResponse> members,
-        List<RoundNumberResponse> rounds
+        List<StudyMemberResponse> members
 ) {
 
     public static StudyDetailResponse of(
             Study study,
-            List<Round> rounds,
             List<StudyMemberResponse> studyMemberResponses
     ) {
         return new StudyDetailResponse(
@@ -39,10 +37,10 @@ public record StudyDetailResponse(
                 study.sizeOfCurrentMembers(),
                 study.getNumberOfMaximumMembers(),
                 study.getMaster().getId(),
-                study.getCurrentRound().getId().intValue(), // TODO: 2021/08/12 currentRound 무슨 정보 줄 지 결정
+                study.getMeetingDaysCountPerWeek(),
+                study.getMinimumWeeks(),
                 study.getIntroduction(),
-                studyMemberResponses,
-                RoundNumberResponse.from(rounds) // TODO: 2021/08/12 이건뭐지
+                studyMemberResponses
         );
     }
 }

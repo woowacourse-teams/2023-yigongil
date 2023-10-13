@@ -9,6 +9,7 @@ import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.domain.studymember.StudyResult;
 import com.yigongil.backend.exception.ApplicantAlreadyExistException;
+import com.yigongil.backend.exception.CannotEndException;
 import com.yigongil.backend.exception.CannotStartException;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidNumberOfMaximumStudyMember;
@@ -136,19 +137,19 @@ public class Study extends BaseEntity {
             String name,
             String introduction,
             Integer numberOfMaximumMembers,
-            Integer meetingDaysCountPerWeek,
             Integer minimumWeeks,
+            Integer meetingDaysCountPerWeek,
             Member master
     ) {
         return Study.builder()
-                           .name(name)
-                           .numberOfMaximumMembers(numberOfMaximumMembers)
-                           .meetingDaysCountPerWeek(meetingDaysCountPerWeek)
-                           .minimumWeeks(minimumWeeks)
-                           .introduction(introduction)
-                           .processingStatus(ProcessingStatus.RECRUITING)
-                           .master(master)
-                           .build();
+                    .name(name)
+                    .numberOfMaximumMembers(numberOfMaximumMembers)
+                    .meetingDaysCountPerWeek(meetingDaysCountPerWeek)
+                    .minimumWeeks(minimumWeeks)
+                    .introduction(introduction)
+                    .processingStatus(ProcessingStatus.RECRUITING)
+                    .master(master)
+                    .build();
     }
 
     private void validateNumberOfMaximumMembers(Integer numberOfMaximumMembers) {
@@ -294,8 +295,18 @@ public class Study extends BaseEntity {
 
     public void finishStudy(Member master) {
         validateMaster(master);
+        validateStudyCanFinish();
         studyMembers.forEach(StudyMember::completeSuccessfully);
         this.processingStatus = ProcessingStatus.END;
+    }
+
+    private void validateStudyCanFinish() {
+        if (isEnd()) {
+            throw new CannotEndException("이미 종료된 스터디입니다.", String.valueOf(id));
+        }
+        if (getCurrentRound().isBeforeOrSame(minimumWeeks)) {
+            throw new CannotEndException("최소 진행 주차를 채우지 못했습니다.", String.valueOf(id));
+        }
     }
 
     public Member getMaster() {

@@ -219,6 +219,10 @@ public class Round extends BaseEntity {
         return meetingDayOfTheWeek.getDayOfWeek();
     }
 
+    public boolean isBeforeOrSame(Integer minimumWeeks) {
+        return weekNumber <= minimumWeeks;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
