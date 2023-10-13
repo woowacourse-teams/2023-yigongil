@@ -330,4 +330,16 @@ public class StudySteps {
 
         sharedContext.setResponse(response);
     }
+
+    @When("스터디 목록을 {string} 검색어와 조회한다.")
+    public void 스터디_목록을_검색한다(String search) {
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .param("search", search)
+                                                        .when()
+                                                        .get("/studies")
+                                                        .then().log().all()
+                                                        .extract();
+
+        sharedContext.setResponse(response);
+    }
 }

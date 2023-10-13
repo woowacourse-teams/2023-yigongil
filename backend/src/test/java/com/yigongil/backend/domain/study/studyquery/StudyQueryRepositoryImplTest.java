@@ -3,6 +3,7 @@ package com.yigongil.backend.domain.study.studyquery;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.yigongil.backend.config.JpaConfig;
+import com.yigongil.backend.config.QueryFactoryConfig;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.domain.study.PageStrategy;
@@ -20,7 +21,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Slice;
 
-@Import(value = {JpaConfig.class, StudyQueryFactory.class})
+@Import(value = {JpaConfig.class, QueryFactoryConfig.class})
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @DataJpaTest
 class StudyQueryRepositoryImplTest {
