@@ -125,8 +125,8 @@ public class FeedSteps {
         sharedContext.setResponse(response);
     }
 
-    @Then("인증이 {int} 개 올라왔다.")
-    public void 인증_개수_검증(int count) {
+    @Then("{int}주차의 인증이 {int} 개 올라왔다.")
+    public void 인증_개수_검증(int weekNumber, int count) {
         MembersCertificationResponse response = sharedContext.getResponse().as(MembersCertificationResponse.class);
 
         long result = response.others().stream()
@@ -138,5 +138,6 @@ public class FeedSteps {
         }
 
         assertThat(result).isEqualTo(count);
+        assertThat(response.weekNumber()).isEqualTo(weekNumber);
     }
 }

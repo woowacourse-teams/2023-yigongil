@@ -1,7 +1,6 @@
 package com.yigongil.backend.application;
 
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.study.PageStrategy;
 import com.yigongil.backend.domain.study.ProcessingStatus;
@@ -116,12 +115,9 @@ public class StudyService {
     public StudyDetailResponse findStudyDetailByStudyId(Long studyId) {
         Study study = findStudyById(studyId);
 
-        List<Round> rounds = study.getRounds();
-        Round currentRound = study.getCurrentRound();
-
         List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRoleNot(studyId, Role.APPLICANT);
 
-        return StudyDetailResponse.of(study, rounds, createStudyMemberResponses(studyMembers));
+        return StudyDetailResponse.of(study, createStudyMemberResponses(studyMembers));
     }
 
     @Transactional
@@ -274,7 +270,7 @@ public class StudyService {
     public MembersCertificationResponse findAllMembersCertification(Member member, Long studyId) {
         Study study = findStudyById(studyId);
         final List<RoundOfMember> roundOfMembers = study.getCurrentRoundOfMembers();
-        return MembersCertificationResponse.of(study.getName(), member, roundOfMembers);
+        return MembersCertificationResponse.of(study.getName(), study.getCurrentRound().getWeekNumber(), member, roundOfMembers);
     }
 
     public CertificationResponse findCertification(Long certificationId) {
