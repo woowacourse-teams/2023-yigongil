@@ -291,7 +291,8 @@ public class StudyService {
         return studies.get()
                       .map(StudyListItemResponse::from)
                       .toList();
-      
+    }
+
     @Transactional
     public void finish(Member member, Long studyId) {
         Study study = findStudyById(studyId);

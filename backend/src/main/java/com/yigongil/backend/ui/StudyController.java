@@ -17,6 +17,10 @@ import com.yigongil.backend.response.StudyListItemResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.response.StudyMemberRoleResponse;
 import com.yigongil.backend.ui.doc.StudyApi;
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,11 +32,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
-import java.net.URI;
-import java.util.List;
-import java.util.Optional;
 
 @RequestMapping("/studies")
 @RestController
@@ -199,6 +198,7 @@ public class StudyController implements StudyApi {
     ) {
         List<StudyListItemResponse> response = studyService.findAppliedStudies(member, page, search);
         return ResponseEntity.ok(response);
+    }
 
     @PatchMapping("/{studyId}/end")
     public ResponseEntity<Void> endStudy(
