@@ -6,10 +6,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yigongil.backend.domain.round.RoundStatus;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.StudyStartRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
-import com.yigongil.backend.response.RoundNumberResponse;
+import com.yigongil.backend.response.MemberCertificationResponse;
+import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyListItemResponse;
@@ -21,7 +23,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -39,19 +41,19 @@ public class StudySteps {
 
     @Given("{string}가 제목-{string}, 정원-{string}명, 최소 주차-{string}주, 주당 진행 횟수-{string}회, 소개-{string}로 스터디를 개설한다.")
     public void 스터디를_개설한다(
-        String masterGithubId,
-        String name,
-        String numberOfMaximumMembers,
-        String minimumWeeks,
-        String meetingDaysCountPerWeek,
-        String introduction
+            String masterGithubId,
+            String name,
+            String numberOfMaximumMembers,
+            String minimumWeeks,
+            String meetingDaysCountPerWeek,
+            String introduction
     ) throws JsonProcessingException {
         StudyUpdateRequest request = new StudyUpdateRequest(
-            name,
-            Integer.parseInt(numberOfMaximumMembers),
-            Integer.parseInt(minimumWeeks),
-            Integer.parseInt(meetingDaysCountPerWeek),
-            introduction
+                name,
+                Integer.parseInt(numberOfMaximumMembers),
+                Integer.parseInt(minimumWeeks),
+                Integer.parseInt(meetingDaysCountPerWeek),
+                introduction
         );
         String token = sharedContext.getToken(masterGithubId);
 
@@ -91,9 +93,9 @@ public class StudySteps {
         Predicate<StudyListItemResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
 
         assertAll(
-            () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
-            () -> assertThat(studyInfoRespons).isNotEmpty(),
-            () -> assertThat(studyInfoRespons).allMatch(isRecruitingPredicate)
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(studyInfoRespons).isNotEmpty(),
+                () -> assertThat(studyInfoRespons).allMatch(isRecruitingPredicate)
         );
     }
 
@@ -110,21 +112,21 @@ public class StudySteps {
 
     @Then("스터디 상세조회 결과가 제목-{string}, 정원-{int}, 최소 주차-{int}주, 주당 진행 횟수-{int}회, 소개-{string}로 조회된다.")
     public void 스터디상세_조회에서_해당_스터디를_확인할_수_있다(
-        String studyName,
-        int maximumNumber,
-        int minimumWeeks,
-        int meetingDaysCountPerWeek,
-        String introduction
+            String studyName,
+            int maximumNumber,
+            int minimumWeeks,
+            int meetingDaysCountPerWeek,
+            String introduction
     ) {
         StudyDetailResponse response = sharedContext.getResponse()
                                                     .as(StudyDetailResponse.class);
 
         assertAll(
-            () -> assertThat(response.name()).isEqualTo(studyName),
-            () -> assertThat(response.numberOfMaximumMembers()).isEqualTo(maximumNumber),
-            () -> assertThat(response.introduction()).isEqualTo(introduction),
-            () -> assertThat(response.meetingDaysCountPerWeek()).isEqualTo(meetingDaysCountPerWeek),
-            () -> assertThat(response.minimumWeeks()).isEqualTo(minimumWeeks)
+                () -> assertThat(response.name()).isEqualTo(studyName),
+                () -> assertThat(response.numberOfMaximumMembers()).isEqualTo(maximumNumber),
+                () -> assertThat(response.introduction()).isEqualTo(introduction),
+                () -> assertThat(response.meetingDaysCountPerWeek()).isEqualTo(meetingDaysCountPerWeek),
+                () -> assertThat(response.minimumWeeks()).isEqualTo(minimumWeeks)
         );
     }
 
@@ -138,60 +140,71 @@ public class StudySteps {
         Predicate<StudyListItemResponse> isRecruitingPredicate = recruitingStudyResponse -> recruitingStudyResponse.processingStatus() == ProcessingStatus.RECRUITING.getCode();
 
         assertAll(
-            () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
-            () -> assertThat(studyInfoRespons).allMatch(isRecruitingPredicate),
-            () -> assertThat(studyInfoRespons).hasSize(acceptedCount)
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(studyInfoRespons).allMatch(isRecruitingPredicate),
+                () -> assertThat(studyInfoRespons).hasSize(acceptedCount)
         );
     }
 
-    @Then("스터디 장이 {string}이고 해당 회차 인것을 확인할 수 있다.")
-    public void 스터디의_회차를_조회할_수_있다(String masterGithubId) {
-        RoundResponse round = sharedContext.getResponse()
-                                           .as(RoundResponse.class);
-
-        Long masterId = sharedContext.getId(masterGithubId);
-
-        assertAll(
-            () -> assertThat(round.masterId()).isEqualTo(masterId),
-            () -> assertThat(round.id()).isEqualTo(sharedContext.getParameter("roundId"))
-        );
-    }
-
-
-    @When("{string}가 이름이 {string}인 스터디의 {int} 회차를 찾는다.")
-    public void 스터디_회차_조회(String memberGithubId, String studyName, int roundNumber) {
+    @When("{string}가 이름이 {string}인 스터디의 이번 회차 인증 정보를 조회한다.")
+    public void 스터디_인증_정보_조회(String memberGithubId, String studyName) {
         String token = sharedContext.getToken(memberGithubId);
         String studyId = (String) sharedContext.getParameter(studyName);
 
-        StudyDetailResponse studyDetailResponse = given().log().all()
-                                                         .header(HttpHeaders.AUTHORIZATION,
-                                                                 token)
-                                                         .when()
-                                                         .get("/studies/" + studyId)
-                                                         .then().log().all()
-                                                         .extract()
-                                                         .as(StudyDetailResponse.class);
-
-        // TODO: 10/12/23 투두 생성, 주별 머스트두 생성 기능 생기면 맞게 수정하기
-        Long roundId = 1L;
-//        Long roundId = studyDetailResponse.rounds()
-//                                          .stream()
-//                                          .filter(round -> Objects.equals(round.number(),
-//                                                  roundNumber))
-//                                          .findFirst()
-//                                          .map(RoundNumberResponse::id)
-//                                          .get();
-
-        sharedContext.setParameter("roundId", roundId);
-
-        ExtractableResponse<Response> response = given()
-                .header(HttpHeaders.AUTHORIZATION, token)
-                .when()
-                .get("/studies/" + studyId + "/rounds/" + roundId)
-                .then().log().all()
-                .extract();
-
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .header(HttpHeaders.AUTHORIZATION,
+                                                                token)
+                                                        .when()
+                                                        .get("/studies/" + studyId + "/certifications")
+                                                        .then().log().all()
+                                                        .extract();
         sharedContext.setResponse(response);
+    }
+
+    @When("{string}가 이름이 {string}인 스터디의 {int} 주차를 조회한다.")
+    public void 스터디_주차_조회(String memberGithubId, String studyName, int weekNumber) {
+        String token = sharedContext.getToken(memberGithubId);
+        String studyId = (String) sharedContext.getParameter(studyName);
+
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .header(HttpHeaders.AUTHORIZATION, token)
+                                                        .when()
+                                                        .get("/studies/" + studyId + "/rounds?weekNumber=" + weekNumber)
+                                                        .then().log().all()
+                                                        .extract();
+        sharedContext.setResponse(response);
+    }
+
+    @When("{string}가 이름이 {string}인 스터디의 현재 주차를 통해 현재 회차를 찾는다.")
+    public void 스터디_회차_조회(String memberGithubId, String studyName) {
+        String token = sharedContext.getToken(memberGithubId);
+        String studyId = (String) sharedContext.getParameter(studyName);
+
+        MembersCertificationResponse membersCertificationResponse = given().log().all()
+                                                                           .header(HttpHeaders.AUTHORIZATION,
+                                                                                   token)
+                                                                           .when()
+                                                                           .get("/studies/" + studyId + "/certifications")
+                                                                           .then().log().all()
+                                                                           .extract()
+                                                                           .as(MembersCertificationResponse.class);
+
+        List<RoundResponse> roundResponses = given().log().all()
+                                                    .header(HttpHeaders.AUTHORIZATION, token)
+                                                    .when()
+                                                    .get("/studies/" + studyId + "/rounds?weekNumber=" + membersCertificationResponse.upcomingRound().weekNumber())
+                                                    .then().log().all()
+                                                    .extract()
+                                                    .response()
+                                                    .jsonPath().getList(".", RoundResponse.class);
+
+        RoundResponse round = roundResponses.stream()
+                                            .filter(roundResponse -> roundResponse.status() == RoundStatus.IN_PROGRESS)
+                                            .findAny()
+                                            .get();
+
+        sharedContext.setParameter("round", round);
+        sharedContext.setParameter("roundId", round.id());
     }
 
     @Given("{string}가 이름이 {string}인 스터디를 {string}에 진행되도록 하여 시작한다.")
@@ -227,23 +240,23 @@ public class StudySteps {
 
     @Given("{string}가 {string} 스터디의 정보를 제목-{string}, 정원-{string}명, 최소 주차-{string}주, 주당 진행 횟수-{string}회, 소개-{string}로 수정한다.")
     public void 스터디_정보_수정(
-        String masterGithubId,
-        String originalStudyName,
-        String updateStudyName,
-        String updateNumberOfMaximumMembers,
-        String updateMinimumWeeks,
-        String updateMeetingDaysCountPerWeek,
-        String updateIntroduction
+            String masterGithubId,
+            String originalStudyName,
+            String updateStudyName,
+            String updateNumberOfMaximumMembers,
+            String updateMinimumWeeks,
+            String updateMeetingDaysCountPerWeek,
+            String updateIntroduction
     ) {
         String token = sharedContext.getToken(masterGithubId);
         String studyId = (String) sharedContext.getParameter(originalStudyName);
 
         StudyUpdateRequest request = new StudyUpdateRequest(
-            updateStudyName,
-            Integer.parseInt(updateNumberOfMaximumMembers),
-            Integer.parseInt(updateMinimumWeeks),
-            Integer.parseInt(updateMeetingDaysCountPerWeek),
-            updateIntroduction
+                updateStudyName,
+                Integer.parseInt(updateNumberOfMaximumMembers),
+                Integer.parseInt(updateMinimumWeeks),
+                Integer.parseInt(updateMeetingDaysCountPerWeek),
+                updateIntroduction
         );
 
         given().log().all()
@@ -301,8 +314,29 @@ public class StudySteps {
 
     @When("{string}가 {string} 스터디를 종료한다.")
     public void 스터디_종료(String githubId, String studyName) {
-        // TODO: 2021/08/12 스터디 종료
+        String token = sharedContext.getToken(githubId);
+        String studyId = (String) sharedContext.getParameter(studyName);
+
+        given().log().all()
+               .header(HttpHeaders.AUTHORIZATION, token)
+               .when()
+               .patch("/studies/{studyId}/end", studyId)
+               .then().log().all();
     }
+
+    @Then("{string}가 {string} 스터디를 종료할 수 없다.")
+    public void 스터디_종료_실패(String githubId, String studyName) {
+        String token = sharedContext.getToken(githubId);
+        String studyId = (String) sharedContext.getParameter(studyName);
+
+        given().log().all()
+               .header(HttpHeaders.AUTHORIZATION, token)
+               .when()
+               .patch("/studies/{studyId}/end", studyId)
+               .then().log().all()
+               .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
 
     @When("{string}이 지원한 스터디 목록을 조회한다.")
     public void 지원한_스터디_목록을_조회한다(String githubId) {
@@ -350,5 +384,44 @@ public class StudySteps {
                                                         .extract();
 
         sharedContext.setResponse(response);
+    }
+
+    @Then("현재 주차가 존재하고 {string}에 종료된다.")
+    public void 현재_주차_종료일을_검증한다(String dayOfWeek) {
+        ExtractableResponse<Response> response = sharedContext.getResponse();
+        List<RoundResponse> roundResponses = response.response().jsonPath().getList(".", RoundResponse.class);
+        Optional<RoundResponse> upcomingRound = roundResponses.stream()
+                                                              .filter(roundResponse -> roundResponse.status() == RoundStatus.IN_PROGRESS)
+                                                              .findAny();
+
+        assertAll(
+                () -> assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(upcomingRound).isPresent(),
+                () -> assertThat(upcomingRound.get().dayOfWeek().name()).isEqualTo(dayOfWeek)
+        );
+    }
+
+    @Then("{string}가 이번 회차를 완료했다.")
+    public void 이번_회차_완료_검증(String nickname) {
+        ExtractableResponse<Response> extractableResponse = sharedContext.getResponse();
+        MembersCertificationResponse response = extractableResponse.as(MembersCertificationResponse.class);
+        MemberCertificationResponse myCertificationResponse = response.me();
+        Optional<MemberCertificationResponse> memberCertificationResponse = response.others()
+                                                                                    .stream()
+                                                                                    .filter(member -> member.nickname().equals(nickname))
+                                                                                    .findAny();
+        MemberCertificationResponse certificationResponse = memberCertificationResponse.orElse(myCertificationResponse);
+
+        assertAll(
+                () -> assertThat(extractableResponse.statusCode()).isEqualTo(HttpStatus.OK.value()),
+                () -> assertThat(certificationResponse.isCertified()).isTrue()
+        );
+    }
+
+    @Then("현재 회차의 필수 투두가 {string}임을 확인할 수 있다.")
+    public void 현재_주차_머스트두_검증(String content) {
+        RoundResponse upcomingRound = (RoundResponse) sharedContext.getParameter("round");
+
+        assertThat(upcomingRound.mustDo()).isEqualTo(content);
     }
 }

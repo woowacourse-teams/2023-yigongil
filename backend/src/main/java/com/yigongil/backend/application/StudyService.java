@@ -1,6 +1,8 @@
 package com.yigongil.backend.application;
 
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.round.Round;
+import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.study.PageStrategy;
 import com.yigongil.backend.domain.study.ProcessingStatus;
@@ -20,6 +22,7 @@ import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
 import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
+import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyListItemResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
@@ -41,17 +44,19 @@ public class StudyService {
     private final StudyMemberRepository studyMemberRepository;
     private final CertificationService certificationService;
     private final FeedService feedService;
+    private final RoundRepository roundRepository;
 
     public StudyService(
             StudyRepository studyRepository,
             StudyMemberRepository studyMemberRepository,
             CertificationService certificationService,
-            FeedService feedService
-    ) {
+            FeedService feedService,
+            final RoundRepository roundRepository) {
         this.studyRepository = studyRepository;
         this.studyMemberRepository = studyMemberRepository;
         this.certificationService = certificationService;
         this.feedService = feedService;
+        this.roundRepository = roundRepository;
     }
 
     @Transactional
@@ -264,7 +269,7 @@ public class StudyService {
     public MembersCertificationResponse findAllMembersCertification(Member member, Long studyId) {
         Study study = findStudyById(studyId);
         final List<RoundOfMember> roundOfMembers = study.getCurrentRoundOfMembers();
-        return MembersCertificationResponse.of(study.getName(), study.getCurrentRound().getWeekNumber(), member, roundOfMembers);
+        return MembersCertificationResponse.of(study.getName(), study.getCurrentRound(), member, roundOfMembers);
     }
 
     @Transactional(readOnly = true)
@@ -297,5 +302,13 @@ public class StudyService {
     public void finish(Member member, Long studyId) {
         Study study = findStudyById(studyId);
         study.finishStudy(member);
+    }
+
+    @Transactional(readOnly = true)
+    public List<RoundResponse> findRoundDetailsOfWeek(Long id, Integer weekNumber) {
+        List<Round> roundsOfWeek = roundRepository.findAllByStudyIdAndWeekNumber(id, weekNumber);
+        return roundsOfWeek.stream()
+                           .map(RoundResponse::from)
+                           .toList();
     }
 }

@@ -44,8 +44,12 @@ public class Round extends BaseEntity {
     @Id
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_id", nullable = false)
+    private Study study;
+
     @Column(length = MAX_TODO_CONTENT_LENGTH)
-    private String necessaryToDoContent;
+    private String mustDo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "master_id", nullable = false)
@@ -73,14 +77,16 @@ public class Round extends BaseEntity {
     @Builder
     public Round(
             Long id,
-            String necessaryToDoContent,
+            Study study,
+            String mustDo,
             Member master,
             List<RoundOfMember> roundOfMembers,
             MeetingDayOfTheWeek meetingDayOfTheWeek,
             Integer weekNumber
     ) {
         this.id = id;
-        this.necessaryToDoContent = necessaryToDoContent;
+        this.study = study;
+        this.mustDo = mustDo;
         this.master = master;
         this.roundOfMembers = roundOfMembers == null ? new ArrayList<>() : roundOfMembers;
         this.meetingDayOfTheWeek = meetingDayOfTheWeek;
@@ -89,6 +95,7 @@ public class Round extends BaseEntity {
 
     public static Round of(MeetingDayOfTheWeek meetingDayOfTheWeek, Study study, Integer weekNumber) {
         return Round.builder()
+                    .study(study)
                     .meetingDayOfTheWeek(meetingDayOfTheWeek)
                     .weekNumber(weekNumber)
                     .master(study.getMaster())
@@ -99,10 +106,10 @@ public class Round extends BaseEntity {
     public void createNecessaryTodo(Member author, String content) {
         validateTodoLength(content);
         validateMaster(author);
-        if (necessaryToDoContent != null) {
-            throw new NecessaryTodoAlreadyExistException("필수 투두가 이미 존재합니다.", necessaryToDoContent);
+        if (mustDo != null) {
+            throw new NecessaryTodoAlreadyExistException("필수 투두가 이미 존재합니다.", mustDo);
         }
-        necessaryToDoContent = content;
+        mustDo = content;
     }
 
     public void validateMaster(Member member) {
@@ -126,7 +133,7 @@ public class Round extends BaseEntity {
     }
 
     public void completeRound(Member member) {
-        if (necessaryToDoContent == null) {
+        if (mustDo == null) {
             throw new NecessaryTodoNotExistException("필수 투두가 생성되지 않았습니다.", String.valueOf(id));
         }
         findRoundOfMemberBy(member).completeRound();
@@ -137,7 +144,7 @@ public class Round extends BaseEntity {
     }
 
     public void updateNecessaryTodoIsDone(Member member, Boolean isDone) {
-        if (necessaryToDoContent == null) {
+        if (mustDo == null) {
             throw new NecessaryTodoNotExistException("필수 투두가 생성되지 않았습니다.", String.valueOf(id));
         }
         findRoundOfMemberBy(member).updateNecessaryTodoIsDone(isDone);
@@ -151,7 +158,7 @@ public class Round extends BaseEntity {
         if (!master.equals(member)) {
             throw new NotStudyMasterException("필수 투두를 수정할 권한이 없습니다.", String.valueOf(member.getNickname()));
         }
-        necessaryToDoContent = content;
+        mustDo = content;
     }
 
     public boolean isEndAt(LocalDate date) {
@@ -215,7 +222,7 @@ public class Round extends BaseEntity {
         return gap;
     }
 
-    public DayOfWeek getDayOFWeek() {
+    public DayOfWeek getDayOfWeek() {
         return meetingDayOfTheWeek.getDayOfWeek();
     }
 

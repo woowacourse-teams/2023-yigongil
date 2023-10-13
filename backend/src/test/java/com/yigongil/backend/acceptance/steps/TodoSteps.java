@@ -7,8 +7,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.request.TodoCreateRequest;
 import com.yigongil.backend.request.TodoUpdateRequest;
-import com.yigongil.backend.response.ProgressRateResponse;
-import com.yigongil.backend.response.RoundResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -59,20 +57,6 @@ public class TodoSteps {
         sharedContext.setResponse(response);
     }
 
-    @Then("필수 투두가 {string}임을 확인할 수 있다.")
-    public void 필수_투두를_확인할_수_있다(String content) {
-        RoundResponse response = sharedContext.getResponse().as(RoundResponse.class);
-
-        assertThat(response.necessaryTodo().content()).isEqualTo(content);
-    }
-
-    @Then("수정된 내용 {string} 이 필수 투두에 반영된다.")
-    public void 수정된_내용이_투두에_반영된다(String content) {
-        RoundResponse response = sharedContext.getResponse().as(RoundResponse.class);
-
-        assertThat(response.necessaryTodo().content()).isEqualTo(content);
-    }
-
     @Then("투두를 수정할 수 없다.")
     public void 투두를_수정할_수_없다() {
         ExtractableResponse<Response> response = sharedContext.getResponse();
@@ -100,13 +84,5 @@ public class TodoSteps {
                                                         .extract();
 
         sharedContext.setResponse(response);
-    }
-
-    @Then("진행률이 {string}이다.")
-    public void 기대_진행률_검증(String progressRate) {
-        ProgressRateResponse response = sharedContext.getResponse()
-                                                     .as(ProgressRateResponse.class);
-
-        assertThat(response.progressRate()).isEqualTo(Integer.parseInt(progressRate));
     }
 }

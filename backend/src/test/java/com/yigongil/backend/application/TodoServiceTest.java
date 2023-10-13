@@ -49,7 +49,7 @@ class TodoServiceTest {
                      .id(3L)
                      .roundOfMembers(List.of(roundOfMember))
                      .master(member)
-                     .necessaryToDoContent(null)
+                     .mustDo(null)
                      .build();
     }
 
@@ -110,7 +110,7 @@ class TodoServiceTest {
             todoService.updateNecessaryTodo(member, round.getId(), request);
 
             //then
-            assertThat(round.getNecessaryToDoContent()).isEqualTo(request.content());
+            assertThat(round.getMustDo()).isEqualTo(request.content());
         }
     }
 }

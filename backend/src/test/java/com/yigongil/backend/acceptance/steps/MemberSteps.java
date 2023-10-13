@@ -161,4 +161,11 @@ public class MemberSteps {
 
         sharedContext.setResponse(response);
     }
+
+    @Then("조회한 멤버의 경험치가 상승했다.")
+    public void 멤버의_티어를_검증한다() {
+        ProfileResponse response = sharedContext.getResponse().as(ProfileResponse.class);
+
+        assertThat(response.tierProgress()).isGreaterThan(0);
+    }
 }

@@ -28,7 +28,7 @@ class RoundTest {
             round.createNecessaryTodo(round.getMaster(), "필수 투두");
 
             //when
-            assertThat(round.getNecessaryToDoContent()).isEqualTo("필수 투두");
+            assertThat(round.getMustDo()).isEqualTo("필수 투두");
         }
 
         @Test

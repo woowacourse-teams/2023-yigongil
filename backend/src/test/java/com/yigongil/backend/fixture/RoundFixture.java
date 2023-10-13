@@ -33,7 +33,7 @@ public enum RoundFixture {
     public Round toRound() {
         return Round.builder()
                     .id(id)
-                    .necessaryToDoContent(content)
+                    .mustDo(content)
                     .master(master)
                     .roundOfMembers(new ArrayList<>(List.of(RoundOfMemberFixture.김진우_라운드_삼.toRoundOfMember(), RoundOfMemberFixture.노이만_라오멤.toRoundOfMember())))
                     .build();
@@ -45,7 +45,7 @@ public enum RoundFixture {
                                                    .toList();
         return Round.builder()
                     .id(id)
-                    .necessaryToDoContent(content)
+                    .mustDo(content)
                     .master(master)
                     .roundOfMembers(roundOfMembers)
                     .build();

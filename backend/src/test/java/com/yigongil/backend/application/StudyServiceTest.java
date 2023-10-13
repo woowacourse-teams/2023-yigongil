@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
 import com.yigongil.backend.exception.StudyNotFoundException;
@@ -27,7 +28,8 @@ class StudyServiceTest {
             studyRepository,
             studyMemberRepository,
             mock(CertificationService.class),
-            mock(FeedService.class)
+            mock(FeedService.class),
+            mock(RoundRepository.class)
     );
 
     @Nested
