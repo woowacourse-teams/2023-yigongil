@@ -131,7 +131,7 @@ public class StudySteps {
     }
 
     @Then("모집 중인 스터디를 {int}개 중 {int}개를 확인할 수 있다.")
-    public void 모집_중인_스터디를_확인할수_있다(int totalCount, int acceptedCount) {
+    public void 모집_중인_스터디를_확인할수_있다(int totalCount, int acceptedCount) { // TODO 이거 확인점요 ㅎㅎ.
         ExtractableResponse<Response> response = sharedContext.getResponse();
 
         List<StudyListItemResponse> studyInfoRespons = response.jsonPath()
@@ -418,7 +418,7 @@ public class StudySteps {
         );
     }
 
-    @Then("현재 회차의 필수 투두가 {string}임을 확인할 수 있다.")
+    @Then("현재 회차의 머스트두가 {string}임을 확인할 수 있다.")
     public void 현재_주차_머스트두_검증(String content) {
         RoundResponse upcomingRound = (RoundResponse) sharedContext.getParameter("round");
 

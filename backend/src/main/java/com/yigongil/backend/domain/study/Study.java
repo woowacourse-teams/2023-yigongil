@@ -254,7 +254,7 @@ public class Study extends BaseEntity {
         if (master.getId().equals(candidate.getId())) {
             return;
         }
-        throw new NotStudyMasterException("필수 투두를 수정할 권한이 없습니다.", candidate.getNickname());
+        throw new NotStudyMasterException(" 머스트두를 수정할 권한이 없습니다.", candidate.getNickname());
     }
 
     public void updateToNextRound() {

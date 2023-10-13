@@ -11,8 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.application.CertificationService;
 import com.yigongil.backend.application.FeedService;
+import com.yigongil.backend.application.MustDoService;
 import com.yigongil.backend.application.StudyService;
-import com.yigongil.backend.application.TodoService;
 import com.yigongil.backend.config.auth.AuthContext;
 import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.domain.member.MemberRepository;
@@ -43,7 +43,7 @@ class StudyControllerTest {
     private StudyService studyService;
 
     @MockBean
-    private TodoService todoService;
+    private MustDoService mustDoService;
 
     @MockBean
     private MemberRepository memberRepository;

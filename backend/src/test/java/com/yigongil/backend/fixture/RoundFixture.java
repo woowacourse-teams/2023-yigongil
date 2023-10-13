@@ -9,9 +9,9 @@ import java.util.List;
 
 public enum RoundFixture {
 
-    아이디_삼_투두없는_라운드(3L, 2, null, MemberFixture.김진우.toMember()),
-    아이디_사_투두없는_라운드(4L, 3, null, MemberFixture.김진우.toMember()),
-    아이디_오_투두없는_라운드(5L, 4, null, MemberFixture.김진우.toMember()),
+    아이디_삼_머스트두없는_라운드(3L, 2, null, MemberFixture.김진우.toMember()),
+    아이디_사_머스트두없는_라운드(4L, 3, null, MemberFixture.김진우.toMember()),
+    아이디_오_머스트두없는_라운드(5L, 4, null, MemberFixture.김진우.toMember()),
     아이디없는_라운드(null, 1, "내용", MemberFixture.김진우.toMember()),
     아이디없는_라운드2(null, 2, "내용", MemberFixture.김진우.toMember()),
     아이디없는_라운드3(null, 3, "내용", MemberFixture.김진우.toMember()),
