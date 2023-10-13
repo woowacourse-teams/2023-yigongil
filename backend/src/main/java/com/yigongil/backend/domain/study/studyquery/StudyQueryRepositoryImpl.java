@@ -46,7 +46,8 @@ public class StudyQueryRepositoryImpl implements StudyQueryRepository {
         List<Study> studies = queryFactory.select(studyMember.study)
                                           .from(studyMember)
                                           .join(studyMember.study, study)
-                                          .where(studyMember.role.eq(role),
+                                          .where(
+                                                  studyMember.role.eq(role),
                                                   studyMember.member.id.eq(memberId),
                                                   searchEq(search)
                                           )
