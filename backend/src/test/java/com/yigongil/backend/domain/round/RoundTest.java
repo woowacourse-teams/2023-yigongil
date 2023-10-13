@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 class RoundTest {
 
     @Nested
-    class _머스트두_생성 {
+    class 머스트두_생성 {
 
         @Test
         void 정상생성한다() {
