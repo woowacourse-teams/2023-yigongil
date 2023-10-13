@@ -61,7 +61,7 @@ class RoundTest {
     }
 
     @Test
-    void 멤버의__머스트두_완료여부를_반환한다() {
+    void 멤버의_머스트두_완료여부를_반환한다() {
         //given
         Round round = RoundFixture.아이디없는_라운드.toRound();
         Member master = round.getMaster();
