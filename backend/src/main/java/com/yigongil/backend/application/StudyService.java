@@ -82,12 +82,6 @@ public class StudyService {
         return toRecruitingStudyResponse(studies);
     }
 
-    private List<StudyListItemResponse> toRecruitingStudyResponse(Slice<Study> studies) {
-        return studies.get()
-                      .map(StudyListItemResponse::from)
-                      .toList();
-    }
-
     @Transactional
     public void apply(Member member, Long studyId) {
         Study study = findStudyById(studyId);
@@ -286,6 +280,18 @@ public class StudyService {
                           .toList();
     }
 
+    public List<StudyListItemResponse> findAppliedStudies(Member member, int page, String search) {
+        Pageable pageable = PageStrategy.defaultPageStrategy(page);
+
+        Slice<Study> studies = studyRepository.findStudiesApplied(member.getId(), search, Role.APPLICANT, pageable);
+        return toRecruitingStudyResponse(studies);
+    }
+
+    private List<StudyListItemResponse> toRecruitingStudyResponse(Slice<Study> studies) {
+        return studies.get()
+                      .map(StudyListItemResponse::from)
+                      .toList();
+      
     @Transactional
     public void finish(Member member, Long studyId) {
         Study study = findStudyById(studyId);
