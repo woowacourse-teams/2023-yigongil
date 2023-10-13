@@ -273,14 +273,22 @@ public class StudyService {
         return MembersCertificationResponse.of(study.getName(), study.getCurrentRound().getWeekNumber(), member, roundOfMembers);
     }
 
+    @Transactional(readOnly = true)
     public CertificationResponse findCertification(Long certificationId) {
         return CertificationResponse.from(certificationService.findById(certificationId));
     }
 
+    @Transactional(readOnly = true)
     public List<FeedPostResponse> findFeedPosts(Long id, Long oldestFeedPostId) {
         return feedService.findFeedPosts(id, oldestFeedPostId)
                           .stream()
                           .map(FeedPostResponse::from)
                           .toList();
+    }
+
+    @Transactional
+    public void finish(Member member, Long studyId) {
+        Study study = findStudyById(studyId);
+        study.finishStudy(member);
     }
 }

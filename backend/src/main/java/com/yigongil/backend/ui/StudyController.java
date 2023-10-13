@@ -189,5 +189,14 @@ public class StudyController implements StudyApi {
         StudyMemberRoleResponse response = studyService.getMemberRoleOfStudy(member, studyId);
         return ResponseEntity.ok(response);
     }
+
+    @PatchMapping("/{studyId}/end")
+    public ResponseEntity<Void> endStudy(
+            @Authorization Member member,
+            @PathVariable Long studyId
+    ) {
+        studyService.finish(member, studyId);
+        return ResponseEntity.ok().build();
+    }
 }
 
