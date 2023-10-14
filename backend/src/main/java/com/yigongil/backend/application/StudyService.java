@@ -252,7 +252,7 @@ public class StudyService {
 
     @Transactional
     public void deleteByMasterId(Long masterId) {
-        List<Study> studies = studyRepository.findAllByMasterIdAndProcessingStatus(masterId, ProcessingStatus.RECRUITING);
+        List<Study> studies = studyRepository.findAllByMasterIdAndProcessingStatus(masterId, ProcessingStatus.RECRUITING, Role.MASTER);
         studyRepository.deleteAll(studies);
     }
 

@@ -2,10 +2,9 @@ package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.studyquery.StudyQueryRepository;
+import com.yigongil.backend.domain.studymember.Role;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,10 +17,6 @@ public interface StudyRepository extends Repository<Study, Long>, StudyQueryRepo
 
     @EntityGraph(attributePaths = {"rounds"})
     Optional<Study> findById(Long studyId);
-
-    Page<Study> findAllByProcessingStatus(ProcessingStatus processingStatus, Pageable pageable);
-
-    Page<Study> findAllByProcessingStatusAndNameContainingIgnoreCase(ProcessingStatus processingStatus, String word, Pageable pageable);
 
     List<Study> findAllByProcessingStatus(ProcessingStatus processingStatus);
 
@@ -37,13 +32,15 @@ public interface StudyRepository extends Repository<Study, Long>, StudyQueryRepo
 
     @Query("""
             select distinct s from Study s
-            join fetch s.rounds r
-            where r.master.id = :masterId
+            join StudyMember sm on s = sm.study
+            where sm.member.id = :masterId
+            and sm.role = :role
             and s.processingStatus = :status
             """)
     List<Study> findAllByMasterIdAndProcessingStatus(
             @Param("masterId") Long masterId,
-            @Param("status") ProcessingStatus status
+            @Param("status") ProcessingStatus status,
+            @Param("role") Role role
     );
 
     @Modifying
