@@ -118,7 +118,7 @@ class StudyTest {
             Round nextRound = study.getCurrentRound();
 
             // then
-            assertThat(nextRound.isNextDayOfWeek(currentRound.getDayOFWeek())).isTrue();
+            assertThat(nextRound.isNextDayOfWeek(currentRound.getDayOfWeek())).isTrue();
         }
 
     }

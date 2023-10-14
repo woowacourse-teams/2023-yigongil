@@ -31,7 +31,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
@@ -91,8 +90,7 @@ public class Study extends BaseEntity {
 
     @Cascade(CascadeType.PERSIST)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany
-    @JoinColumn(name = "study_id", nullable = false)
+    @OneToMany(mappedBy = "study", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Round> rounds = new ArrayList<>();
 
     protected Study() {
@@ -256,7 +254,7 @@ public class Study extends BaseEntity {
         if (master.getId().equals(candidate.getId())) {
             return;
         }
-        throw new NotStudyMasterException("필수 투두를 수정할 권한이 없습니다.", candidate.getNickname());
+        throw new NotStudyMasterException(" 머스트두를 수정할 권한이 없습니다.", candidate.getNickname());
     }
 
     public void updateToNextRound() {
@@ -275,7 +273,7 @@ public class Study extends BaseEntity {
 
     private Round findUpcomingRoundOf(int weekNumber) {
         return rounds.stream()
-                     .filter(round -> round.isSameWeek(weekNumber) && round.isNextDayOfWeek(getCurrentRound().getDayOFWeek()))
+                     .filter(round -> round.isSameWeek(weekNumber) && round.isNextDayOfWeek(getCurrentRound().getDayOfWeek()))
                      .findFirst()
                      .orElseGet(() -> findFirstRoundOf(weekNumber + 1));
     }

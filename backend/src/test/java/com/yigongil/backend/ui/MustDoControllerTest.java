@@ -5,19 +5,17 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yigongil.backend.application.TodoService;
+import com.yigongil.backend.application.MustDoService;
 import com.yigongil.backend.config.auth.AuthContext;
 import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.domain.member.MemberRepository;
 import com.yigongil.backend.fixture.MemberFixture;
-import com.yigongil.backend.request.TodoCreateRequest;
-import com.yigongil.backend.request.TodoUpdateRequest;
+import com.yigongil.backend.request.MustDoUpdateRequest;
 import com.yigongil.backend.ui.exceptionhandler.InternalServerErrorMessageConverter;
 import com.yigongil.backend.utils.querycounter.ApiQueryCounter;
 import java.util.Optional;
@@ -30,8 +28,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(TodoController.class)
-class TodoControllerTest {
+@WebMvcTest(MustDoController.class)
+class MustDoControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -40,7 +38,7 @@ class TodoControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private TodoService todoService;
+    private MustDoService mustDoService;
 
     @MockBean
     private MemberRepository memberRepository;
@@ -63,12 +61,12 @@ class TodoControllerTest {
     }
 
     @Test
-    void 필수_투두를_생성한다() throws Exception {
-        TodoCreateRequest request = new TodoCreateRequest("첫 투두");
+    void 머스트두를_생성한다() throws Exception {
+        MustDoUpdateRequest request = new MustDoUpdateRequest("첫 머스트두");
 
-        willDoNothing().given(todoService).createNecessaryTodo(MemberFixture.김진우.toMember(), 1L, request);
+        willDoNothing().given(mustDoService).updateMustDo(MemberFixture.김진우.toMember(), 1L, request);
 
-        mockMvc.perform(post("/rounds/1/todos")
+        mockMvc.perform(put("/rounds/1/todos")
                        .header(HttpHeaders.AUTHORIZATION, "1")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(request)))
@@ -77,18 +75,18 @@ class TodoControllerTest {
     }
 
     @Test
-    void 필수_투두를_업데이트한다() throws Exception {
-        TodoUpdateRequest request = new TodoUpdateRequest("수정");
+    void 머스트두를_업데이트한다() throws Exception {
+        MustDoUpdateRequest request = new MustDoUpdateRequest("수정");
 
-        willDoNothing().given(todoService).updateNecessaryTodo(MemberFixture.김진우.toMember(), 1L, request);
+        willDoNothing().given(mustDoService).updateMustDo(MemberFixture.김진우.toMember(), 1L, request);
 
-        mockMvc.perform(patch("/rounds/1/todos")
+        mockMvc.perform(put("/rounds/1/todos")
                        .header(HttpHeaders.AUTHORIZATION, "1")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(request)))
                .andDo(print())
-               .andExpect(status().isNoContent());
+               .andExpect(status().isOk());
 
-        verify(todoService, only()).updateNecessaryTodo(MemberFixture.김진우.toMember(), 1L, request);
+        verify(mustDoService, only()).updateMustDo(MemberFixture.김진우.toMember(), 1L, request);
     }
 }

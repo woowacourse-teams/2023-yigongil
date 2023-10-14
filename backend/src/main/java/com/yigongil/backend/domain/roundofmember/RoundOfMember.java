@@ -53,11 +53,7 @@ public class RoundOfMember extends BaseEntity {
     }
 
     public void completeRound() {
-        updateNecessaryTodoIsDone(true);
-    }
-
-    public void updateNecessaryTodoIsDone(boolean isDone) {
-        this.isDone = isDone;
+        this.isDone = true;
     }
 
     public boolean isMemberEquals(Member member) {

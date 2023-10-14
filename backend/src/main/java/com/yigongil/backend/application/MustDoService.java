@@ -4,34 +4,25 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.exception.RoundNotFoundException;
-import com.yigongil.backend.request.TodoCreateRequest;
-import com.yigongil.backend.request.TodoUpdateRequest;
+import com.yigongil.backend.request.MustDoUpdateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class TodoService {
+public class MustDoService {
 
     private final RoundRepository roundRepository;
 
-    public TodoService(
+    public MustDoService(
             RoundRepository roundRepository
     ) {
         this.roundRepository = roundRepository;
     }
 
     @Transactional
-    public void createNecessaryTodo(Member member, Long roundId, TodoCreateRequest request) {
+    public void updateMustDo(Member member, Long roundId, MustDoUpdateRequest request) {
         Round round = findRoundById(roundId);
-        round.createNecessaryTodo(member, request.content());
-    }
-
-    @Transactional
-    public void updateNecessaryTodo(Member member, Long roundId, TodoUpdateRequest request) {
-        Round round = findRoundById(roundId);
-        if (request.content() != null) {
-            round.updateNecessaryTodoContent(member, request.content());
-        }
+        round.updateMustDo(member, request.content());
     }
 
     private Round findRoundById(Long roundId) {

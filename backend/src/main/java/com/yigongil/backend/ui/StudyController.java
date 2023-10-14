@@ -12,6 +12,7 @@ import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
 import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
+import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyListItemResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
@@ -207,6 +208,15 @@ public class StudyController implements StudyApi {
     ) {
         studyService.finish(member, studyId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{studyId}/rounds")
+    public ResponseEntity<List<RoundResponse>> findRoundDetailsOfWeek(
+            @PathVariable Long studyId,
+            @RequestParam Integer weekNumber
+    ) {
+        List<RoundResponse> roundResponses = studyService.findRoundDetailsOfWeek(studyId, weekNumber);
+        return ResponseEntity.ok(roundResponses);
     }
 }
 
