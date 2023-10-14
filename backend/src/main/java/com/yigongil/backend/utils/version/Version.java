@@ -19,19 +19,19 @@ public enum Version {
         this.message = message;
     }
 
+    public static Version from(String versionCode) {
+        return Arrays.stream(values())
+                     .filter(version -> version.versionCode.equals(versionCode))
+                     .findFirst()
+                     .orElseThrow(() -> new VersionNotFoundException(versionCode));
+    }
+
     public boolean shouldUpdate() {
         return shouldUpdate;
     }
 
     public String getMessage() {
         return message;
-    }
-
-    public static Version from(String versionCode) {
-        return Arrays.stream(values())
-                .filter(version -> version.versionCode.equals(versionCode))
-                .findFirst()
-                .orElseThrow(() -> new VersionNotFoundException(versionCode));
     }
 
     private static class VersionNotFoundException extends HttpException {
