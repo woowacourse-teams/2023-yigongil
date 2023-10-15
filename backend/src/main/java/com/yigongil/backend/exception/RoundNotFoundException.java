@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public class RoundNotFoundException extends HttpException {
 
-    public RoundNotFoundException(String message, Long input) {
+    public RoundNotFoundException(String message, long input) {
         super(HttpStatus.NOT_FOUND, message, String.valueOf(input));
     }
 }

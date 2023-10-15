@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/v1/login")
+@RequestMapping("/login")
 @RestController
 public class LoginController implements LoginApi {
 

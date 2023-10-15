@@ -34,7 +34,7 @@ public class StudyMemberSteps {
         String memberToken = sharedContext.getToken(memberName);
         ExtractableResponse<Response> response = given().when()
                                                         .header(HttpHeaders.AUTHORIZATION, memberToken)
-                                                        .get("/v1/studies/{studyId}/members/role", studyId)
+                                                        .get("/studies/{studyId}/members/role", studyId)
                                                         .then()
                                                         .log()
                                                         .all()

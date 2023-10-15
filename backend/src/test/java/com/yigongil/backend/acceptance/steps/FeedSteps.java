@@ -37,7 +37,7 @@ public class FeedSteps {
                .contentType(MediaType.APPLICATION_JSON_VALUE)
                .body(request)
                .when()
-               .post("/v1/studies/" + sharedContext.getParameter(studyName) + "/feeds")
+               .post("/studies/" + sharedContext.getParameter(studyName) + "/feeds")
                .then()
                .log()
                .all()
@@ -55,7 +55,7 @@ public class FeedSteps {
                                                               .contentType("application/json")
                                                               .body(request)
                                                               .when()
-                                                              .post("/v1/studies/" + sharedContext.getParameter(studyName) + "/certifications")
+                                                              .post("/studies/" + sharedContext.getParameter(studyName) + "/certifications")
                                                               .then()
                                                               .log()
                                                               .all()
@@ -72,7 +72,7 @@ public class FeedSteps {
                                                         .all()
                                                         .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
-                                                        .get("/v1/studies/" + sharedContext.getParameter(studyName) + "/feeds")
+                                                        .get("/studies/" + sharedContext.getParameter(studyName) + "/feeds")
                                                         .then()
                                                         .log()
                                                         .all()
@@ -95,7 +95,7 @@ public class FeedSteps {
                                                         .all()
                                                         .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
-                                                        .get("/v1/studies/" + sharedContext.getParameter(studyName) + "/certifications/" + certificationId)
+                                                        .get("/studies/" + sharedContext.getParameter(studyName) + "/certifications/" + certificationId)
                                                         .then()
                                                         .log()
                                                         .all()
@@ -119,13 +119,13 @@ public class FeedSteps {
                                                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                                                         .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
-                                                        .get("/v1/studies/" + studyId + "/certifications")
+                                                        .get("/studies/" + studyId + "/certifications")
                                                         .then().log().all()
                                                         .extract();
         sharedContext.setResponse(response);
     }
 
-    @Then("인증이 {int} 개 올라왔다.")
+    @Then("현재 회차의 인증이 {int} 개 올라왔다.")
     public void 인증_개수_검증(int count) {
         MembersCertificationResponse response = sharedContext.getResponse().as(MembersCertificationResponse.class);
 
@@ -137,6 +137,9 @@ public class FeedSteps {
             result++;
         }
 
-        assertThat(result).isEqualTo(count);
+        final long finalResult = result;
+        assertAll(
+                () -> assertThat(finalResult).isEqualTo(count)
+        );
     }
 }

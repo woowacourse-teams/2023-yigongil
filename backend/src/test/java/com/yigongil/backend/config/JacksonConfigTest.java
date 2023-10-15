@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yigongil.backend.request.StudyUpdateRequest;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -28,20 +27,23 @@ class JacksonConfigTest {
 
         String json = """
                 {
-                    "name":"자바 스터디",
-                    "numberOfMaximumMembers":"5",
-                    "startAt":"%s",
-                    "totalRoundCount":"8",
-                    "periodOfRound":"1w",
-                    "introduction":"스터디 소개"
+                    "startAt":"%s"
                 }
                 """.formatted(startAtInput);
 
         // when
-        StudyUpdateRequest request = objectMapper.readValue(json, StudyUpdateRequest.class);
+        TestDto dto = objectMapper.readValue(json, TestDto.class);
 
         // then
-        assertThat(request.startAt()).isEqualTo(startAt);
+        assertThat(dto.getStartAt()).isEqualTo(startAt);
     }
 
+    private static class TestDto {
+
+        private LocalDate startAt;
+
+        public LocalDate getStartAt() {
+            return startAt;
+        }
+    }
 }

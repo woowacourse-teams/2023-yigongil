@@ -1,18 +1,17 @@
 package com.yigongil.backend.config.auth;
 
 import com.yigongil.backend.exception.InvalidTokenException;
+import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import java.util.regex.Pattern;
-
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
 
-    private static final Pattern STUDY_DETAIL_REQUEST_PATTERN = Pattern.compile("/v1/studies/[1-9]\\d*");
+    private static final Pattern STUDY_DETAIL_REQUEST_PATTERN = Pattern.compile("/studies/[1-9]\\d*");
 
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthContext authContext;
@@ -25,7 +24,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (request.getMethod().equals("GET") && STUDY_DETAIL_REQUEST_PATTERN.matcher(request.getRequestURI()).matches()) {
+        if (isExcludedMethodAndUri(request)) {
             return true;
         }
 
@@ -35,5 +34,15 @@ public class AuthInterceptor implements HandlerInterceptor {
         Long memberId = jwtTokenProvider.parseToken(authHeader);
         authContext.setMemberId(memberId);
         return true;
+    }
+
+    private boolean isExcludedMethodAndUri(HttpServletRequest request) {
+        if (request.getMethod().equals("GET") && STUDY_DETAIL_REQUEST_PATTERN.matcher(request.getRequestURI()).matches()) {
+            return true;
+        }
+        if (request.getMethod().equals("GET") && request.getRequestURI().equals("/studies")) {
+            return true;
+        }
+        return false;
     }
 }
