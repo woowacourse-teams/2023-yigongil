@@ -67,7 +67,7 @@ create table round
     id                         bigint   not null auto_increment,
     created_at                 datetime not null,
     updated_at                 datetime,
-    necessary_to_do_content    varchar(20),
+    must_do                    varchar(20),
     round_status               varchar(255),
     week_number                integer  not null,
     master_id                  bigint   not null,
