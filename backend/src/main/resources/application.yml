@@ -11,6 +11,7 @@ springdoc:
     path: "/api-docs"
   swagger-ui:
     url: "/v1/api-docs"
+    path: "/api"
     display-request-duration: true
 
 ---
