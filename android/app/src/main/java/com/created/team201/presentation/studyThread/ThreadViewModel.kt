@@ -2,10 +2,9 @@ package com.created.team201.presentation.studyThread
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.created.domain.model.Feeds
+import com.created.domain.model.MustDo
 import com.created.domain.repository.ThreadRepository
-import com.created.team201.presentation.studyThread.uiState.FeedsUiState
-import com.created.team201.presentation.studyThread.uiState.MustDoCertificationUiState
-import com.created.team201.presentation.studyThread.uiState.MustDoCertificationUiState.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,15 +20,13 @@ class ThreadViewModel @Inject constructor(
 
     private val studyId: MutableStateFlow<Long> = MutableStateFlow(0)
 
-    val message: MutableStateFlow<String> = MutableStateFlow("")
+    private val _uiState: MutableStateFlow<ThreadUiState> = MutableStateFlow(ThreadUiState.Loading)
+    val uiState: StateFlow<ThreadUiState> get() = _uiState.asStateFlow()
 
-    private val _mustDoUiState: MutableStateFlow<MustDoCertificationUiState> =
-        MutableStateFlow(Loading)
-    val mustDoUiState: StateFlow<MustDoCertificationUiState> get() = _mustDoUiState.asStateFlow()
-
-    private val _feedsUiState: MutableStateFlow<FeedsUiState> =
-        MutableStateFlow(FeedsUiState.Loading)
-    val feedsUiState: StateFlow<FeedsUiState> get() = _feedsUiState.asStateFlow()
+    init {
+        updateFeeds()
+        updateMustDoCertification()
+    }
 
     fun updateStudyId(id: Long) {
         studyId.value = id
@@ -37,25 +34,35 @@ class ThreadViewModel @Inject constructor(
 
     fun updateMustDoCertification() {
         viewModelScope.launch {
-            threadRepository.getMustDoCertification(studyId.value).collectLatest {
-                _mustDoUiState.value = Success(it)
+            threadRepository.getMustDoCertification(studyId.value).collectLatest { mustDo ->
+                _uiState.value = ThreadUiState.Success().copy(mustDo = mustDo)
             }
         }
     }
 
-    fun sendFeeds() {
+    fun dispatchFeed(message: String) {
         viewModelScope.launch {
-            threadRepository.postFeeds(studyId.value, message.value, null)
-                .onSuccess { updateFeeds() }
-                .onFailure { }
+            runCatching { threadRepository.updateFeeds(studyId.value, message, null) }
+                .onFailure {
+                    // error 메시지
+                }
         }
     }
 
     fun updateFeeds() {
         viewModelScope.launch {
             threadRepository.getFeeds(studyId.value).collectLatest {
-                _feedsUiState.value = FeedsUiState.Success(it)
+                _uiState.value = ThreadUiState.Success().copy(feeds = it)
             }
         }
     }
+}
+
+sealed interface ThreadUiState {
+    data class Success(
+        val feeds: List<Feeds> = emptyList(),
+        val mustDo: List<MustDo> = emptyList()
+    ) : ThreadUiState
+
+    object Loading : ThreadUiState
 }

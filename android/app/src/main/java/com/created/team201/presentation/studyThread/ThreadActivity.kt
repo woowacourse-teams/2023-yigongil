@@ -3,7 +3,6 @@ package com.created.team201.presentation.studyThread
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -11,10 +10,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.created.team201.R
 import com.created.team201.databinding.ActivityThreadBinding
 import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.studyThread.ThreadUiState.Loading
+import com.created.team201.presentation.studyThread.ThreadUiState.Success
 import com.created.team201.presentation.studyThread.adapter.MustDoAdapter
 import com.created.team201.presentation.studyThread.adapter.ThreadAdapter
-import com.created.team201.presentation.studyThread.uiState.FeedsUiState
-import com.created.team201.presentation.studyThread.uiState.MustDoCertificationUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -29,60 +28,48 @@ class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        attachAdapter()
         bindViewModel()
-        setupView()
+        attachAdapter()
+        setOnClickEvent()
+        collectUiState()
+    }
 
+    private fun collectUiState() {
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                threadViewModel.uiState.collectLatest { state ->
+                    when (state) {
+                        is Success -> showView(state)
+                        is Loading -> {}
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showView(state: Success) {
+        threadAdapter.submitList(state.feeds)
+        mustDoAdapter.submitList(state.mustDo)
+    }
+
+    private fun setOnClickEvent() {
         binding.ivThreadBackButton.setOnClickListener {
             finish()
         }
 
         binding.ivThreadDirectButton.setOnClickListener {
-            threadViewModel.sendFeeds()
+            val message = binding.etThreadInput.text.toString()
+
+            threadViewModel.dispatchFeed(message)
             binding.etThreadInput.text.clear()
-        }
-
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                threadViewModel.mustDoUiState.collectLatest { uiState ->
-                    when (uiState) {
-                        is MustDoCertificationUiState.Success -> mustDoAdapter.submitList(uiState.mustDo)
-                        is MustDoCertificationUiState.Loading -> {}
-                    }
-                }
-
-            }
-        }
-
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-                threadViewModel.feedsUiState.collectLatest { uiState ->
-                    when (uiState) {
-                        is FeedsUiState.Success -> {
-                            Log.d("123123123", uiState.feeds.toString())
-                            threadAdapter.submitList(uiState.feeds)
-                        }
-
-                        is FeedsUiState.Loading -> {}
-                    }
-                }
-            }
-        }
-
-    }
-
-    private fun setupView() {
-        with(threadViewModel) {
-            updateStudyId(studyId)
-            updateMustDoCertification()
-            updateFeeds()
         }
     }
 
     private fun bindViewModel() {
         binding.lifecycleOwner = this
-        binding.vm = threadViewModel
+        binding.vm = threadViewModel.also {
+            it.updateStudyId(studyId)
+        }
     }
 
     private fun attachAdapter() {
