@@ -27,4 +27,3 @@ interface ThreadService {
         @Path("id") studyId: Long,
     ): List<FeedsResponseDto>
 }
-

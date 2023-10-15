@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ThreadRepository {
 
-    suspend fun postFeeds(studyId: Long, content: String, image: String?): Result<Unit>
+    suspend fun updateFeeds(studyId: Long, content: String, image: String?)
 
     fun getFeeds(studyId: Long): Flow<List<Feeds>>
 

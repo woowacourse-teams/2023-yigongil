@@ -8,6 +8,7 @@ import com.created.team201.data.mapper.toMustDo
 import com.created.team201.data.remote.api.ThreadService
 import com.created.team201.data.remote.request.FeedRequestDto
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -17,21 +18,22 @@ class DefaultThreadRepository @Inject constructor(
     private val threadService: ThreadService
 ) : ThreadRepository {
 
-    override suspend fun postFeeds(studyId: Long, content: String, image: String?): Result<Unit> {
-        return runCatching {
-            threadService.postFeeds(
-                studyId,
-                FeedRequestDto(
-                    content = content, imageUrl = image
-                )
+    override suspend fun updateFeeds(studyId: Long, content: String, image: String?) {
+        threadService.postFeeds(
+            studyId,
+            FeedRequestDto(
+                content = content, imageUrl = image
             )
-        }
+        )
     }
 
     override fun getFeeds(studyId: Long): Flow<List<Feeds>> = flow {
-        val feeds = threadService.getFeeds(studyId).map { it.toFeeds() }
+        while (true) {
+            val feeds = threadService.getFeeds(studyId).map { it.toFeeds() }
 
-        emit(feeds)
+            emit(feeds)
+            delay(1000)
+        }
     }.flowOn(Dispatchers.IO)
 
     override fun getMustDoCertification(studyId: Long): Flow<List<MustDo>> = flow {
