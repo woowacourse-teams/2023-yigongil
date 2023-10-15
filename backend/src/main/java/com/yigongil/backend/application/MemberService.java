@@ -71,9 +71,6 @@ public class MemberService {
                 study.getId(),
                 study.getName(),
                 study.calculateAverageTier(),
-                study.getStartAt().toLocalDate(),
-                study.getTotalRoundCount(),
-                study.getPeriodUnit().toStringFormat(study.getPeriodOfRound()),
                 study.sizeOfCurrentMembers(),
                 study.getNumberOfMaximumMembers(),
                 studyMember.isSuccess()
@@ -89,7 +86,7 @@ public class MemberService {
         return (int) studies.stream()
                             .map(Study::getRounds)
                             .flatMap(List::stream)
-                            .filter(round -> round.isNecessaryToDoDone(member))
+                            .filter(round -> round.isMustDoDone(member))
                             .count();
     }
 

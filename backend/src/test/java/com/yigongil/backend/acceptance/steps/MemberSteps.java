@@ -38,7 +38,7 @@ public class MemberSteps {
     public void 깃허브_아이디로_회원가입을_한다(String githubId) {
         TokenResponse tokenResponse = given().log().all()
                                              .when()
-                                             .get("/v1/login/fake/tokens?githubId=" + githubId)
+                                             .get("/login/fake/tokens?githubId=" + githubId)
                                              .then().log().all()
                                              .extract()
                                              .as(TokenResponse.class);
@@ -61,7 +61,7 @@ public class MemberSteps {
                                                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                                                         .body(objectMapper.writeValueAsString(request))
                                                         .when()
-                                                        .patch("/v1/members")
+                                                        .patch("/members")
                                                         .then().log().all()
                                                         .extract();
 
@@ -72,7 +72,7 @@ public class MemberSteps {
     public void profile_확인(String githubId, String nickname, String introduction) {
         ProfileResponse response = given()
                 .when()
-                .get("/v1/members/" + sharedContext.getParameter(githubId))
+                .get("/members/" + sharedContext.getParameter(githubId))
                 .then()
                 .extract()
                 .as(ProfileResponse.class);
@@ -90,7 +90,7 @@ public class MemberSteps {
         given().log().all()
                .header(HttpHeaders.AUTHORIZATION, token)
                .when()
-               .delete("/v1/members")
+               .delete("/members")
                .then().log().all();
     }
 
@@ -101,7 +101,7 @@ public class MemberSteps {
         ExtractableResponse<Response> response = given().log().all()
                                                         .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
-                                                        .get("/v1/members/my")
+                                                        .get("/members/my")
                                                         .then().log().all()
                                                         .extract();
 
@@ -112,7 +112,7 @@ public class MemberSteps {
     public void 중복_닉네임_확인(String nickname) {
         ExtractableResponse<Response> response = given()
                 .when()
-                .get("/v1/members/exists?nickname=" + nickname)
+                .get("/members/exists?nickname=" + nickname)
                 .then().log().all()
                 .extract();
 
@@ -127,7 +127,7 @@ public class MemberSteps {
         ExtractableResponse<Response> response = given().log().all()
                                                         .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(githubId))
                                                         .when()
-                                                        .get("v1/members/check-onboarding-is-done")
+                                                        .get("members/check-onboarding-is-done")
                                                         .then().log().all()
                                                         .statusCode(HttpStatus.OK.value())
                                                         .extract();
@@ -155,10 +155,17 @@ public class MemberSteps {
         ExtractableResponse<Response> response = given().log().all()
                                                         .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(githubId1))
                                                         .when()
-                                                        .get("/v1/members/" + id)
+                                                        .get("/members/" + id)
                                                         .then().log().all()
                                                         .extract();
 
         sharedContext.setResponse(response);
+    }
+
+    @Then("조회한 멤버의 경험치가 상승했다.")
+    public void 멤버의_티어를_검증한다() {
+        ProfileResponse response = sharedContext.getResponse().as(ProfileResponse.class);
+
+        assertThat(response.tierProgress()).isGreaterThan(0);
     }
 }

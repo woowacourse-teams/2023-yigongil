@@ -3,15 +3,18 @@ package com.yigongil.backend.ui;
 import com.yigongil.backend.application.StudyService;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;
+import com.yigongil.backend.request.StudyStartRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
 import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
-import com.yigongil.backend.response.RecruitingStudyResponse;
+import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
+import com.yigongil.backend.response.StudyListItemResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.response.StudyMemberRoleResponse;
 import com.yigongil.backend.ui.doc.StudyApi;
@@ -31,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/v1/studies")
+@RequestMapping("/studies")
 @RestController
 public class StudyController implements StudyApi {
 
@@ -47,7 +50,7 @@ public class StudyController implements StudyApi {
             @RequestBody @Valid StudyUpdateRequest request
     ) {
         Long studyId = studyService.create(member, request);
-        return ResponseEntity.created(URI.create("/v1/studies/" + studyId)).build();
+        return ResponseEntity.created(URI.create("/studies/" + studyId)).build();
     }
 
     @PutMapping("/{studyId}")
@@ -94,18 +97,13 @@ public class StudyController implements StudyApi {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/recruiting")
-    public ResponseEntity<List<RecruitingStudyResponse>> findRecruitingStudies(int page) {
-        List<RecruitingStudyResponse> response = studyService.findRecruitingStudies(page);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/recruiting/search")
-    public ResponseEntity<List<RecruitingStudyResponse>> findRecruitingStudiesWithSearch(
-            int page,
-            @RequestParam(name = "q") String word
+    @GetMapping
+    public ResponseEntity<List<StudyListItemResponse>> findStudies(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "all") ProcessingStatus status
     ) {
-        List<RecruitingStudyResponse> response = studyService.findRecruitingStudiesWithSearch(page, word);
+        List<StudyListItemResponse> response = studyService.findStudies(page, search, status);
         return ResponseEntity.ok(response);
     }
 
@@ -125,8 +123,12 @@ public class StudyController implements StudyApi {
     }
 
     @PatchMapping("/{id}/start")
-    public ResponseEntity<Void> startStudy(@Authorization Member member, @PathVariable Long id) {
-        studyService.startStudy(member, id);
+    public ResponseEntity<Void> startStudy(
+            @Authorization Member member,
+            @PathVariable Long id,
+            @RequestBody StudyStartRequest studyStartRequest
+    ) {
+        studyService.start(member, id, studyStartRequest);
 
         return ResponseEntity.ok().build();
     }
@@ -160,7 +162,7 @@ public class StudyController implements StudyApi {
             @RequestBody CertificationCreateRequest request
     ) {
         Long certificationId = studyService.createCertification(member, id, request);
-        return ResponseEntity.created(URI.create("/v1/studies/" + id + "/certifications/" + certificationId)).build();
+        return ResponseEntity.created(URI.create("/studies/" + id + "/certifications/" + certificationId)).build();
     }
 
     @GetMapping("/{id}/certifications")
@@ -187,6 +189,34 @@ public class StudyController implements StudyApi {
     ) {
         StudyMemberRoleResponse response = studyService.getMemberRoleOfStudy(member, studyId);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/applied")
+    public ResponseEntity<List<StudyListItemResponse>> findAppliedStudies(
+            @Authorization Member member,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String search
+    ) {
+        List<StudyListItemResponse> response = studyService.findAppliedStudies(member, page, search);
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{studyId}/end")
+    public ResponseEntity<Void> endStudy(
+            @Authorization Member member,
+            @PathVariable Long studyId
+    ) {
+        studyService.finish(member, studyId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{studyId}/rounds")
+    public ResponseEntity<List<RoundResponse>> findRoundDetailsOfWeek(
+            @PathVariable Long studyId,
+            @RequestParam Integer weekNumber
+    ) {
+        List<RoundResponse> roundResponses = studyService.findRoundDetailsOfWeek(studyId, weekNumber);
+        return ResponseEntity.ok(roundResponses);
     }
 }
 

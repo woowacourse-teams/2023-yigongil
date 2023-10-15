@@ -1,23 +1,23 @@
 package com.yigongil.backend.domain.round;
 
 import com.yigongil.backend.domain.BaseEntity;
+import com.yigongil.backend.domain.meetingdayoftheweek.MeetingDayOfTheWeek;
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.member.Tier;
-import com.yigongil.backend.domain.optionaltodo.OptionalTodo;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
+import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.exception.InvalidTodoLengthException;
-import com.yigongil.backend.exception.NecessaryTodoAlreadyExistException;
 import com.yigongil.backend.exception.NecessaryTodoNotExistException;
 import com.yigongil.backend.exception.NotStudyMasterException;
 import com.yigongil.backend.exception.NotStudyMemberException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -43,17 +43,16 @@ public class Round extends BaseEntity {
     @Id
     private Long id;
 
-    @Column(nullable = false)
-    private Integer roundNumber;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_id", nullable = false)
+    private Study study;
 
     @Column(length = MAX_TODO_CONTENT_LENGTH)
-    private String necessaryToDoContent;
+    private String mustDo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "master_id", nullable = false)
     private Member master;
-
-    private LocalDateTime endAt;
 
     @Cascade(CascadeType.PERSIST)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -61,66 +60,59 @@ public class Round extends BaseEntity {
     @JoinColumn(name = "round_id", nullable = false)
     private List<RoundOfMember> roundOfMembers = new ArrayList<>();
 
+    @Cascade(CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private MeetingDayOfTheWeek meetingDayOfTheWeek;
+
+    @Column(nullable = false)
+    private Integer weekNumber;
+
+    @Enumerated(EnumType.STRING)
+    private RoundStatus roundStatus = RoundStatus.NOT_STARTED;
+
     protected Round() {
     }
 
     @Builder
     public Round(
             Long id,
-            Integer roundNumber,
-            String necessaryToDoContent,
+            Study study,
+            String mustDo,
             Member master,
-            LocalDateTime endAt,
-            List<RoundOfMember> roundOfMembers
+            List<RoundOfMember> roundOfMembers,
+            MeetingDayOfTheWeek meetingDayOfTheWeek,
+            Integer weekNumber
     ) {
         this.id = id;
-        this.roundNumber = roundNumber;
-        this.necessaryToDoContent = necessaryToDoContent;
+        this.study = study;
+        this.mustDo = mustDo;
         this.master = master;
-        this.endAt = endAt;
         this.roundOfMembers = roundOfMembers == null ? new ArrayList<>() : roundOfMembers;
+        this.meetingDayOfTheWeek = meetingDayOfTheWeek;
+        this.weekNumber = weekNumber;
     }
 
-    public static List<Round> of(Integer totalRoundCount, Member master) {
-        List<Round> rounds = new ArrayList<>();
-        for (int i = 1; i <= totalRoundCount; i++) {
-            Round round = Round.builder()
-                               .roundNumber(i)
-                               .master(master)
-                               .roundOfMembers(new ArrayList<>())
-                               .build();
-
-            RoundOfMember roundOfMember = RoundOfMember.builder()
-                                                       .member(master)
-                                                       .isDone(false)
-                                                       .build();
-            round.roundOfMembers.add(roundOfMember);
-
-            rounds.add(round);
-        }
-        return rounds;
+    public static Round of(MeetingDayOfTheWeek meetingDayOfTheWeek, Study study, Integer weekNumber) {
+        return Round.builder()
+                    .study(study)
+                    .meetingDayOfTheWeek(meetingDayOfTheWeek)
+                    .weekNumber(weekNumber)
+                    .master(study.getMaster())
+                    .roundOfMembers(RoundOfMember.from(study))
+                    .build();
     }
 
-    public void createNecessaryTodo(Member author, String content) {
+    public void updateMustDo(Member author, String content) {
         validateTodoLength(content);
         validateMaster(author);
-        if (necessaryToDoContent != null) {
-            throw new NecessaryTodoAlreadyExistException("필수 투두가 이미 존재합니다.", necessaryToDoContent);
-        }
-        necessaryToDoContent = content;
+        mustDo = content;
     }
 
     public void validateMaster(Member member) {
         if (master.getId().equals(member.getId())) {
             return;
         }
-        throw new NotStudyMasterException("필수 투두를 수정할 권한이 없습니다.", member.getNickname());
-    }
-
-    public OptionalTodo createOptionalTodo(Member author, String content) {
-        validateTodoLength(content);
-        RoundOfMember targetRoundOfMember = findRoundOfMemberBy(author);
-        return targetRoundOfMember.createOptionalTodo(content);
+        throw new NotStudyMasterException(" 머스트두를 수정할 권한이 없습니다.", member.getNickname());
     }
 
     private void validateTodoLength(String content) {
@@ -128,7 +120,7 @@ public class Round extends BaseEntity {
         if (contentLength > MAX_TODO_CONTENT_LENGTH || contentLength < MIN_TODO_CONTENT_LENGTH) {
             throw new InvalidTodoLengthException(
                     String.format(
-                            "투두 길이는 %d자 이상 %d자 이하로 작성 가능합니다.",
+                            "머스트두 길이는 %d자 이상 %d자 이하로 작성 가능합니다.",
                             MIN_TODO_CONTENT_LENGTH,
                             MAX_TODO_CONTENT_LENGTH
                     ), content
@@ -136,71 +128,19 @@ public class Round extends BaseEntity {
         }
     }
 
-    public int calculateAverageTier() {
-        double averageTier = roundOfMembers.stream()
-                                           .map(RoundOfMember::getMember)
-                                           .mapToInt(Member::getExperience)
-                                           .map(experience -> Tier.getTier(experience).getOrder())
-                                           .average()
-                                           .orElseThrow(IllegalStateException::new);
-
-        return (int) Math.round(averageTier);
-    }
-
     public void completeRound(Member member) {
+        if (mustDo == null) {
+            throw new NecessaryTodoNotExistException(" 머스트두가 생성되지 않았습니다.", String.valueOf(id));
+        }
         findRoundOfMemberBy(member).completeRound();
     }
 
-    public void addMember(Member member) {
-        RoundOfMember roundOfMember = RoundOfMember.builder()
-                                                   .member(member)
-                                                   .isDone(false)
-                                                   .build();
-
-        roundOfMembers.add(roundOfMember);
-    }
-
-    public int sizeOfCurrentMembers() {
-        return roundOfMembers.size();
-    }
-
-    public void updateNecessaryTodoIsDone(Member member, Boolean isDone) {
-        if (necessaryToDoContent == null) {
-            throw new NecessaryTodoNotExistException("필수 투두가 생성되지 않았습니다.", String.valueOf(id));
-        }
-        findRoundOfMemberBy(member).updateNecessaryTodoIsDone(isDone);
-    }
-
-    public boolean isNecessaryToDoDone(Member member) {
+    public boolean isMustDoDone(Member member) {
         return findRoundOfMemberBy(member).isDone();
     }
 
-    public void updateNecessaryTodoContent(Member member, String content) {
-        if (!master.equals(member)) {
-            throw new NotStudyMasterException("필수 투두를 수정할 권한이 없습니다.", String.valueOf(member.getNickname()));
-        }
-        necessaryToDoContent = content;
-    }
-
-    public boolean isEndAt(LocalDate today) {
-        LocalDate endAtDate = endAt.toLocalDate();
-        return endAtDate.isBefore(today) || endAtDate.equals(today);
-    }
-
-    public void updateEndAt(LocalDateTime endAt) {
-        this.endAt = LocalDateTime.of(endAt.toLocalDate(), LocalTime.MIN);
-    }
-
-    public void updateOptionalTodoContent(Member member, Long todoId, String content) {
-        findRoundOfMemberBy(member).updateOptionalTodoContent(todoId, content);
-    }
-
-    public void updateOptionalTodoIsDone(Member member, Long todoId, boolean isDone) {
-        findRoundOfMemberBy(member).updateOptionalTodoIsDone(todoId, isDone);
-    }
-
-    public void deleteOptionalTodo(Member member, Long todoId) {
-        findRoundOfMemberBy(member).removeOptionalTodoById(todoId);
+    public boolean isEndAt(LocalDate date) {
+        return meetingDayOfTheWeek.isSameDayOfWeek(date.getDayOfWeek());
     }
 
     public RoundOfMember findRoundOfMemberBy(Member member) {
@@ -220,12 +160,52 @@ public class Round extends BaseEntity {
         return doneCount * 100 / roundOfMembers.size();
     }
 
+    public void proceed() {
+        roundStatus = RoundStatus.IN_PROGRESS;
+    }
+
+    public void finish() {
+        roundStatus = RoundStatus.FINISHED;
+    }
+
     public boolean isSuccess(Member member) {
         return findRoundOfMemberBy(member).isDone();
     }
 
     public boolean isMaster(Member member) {
         return master.equals(member);
+    }
+
+    public boolean isSameWeek(Integer weekNumber) {
+        return this.weekNumber == weekNumber;
+    }
+
+    public boolean isSameDayOfWeek(MeetingDayOfTheWeek meetingDayOfTheWeek) {
+        return this.meetingDayOfTheWeek.equals(meetingDayOfTheWeek);
+    }
+
+    public boolean isNextDayOfWeek(DayOfWeek dayOfWeek) {
+        return this.meetingDayOfTheWeek.comesNext(dayOfWeek);
+    }
+
+    public boolean isInProgress() {
+        return roundStatus == RoundStatus.IN_PROGRESS;
+    }
+
+    public int calculateLeftDaysFrom(LocalDate date) {
+        int gap = meetingDayOfTheWeek.getDayOfWeek().getValue() - date.getDayOfWeek().getValue();
+        if (gap < 0) {
+            return gap + DayOfWeek.values().length;
+        }
+        return gap;
+    }
+
+    public DayOfWeek getDayOfWeek() {
+        return meetingDayOfTheWeek.getDayOfWeek();
+    }
+
+    public boolean isBeforeOrSame(Integer minimumWeeks) {
+        return weekNumber <= minimumWeeks;
     }
 
     @Override

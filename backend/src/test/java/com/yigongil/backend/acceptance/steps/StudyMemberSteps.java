@@ -1,19 +1,18 @@
 package com.yigongil.backend.acceptance.steps;
 
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+
 import com.yigongil.backend.response.StudyMemberRoleResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.util.Map;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-
-import java.util.Map;
-
-import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class StudyMemberSteps {
 
@@ -35,7 +34,7 @@ public class StudyMemberSteps {
         String memberToken = sharedContext.getToken(memberName);
         ExtractableResponse<Response> response = given().when()
                                                         .header(HttpHeaders.AUTHORIZATION, memberToken)
-                                                        .get("/v1/studies/{studyId}/members/role", studyId)
+                                                        .get("/studies/{studyId}/members/role", studyId)
                                                         .then()
                                                         .log()
                                                         .all()

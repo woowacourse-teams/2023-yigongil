@@ -30,7 +30,7 @@ public class FakeController {
         this.studyService = studyService;
     }
 
-    @GetMapping("/v1/login/fake/tokens")
+    @GetMapping("/login/fake/tokens")
     public ResponseEntity<TokenResponse> createFakeToken(@RequestParam String githubId) {
         Optional<Member> member = memberRepository.findByGithubId(githubId);
 
@@ -45,7 +45,7 @@ public class FakeController {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE).body(new TokenResponse(jwtTokenProvider.createAccessToken(id), jwtTokenProvider.createRefreshToken(id)));
     }
 
-    @PutMapping("/v1/fake/proceed")
+    @PutMapping("/fake/proceed")
     public ResponseEntity<Void> proceed(@RequestParam Integer days) {
         for (int i = 1; i <= days; i++) {
             studyService.proceedRound(LocalDate.now().plusDays(i));

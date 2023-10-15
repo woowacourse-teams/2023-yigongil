@@ -1,10 +1,9 @@
 package com.yigongil.backend.ui.doc;
 
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.response.RoundResponse;
+import com.yigongil.backend.request.MustDoUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -12,21 +11,22 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
-@Tag(name = "회차", description = "회차 관련 api")
-public interface RoundApi {
+@Tag(name = "머스트두", description = "머스트두 관련 api")
+public interface MustDoApi {
 
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200"),
-                    @ApiResponse(responseCode = "401", content = @Content),
-                    @ApiResponse(responseCode = "404", content = @Content)
+                    @ApiResponse(responseCode = "400"),
+                    @ApiResponse(responseCode = "401"),
+                    @ApiResponse(responseCode = "404")
             }
     )
     @SecurityRequirement(name = "token")
-    @Operation(summary = "회차 상세 조회")
-    public ResponseEntity<RoundResponse> viewRoundDetail(
+    @Operation(summary = " 머스트두 생성")
+    ResponseEntity<Void> updateMustDo(
             @Schema(hidden = true) Member member,
-            @Parameter(description = "스터디 id", required = true) Long studyId,
-            @Parameter(description = "회차 id", required = true) Long roundId
+            @Parameter(description = " 머스트두를 생성할 라운드 id", required = true) Long roundId,
+            MustDoUpdateRequest request
     );
 }
