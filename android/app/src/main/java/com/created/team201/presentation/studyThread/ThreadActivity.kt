@@ -4,12 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.created.team201.R
 import com.created.team201.databinding.ActivityThreadBinding
-import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.studyThread.ThreadUiState.Loading
 import com.created.team201.presentation.studyThread.ThreadUiState.Success
 import com.created.team201.presentation.studyThread.adapter.MustDoAdapter
@@ -19,7 +18,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_thread) {
+class ThreadActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityThreadBinding
     private val mustDoAdapter by lazy { MustDoAdapter() }
     private val threadAdapter by lazy { ThreadAdapter() }
     private val threadViewModel: ThreadViewModel by viewModels()
@@ -27,8 +27,10 @@ class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityThreadBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        bindViewModel()
+        threadViewModel.updateStudyId(studyId)
         attachAdapter()
         setOnClickEvent()
         collectUiState()
@@ -62,13 +64,6 @@ class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_
 
             threadViewModel.dispatchFeed(message)
             binding.etThreadInput.text.clear()
-        }
-    }
-
-    private fun bindViewModel() {
-        binding.lifecycleOwner = this
-        binding.vm = threadViewModel.also {
-            it.updateStudyId(studyId)
         }
     }
 

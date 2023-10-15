@@ -2,8 +2,6 @@ package com.created.team201.presentation.studyThread
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.created.domain.model.Feeds
-import com.created.domain.model.MustDo
 import com.created.domain.repository.ThreadRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,14 +30,6 @@ class ThreadViewModel @Inject constructor(
         studyId.value = id
     }
 
-    fun updateMustDoCertification() {
-        viewModelScope.launch {
-            threadRepository.getMustDoCertification(studyId.value).collectLatest { mustDo ->
-                _uiState.value = ThreadUiState.Success().copy(mustDo = mustDo)
-            }
-        }
-    }
-
     fun dispatchFeed(message: String) {
         viewModelScope.launch {
             runCatching { threadRepository.updateFeeds(studyId.value, message, null) }
@@ -49,20 +39,19 @@ class ThreadViewModel @Inject constructor(
         }
     }
 
-    fun updateFeeds() {
+    private fun updateMustDoCertification() {
+        viewModelScope.launch {
+            threadRepository.getMustDoCertification(studyId.value).collectLatest { mustDo ->
+                _uiState.value = ThreadUiState.Success().copy(mustDo = mustDo)
+            }
+        }
+    }
+
+    private fun updateFeeds() {
         viewModelScope.launch {
             threadRepository.getFeeds(studyId.value).collectLatest {
                 _uiState.value = ThreadUiState.Success().copy(feeds = it)
             }
         }
     }
-}
-
-sealed interface ThreadUiState {
-    data class Success(
-        val feeds: List<Feeds> = emptyList(),
-        val mustDo: List<MustDo> = emptyList()
-    ) : ThreadUiState
-
-    object Loading : ThreadUiState
 }

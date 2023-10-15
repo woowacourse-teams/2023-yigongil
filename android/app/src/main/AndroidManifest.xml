@@ -24,7 +24,8 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".presentation.studyThread.ThreadActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.report.ReportActivity"
             android:exported="false"
