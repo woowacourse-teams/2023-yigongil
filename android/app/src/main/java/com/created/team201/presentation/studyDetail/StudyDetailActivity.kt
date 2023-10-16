@@ -22,7 +22,6 @@ import com.created.team201.presentation.studyDetail.StudyDetailState.Guest
 import com.created.team201.presentation.studyDetail.StudyDetailState.Master
 import com.created.team201.presentation.studyDetail.adapter.StudyParticipantsAdapter
 import com.created.team201.presentation.studyDetail.bottomSheet.StudyStartBottomSheetFragment
-import com.created.team201.presentation.studyDetail.model.PeriodFormat
 import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -142,13 +141,6 @@ class StudyDetailActivity :
         }
     }
 
-    fun convertPeriodOfCountFormat(periodOfCount: String): String {
-        if (periodOfCount == "") return ""
-        val stringRes =
-            PeriodFormat.valueOf(periodOfCount.last()).res
-        return getString(stringRes, periodOfCount.dropLast(STRING_LAST_INDEX).toInt())
-    }
-
     fun initMainButtonOnClick(role: Role) {
         when (role) {
             Role.MASTER -> onMasterClickMainButton()
@@ -240,7 +232,6 @@ class StudyDetailActivity :
 
     companion object {
         private const val NON_EXISTENCE_STUDY_ID = 0L
-        private const val STRING_LAST_INDEX = 1
         private const val KEY_STUDY_ID = "KEY_STUDY_ID"
         fun getIntent(context: Context, studyId: Long): Intent =
             Intent(context, StudyDetailActivity::class.java).apply {

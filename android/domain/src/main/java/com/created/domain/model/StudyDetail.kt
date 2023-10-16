@@ -7,13 +7,10 @@ data class StudyDetail(
     val numberOfCurrentMembers: Int,
     val numberOfMaximumMembers: Int,
     val studyMasterId: Long,
-    val startDate: String,
-    val totalRoundCount: Int,
-    val cycle: String,
-    val currentRound: Int,
+    val meetingDaysCountPerWeek: Int,
     val introduction: String,
     val members: List<Member>,
-    val rounds: List<Round>,
+    val minimumWeeks: Int,
 ) {
     companion object {
         private const val START_MEMBER_CONDITION = 2

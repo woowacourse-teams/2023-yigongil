@@ -94,11 +94,11 @@
 
     <!-- 아이콘 텍스트 버튼 커스텀 뷰 -->
     <string name="icon_text_button_name_people_count">인원 수</string>
-    <string name="icon_text_button_name_start_date">예상시작일</string>
-    <string name="icon_text_button_name_period">스터디기간</string>
-    <string name="icon_text_button_name_cycle">스터디주기</string>
+    <string name="icon_text_button_name_period">기간</string>
+    <string name="icon_text_button_name_cycle">주</string>
     <string name="icon_text_button_formatter_information_people_count">%d명</string>
-    <string name="icon_text_button_formatter_information_period">%d회차</string>
+    <string name="icon_text_button_formatter_information_cycle">%d주</string>
+    <string name="icon_text_button_formatter_information_period">%d회</string>
 
     <!--스터디 상세보기 뷰-->
     <string name="study_detail_app_bar_title">스터디 상세보기</string>
@@ -111,9 +111,6 @@
     <string name="study_detail_study_accept_waiting">수락을 기다리고 있어요</string>
     <string name="study_detail_study_start_waiting">시작을 기다리고 있어요</string>
     <string name="study_detail_do_not_accept_member_anymore">더이상 스터디 멤버를 받을 수 없습니다.</string>
-    <string name="study_detail_period_of_count_day">%d일</string>
-    <string name="study_detail_period_of_count_week">%d주</string>
-    <string name="study_detail_period_format">%s회차</string>
     <string name="study_detail_notify_invalid_study">스터디를 찾을 수 없습니다.</string>
     <string name="study_detail_notify_cant_participant">더는 참가할 수 없어요</string>
     <string name="study_detail_not_yet">아직 준비중입니다</string>
