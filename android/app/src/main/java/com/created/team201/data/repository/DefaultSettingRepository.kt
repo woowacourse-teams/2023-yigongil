@@ -13,12 +13,15 @@ class DefaultSettingRepository @Inject constructor(
 ) : SettingRepository {
     override fun logout() {
         tokenDataSource.setAccessToken("")
+        tokenDataSource.setRefreshToken("")
+        onBoardingDataSource.setOnBoardingIsDone(false)
     }
 
     override suspend fun requestWithdrawAccount(): Result<Unit> {
         return runCatching {
             settingService.requestWithdrawAccount()
             tokenDataSource.setAccessToken("")
+            tokenDataSource.setRefreshToken("")
             onBoardingDataSource.setOnBoardingIsDone(false)
         }
     }

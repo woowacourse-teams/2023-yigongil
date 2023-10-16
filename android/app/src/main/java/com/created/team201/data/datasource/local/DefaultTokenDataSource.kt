@@ -10,11 +10,11 @@ class DefaultTokenDataSource @Inject constructor(
     }
 
     override fun getAccessToken(): String {
-        return tokenStorage.fetchToken(ACCESS_TOKEN) ?: throw IllegalStateException()
+        return tokenStorage.fetchToken(ACCESS_TOKEN)
     }
 
     override fun getRefreshToken(): String {
-        return tokenStorage.fetchToken(REFRESH_TOKEN) ?: throw IllegalStateException()
+        return tokenStorage.fetchToken(REFRESH_TOKEN)
     }
 
     override fun setAccessToken(token: String) {
