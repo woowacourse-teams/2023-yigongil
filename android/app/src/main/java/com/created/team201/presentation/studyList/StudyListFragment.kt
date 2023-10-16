@@ -3,7 +3,6 @@ package com.created.team201.presentation.studyList
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.View.VISIBLE
@@ -25,11 +24,14 @@ import com.created.team201.presentation.studyList.adapter.StudyListAdapter
 import com.created.team201.presentation.studyList.model.StudyListFilter
 import com.created.team201.util.FirebaseLogUtil
 import com.created.team201.util.FirebaseLogUtil.SCREEN_STUDY_LIST
+import com.google.android.material.chip.ChipGroup
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fragment_study_list) {
+class StudyListFragment :
+    BindingFragment<FragmentStudyListBinding>(R.layout.fragment_study_list),
+    BottomSheetListener {
 
     private val studyListViewModel: StudyListViewModel by activityViewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
@@ -58,6 +60,10 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         setupScrollListener()
         setupStudyList()
         setupStudyListFilter()
+    }
+
+    override fun onBottomSheetClosed() {
+        loadFilteredPage(binding.cgStudyList)
     }
 
     private fun setupToolbar() {
@@ -109,7 +115,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
                 override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                     searchView.hideKeyboard()
                     studyListViewModel.changeSearchWord("")
-                    studyListViewModel.loadPage()
+                    studyListViewModel.refreshPage()
                     return true
                 }
             })
@@ -118,9 +124,8 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private fun setOnSearchViewQueryTextListener(searchView: SearchView) {
         searchView.setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                Log.d("ring", query.toString())
                 studyListViewModel.changeSearchWord(query.toString())
-                studyListViewModel.loadPage()
+                studyListViewModel.refreshPage()
                 searchView.hideKeyboard()
                 return true
             }
@@ -149,7 +154,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private fun setupRefreshListener() {
         binding.srlStudyList.setOnRefreshListener {
             viewLifecycleOwner.lifecycleScope.launch {
-                studyListViewModel.refreshPage(mainViewModel.isGuest)
+                studyListViewModel.refreshPage()
                 binding.srlStudyList.isRefreshing = false
             }
         }
@@ -229,6 +234,9 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
     private fun setupStudyList() {
         studyListViewModel.initPage()
+        binding.tvGuestInformation.setOnClickListener {
+            showLoginBottomSheetDialog()
+        }
     }
 
     private fun studyListClickListener() = object : StudyListClickListener {
@@ -239,28 +247,28 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
 
     private fun setupStudyListFilter() {
         binding.cgStudyList.setOnCheckedStateChangeListener { group, _ ->
-            when (group.checkedChipId) {
-                binding.chipStudyListAll.id -> {
-                    studyListViewModel.loadFilteredPage(StudyListFilter.ALL)
-                }
+            loadFilteredPage(group)
+        }
+    }
 
-                binding.chipStudyListWaiting.id -> {
-                    studyListViewModel.loadAppliedPage(mainViewModel.isGuest)
-                }
+    private fun loadFilteredPage(group: ChipGroup) {
+        studyListViewModel.updateIsGuest(mainViewModel.isGuest)
+        val filter = getStudyListFilter(group)
+        studyListViewModel.loadFilteredPage(filter)
+    }
 
-                binding.chipStudyListProcessing.id -> {
-                    studyListViewModel.loadFilteredPage(StudyListFilter.PROCESSING)
-                }
-
-                binding.chipStudyListRecruiting.id -> {
-                    studyListViewModel.loadFilteredPage(StudyListFilter.RECRUITING)
-                }
-
-                -1 -> {
-                    group.check(R.id.chip_study_list_all)
-                    studyListViewModel.loadFilteredPage(StudyListFilter.ALL)
-                }
+    private fun getStudyListFilter(group: ChipGroup): StudyListFilter {
+        return when (group.checkedChipId) {
+            binding.chipStudyListAll.id -> StudyListFilter.ALL
+            binding.chipStudyListWaiting.id -> StudyListFilter.WAITING
+            binding.chipStudyListProcessing.id -> StudyListFilter.PROCESSING
+            binding.chipStudyListRecruiting.id -> StudyListFilter.RECRUITING
+            NON_SELECTED_CHIP_ID -> {
+                group.check(R.id.chip_study_list_all)
+                StudyListFilter.ALL
             }
+
+            else -> throw IllegalArgumentException()
         }
     }
 
@@ -268,5 +276,9 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         val inputMethodManager =
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
+    }
+
+    companion object {
+        private const val NON_SELECTED_CHIP_ID = -1
     }
 }
