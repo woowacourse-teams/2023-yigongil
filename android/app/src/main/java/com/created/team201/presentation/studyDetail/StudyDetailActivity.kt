@@ -21,6 +21,7 @@ import com.created.team201.presentation.report.model.ReportCategory
 import com.created.team201.presentation.studyDetail.StudyDetailState.Guest
 import com.created.team201.presentation.studyDetail.StudyDetailState.Master
 import com.created.team201.presentation.studyDetail.adapter.StudyParticipantsAdapter
+import com.created.team201.presentation.studyDetail.bottomSheet.StudyStartBottomSheetFragment
 import com.created.team201.presentation.studyDetail.model.PeriodFormat
 import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -154,7 +155,11 @@ class StudyDetailActivity :
     }
 
     private fun onMasterClickMainButton() {
-        studyDetailViewModel.startStudy(studyId)
+        val studyStartBottomSheetFragment = StudyStartBottomSheetFragment.newInstance(studyId)
+        studyStartBottomSheetFragment.show(
+            supportFragmentManager,
+            studyStartBottomSheetFragment.tag,
+        )
     }
 
     private fun onNothingClickMainButton() {
@@ -165,7 +170,7 @@ class StudyDetailActivity :
         removeAllFragment()
         LoginBottomSheetFragment().show(
             supportFragmentManager,
-            LoginBottomSheetFragment.TAG_LOGIN_BOTTOM_SHEET
+            LoginBottomSheetFragment.TAG_LOGIN_BOTTOM_SHEET,
         )
     }
 
