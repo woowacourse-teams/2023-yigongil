@@ -100,7 +100,7 @@
     <string name="study_detail_app_bar_study_master_title">개설한 스터디 관리하기</string>
     <string name="study_detail_study_people">스터디원</string>
     <string name="study_detail_study_capacity">참여하기(%d/%d)</string>
-    <string name="study_detail_button_start_study">시작하기(%d/%d)</string>
+    <string name="study_detail_button_start_study">요일 선택하기(%d/%d)</string>
     <string name="study_detail_button_preparing_service">아직 준비중인 기능입니다</string>
     <string name="study_detail_dm_button_content_description">스터디장에게 문의하기</string>
     <string name="study_detail_study_accept_waiting">수락을 기다리고 있어요</string>
@@ -114,6 +114,11 @@
     <string name="study_detail_not_yet">아직 준비중입니다</string>
     <string name="item_study_detail_deleted_user_description">탈퇴한 유저에요</string>
     <string name="item_study_detail_study_success_rate">스터디 성공률 %d%%</string>
+
+    <!-- 스터디 상세보기 - 시작하기 바텀시트 다이얼로그 프래그먼트 -->
+    <string name="start_study_bottom_sheet_dialog_fragment_title">스터디 요일</string>
+    <string name="start_study_bottom_sheet_dialog_fragment_button_start">시작하기</string>
+    <string name="study_start_bottom_sheet_dialog_fragment_not_valid_study">유효하지 않은 스터디입니다.</string>
 
     <!--스터디 관리하기 뷰-->
     <string name="study_management_app_bar_title_is_study_participant">참여한 스터디 관리하기</string>
@@ -153,6 +158,9 @@
     <string name="create_study_toolbar_title">스터디 만들기</string>
     <string name="create_study_button_next">다음</string>
     <string name="create_study_button_done">작성완료</string>
+
+    <string name="create_study_toast_create_study_success">스터디 개설에 성공했습니다</string>
+    <string name="create_study_toast_create_study_fail">스터디 개설에 실패했습니다</string>
 
     <string name="create_study_tag_people_count">TAG_CREATE_STUDY_PEOPLE_COUNT</string>
     <string name="create_study_tag_study_date">TAG_CREATE_STUDY_STUDY_DATE</string>
@@ -263,5 +271,14 @@
 
     <!-- 채팅 뷰 -->
     <string name="chat_no_chat">아직 준비중인 기능이에요!\n조금만 기다려주세요!</string>
+
+    <!-- 요일 선택기 뷰 -->
+    <string name="monday">월</string>
+    <string name="tuesday">화</string>
+    <string name="wednesday">수</string>
+    <string name="thursday">목</string>
+    <string name="friday">금</string>
+    <string name="saturday">토</string>
+    <string name="sunday">일</string>
 
 </resources>
