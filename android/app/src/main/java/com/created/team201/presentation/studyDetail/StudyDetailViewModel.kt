@@ -8,8 +8,11 @@ import com.created.domain.model.Profile
 import com.created.domain.model.ProfileInformation
 import com.created.domain.model.Role
 import com.created.domain.model.StudyDetail
+import com.created.domain.model.StudyStart
 import com.created.domain.repository.GuestRepository
 import com.created.domain.repository.StudyDetailRepository
+import com.created.team201.data.mapper.toDomain
+import com.created.team201.presentation.common.customview.dayofselector.DayOfWeek
 import com.created.team201.presentation.myPage.model.ProfileInformationUiModel
 import com.created.team201.presentation.myPage.model.ProfileUiModel
 import com.created.team201.presentation.onBoarding.model.NicknameUiModel
@@ -77,7 +80,7 @@ class StudyDetailViewModel @Inject constructor(
                         val studyDetailUIModel =
                             StudyDetailUIModel.createFromStudyDetailRole(
                                 studyDetail = studyDetail,
-                                role = Role.GUEST
+                                role = Role.GUEST,
                             )
                         setStudyDetail(studyDetailUIModel, studyId)
                     }
@@ -89,7 +92,7 @@ class StudyDetailViewModel @Inject constructor(
                                 val studyDetailUIModel =
                                     StudyDetailUIModel.createFromStudyDetailRole(
                                         studyDetail = studyDetail,
-                                        role = Role.valueOf(role)
+                                        role = Role.valueOf(role),
                                     )
                                 setStudyDetail(studyDetailUIModel, studyId)
                             }.onFailure {
@@ -154,10 +157,11 @@ class StudyDetailViewModel @Inject constructor(
         }
     }
 
-    fun startStudy(studyId: Long) {
+    fun startStudy(studyId: Long, days: List<DayOfWeek>) {
         viewModelScope.launch {
             runCatching {
-                studyDetailRepository.startStudy(studyId)
+                val studyStart = StudyStart(days.map { dayOfWeek -> dayOfWeek.toDomain() })
+                studyDetailRepository.startStudy(studyId, studyStart)
             }.onSuccess {
                 _isStartStudy.value = true
             }
@@ -203,10 +207,10 @@ class StudyDetailViewModel @Inject constructor(
     private fun ProfileInformation.toUiModel(): ProfileInformationUiModel =
         ProfileInformationUiModel(
             nickname = nickname.toUiModel(),
-            introduction = introduction
+            introduction = introduction,
         )
 
     private fun Nickname.toUiModel(): NicknameUiModel = NicknameUiModel(
-        nickname = nickname
+        nickname = nickname,
     )
 }
