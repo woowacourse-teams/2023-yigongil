@@ -1,7 +1,7 @@
 package com.created.team201.presentation.createStudy.model
 
 sealed interface CreateStudyUiState {
-    object Success : CreateStudyUiState
+    class Success(val studyId: Long) : CreateStudyUiState
 
     object Fail : CreateStudyUiState
 

@@ -23,6 +23,7 @@ import com.created.team201.presentation.createStudy.model.FragmentState.SecondFr
 import com.created.team201.presentation.createStudy.model.FragmentType
 import com.created.team201.presentation.createStudy.model.FragmentType.FIRST
 import com.created.team201.presentation.createStudy.model.FragmentType.SECOND
+import com.created.team201.presentation.studyDetail.StudyDetailActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -85,8 +86,14 @@ class CreateStudyActivity :
             createStudyViewModel.createStudyUiState.collectLatest { createStudyUiState ->
                 when (createStudyUiState) {
                     is Success -> {
-                        // TODO 어디로 갈건데?
                         showToast(R.string.create_study_toast_create_study_success)
+                        startActivity(
+                            StudyDetailActivity.getIntent(
+                                this@CreateStudyActivity,
+                                createStudyUiState.studyId
+                            ),
+                        )
+
                         finish()
                     }
 

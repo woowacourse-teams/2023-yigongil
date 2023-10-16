@@ -111,8 +111,8 @@ class CreateStudyViewModel @Inject constructor(
                 numberOfStudyPerWeek = cycle.value,
             )
             createStudyRepository.createStudy(study)
-                .onSuccess {
-                    _createStudyUiState.emit(CreateStudyUiState.Success)
+                .onSuccess { studyId ->
+                    _createStudyUiState.emit(CreateStudyUiState.Success(studyId))
                 }
                 .onFailure {
                     _createStudyUiState.emit(CreateStudyUiState.Fail)
