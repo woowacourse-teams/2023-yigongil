@@ -6,7 +6,6 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatDialog
-import com.created.team201.R
 import com.created.team201.databinding.LayoutDialogInAppUpdateBinding
 import com.created.team201.presentation.splash.model.AppUpdateType
 import com.created.team201.presentation.splash.model.AppUpdateType.FLEXIBLE
@@ -41,8 +40,7 @@ class InAppUpdateDialog(
         }
         setCancelVisible(appUpdateType)
         binding.tvDialogInAppUpdateTitle.text = title
-        binding.tvDialogInAppUpdateContent.text =
-            content.ifBlank { context.getString(R.string.in_app_update_dialog_content) }
+        binding.tvDialogInAppUpdateContent.text = content
     }
 
     private fun setCancelVisible(appUpdateType: AppUpdateType) {

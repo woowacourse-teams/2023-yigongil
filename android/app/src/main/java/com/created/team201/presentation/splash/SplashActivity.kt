@@ -52,14 +52,14 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
 
     private fun showInAppUpdateDialog(
         appUpdateType: com.created.team201.presentation.splash.model.AppUpdateType,
-        title: String = getString(R.string.in_app_update_dialog_title),
-        content: String = getString(R.string.in_app_update_dialog_content)
+        title: String,
+        content: String
     ) {
         InAppUpdateDialog(
             context = this,
             appUpdateType = appUpdateType,
-            title = title,
-            content = content,
+            title = title.ifBlank { getString(R.string.in_app_update_dialog_title) },
+            content = content.ifBlank { getString(R.string.in_app_update_dialog_content) },
             onUpdateClick = ::navigateToPlayStore,
             onCancelClick = ::onInAppUpdateDialogCancelClickListener,
         ).show()
@@ -71,6 +71,7 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
                 with(com.created.team201.presentation.splash.model.AppUpdateType) {
                     showInAppUpdateDialog(
                         appUpdateType = from(appUpdateInformation.shouldUpdate),
+                        title = "",
                         content = appUpdateInformation.message,
                     )
                 }
