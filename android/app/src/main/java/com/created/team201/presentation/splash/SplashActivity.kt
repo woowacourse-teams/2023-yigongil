@@ -17,7 +17,6 @@ import com.created.team201.presentation.splash.SplashViewModel.State.FAIL
 import com.created.team201.presentation.splash.SplashViewModel.State.IDLE
 import com.created.team201.presentation.splash.SplashViewModel.State.SUCCESS
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -39,9 +38,7 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
     private fun verifyAppVersion() {
         val appUpdateManager = AppUpdateManagerFactory.create(this)
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
-                appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
-            ) {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
                 splashViewModel.getAppUpdateInformation(appUpdateInfo.availableVersionCode())
             } else {
                 splashViewModel.verifyToken()
@@ -54,26 +51,36 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
     }
 
     private fun showInAppUpdateDialog(
+        appUpdateType: com.created.team201.presentation.splash.model.AppUpdateType,
         title: String = getString(R.string.in_app_update_dialog_title),
         content: String = getString(R.string.in_app_update_dialog_content)
     ) {
         InAppUpdateDialog(
             context = this,
-            title,
-            content,
-            ::navigateToPlayStore,
+            appUpdateType = appUpdateType,
+            title = title,
+            content = content,
+            onUpdateClick = ::navigateToPlayStore,
+            onCancelClick = ::onInAppUpdateDialogCancelClickListener,
         ).show()
     }
 
     private fun collectAppUpdateInformation() {
         lifecycleScope.launch {
             splashViewModel.appUpdateInformation.collect { appUpdateInformation ->
-                when (appUpdateInformation.shouldUpdate) {
-                    true -> showInAppUpdateDialog(content = appUpdateInformation.message)
-                    false -> splashViewModel.verifyToken()
+                with(com.created.team201.presentation.splash.model.AppUpdateType) {
+                    showInAppUpdateDialog(
+                        appUpdateType = from(appUpdateInformation.shouldUpdate),
+                        content = appUpdateInformation.message,
+                    )
                 }
             }
         }
+    }
+
+    private fun onInAppUpdateDialogCancelClickListener() {
+        splashViewModel.verifyToken()
+        finish()
     }
 
     private fun observeLoginState() {
