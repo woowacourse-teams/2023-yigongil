@@ -59,6 +59,7 @@ class ThreadActivity : AppCompatActivity() {
     }
 
     private fun showView(state: Success) {
+        binding.tvThreadStudyName.text = state.studyName
         threadAdapter.submitList(state.feeds)
         mustDoAdapter.submitList(state.mustDo)
     }
@@ -79,11 +80,15 @@ class ThreadActivity : AppCompatActivity() {
     private fun onClickMore(position: Int) {
         when (position) {
             MUST_DO -> {
-                //createBottomDialog
+                // createBottomDialog
             }
 
-            MUST_DO_CERTIFICATION -> {}
-            STUDY_INFO -> {}
+            MUST_DO_CERTIFICATION -> {
+                // startActivity(CertificationActivity)
+            }
+            STUDY_INFO -> {
+                // createDialog
+            }
         }
     }
 

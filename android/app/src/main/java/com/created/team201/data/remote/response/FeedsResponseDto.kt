@@ -5,16 +5,16 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class FeedsResponseDto(
+    @SerialName("id")
+    val id: Int,
     @SerialName("author")
     val author: Author,
+    @SerialName("imageUrl")
+    val imageUrl: String?,
     @SerialName("content")
     val content: String,
     @SerialName("createdAt")
-    val createdAt: String,
-    @SerialName("id")
-    val id: Int,
-    @SerialName("imageUrl")
-    val imageUrl: String?
+    val createdAt: String
 ) {
     @Serializable
     data class Author(

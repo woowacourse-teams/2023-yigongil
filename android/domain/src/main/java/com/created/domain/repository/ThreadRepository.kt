@@ -1,7 +1,7 @@
 package com.created.domain.repository
 
 import com.created.domain.model.Feeds
-import com.created.domain.model.MustDo
+import com.created.domain.model.MustDoCertification
 import kotlinx.coroutines.flow.Flow
 
 interface ThreadRepository {
@@ -10,7 +10,7 @@ interface ThreadRepository {
 
     fun getFeeds(studyId: Long): Flow<List<Feeds>>
 
-    fun getMustDoCertification(studyId: Long): Flow<List<MustDo>>
+    suspend fun getMustDoCertification(studyId: Long): MustDoCertification
 
     fun postMustDoCertification(studyId: Long)
 

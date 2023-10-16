@@ -1,10 +1,10 @@
 package com.created.team201.data.repository
 
 import com.created.domain.model.Feeds
-import com.created.domain.model.MustDo
+import com.created.domain.model.MustDoCertification
 import com.created.domain.repository.ThreadRepository
+import com.created.team201.data.mapper.toDomain
 import com.created.team201.data.mapper.toFeeds
-import com.created.team201.data.mapper.toMustDo
 import com.created.team201.data.remote.api.ThreadService
 import com.created.team201.data.remote.request.FeedRequestDto
 import kotlinx.coroutines.Dispatchers
@@ -18,13 +18,10 @@ class DefaultThreadRepository @Inject constructor(
     private val threadService: ThreadService
 ) : ThreadRepository {
 
-    override suspend fun updateFeeds(studyId: Long, content: String, image: String?) {
-        threadService.postFeeds(
-            studyId,
-            FeedRequestDto(
-                content = content, imageUrl = image
-            )
-        )
+    override suspend fun getMustDoCertification(studyId: Long): MustDoCertification {
+        val mustDoCertification = threadService.getMustDoCertification(studyId = studyId)
+
+        return mustDoCertification.toDomain()
     }
 
     override fun getFeeds(studyId: Long): Flow<List<Feeds>> = flow {
@@ -36,13 +33,14 @@ class DefaultThreadRepository @Inject constructor(
         }
     }.flowOn(Dispatchers.IO)
 
-    override fun getMustDoCertification(studyId: Long): Flow<List<MustDo>> = flow {
-        val mustDoCertification = threadService.getMustDoCertification(studyId = studyId)
-        val membersMustDoCertification =
-            listOf(mustDoCertification.me.toMustDo()) + mustDoCertification.others.map { it.toMustDo() }
-
-        emit(membersMustDoCertification)
-    }.flowOn(Dispatchers.IO)
+    override suspend fun updateFeeds(studyId: Long, content: String, image: String?) {
+        threadService.postFeeds(
+            studyId,
+            FeedRequestDto(
+                content = content, imageUrl = image
+            )
+        )
+    }
 
     override fun postMustDoCertification(studyId: Long) {
         TODO("Not yet implemented")

@@ -5,32 +5,33 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MustDoCertificationResponseDto(
+    @SerialName("studyName")
+    val studyName: String,
+    @SerialName("upcomingRound")
+    val upcomingRound: UpcomingRound,
     @SerialName("me")
-    val me: Me,
+    val me: User,
     @SerialName("others")
-    val others: List<Other>
+    val others: List<User>
 ) {
     @Serializable
-    data class Me(
+    data class User(
         @SerialName("id")
         val id: Int,
-        @SerialName("isCertified")
-        val isCertified: Boolean,
         @SerialName("nickname")
         val nickname: String,
         @SerialName("profileImageUrl")
-        val profileImageUrl: String
+        val profileImageUrl: String,
+        @SerialName("isCertified")
+        val isCertified: Boolean
     )
 
     @Serializable
-    data class Other(
+    data class UpcomingRound(
         @SerialName("id")
         val id: Int,
-        @SerialName("isCertified")
-        val isCertified: Boolean,
-        @SerialName("nickname")
-        val nickname: String,
-        @SerialName("profileImageUrl")
-        val profileImageUrl: String
+        @SerialName("weekNumber")
+        val weekNumber: Int,
     )
 }
+
