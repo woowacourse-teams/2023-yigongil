@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface CommonStudyListService {
 
-    @GET("v1/studies/recruiting?")
+    @GET("v1/studies?")
     suspend fun getStudyList(
         @Query("status") status: String?,
         @Query("page") index: Int?,

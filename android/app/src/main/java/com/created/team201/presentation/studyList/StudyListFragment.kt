@@ -2,6 +2,7 @@ package com.created.team201.presentation.studyList
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.View.VISIBLE
@@ -115,6 +116,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private fun setOnSearchViewQueryTextListener(searchView: SearchView) {
         searchView.setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                Log.d("ring", query.toString())
                 studyListViewModel.changeSearchWord(query.toString())
                 studyListViewModel.loadPage()
                 searchView.hideKeyboard()

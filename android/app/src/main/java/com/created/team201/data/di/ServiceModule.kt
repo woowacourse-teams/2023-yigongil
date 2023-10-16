@@ -31,12 +31,12 @@ object ServiceModule {
 
     @Singleton
     @Provides
-    fun provideCommonStudyListService(@AuthRetrofit retrofit: Retrofit): CommonStudyListService =
+    fun provideCommonStudyListService(@DefaultRetrofit retrofit: Retrofit): CommonStudyListService =
         retrofit.create(CommonStudyListService::class.java)
 
     @Singleton
     @Provides
-    fun provideMemberStudyListService(@DefaultRetrofit retrofit: Retrofit): MemberStudyListService =
+    fun provideMemberStudyListService(@AuthRetrofit retrofit: Retrofit): MemberStudyListService =
         retrofit.create(MemberStudyListService::class.java)
 
     @Singleton

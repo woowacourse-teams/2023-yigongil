@@ -17,7 +17,7 @@ data class StudySummaryResponseDto(
     val createdAt: String,
     @SerialName("minimumWeeks")
     val minimumWeeks: Int,
-    @SerialName("meetingDaysCountPerWeek")
+    @SerialName("meetingDaysPerWeek")
     val meetingDaysCountPerWeek: Int,
     @SerialName("numberOfCurrentMembers")
     val numberOfCurrentMembers: Int,

@@ -53,14 +53,18 @@ class StudyListViewModel @Inject constructor(
             }.onSuccess {
                 if (it.isNotEmpty()) {
                     _isNotFoundStudies.value = false
-                    val newItems = _studySummaries.value?.toMutableList()
-                    _studySummaries.value = mutableListOf()
+                    val newItems = if (page != Page()) {
+                        _studySummaries.value?.toMutableList()
+                    } else {
+                        mutableListOf()
+                    }
+                    _studySummaries.value = emptyList()
                     newItems?.addAll(it.toUiModel())
                     _studySummaries.value = newItems?.toList()
                     page++
                     return@launch
                 }
-                if (page != Page(0)) {
+                if (page == Page(0)) {
                     setNotFoundStudies()
                 }
             }.onFailure {
@@ -74,13 +78,13 @@ class StudyListViewModel @Inject constructor(
     }
 
     fun refreshPage() {
-        page = Page(0)
+        page = Page()
         _studySummaries.value = listOf()
         loadPage()
     }
 
     fun loadNextPage() {
-        if (page == Page(0)) {
+        if (page == Page()) {
             return
         }
         _loadingState.value = true
@@ -96,6 +100,7 @@ class StudyListViewModel @Inject constructor(
     }
 
     fun changeSearchWord(searchWord: String) {
+        page = Page()
         recentSearchWord = searchWord
     }
 
