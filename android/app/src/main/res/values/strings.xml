@@ -67,17 +67,23 @@
     <string name="error_baseFragment">"[ERROR]Binding no initialization"</string>
 
     <!--스터디 목록 탭-->
+    <string name="study_list_chip_recruiting">모집중</string>
+    <string name="study_list_chip_processing">진행중</string>
+    <string name="study_list_chip_all">전체</string>
+    <string name="study_list_chip_waiting">수락 대기중</string>
     <string name="study_list_create">스터디 만들기</string>
     <string name="study_list_item_sort_description">정렬</string>
     <string name="study_list_search_button_menu">검색</string>
     <string name="study_list_title">스터디 목록</string>
-    <string name="study_list_information_format">%s %s · 총 %d회차 · %d %s(주기)</string>
+    <string name="study_list_information_format">개설일 %s</string>
     <string name="study_list_member_format">%d/%d</string>
     <string name="study_list_previous_date">예상시작일</string>
     <string name="study_list_processing_date">시작일</string>
     <string name="study_list_item_date_format">일</string>
     <string name="study_list_item_week_format">주</string>
     <string name="study_list_not_found">찾으시는 스터디가 없어요</string>
+    <string name="study_list_sort">정렬</string>
+    <string name="study_list_average_tier_description">평균티어</string>
 
     <!--스터디 관리 탭-->
     <string name="study_manage_title">스터디 관리</string>
@@ -235,7 +241,7 @@
     <string name="profile_study_success_rate">스터디 성공률</string>
     <string name="profile_todo_success_rate">필수투두 완료횟수</string>
     <string name="profile_unexpected_user_access_warning">존재하지 않는 사용자입니다.</string>
-    <string name="item_profile_finished_study_information_format">시작일 %s · 총 %d회차 · %d %s(주기)</string>
+    <string name="item_profile_finished_study_information_format">시작일 %s</string>
 
     <!-- 설정 뷰 -->
     <string name="setting_toolbar_title">설정</string>

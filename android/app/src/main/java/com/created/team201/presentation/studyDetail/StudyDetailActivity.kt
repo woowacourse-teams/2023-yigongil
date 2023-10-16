@@ -112,7 +112,10 @@ class StudyDetailActivity :
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> finish()
+            android.R.id.home -> {
+                finish()
+            }
+
             R.id.menu_study_detail_report -> {
                 when (studyDetailViewModel.state.value) {
                     is Guest -> showLoginBottomSheetDialog()
@@ -220,6 +223,8 @@ class StudyDetailActivity :
             when (isStartStudy) {
                 true -> finish()
                 false -> Unit
+            }
+            studyDetailViewModel.isStartStudy.observe(this) { _ ->
             }
         }
     }

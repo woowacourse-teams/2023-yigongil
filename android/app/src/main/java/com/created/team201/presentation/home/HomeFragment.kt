@@ -11,6 +11,7 @@ import com.created.team201.databinding.FragmentHomeBinding
 import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.home.HomeViewModel.UserStudyState.Joined
 import com.created.team201.presentation.home.adapter.HomeAdapter
+import kotlinx.coroutines.flow.Flow
 import com.created.team201.presentation.studyThread.ThreadActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
