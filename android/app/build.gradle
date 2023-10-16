@@ -37,7 +37,6 @@ android {
         versionName "1.1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "TEAM201_GIT_HUB_URL", properties["GIT_HUB_URL"]
         buildConfigField "String", "TEAM201_POLICY", properties["POLICY"]
     }
 
@@ -48,6 +47,7 @@ android {
             shrinkResources true
 
             buildConfigField "String", "TEAM201_BASE_URL", properties["BASE_URL"]
+            buildConfigField "String", "TEAM201_GIT_HUB_URL", properties["GIT_HUB_URL"]
 
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig = signingConfigs.release
@@ -59,6 +59,7 @@ android {
             shrinkResources false
 
             buildConfigField "String", "TEAM201_BASE_URL", properties["BASE_TEST_URL"]
+            buildConfigField "String", "TEAM201_GIT_HUB_URL", properties["GIT_HUB_TEST_URL"]
         }
     }
 
@@ -148,4 +149,6 @@ dependencies {
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
 
+    // google in app update
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
 }

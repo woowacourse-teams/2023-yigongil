@@ -26,7 +26,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         super.onHiddenChanged(hidden)
 
         if (hidden) {
-            myPageViewModel.loadProfile()
+            myPageViewModel.resetModifyProfile()
             myPageViewModel.setProfileType(ProfileType.VIEW)
         }
     }
@@ -88,6 +88,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
             when (profileType) {
                 ProfileType.VIEW -> setProfileView(false)
                 ProfileType.MODIFY -> setProfileView(true)
+                else -> Unit
             }
         }
         myPageViewModel.modifyProfileState.observe(viewLifecycleOwner) { modifyProfileState ->
@@ -111,7 +112,6 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
 
                 IDLE -> throw IllegalStateException()
             }
-            myPageViewModel.loadProfile()
         }
     }
 
@@ -139,7 +139,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
     private fun onModifySaveClick(): MyPageDialogClickListener =
         object : MyPageDialogClickListener {
             override fun onCancelClick() {
-                myPageViewModel.loadProfile()
+                myPageViewModel.resetModifyProfile()
                 Toast.makeText(
                     requireContext(),
                     getString(R.string.myPage_toast_modify_profile_cancel),

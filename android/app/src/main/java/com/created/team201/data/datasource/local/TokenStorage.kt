@@ -26,8 +26,8 @@ class TokenStorage @Inject constructor(context: Context) {
         editor.putString(key, value).apply()
     }
 
-    fun fetchToken(key: String): String? {
-        return storage.getString(key, null)
+    fun fetchToken(key: String): String {
+        return storage.getString(key, "") ?: ""
     }
 
     fun isGuest(key: String): Boolean {

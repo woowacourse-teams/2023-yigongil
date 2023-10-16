@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.created.domain.model.response.NetworkResponse
 import com.created.domain.repository.AuthRepository
 import com.created.domain.repository.OnBoardingRepository
 import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
@@ -25,18 +26,33 @@ class SplashViewModel @Inject constructor(
     val onBoardingDoneState: LiveData<OnBoardingDoneState> get() = _onBoardingDoneState
 
     init {
+        verifyToken()
+    }
+
+    private fun verifyToken() {
+        if (authRepository.accessToken.isEmpty()) {
+            _loginState.value = FAIL
+            return
+        }
         tryLogin()
     }
 
     private fun tryLogin() {
         viewModelScope.launch {
-            authRepository.requestSignIn()
-                .onSuccess {
-                    _loginState.value = SUCCESS
+            when (val response = authRepository.requestSignIn()) {
+                is NetworkResponse.Success -> _loginState.value = SUCCESS
+                is NetworkResponse.Failure -> {
+                    if (response.responseCode == 401) {
+                        if (authRepository.renewAccessToken() is NetworkResponse.Success) {
+                            _loginState.value = SUCCESS
+                        } else {
+                            _loginState.value = FAIL
+                        }
+                    }
                 }
-                .onFailure {
-                    _loginState.value = FAIL
-                }
+
+                else -> _loginState.value = FAIL
+            }
         }
     }
 

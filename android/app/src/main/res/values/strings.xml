@@ -4,6 +4,11 @@
     <!-- 툴바 공통 -->
     <string name="toolbar_back_text">뒤로가기</string>
 
+    <!-- 스플레시 뷰 인 앱 업데이트 다이얼로그 -->
+    <string name="in_app_update_dialog_title">업데이트 안내</string>
+    <string name="in_app_update_dialog_content">새 버전이 있습니다. 원활한 앱 사용을 위해 최신 버전 업데이트를 권장합니다.\n업데이트 하시겠습니까?</string>
+    <string name="in_app_update_dialog_btn_ok_text">업데이트 하기</string>
+
     <!--로그인 뷰-->
     <string name="login_guest"><u>비회원으로 둘러보기</u></string>
     <string name="login_github_guide">깃허브로 시작하기</string>
@@ -100,7 +105,8 @@
     <string name="study_detail_app_bar_study_master_title">개설한 스터디 관리하기</string>
     <string name="study_detail_study_people">스터디원</string>
     <string name="study_detail_study_capacity">참여하기(%d/%d)</string>
-    <string name="study_detail_button_start_study">시작하기(%d/%d)</string>
+    <string name="study_detail_button_start_study">요일 선택하기(%d/%d)</string>
+    <string name="study_detail_button_preparing_service">아직 준비중인 기능입니다</string>
     <string name="study_detail_dm_button_content_description">스터디장에게 문의하기</string>
     <string name="study_detail_study_accept_waiting">수락을 기다리고 있어요</string>
     <string name="study_detail_study_start_waiting">시작을 기다리고 있어요</string>
@@ -113,6 +119,11 @@
     <string name="study_detail_not_yet">아직 준비중입니다</string>
     <string name="item_study_detail_deleted_user_description">탈퇴한 유저에요</string>
     <string name="item_study_detail_study_success_rate">스터디 성공률 %d%%</string>
+
+    <!-- 스터디 상세보기 - 시작하기 바텀시트 다이얼로그 프래그먼트 -->
+    <string name="start_study_bottom_sheet_dialog_fragment_title">스터디 요일</string>
+    <string name="start_study_bottom_sheet_dialog_fragment_button_start">시작하기</string>
+    <string name="study_start_bottom_sheet_dialog_fragment_not_valid_study">유효하지 않은 스터디입니다.</string>
 
     <!--스터디 관리하기 뷰-->
     <string name="study_management_app_bar_title_is_study_participant">참여한 스터디 관리하기</string>
@@ -149,31 +160,49 @@
     <string name="custom_profile_image_content_description">프로필 이미지</string>
 
     <!--스터디 개설 뷰-->
-    <string name="createStudy_toolbar_title_create">스터디 만들기</string>
-    <string name="createStudy_toolbar_title_edit">수정하기</string>
-    <string name="createStudy_study_hint_name">제목을 입력해주세요.</string>
-    <string name="createStudy_study_hint_introduction">스터디를 소개해주세요.</string>
-    <string name="createStudy_button_created">작성완료</string>
+    <string name="create_study_toolbar_title">스터디 만들기</string>
+    <string name="create_study_button_next">다음</string>
+    <string name="create_study_button_done">작성완료</string>
 
-    <string name="createStudy_tag_people_count">TAG_CREATE_STUDY_PEOPLE_COUNT</string>
-    <string name="createStudy_tag_start_date">TAG_CREATE_STUDY_START_DATE</string>
-    <string name="createStudy_tag_period">TAG_CREATE_STUDY_PERIOD</string>
-    <string name="createStudy_tag_cycle">TAG_CREATE_STUDY_CYCLE</string>
+    <string name="create_study_tag_people_count">TAG_CREATE_STUDY_PEOPLE_COUNT</string>
+    <string name="create_study_tag_study_date">TAG_CREATE_STUDY_STUDY_DATE</string>
+    <string name="create_study_tag_cycle">TAG_CREATE_STUDY_CYCLE</string>
 
-    <string name="createStudy_toast_success">스터디 개설에 성공했습니다</string>
-    <string name="createStudy_toast_fail">스터디 개설에 실패했습니다</string>
+    <!-- 스터디 개설 첫번째 프래그먼트 -->
+    <string name="first_create_study_people_count_title">스터디는 몇 명과 함께하시나요?</string>
+    <string name="first_create_study_people_count_information">모집인원을 알려주세요!\n최소 2명, 최대 8명까지 함께할 수 있습니다.</string>
+    <string name="first_create_study_people_count_hint">6 명</string>
+    <string name="first_create_study_study_date_title">스터디는 몇 주간 진행하시나요?</string>
+    <string name="first_create_study_study_date_information">스터디가 진행되는 기간을 대략적으로 알려주세요!\n기간이 지나도 스터디가 종료되지는 않습니다.</string>
+    <string name="first_create_study_study_date_hint">약 8주간 진행</string>
+    <string name="first_create_study_cycle_title">한 주에 몇 회 진행되나요?</string>
+    <string name="first_create_study_cycle_information">진행될 스터디가 한 주에 몇 회 진행되는지 알려주세요!\n정확한 요일은 스터디가 시작될 때 입력할 수 있습니다.</string>
+    <string name="first_create_study_cycle_hint">1 회</string>
+    <string name="first_create_study_formatter_information_people_count">%d 명</string>
+    <string name="first_create_study_formatter_information_study_date">약 %d주간 진행</string>
+    <string name="first_create_study_formatter_information_cycle">%d 회</string>
+
+    <!-- 스터디 개설 두번째 프래그먼트 -->
+    <string name="second_create_study_study_name_title">스터디 이름은 무엇인가요?</string>
+    <string name="second_create_study_study_name_information">스터디 이름을 알려주세요.\n다른 사용자들이 알기 쉽게 작성하는 것이 좋아요!</string>
+    <string name="second_create_study_study_name_hint">예시) 자바 프로그래밍 스터디 구해요</string>
+    <string name="second_create_study_study_introduction_title">무엇을 하는 스터디인가요?</string>
+    <string name="second_create_study_study_introduction_information">스터디를 소개 해주세요.\n다른 사용자들이 알기 쉽게 작성하는 것이 좋아요!</string>
+    <string name="second_create_study_study_introduction_hint">예시) 야, 너두 할 수 있어 자바\' 책을 착실히 읽어나갈 분들을 찾고 있습니다</string>
 
     <!-- 스터디 개설 - 바텀 다이얼로그 뷰 -->
-    <string name="bottomSheetFragment_peopleCount_title_text">인원 수</string>
-    <string name="bottomSheetFragment_startDate_title_text">예상 시작일</string>
-    <string name="bottomSheetFragment_cycle_title_text">스터디 주기</string>
-    <string name="bottomSheetFragment_period_title_text">스터디 기간</string>
-    <string name="bottomSheetFragment_button_name_cancel">취소</string>
-    <string name="bottomSheetFragment_button_name_save">저장</string>
+    <string name="bottom_sheet_fragment_people_count_title_text">인원 수</string>
+    <string name="bottom_sheet_fragment_study_date_title_text">예상 스터디 기간</string>
+    <string name="bottom_sheet_fragment_startDate_title_text">예상 시작일</string>
+    <string name="bottom_sheet_fragment_cycle_title_text">스터디 진행 횟수</string>
+    <string name="bottom_sheet_fragment_period_title_text">스터디 기간</string>
+    <string name="bottom_sheet_fragment_button_name_cancel">취소</string>
+    <string name="bottom_sheet_fragment_button_name_save">저장</string>
 
     <!-- 싱글 피커 커스텀 뷰 -->
     <string name="single_picker_text_people_count">명</string>
-    <string name="single_picker_text_period">회차</string>
+    <string name="single_picker_text_study_date">주</string>
+    <string name="single_picker_text_cycle">회</string>
 
     <!-- 캘린더 선택 커스텀 뷰-->
     <string name="calendar_formatter_information_date">yyyy.MM.dd</string>
@@ -245,5 +274,13 @@
     <!-- 채팅 뷰 -->
     <string name="chat_no_chat">아직 준비중인 기능이에요!\n조금만 기다려주세요!</string>
 
+    <!-- 요일 선택기 뷰 -->
+    <string name="monday">월</string>
+    <string name="tuesday">화</string>
+    <string name="wednesday">수</string>
+    <string name="thursday">목</string>
+    <string name="friday">금</string>
+    <string name="saturday">토</string>
+    <string name="sunday">일</string>
 
 </resources>

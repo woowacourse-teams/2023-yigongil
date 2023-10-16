@@ -32,4 +32,8 @@
     <declare-styleable name="Calendar">
         <attr name="maximumMonthRange" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="DayOfWeekSelector">
+        <attr name="canMultipleSelect" format="boolean" />
+    </declare-styleable>
 </resources>
