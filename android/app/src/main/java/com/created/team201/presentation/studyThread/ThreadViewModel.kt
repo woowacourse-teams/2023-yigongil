@@ -7,7 +7,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,10 +23,30 @@ class ThreadViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<ThreadUiState> = MutableStateFlow(ThreadUiState.Loading)
     val uiState: StateFlow<ThreadUiState> get() = _uiState.asStateFlow()
 
-    init {
-        updateFeeds()
-        updateMustDoCertification()
-    }
+//    init {
+//        viewModelScope.launch {
+//            combine(
+//                uiState,
+//                threadRepository.getMustDoCertification(studyId.value),
+//                threadRepository.getFeeds(studyId.value)
+//            ) { state, mustDo, feed ->
+//                when (state) {
+//                    is ThreadUiState.Loading -> {
+//
+//                    }
+//
+//                    is ThreadUiState.Success -> {
+//
+//                    }
+//                }
+//
+//            }.catch { }.collectLatest { _uiState.value = it }
+//        }
+//
+//
+//        updateFeeds()
+//        updateMustDoCertification()
+//    }
 
     fun updateStudyId(id: Long) {
         studyId.value = id
@@ -39,10 +61,12 @@ class ThreadViewModel @Inject constructor(
         }
     }
 
+
     private fun updateMustDoCertification() {
         viewModelScope.launch {
             threadRepository.getMustDoCertification(studyId.value).collectLatest { mustDo ->
                 _uiState.value = ThreadUiState.Success().copy(mustDo = mustDo)
+                // error 메시지 catch
             }
         }
     }
