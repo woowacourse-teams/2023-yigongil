@@ -8,6 +8,10 @@
         <variable
             name="studyListViewModel"
             type="com.created.team201.presentation.studyList.StudyListViewModel" />
+
+        <variable
+            name="filter"
+            type="com.created.team201.presentation.studyList.model.StudyListFilter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -54,41 +58,46 @@
                 android:paddingTop="8dp"
                 app:singleSelection="true">
 
-                <com.google.android.material.chip.Chip
+                <com.created.team201.presentation.studyList.CustomChip
                     android:id="@+id/chip_study_list_all"
                     style="@style/chip_study_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/study_list_chip_all"
+                    android:checked="true"
                     android:textColor="@color/chip_text_color_checked_end"
-                    app:chipBackgroundColor="@color/chip_color_checked_end" />
+                    app:chipBackgroundColor="@color/chip_color_checked_end"
+                    app:studyListFilter="@{filter.ALL}" />
 
-                <com.google.android.material.chip.Chip
+                <com.created.team201.presentation.studyList.CustomChip
                     android:id="@+id/chip_study_list_recruiting"
                     style="@style/chip_study_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/study_list_chip_recruiting"
                     android:textColor="@color/chip_text_color_checked_recruiting"
-                    app:chipBackgroundColor="@color/chip_color_checked_recruiting" />
+                    app:chipBackgroundColor="@color/chip_color_checked_recruiting"
+                    app:studyListFilter="@{filter.RECRUITING}" />
 
-                <com.google.android.material.chip.Chip
+                <com.created.team201.presentation.studyList.CustomChip
                     android:id="@+id/chip_study_list_processing"
                     style="@style/chip_study_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/study_list_chip_processing"
                     android:textColor="@color/chip_text_color_checked_processing"
-                    app:chipBackgroundColor="@color/chip_color_checked_processing" />
+                    app:chipBackgroundColor="@color/chip_color_checked_processing"
+                    app:studyListFilter="@{filter.PROCESSING}" />
 
-                <com.google.android.material.chip.Chip
+                <com.created.team201.presentation.studyList.CustomChip
                     android:id="@+id/chip_study_list_waiting"
                     style="@style/chip_study_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/study_list_chip_waiting"
                     android:textColor="@color/chip_text_color_checked_waiting"
-                    app:chipBackgroundColor="@color/chip_color_checked_waiting" />
+                    app:chipBackgroundColor="@color/chip_color_checked_waiting"
+                    app:studyListFilter="@{filter.WAITING}" />
 
             </com.google.android.material.chip.ChipGroup>
 

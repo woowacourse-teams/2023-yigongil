@@ -22,6 +22,7 @@ import com.created.team201.presentation.guest.bottomSheet.LoginBottomSheetFragme
 import com.created.team201.presentation.main.MainViewModel
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
 import com.created.team201.presentation.studyList.adapter.StudyListAdapter
+import com.created.team201.presentation.studyList.model.StudyListFilter
 import com.created.team201.util.FirebaseLogUtil
 import com.created.team201.util.FirebaseLogUtil.SCREEN_STUDY_LIST
 import dagger.hilt.android.AndroidEntryPoint
@@ -148,7 +149,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private fun setupRefreshListener() {
         binding.srlStudyList.setOnRefreshListener {
             viewLifecycleOwner.lifecycleScope.launch {
-                studyListViewModel.refreshPage()
+                studyListViewModel.refreshPage(mainViewModel.isGuest)
                 binding.srlStudyList.isRefreshing = false
             }
         }
@@ -166,7 +167,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
                     context = requireContext(),
                 ).apply {
                     flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                }
+                },
             )
         }
     }
@@ -237,22 +238,27 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     }
 
     private fun setupStudyListFilter() {
-        binding.cgStudyList.check(R.id.chip_study_list_all)
         binding.cgStudyList.setOnCheckedStateChangeListener { group, _ ->
             when (group.checkedChipId) {
                 binding.chipStudyListAll.id -> {
-                    studyListViewModel.loadFilteredPage(null)
+                    studyListViewModel.loadFilteredPage(StudyListFilter.ALL)
                 }
+
                 binding.chipStudyListWaiting.id -> {
                     studyListViewModel.loadAppliedPage(mainViewModel.isGuest)
                 }
 
                 binding.chipStudyListProcessing.id -> {
-                    studyListViewModel.loadFilteredPage("processing")
+                    studyListViewModel.loadFilteredPage(StudyListFilter.PROCESSING)
                 }
 
                 binding.chipStudyListRecruiting.id -> {
-                    studyListViewModel.loadFilteredPage("recruiting")
+                    studyListViewModel.loadFilteredPage(StudyListFilter.RECRUITING)
+                }
+
+                -1 -> {
+                    group.check(R.id.chip_study_list_all)
+                    studyListViewModel.loadFilteredPage(StudyListFilter.ALL)
                 }
             }
         }

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.created.domain.model.Page
 import com.created.domain.repository.StudyListRepository
+import com.created.team201.presentation.studyList.model.StudyListFilter
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel.Companion.toUiModel
 import com.created.team201.util.NonNullLiveData
@@ -40,7 +41,7 @@ class StudyListViewModel @Inject constructor(
         get() = _isNotFoundStudies
 
     private var recentSearchWord: String = ""
-    private var filterStatus: String? = null
+    private var filterStatus: StudyListFilter = StudyListFilter.ALL
 
     fun initPage() {
         refreshPage()
@@ -49,7 +50,7 @@ class StudyListViewModel @Inject constructor(
     fun loadPage() {
         viewModelScope.launch {
             runCatching {
-                studyListRepository.getStudyList(filterStatus, page.index, recentSearchWord)
+                studyListRepository.getStudyList(filterStatus.name, page.index, recentSearchWord)
             }.onSuccess {
                 if (it.isNotEmpty()) {
                     _isNotFoundStudies.value = false
@@ -77,10 +78,14 @@ class StudyListViewModel @Inject constructor(
         _studySummaries.value = emptyList()
     }
 
-    fun refreshPage() {
+    fun refreshPage(isGuest: Boolean = true) {
         page = Page()
         _studySummaries.value = listOf()
-        loadPage()
+        if (filterStatus == StudyListFilter.WAITING) {
+            loadAppliedPage(isGuest)
+        } else {
+            loadPage()
+        }
     }
 
     fun loadNextPage() {
@@ -104,14 +109,18 @@ class StudyListViewModel @Inject constructor(
         recentSearchWord = searchWord
     }
 
-    fun loadFilteredPage(status: String?) {
-        filterStatus = status
+    fun loadFilteredPage(filter: StudyListFilter): Boolean {
+        if (filter == filterStatus) return false
+        filterStatus = filter
         refreshPage()
+        return true
     }
 
     fun loadAppliedPage(isGuest: Boolean) {
+        filterStatus = StudyListFilter.WAITING
         if (isGuest) {
             // 로그인이 필요한 페이지 입니다.
+            _isNotFoundStudies.value = false
             _studySummaries.value = emptyList()
             return
         }
