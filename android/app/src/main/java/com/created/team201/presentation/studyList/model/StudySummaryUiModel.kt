@@ -27,5 +27,8 @@ data class StudySummaryUiModel(
                 numberOfCurrentMembers,
                 numberOfMaximumMembers,
             )
+
+        fun List<StudySummary>.toUiModel(): List<StudySummaryUiModel> =
+            this.map { it.toUiModel() }
     }
 }

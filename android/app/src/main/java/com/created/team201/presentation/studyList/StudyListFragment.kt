@@ -19,7 +19,6 @@ import com.created.team201.presentation.guest.bottomSheet.LoginBottomSheetFragme
 import com.created.team201.presentation.main.MainViewModel
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
 import com.created.team201.presentation.studyList.adapter.StudyListAdapter
-import com.created.team201.presentation.studyList.model.StudyStatus
 import com.created.team201.presentation.updateStudy.UpdateStudyActivity
 import com.created.team201.util.FirebaseLogUtil
 import com.created.team201.util.FirebaseLogUtil.SCREEN_STUDY_LIST
@@ -35,7 +34,6 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private val studyListAdapter: StudyListAdapter by lazy {
         StudyListAdapter(studyListClickListener())
     }
-    private var searchWord = ""
 
     override fun onResume() {
         super.onResume()
@@ -92,7 +90,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private fun setOnSearchItemCloseListener(searchView: SearchView, searchItem: MenuItem) {
         searchView.setOnCloseListener {
             searchItem.collapseActionView()
-            studyListViewModel.changeSearchMode(false)
+            studyListViewModel.changeSearchWord("")
             true
         }
     }
@@ -101,15 +99,14 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         searchItem
             .setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
                 override fun onMenuItemActionExpand(item: MenuItem): Boolean {
-                    studyListViewModel.changeSearchMode(true)
                     searchView.requestFocus()
                     return true
                 }
 
                 override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                     searchView.hideKeyboard()
-                    studyListViewModel.changeSearchMode(false)
-                    studyListViewModel.refreshPage()
+                    studyListViewModel.changeSearchWord("")
+                    studyListViewModel.loadPage()
                     return true
                 }
             })
@@ -118,9 +115,8 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private fun setOnSearchViewQueryTextListener(searchView: SearchView) {
         searchView.setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                studyListViewModel.changeSearchMode(true)
-                searchWord = query.toString()
-                studyListViewModel.loadSearchedPage(searchWord)
+                studyListViewModel.changeSearchWord(query.toString())
+                studyListViewModel.loadPage()
                 searchView.hideKeyboard()
                 return true
             }
@@ -220,7 +216,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
                 }
 
                 if (!binding.rvStudyListList.canScrollVertically(1)) {
-                    studyListViewModel.loadNextPage(searchWord)
+                    studyListViewModel.loadNextPage()
                 }
             }
         }
@@ -238,46 +234,23 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     }
 
     private fun setupStudyListFilter() {
+        binding.cgStudyList.check(R.id.chip_study_list_all)
         binding.cgStudyList.setOnCheckedStateChangeListener { group, _ ->
-            studyListViewModel.studySummaries.value?.let { studyList ->
-                when (group.checkedChipId) {
-                    binding.chipStudyListWaiting.id -> {
-                        studyListAdapter.submitList(
-                            studyList.filter { study ->
-                                study.processingStatus == StudyStatus.WAITING
-                            },
-                        )
-                        return@let
-                    }
-
-                    binding.chipStudyListProcessing.id -> {
-                        studyListAdapter.submitList(
-                            studyList.filter { study ->
-                                study.processingStatus == StudyStatus.PROCESSING
-                            },
-                        )
-                        return@let
-                    }
-
-                    binding.chipStudyListRecruiting.id -> {
-                        studyListAdapter.submitList(
-                            studyList.filter { study ->
-                                study.processingStatus == StudyStatus.RECRUITING
-                            },
-                        )
-                        return@let
-                    }
-
-                    binding.chipStudyListEnd.id -> {
-                        studyListAdapter.submitList(
-                            studyList.filter { study ->
-                                study.processingStatus == StudyStatus.END
-                            },
-                        )
-                        return@let
-                    }
+            when (group.checkedChipId) {
+                binding.chipStudyListAll.id -> {
+                    studyListViewModel.loadFilteredPage(null)
                 }
-                studyListAdapter.submitList(studyList)
+                binding.chipStudyListWaiting.id -> {
+                    studyListViewModel.loadAppliedPage(mainViewModel.isGuest)
+                }
+
+                binding.chipStudyListProcessing.id -> {
+                    studyListViewModel.loadFilteredPage("processing")
+                }
+
+                binding.chipStudyListRecruiting.id -> {
+                    studyListViewModel.loadFilteredPage("recruiting")
+                }
             }
         }
     }

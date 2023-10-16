@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.created.domain.model.Page
-import com.created.domain.model.StudySummary
 import com.created.domain.repository.StudyListRepository
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel.Companion.toUiModel
@@ -22,62 +21,49 @@ class StudyListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var page: Page = Page()
-    private val _studySummaries = MutableLiveData<List<StudySummaryUiModel>>()
+
+    private val _studySummaries: MutableLiveData<List<StudySummaryUiModel>> =
+        MutableLiveData(listOf())
     val studySummaries: LiveData<List<StudySummaryUiModel>>
         get() = _studySummaries
+
     private val _scrollState = MutableLiveData(true)
     val scrollState: LiveData<Boolean>
         get() = _scrollState
+
     private val _loadingState = MutableLiveData(false)
     val loadingState: LiveData<Boolean>
         get() = _loadingState
-    private val isSearchMode: NonNullMutableLiveData<Boolean> = NonNullMutableLiveData(false)
-    private val _isNotFoundStudies: NonNullMutableLiveData<Boolean> = NonNullMutableLiveData(false)
-    val isNotFoundStudies: NonNullLiveData<Boolean> get() = _isNotFoundStudies
-    private var recentSearchWord: String = ""
 
-    init {
-        _studySummaries.value = listOf()
-    }
+    private val _isNotFoundStudies: NonNullMutableLiveData<Boolean> = NonNullMutableLiveData(false)
+    val isNotFoundStudies: NonNullLiveData<Boolean>
+        get() = _isNotFoundStudies
+
+    private var recentSearchWord: String = ""
+    private var filterStatus: String? = null
 
     fun initPage() {
         refreshPage()
     }
 
-    private fun loadPage() {
+    fun loadPage() {
         viewModelScope.launch {
             runCatching {
-                studyListRepository.getStudyList(page.index)
+                studyListRepository.getStudyList(filterStatus, page.index, recentSearchWord)
             }.onSuccess {
                 if (it.isNotEmpty()) {
                     _isNotFoundStudies.value = false
                     val newItems = _studySummaries.value?.toMutableList()
+                    _studySummaries.value = mutableListOf()
                     newItems?.addAll(it.toUiModel())
                     _studySummaries.value = newItems?.toList()
                     page++
                     return@launch
+                }
+                if (page != Page(0)) {
+                    setNotFoundStudies()
                 }
             }.onFailure {
-            }
-        }
-    }
-
-    fun loadSearchedPage(searchWord: String) {
-        viewModelScope.launch {
-            runCatching {
-                recentSearchWord = searchWord
-                studyListRepository.getSearchedStudyList(searchWord, 0)
-            }.onSuccess {
-                if (it.isNotEmpty()) {
-                    _isNotFoundStudies.value = false
-                    _studySummaries.value = mutableListOf()
-                    val newItems = _studySummaries.value?.toMutableList()
-                    newItems?.addAll(it.toUiModel())
-                    _studySummaries.value = newItems?.toList()
-                    page++
-                    return@launch
-                }
-                setNotFoundStudies()
             }
         }
     }
@@ -90,25 +76,14 @@ class StudyListViewModel @Inject constructor(
     fun refreshPage() {
         page = Page(0)
         _studySummaries.value = listOf()
-        if (isSearchMode.value) {
-            loadSearchedPage(recentSearchWord)
-            return
-        }
         loadPage()
     }
 
-    fun loadNextPage(searchWord: String = "") {
+    fun loadNextPage() {
         if (page == Page(0)) {
             return
         }
         _loadingState.value = true
-
-        if (isSearchMode.value) {
-            loadSearchedPage(searchWord)
-            _loadingState.value = false
-            return
-        }
-
         loadPage()
         _loadingState.value = false
     }
@@ -120,10 +95,31 @@ class StudyListViewModel @Inject constructor(
         }
     }
 
-    fun changeSearchMode(mode: Boolean) {
-        isSearchMode.value = mode
+    fun changeSearchWord(searchWord: String) {
+        recentSearchWord = searchWord
     }
 
-    private fun List<StudySummary>.toUiModel(): List<StudySummaryUiModel> =
-        this.map { it.toUiModel() }
+    fun loadFilteredPage(status: String?) {
+        filterStatus = status
+        refreshPage()
+    }
+
+    fun loadAppliedPage(isGuest: Boolean) {
+        if (isGuest) {
+            // 로그인이 필요한 페이지 입니다.
+            _studySummaries.value = emptyList()
+            return
+        }
+        viewModelScope.launch {
+            runCatching {
+                studyListRepository.getAppliedStudyList(recentSearchWord)
+            }.onSuccess {
+                if (it.isNotEmpty()) {
+                    _studySummaries.value = it.toUiModel()
+                    return@launch
+                }
+                setNotFoundStudies()
+            }
+        }
+    }
 }
