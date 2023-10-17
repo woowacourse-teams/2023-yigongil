@@ -1,9 +1,9 @@
 package com.created.domain.model
 
-data class Feeds(
+data class MemberCertification(
+    val id: Long,
     val author: Author,
+    val imageUrl: String,
     val content: String,
     val createdAt: String,
-    val id: Long,
-    val imageUrl: String,
 )

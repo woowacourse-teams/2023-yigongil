@@ -1,8 +1,10 @@
 package com.created.team201.data.repository
 
 import com.created.domain.model.Certification
+import com.created.domain.model.MemberCertification
 import com.created.domain.model.response.NetworkResponse
 import com.created.domain.repository.CertificationRepository
+import com.created.team201.data.mapper.toDomain
 import com.created.team201.data.mapper.toRequestDto
 import com.created.team201.data.remote.api.CertificationService
 import com.created.team201.data.remote.request.CertificationRequestDto
@@ -30,5 +32,22 @@ class DefaultCertificationRepository @Inject constructor(
             Json.encodeToString(CertificationRequestDto.serializer(), certification.toRequestDto())
                 .toRequestBody("application/json".toMediaType())
         return certificationService.postCertification(studyId, image, body)
+    }
+
+    override suspend fun getMemberCertification(
+        studyId: Long,
+        certificationsId: Long,
+    ): NetworkResponse<MemberCertification> {
+        val response = certificationService.getMemberCertification(studyId, certificationsId)
+        return when (response) {
+            is NetworkResponse.Success -> NetworkResponse.Success(response.body.toDomain())
+            is NetworkResponse.Failure -> NetworkResponse.Failure(
+                response.responseCode,
+                response.error,
+            )
+
+            is NetworkResponse.NetworkError -> NetworkResponse.NetworkError(response.exception)
+            is NetworkResponse.Unexpected -> NetworkResponse.Unexpected(response.t)
+        }
     }
 }

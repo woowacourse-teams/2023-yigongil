@@ -4,13 +4,13 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FeedsResponseDto(
+data class MemberCertificationResponseDto(
     @SerialName("id")
-    val id: Int,
+    val id: Long,
     @SerialName("author")
     val author: AuthorResponseDto,
     @SerialName("imageUrl")
-    val imageUrl: String?,
+    val imageUrl: String,
     @SerialName("content")
     val content: String,
     @SerialName("createdAt")
