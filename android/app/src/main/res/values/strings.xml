@@ -250,6 +250,8 @@
     <string name="setting_item_account_title">계정 관리</string>
     <string name="setting_item_policy">정책 및 약관</string>
     <string name="setting_item_logout">로그아웃</string>
+    <string name="setting_version_title">버전 정보</string>
+    <string name="setting_version_update">새 버전으로 업데이트 해주세요</string>
 
     <!-- 설정뷰 - 다이얼로그 -->
     <string name="setting_dialog_logout_title">로그아웃</string>
