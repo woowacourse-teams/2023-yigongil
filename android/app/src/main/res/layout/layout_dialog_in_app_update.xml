@@ -40,22 +40,6 @@
             tools:text="@string/in_app_update_dialog_content" />
 
         <TextView
-            android:id="@+id/tv_dialog_in_app_update_btn_cancel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:paddingVertical="10dp"
-            android:text="@string/in_app_update_dialog_btn_cancel_text"
-            android:textAlignment="center"
-            android:textAppearance="@style/text_sb16"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/tv_dialog_in_app_update_btn_ok"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_dialog_in_app_update_content"
-            tools:text="나중에 하기" />
-
-        <TextView
             android:id="@+id/tv_dialog_in_app_update_btn_ok"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -67,7 +51,7 @@
             android:textColor="@color/green05_3AD353"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_dialog_in_app_update_btn_cancel"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_dialog_in_app_update_content" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

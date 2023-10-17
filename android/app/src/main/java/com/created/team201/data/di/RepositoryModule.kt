@@ -9,7 +9,6 @@ import com.created.domain.repository.OnBoardingRepository
 import com.created.domain.repository.ProfileRepository
 import com.created.domain.repository.ReportRepository
 import com.created.domain.repository.SettingRepository
-import com.created.domain.repository.SplashRepository
 import com.created.domain.repository.StudyDetailRepository
 import com.created.domain.repository.StudyListRepository
 import com.created.domain.repository.UpdateStudyRepository
@@ -22,7 +21,6 @@ import com.created.team201.data.repository.DefaultOnBoardingRepository
 import com.created.team201.data.repository.DefaultProfileRepository
 import com.created.team201.data.repository.DefaultReportRepository
 import com.created.team201.data.repository.DefaultSettingRepository
-import com.created.team201.data.repository.DefaultSplashRepository
 import com.created.team201.data.repository.DefaultStudyDetailRepository
 import com.created.team201.data.repository.DefaultStudyListRepository
 import com.created.team201.data.repository.DefaultUpdateStudyRepository
@@ -35,10 +33,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 interface RepositoryModule {
-
-    @Binds
-    @Singleton
-    fun bindDefaultSplashRepository(defaultSplashRepository: DefaultSplashRepository): SplashRepository
 
     @Binds
     @Singleton
