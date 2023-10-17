@@ -25,9 +25,11 @@ class DefaultSplashRepository @Inject constructor() : SplashRepository {
                 .get()
         documentTask.addOnSuccessListener { documentSnapshot ->
             CoroutineScope(Dispatchers.IO).launch {
-                onSuccess.invoke(documentSnapshot.toObject<AppUpdateInformation>()?.run {
-                    copy(message = message.replace("\\n", "\n"))
-                } ?: DEFAULT_APP_INFORMATION)
+                onSuccess.invoke(
+                    documentSnapshot.toObject<AppUpdateInformation>()?.run {
+                        copy(message = message.replace("\\n", "\n"))
+                    } ?: DEFAULT_APP_INFORMATION,
+                )
             }
         }
         documentTask.addOnFailureListener { exception ->

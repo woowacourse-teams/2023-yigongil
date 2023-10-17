@@ -9,10 +9,6 @@
         <import type="java.util.List" />
 
         <variable
-            name="periodStringFormat"
-            type="List&lt;String>" />
-
-        <variable
             name="studyDetail"
             type="com.created.team201.presentation.studyDetail.model.StudyDetailUIModel" />
 

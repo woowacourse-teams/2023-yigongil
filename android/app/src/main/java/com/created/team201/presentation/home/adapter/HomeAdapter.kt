@@ -7,7 +7,7 @@ import com.created.domain.model.UserStudy
 
 
 class HomeAdapter(
-    private val onClick: (studyId: Int) -> Unit
+    private val onClick: (studyId: Long) -> Unit
 ) : ListAdapter<UserStudy, HomeViewHolder>(diffCallBack) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
