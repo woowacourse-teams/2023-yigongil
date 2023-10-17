@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_day_of_week_background"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/bg_day_of_week_selector"
+        android:backgroundTint="#04050D"
+        tools:layout_height="60dp">
+
+        <TextView
+            android:id="@+id/tv_day_of_week_selector_day0"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_day_of_week_selector_single_select"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_day_of_week_selector_day1"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="월" />
+
+        <TextView
+            android:id="@+id/tv_day_of_week_selector_day1"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_day_of_week_selector_single_select"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_day_of_week_selector_day2"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@id/tv_day_of_week_selector_day0"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="화" />
+
+        <TextView
+            android:id="@+id/tv_day_of_week_selector_day2"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_day_of_week_selector_single_select"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_day_of_week_selector_day3"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@id/tv_day_of_week_selector_day1"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="수" />
+
+        <TextView
+            android:id="@+id/tv_day_of_week_selector_day3"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_day_of_week_selector_single_select"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_day_of_week_selector_day4"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@id/tv_day_of_week_selector_day2"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="목" />
+
+        <TextView
+            android:id="@+id/tv_day_of_week_selector_day4"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_day_of_week_selector_single_select"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_day_of_week_selector_day5"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@id/tv_day_of_week_selector_day3"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="금" />
+
+        <TextView
+            android:id="@+id/tv_day_of_week_selector_day5"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_day_of_week_selector_single_select"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_day_of_week_selector_day6"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@id/tv_day_of_week_selector_day4"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="토" />
+
+        <TextView
+            android:id="@+id/tv_day_of_week_selector_day6"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_day_of_week_selector_single_select"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@id/tv_day_of_week_selector_day5"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="일" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

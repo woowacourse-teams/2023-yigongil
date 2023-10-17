@@ -67,17 +67,23 @@
     <string name="error_baseFragment">"[ERROR]Binding no initialization"</string>
 
     <!--스터디 목록 탭-->
+    <string name="study_list_chip_recruiting">모집중</string>
+    <string name="study_list_chip_processing">진행중</string>
+    <string name="study_list_chip_all">전체</string>
+    <string name="study_list_chip_waiting">수락 대기중</string>
     <string name="study_list_create">스터디 만들기</string>
     <string name="study_list_item_sort_description">정렬</string>
     <string name="study_list_search_button_menu">검색</string>
     <string name="study_list_title">스터디 목록</string>
-    <string name="study_list_information_format">%s %s · 총 %d회차 · %d %s(주기)</string>
+    <string name="study_list_information_format">개설일 %s</string>
     <string name="study_list_member_format">%d/%d</string>
     <string name="study_list_previous_date">예상시작일</string>
     <string name="study_list_processing_date">시작일</string>
     <string name="study_list_item_date_format">일</string>
     <string name="study_list_item_week_format">주</string>
     <string name="study_list_not_found">찾으시는 스터디가 없어요</string>
+    <string name="study_list_sort">정렬</string>
+    <string name="study_list_average_tier_description">평균티어</string>
 
     <!--스터디 관리 탭-->
     <string name="study_manage_title">스터디 관리</string>
@@ -88,31 +94,33 @@
 
     <!-- 아이콘 텍스트 버튼 커스텀 뷰 -->
     <string name="icon_text_button_name_people_count">인원 수</string>
-    <string name="icon_text_button_name_start_date">예상시작일</string>
-    <string name="icon_text_button_name_period">스터디기간</string>
-    <string name="icon_text_button_name_cycle">스터디주기</string>
+    <string name="icon_text_button_name_period">기간</string>
+    <string name="icon_text_button_name_cycle">주</string>
     <string name="icon_text_button_formatter_information_people_count">%d명</string>
-    <string name="icon_text_button_formatter_information_period">%d회차</string>
+    <string name="icon_text_button_formatter_information_cycle">%d주</string>
+    <string name="icon_text_button_formatter_information_period">%d회</string>
 
     <!--스터디 상세보기 뷰-->
     <string name="study_detail_app_bar_title">스터디 상세보기</string>
     <string name="study_detail_app_bar_study_master_title">개설한 스터디 관리하기</string>
     <string name="study_detail_study_people">스터디원</string>
     <string name="study_detail_study_capacity">참여하기(%d/%d)</string>
-    <string name="study_detail_button_start_study">시작하기(%d/%d)</string>
+    <string name="study_detail_button_start_study">요일 선택하기(%d/%d)</string>
     <string name="study_detail_button_preparing_service">아직 준비중인 기능입니다</string>
     <string name="study_detail_dm_button_content_description">스터디장에게 문의하기</string>
     <string name="study_detail_study_accept_waiting">수락을 기다리고 있어요</string>
     <string name="study_detail_study_start_waiting">시작을 기다리고 있어요</string>
     <string name="study_detail_do_not_accept_member_anymore">더이상 스터디 멤버를 받을 수 없습니다.</string>
-    <string name="study_detail_period_of_count_day">%d일</string>
-    <string name="study_detail_period_of_count_week">%d주</string>
-    <string name="study_detail_period_format">%s회차</string>
     <string name="study_detail_notify_invalid_study">스터디를 찾을 수 없습니다.</string>
     <string name="study_detail_notify_cant_participant">더는 참가할 수 없어요</string>
     <string name="study_detail_not_yet">아직 준비중입니다</string>
     <string name="item_study_detail_deleted_user_description">탈퇴한 유저에요</string>
     <string name="item_study_detail_study_success_rate">스터디 성공률 %d%%</string>
+
+    <!-- 스터디 상세보기 - 시작하기 바텀시트 다이얼로그 프래그먼트 -->
+    <string name="start_study_bottom_sheet_dialog_fragment_title">스터디 요일</string>
+    <string name="start_study_bottom_sheet_dialog_fragment_button_start">시작하기</string>
+    <string name="study_start_bottom_sheet_dialog_fragment_not_valid_study">유효하지 않은 스터디입니다.</string>
 
     <!--스터디 관리하기 뷰-->
     <string name="study_management_app_bar_title_is_study_participant">참여한 스터디 관리하기</string>
@@ -152,6 +160,9 @@
     <string name="create_study_toolbar_title">스터디 만들기</string>
     <string name="create_study_button_next">다음</string>
     <string name="create_study_button_done">작성완료</string>
+
+    <string name="create_study_toast_create_study_success">스터디 개설에 성공했습니다</string>
+    <string name="create_study_toast_create_study_fail">스터디 개설에 실패했습니다</string>
 
     <string name="create_study_tag_people_count">TAG_CREATE_STUDY_PEOPLE_COUNT</string>
     <string name="create_study_tag_study_date">TAG_CREATE_STUDY_STUDY_DATE</string>
@@ -227,7 +238,7 @@
     <string name="profile_study_success_rate">스터디 성공률</string>
     <string name="profile_todo_success_rate">필수투두 완료횟수</string>
     <string name="profile_unexpected_user_access_warning">존재하지 않는 사용자입니다.</string>
-    <string name="item_profile_finished_study_information_format">시작일 %s · 총 %d회차 · %d %s(주기)</string>
+    <string name="item_profile_finished_study_information_format">시작일 %s</string>
 
     <!-- 설정 뷰 -->
     <string name="setting_toolbar_title">설정</string>
@@ -262,5 +273,14 @@
 
     <!-- 채팅 뷰 -->
     <string name="chat_no_chat">아직 준비중인 기능이에요!\n조금만 기다려주세요!</string>
+
+    <!-- 요일 선택기 뷰 -->
+    <string name="monday">월</string>
+    <string name="tuesday">화</string>
+    <string name="wednesday">수</string>
+    <string name="thursday">목</string>
+    <string name="friday">금</string>
+    <string name="saturday">토</string>
+    <string name="sunday">일</string>
 
 </resources>

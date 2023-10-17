@@ -1,6 +1,7 @@
 package com.created.team201.data.di
 
 import com.created.domain.repository.AuthRepository
+import com.created.domain.repository.CreateStudyRepository
 import com.created.domain.repository.GuestRepository
 import com.created.domain.repository.HomeRepository
 import com.created.domain.repository.MyPageRepository
@@ -13,6 +14,7 @@ import com.created.domain.repository.StudyListRepository
 import com.created.domain.repository.ThreadRepository
 import com.created.domain.repository.UpdateStudyRepository
 import com.created.team201.data.repository.DefaultAuthRepository
+import com.created.team201.data.repository.DefaultCreateStudyRepository
 import com.created.team201.data.repository.DefaultGuestRepository
 import com.created.team201.data.repository.DefaultHomeRepository
 import com.created.team201.data.repository.DefaultMyPageRepository
@@ -76,10 +78,13 @@ interface RepositoryModule {
 
     @Binds
     @Singleton
+    fun bindDefaultCreateStudyRepository(defaultCreateStudyRepository: DefaultCreateStudyRepository): CreateStudyRepository
+
+    @Binds
+    @Singleton
     fun bindDefaultUpdateStudyRepository(defaultUpdateStudyRepository: DefaultUpdateStudyRepository): UpdateStudyRepository
 
     @Binds
     @Singleton
     fun bindDefaultThreadRepository(defaultThreadRepository: DefaultThreadRepository): ThreadRepository
-
 }

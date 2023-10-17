@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <style name="chip_study_list" parent="@style/Widget.Material3.Chip.Filter">
+        <item name="android:checkable">true</item>
+        <item name="android:textAppearance">@style/text_r14</item>
+        <item name="chipCornerRadius">14dp</item>
+        <item name="chipStartPadding">5dp</item>
+        <item name="chipEndPadding">5dp</item>
+        <item name="checkedIconEnabled">false</item>
+        <item name="checkedIcon">@null</item>
+        <item name="chipStrokeColor">@color/grey03_595959</item>
+        <item name="chipSurfaceColor">@color/black02_181B21</item>
+    </style>
+</resources>

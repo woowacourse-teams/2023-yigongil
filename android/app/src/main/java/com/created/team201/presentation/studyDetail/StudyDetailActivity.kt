@@ -21,7 +21,7 @@ import com.created.team201.presentation.report.model.ReportCategory
 import com.created.team201.presentation.studyDetail.StudyDetailState.Guest
 import com.created.team201.presentation.studyDetail.StudyDetailState.Master
 import com.created.team201.presentation.studyDetail.adapter.StudyParticipantsAdapter
-import com.created.team201.presentation.studyDetail.model.PeriodFormat
+import com.created.team201.presentation.studyDetail.bottomSheet.StudyStartBottomSheetFragment
 import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -111,7 +111,10 @@ class StudyDetailActivity :
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> finish()
+            android.R.id.home -> {
+                finish()
+            }
+
             R.id.menu_study_detail_report -> {
                 when (studyDetailViewModel.state.value) {
                     is Guest -> showLoginBottomSheetDialog()
@@ -138,13 +141,6 @@ class StudyDetailActivity :
         }
     }
 
-    fun convertPeriodOfCountFormat(periodOfCount: String): String {
-        if (periodOfCount == "") return ""
-        val stringRes =
-            PeriodFormat.valueOf(periodOfCount.last()).res
-        return getString(stringRes, periodOfCount.dropLast(STRING_LAST_INDEX).toInt())
-    }
-
     fun initMainButtonOnClick(role: Role) {
         when (role) {
             Role.MASTER -> onMasterClickMainButton()
@@ -154,7 +150,11 @@ class StudyDetailActivity :
     }
 
     private fun onMasterClickMainButton() {
-        studyDetailViewModel.startStudy(studyId)
+        val studyStartBottomSheetFragment = StudyStartBottomSheetFragment.newInstance(studyId)
+        studyStartBottomSheetFragment.show(
+            supportFragmentManager,
+            studyStartBottomSheetFragment.tag,
+        )
     }
 
     private fun onNothingClickMainButton() {
@@ -165,7 +165,7 @@ class StudyDetailActivity :
         removeAllFragment()
         LoginBottomSheetFragment().show(
             supportFragmentManager,
-            LoginBottomSheetFragment.TAG_LOGIN_BOTTOM_SHEET
+            LoginBottomSheetFragment.TAG_LOGIN_BOTTOM_SHEET,
         )
     }
 
@@ -216,6 +216,8 @@ class StudyDetailActivity :
                 true -> finish()
                 false -> Unit
             }
+            studyDetailViewModel.isStartStudy.observe(this) { _ ->
+            }
         }
     }
 
@@ -230,7 +232,6 @@ class StudyDetailActivity :
 
     companion object {
         private const val NON_EXISTENCE_STUDY_ID = 0L
-        private const val STRING_LAST_INDEX = 1
         private const val KEY_STUDY_ID = "KEY_STUDY_ID"
         fun getIntent(context: Context, studyId: Long): Intent =
             Intent(context, StudyDetailActivity::class.java).apply {

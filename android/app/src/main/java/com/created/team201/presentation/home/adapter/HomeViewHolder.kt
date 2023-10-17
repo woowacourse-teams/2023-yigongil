@@ -8,7 +8,7 @@ import com.created.team201.databinding.ItemHomeStudyListBinding
 
 class HomeViewHolder(
     private val binding: ItemHomeStudyListBinding,
-    onClick: (studyId: Long) -> Unit
+    onClick: (studyId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
 
     init {
@@ -25,8 +25,9 @@ class HomeViewHolder(
                 ItemHomeStudyListBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
-                    false
-                ), onClick
+                    false,
+                ),
+                onClick,
             )
     }
 }
