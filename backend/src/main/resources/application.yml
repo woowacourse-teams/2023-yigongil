@@ -14,7 +14,8 @@ springdoc:
     url: "/api-docs"
     path: "/api"
     display-request-duration: true
-
+server:
+  shutdown: graceful
 ---
 
 spring:
