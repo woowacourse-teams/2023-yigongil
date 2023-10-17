@@ -8,13 +8,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.R
 import com.created.team201.databinding.ActivityThreadBinding
+import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.profile.ProfileActivity
 import com.created.team201.presentation.studyThread.ThreadUiState.Loading
 import com.created.team201.presentation.studyThread.ThreadUiState.Success
@@ -26,8 +26,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ThreadActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityThreadBinding
+class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_thread) {
     private val mustDoAdapter: MustDoAdapter by lazy { MustDoAdapter() }
     private val threadAdapter: ThreadAdapter by lazy { ThreadAdapter(::onUserClick) }
     private val moreAdapter: MoreAdapter by lazy {
@@ -42,8 +41,6 @@ class ThreadActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityThreadBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         threadViewModel.initStudyThread(studyId)
         setupThreadAdapter()
