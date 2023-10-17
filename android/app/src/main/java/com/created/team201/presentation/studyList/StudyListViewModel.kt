@@ -36,6 +36,11 @@ class StudyListViewModel @Inject constructor(
     val loadingState: LiveData<Boolean>
         get() = _loadingState
 
+    private var _isGuestMode = NonNullMutableLiveData(false)
+    val isGuestMode: NonNullLiveData<Boolean>
+        get() = _isGuestMode
+    private var isGuest = false
+
     private val _isNotFoundStudies: NonNullMutableLiveData<Boolean> = NonNullMutableLiveData(false)
     val isNotFoundStudies: NonNullLiveData<Boolean>
         get() = _isNotFoundStudies
@@ -47,7 +52,7 @@ class StudyListViewModel @Inject constructor(
         refreshPage()
     }
 
-    fun loadPage() {
+    private fun loadPage() {
         viewModelScope.launch {
             runCatching {
                 studyListRepository.getStudyList(filterStatus.name, page.index, recentSearchWord)
@@ -78,11 +83,11 @@ class StudyListViewModel @Inject constructor(
         _studySummaries.value = emptyList()
     }
 
-    fun refreshPage(isGuest: Boolean = true) {
+    fun refreshPage() {
         page = Page()
         _studySummaries.value = listOf()
         if (filterStatus == StudyListFilter.WAITING) {
-            loadAppliedPage(isGuest)
+            loadAppliedPage()
         } else {
             loadPage()
         }
@@ -109,19 +114,16 @@ class StudyListViewModel @Inject constructor(
         recentSearchWord = searchWord
     }
 
-    fun loadFilteredPage(filter: StudyListFilter): Boolean {
-        if (filter == filterStatus) return false
+    fun loadFilteredPage(filter: StudyListFilter) {
         filterStatus = filter
+        _isGuestMode.value = (filterStatus == StudyListFilter.WAITING) && isGuest
         refreshPage()
-        return true
     }
 
-    fun loadAppliedPage(isGuest: Boolean) {
-        filterStatus = StudyListFilter.WAITING
+    private fun loadAppliedPage() {
+        _isNotFoundStudies.value = false
+        _studySummaries.value = emptyList()
         if (isGuest) {
-            // 로그인이 필요한 페이지 입니다.
-            _isNotFoundStudies.value = false
-            _studySummaries.value = emptyList()
             return
         }
         viewModelScope.launch {
@@ -135,5 +137,9 @@ class StudyListViewModel @Inject constructor(
                 setNotFoundStudies()
             }
         }
+    }
+
+    fun updateIsGuest(isGuest: Boolean) {
+        this.isGuest = isGuest
     }
 }
