@@ -103,6 +103,21 @@
 
         </HorizontalScrollView>
 
+        <TextView
+            android:id="@+id/tv_guest_information"
+            android:layout_width="0dp"
+            android:height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/pb_study_list_load"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hsv_study_list"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:textAppearance="@style/subtitle_r20"
+            android:textColor="@color/grey02_78808B"
+            app:isVisible="@{studyListViewModel.isGuestMode()}"
+            android:text="@string/guest_information_title" />
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srl_study_list"
             android:layout_width="match_parent"
@@ -112,6 +127,7 @@
             app:layout_constraintBottom_toTopOf="@id/pb_study_list_load"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:isVisible="@{!studyListViewModel.isGuestMode()}"
             app:layout_constraintTop_toBottomOf="@id/hsv_study_list">
 
             <androidx.recyclerview.widget.RecyclerView
