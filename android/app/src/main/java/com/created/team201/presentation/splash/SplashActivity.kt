@@ -59,7 +59,7 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
             title = title.ifBlank { getString(R.string.in_app_update_dialog_title) },
             content = content.ifBlank { getString(R.string.in_app_update_dialog_content) },
             onUpdateClick = ::navigateToPlayStore,
-            onCancelClick = ::onInAppUpdateDialogCancelClickListener,
+            onCancelClick = splashViewModel::verifyToken,
         ).show()
     }
 
@@ -73,11 +73,6 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
                 )
             }
         }
-    }
-
-    private fun onInAppUpdateDialogCancelClickListener() {
-        splashViewModel.verifyToken()
-        finish()
     }
 
     private fun observeLoginState() {
