@@ -3,18 +3,16 @@ package com.created.team201.presentation.studyList
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
-import android.widget.LinearLayout.VERTICAL
 import android.widget.SearchView
 import android.widget.SearchView.OnQueryTextListener
-import androidx.core.content.ContextCompat.getDrawable
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.R
 import com.created.team201.databinding.FragmentStudyListBinding
@@ -24,6 +22,7 @@ import com.created.team201.presentation.guest.bottomSheet.LoginBottomSheetFragme
 import com.created.team201.presentation.main.MainViewModel
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
 import com.created.team201.presentation.studyList.adapter.StudyListAdapter
+import com.created.team201.presentation.studyList.model.StudyListFilter
 import com.created.team201.util.FirebaseLogUtil
 import com.created.team201.util.FirebaseLogUtil.SCREEN_STUDY_LIST
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,31 +37,30 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private val studyListAdapter: StudyListAdapter by lazy {
         StudyListAdapter(studyListClickListener())
     }
-    private var searchWord = ""
 
     override fun onResume() {
         super.onResume()
 
         FirebaseLogUtil.logScreenEvent(
             SCREEN_STUDY_LIST,
-            this@StudyListFragment.javaClass.simpleName
+            this@StudyListFragment.javaClass.simpleName,
         )
-
-        studyListViewModel.initPage()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setUpToolbar()
-        setUpStudyListSettings()
-        setUpDataObserve()
-        setUpRefreshListener()
-        setUpCreateStudyListener()
-        setUpScrollListener()
+        setupToolbar()
+        setupStudyListSettings()
+        setupDataObserve()
+        setupRefreshListener()
+        setupCreateStudyListener()
+        setupScrollListener()
+        setupStudyList()
+        setupStudyListFilter()
     }
 
-    private fun setUpToolbar() {
+    private fun setupToolbar() {
         val menu = binding.tbStudyList.menu
         val searchItem = menu.findItem(R.id.menu_study_list_search)
         val searchView = searchItem.actionView as SearchView
@@ -95,7 +93,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private fun setOnSearchItemCloseListener(searchView: SearchView, searchItem: MenuItem) {
         searchView.setOnCloseListener {
             searchItem.collapseActionView()
-            studyListViewModel.changeSearchMode(false)
+            studyListViewModel.changeSearchWord("")
             true
         }
     }
@@ -104,15 +102,14 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         searchItem
             .setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
                 override fun onMenuItemActionExpand(item: MenuItem): Boolean {
-                    studyListViewModel.changeSearchMode(true)
                     searchView.requestFocus()
                     return true
                 }
 
                 override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                     searchView.hideKeyboard()
-                    studyListViewModel.changeSearchMode(false)
-                    studyListViewModel.refreshPage()
+                    studyListViewModel.changeSearchWord("")
+                    studyListViewModel.loadPage()
                     return true
                 }
             })
@@ -121,9 +118,9 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
     private fun setOnSearchViewQueryTextListener(searchView: SearchView) {
         searchView.setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                studyListViewModel.changeSearchMode(true)
-                searchWord = query.toString()
-                studyListViewModel.loadSearchedPage(searchWord)
+                Log.d("ring", query.toString())
+                studyListViewModel.changeSearchWord(query.toString())
+                studyListViewModel.loadPage()
                 searchView.hideKeyboard()
                 return true
             }
@@ -134,20 +131,14 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         })
     }
 
-    private fun setUpStudyListSettings() {
-        val dividerItemDecoration = DividerItemDecoration(context, VERTICAL)
-        getDrawable(requireContext(), R.drawable.divider_recyclerview_line)?.let {
-            dividerItemDecoration.setDrawable(it)
-        }
-
+    private fun setupStudyListSettings() {
         binding.rvStudyListList.apply {
             adapter = studyListAdapter
-            addItemDecoration(dividerItemDecoration)
             setHasFixedSize(true)
         }
     }
 
-    private fun setUpDataObserve() {
+    private fun setupDataObserve() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.studyListViewModel = studyListViewModel
         studyListViewModel.studySummaries.observe(viewLifecycleOwner) {
@@ -155,16 +146,16 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         }
     }
 
-    private fun setUpRefreshListener() {
+    private fun setupRefreshListener() {
         binding.srlStudyList.setOnRefreshListener {
             viewLifecycleOwner.lifecycleScope.launch {
-                studyListViewModel.refreshPage()
+                studyListViewModel.refreshPage(mainViewModel.isGuest)
                 binding.srlStudyList.isRefreshing = false
             }
         }
     }
 
-    private fun setUpCreateStudyListener() {
+    private fun setupCreateStudyListener() {
         binding.fabStudyListCreateButton.setOnClickListener {
             if (mainViewModel.isGuest) {
                 showLoginBottomSheetDialog()
@@ -176,7 +167,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
                     context = requireContext(),
                 ).apply {
                     flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                }
+                },
             )
         }
     }
@@ -185,7 +176,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         removeAllFragment()
         LoginBottomSheetFragment().show(
             childFragmentManager,
-            LoginBottomSheetFragment.TAG_LOGIN_BOTTOM_SHEET
+            LoginBottomSheetFragment.TAG_LOGIN_BOTTOM_SHEET,
         )
     }
 
@@ -197,7 +188,7 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
         }
     }
 
-    private fun setUpScrollListener() {
+    private fun setupScrollListener() {
         val onScrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 studyListViewModel.updateScrollState(newState)
@@ -229,16 +220,47 @@ class StudyListFragment : BindingFragment<FragmentStudyListBinding>(R.layout.fra
                 }
 
                 if (!binding.rvStudyListList.canScrollVertically(1)) {
-                    studyListViewModel.loadNextPage(searchWord)
+                    studyListViewModel.loadNextPage()
                 }
             }
         }
         binding.rvStudyListList.addOnScrollListener(onScrollListener)
     }
 
+    private fun setupStudyList() {
+        studyListViewModel.initPage()
+    }
+
     private fun studyListClickListener() = object : StudyListClickListener {
         override fun onClickStudySummary(id: Long) {
             startActivity(StudyDetailActivity.getIntent(requireContext(), id))
+        }
+    }
+
+    private fun setupStudyListFilter() {
+        binding.cgStudyList.setOnCheckedStateChangeListener { group, _ ->
+            when (group.checkedChipId) {
+                binding.chipStudyListAll.id -> {
+                    studyListViewModel.loadFilteredPage(StudyListFilter.ALL)
+                }
+
+                binding.chipStudyListWaiting.id -> {
+                    studyListViewModel.loadAppliedPage(mainViewModel.isGuest)
+                }
+
+                binding.chipStudyListProcessing.id -> {
+                    studyListViewModel.loadFilteredPage(StudyListFilter.PROCESSING)
+                }
+
+                binding.chipStudyListRecruiting.id -> {
+                    studyListViewModel.loadFilteredPage(StudyListFilter.RECRUITING)
+                }
+
+                -1 -> {
+                    group.check(R.id.chip_study_list_all)
+                    studyListViewModel.loadFilteredPage(StudyListFilter.ALL)
+                }
+            }
         }
     }
 

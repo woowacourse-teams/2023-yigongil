@@ -6,5 +6,5 @@ data class UserStudyUiState(
     val studyName: String,
     val dDay: Int,
     val mustDo: String,
-    val grassSeed: Int
+    val grassSeed: Int,
 )

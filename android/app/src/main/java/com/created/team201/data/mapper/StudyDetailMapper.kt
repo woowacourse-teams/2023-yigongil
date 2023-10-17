@@ -8,19 +8,16 @@ import com.created.team201.data.remote.response.RoundResponseDto
 import com.created.team201.data.remote.response.StudyDetailResponseDto
 
 fun StudyDetailResponseDto.toDomain(): StudyDetail = StudyDetail(
-    id = this.id,
-    processingStatus = this.processingStatus,
-    name = this.name,
-    numberOfCurrentMembers = this.numberOfCurrentMembers,
-    numberOfMaximumMembers = this.numberOfMaximumMembers,
-    studyMasterId = this.studyMasterId,
-    startDate = this.startAt,
-    totalRoundCount = this.totalRoundCount,
-    cycle = this.periodOfRound,
-    currentRound = this.currentRound,
-    introduction = this.introduction,
-    members = this.members.map { it.toDomain() },
-    rounds = this.rounds.map { it.toDomain() },
+    id = id,
+    processingStatus = processingStatus,
+    name = name,
+    numberOfCurrentMembers = numberOfCurrentMembers,
+    numberOfMaximumMembers = numberOfMaximumMembers,
+    studyMasterId = studyMasterId,
+    meetingDaysCountPerWeek = meetingDaysCountPerWeek,
+    introduction = introduction,
+    members = members.map { it.toDomain() },
+    minimumWeeks = minimumWeeks,
 )
 
 fun MemberResponseDto.toDomain(): Member = Member(
