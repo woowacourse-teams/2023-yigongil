@@ -289,4 +289,7 @@
     <!-- 스레드 뷰 -->
     <string name="thread_blank_input_toast_title">내용을 입력해 주세요</string>
 
+    <!-- 인증 뷰 -->
+    <string name="certification_post_button_title">인증하기</string>
+
 </resources>
