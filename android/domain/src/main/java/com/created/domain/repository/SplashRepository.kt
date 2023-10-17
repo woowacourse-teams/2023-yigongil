@@ -1,8 +1,10 @@
 package com.created.domain.repository
 
 import com.created.domain.model.AppUpdateInformation
-import com.created.domain.model.response.NetworkResponse
+import kotlinx.coroutines.flow.SharedFlow
 
 interface SplashRepository {
-    suspend fun getAppUpdateInformation(versionCode: Int): NetworkResponse<AppUpdateInformation>
+    val appUpdateInformation: SharedFlow<AppUpdateInformation>
+
+    suspend fun getAppUpdateInformation(versionCode: Int)
 }

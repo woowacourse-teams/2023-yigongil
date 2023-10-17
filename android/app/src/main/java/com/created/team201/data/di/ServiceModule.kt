@@ -10,7 +10,6 @@ import com.created.team201.data.remote.api.OnBoardingService
 import com.created.team201.data.remote.api.ProfileService
 import com.created.team201.data.remote.api.ReportService
 import com.created.team201.data.remote.api.SettingService
-import com.created.team201.data.remote.api.SplashService
 import com.created.team201.data.remote.api.StudyDetailService
 import com.created.team201.data.remote.api.StudyListService
 import com.created.team201.data.remote.api.UpdateStudyService
@@ -24,11 +23,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ServiceModule {
-
-    @Singleton
-    @Provides
-    fun provideSplashService(@DefaultRetrofit retrofit: Retrofit): SplashService =
-        retrofit.create(SplashService::class.java)
 
     @Singleton
     @Provides

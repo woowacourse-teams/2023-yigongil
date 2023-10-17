@@ -6,7 +6,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.created.team201.R
 import com.created.team201.databinding.ActivitySplashBinding
 import com.created.team201.presentation.common.BindingActivity
@@ -68,12 +70,14 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
     private fun collectAppUpdateInformation() {
         lifecycleScope.launch {
             splashViewModel.appUpdateInformation.collect { appUpdateInformation ->
-                with(com.created.team201.presentation.splash.model.AppUpdateType) {
-                    showInAppUpdateDialog(
-                        appUpdateType = from(appUpdateInformation.shouldUpdate),
-                        title = "",
-                        content = appUpdateInformation.message,
-                    )
+                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    with(com.created.team201.presentation.splash.model.AppUpdateType) {
+                        showInAppUpdateDialog(
+                            appUpdateType = from(appUpdateInformation.shouldUpdate),
+                            title = "",
+                            content = appUpdateInformation.message,
+                        )
+                    }
                 }
             }
         }

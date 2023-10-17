@@ -39,9 +39,10 @@ class SplashViewModel @Inject constructor(
 
     fun getAppUpdateInformation(versionCode: Int) {
         viewModelScope.launch {
-            when (val response = splashRepository.getAppUpdateInformation(versionCode)) {
-                is NetworkResponse.Success -> _appUpdateInformation.emit(response.body)
-                else -> _appUpdateInformation.emit(AppUpdateInformation(false, ""))
+            splashRepository.getAppUpdateInformation(versionCode)
+
+            splashRepository.appUpdateInformation.collect { appUpdateInformation ->
+                _appUpdateInformation.emit(appUpdateInformation)
             }
         }
     }
