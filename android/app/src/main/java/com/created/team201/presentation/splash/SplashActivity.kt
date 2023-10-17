@@ -6,9 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.created.team201.R
 import com.created.team201.databinding.ActivitySplashBinding
 import com.created.team201.presentation.common.BindingActivity
@@ -21,7 +18,6 @@ import com.created.team201.presentation.splash.SplashViewModel.State.SUCCESS
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.UpdateAvailability
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 @SuppressLint("CustomSplashScreen")
@@ -31,7 +27,7 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        collectAppUpdateInformation()
+        observeAppUpdateInformation()
         observeLoginState()
         observeOnBoardingDoneState()
         verifyAppVersion()
@@ -67,18 +63,14 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
         ).show()
     }
 
-    private fun collectAppUpdateInformation() {
-        lifecycleScope.launch {
-            splashViewModel.appUpdateInformation.collect { appUpdateInformation ->
-                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    with(com.created.team201.presentation.splash.model.AppUpdateType) {
-                        showInAppUpdateDialog(
-                            appUpdateType = from(appUpdateInformation.shouldUpdate),
-                            title = "",
-                            content = appUpdateInformation.message,
-                        )
-                    }
-                }
+    private fun observeAppUpdateInformation() {
+        splashViewModel.appUpdateInformation.observe(this) { appUpdateInformation ->
+            with(com.created.team201.presentation.splash.model.AppUpdateType) {
+                showInAppUpdateDialog(
+                    appUpdateType = from(appUpdateInformation.shouldUpdate),
+                    title = "",
+                    content = appUpdateInformation.message,
+                )
             }
         }
     }

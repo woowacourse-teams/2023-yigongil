@@ -4,32 +4,30 @@ import android.util.Log
 import com.created.domain.model.AppUpdateInformation
 import com.created.domain.repository.SplashRepository
 import com.created.team201.BuildConfig
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DefaultSplashRepository @Inject constructor() : SplashRepository {
-    private val _appUpdateInformation: MutableSharedFlow<AppUpdateInformation> = MutableSharedFlow()
-    override val appUpdateInformation: SharedFlow<AppUpdateInformation>
-        get() = _appUpdateInformation.asSharedFlow()
-
-    override suspend fun getAppUpdateInformation(versionCode: Int) {
-        val documentTask =
+    override fun getAppUpdateInformation(
+        versionCode: Int,
+        onSuccess: (AppUpdateInformation) -> Unit,
+    ) {
+        val documentTask: Task<DocumentSnapshot> =
             Firebase.firestore.collection(BuildConfig.TEAM201_APP_VERSION_COLLECTION)
                 .document(versionCode.toString())
                 .get()
-
         documentTask.addOnSuccessListener { documentSnapshot ->
-            runBlocking {
-                _appUpdateInformation.emit(
-                    documentSnapshot.toObject<AppUpdateInformation>()?.run {
-                        copy(message = message.replace("\\n", "\n"))
-                    } ?: DEFAULT_APP_INFORMATION)
+            CoroutineScope(Dispatchers.IO).launch {
+                onSuccess.invoke(documentSnapshot.toObject<AppUpdateInformation>()?.run {
+                    copy(message = message.replace("\\n", "\n"))
+                } ?: DEFAULT_APP_INFORMATION)
             }
         }
         documentTask.addOnFailureListener { exception ->

@@ -13,9 +13,6 @@ import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
 import com.created.team201.presentation.splash.SplashViewModel.State.FAIL
 import com.created.team201.presentation.splash.SplashViewModel.State.SUCCESS
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,9 +23,8 @@ class SplashViewModel @Inject constructor(
     private val onBoardingRepository: OnBoardingRepository,
 ) : ViewModel() {
 
-    private val _appUpdateInformation: MutableSharedFlow<AppUpdateInformation> = MutableSharedFlow()
-    val appUpdateInformation: SharedFlow<AppUpdateInformation> =
-        _appUpdateInformation.asSharedFlow()
+    private val _appUpdateInformation: MutableLiveData<AppUpdateInformation> = MutableLiveData()
+    val appUpdateInformation: LiveData<AppUpdateInformation> get() = _appUpdateInformation
 
     private val _loginState: MutableLiveData<State> = MutableLiveData()
     val loginState: LiveData<State> get() = _loginState
@@ -38,12 +34,8 @@ class SplashViewModel @Inject constructor(
 
 
     fun getAppUpdateInformation(versionCode: Int) {
-        viewModelScope.launch {
-            splashRepository.getAppUpdateInformation(versionCode)
-
-            splashRepository.appUpdateInformation.collect { appUpdateInformation ->
-                _appUpdateInformation.emit(appUpdateInformation)
-            }
+        splashRepository.getAppUpdateInformation(versionCode) { appUpdateInformation ->
+            _appUpdateInformation.value = appUpdateInformation
         }
     }
 
