@@ -11,9 +11,8 @@ data class StudyDetailUIModel(
     val introduction: String,
     val peopleCount: Int,
     val role: Role,
-    val startDate: String,
-    val period: String,
-    val cycle: String,
+    val minimumWeeks: Int,
+    val meetingDaysCountPerWeek: Int,
     val memberCount: Int,
     val canStartStudy: Boolean,
     val studyMembers: List<StudyMemberUIModel>,
@@ -26,9 +25,8 @@ data class StudyDetailUIModel(
             introduction = "",
             peopleCount = 0,
             role = Role.NOTHING,
-            startDate = "",
-            period = "",
-            cycle = "",
+            minimumWeeks = 0,
+            meetingDaysCountPerWeek = 0,
             memberCount = 0,
             canStartStudy = false,
             studyMembers = listOf(),
@@ -42,15 +40,14 @@ data class StudyDetailUIModel(
                 introduction = studyDetail.introduction,
                 peopleCount = studyDetail.numberOfMaximumMembers,
                 role = role,
-                startDate = studyDetail.startDate,
-                period = studyDetail.totalRoundCount.toString(),
-                cycle = studyDetail.cycle,
+                minimumWeeks = studyDetail.minimumWeeks,
+                meetingDaysCountPerWeek = studyDetail.meetingDaysCountPerWeek,
                 memberCount = studyDetail.numberOfCurrentMembers,
                 canStartStudy = StudyDetail.canStartStudy(studyDetail.numberOfCurrentMembers),
                 studyMembers = studyDetail.members.map {
                     it.toUiModel(
                         studyDetail.studyMasterId,
-                        isApplicant = false
+                        isApplicant = false,
                     )
                 },
             )
