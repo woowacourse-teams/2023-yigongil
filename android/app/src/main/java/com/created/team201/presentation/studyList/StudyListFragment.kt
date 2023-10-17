@@ -259,16 +259,15 @@ class StudyListFragment :
 
     private fun getStudyListFilter(group: ChipGroup): StudyListFilter {
         return when (group.checkedChipId) {
-            binding.chipStudyListAll.id -> StudyListFilter.ALL
-            binding.chipStudyListWaiting.id -> StudyListFilter.WAITING
-            binding.chipStudyListProcessing.id -> StudyListFilter.PROCESSING
-            binding.chipStudyListRecruiting.id -> StudyListFilter.RECRUITING
             NON_SELECTED_CHIP_ID -> {
                 group.check(R.id.chip_study_list_all)
                 StudyListFilter.ALL
             }
 
-            else -> throw IllegalArgumentException()
+            else -> {
+                val chip: CustomChip = group.findViewById(group.checkedChipId)
+                chip.filter
+            }
         }
     }
 
