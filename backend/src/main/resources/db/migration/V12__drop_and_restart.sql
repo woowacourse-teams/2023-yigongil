@@ -1,4 +1,4 @@
-set foreign_key_checks = 0;
+set foreign_key_checks=0;
 drop table certification;
 drop table feed_post;
 drop table report;
@@ -6,7 +6,7 @@ drop table round;
 drop table round_of_member;
 drop table study;
 drop table study_member;
-set foreign_key_checks = 1;
+set foreign_key_checks=1;
 
 create table certification
 (
@@ -19,7 +19,7 @@ create table certification
     round_id   bigint,
     study_id   bigint,
     primary key (id)
-) engine = InnoDB
+) engine=InnoDB
 ;
 
 create table feed_post
@@ -32,7 +32,7 @@ create table feed_post
     author_id  bigint,
     study_id   bigint,
     primary key (id)
-) engine = InnoDB
+) engine=InnoDB
 ;
 
 create table meeting_day_of_the_week
@@ -43,7 +43,23 @@ create table meeting_day_of_the_week
     day_of_week integer,
     study_id    bigint,
     primary key (id)
-) engine = InnoDB
+) engine=InnoDB
+;
+
+create table member
+(
+    id                 bigint   not null auto_increment,
+    created_at         datetime not null,
+    updated_at         datetime,
+    deleted            bit      not null,
+    experience         integer  not null,
+    github_id          varchar(255),
+    introduction       varchar(200),
+    is_onboarding_done bit      not null,
+    nickname           varchar(8),
+    profile_image_url  varchar(255),
+    primary key (id)
+) engine=InnoDB
 ;
 
 create table report
@@ -59,7 +75,7 @@ create table report
     reported_member_id  bigint,
     reported_study_id   bigint,
     primary key (id)
-) engine = InnoDB
+) engine=InnoDB
 ;
 
 create table round
@@ -74,7 +90,7 @@ create table round
     meeting_day_of_the_week_id bigint,
     study_id                   bigint   not null,
     primary key (id)
-) engine = InnoDB
+) engine=InnoDB
 ;
 
 create table round_of_member
@@ -86,7 +102,7 @@ create table round_of_member
     member_id  bigint   not null,
     round_id   bigint   not null,
     primary key (id)
-) engine = InnoDB
+) engine=InnoDB
 ;
 
 create table study
@@ -103,7 +119,7 @@ create table study
     number_of_maximum_members   integer      not null,
     processing_status           varchar(255) not null,
     primary key (id)
-) engine = InnoDB
+) engine=InnoDB
 ;
 
 create table study_member
@@ -116,11 +132,11 @@ create table study_member
     member_id    bigint       not null,
     study_id     bigint       not null,
     primary key (id)
-) engine = InnoDB
+) engine=InnoDB
 ;
 
 alter table member
-    drop index UK_6p926dfj54l7npjasf3kx2uxm
+drop index UK_6p926dfj54l7npjasf3kx2uxm
 ;
 
 alter table member
@@ -128,7 +144,7 @@ alter table member
 ;
 
 alter table member
-    drop index UK_hh9kg6jti4n1eoiertn2k6qsc
+drop index UK_hh9kg6jti4n1eoiertn2k6qsc
 ;
 
 alter table member
