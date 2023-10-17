@@ -3,6 +3,7 @@ package com.created.team201.presentation.studyThread
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Spinner
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
@@ -90,6 +91,15 @@ class ThreadActivity : AppCompatActivity() {
             STUDY_INFO -> {
                 showStudyInformationDialog()
             }
+        }
+        hideSpinnerDropDown(binding.spinnerThread)
+    }
+
+    private fun hideSpinnerDropDown(spinner: Spinner) {
+        runCatching {
+            val method = Spinner::class.java.getDeclaredMethod("onDetachedFromWindow")
+            method.isAccessible = true
+            method.invoke(spinner)
         }
     }
 
