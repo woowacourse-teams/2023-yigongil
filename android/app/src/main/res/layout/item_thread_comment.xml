@@ -21,39 +21,57 @@
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.created.team201.presentation.studyDetail.CustomProfileImage
-                android:id="@+id/fl_item_thread_comment_profile_image"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="12dp"
-                app:glideCircleImageUrl="@{item.author.profileImageUrl}"
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_thread_comment_member_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:textAppearance="@style/text_m14"
-                android:textColor="@color/white"
-                android:text="@{item.author.nickname}"
-                app:layout_constraintBottom_toTopOf="@+id/tv_thread_comment_past_time"
-                app:layout_constraintStart_toEndOf="@+id/fl_item_thread_comment_profile_image"
-                app:layout_constraintTop_toTopOf="@+id/fl_item_thread_comment_profile_image"
-                tools:text="링링아하링링" />
+                android:layout_marginStart="20dp"
 
-            <TextView
-                android:id="@+id/tv_thread_comment_past_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/description_r10"
-                android:textColor="@color/white01_66FFFFFF"
-                app:layout_constraintBottom_toBottomOf="@+id/fl_item_thread_comment_profile_image"
-                app:layout_constraintStart_toStartOf="@+id/tv_thread_comment_member_name"
-                app:layout_constraintTop_toBottomOf="@+id/tv_thread_comment_member_name"
-                tools:text="5min" />
+                android:layout_marginTop="12dp"
+                android:id="@+id/cl_member_info">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/fl_item_thread_comment_profile_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="centerCrop"
+                    android:layout_marginVertical="2dp"
+                    app:shapeAppearanceOverlay="@style/circleImageView"
+                    app:strokeColor="@color/grey02_78808B"
+                    app:strokeWidth="1dp"
+                    android:padding="2dp"
+                    app:glideSrcUrl="@{item.author.profileImageUrl}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_thread_comment_member_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textAppearance="@style/text_m14"
+                    android:textColor="@color/white"
+                    android:text="@{item.author.nickname}"
+                    app:layout_constraintBottom_toTopOf="@+id/tv_thread_comment_past_time"
+                    app:layout_constraintStart_toEndOf="@+id/fl_item_thread_comment_profile_image"
+                    app:layout_constraintTop_toTopOf="@id/fl_item_thread_comment_profile_image"
+                    tools:text="링링아하링링" />
+
+                <TextView
+                    android:id="@+id/tv_thread_comment_past_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/description_r10"
+                    android:textColor="@color/white01_66FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="@id/fl_item_thread_comment_profile_image"
+                    app:layout_constraintStart_toStartOf="@+id/tv_thread_comment_member_name"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_thread_comment_member_name"
+                    android:text="@{item.createdAt}"
+                    tools:text="5min" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
                 android:id="@+id/iv_thread_comment_more_button"
@@ -61,9 +79,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/icn_more"
-                app:layout_constraintBottom_toBottomOf="@+id/fl_item_thread_comment_profile_image"
+                app:layout_constraintBottom_toBottomOf="@+id/cl_member_info"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/fl_item_thread_comment_profile_image" />
+                app:layout_constraintTop_toTopOf="@+id/cl_member_info" />
 
             <TextView
                 android:id="@+id/tv_thread_comment_content"
@@ -79,7 +97,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/view_thread_comment_border"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fl_item_thread_comment_profile_image"
+                app:layout_constraintTop_toBottomOf="@+id/cl_member_info"
                 tools:text="아아 언제다하냐 진짜 ㅋㅋ" />
 
             <View

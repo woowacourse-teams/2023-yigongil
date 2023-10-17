@@ -7,7 +7,7 @@ sealed interface ThreadUiState {
     data class Success(
         val studyName: String = "",
         val feeds: List<Feeds> = emptyList(),
-        val mustDo: List<MustDo> = emptyList()
+        val mustDo: List<MustDo> = emptyList(),
     ) : ThreadUiState
 
     object Loading : ThreadUiState
