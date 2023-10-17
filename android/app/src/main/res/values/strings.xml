@@ -286,4 +286,7 @@
     <string name="saturday">토</string>
     <string name="sunday">일</string>
 
+    <!-- 스레드 뷰 -->
+    <string name="thread_blank_input_toast_title">내용을 입력해 주세요</string>
+
 </resources>

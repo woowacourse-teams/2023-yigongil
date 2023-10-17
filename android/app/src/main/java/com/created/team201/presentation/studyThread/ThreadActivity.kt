@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
@@ -86,6 +87,11 @@ class ThreadActivity : AppCompatActivity() {
         binding.ivThreadDirectButton.setOnClickListener {
             val message = binding.etThreadInput.text.toString()
 
+            if (message.isBlank()) {
+                showBlankInputToast()
+                return@setOnClickListener
+            }
+
             threadViewModel.dispatchFeed(message)
             binding.etThreadInput.run {
                 text.clear()
@@ -93,6 +99,14 @@ class ThreadActivity : AppCompatActivity() {
                 hideKeyboard()
             }
         }
+    }
+
+    private fun showBlankInputToast() {
+        Toast.makeText(
+            this,
+            getText(R.string.thread_blank_input_toast_title),
+            Toast.LENGTH_SHORT,
+        ).show()
     }
 
     private fun onUserClick(memberId: Long) {
