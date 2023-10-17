@@ -3,6 +3,8 @@ package com.created.team201.presentation.studyThread
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Spinner
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -74,7 +76,11 @@ class ThreadActivity : AppCompatActivity() {
             val message = binding.etThreadInput.text.toString()
 
             threadViewModel.dispatchFeed(message)
-            binding.etThreadInput.text.clear()
+            binding.etThreadInput.run {
+                text.clear()
+                clearFocus()
+                hideKeyboard()
+            }
         }
     }
 
@@ -113,6 +119,12 @@ class ThreadActivity : AppCompatActivity() {
         binding.rvMustDo.adapter = mustDoAdapter
         binding.rvMustDo.setHasFixedSize(true)
         binding.spinnerThread.adapter = moreAdapter
+    }
+
+    private fun View.hideKeyboard() {
+        val inputMethodManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
     }
 
     companion object {
