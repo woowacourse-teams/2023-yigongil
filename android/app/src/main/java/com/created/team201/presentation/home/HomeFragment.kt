@@ -29,12 +29,17 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         collectUiState()
     }
 
+    override fun onResume() {
+        super.onResume()
+        homeViewModel.updateUserStudy()
+    }
+
     private fun setupViewModel() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = homeViewModel
     }
 
-    private fun navigateToThreadActivity(studyId: Int) {
+    private fun navigateToThreadActivity(studyId: Long) {
         startActivity(ThreadActivity.getIntent(requireContext(), studyId))
     }
 
@@ -50,5 +55,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
     private fun setupAdapter() {
         binding.rvHome.adapter = homeAdapter
+        binding.rvHome.setHasFixedSize(true)
     }
 }

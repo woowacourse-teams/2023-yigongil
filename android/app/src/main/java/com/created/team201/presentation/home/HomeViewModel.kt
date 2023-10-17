@@ -22,11 +22,7 @@ class HomeViewModel @Inject constructor(
     private val _userStudyUiState: MutableStateFlow<UserStudyState> = MutableStateFlow(Idle)
     val userStudyUiState: StateFlow<UserStudyState> get() = _userStudyUiState
 
-    init {
-        updateUserStudy()
-    }
-
-    private fun updateUserStudy() {
+    fun updateUserStudy() {
         viewModelScope.launch {
             runCatching {
                 homeRepository.getUserStudies()
@@ -40,10 +36,7 @@ class HomeViewModel @Inject constructor(
     }
 
     sealed interface UserStudyState {
-        data class Joined(
-            val userStudies: List<UserStudy>
-        ) : UserStudyState
-
+        data class Joined(val userStudies: List<UserStudy>) : UserStudyState
         object Nothing : UserStudyState
         object Idle : UserStudyState
     }

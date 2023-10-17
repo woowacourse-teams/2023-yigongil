@@ -90,7 +90,7 @@ class CreateStudyActivity :
                         startActivity(
                             StudyDetailActivity.getIntent(
                                 this@CreateStudyActivity,
-                                createStudyUiState.studyId
+                                createStudyUiState.studyId,
                             ),
                         )
 
@@ -124,7 +124,7 @@ class CreateStudyActivity :
         setProgressIndicator(type)
 
         val (fragment: Fragment, isCreated: Boolean) = findFragment(
-            type
+            type,
         ) ?: createFragment(type)
 
         supportFragmentManager.commit {

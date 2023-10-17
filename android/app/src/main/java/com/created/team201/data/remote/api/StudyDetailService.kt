@@ -1,9 +1,11 @@
 package com.created.team201.data.remote.api
 
+import com.created.team201.data.remote.request.StudyStartRequestDto
 import com.created.team201.data.remote.response.MemberResponseDto
 import com.created.team201.data.remote.response.MyPageResponseDto
 import com.created.team201.data.remote.response.StudyDetailResponseDto
 import com.created.team201.data.remote.response.StudyMemberRoleResponseDto
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -28,6 +30,7 @@ interface StudyDetailService {
     @PATCH("v1/studies/{studyId}/start")
     suspend fun startStudy(
         @Path("studyId") studyId: Long,
+        @Body studyStart: StudyStartRequestDto,
     )
 
     @PATCH("v1/studies/{studyId}/applicants/{memberId}")

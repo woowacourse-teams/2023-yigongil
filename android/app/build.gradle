@@ -38,6 +38,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "TEAM201_POLICY", properties["POLICY"]
+        buildConfigField "String", "TEAM201_APP_VERSION_COLLECTION", properties["FIREBASE_APP_VERSION_COLLECTION"]
     }
 
     buildTypes {
@@ -138,6 +139,9 @@ dependencies {
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-analytics-ktx")
+
+    // firebase firestore
+    implementation "com.google.firebase:firebase-firestore-ktx:24.8.1"
 
     // browser
     implementation 'androidx.browser:browser:1.5.0'

@@ -18,6 +18,7 @@ import com.created.team201.presentation.guest.GuestViewModel.State.IDLE
 import com.created.team201.presentation.guest.GuestViewModel.State.SUCCESS
 import com.created.team201.presentation.onBoarding.OnBoardingActivity
 import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
+import com.created.team201.presentation.studyList.BottomSheetListener
 import com.created.team201.util.auth.CustomTabLauncherActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,7 +30,7 @@ class LoginBottomSheetFragment :
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
 
@@ -66,7 +67,6 @@ class LoginBottomSheetFragment :
         }
     }
 
-
     private fun setObserveOnBoardingDoneState() {
         guestViewModel.onBoardingDoneState.observe(this) { onBoardingDoneState ->
             when (onBoardingDoneState) {
@@ -74,6 +74,9 @@ class LoginBottomSheetFragment :
                     if (onBoardingDoneState.isDone) {
                         guestViewModel.refresh()
                         this.dismiss()
+                        if (parentFragment is BottomSheetListener) {
+                            (parentFragment as BottomSheetListener).onBottomSheetClosed()
+                        }
                         return@observe
                     }
                     navigateToOnBoarding()

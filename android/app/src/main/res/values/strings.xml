@@ -8,6 +8,7 @@
     <string name="in_app_update_dialog_title">업데이트 안내</string>
     <string name="in_app_update_dialog_content">새 버전이 있습니다. 원활한 앱 사용을 위해 최신 버전 업데이트를 권장합니다.\n업데이트 하시겠습니까?</string>
     <string name="in_app_update_dialog_btn_ok_text">업데이트 하기</string>
+    <string name="in_app_update_dialog_btn_cancel_text">나중에 하기</string>
 
     <!--로그인 뷰-->
     <string name="login_guest"><u>비회원으로 둘러보기</u></string>
@@ -67,17 +68,23 @@
     <string name="error_baseFragment">"[ERROR]Binding no initialization"</string>
 
     <!--스터디 목록 탭-->
+    <string name="study_list_chip_recruiting">모집중</string>
+    <string name="study_list_chip_processing">진행중</string>
+    <string name="study_list_chip_all">전체</string>
+    <string name="study_list_chip_waiting">수락 대기중</string>
     <string name="study_list_create">스터디 만들기</string>
     <string name="study_list_item_sort_description">정렬</string>
     <string name="study_list_search_button_menu">검색</string>
     <string name="study_list_title">스터디 목록</string>
-    <string name="study_list_information_format">%s %s · 총 %d회차 · %d %s(주기)</string>
+    <string name="study_list_information_format">개설일 %s</string>
     <string name="study_list_member_format">%d/%d</string>
     <string name="study_list_previous_date">예상시작일</string>
     <string name="study_list_processing_date">시작일</string>
     <string name="study_list_item_date_format">일</string>
     <string name="study_list_item_week_format">주</string>
     <string name="study_list_not_found">찾으시는 스터디가 없어요</string>
+    <string name="study_list_sort">정렬</string>
+    <string name="study_list_average_tier_description">평균티어</string>
 
     <!--스터디 관리 탭-->
     <string name="study_manage_title">스터디 관리</string>
@@ -88,11 +95,11 @@
 
     <!-- 아이콘 텍스트 버튼 커스텀 뷰 -->
     <string name="icon_text_button_name_people_count">인원 수</string>
-    <string name="icon_text_button_name_start_date">예상시작일</string>
-    <string name="icon_text_button_name_period">스터디기간</string>
-    <string name="icon_text_button_name_cycle">스터디주기</string>
+    <string name="icon_text_button_name_period">기간</string>
+    <string name="icon_text_button_name_cycle">주</string>
     <string name="icon_text_button_formatter_information_people_count">%d명</string>
-    <string name="icon_text_button_formatter_information_period">%d회차</string>
+    <string name="icon_text_button_formatter_information_cycle">%d주</string>
+    <string name="icon_text_button_formatter_information_period">%d회</string>
 
     <!--스터디 상세보기 뷰-->
     <string name="study_detail_app_bar_title">스터디 상세보기</string>
@@ -105,9 +112,6 @@
     <string name="study_detail_study_accept_waiting">수락을 기다리고 있어요</string>
     <string name="study_detail_study_start_waiting">시작을 기다리고 있어요</string>
     <string name="study_detail_do_not_accept_member_anymore">더이상 스터디 멤버를 받을 수 없습니다.</string>
-    <string name="study_detail_period_of_count_day">%d일</string>
-    <string name="study_detail_period_of_count_week">%d주</string>
-    <string name="study_detail_period_format">%s회차</string>
     <string name="study_detail_notify_invalid_study">스터디를 찾을 수 없습니다.</string>
     <string name="study_detail_notify_cant_participant">더는 참가할 수 없어요</string>
     <string name="study_detail_not_yet">아직 준비중입니다</string>
@@ -218,6 +222,8 @@
     <string name="myPage_button_modify_profile">프로필 수정</string>
     <string name="myPage_study_success_rate_title">스터디 성공률</string>
     <string name="myPage_todo_success_rate_title">필수투두 완료횟수</string>
+    <string name="myPage_tier_description_less">less</string>
+    <string name="myPage_tier_description_more">more</string>
 
     <string name="myPage_dialog_modify_profile_title">프로필 수정</string>
     <string name="myPage_dialog_modify_profile_content">변경사항을 저장하시겠습니까?</string>
@@ -235,7 +241,7 @@
     <string name="profile_study_success_rate">스터디 성공률</string>
     <string name="profile_todo_success_rate">필수투두 완료횟수</string>
     <string name="profile_unexpected_user_access_warning">존재하지 않는 사용자입니다.</string>
-    <string name="item_profile_finished_study_information_format">시작일 %s · 총 %d회차 · %d %s(주기)</string>
+    <string name="item_profile_finished_study_information_format">시작일 %s</string>
 
     <!-- 설정 뷰 -->
     <string name="setting_toolbar_title">설정</string>
@@ -279,5 +285,8 @@
     <string name="friday">금</string>
     <string name="saturday">토</string>
     <string name="sunday">일</string>
+
+    <!-- 스레드 뷰 -->
+    <string name="thread_blank_input_toast_title">내용을 입력해 주세요</string>
 
 </resources>

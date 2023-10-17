@@ -8,6 +8,7 @@ import com.created.team201.R
 import com.created.team201.databinding.FragmentStudyStartBottomSheetBinding
 import com.created.team201.presentation.common.BindingBottomSheetFragment
 import com.created.team201.presentation.studyDetail.StudyDetailViewModel
+import com.created.team201.presentation.studyThread.ThreadActivity
 
 class StudyStartBottomSheetFragment :
     BindingBottomSheetFragment<FragmentStudyStartBottomSheetBinding>(
@@ -43,15 +44,14 @@ class StudyStartBottomSheetFragment :
     }
 
     private fun onStartButtonClick() {
-//        val studyId = arguments?.getLong(KEY_STUDY_ID) ?: INVALID_STUDY_ID
-//        validateStudyId(studyId)
-//        studyDetailViewModel.startStudy(studyId) ToDo: 서버 연결시 수정
-        Toast.makeText(
-            context,
-            binding.dowsStudyStartBottomSheetDayOfWeekSelector.getSelectedDays().toString(),
-            Toast.LENGTH_SHORT,
-        ).show()
+        val studyId = arguments?.getLong(KEY_STUDY_ID) ?: INVALID_STUDY_ID
+        validateStudyId(studyId)
+        studyDetailViewModel.startStudy(
+            studyId,
+            binding.dowsStudyStartBottomSheetDayOfWeekSelector.getSelectedDays(),
+        )
         dismiss()
+        startActivity(ThreadActivity.getIntent(requireContext(), studyId))
     }
 
     private fun validateStudyId(studyId: Long) {
