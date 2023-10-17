@@ -16,7 +16,6 @@ import com.created.team201.presentation.splash.SplashViewModel.State.FAIL
 import com.created.team201.presentation.splash.SplashViewModel.State.IDLE
 import com.created.team201.presentation.splash.SplashViewModel.State.SUCCESS
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,35 +27,52 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        observeAppUpdateInformation()
+        observeLoginState()
+        observeOnBoardingDoneState()
         verifyAppVersion()
     }
 
     private fun verifyAppVersion() {
         val appUpdateManager = AppUpdateManagerFactory.create(this)
         appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
-                appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
-            ) {
-                showInAppUpdateDialog()
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                splashViewModel.getAppUpdateInformation(appUpdateInfo.availableVersionCode())
             } else {
-                observeLoginState()
-                observeOnBoardingDoneState()
+                splashViewModel.verifyToken()
             }
         }
         appUpdateManager.appUpdateInfo.addOnFailureListener { e ->
             Log.d("App Update Manager", "$e")
-            observeLoginState()
-            observeOnBoardingDoneState()
+            splashViewModel.verifyToken()
         }
     }
 
-    private fun showInAppUpdateDialog() {
+    private fun showInAppUpdateDialog(
+        appUpdateType: com.created.team201.presentation.splash.model.AppUpdateType,
+        title: String,
+        content: String,
+    ) {
         InAppUpdateDialog(
             context = this,
-            getString(R.string.in_app_update_dialog_title),
-            getString(R.string.in_app_update_dialog_content),
-            ::navigateToPlayStore,
+            appUpdateType = appUpdateType,
+            title = title.ifBlank { getString(R.string.in_app_update_dialog_title) },
+            content = content.ifBlank { getString(R.string.in_app_update_dialog_content) },
+            onUpdateClick = ::navigateToPlayStore,
+            onCancelClick = splashViewModel::verifyToken,
         ).show()
+    }
+
+    private fun observeAppUpdateInformation() {
+        splashViewModel.appUpdateInformation.observe(this) { appUpdateInformation ->
+            with(com.created.team201.presentation.splash.model.AppUpdateType) {
+                showInAppUpdateDialog(
+                    appUpdateType = from(appUpdateInformation.shouldUpdate),
+                    title = "",
+                    content = appUpdateInformation.message,
+                )
+            }
+        }
     }
 
     private fun observeLoginState() {

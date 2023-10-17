@@ -8,6 +8,7 @@
     <string name="in_app_update_dialog_title">업데이트 안내</string>
     <string name="in_app_update_dialog_content">새 버전이 있습니다. 원활한 앱 사용을 위해 최신 버전 업데이트를 권장합니다.\n업데이트 하시겠습니까?</string>
     <string name="in_app_update_dialog_btn_ok_text">업데이트 하기</string>
+    <string name="in_app_update_dialog_btn_cancel_text">나중에 하기</string>
 
     <!--로그인 뷰-->
     <string name="login_guest"><u>비회원으로 둘러보기</u></string>
@@ -221,6 +222,8 @@
     <string name="myPage_button_modify_profile">프로필 수정</string>
     <string name="myPage_study_success_rate_title">스터디 성공률</string>
     <string name="myPage_todo_success_rate_title">필수투두 완료횟수</string>
+    <string name="myPage_tier_description_less">less</string>
+    <string name="myPage_tier_description_more">more</string>
 
     <string name="myPage_dialog_modify_profile_title">프로필 수정</string>
     <string name="myPage_dialog_modify_profile_content">변경사항을 저장하시겠습니까?</string>
