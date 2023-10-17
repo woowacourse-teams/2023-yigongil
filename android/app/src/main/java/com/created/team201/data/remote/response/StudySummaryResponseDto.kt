@@ -10,17 +10,17 @@ data class StudySummaryResponseDto(
     @SerialName("processingStatus")
     val processingStatus: Int,
     @SerialName("averageTier")
-    val tier: Int,
+    val averageTier: Int,
     @SerialName("name")
-    val title: String,
-    @SerialName("startAt")
-    val date: String,
-    @SerialName("totalRoundCount")
-    val totalRound: Int,
-    @SerialName("periodOfRound")
-    val period: String,
+    val name: String,
+    @SerialName("createdAt")
+    val createdAt: String,
+    @SerialName("minimumWeeks")
+    val minimumWeeks: Int,
+    @SerialName("meetingDaysPerWeek")
+    val meetingDaysCountPerWeek: Int,
     @SerialName("numberOfCurrentMembers")
-    val currentMember: Int,
+    val numberOfCurrentMembers: Int,
     @SerialName("numberOfMaximumMembers")
-    val maximumMember: Int,
+    val numberOfMaximumMembers: Int,
 )

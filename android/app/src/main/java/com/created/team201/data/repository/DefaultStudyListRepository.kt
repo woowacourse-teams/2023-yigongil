@@ -3,18 +3,24 @@ package com.created.team201.data.repository
 import com.created.domain.model.StudySummary
 import com.created.domain.repository.StudyListRepository
 import com.created.team201.data.mapper.toDomain
-import com.created.team201.data.remote.api.StudyListService
+import com.created.team201.data.remote.api.CommonStudyListService
+import com.created.team201.data.remote.api.MemberStudyListService
 import javax.inject.Inject
 
 class DefaultStudyListRepository @Inject constructor(
-    private val studyListService: StudyListService
+    private val commonStudyListService: CommonStudyListService,
+    private val memberStudyListService: MemberStudyListService,
 ) : StudyListRepository {
 
-    override suspend fun getStudyList(page: Int): List<StudySummary> {
-        return studyListService.getStudyList(page).toDomain()
+    override suspend fun getStudyList(
+        status: String?,
+        page: Int?,
+        searchWord: String?,
+    ): List<StudySummary> {
+        return commonStudyListService.getStudyList(status, page, searchWord).toDomain()
     }
 
-    override suspend fun getSearchedStudyList(searchWord: String, page: Int): List<StudySummary> {
-        return studyListService.getSearchedStudyList(searchWord, page).toDomain()
+    override suspend fun getAppliedStudyList(searchWord: String?): List<StudySummary> {
+        return memberStudyListService.getAppliedStudyList(searchWord).toDomain()
     }
 }

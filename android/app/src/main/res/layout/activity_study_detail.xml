@@ -84,22 +84,9 @@
                 app:iconResource="@drawable/ic_people_capacity"
                 app:information="@{@string/icon_text_button_formatter_information_people_count(viewModel.study.peopleCount)}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/itb_study_detail_start_date"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view_study_detail_information_divider" />
-
-            <com.created.team201.presentation.studyDetail.custom.IconTextButton
-                android:id="@+id/itb_study_detail_start_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:buttonName="@string/icon_text_button_name_start_date"
-                app:iconResource="@drawable/ic_start_date"
-                app:information="@{viewModel.study.startDate.toString()}"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/itb_study_detail_period"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@id/itb_study_detail_capacity"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/view_study_detail_information_divider" />
 
             <com.created.team201.presentation.studyDetail.custom.IconTextButton
@@ -108,11 +95,11 @@
                 android:layout_height="wrap_content"
                 app:buttonName="@string/icon_text_button_name_period"
                 app:iconResource="@drawable/ic_period"
-                app:information="@{@string/study_detail_period_format(viewModel.study.period)}"
+                app:information="@{@string/icon_text_button_formatter_information_cycle(viewModel.study.minimumWeeks)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/itb_study_detail_cycle"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@id/itb_study_detail_start_date"
+                app:layout_constraintStart_toEndOf="@id/itb_study_detail_capacity"
                 app:layout_constraintTop_toBottomOf="@id/view_study_detail_information_divider" />
 
             <com.created.team201.presentation.studyDetail.custom.IconTextButton
@@ -121,12 +108,12 @@
                 android:layout_height="wrap_content"
                 app:buttonName="@string/icon_text_button_name_cycle"
                 app:iconResource="@drawable/ic_cycle"
-                app:information="@{activity.convertPeriodOfCountFormat(viewModel.study.cycle) }"
+                app:information="@{@string/icon_text_button_formatter_information_period(viewModel.study.meetingDaysCountPerWeek) }"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@id/itb_study_detail_period"
-                app:layout_constraintTop_toBottomOf="@id/view_study_detail_information_divider" />
+                app:layout_constraintTop_toTopOf="@id/view_study_detail_information_divider" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
