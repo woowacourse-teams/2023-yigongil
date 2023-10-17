@@ -4,6 +4,7 @@ import com.created.team201.data.di.qualifier.AuthRetrofit
 import com.created.team201.data.di.qualifier.DefaultRetrofit
 import com.created.team201.data.remote.api.AuthService
 import com.created.team201.data.remote.api.CommonStudyListService
+import com.created.team201.data.remote.api.CreateStudyService
 import com.created.team201.data.remote.api.HomeService
 import com.created.team201.data.remote.api.MemberStudyListService
 import com.created.team201.data.remote.api.MyPageService
@@ -38,6 +39,11 @@ object ServiceModule {
     @Provides
     fun provideMemberStudyListService(@AuthRetrofit retrofit: Retrofit): MemberStudyListService =
         retrofit.create(MemberStudyListService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideCreateStudyService(@AuthRetrofit retrofit: Retrofit): CreateStudyService =
+        retrofit.create(CreateStudyService::class.java)
 
     @Singleton
     @Provides

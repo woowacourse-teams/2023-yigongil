@@ -164,6 +164,9 @@
     <string name="create_study_button_next">다음</string>
     <string name="create_study_button_done">작성완료</string>
 
+    <string name="create_study_toast_create_study_success">스터디 개설에 성공했습니다</string>
+    <string name="create_study_toast_create_study_fail">스터디 개설에 실패했습니다</string>
+
     <string name="create_study_tag_people_count">TAG_CREATE_STUDY_PEOPLE_COUNT</string>
     <string name="create_study_tag_study_date">TAG_CREATE_STUDY_STUDY_DATE</string>
     <string name="create_study_tag_cycle">TAG_CREATE_STUDY_CYCLE</string>
