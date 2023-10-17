@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.R
 import com.created.team201.databinding.ActivityThreadBinding
 import com.created.team201.presentation.studyThread.ThreadUiState.Loading
@@ -43,9 +44,18 @@ class ThreadActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         threadViewModel.initStudyThread(studyId)
+        setupThreadAdapter()
         attachAdapter()
         setOnClickEvent()
         collectUiState()
+    }
+
+    private fun setupThreadAdapter() {
+        threadAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                binding.rvThread.scrollToPosition(SCROLL_TO_BOTTOM_IDX)
+            }
+        })
     }
 
     private fun collectUiState() {
@@ -63,8 +73,8 @@ class ThreadActivity : AppCompatActivity() {
 
     private fun showView(state: Success) {
         binding.tvThreadStudyName.text = state.studyName
-        threadAdapter.submitList(state.feeds)
         mustDoAdapter.submitList(state.mustDo)
+        threadAdapter.submitList(state.feeds)
     }
 
     private fun setOnClickEvent() {
@@ -132,6 +142,7 @@ class ThreadActivity : AppCompatActivity() {
         private const val MUST_DO = 0
         private const val MUST_DO_CERTIFICATION = 1
         private const val STUDY_INFO = 2
+        private const val SCROLL_TO_BOTTOM_IDX = 0
 
         fun getIntent(context: Context, studyId: Long): Intent =
             Intent(context, ThreadActivity::class.java).apply {
