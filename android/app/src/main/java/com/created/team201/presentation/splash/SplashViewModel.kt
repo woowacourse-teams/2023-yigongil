@@ -35,7 +35,7 @@ class SplashViewModel @Inject constructor(
 
     fun getAppUpdateInformation(versionCode: Int) {
         splashRepository.getAppUpdateInformation(versionCode) { appUpdateInformation ->
-            _appUpdateInformation.value = appUpdateInformation
+            _appUpdateInformation.postValue(appUpdateInformation)
         }
     }
 

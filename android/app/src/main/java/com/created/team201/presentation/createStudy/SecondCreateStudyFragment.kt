@@ -3,7 +3,9 @@ package com.created.team201.presentation.createStudy
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.created.team201.R
 import com.created.team201.databinding.FragmentSecondCreateStudyBinding
 import com.created.team201.presentation.common.BindingFragment
@@ -26,7 +28,9 @@ class SecondCreateStudyFragment :
     private fun setupCollectEnableNext() {
         lifecycleScope.launch {
             createStudyViewModel.isEnableSecondCreateStudyNext.collect { isEnable ->
-                binding.tvSecondCreateStudyBtnNext.isEnabled = isEnable
+                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    binding.tvSecondCreateStudyBtnNext.isEnabled = isEnable
+                }
             }
         }
     }
