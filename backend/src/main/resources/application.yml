@@ -8,9 +8,9 @@ spring:
 
 springdoc:
   api-docs:
-    path: "/v1/api-docs"
+    path: "/api-docs"
   swagger-ui:
-    url: "/v1/api-docs"
+    url: "/api-docs"
     path: "/api"
     display-request-duration: true
 
