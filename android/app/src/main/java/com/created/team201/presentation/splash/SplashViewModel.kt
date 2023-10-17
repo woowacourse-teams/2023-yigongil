@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.created.domain.model.AppUpdateInformation
 import com.created.domain.model.response.NetworkResponse
 import com.created.domain.repository.AuthRepository
 import com.created.domain.repository.OnBoardingRepository
+import com.created.domain.repository.SplashRepository
 import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
 import com.created.team201.presentation.splash.SplashViewModel.State.FAIL
 import com.created.team201.presentation.splash.SplashViewModel.State.SUCCESS
@@ -16,20 +18,28 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
+    private val splashRepository: SplashRepository,
     private val authRepository: AuthRepository,
     private val onBoardingRepository: OnBoardingRepository,
 ) : ViewModel() {
+
+    private val _appUpdateInformation: MutableLiveData<AppUpdateInformation> = MutableLiveData()
+    val appUpdateInformation: LiveData<AppUpdateInformation> get() = _appUpdateInformation
+
     private val _loginState: MutableLiveData<State> = MutableLiveData()
     val loginState: LiveData<State> get() = _loginState
 
     private val _onBoardingDoneState: MutableLiveData<OnBoardingDoneState> = MutableLiveData()
     val onBoardingDoneState: LiveData<OnBoardingDoneState> get() = _onBoardingDoneState
 
-    init {
-        verifyToken()
+
+    fun getAppUpdateInformation(versionCode: Int) {
+        splashRepository.getAppUpdateInformation(versionCode) { appUpdateInformation ->
+            _appUpdateInformation.value = appUpdateInformation
+        }
     }
 
-    private fun verifyToken() {
+    fun verifyToken() {
         if (authRepository.accessToken.isEmpty()) {
             _loginState.value = FAIL
             return
