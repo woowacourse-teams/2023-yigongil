@@ -28,7 +28,7 @@ class ThreadActivity : AppCompatActivity() {
         MoreAdapter(
             this,
             R.layout.item_thread_more,
-            ::onClickMore
+            ::onClickMore,
         )
     }
     private val threadViewModel: ThreadViewModel by viewModels()
@@ -86,10 +86,15 @@ class ThreadActivity : AppCompatActivity() {
             MUST_DO_CERTIFICATION -> {
                 // startActivity(CertificationActivity)
             }
+
             STUDY_INFO -> {
-                // createDialog
+                showStudyInformationDialog()
             }
         }
+    }
+
+    private fun showStudyInformationDialog() {
+        StudyInformationDialog(this, threadViewModel.studyDetail).show()
     }
 
     private fun attachAdapter() {
