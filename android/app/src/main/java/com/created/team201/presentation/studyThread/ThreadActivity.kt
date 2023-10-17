@@ -14,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.R
 import com.created.team201.databinding.ActivityThreadBinding
+import com.created.team201.presentation.profile.ProfileActivity
 import com.created.team201.presentation.studyThread.ThreadUiState.Loading
 import com.created.team201.presentation.studyThread.ThreadUiState.Success
 import com.created.team201.presentation.studyThread.adapter.MoreAdapter
@@ -27,7 +28,7 @@ import kotlinx.coroutines.launch
 class ThreadActivity : AppCompatActivity() {
     private lateinit var binding: ActivityThreadBinding
     private val mustDoAdapter: MustDoAdapter by lazy { MustDoAdapter() }
-    private val threadAdapter: ThreadAdapter by lazy { ThreadAdapter() }
+    private val threadAdapter: ThreadAdapter by lazy { ThreadAdapter(::onUserClick) }
     private val moreAdapter: MoreAdapter by lazy {
         MoreAdapter(
             this,
@@ -92,6 +93,14 @@ class ThreadActivity : AppCompatActivity() {
                 hideKeyboard()
             }
         }
+    }
+
+    private fun onUserClick(memberId: Long) {
+        val isMyProfile = threadViewModel.isMyProfile(memberId)
+        startActivity(
+            ProfileActivity.getIntent(this, memberId, isMyProfile)
+                .also { it.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP },
+        )
     }
 
     private fun onClickMore(position: Int) {

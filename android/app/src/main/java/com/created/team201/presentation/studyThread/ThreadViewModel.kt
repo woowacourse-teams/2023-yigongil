@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.created.domain.model.Feeds
 import com.created.domain.model.MustDoCertification
 import com.created.domain.model.Role
+import com.created.domain.repository.MyPageRepository
 import com.created.domain.repository.StudyDetailRepository
 import com.created.domain.repository.ThreadRepository
 import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
@@ -20,9 +21,11 @@ import javax.inject.Inject
 class ThreadViewModel @Inject constructor(
     private val threadRepository: ThreadRepository,
     private val detailRepository: StudyDetailRepository,
+    private val myPageRepository: MyPageRepository,
 ) : ViewModel() {
 
-    private var studyId: Long = 0
+    private var myId: Long = DEFAULT_MY_ID
+    private var studyId: Long = DEFAULT_STUDY_ID
 
     private val _uiState: MutableStateFlow<ThreadUiState> = MutableStateFlow(ThreadUiState.Loading)
     val uiState: StateFlow<ThreadUiState> get() = _uiState.asStateFlow()
@@ -34,6 +37,7 @@ class ThreadViewModel @Inject constructor(
         fetchStudyDetail()
         updateMustDoCertification()
         updateFeeds()
+        getMyProfile()
     }
 
     fun dispatchFeed(message: String) {
@@ -97,5 +101,21 @@ class ThreadViewModel @Inject constructor(
                 studyDetail = StudyDetailUIModel.createFromStudyDetailRole(it, Role.NOTHING)
             }
         }
+    }
+
+    private fun getMyProfile() {
+        viewModelScope.launch {
+            myPageRepository.getMyPage()
+                .onSuccess {
+                    myId = it.id
+                }
+        }
+    }
+
+    fun isMyProfile(memberId: Long): Boolean = (memberId == myId)
+
+    companion object {
+        private const val DEFAULT_STUDY_ID = 0L
+        private const val DEFAULT_MY_ID = -1L
     }
 }
