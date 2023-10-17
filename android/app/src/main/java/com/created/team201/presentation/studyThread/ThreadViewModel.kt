@@ -2,6 +2,8 @@ package com.created.team201.presentation.studyThread
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.created.domain.model.Feeds
+import com.created.domain.model.MustDoCertification
 import com.created.domain.model.Role
 import com.created.domain.repository.StudyDetailRepository
 import com.created.domain.repository.ThreadRepository
@@ -27,14 +29,11 @@ class ThreadViewModel @Inject constructor(
 
     lateinit var studyDetail: StudyDetailUIModel
 
-    init {
+    fun initStudyThread(studyId: Long) {
+        this.studyId = studyId
+        fetchStudyDetail()
         updateMustDoCertification()
         updateFeeds()
-    }
-
-    fun updateStudyId(id: Long) {
-        studyId = id
-        fetchStudyDetail()
     }
 
     fun dispatchFeed(message: String) {
@@ -49,18 +48,44 @@ class ThreadViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching { threadRepository.getMustDoCertification(studyId) }
                 .onSuccess {
-                    _uiState.value =
-                        ThreadUiState.Success()
-                            .copy(studyName = it.studyName, mustDo = listOf(it.me) + it.others)
+                    updateMustDoCertificationInState(it)
                 }
+        }
+    }
+
+    private fun updateMustDoCertificationInState(certification: MustDoCertification) {
+        if (uiState.value is ThreadUiState.Success) {
+            _uiState.value =
+                (uiState.value as ThreadUiState.Success).copy(
+                    studyName = certification.studyName,
+                    mustDo = listOf(certification.me) + certification.others,
+                )
+        } else {
+            _uiState.value = ThreadUiState.Success(
+                studyName = certification.studyName,
+                mustDo = listOf(certification.me) + certification.others,
+            )
         }
     }
 
     private fun updateFeeds() {
         viewModelScope.launch {
             threadRepository.getFeeds(studyId).collectLatest {
-                _uiState.value = ThreadUiState.Success().copy(feeds = it)
+                updateFeedsInState(it)
             }
+        }
+    }
+
+    private fun updateFeedsInState(feeds: List<Feeds>) {
+        if (uiState.value is ThreadUiState.Success) {
+            _uiState.value =
+                (uiState.value as ThreadUiState.Success).copy(
+                    feeds = feeds,
+                )
+        } else {
+            _uiState.value = ThreadUiState.Success(
+                feeds = feeds,
+            )
         }
     }
 

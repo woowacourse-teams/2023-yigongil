@@ -42,7 +42,7 @@ class ThreadActivity : AppCompatActivity() {
         binding = ActivityThreadBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        threadViewModel.updateStudyId(studyId)
+        threadViewModel.initStudyThread(studyId)
         attachAdapter()
         setOnClickEvent()
         collectUiState()
