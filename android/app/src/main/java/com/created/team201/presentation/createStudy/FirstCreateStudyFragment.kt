@@ -70,9 +70,9 @@ class FirstCreateStudyFragment :
     }
 
     private fun setupCollectEnableNext() {
-        lifecycleScope.launch {
-            createStudyViewModel.isEnableFirstCreateStudyNext.collect { isEnable ->
-                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                createStudyViewModel.isEnableFirstCreateStudyNext.collect { isEnable ->
                     binding.tvFirstCreateStudyBtnNext.isEnabled = isEnable
                 }
             }

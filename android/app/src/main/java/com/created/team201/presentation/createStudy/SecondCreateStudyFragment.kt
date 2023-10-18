@@ -26,9 +26,9 @@ class SecondCreateStudyFragment :
     }
 
     private fun setupCollectEnableNext() {
-        lifecycleScope.launch {
-            createStudyViewModel.isEnableSecondCreateStudyNext.collect { isEnable ->
-                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                createStudyViewModel.isEnableSecondCreateStudyNext.collect { isEnable ->
                     binding.tvSecondCreateStudyBtnNext.isEnabled = isEnable
                 }
             }

@@ -118,8 +118,8 @@ class CreateStudyActivity :
 
     private fun setupCollectCreateStudyState() {
         lifecycleScope.launch {
-            createStudyViewModel.fragmentState.collect { fragmentState ->
-                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                createStudyViewModel.fragmentState.collect { fragmentState ->
                     showFragment(fragmentState.type)
                 }
             }
