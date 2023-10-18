@@ -82,7 +82,7 @@
             android:padding="12dp"
             android:text="@string/certification_post_button_title"
             android:textAppearance="@style/button_sb18"
-            android:textColor="@color/white"
+            android:textColor="@color/tv_color_disabled"
             app:layout_constraintBottom_toBottomOf="parent" />
 
 

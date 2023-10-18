@@ -26,6 +26,9 @@ class ThreadViewModel @Inject constructor(
 
     private var myId: Long = DEFAULT_MY_ID
     private var studyId: Long = DEFAULT_STUDY_ID
+    private var _upComingRoundId: Long = DEFAULT_ROUND_ID
+    val upComingRoundId: Long
+        get() = _upComingRoundId
 
     private val _uiState: MutableStateFlow<ThreadUiState> = MutableStateFlow(ThreadUiState.Loading)
     val uiState: StateFlow<ThreadUiState> get() = _uiState.asStateFlow()
@@ -52,6 +55,7 @@ class ThreadViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching { threadRepository.getMustDoCertification(studyId) }
                 .onSuccess {
+                    _upComingRoundId = it.upcomingRound.id
                     updateMustDoCertificationInState(it)
                 }
         }
@@ -117,5 +121,6 @@ class ThreadViewModel @Inject constructor(
     companion object {
         private const val DEFAULT_STUDY_ID = 0L
         private const val DEFAULT_MY_ID = -1L
+        private const val DEFAULT_ROUND_ID = -1L
     }
 }

@@ -15,6 +15,7 @@ interface CertificationRepository {
 
     suspend fun getMemberCertification(
         studyId: Long,
-        certificationsId: Long,
+        roundId: Long,
+        memberId: Long,
     ): MemberCertification
 }

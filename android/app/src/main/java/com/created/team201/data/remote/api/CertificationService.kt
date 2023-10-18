@@ -20,9 +20,10 @@ interface CertificationService {
         @Part("request") body: RequestBody,
     ): NetworkResponse<Unit>
 
-    @GET("v1/studies/{studyId}/certifications/{certificationsId}")
+    @GET("v1/studies/{studyId}/rounds/{roundId}/members/{memberId}")
     suspend fun getMemberCertification(
         @Path("studyId") studyId: Long,
-        @Path("certificationsId") certificationsId: Long,
+        @Path("roundId") roundId: Long,
+        @Path("memberId") memberId: Long,
     ): MemberCertificationResponseDto
 }

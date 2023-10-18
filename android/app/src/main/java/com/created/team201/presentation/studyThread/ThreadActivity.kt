@@ -114,9 +114,10 @@ class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_
         ).show()
     }
 
-    private fun onMemberCertificationClick(certificationId: Long) {
+    private fun onMemberCertificationClick(memberId: Long) {
+        val roundId = threadViewModel.upComingRoundId
         startActivity(
-            CertificationCheckActivity.getIntent(this, studyId, certificationId),
+            CertificationCheckActivity.getIntent(this, studyId, roundId, memberId),
         )
     }
 

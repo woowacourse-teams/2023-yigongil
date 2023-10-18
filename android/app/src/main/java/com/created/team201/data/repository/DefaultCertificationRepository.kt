@@ -36,8 +36,9 @@ class DefaultCertificationRepository @Inject constructor(
 
     override suspend fun getMemberCertification(
         studyId: Long,
-        certificationsId: Long,
+        roundId: Long,
+        memberId: Long,
     ): MemberCertification {
-        return certificationService.getMemberCertification(studyId, certificationsId).toDomain()
+        return certificationService.getMemberCertification(studyId, roundId, memberId).toDomain()
     }
 }

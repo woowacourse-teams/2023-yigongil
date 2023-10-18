@@ -20,10 +20,10 @@ class CertificationCheckViewModel @Inject constructor(
     val uiState: LiveData<MemberCertificationUiState>
         get() = _uiState
 
-    fun getMemberCertification(studyId: Long, certificationId: Long) {
+    fun getMemberCertification(studyId: Long, roundId: Long, memberId: Long) {
         viewModelScope.launch {
             runCatching {
-                certificationRepository.getMemberCertification(studyId, certificationId)
+                certificationRepository.getMemberCertification(studyId, roundId, memberId)
             }.onSuccess {
                 _uiState.value = MemberCertificationUiState.Success.getState(it)
             }.onFailure {

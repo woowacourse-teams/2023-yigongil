@@ -31,9 +31,16 @@ class CertificationCheckActivity :
     }
 
     private fun setupMemberCertification() {
-        val studyId = intent.getLongExtra(KEY_STUDY_ID, -1)
-        val certificationId = intent.getLongExtra(KEY_CERTIFICATION_ID, -1)
-        certificationCheckViewModel.getMemberCertification(studyId, certificationId)
+        val studyId = intent.getLongExtra(KEY_STUDY_ID, KEY_NOT_FOUND)
+        val memberId = intent.getLongExtra(KEY_MEMBER_ID, KEY_NOT_FOUND)
+        val roundId = intent.getLongExtra(KEY_ROUND_ID, KEY_NOT_FOUND)
+        if ((studyId == KEY_NOT_FOUND) or (memberId == KEY_NOT_FOUND) or (roundId == KEY_NOT_FOUND)) {
+            showLoadFailureToast()
+            finish()
+            return
+        }
+
+        certificationCheckViewModel.getMemberCertification(studyId, roundId, memberId)
     }
 
     private fun observeMemberCertificationUiState() {
@@ -65,12 +72,15 @@ class CertificationCheckActivity :
     }
 
     companion object {
+        private const val KEY_NOT_FOUND = -1L
         private const val KEY_STUDY_ID = "STUDY_ID"
-        private const val KEY_CERTIFICATION_ID = "CERTIFICATION_ID"
-        fun getIntent(context: Context, studyId: Long, certificationId: Long): Intent =
+        private const val KEY_MEMBER_ID = "MEMBER_ID"
+        private const val KEY_ROUND_ID = "ROUND_ID"
+        fun getIntent(context: Context, studyId: Long, roundId: Long, memberId: Long): Intent =
             Intent(context, CertificationCheckActivity::class.java).apply {
                 putExtra(KEY_STUDY_ID, studyId)
-                putExtra(KEY_CERTIFICATION_ID, certificationId)
+                putExtra(KEY_ROUND_ID, roundId)
+                putExtra(KEY_MEMBER_ID, memberId)
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             }
     }
