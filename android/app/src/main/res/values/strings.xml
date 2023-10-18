@@ -292,4 +292,7 @@
     <!-- 인증 뷰 -->
     <string name="certification_post_button_title">인증하기</string>
 
+    <!-- 인증 확인 뷰 -->
+    <string name="certification_check_fail_loading">인증 로딩에 실패했습니다.</string>
+
 </resources>

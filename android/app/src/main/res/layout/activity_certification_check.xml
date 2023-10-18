@@ -13,7 +13,7 @@
         tools:context=".presentation.certificationCheck.CertificationCheckActivity">
 
         <ImageView
-            android:id="@+id/iv_certification_close_button"
+            android:id="@+id/iv_certification_check_close_button"
             android:layout_marginTop="24dp"
             android:layout_marginStart="16dp"
             android:layout_width="32dp"
@@ -23,7 +23,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
-            android:id="@+id/iv_certification_photo"
+            android:id="@+id/iv_certification_check_photo"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scaleType="fitCenter"
@@ -31,12 +31,12 @@
             android:layout_marginTop="40dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_certification_close_button"
-            app:layout_constraintBottom_toTopOf="@id/et_certification_body"
+            app:layout_constraintTop_toBottomOf="@id/iv_certification_check_close_button"
+            app:layout_constraintBottom_toTopOf="@id/tv_certification_check_body"
             tools:src="@drawable/ic_camera" />
 
-        <EditText
-            android:id="@+id/et_certification_body"
+        <TextView
+            android:id="@+id/tv_certification_check_body"
             android:layout_width="match_parent"
             android:layout_height="160dp"
             android:background="@drawable/bg_rectangle_radius_5dp"
