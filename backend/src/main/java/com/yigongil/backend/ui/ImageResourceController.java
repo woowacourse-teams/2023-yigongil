@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @Profile(value = {"prod", "dev"})
-@RestController("/v1/images")
+@RestController("/images")
 public class ImageResourceController {
 
     private final ImageResourceService imageResourceService;
