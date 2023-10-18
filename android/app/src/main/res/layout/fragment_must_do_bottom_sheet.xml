@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.created.team201.presentation.studyThread.ThreadViewModel" />
+
+        <variable
+            name="onCancelClickListener"
+            type="kotlin.jvm.functions.Function0" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_bottom_sheet_top_radius_20dp"
+        android:backgroundTint="@color/black02_181B21"
+        android:padding="16dp"
+        app:behavior_draggable="false"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:id="@+id/view_thread_must_do_bottom_sheet_fragment_decorator"
+            android:layout_width="0dp"
+            android:layout_height="5dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            android:backgroundTint="@color/grey02_78808B"
+            app:layout_constraintDimensionRatio="W, 10:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_thread_must_do_bottom_sheet_fragment_previous_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/thread_must_do_bottom_sheet_fragment_previous_button_description"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_prev_active"
+            app:layout_constraintBottom_toBottomOf="@id/thread_must_do_bottom_sheet_fragment_title"
+            app:layout_constraintEnd_toStartOf="@id/thread_must_do_bottom_sheet_fragment_title"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/thread_must_do_bottom_sheet_fragment_title" />
+
+        <TextView
+            android:id="@+id/thread_must_do_bottom_sheet_fragment_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="20dp"
+            android:text="@string/thread_must_do_bottom_sheet_fragment_weeks"
+            android:textAlignment="center"
+            android:textAppearance="@style/picker_sb18"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@id/dows_thread_must_do_bottom_sheet_fragment_day_of_week_selector"
+            app:layout_constraintEnd_toStartOf="@id/iv_thread_must_do_bottom_sheet_fragment_next_icon"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@id/iv_thread_must_do_bottom_sheet_fragment_previous_icon"
+            app:layout_constraintTop_toBottomOf="@id/view_thread_must_do_bottom_sheet_fragment_decorator"
+            tools:text="2주차" />
+
+        <ImageView
+            android:id="@+id/iv_thread_must_do_bottom_sheet_fragment_next_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/thread_must_do_bottom_sheet_fragment_next_button_description"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_next_active"
+            app:layout_constraintBottom_toBottomOf="@id/thread_must_do_bottom_sheet_fragment_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@id/thread_must_do_bottom_sheet_fragment_title"
+            app:layout_constraintTop_toTopOf="@id/thread_must_do_bottom_sheet_fragment_title" />
+
+
+        <com.created.team201.presentation.common.customview.dayofselector.DayOfWeekSelector
+            android:id="@+id/dows_thread_must_do_bottom_sheet_fragment_day_of_week_selector"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="24dp"
+            app:canMultipleSelect="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/thread_must_do_bottom_sheet_fragment_title" />
+
+        <ImageView
+            android:id="@+id/tv_thread_must_do_bottom_sheet_fragment_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/thread_must_do_bottom_sheet_fragment_close_button_description"
+            android:onClick="@{() -> onCancelClickListener.invoke()}"
+            android:src="@drawable/ic_close"
+            android:text="@string/bottom_sheet_fragment_button_name_cancel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_thread_must_do_bottom_sheet_fragment_must_do_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/thread_must_do_bottom_sheet_fragment_must_do_title"
+            android:textAppearance="@style/text_m14"
+            android:textColor="@color/grey02_78808B"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dows_thread_must_do_bottom_sheet_fragment_day_of_week_selector" />
+
+        <ImageView
+            android:id="@+id/iv_thread_must_do_bottom_sheet_fragment_must_do_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/thread_must_do_bottom_sheet_fragment_must_do_edit_button_description"
+            android:padding="12dp"
+            android:src="@drawable/ic_edit_12"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_thread_must_do_bottom_sheet_fragment_must_do_title"
+            app:layout_constraintStart_toEndOf="@id/tv_thread_must_do_bottom_sheet_fragment_must_do_title"
+            app:layout_constraintTop_toTopOf="@id/tv_thread_must_do_bottom_sheet_fragment_must_do_title"
+            app:tint="@color/grey02_78808B" />
+
+        <ImageView
+            android:id="@+id/iv_thread_must_do_bottom_sheet_fragment_must_do_edit_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/thread_must_do_bottom_sheet_fragment_must_do_edit_done_button_description"
+            android:padding="6dp"
+            android:src="@drawable/ic_check_24"
+            app:layout_constraintBottom_toBottomOf="@id/iv_thread_must_do_bottom_sheet_fragment_must_do_edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/iv_thread_must_do_bottom_sheet_fragment_must_do_edit"
+            app:tint="@color/grey02_78808B" />
+
+        <EditText
+            android:id="@+id/et_thread_must_do_bottom_sheet_fragment_must_do_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            android:hint="@string/thread_must_do_bottom_sheet_fragment_must_do_content_hint"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine|textNoSuggestions"
+            android:maxLength="200"
+            android:padding="16dp"
+            android:textAppearance="@style/text_r16"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey02_78808B"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_thread_must_do_bottom_sheet_fragment_must_do_edit"
+            tools:text="Kotlin In Action 책 2장 읽어오기" />
+
+        <TextView
+            android:id="@+id/tv_view_thread_must_do_bottom_sheet_fragment_button_main"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_rectangle_radius_10dp_green01"
+            android:gravity="center"
+            android:text="@string/thread_must_do_bottom_sheet_fragment_main_button_study_end"
+            android:textAlignment="center"
+            android:textAppearance="@style/button_sb18"
+            android:textColor="@color/green09_799E82"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_thread_must_do_bottom_sheet_fragment_must_do_content" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

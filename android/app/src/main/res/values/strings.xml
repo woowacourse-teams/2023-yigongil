@@ -289,4 +289,16 @@
     <!-- 스레드 뷰 -->
     <string name="thread_blank_input_toast_title">내용을 입력해 주세요</string>
 
+    <!-- 스레드 Must Do 바텀시트 다이얼로그 -->
+    <string name="thread_must_do_bottom_sheet_fragment_weeks">%d주차</string>
+    <string name="thread_must_do_bottom_sheet_fragment_main_button_study_quit">스터디 탈퇴하기</string>
+    <string name="thread_must_do_bottom_sheet_fragment_main_button_study_end">스터디 종료하기</string>
+    <string name="thread_must_do_bottom_sheet_fragment_must_do_content_hint">Must Do 내용을 입력해주세요.</string>
+    <string name="thread_must_do_bottom_sheet_fragment_must_do_title">Must Do</string>
+    <string name="thread_must_do_bottom_sheet_fragment_previous_button_description">이전 주차 버튼</string>
+    <string name="thread_must_do_bottom_sheet_fragment_next_button_description">다음 주차 버튼</string>
+    <string name="thread_must_do_bottom_sheet_fragment_close_button_description">닫기 버튼</string>
+    <string name="thread_must_do_bottom_sheet_fragment_must_do_edit_button_description">Must Do 수정하기 버튼</string>
+    <string name="thread_must_do_bottom_sheet_fragment_must_do_edit_done_button_description">Must Do 수정 완료 버튼</string>
+
 </resources>
