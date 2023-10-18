@@ -46,6 +46,7 @@
             android:paddingHorizontal="16dp"
             android:paddingVertical="12dp"
             android:gravity="top"
+            android:textIsSelectable="true"
             android:textAppearance="@style/text_r14"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
