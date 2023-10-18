@@ -133,11 +133,6 @@ class CertificationActivity :
     private fun setupPostButtonListener() {
         binding.tvCertificationPostButton.setOnClickListener {
             val studyId = intent.getLongExtra(KEY_STUDY_ID, KEY_NOT_FOUND_STUDY_ID)
-            if (studyId == KEY_NOT_FOUND_STUDY_ID) {
-                showFailPostToast()
-                finish()
-                return@setOnClickListener
-            }
             imageUri?.toAdjustImageFile(this)?.let { file ->
                 certificationViewModel.updateCertification(file, studyId)
             }
@@ -147,14 +142,19 @@ class CertificationActivity :
     private fun observeUiState() {
         certificationViewModel.uiState.observe(this) { state ->
             when (state) {
-                is CertificationUiState.Failure -> showFailPostToast()
+                is CertificationUiState.Failure -> {
+                    showFailPostToast()
+                    finish()
+                }
+
                 is CertificationUiState.Success -> {
                     showSuccessPostToast()
                     finish()
                 }
 
                 else -> {
-                    binding.tvCertificationPostButton.isEnabled = state is CertificationUiState.Complete
+                    binding.tvCertificationPostButton.isEnabled =
+                        state is CertificationUiState.Complete
                 }
             }
         }
@@ -190,7 +190,7 @@ class CertificationActivity :
         private const val PATH_CACHE_IMAGE_SUFFIX = ".jpg"
         private const val PATH_GALLERY_INPUT = "image/*"
         private const val KEY_STUDY_ID = "STUDY_ID"
-        private const val KEY_NOT_FOUND_STUDY_ID = -1L
+        const val KEY_NOT_FOUND_STUDY_ID = -1L
         fun getIntent(context: Context, studyId: Long): Intent =
             Intent(context, CertificationActivity::class.java).apply {
                 putExtra(KEY_STUDY_ID, studyId)

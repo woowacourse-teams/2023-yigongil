@@ -31,6 +31,10 @@ class CertificationViewModel @Inject constructor(
     }
 
     fun updateCertification(file: File, studyId: Long) {
+        if (studyId == CertificationActivity.KEY_NOT_FOUND_STUDY_ID) {
+            _uiState.value = CertificationUiState.Failure(content = uiState.value.content)
+            return
+        }
         viewModelScope.launch {
             postImage(file)
             postCertification(studyId)
@@ -40,8 +44,13 @@ class CertificationViewModel @Inject constructor(
     private fun postImage(file: File) {
         viewModelScope.launch {
             certificationRepository.postImage(file)
-                .onSuccess {
-                    _uiState.value = CertificationUiState.getState(it, uiState.value.content)
+                .onSuccess { url ->
+                    if (url.isBlank()) {
+                        _uiState.value =
+                            CertificationUiState.Failure(content = uiState.value.content)
+                    } else {
+                        _uiState.value = CertificationUiState.getState(url, uiState.value.content)
+                    }
                 }.onFailure {
                     _uiState.value = CertificationUiState.Failure(content = uiState.value.content)
                 }
