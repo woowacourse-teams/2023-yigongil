@@ -55,6 +55,7 @@
                 android:id="@+id/cg_study_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:overScrollMode="ifContentScrolls"
                 android:paddingTop="8dp"
                 app:singleSelection="true">
 
@@ -65,8 +66,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/study_list_chip_all"
                     android:checked="true"
-                    android:textColor="@color/chip_text_color_checked_end"
-                    app:chipBackgroundColor="@color/chip_color_checked_end"
+                    android:textColor="@color/chip_text_color_checked_all"
+                    app:chipBackgroundColor="@color/chip_color_checked_all"
                     app:studyListFilter="@{filter.ALL}" />
 
                 <com.created.team201.presentation.studyList.CustomChip
@@ -98,6 +99,16 @@
                     android:textColor="@color/chip_text_color_checked_waiting"
                     app:chipBackgroundColor="@color/chip_color_checked_waiting"
                     app:studyListFilter="@{filter.WAITING}" />
+
+                <com.created.team201.presentation.studyList.CustomChip
+                    android:id="@+id/chip_study_list_accept"
+                    style="@style/chip_study_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/study_list_chip_accept"
+                    android:textColor="@color/chip_text_color_checked_accepted"
+                    app:chipBackgroundColor="@color/chip_color_checked_accpted"
+                    app:studyListFilter="@{filter.ACCEPTED}" />
 
             </com.google.android.material.chip.ChipGroup>
 
