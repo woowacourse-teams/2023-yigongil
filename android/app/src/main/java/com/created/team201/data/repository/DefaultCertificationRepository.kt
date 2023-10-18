@@ -37,17 +37,7 @@ class DefaultCertificationRepository @Inject constructor(
     override suspend fun getMemberCertification(
         studyId: Long,
         certificationsId: Long,
-    ): NetworkResponse<MemberCertification> {
-        val response = certificationService.getMemberCertification(studyId, certificationsId)
-        return when (response) {
-            is NetworkResponse.Success -> NetworkResponse.Success(response.body.toDomain())
-            is NetworkResponse.Failure -> NetworkResponse.Failure(
-                response.responseCode,
-                response.error,
-            )
-
-            is NetworkResponse.NetworkError -> NetworkResponse.NetworkError(response.exception)
-            is NetworkResponse.Unexpected -> NetworkResponse.Unexpected(response.t)
-        }
+    ): MemberCertification {
+        return certificationService.getMemberCertification(studyId, certificationsId).toDomain()
     }
 }

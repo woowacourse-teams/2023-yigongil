@@ -24,5 +24,5 @@ interface CertificationService {
     suspend fun getMemberCertification(
         @Path("studyId") studyId: Long,
         @Path("certificationsId") certificationsId: Long,
-    ): NetworkResponse<MemberCertificationResponseDto>
+    ): MemberCertificationResponseDto
 }

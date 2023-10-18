@@ -50,6 +50,7 @@ class CertificationCheckActivity :
                 is MemberCertificationUiState.Loading -> Unit
                 else -> {
                     showLoadFailureToast()
+                    finish()
                 }
             }
         }

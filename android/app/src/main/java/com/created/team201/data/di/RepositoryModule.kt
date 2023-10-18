@@ -1,6 +1,7 @@
 package com.created.team201.data.di
 
 import com.created.domain.repository.AuthRepository
+import com.created.domain.repository.CertificationRepository
 import com.created.domain.repository.CreateStudyRepository
 import com.created.domain.repository.GuestRepository
 import com.created.domain.repository.HomeRepository
@@ -15,6 +16,7 @@ import com.created.domain.repository.StudyListRepository
 import com.created.domain.repository.ThreadRepository
 import com.created.domain.repository.UpdateStudyRepository
 import com.created.team201.data.repository.DefaultAuthRepository
+import com.created.team201.data.repository.DefaultCertificationRepository
 import com.created.team201.data.repository.DefaultCreateStudyRepository
 import com.created.team201.data.repository.DefaultGuestRepository
 import com.created.team201.data.repository.DefaultHomeRepository
@@ -93,4 +95,8 @@ interface RepositoryModule {
     @Binds
     @Singleton
     fun bindDefaultThreadRepository(defaultThreadRepository: DefaultThreadRepository): ThreadRepository
+
+    @Binds
+    @Singleton
+    fun bindDefaultCertificationRepository(defaultCertificationRepository: DefaultCertificationRepository): CertificationRepository
 }
