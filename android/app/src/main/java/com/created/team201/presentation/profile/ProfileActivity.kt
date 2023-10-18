@@ -79,7 +79,11 @@ class ProfileActivity : BindingActivity<ActivityProfileBinding>(R.layout.activit
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_profile, menu)
+        val isMyProfile = intent.getBooleanExtra(KEY_MY_PROFILE, false)
+        when (isMyProfile) {
+            true -> binding.tbProfile.setTitle(R.string.myPage_toolbar_title)
+            false -> menuInflater.inflate(R.menu.menu_profile, menu)
+        }
         return true
     }
 
@@ -94,7 +98,7 @@ class ProfileActivity : BindingActivity<ActivityProfileBinding>(R.layout.activit
                     Toast.makeText(
                         this,
                         getString(R.string.guest_toast_can_not_report),
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_SHORT,
                     ).show()
                     return true
                 }
@@ -108,9 +112,11 @@ class ProfileActivity : BindingActivity<ActivityProfileBinding>(R.layout.activit
     companion object {
         private const val NON_EXISTENCE_USER_ID = 0L
         private const val KEY_USER_ID = "KEY_USER_ID"
-        fun getIntent(context: Context, userId: Long): Intent =
+        private const val KEY_MY_PROFILE = "KEY_MY_PROFILE"
+        fun getIntent(context: Context, userId: Long, isMyProfile: Boolean = false): Intent =
             Intent(context, ProfileActivity::class.java).apply {
                 putExtra(KEY_USER_ID, userId)
+                putExtra(KEY_MY_PROFILE, isMyProfile)
             }
     }
 }

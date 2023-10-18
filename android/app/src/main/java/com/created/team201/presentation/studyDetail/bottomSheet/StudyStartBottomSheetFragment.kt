@@ -51,7 +51,7 @@ class StudyStartBottomSheetFragment :
             binding.dowsStudyStartBottomSheetDayOfWeekSelector.getSelectedDays(),
         )
         dismiss()
-        startActivity(ThreadActivity.getIntent(requireContext(), studyId.toInt()))
+        startActivity(ThreadActivity.getIntent(requireContext(), studyId))
     }
 
     private fun validateStudyId(studyId: Long) {

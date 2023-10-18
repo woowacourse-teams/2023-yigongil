@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
 
     <application
         android:name=".application.Team201App"
@@ -23,7 +24,8 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".presentation.studyThread.ThreadActivity"
-            android:exported="false" />
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.report.ReportActivity"
             android:exported="false"

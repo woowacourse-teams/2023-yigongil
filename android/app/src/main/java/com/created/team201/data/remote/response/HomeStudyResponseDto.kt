@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class HomeStudyResponseDto(
     @SerialName("id")
-    val studyId: Int,
+    val studyId: Long,
     @SerialName("name")
     val studyName: String,
     @SerialName("todoContent")
-    val mustDo: String,
+    val mustDo: String?,
     @SerialName("leftDays")
     val leftDays: Int,
     @SerialName("grassCount")
