@@ -19,10 +19,17 @@ class CertificationActivity :
         super.onCreate(savedInstanceState)
 
         setupBinding()
+        setupCloseButtonListener()
     }
 
     private fun setupBinding() {
         binding.lifecycleOwner = this
+    }
+
+    private fun setupCloseButtonListener() {
+        binding.ivCertificationCloseButton.setOnClickListener {
+            finish()
+        }
     }
 
     companion object {

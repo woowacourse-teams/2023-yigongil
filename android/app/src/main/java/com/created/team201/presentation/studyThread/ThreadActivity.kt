@@ -51,6 +51,12 @@ class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_
         collectUiState()
     }
 
+    override fun onRestart() {
+        super.onRestart()
+
+        threadViewModel.updateMustDoCertification()
+    }
+
     private fun setupThreadAdapter() {
         threadAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {

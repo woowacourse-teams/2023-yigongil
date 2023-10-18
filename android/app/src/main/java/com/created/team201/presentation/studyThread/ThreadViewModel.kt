@@ -48,7 +48,7 @@ class ThreadViewModel @Inject constructor(
         }
     }
 
-    private fun updateMustDoCertification() {
+    fun updateMustDoCertification() {
         viewModelScope.launch {
             runCatching { threadRepository.getMustDoCertification(studyId) }
                 .onSuccess {
