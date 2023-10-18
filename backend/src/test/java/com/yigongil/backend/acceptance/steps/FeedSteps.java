@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;
-import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
 import com.yigongil.backend.response.MemberCertificationResponse;
 import com.yigongil.backend.response.MembersCertificationResponse;
@@ -84,28 +83,6 @@ public class FeedSteps {
                 () -> assertThat(responses).hasSize(1),
                 () -> assertThat(responses.get(0).author().nickname()).isEqualTo(author),
                 () -> assertThat(responses.get(0).content()).isEqualTo(content)
-        );
-    }
-
-    @Then("{string}가 {string}스터디 피드에서 {string}의 {string}의 인증 글을 확인할 수 있다.")
-    public void 스터디_피드에서_인증_글을_확인_할_수_있다(String githubId, String studyName, String author, String content) {
-        String token = sharedContext.getToken(githubId);
-        Long certificationId = sharedContext.getId("certificationId");
-        ExtractableResponse<Response> response = given().log()
-                                                        .all()
-                                                        .header(HttpHeaders.AUTHORIZATION, token)
-                                                        .when()
-                                                        .get("/studies/" + sharedContext.getParameter(studyName) + "/certifications/" + certificationId)
-                                                        .then()
-                                                        .log()
-                                                        .all()
-                                                        .statusCode(HttpStatus.OK.value())
-                                                        .extract();
-
-        CertificationResponse certificationResponse = response.as(CertificationResponse.class);
-        assertAll(
-                () -> assertThat(certificationResponse.author().nickname()).isEqualTo(author),
-                () -> assertThat(certificationResponse.content()).isEqualTo(content)
         );
     }
 

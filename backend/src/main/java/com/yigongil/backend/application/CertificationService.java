@@ -34,4 +34,9 @@ public class CertificationService {
     public Certification findById(Long id) {
         return certificationRepository.findById(id);
     }
+
+    @Transactional(readOnly = true)
+    public Certification findByRoundIdAndMemberId(Long roundId, Long memberId) {
+        return certificationRepository.findByRoundIdAndAuthorId(roundId, memberId);
+    }
 }
