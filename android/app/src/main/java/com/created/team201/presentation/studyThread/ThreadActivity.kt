@@ -14,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.created.team201.R
 import com.created.team201.databinding.ActivityThreadBinding
+import com.created.team201.presentation.certificationCheck.CertificationCheckActivity
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.profile.ProfileActivity
 import com.created.team201.presentation.studyThread.ThreadUiState.Loading
@@ -27,7 +28,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_thread) {
-    private val mustDoAdapter: MustDoAdapter by lazy { MustDoAdapter() }
+    private val mustDoAdapter: MustDoAdapter by lazy { MustDoAdapter(::onMemberCertificationClick) }
     private val threadAdapter: ThreadAdapter by lazy { ThreadAdapter(::onUserClick) }
     private val moreAdapter: MoreAdapter by lazy {
         MoreAdapter(
@@ -104,6 +105,12 @@ class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_
             getText(R.string.thread_blank_input_toast_title),
             Toast.LENGTH_SHORT,
         ).show()
+    }
+
+    private fun onMemberCertificationClick(certificationId: Long) {
+        startActivity(
+            CertificationCheckActivity.getIntent(this, studyId, certificationId),
+        )
     }
 
     private fun onUserClick(memberId: Long) {
