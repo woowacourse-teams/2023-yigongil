@@ -52,10 +52,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         setNicknameValidate()
         setMyPageObserve()
         setOnProfileModifyClick()
-
-        // ToDo: 아래는 서버 연결시 변경됩니다.
-        val tierProgress = TierProgress.of(Tier.DIAMOND, 57).getTierProgressTable()
-        setupTierProgress(tierProgress)
+        observeProfile()
     }
 
     private fun initBinding() {
@@ -195,7 +192,16 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         }
     }
 
+    private fun observeProfile() {
+        myPageViewModel.profile.observe(viewLifecycleOwner) { profile ->
+            val tierProgress =
+                TierProgress.of(Tier.of(profile.tier), profile.tierProgress).getTierProgressTable()
+            setupTierProgress(tierProgress)
+        }
+    }
+
     private fun setupTierProgress(tierProgress: List<Int>) {
+        binding.glMyPageTierProgress.removeAllViews()
         repeat(TOTAL_BLOCK_COUNT) {
             val params: GridLayout.LayoutParams = getDefaultTierProgressBlockParams()
 
