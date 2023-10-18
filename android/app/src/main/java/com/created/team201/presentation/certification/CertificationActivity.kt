@@ -14,6 +14,7 @@ import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import com.created.team201.R
 import com.created.team201.databinding.ActivityCertificationBinding
 import com.created.team201.presentation.certification.image.toAdjustImageFile
@@ -133,7 +134,7 @@ class CertificationActivity :
     private fun setupPostButtonListener() {
         binding.tvCertificationPostButton.setOnClickListener {
             val studyId = intent.getLongExtra(KEY_STUDY_ID, KEY_NOT_FOUND_STUDY_ID)
-            imageUri?.toAdjustImageFile(this)?.let { file ->
+            certificationViewModel.uiState.value.imageUrl.toUri().toAdjustImageFile(this)?.let { file ->
                 certificationViewModel.updateCertification(file, studyId)
             }
         }
