@@ -5,6 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CertificationRequestDto(
+    @SerialName("imageUrl")
+    val imageUrl: String,
     @SerialName("content")
     val content: String,
 )

@@ -16,9 +16,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.created.team201.R
 import com.created.team201.databinding.ActivityCertificationBinding
+import com.created.team201.presentation.certification.image.toAdjustImageFile
 import com.created.team201.presentation.certification.model.CertificationUiState
 import com.created.team201.presentation.common.BindingActivity
-import com.created.team201.util.BindingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
@@ -46,6 +46,7 @@ class CertificationActivity :
         setupCloseButtonListener()
         setupGalleryButtonListener()
         setupCameraButtonListener()
+        setupPostButtonListener()
         observeUiState()
     }
 
@@ -125,13 +126,37 @@ class CertificationActivity :
             return
         }
         certificationViewModel.updateImage(imageUri.toString())
-        BindingAdapter.glideSrcUrl(binding.ivCertificationPhoto, imageUri.toString())
+        binding.ivCertificationPhoto.setImageURI(imageUri)
         imageUri = null
+    }
+
+    private fun setupPostButtonListener() {
+        binding.tvCertificationPostButton.setOnClickListener {
+            val studyId = intent.getLongExtra(KEY_STUDY_ID, KEY_NOT_FOUND_STUDY_ID)
+            if (studyId == KEY_NOT_FOUND_STUDY_ID) {
+                showFailPostToast()
+                finish()
+                return@setOnClickListener
+            }
+            imageUri?.toAdjustImageFile(this)?.let { file ->
+                certificationViewModel.updateCertification(file, studyId)
+            }
+        }
     }
 
     private fun observeUiState() {
         certificationViewModel.uiState.observe(this) { state ->
-            binding.tvCertificationPostButton.isEnabled = state is CertificationUiState.Complete
+            when (state) {
+                is CertificationUiState.Failure -> showFailPostToast()
+                is CertificationUiState.Success -> {
+                    showSuccessPostToast()
+                    finish()
+                }
+
+                else -> {
+                    binding.tvCertificationPostButton.isEnabled = state is CertificationUiState.Complete
+                }
+            }
         }
     }
 
@@ -143,12 +168,29 @@ class CertificationActivity :
         ).show()
     }
 
+    private fun showFailPostToast() {
+        Toast.makeText(
+            this,
+            R.string.certification_post_fail_posting,
+            Toast.LENGTH_SHORT,
+        ).show()
+    }
+
+    private fun showSuccessPostToast() {
+        Toast.makeText(
+            this,
+            R.string.certification_post_success_posting,
+            Toast.LENGTH_SHORT,
+        ).show()
+    }
+
     companion object {
         private const val REQUEST_CODE_CAMERA = 1000
         private const val PATH_CACHE_IMAGE_PREFIX = "IMG_"
         private const val PATH_CACHE_IMAGE_SUFFIX = ".jpg"
         private const val PATH_GALLERY_INPUT = "image/*"
         private const val KEY_STUDY_ID = "STUDY_ID"
+        private const val KEY_NOT_FOUND_STUDY_ID = -1L
         fun getIntent(context: Context, studyId: Long): Intent =
             Intent(context, CertificationActivity::class.java).apply {
                 putExtra(KEY_STUDY_ID, studyId)

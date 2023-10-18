@@ -7,31 +7,34 @@ import com.created.domain.repository.CertificationRepository
 import com.created.team201.data.mapper.toDomain
 import com.created.team201.data.mapper.toRequestDto
 import com.created.team201.data.remote.api.CertificationService
-import com.created.team201.data.remote.request.CertificationRequestDto
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
+import com.created.team201.data.remote.api.ImageService
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import javax.inject.Inject
 
 class DefaultCertificationRepository @Inject constructor(
+    private val imageService: ImageService,
     private val certificationService: CertificationService,
 ) : CertificationRepository {
 
+    override suspend fun postImage(file: File): Result<String> {
+        val fileBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+        val image = MultipartBody.Part.createFormData("image", file.name, fileBody)
+        val response = imageService.postImage(image)
+        return runCatching {
+            response.headers()[LOCATION_KEY]
+                ?.substringAfterLast(LOCATION_DELIMITER)
+                ?: throw IllegalStateException()
+        }
+    }
+
     override suspend fun postCertification(
         studyId: Long,
-        imageUrl: File,
         certification: Certification,
     ): NetworkResponse<Unit> {
-        val fileBody = imageUrl.asRequestBody("image/*".toMediaTypeOrNull())
-        val image = MultipartBody.Part.createFormData("imageUrl", imageUrl.name, fileBody)
-        val body =
-            Json.encodeToString(CertificationRequestDto.serializer(), certification.toRequestDto())
-                .toRequestBody("application/json".toMediaType())
-        return certificationService.postCertification(studyId, image, body)
+        return certificationService.postCertification(studyId, certification.toRequestDto())
     }
 
     override suspend fun getMemberCertification(
@@ -40,5 +43,10 @@ class DefaultCertificationRepository @Inject constructor(
         memberId: Long,
     ): MemberCertification {
         return certificationService.getMemberCertification(studyId, roundId, memberId).toDomain()
+    }
+
+    companion object {
+        private const val LOCATION_KEY = "Location"
+        private const val LOCATION_DELIMITER = "/"
     }
 }

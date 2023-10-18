@@ -15,6 +15,11 @@ sealed interface CertificationUiState {
     ) : CertificationUiState
 
     data class Failure(
+        override val imageUrl: String = "",
+        override val content: String,
+    ) : CertificationUiState
+
+    data class Success(
         override val imageUrl: String,
         override val content: String,
     ) : CertificationUiState

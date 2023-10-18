@@ -7,6 +7,7 @@ import com.created.team201.data.remote.api.CertificationService
 import com.created.team201.data.remote.api.CommonStudyListService
 import com.created.team201.data.remote.api.CreateStudyService
 import com.created.team201.data.remote.api.HomeService
+import com.created.team201.data.remote.api.ImageService
 import com.created.team201.data.remote.api.MemberStudyListService
 import com.created.team201.data.remote.api.MyPageService
 import com.created.team201.data.remote.api.OnBoardingService
@@ -96,4 +97,9 @@ object ServiceModule {
     @Provides
     fun provideCertificationService(@AuthRetrofit retrofit: Retrofit): CertificationService =
         retrofit.create(CertificationService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideImageService(@DefaultRetrofit retrofit: Retrofit): ImageService =
+        retrofit.create(ImageService::class.java)
 }

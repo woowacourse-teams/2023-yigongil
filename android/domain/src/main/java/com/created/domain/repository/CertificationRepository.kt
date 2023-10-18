@@ -7,9 +7,12 @@ import java.io.File
 
 interface CertificationRepository {
 
+    suspend fun postImage(
+        file: File,
+    ): Result<String>
+
     suspend fun postCertification(
         studyId: Long,
-        imageUrl: File,
         certification: Certification,
     ): NetworkResponse<Unit>
 
