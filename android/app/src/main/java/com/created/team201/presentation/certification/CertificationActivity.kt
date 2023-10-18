@@ -1,5 +1,7 @@
 package com.created.team201.presentation.certification
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.created.team201.R
@@ -21,5 +23,14 @@ class CertificationActivity :
 
     private fun setupBinding() {
         binding.lifecycleOwner = this
+    }
+
+    companion object {
+        private const val KEY_STUDY_ID = "STUDY_ID"
+        fun getIntent(context: Context, studyId: Long): Intent =
+            Intent(context, CertificationActivity::class.java).apply {
+                putExtra(KEY_STUDY_ID, studyId)
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            }
     }
 }
