@@ -5,6 +5,10 @@
 
     <data>
 
+        <import type="com.created.domain.model.ProcessingStatus" />
+
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.created.team201.presentation.studyDetail.StudyDetailViewModel" />
@@ -176,6 +180,7 @@
             android:contentDescription="@string/study_detail_dm_button_content_description"
             android:padding="16dp"
             android:src="@{context.getDrawable(viewModel.state.subButtonSrc)}"
+            android:visibility="@{viewModel.study.processingStatus == ProcessingStatus.RECRUITING ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_study_detail_main"
             app:layout_constraintHorizontal_bias="0.5"
@@ -198,6 +203,7 @@
             android:text="@{context.getString(viewModel.state.mainButtonText, viewModel.study.memberCount, viewModel.study.peopleCount)}"
             android:textAppearance="@style/button_sb20"
             android:textColor="@color/tv_color_disabled"
+            android:visibility="@{viewModel.study.processingStatus == ProcessingStatus.RECRUITING ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
