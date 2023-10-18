@@ -293,6 +293,7 @@
     <string name="certification_post_button_title">인증하기</string>
     <string name="certification_post_is_done_message">인증을 이미 완료 하셨어요!</string>
     <string name="certification_post_body_hint">스터디한 내역을 공유해주세요!\n노션이나 블로그 링크를 적어도 좋아요!</string>
+    <string name="certification_post_fail_loading_image">이미지 로딩에 실패했습니다.</string>
 
     <!-- 인증 확인 뷰 -->
     <string name="certification_check_fail_loading">인증 로딩에 실패했습니다.</string>

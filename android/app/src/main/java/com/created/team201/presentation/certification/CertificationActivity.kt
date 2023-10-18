@@ -2,18 +2,25 @@ package com.created.team201.presentation.certification
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.created.team201.R
 import com.created.team201.databinding.ActivityCertificationBinding
 import com.created.team201.presentation.certification.model.CertificationUiState
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.util.BindingAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 
 @AndroidEntryPoint
 class CertificationActivity :
@@ -21,23 +28,39 @@ class CertificationActivity :
 
     private val certificationViewModel: CertificationViewModel by viewModels()
 
+    private var imageUri: Uri? = null
+    private val cameraLauncher: ActivityResultLauncher<Uri> =
+        registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
+            if (!isSuccess) return@registerForActivityResult
+            updateImageUrl(isSuccess and (imageUri != null))
+        }
+    private val galleryLauncher: ActivityResultLauncher<String> =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            updateLoadedGalleryImage(uri)
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setupBinding()
         setupCloseButtonListener()
         setupGalleryButtonListener()
+        setupCameraButtonListener()
         observeUiState()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        onHideKeyBoard()
+
+        return super.dispatchTouchEvent(ev)
+    }
+
+    private fun onHideKeyBoard() {
         val imm: InputMethodManager =
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
         binding.etCertificationBody.clearFocus()
         certificationViewModel.updateContent(binding.etCertificationBody.text.toString())
-
-        return super.dispatchTouchEvent(ev)
     }
 
     private fun setupBinding() {
@@ -51,21 +74,59 @@ class CertificationActivity :
     }
 
     private fun setupGalleryButtonListener() {
-        val galleryLauncher =
-            registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-                val inputStream = contentResolver.openInputStream(uri!!)
-                inputStream?.close()
-                updateImageUrl(uri)
-            }
-
         binding.ivCertificationGalleryButton.setOnClickListener {
-            galleryLauncher.launch("image/*")
+            galleryLauncher.launch(PATH_GALLERY_INPUT)
         }
     }
 
-    private fun updateImageUrl(uri: Uri) {
-        certificationViewModel.updateImage(uri.toString())
-        BindingAdapter.glideSrcUrl(binding.ivCertificationPhoto, uri.toString())
+    private fun setupCameraButtonListener() {
+        binding.ivCertificationCameraButton.setOnClickListener {
+            if (checkCameraPermission()) {
+                requestCameraPermission()
+            } else {
+                val photoFile = File.createTempFile(
+                    PATH_CACHE_IMAGE_PREFIX,
+                    PATH_CACHE_IMAGE_SUFFIX,
+                    this.cacheDir,
+                )
+                imageUri = FileProvider.getUriForFile(this, "$packageName.provider", photoFile)
+                cameraLauncher.launch(imageUri)
+            }
+        }
+    }
+
+    private fun requestCameraPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(android.Manifest.permission.CAMERA),
+            REQUEST_CODE_CAMERA,
+        )
+    }
+
+    private fun checkCameraPermission(): Boolean {
+        val cameraPermissionCheck = ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.CAMERA,
+        )
+        return cameraPermissionCheck != PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun updateLoadedGalleryImage(uri: Uri?) {
+        if (uri == null) return
+        imageUri = uri
+        val inputStream = contentResolver.openInputStream(imageUri!!)
+        inputStream?.close()
+        updateImageUrl(imageUri != null)
+    }
+
+    private fun updateImageUrl(isLoaded: Boolean) {
+        if (!isLoaded) {
+            showFailLoadingImageToast()
+            return
+        }
+        certificationViewModel.updateImage(imageUri.toString())
+        BindingAdapter.glideSrcUrl(binding.ivCertificationPhoto, imageUri.toString())
+        imageUri = null
     }
 
     private fun observeUiState() {
@@ -74,7 +135,19 @@ class CertificationActivity :
         }
     }
 
+    private fun showFailLoadingImageToast() {
+        Toast.makeText(
+            this,
+            R.string.certification_post_fail_loading_image,
+            Toast.LENGTH_SHORT,
+        ).show()
+    }
+
     companion object {
+        private const val REQUEST_CODE_CAMERA = 1000
+        private const val PATH_CACHE_IMAGE_PREFIX = "IMG_"
+        private const val PATH_CACHE_IMAGE_SUFFIX = ".jpg"
+        private const val PATH_GALLERY_INPUT = "image/*"
         private const val KEY_STUDY_ID = "STUDY_ID"
         fun getIntent(context: Context, studyId: Long): Intent =
             Intent(context, CertificationActivity::class.java).apply {
