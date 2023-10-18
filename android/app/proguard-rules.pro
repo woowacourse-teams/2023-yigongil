@@ -19,6 +19,8 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep interface com.created.domain.* { *; }
+-keep class com.created.domain.model.response.** { *; }
 
 #---------------------------------------------------Retrofit
 # Retrofit does reflection on generic parameters. InnerClasses is required to use Signature and
