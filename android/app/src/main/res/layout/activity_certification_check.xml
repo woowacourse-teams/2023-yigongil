@@ -48,6 +48,7 @@
             android:gravity="top"
             android:textIsSelectable="true"
             android:textAppearance="@style/text_r14"
+            android:textCursorDrawable="@drawable/cursor_color"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
