@@ -197,7 +197,7 @@
             android:onClick="@{() -> activity.initMainButtonOnClick(viewModel.study.role)}"
             android:text="@{context.getString(viewModel.state.mainButtonText, viewModel.study.memberCount, viewModel.study.peopleCount)}"
             android:textAppearance="@style/button_sb20"
-            android:textColor="@{context.getColor(viewModel.state.mainButtonTextColor)}"
+            android:textColor="@color/tv_color_disabled"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
