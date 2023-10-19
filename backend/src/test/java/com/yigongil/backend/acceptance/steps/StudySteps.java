@@ -491,4 +491,32 @@ public class StudySteps {
                                              .anyMatch(studyMemberResponse -> studyMemberResponse.id().equals(id));
         assertThat(isExist).isFalse();
     }
+
+    @When("{string}가 홈을 조회한다.")
+    public void 홈을_조회한다(String githubId) {
+        String token = sharedContext.getToken(githubId);
+
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .header(HttpHeaders.AUTHORIZATION, token)
+                                                        .when()
+                                                        .get("/home")
+                                                        .then().log().all()
+                                                        .extract();
+
+        sharedContext.setResponse(response);
+    }
+
+    @Then("{string}스터디의 잔디 누적량이 {int} 이다.")
+    public void 스터디의잔디누적량이이다(String studyName, int grassCount) {
+        ExtractableResponse<Response> response = sharedContext.getResponse();
+
+        List<UpcomingStudyResponse> homeResponse = response.jsonPath().getList(".", UpcomingStudyResponse.class);
+
+        UpcomingStudyResponse studyResponse = homeResponse.stream()
+                                                          .filter(upcomingStudyResponse -> upcomingStudyResponse.name().equals(studyName))
+                                                          .findAny()
+                                                          .get();
+
+        assertThat(studyResponse.grassCount()).isEqualTo(grassCount);
+    }
 }

@@ -6,6 +6,7 @@ import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
+import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.response.UpcomingStudyResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class RoundService {
 
         for (Study study : studies) {
             Round currentRound = study.getCurrentRound();
+            StudyMember studyMember = study.getStudyMemberByMember(member);
 
             int leftDays = currentRound.calculateLeftDaysFrom(LocalDate.now());
 
@@ -43,7 +45,7 @@ public class RoundService {
                             study.getName(),
                             currentRound.getMustDo(),
                             leftDays,
-                            currentRound.calculateProgress(),
+                            studyMember.calculateAccumulatedExperience(),
                             study.isMaster(member)
                     )
             );
