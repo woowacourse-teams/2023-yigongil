@@ -6,8 +6,9 @@ import retrofit2.http.Query
 
 interface MemberStudyListService {
 
-    @GET("v1/studies/applied?")
+    @GET("v1/studies/waiting?")
     suspend fun getAppliedStudyList(
         @Query("search") searchWord: String?,
+        @Query("role") role: String,
     ): List<StudySummaryResponseDto>
 }
