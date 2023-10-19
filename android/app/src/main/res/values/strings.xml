@@ -47,6 +47,7 @@
 
     <!--홈 탭-->
     <string name="home_study_list_must_do">Must Do</string>
+    <string name="hom_study_list_must_do_default_message">Must Do를 아직 등록하지 않았어요!</string>
     <string name="home_study_list_guide">Must Do를 인증하면 잔디씨앗을 드려요! \n스터디를 완주하면 잔디를 심어드려요!</string>
     <string name="home_no_study">참여중인 스터디가 없어요!\n스터디를 개설/참여 해볼까요?</string>
     <string name="home_study_list_date">D - %d</string>
