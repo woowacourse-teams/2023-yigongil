@@ -63,7 +63,7 @@ class StudyDetailActivity :
                 }
 
                 is Guest -> showLoginBottomSheetDialog()
-                else -> Unit
+                else -> showToast(R.string.study_detail_button_preparing_service)
             }
         }
     }
