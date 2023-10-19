@@ -1,7 +1,7 @@
 package com.created.domain.model
 
 enum class Role {
-    MASTER, MEMBER, APPLICANT, NOTHING, GUEST;
+    MASTER, STUDY_MEMBER, APPLICANT, NOTHING, GUEST;
 
     companion object {
         fun valueOf(index: Int): Role {

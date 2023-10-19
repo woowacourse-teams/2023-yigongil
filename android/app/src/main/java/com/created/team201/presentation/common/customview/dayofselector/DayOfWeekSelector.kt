@@ -146,6 +146,12 @@ class DayOfWeekSelector @JvmOverloads constructor(
         return dayTextViews.values.count { it.isSelected }
     }
 
+    fun releaseSelection(dayOfWeek: DayOfWeek) {
+        (DayOfWeek.values().toList() - dayOfWeek).forEach {
+            dayTextViews[it]?.isSelected = false
+        }
+    }
+
     companion object {
 
         @JvmStatic
@@ -155,6 +161,16 @@ class DayOfWeekSelector @JvmOverloads constructor(
             selectableDays: List<DayOfWeek>,
         ) {
             dayOfWeekSelector.setSelectableDays(selectableDays)
+        }
+
+        @JvmStatic
+        @BindingAdapter("selectDay")
+        fun selectDay(
+            dayOfWeekSelector: DayOfWeekSelector,
+            selectedDay: DayOfWeek,
+        ) {
+            dayOfWeekSelector.selectDay(selectedDay)
+            dayOfWeekSelector.releaseSelection(selectedDay)
         }
 
         @JvmStatic

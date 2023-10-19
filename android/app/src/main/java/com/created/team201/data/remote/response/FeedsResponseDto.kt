@@ -8,22 +8,11 @@ data class FeedsResponseDto(
     @SerialName("id")
     val id: Int,
     @SerialName("author")
-    val author: Author,
+    val author: AuthorResponseDto,
     @SerialName("imageUrl")
     val imageUrl: String?,
     @SerialName("content")
     val content: String,
     @SerialName("createdAt")
-    val createdAt: String
-) {
-    @Serializable
-    data class Author(
-        @SerialName("id")
-        val id: Int,
-        @SerialName("nickname")
-        val nickname: String,
-        @SerialName("profileImageUrl")
-        val profileImageUrl: String
-    )
-}
-
+    val createdAt: String,
+)

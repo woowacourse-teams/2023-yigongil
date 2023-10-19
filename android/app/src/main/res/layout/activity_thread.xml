@@ -1,115 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.studyThread.ThreadActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/iv_thread_back_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/ic_arrow_prev_active"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <TextView
-        android:id="@+id/tv_thread_study_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:textAppearance="@style/picker_sb18"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_thread_back_button"
-        app:layout_constraintEnd_toStartOf="@+id/spinner_thread"
-        app:layout_constraintStart_toEndOf="@+id/iv_thread_back_button"
-        app:layout_constraintTop_toTopOf="@+id/iv_thread_back_button"
-        tools:text="자두타먹는 스터디" />
+    </data>
 
-    <Spinner
-        android:id="@+id/spinner_thread"
-        style="@style/text_m14"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/icn_more_vertical"
-        android:overlapAnchor="false"
-        android:popupBackground="#20232B"
-        android:popupElevation="10dp"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_thread_back_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/iv_thread_back_button" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.studyThread.ThreadActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_must_do"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@color/black02_181B21"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_thread_back_button"
-        tools:listitem="@layout/item_thread_must_do" />
+        <ImageView
+            android:id="@+id/iv_thread_back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/ic_arrow_prev_active"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_thread"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@+id/view_thread_border"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_must_do"
-        app:reverseLayout="true"
-        tools:itemCount="2"
-        tools:listitem="@layout/item_thread_comment" />
+        <TextView
+            android:id="@+id/tv_thread_study_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textAppearance="@style/picker_sb18"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_thread_back_button"
+            app:layout_constraintEnd_toStartOf="@+id/spinner_thread"
+            app:layout_constraintStart_toEndOf="@+id/iv_thread_back_button"
+            app:layout_constraintTop_toTopOf="@+id/iv_thread_back_button"
+            tools:text="자두타먹는 스터디" />
 
-    <View
-        android:id="@+id/view_thread_border"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginBottom="12dp"
-        android:background="@color/black03_272C33"
-        app:layout_constraintBottom_toTopOf="@+id/et_thread_input"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Spinner
+            android:id="@+id/spinner_thread"
+            style="@style/text_m14"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/icn_more_vertical"
+            android:overlapAnchor="false"
+            android:popupBackground="#20232B"
+            android:popupElevation="10dp"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_thread_back_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_thread_back_button" />
 
-    <EditText
-        android:id="@+id/et_thread_input"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/bg_rectangle_radius_10dp_black02"
-        android:ems="10"
-        android:hint="잡담 및 질답하기"
-        android:textAppearance="@style/text_r16"
-        android:inputType="text"
-        android:padding="8dp"
-        android:textCursorDrawable="@drawable/cursor_color"
-        android:textColor="@color/white"
-        android:textColorHint="@color/grey02_78808B"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/iv_thread_direct_button"
-        app:layout_constraintStart_toStartOf="parent" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_must_do"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/black02_181B21"
+            android:orientation="horizontal"
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_thread_back_button"
+            tools:listitem="@layout/item_thread_must_do" />
 
-    <ImageView
-        android:id="@+id/iv_thread_direct_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:src="@drawable/icn_direct_message_btn"
-        app:layout_constraintBottom_toBottomOf="@+id/et_thread_input"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/et_thread_input" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_thread"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/view_thread_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rv_must_do"
+            app:reverseLayout="true"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_thread_comment" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:id="@+id/view_thread_border"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginBottom="12dp"
+            android:background="@color/black03_272C33"
+            app:layout_constraintBottom_toTopOf="@+id/et_thread_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/et_thread_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_rectangle_radius_10dp_black02"
+            android:ems="10"
+            android:hint="잡담 및 질답하기"
+            android:inputType="text"
+            android:padding="8dp"
+            android:textAppearance="@style/text_r16"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey02_78808B"
+            android:textCursorDrawable="@drawable/cursor_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/iv_thread_direct_button"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_thread_direct_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/icn_direct_message_btn"
+            app:layout_constraintBottom_toBottomOf="@+id/et_thread_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/et_thread_input" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

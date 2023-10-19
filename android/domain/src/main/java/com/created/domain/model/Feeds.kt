@@ -5,12 +5,5 @@ data class Feeds(
     val content: String,
     val createdAt: String,
     val id: Long,
-    val imageUrl: String
-) {
-
-    data class Author(
-        val id: Long,
-        val nickname: String,
-        val profileImageUrl: String
-    )
-}
+    val imageUrl: String,
+)

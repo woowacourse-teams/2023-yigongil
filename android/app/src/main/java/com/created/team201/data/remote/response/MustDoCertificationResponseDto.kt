@@ -12,7 +12,7 @@ data class MustDoCertificationResponseDto(
     @SerialName("me")
     val me: User,
     @SerialName("others")
-    val others: List<User>
+    val others: List<User>,
 ) {
     @Serializable
     data class User(
@@ -23,15 +23,14 @@ data class MustDoCertificationResponseDto(
         @SerialName("profileImageUrl")
         val profileImageUrl: String,
         @SerialName("isCertified")
-        val isCertified: Boolean
+        val isCertified: Boolean,
     )
 
     @Serializable
     data class UpcomingRound(
         @SerialName("id")
-        val id: Int,
+        val id: Long,
         @SerialName("weekNumber")
         val weekNumber: Int,
     )
 }
-

@@ -18,5 +18,18 @@ enum class DayOfWeek(@StringRes val stringRes: Int) {
             val values = DayOfWeek.values()
             return values.slice(startDay.ordinal until values.size) + values.slice(0 until startDay.ordinal)
         }
+
+        fun of(dayOfWeek: String): DayOfWeek {
+            return when (dayOfWeek) {
+                "MONDAY" -> MONDAY
+                "TUESDAY" -> TUESDAY
+                "WEDNESDAY" -> WEDNESDAY
+                "THURSDAY" -> THURSDAY
+                "FRIDAY" -> FRIDAY
+                "SATURDAY" -> SATURDAY
+                "SUNDAY" -> SUNDAY
+                else -> throw IllegalArgumentException("${dayOfWeek}은 없는 요일입니다.")
+            }
+        }
     }
 }

@@ -47,6 +47,7 @@
 
     <!--홈 탭-->
     <string name="home_study_list_must_do">Must Do</string>
+    <string name="hom_study_list_must_do_default_message">Must Do를 아직 등록하지 않았어요!</string>
     <string name="home_study_list_guide">Must Do를 인증하면 잔디씨앗을 드려요! \n스터디를 완주하면 잔디를 심어드려요!</string>
     <string name="home_no_study">참여중인 스터디가 없어요!\n스터디를 개설/참여 해볼까요?</string>
     <string name="home_study_list_date">D - %d</string>
@@ -72,6 +73,7 @@
     <string name="study_list_chip_processing">진행중</string>
     <string name="study_list_chip_all">전체</string>
     <string name="study_list_chip_waiting">수락 대기중</string>
+    <string name="study_list_chip_accept">시작 대기중</string>
     <string name="study_list_create">스터디 만들기</string>
     <string name="study_list_item_sort_description">정렬</string>
     <string name="study_list_search_button_menu">검색</string>
@@ -115,6 +117,7 @@
     <string name="study_detail_notify_invalid_study">스터디를 찾을 수 없습니다.</string>
     <string name="study_detail_notify_cant_participant">더는 참가할 수 없어요</string>
     <string name="study_detail_not_yet">아직 준비중입니다</string>
+    <string name="study_detail_toast_study_start_failed">스터디 시작이 실패했습니다</string>
     <string name="item_study_detail_deleted_user_description">탈퇴한 유저에요</string>
     <string name="item_study_detail_study_success_rate">스터디 성공률 %d%%</string>
 
@@ -288,5 +291,39 @@
 
     <!-- 스레드 뷰 -->
     <string name="thread_blank_input_toast_title">내용을 입력해 주세요</string>
+
+    <!-- 스레드 Must Do 바텀시트 다이얼로그 -->
+    <string name="thread_must_do_bottom_sheet_fragment_weeks">%d주차</string>
+    <string name="thread_must_do_bottom_sheet_fragment_main_button_study_quit">스터디 탈퇴하기</string>
+    <string name="thread_must_do_bottom_sheet_fragment_main_button_study_end">스터디 종료하기</string>
+    <string name="thread_must_do_bottom_sheet_fragment_must_do_content_hint">Must Do 내용을 입력해주세요.</string>
+    <string name="thread_must_do_bottom_sheet_fragment_must_do_content_hint_not_study_master">Must Do가 아직 정해지지 않았어요.</string>
+    <string name="thread_must_do_bottom_sheet_fragment_must_do_title">Must Do</string>
+    <string name="thread_must_do_bottom_sheet_fragment_previous_button_description">이전 주차 버튼</string>
+    <string name="thread_must_do_bottom_sheet_fragment_next_button_description">다음 주차 버튼</string>
+    <string name="thread_must_do_bottom_sheet_fragment_close_button_description">닫기 버튼</string>
+    <string name="thread_must_do_bottom_sheet_fragment_must_do_edit_button_description">Must Do 수정하기 버튼</string>
+    <string name="thread_must_do_bottom_sheet_fragment_must_do_edit_done_button_description">Must Do 수정 완료 버튼</string>
+
+    <!-- 스레드 경고 다이얼로그 -->
+    <string name="thread_warning_dialog_title_quit">스터디 탈퇴</string>
+    <string name="thread_warning_dialog_title_end">스터디 종료</string>
+    <string name="thread_warning_dialog_content_quit">정말로 스터디를 탈퇴하실 건가요?\n<b>그동안 스터디를 하며 쌓아온 잔디 씨앗(경험치)은 사라지게 돼요.</b></string>
+    <string name="thread_warning_dialog_content_end">이만 스터디를 종료할까요?\n<b>스터디는 추후에 재시작할 수 없어요.</b></string>
+    <string name="thread_warning_dialog_accept_quit">탈퇴하기</string>
+    <string name="thread_warning_dialog_accept_end">종료하기</string>
+    <string name="thread_warning_dialog_cancel">취소하기</string>
+
+    <!-- 인증 뷰 -->
+    <string name="certification_post_button_title">인증하기</string>
+    <string name="certification_post_is_done_message">인증을 이미 완료 하셨어요!</string>
+    <string name="certification_post_non_exist_message">아직 인증할 수 있는 Must Do가 없어요!</string>
+    <string name="certification_post_body_hint">스터디한 내역을 공유해주세요!\n노션이나 블로그 링크를 적어도 좋아요!</string>
+    <string name="certification_post_fail_loading_image">이미지 로딩에 실패했습니다.</string>
+    <string name="certification_post_fail_posting">인증 등록을 실패했습니다.</string>
+    <string name="certification_post_success_posting">인증 등록을 완료했습니다!</string>
+
+    <!-- 인증 확인 뷰 -->
+    <string name="certification_check_fail_loading">인증 로딩에 실패했습니다.</string>
 
 </resources>

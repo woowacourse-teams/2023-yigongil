@@ -9,11 +9,17 @@
             name="item"
             type="com.created.domain.model.MustDo" />
 
+        <variable
+            name="onMemberCertificationClick"
+            type="kotlin.jvm.functions.Function1" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:clickable="@{item.certified}"
+        android:onClick="@{() -> onMemberCertificationClick.invoke(item.id)}">
 
         <com.created.team201.presentation.studyDetail.CustomProfileImage
             android:id="@+id/fl_item_must_do_profile_image"

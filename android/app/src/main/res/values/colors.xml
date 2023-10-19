@@ -6,6 +6,7 @@
 
     <!--Custom Color-->
     <color name="white01_66FFFFFF">#66FFFFFF</color>
+    <color name="white02_E7EAEE">#E7EAEE</color>
 
     <color name="green01_4039D353">#4039D353</color>
     <color name="green02_E639D353">#E639D353</color>
@@ -36,12 +37,14 @@
     <!-- chip color -->
     <color name="end01_2B2E33">#2B2E33</color>
     <color name="end02_80858F">#80858F</color>
-    <color name="waiting01_87603D">#87603D</color>
+    <color name="waiting01_87603D">#8087603D</color>
     <color name="waiting02_F1962A">#F1962A</color>
-    <color name="recruiting01_0E4429">#0E4429</color>
+    <color name="recruiting01_0E4429">#900E4429</color>
     <color name="recruiting02_7ADC4B">#7ADC4B</color>
-    <color name="processing01_5E5787">#5E5787</color>
-    <color name="processing02_9889EF">#9889EF</color>
+    <color name="processing01_716A98">#90716A98</color>
+    <color name="processing02_968DCB">#968DCB</color>
+    <color name="accepted01_C53DA7">#80C53DA7</color>
+    <color name="accepted02_F844D1">#F844D1</color>
 
     <color name="red_EB7A7A">#EB7A7A</color>
     <color name="blue_9BB9F2">#9BB9F2</color>

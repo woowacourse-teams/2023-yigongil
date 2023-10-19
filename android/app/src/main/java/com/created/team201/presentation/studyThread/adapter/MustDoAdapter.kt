@@ -5,10 +5,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.created.domain.model.MustDo
 
-class MustDoAdapter : ListAdapter<MustDo, MustDoViewHolder>(diffCallBack) {
+class MustDoAdapter(
+    private val onMemberCertificationClick: (Long) -> Unit,
+) : ListAdapter<MustDo, MustDoViewHolder>(diffCallBack) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MustDoViewHolder =
-        MustDoViewHolder.from(parent)
+        MustDoViewHolder.from(parent, onMemberCertificationClick)
 
     override fun onBindViewHolder(holder: MustDoViewHolder, position: Int) {
         holder.bind(getItem(position))
