@@ -491,7 +491,7 @@ public class StudySteps {
                                              .anyMatch(studyMemberResponse -> studyMemberResponse.id().equals(id));
         assertThat(isExist).isFalse();
     }
-
+  
     @When("{string}가 홈을 조회한다.")
     public void 홈을_조회한다(String githubId) {
         String token = sharedContext.getToken(githubId);
