@@ -39,11 +39,12 @@ public class ImageResourceService {
 
     public String uploadImage(MultipartFile image) {
         String key = createKey(ImageExtension.from(image.getOriginalFilename()));
+        String uploadPath = directoryName + "/" + key;
         try {
             s3Client.putObject(
                     PutObjectRequest.builder()
                                     .bucket(bucketName)
-                                    .key(key)
+                                    .key(uploadPath)
                                     .build(),
                     RequestBody.fromBytes(image.getBytes())
             );
@@ -54,7 +55,7 @@ public class ImageResourceService {
     }
 
     private String createKey(ImageExtension extension) {
-        return directoryName + "/" + UUID.randomUUID() + extension.toString();
+        return UUID.randomUUID() + extension.toString();
     }
 
     enum ImageExtension {
