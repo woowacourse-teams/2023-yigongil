@@ -100,6 +100,6 @@ object ServiceModule {
 
     @Singleton
     @Provides
-    fun provideImageService(@DefaultRetrofit retrofit: Retrofit): ImageService =
+    fun provideImageService(@AuthRetrofit retrofit: Retrofit): ImageService =
         retrofit.create(ImageService::class.java)
 }

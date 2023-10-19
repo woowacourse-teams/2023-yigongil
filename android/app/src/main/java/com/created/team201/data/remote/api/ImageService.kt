@@ -11,6 +11,6 @@ interface ImageService {
     @Multipart
     @POST("v1/images")
     suspend fun postImage(
-        @Part imageUrl: MultipartBody.Part,
+        @Part image: MultipartBody.Part,
     ): Response<Unit>
 }
