@@ -15,6 +15,7 @@ import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyListItemResponse;
+import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.response.UpcomingStudyResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -438,5 +439,35 @@ public class StudySteps {
         RoundResponse upcomingRound = (RoundResponse) sharedContext.getParameter("round");
 
         assertThat(upcomingRound.mustDo()).isEqualTo(content);
+    }
+
+    @When("{string} 이 {string} 스터디에서 탈퇴한다.")
+    public void 스터디에서_탈퇴한다(String githubId, String studyName) {
+        String token = sharedContext.getToken(githubId);
+        String studyId = (String) sharedContext.getParameter(studyName);
+
+        given().log().all()
+               .header(HttpHeaders.AUTHORIZATION, token)
+               .when()
+               .delete("/studies/{studyId}/exit", studyId)
+               .then().log().all();
+
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .header(HttpHeaders.AUTHORIZATION, token)
+                                                        .when()
+                                                        .get("/studies/{studyId}/", studyId)
+                                                        .then().log().all()
+                                                        .extract();
+
+        sharedContext.setResponse(response);
+    }
+
+    @Then("{string} 이 {string} 스터디에 참여하지 않는다.")
+    public void 스터디에_참여하지_않는다(String githubId, String studyName) {
+        Long id = sharedContext.getId(githubId);
+
+        StudyDetailResponse response = sharedContext.getResponse().as(StudyDetailResponse.class);
+
+        assertThat(response.members()).map(StudyMemberResponse::id).doesNotContain(id);
     }
 }

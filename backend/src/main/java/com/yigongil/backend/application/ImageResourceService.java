@@ -18,40 +18,43 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 @Service
 public class ImageResourceService {
 
-    private final String BUCKET_NAME;
-    private final String CLOUD_FRONT_DOMAIN_NAME;
-    private final S3Client S3_CLIENT;
+    private final String bucketName;
+    private final String cloudFrontDomainName;
+    private final S3Client s3Client;
+    private final String directoryName;
 
     public ImageResourceService(
             @Value("${aws.region}") String region,
             @Value("${aws.s3.bucket-name}") String bucketName,
-            @Value("${aws.cloud-front-domain}") String cloudFrontDomainName
+            @Value("${aws.cloud-front-domain}") String cloudFrontDomainName,
+            @Value("${aws.s3.directory-name}") String directoryName
     ) {
-        BUCKET_NAME = bucketName;
-        CLOUD_FRONT_DOMAIN_NAME = cloudFrontDomainName;
-        S3_CLIENT = S3Client.builder()
-                            .region(Region.of(region))
-                            .build();
+        this.bucketName = bucketName;
+        this.cloudFrontDomainName = cloudFrontDomainName;
+        this.s3Client = S3Client.builder()
+                                .region(Region.of(region))
+                                .build();
+        this.directoryName = directoryName;
     }
 
     public String uploadImage(MultipartFile image) {
         String key = createKey(ImageExtension.from(image.getOriginalFilename()));
         try {
-            S3_CLIENT.putObject(
+            s3Client.putObject(
                     PutObjectRequest.builder()
-                                    .bucket(BUCKET_NAME)
+                                    .bucket(bucketName)
                                     .key(key)
                                     .build(),
                     RequestBody.fromBytes(image.getBytes())
             );
-            return CLOUD_FRONT_DOMAIN_NAME + "/" + key;
+            return cloudFrontDomainName + "/" + key;
         } catch (IOException e) {
             throw new ImageToBytesException(e);
         }
     }
 
     private String createKey(ImageExtension extension) {
-        return UUID.randomUUID() + extension.toString();
+        return directoryName + "/" + UUID.randomUUID() + extension.toString();
     }
 
     enum ImageExtension {
