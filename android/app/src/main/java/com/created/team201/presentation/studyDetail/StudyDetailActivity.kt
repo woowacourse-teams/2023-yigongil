@@ -232,7 +232,6 @@ class StudyDetailActivity :
         finish()
     }
 
-
     private fun showToast(@StringRes stringRes: Int) =
         Toast.makeText(this, getString(stringRes), Toast.LENGTH_SHORT).show()
 
