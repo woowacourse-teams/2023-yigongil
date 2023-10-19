@@ -42,14 +42,16 @@ public class StudyQueryRepositoryImpl implements StudyQueryRepository {
         return new SliceImpl<>(studies);
     }
 
-    public Slice<Study> findStudiesApplied(Long memberId, String search, Role role, Pageable page) {
+    @Override
+    public Slice<Study> findWaitingStudies(Long memberId, String search, Role role, Pageable page) {
         List<Study> studies = queryFactory.select(studyMember.study)
                                           .from(studyMember)
                                           .join(studyMember.study, study)
                                           .where(
                                                   studyMember.role.eq(role),
                                                   studyMember.member.id.eq(memberId),
-                                                  searchEq(search)
+                                                  searchEq(search),
+                                                  study.processingStatus.eq(ProcessingStatus.RECRUITING)
                                           )
                                           .offset(page.getOffset())
                                           .limit(page.getPageSize())

@@ -10,5 +10,5 @@ public interface StudyQueryRepository {
 
     Slice<Study> findStudiesByConditions(String search, ProcessingStatus status, Pageable page);
 
-    Slice<Study> findStudiesApplied(Long memberId, String search, Role role, Pageable page);
+    Slice<Study> findWaitingStudies(Long memberId, String search, Role role, Pageable page);
 }
