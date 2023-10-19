@@ -92,4 +92,8 @@ public class StudyMember extends BaseEntity {
         member.addExperience(totalExperience);
         this.studyResult = StudyResult.SUCCESS;
     }
+
+    public void failStudy() {
+        this.studyResult = StudyResult.FAIL;
+    }
 }

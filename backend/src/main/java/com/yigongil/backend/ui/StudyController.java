@@ -219,5 +219,14 @@ public class StudyController implements StudyApi {
         List<RoundResponse> roundResponses = studyService.findRoundDetailsOfWeek(studyId, weekNumber);
         return ResponseEntity.ok(roundResponses);
     }
+
+    @DeleteMapping("/{studyId}/exit")
+    public ResponseEntity<Void> exitStudy(
+            @Authorization Member member,
+            @PathVariable Long studyId
+    ) {
+        studyService.exit(member, studyId);
+        return ResponseEntity.ok().build();
+    }
 }
 
