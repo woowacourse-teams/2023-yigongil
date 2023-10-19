@@ -1,5 +1,8 @@
 package com.yigongil.backend.domain.round;
 
+import static com.yigongil.backend.fixture.MemberFixture.폰노이만;
+import static com.yigongil.backend.fixture.RoundOfMemberFixture.김진우_라오멤;
+import static com.yigongil.backend.fixture.RoundOfMemberFixture.노이만_라오멤;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -7,7 +10,6 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NotStudyMasterException;
 import com.yigongil.backend.fixture.RoundFixture;
-import com.yigongil.backend.fixture.RoundOfMemberFixture;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -80,9 +82,9 @@ class RoundTest {
         void 멤버들의_진행률을_계산한다() {
             //given
             Round round = RoundFixture.아이디없는_라운드.toRoundWithRoundOfMember(
-                    RoundOfMemberFixture.노이만_라오멤,
-                    RoundOfMemberFixture.노이만_라오멤,
-                    RoundOfMemberFixture.노이만_라오멤
+                    노이만_라오멤,
+                    노이만_라오멤,
+                    노이만_라오멤
             );
             round.getRoundOfMembers().get(0).completeRound();
 
@@ -97,9 +99,9 @@ class RoundTest {
         void 머스트두를_완료한_멤버가_없다() {
             //given
             Round round = RoundFixture.아이디없는_라운드.toRoundWithRoundOfMember(
-                    RoundOfMemberFixture.노이만_라오멤,
-                    RoundOfMemberFixture.노이만_라오멤,
-                    RoundOfMemberFixture.노이만_라오멤
+                    노이만_라오멤,
+                    노이만_라오멤,
+                    노이만_라오멤
             );
 
             //when
@@ -107,6 +109,26 @@ class RoundTest {
 
             //then
             assertThat(result).isZero();
+        }
+    }
+
+    @Nested
+    class 라운드_나가기 {
+        @Test
+        void 라운드를_나가면_RoundOfMember에서_사라진다() {
+            // given
+            Round round = RoundFixture.아이디없는_라운드.toRoundWithRoundOfMember(
+                    김진우_라오멤,
+                    노이만_라오멤
+            );
+
+            // when
+            round.exit(폰노이만.toMember());
+            boolean roundOfMemberExists = round.getRoundOfMembers().stream()
+                             .anyMatch(roundOfMember -> roundOfMember.equals(노이만_라오멤));
+
+            // then
+            assertThat(roundOfMemberExists).isFalse();
         }
     }
 }

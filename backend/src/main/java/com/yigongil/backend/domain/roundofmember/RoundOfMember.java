@@ -4,6 +4,7 @@ import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.Study;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -58,5 +59,24 @@ public class RoundOfMember extends BaseEntity {
 
     public boolean isMemberEquals(Member member) {
         return this.member.equals(member);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof RoundOfMember roundOfMember)) {
+            return false;
+        }
+        if (id == null || roundOfMember.getId() == null) {
+            return false;
+        }
+        return id.equals(roundOfMember.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

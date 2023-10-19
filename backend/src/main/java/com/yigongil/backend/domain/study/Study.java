@@ -413,8 +413,19 @@ public class Study extends BaseEntity {
     }
 
     public void exit(Member member) {
+        validateCanExitMemberSize();
         rounds.forEach(round -> round.exit(member));
-        findStudyMemberBy(member).failStudy();
+        findStudyMemberBy(member).exit();
+    }
+
+    private void validateCanExitMemberSize() {
+        long studyMemberCount = studyMembers.stream()
+                                            .filter(StudyMember::isStudyMember)
+                                            .count();
+        if (studyMemberCount <= MIN_MEMBER_SIZE) {
+            throw new InvalidMemberSizeException("스터디 멤버 수가 2명 이하일 때는 탈퇴할 수 없습니다.",
+                    (int) studyMemberCount);
+        }
     }
 
     private StudyMember findStudyMemberBy(Member member) {

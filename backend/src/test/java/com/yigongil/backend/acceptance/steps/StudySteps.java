@@ -15,7 +15,6 @@ import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyListItemResponse;
-import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.response.UpcomingStudyResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -451,24 +450,15 @@ public class StudySteps {
                .when()
                .delete("/studies/{studyId}/exit", studyId)
                .then().log().all();
-
-        ExtractableResponse<Response> response = given().log().all()
-                                                        .header(HttpHeaders.AUTHORIZATION, token)
-                                                        .when()
-                                                        .get("/studies/{studyId}/", studyId)
-                                                        .then().log().all()
-                                                        .extract();
-
-        sharedContext.setResponse(response);
     }
 
     @Then("{string} 이 {string} 스터디에 참여하지 않는다.")
     public void 스터디에_참여하지_않는다(String githubId, String studyName) {
         Long id = sharedContext.getId(githubId);
 
-        StudyDetailResponse response = sharedContext.getResponse().as(StudyDetailResponse.class);
+        MembersCertificationResponse response = sharedContext.getResponse().as(MembersCertificationResponse.class);
 
-        assertThat(response.members()).map(StudyMemberResponse::id).doesNotContain(id);
+        assertThat(response.others()).map(MemberCertificationResponse::id).doesNotContain(id);
     }
 
     @Then("{string}는 {string} 스터디 구성원에 포함되어 있지않다.")

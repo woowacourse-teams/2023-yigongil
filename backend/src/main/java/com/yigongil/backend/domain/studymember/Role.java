@@ -10,6 +10,7 @@ public enum Role {
     STUDY_MEMBER(1),
     APPLICANT(2),
     NO_ROLE(3),
+    EXIT(4),
     ;
 
     private final int code;

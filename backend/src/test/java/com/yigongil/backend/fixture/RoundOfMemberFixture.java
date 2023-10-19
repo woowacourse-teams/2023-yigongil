@@ -5,7 +5,7 @@ import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 
 public enum RoundOfMemberFixture {
 
-    김진우_라운드_삼(1L, MemberFixture.김진우.toMember(), false),
+    김진우_라오멤(2L, MemberFixture.김진우.toMember(), false),
     노이만_라오멤(1L, MemberFixture.폰노이만.toMember(), false),
     ;
 
