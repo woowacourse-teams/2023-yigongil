@@ -86,12 +86,16 @@ public class StudyMember extends BaseEntity {
     }
 
     public void completeSuccessfully() {
+        int totalExperience = calculateAccumulatedExperience();
+        member.addExperience(totalExperience);
+        this.studyResult = StudyResult.SUCCESS;
+    }
+
+    public int calculateAccumulatedExperience() {
         int successfulRoundCount = study.calculateSuccessfulRoundCount(member);
         int defaultRoundExperience = EXPERIENCE_BASE_UNIT * 2;
         int additionalExperienceOfPeriodLength = EXPERIENCE_BASE_UNIT * 3 / study.getMeetingDaysCountPerWeek() + 1;
-        int totalExperience = successfulRoundCount * (defaultRoundExperience + additionalExperienceOfPeriodLength);
-        member.addExperience(totalExperience);
-        this.studyResult = StudyResult.SUCCESS;
+        return successfulRoundCount * (defaultRoundExperience + additionalExperienceOfPeriodLength);
     }
 
     public void failStudy() {
