@@ -194,7 +194,7 @@ class ThreadViewModel @Inject constructor(
             runCatching {
                 detailRepository.getStudyDetail(studyId)
             }.onSuccess {
-                val myRole: Role = if (it.studyMasterId == myId) Role.MASTER else Role.MEMBER
+                val myRole: Role = if (it.studyMasterId == myId) Role.MASTER else Role.STUDY_MEMBER
                 studyDetail = StudyDetailUIModel.createFromStudyDetailRole(it, myRole)
             }
         }
