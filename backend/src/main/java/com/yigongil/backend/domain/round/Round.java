@@ -208,6 +208,13 @@ public class Round extends BaseEntity {
         return weekNumber <= minimumWeeks;
     }
 
+    public void exit(Member member) {
+        if (isMaster(member)) {
+            throw new NotStudyMemberException("스터디장은 스터디를 나갈 수 없습니다.", member.getGithubId());
+        }
+        roundOfMembers.remove(findRoundOfMemberBy(member));
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

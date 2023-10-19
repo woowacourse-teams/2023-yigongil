@@ -16,6 +16,7 @@ import com.yigongil.backend.exception.InvalidNumberOfMaximumStudyMember;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.InvalidStudyNameLengthException;
 import com.yigongil.backend.exception.NotStudyMasterException;
+import com.yigongil.backend.exception.NotStudyMemberException;
 import com.yigongil.backend.exception.RoundNotFoundException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -400,5 +401,17 @@ public class Study extends BaseEntity {
     private boolean isAlreadyExist(Member member) {
         return studyMembers.stream()
                            .anyMatch(studyMember -> studyMember.getMember().equals(member));
+    }
+
+    public void exit(Member member) {
+        rounds.forEach(round -> round.exit(member));
+        findStudyMemberBy(member).failStudy();
+    }
+
+    private StudyMember findStudyMemberBy(Member member) {
+        return studyMembers.stream()
+                           .filter(studyMember -> studyMember.getMember().equals(member))
+                           .findAny()
+                           .orElseThrow(() -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", member.getGithubId()));
     }
 }

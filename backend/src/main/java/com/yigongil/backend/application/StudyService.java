@@ -114,7 +114,7 @@ public class StudyService {
     public StudyDetailResponse findStudyDetailByStudyId(Long studyId) {
         Study study = findStudyById(studyId);
 
-        List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRoleNot(studyId, Role.APPLICANT);
+        List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRoleNotAndStudyResult(studyId, Role.APPLICANT, StudyResult.NONE);
 
         return StudyDetailResponse.of(study, createStudyMemberResponses(studyMembers));
     }
@@ -310,5 +310,11 @@ public class StudyService {
         return roundsOfWeek.stream()
                            .map(RoundResponse::from)
                            .toList();
+    }
+
+    @Transactional
+    public void exit(Member member, Long studyId) {
+        Study study = findStudyById(studyId);
+        study.exit(member);
     }
 }
