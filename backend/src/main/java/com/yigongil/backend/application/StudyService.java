@@ -1,5 +1,6 @@
 package com.yigongil.backend.application;
 
+import com.yigongil.backend.domain.certification.Certification;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
@@ -276,8 +277,9 @@ public class StudyService {
     }
 
     @Transactional(readOnly = true)
-    public CertificationResponse findCertification(Long certificationId) {
-        return CertificationResponse.from(certificationService.findById(certificationId));
+    public CertificationResponse findCertification(Long roundId, Long memberId) {
+        Certification certification = certificationService.findByRoundIdAndMemberId(roundId, memberId);
+        return CertificationResponse.from(certification);
     }
 
     @Transactional(readOnly = true)

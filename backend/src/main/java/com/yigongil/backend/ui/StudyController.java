@@ -175,11 +175,12 @@ public class StudyController implements StudyApi {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}/certifications/{certificationId}")
+    @GetMapping("/{id}/rounds/{roundId}/members/{memberId}")
     public ResponseEntity<CertificationResponse> findMemberCertification(
-            @PathVariable Long certificationId
+            @PathVariable Long roundId,
+            @PathVariable Long memberId
     ) {
-        CertificationResponse response = studyService.findCertification(certificationId);
+        CertificationResponse response = studyService.findCertification(roundId, memberId);
         return ResponseEntity.ok(response);
     }
 
