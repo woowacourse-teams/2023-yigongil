@@ -1,10 +1,11 @@
 package com.yigongil.backend.application;
 
-import static com.yigongil.backend.domain.study.PageStrategy.ID_DESC;
-
-import com.yigongil.backend.application.studyevent.StudyStartedEvent;
+import com.yigongil.backend.domain.certification.Certification;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
+import com.yigongil.backend.domain.round.RoundRepository;
+import com.yigongil.backend.domain.roundofmember.RoundOfMember;
+import com.yigongil.backend.domain.study.PageStrategy;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
@@ -12,110 +13,133 @@ import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
 import com.yigongil.backend.domain.studymember.StudyResult;
-import com.yigongil.backend.exception.ApplicantAlreadyExistException;
 import com.yigongil.backend.exception.ApplicantNotFoundException;
 import com.yigongil.backend.exception.StudyNotFoundException;
+import com.yigongil.backend.request.CertificationCreateRequest;
+import com.yigongil.backend.request.FeedPostCreateRequest;
+import com.yigongil.backend.request.StudyStartRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
+import com.yigongil.backend.response.CertificationResponse;
+import com.yigongil.backend.response.FeedPostResponse;
+import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
-import com.yigongil.backend.response.RecruitingStudyResponse;
+import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
+import com.yigongil.backend.response.StudyListItemResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
+import com.yigongil.backend.response.StudyMemberRoleResponse;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
 @Service
 public class StudyService {
 
     private final StudyRepository studyRepository;
     private final StudyMemberRepository studyMemberRepository;
-    private final ApplicationEventPublisher publisher;
+    private final CertificationService certificationService;
+    private final FeedService feedService;
+    private final RoundRepository roundRepository;
 
     public StudyService(
             StudyRepository studyRepository,
             StudyMemberRepository studyMemberRepository,
-            ApplicationEventPublisher publisher
-    ) {
+            CertificationService certificationService,
+            FeedService feedService,
+            final RoundRepository roundRepository) {
         this.studyRepository = studyRepository;
         this.studyMemberRepository = studyMemberRepository;
-        this.publisher = publisher;
+        this.certificationService = certificationService;
+        this.feedService = feedService;
+        this.roundRepository = roundRepository;
     }
 
     @Transactional
     public Long create(Member member, StudyUpdateRequest request) {
-        Study study = Study.initializeStudyOf(
-                request.name(),
-                request.introduction(),
-                request.numberOfMaximumMembers(),
-                request.startAt().atStartOfDay(),
-                request.totalRoundCount(),
-                request.periodOfRound(),
-                member
-        );
-
-        studyRepository.save(study);
-
-        StudyMember studyMember = StudyMember.builder()
-                                             .study(study)
-                                             .member(member)
-                                             .role(Role.MASTER)
-                                             .studyResult(StudyResult.NONE)
-                                             .build();
-
-        studyMemberRepository.save(studyMember);
+        Study study = createStudy(request, member);
 
         return study.getId();
     }
 
-    @Transactional(readOnly = true)
-    public List<RecruitingStudyResponse> findRecruitingStudies(int page) {
-        Pageable pageable = PageRequest.of(page, ID_DESC.getSize(), ID_DESC.getSort());
-
-        Page<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.RECRUITING, pageable);
-        return toRecruitingStudyResponse(studies);
-
-    }
-
-    @Transactional(readOnly = true)
-    public List<RecruitingStudyResponse> findRecruitingStudiesWithSearch(int page, String word) {
-        Pageable pageable = PageRequest.of(page, ID_DESC.getSize(), ID_DESC.getSort());
-        Page<Study> studies = studyRepository.findAllByProcessingStatusAndNameContainingIgnoreCase(
-                ProcessingStatus.RECRUITING,
-                word,
-                pageable
+    private Study createStudy(StudyUpdateRequest request, Member member) {
+        Study study = Study.initializeStudyOf(
+                request.name(),
+                request.introduction(),
+                request.numberOfMaximumMembers(),
+                request.minimumWeeks(),
+                request.meetingDaysCountPerWeek(),
+                member
         );
+        studyRepository.save(study);
+        return study;
+    }
+
+    @Transactional(readOnly = true)
+    public List<StudyListItemResponse> findStudies(int page, String search, ProcessingStatus status) {
+        Pageable pageable = PageStrategy.defaultPageStrategy(page);
+
+        Slice<Study> studies = studyRepository.findStudiesByConditions(search, status, pageable);
         return toRecruitingStudyResponse(studies);
     }
 
-    private List<RecruitingStudyResponse> toRecruitingStudyResponse(Page<Study> studies) {
-        return studies.get()
-                      .map(RecruitingStudyResponse::from)
-                      .toList();
+    @Transactional(readOnly = true)
+    public List<StudyListItemResponse> findWaitingStudies(Member member, int page, String search, Role role) {
+        Pageable pageable = PageStrategy.defaultPageStrategy(page);
+
+        Slice<Study> studies = studyRepository.findWaitingStudies(member.getId(), search, role, pageable);
+        return toRecruitingStudyResponse(studies);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MyStudyResponse> findMyStudies(Member member) {
+        List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndRoleNotAndStudyResult(
+                member.getId(),
+                Role.APPLICANT,
+                StudyResult.NONE
+        );
+
+        List<MyStudyResponse> response = new ArrayList<>();
+        for (StudyMember studyMember : studyMembers) {
+            Study study = studyMember.getStudy();
+            response.add(
+                    new MyStudyResponse(
+                            study.getId(),
+                            study.getProcessingStatus()
+                                 .getCode(),
+                            studyMember.getRole()
+                                       .getCode(),
+                            study.getName(),
+                            study.calculateAverageTier(),
+                            study.sizeOfCurrentMembers(),
+                            study.getNumberOfMaximumMembers()
+                    )
+            );
+        }
+        return response;
     }
 
     @Transactional
     public void apply(Member member, Long studyId) {
         Study study = findStudyById(studyId);
+        study.apply(member);
+    }
 
-        study.validateMemberSize();
-        validateApplicantAlreadyExist(member, study);
+    @Transactional
+    public void createFeedPost(Member member, Long studyId, FeedPostCreateRequest request) {
+        final Study study = findStudyById(studyId);
+        feedService.createFeedPost(member, study, request);
+    }
 
-        studyMemberRepository.save(
-                StudyMember.builder()
-                           .study(study)
-                           .member(member)
-                           .role(Role.APPLICANT)
-                           .studyResult(StudyResult.NONE)
-                           .build()
-        );
+    @Transactional
+    public Long createCertification(Member member, Long id, CertificationCreateRequest request) {
+        Study study = findStudyById(id);
+        return certificationService.createCertification(study, member, request).getId();
     }
 
     public Study findStudyById(Long studyId) {
@@ -123,27 +147,13 @@ public class StudyService {
                               .orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
     }
 
-    private void validateApplicantAlreadyExist(Member member, Study study) {
-        boolean cannotApply = studyMemberRepository.existsByStudyIdAndMemberId(study.getId(), member.getId());
-        if (cannotApply) {
-            throw new ApplicantAlreadyExistException("스터디에 신청할 수 없는 멤버입니다.", String.valueOf(member.getId()));
-        }
-    }
-
     @Transactional(readOnly = true)
-    public StudyDetailResponse findStudyDetailByStudyId(Member member, Long studyId) {
+    public StudyDetailResponse findStudyDetailByStudyId(Long studyId) {
         Study study = findStudyById(studyId);
-
-        List<Round> rounds = study.getRounds();
-        Round currentRound = study.getCurrentRound();
 
         List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRoleNotAndStudyResult(studyId, Role.APPLICANT, StudyResult.NONE);
 
-        Role role = studyMemberRepository.findByStudyIdAndMemberId(studyId, member.getId())
-                                         .map(StudyMember::getRole)
-                                         .orElse(Role.NO_ROLE);
-
-        return StudyDetailResponse.of(study, rounds, role, currentRound, createStudyMemberResponses(studyMembers));
+        return StudyDetailResponse.of(study, createStudyMemberResponses(studyMembers));
     }
 
     @Transactional
@@ -151,10 +161,7 @@ public class StudyService {
         StudyMember studyMember = findApplicantByMemberIdAndStudyId(memberId, studyId);
         Study study = studyMember.getStudy();
 
-        study.validateMaster(master);
-
-        study.addMember(studyMember.getMember());
-        studyMember.participate();
+        study.permit(studyMember.getMember(), master);
     }
 
     @Transactional(readOnly = true)
@@ -178,7 +185,7 @@ public class StudyService {
 
         return new StudyMemberResponse(
                 member.getId(),
-                member.getTier(),
+                member.getTier().getOrder(),
                 member.getNickname(),
                 calculateSuccessRate(member),
                 member.getProfileImageUrl(),
@@ -193,40 +200,6 @@ public class StudyService {
             return 0;
         }
         return ((double) (success * 100) / success + fail);
-    }
-
-    @Transactional(readOnly = true)
-    public List<MyStudyResponse> findMyStudies(Member member) {
-        List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndRoleNotAndStudyResult(
-                member.getId(),
-                Role.APPLICANT,
-                StudyResult.NONE
-        );
-
-        List<MyStudyResponse> response = new ArrayList<>();
-        for (StudyMember studyMember : studyMembers) {
-            Study study = studyMember.getStudy();
-            response.add(
-                    new MyStudyResponse(
-                            study.getId(),
-                            study.getProcessingStatus()
-                                 .getCode(),
-                            studyMember.getRole()
-                                       .getCode(),
-                            study.getName(),
-                            study.calculateAverageTier(),
-                            study.getStartAt().toLocalDate(),
-                            study.getTotalRoundCount(),
-                            study.getPeriodUnit()
-                                 .toStringFormat(study.getPeriodOfRound()),
-                            study.getCurrentRound()
-                                 .getRoundOfMembers()
-                                 .size(),
-                            study.getNumberOfMaximumMembers()
-                    )
-            );
-        }
-        return response;
     }
 
     @Transactional
@@ -252,22 +225,20 @@ public class StudyService {
         studies.stream()
                .filter(study -> study.isCurrentRoundEndAt(today))
                .forEach(Study::updateToNextRound);
-
-        studies.stream()
-               .filter(Study::isEnd)
-               .map(endedStudy -> studyMemberRepository.findAllByStudyId(endedStudy.getId()))
-               .flatMap(Collection::stream)
-               .forEach(StudyMember::completeSuccessfully);
     }
 
     @Transactional
-    public void startStudy(Member member, Long studyId) {
-        studyMemberRepository.deleteAllByStudyIdAndRole(studyId, Role.APPLICANT);
-        Study study = findStudyById(studyId);
-        study.validateMaster(member);
+    public void start(Member member, Long studyId, StudyStartRequest request) {
+        List<DayOfWeek> meetingDaysOfTheWeek = createDayOfWeek(request.meetingDaysOfTheWeek());
 
-        study.startStudy();
-        publisher.publishEvent(new StudyStartedEvent(study));
+        Study study = findStudyById(studyId);
+        study.start(member, meetingDaysOfTheWeek, LocalDateTime.now());
+    }
+
+    private List<DayOfWeek> createDayOfWeek(List<String> daysOfTheWeek) {
+        return daysOfTheWeek.stream()
+                            .map(DayOfWeek::valueOf)
+                            .toList();
     }
 
     @Transactional
@@ -277,10 +248,71 @@ public class StudyService {
                 member,
                 request.name(),
                 request.numberOfMaximumMembers(),
-                request.startAt().atStartOfDay(),
-                request.totalRoundCount(),
-                request.periodOfRound(),
-                request.introduction()
+                request.introduction(),
+                request.minimumWeeks(),
+                request.meetingDaysCountPerWeek()
         );
+    }
+
+    @Transactional
+    public void deleteByMasterId(Long masterId) {
+        List<Study> studies = studyRepository.findAllByMasterIdAndProcessingStatus(masterId, ProcessingStatus.RECRUITING, Role.MASTER);
+        studyRepository.deleteAll(studies);
+    }
+
+    @Transactional(readOnly = true)
+    public StudyMemberRoleResponse getMemberRoleOfStudy(Member member, Long studyId) {
+        Role role = studyMemberRepository.findByStudyIdAndMemberId(studyId, member.getId())
+                                         .map(StudyMember::getRole)
+                                         .orElse(Role.NO_ROLE);
+
+        return StudyMemberRoleResponse.from(role);
+    }
+
+    @Transactional(readOnly = true)
+    public MembersCertificationResponse findAllMembersCertification(Member member, Long studyId) {
+        Study study = findStudyById(studyId);
+        final List<RoundOfMember> roundOfMembers = study.getCurrentRoundOfMembers();
+        return MembersCertificationResponse.of(study.getName(), study.getCurrentRound(), member, roundOfMembers);
+    }
+
+    @Transactional(readOnly = true)
+    public CertificationResponse findCertification(Long roundId, Long memberId) {
+        Certification certification = certificationService.findByRoundIdAndMemberId(roundId, memberId);
+        return CertificationResponse.from(certification);
+    }
+
+    @Transactional(readOnly = true)
+    public List<FeedPostResponse> findFeedPosts(Long id, Long oldestFeedPostId) {
+        return feedService.findFeedPosts(id, oldestFeedPostId)
+                          .stream()
+                          .map(FeedPostResponse::from)
+                          .toList();
+    }
+
+    private List<StudyListItemResponse> toRecruitingStudyResponse(Slice<Study> studies) {
+        return studies.get()
+                      .map(StudyListItemResponse::from)
+                      .toList();
+    }
+
+    @Transactional
+    public void finish(Member member, Long studyId) {
+        Study study = findStudyById(studyId);
+        study.finishStudy(member);
+    }
+
+    @Transactional(readOnly = true)
+    public List<RoundResponse> findRoundDetailsOfWeek(Long id, Integer weekNumber) {
+        List<Round> roundsOfWeek = roundRepository.findAllByStudyIdAndWeekNumber(id, weekNumber);
+        return roundsOfWeek.stream()
+                           .map(RoundResponse::from)
+                           .toList();
+    }
+
+    @Transactional
+    public void exit(Member member, Long studyId) {
+        Study study = findStudyById(studyId);
+        study.exit(member);
     }
 }

@@ -1,7 +1,6 @@
 package com.yigongil.backend.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDate;
 
 public record FinishedStudyResponse(
         @Schema(example = "1")
@@ -10,12 +9,6 @@ public record FinishedStudyResponse(
         String name,
         @Schema(example = "4")
         Integer averageTier,
-        @Schema(example = "2023.08.12")
-        LocalDate startAt,
-        @Schema(example = "5")
-        Integer totalRoundCount,
-        @Schema(example = "1w")
-        String periodOfRound,
         @Schema(example = "3")
         Integer numberOfCurrentMembers,
         @Schema(example = "4")

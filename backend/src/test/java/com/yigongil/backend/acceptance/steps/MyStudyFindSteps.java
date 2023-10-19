@@ -4,7 +4,6 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.response.MyStudyResponse;
 import io.cucumber.java.en.Then;
@@ -16,23 +15,21 @@ import org.springframework.http.HttpHeaders;
 
 public class MyStudyFindSteps {
 
-    private final ObjectMapper objectMapper;
     private final SharedContext sharedContext;
 
-    public MyStudyFindSteps(ObjectMapper objectMapper, SharedContext sharedContext) {
-        this.objectMapper = objectMapper;
+    public MyStudyFindSteps(SharedContext sharedContext) {
         this.sharedContext = sharedContext;
     }
 
     @When("{string}의 모든 스터디를 조회한다.")
     public void 나의_스터디_조회(String githubId) {
-        Object memberId = sharedContext.getParameter(githubId);
+        String memberToken = sharedContext.getToken(githubId);
 
         ExtractableResponse<Response> response = given().log()
                                                         .all()
-                                                        .header(HttpHeaders.AUTHORIZATION, memberId)
+                                                        .header(HttpHeaders.AUTHORIZATION, memberToken)
                                                         .when()
-                                                        .get("/v1/studies/my")
+                                                        .get("/studies/my")
                                                         .then().log().all()
                                                         .extract();
         sharedContext.setResponse(response);

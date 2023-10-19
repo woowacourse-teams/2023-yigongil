@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/v1/login")
+@RequestMapping("/login")
 @RestController
 public class LoginController implements LoginApi {
 
@@ -26,6 +26,11 @@ public class LoginController implements LoginApi {
     public ResponseEntity<TokenResponse> createMemberToken(@RequestParam String code) {
         TokenResponse response = authService.login(code);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/tokens/validate")
+    public ResponseEntity<Void> validateToken() {
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/tokens/refresh")

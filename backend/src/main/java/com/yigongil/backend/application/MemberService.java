@@ -50,8 +50,8 @@ public class MemberService {
                 member.getProfileImageUrl(),
                 studyService.calculateSuccessRate(member),
                 calculateNumberOfSuccessRounds(member),
-                99, // TODO: 2023/07/27 티어 진행률은 추후 티어 진행 알고리즘 회의 후 추가
-                member.getTier(),
+                member.calculateProgress(),
+                member.getTier().getOrder(),
                 member.getIntroduction(),
                 finishedStudyResponses
         );
@@ -71,9 +71,6 @@ public class MemberService {
                 study.getId(),
                 study.getName(),
                 study.calculateAverageTier(),
-                study.getStartAt().toLocalDate(),
-                study.getTotalRoundCount(),
-                study.getPeriodUnit().toStringFormat(study.getPeriodOfRound()),
                 study.sizeOfCurrentMembers(),
                 study.getNumberOfMaximumMembers(),
                 studyMember.isSuccess()
@@ -89,7 +86,7 @@ public class MemberService {
         return (int) studies.stream()
                             .map(Study::getRounds)
                             .flatMap(List::stream)
-                            .filter(round -> round.isNecessaryToDoDone(member))
+                            .filter(round -> round.isMustDoDone(member))
                             .count();
     }
 
@@ -100,7 +97,7 @@ public class MemberService {
 
     @Transactional
     public void delete(Member member) {
-        member.exit();
+        memberRepository.delete(member);
     }
 
     @Transactional(readOnly = true)
