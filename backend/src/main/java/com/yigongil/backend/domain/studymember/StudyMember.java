@@ -3,6 +3,7 @@ package com.yigongil.backend.domain.studymember;
 import com.yigongil.backend.domain.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.Study;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -95,5 +96,24 @@ public class StudyMember extends BaseEntity {
 
     public void failStudy() {
         this.studyResult = StudyResult.FAIL;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof StudyMember studyMember)) {
+            return false;
+        }
+        if (id == null || studyMember.getId() == null) {
+            return false;
+        }
+        return id.equals(studyMember.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
