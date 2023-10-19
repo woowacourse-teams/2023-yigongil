@@ -294,11 +294,21 @@
     <string name="thread_must_do_bottom_sheet_fragment_main_button_study_quit">스터디 탈퇴하기</string>
     <string name="thread_must_do_bottom_sheet_fragment_main_button_study_end">스터디 종료하기</string>
     <string name="thread_must_do_bottom_sheet_fragment_must_do_content_hint">Must Do 내용을 입력해주세요.</string>
+    <string name="thread_must_do_bottom_sheet_fragment_must_do_content_hint_not_study_master">Must Do가 아직 정해지지 않았어요.</string>
     <string name="thread_must_do_bottom_sheet_fragment_must_do_title">Must Do</string>
     <string name="thread_must_do_bottom_sheet_fragment_previous_button_description">이전 주차 버튼</string>
     <string name="thread_must_do_bottom_sheet_fragment_next_button_description">다음 주차 버튼</string>
     <string name="thread_must_do_bottom_sheet_fragment_close_button_description">닫기 버튼</string>
     <string name="thread_must_do_bottom_sheet_fragment_must_do_edit_button_description">Must Do 수정하기 버튼</string>
     <string name="thread_must_do_bottom_sheet_fragment_must_do_edit_done_button_description">Must Do 수정 완료 버튼</string>
+
+    <!-- 스레드 경고 다이얼로그 -->
+    <string name="thread_warning_dialog_title_quit">스터디 탈퇴</string>
+    <string name="thread_warning_dialog_title_end">스터디 종료</string>
+    <string name="thread_warning_dialog_content_quit">정말로 스터디를 탈퇴하실 건가요?\n<b>그동안 스터디를 하며 쌓아온 잔디 씨앗(경험치)은 사라지게 돼요.</b></string>
+    <string name="thread_warning_dialog_content_end">이만 스터디를 종료할까요?\n<b>스터디는 추후에 재시작할 수 없어요.</b></string>
+    <string name="thread_warning_dialog_accept_quit">탈퇴하기</string>
+    <string name="thread_warning_dialog_accept_end">종료하기</string>
+    <string name="thread_warning_dialog_cancel">취소하기</string>
 
 </resources>
