@@ -44,7 +44,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            debuggable true
+            debuggable false
             shrinkResources true
 
             buildConfigField "String", "TEAM201_BASE_URL", properties["BASE_URL"]
