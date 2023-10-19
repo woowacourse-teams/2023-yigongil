@@ -1,12 +1,15 @@
 package com.created.team201.data.repository
 
+import android.util.Log
 import com.created.domain.model.Feeds
 import com.created.domain.model.MustDoCertification
+import com.created.domain.model.WeeklyMustDo
 import com.created.domain.repository.ThreadRepository
 import com.created.team201.data.mapper.toDomain
 import com.created.team201.data.mapper.toFeeds
 import com.created.team201.data.remote.api.ThreadService
 import com.created.team201.data.remote.request.FeedRequestDto
+import com.created.team201.data.remote.request.MustDoContentRequestDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +18,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class DefaultThreadRepository @Inject constructor(
-    private val threadService: ThreadService
+    private val threadService: ThreadService,
 ) : ThreadRepository {
 
     override suspend fun getMustDoCertification(studyId: Long): MustDoCertification {
@@ -37,8 +40,9 @@ class DefaultThreadRepository @Inject constructor(
         threadService.postFeeds(
             studyId,
             FeedRequestDto(
-                content = content, imageUrl = image
-            )
+                content = content,
+                imageUrl = image,
+            ),
         )
     }
 
@@ -50,7 +54,20 @@ class DefaultThreadRepository @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun getMustDo(studyId: Long) {
-        TODO("Not yet implemented")
+    override suspend fun getWeeklyMustDo(studyId: Long, weekNumber: Int): List<WeeklyMustDo> {
+        return threadService.getMustDos(studyId, weekNumber).map { it.toDomain() }
+    }
+
+    override suspend fun putMustDo(roundId: Long, content: String) {
+        Log.d("bandal", "putMustDo: $roundId $content")
+        threadService.putMustDo(roundId, MustDoContentRequestDto(content))
+    }
+
+    override suspend fun endStudy(studyId: Long) {
+        threadService.endStudy(studyId)
+    }
+
+    override suspend fun quitStudy(studyId: Long) {
+        threadService.quitStudy(studyId)
     }
 }
