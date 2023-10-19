@@ -28,6 +28,9 @@ class CertificationCheckActivity :
 
     private fun setupBinding() {
         binding.lifecycleOwner = this
+        binding.ivCertificationCheckCloseButton.setOnClickListener {
+            finish()
+        }
     }
 
     private fun setupMemberCertification() {
