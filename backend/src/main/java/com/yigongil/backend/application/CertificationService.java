@@ -4,6 +4,7 @@ import com.yigongil.backend.domain.certification.Certification;
 import com.yigongil.backend.domain.certification.CertificationRepository;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.Study;
+import com.yigongil.backend.exception.NoCertificationException;
 import com.yigongil.backend.request.CertificationCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,12 +32,8 @@ public class CertificationService {
     }
 
     @Transactional(readOnly = true)
-    public Certification findById(Long id) {
-        return certificationRepository.findById(id);
-    }
-
-    @Transactional(readOnly = true)
     public Certification findByRoundIdAndMemberId(Long roundId, Long memberId) {
-        return certificationRepository.findByRoundIdAndAuthorId(roundId, memberId);
+        return certificationRepository.findByRoundIdAndAuthorId(roundId, memberId)
+                                      .orElseThrow(() -> new NoCertificationException("인증을 찾을 수 없습니다", String.valueOf(memberId)));
     }
 }
