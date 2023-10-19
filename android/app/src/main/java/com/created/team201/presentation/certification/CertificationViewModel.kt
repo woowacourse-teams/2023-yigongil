@@ -35,13 +35,10 @@ class CertificationViewModel @Inject constructor(
             _uiState.value = CertificationUiState.Failure(content = uiState.value.content)
             return
         }
-        viewModelScope.launch {
-            postImage(file)
-            postCertification(studyId)
-        }
+        postImage(file, studyId)
     }
 
-    private fun postImage(file: File) {
+    private fun postImage(file: File, studyId: Long) {
         viewModelScope.launch {
             certificationRepository.postImage(file)
                 .onSuccess { url ->
@@ -50,6 +47,7 @@ class CertificationViewModel @Inject constructor(
                             CertificationUiState.Failure(content = uiState.value.content)
                     } else {
                         _uiState.value = CertificationUiState.getState(url, uiState.value.content)
+                        postCertification(studyId)
                     }
                 }.onFailure {
                     _uiState.value = CertificationUiState.Failure(content = uiState.value.content)

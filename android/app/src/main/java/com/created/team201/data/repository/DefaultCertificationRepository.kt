@@ -2,7 +2,6 @@ package com.created.team201.data.repository
 
 import com.created.domain.model.Certification
 import com.created.domain.model.MemberCertification
-import com.created.domain.model.response.NetworkResponse
 import com.created.domain.repository.CertificationRepository
 import com.created.team201.data.mapper.toDomain
 import com.created.team201.data.mapper.toRequestDto
@@ -25,7 +24,6 @@ class DefaultCertificationRepository @Inject constructor(
         val response = imageService.postImage(image)
         return runCatching {
             response.headers()[LOCATION_KEY]
-                ?.substringAfterLast(LOCATION_DELIMITER)
                 ?: throw IllegalStateException()
         }
     }
@@ -33,8 +31,8 @@ class DefaultCertificationRepository @Inject constructor(
     override suspend fun postCertification(
         studyId: Long,
         certification: Certification,
-    ): NetworkResponse<Unit> {
-        return certificationService.postCertification(studyId, certification.toRequestDto())
+    ) {
+        certificationService.postCertification(studyId, certification.toRequestDto())
     }
 
     override suspend fun getMemberCertification(
@@ -47,6 +45,5 @@ class DefaultCertificationRepository @Inject constructor(
 
     companion object {
         private const val LOCATION_KEY = "Location"
-        private const val LOCATION_DELIMITER = "/"
     }
 }

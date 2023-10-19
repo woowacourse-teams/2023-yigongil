@@ -1,6 +1,5 @@
 package com.created.team201.data.remote.api
 
-import com.created.domain.model.response.NetworkResponse
 import com.created.team201.data.remote.request.CertificationRequestDto
 import com.created.team201.data.remote.response.MemberCertificationResponseDto
 import retrofit2.http.Body
@@ -14,7 +13,7 @@ interface CertificationService {
     suspend fun postCertification(
         @Path("id") studyId: Long,
         @Body certification: CertificationRequestDto,
-    ): NetworkResponse<Unit>
+    )
 
     @GET("v1/studies/{studyId}/rounds/{roundId}/members/{memberId}")
     suspend fun getMemberCertification(
