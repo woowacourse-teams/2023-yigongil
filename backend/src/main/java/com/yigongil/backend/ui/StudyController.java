@@ -4,6 +4,7 @@ import com.yigongil.backend.application.StudyService;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.ProcessingStatus;
+import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.StudyStartRequest;
@@ -174,11 +175,12 @@ public class StudyController implements StudyApi {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{id}/certifications/{certificationId}")
+    @GetMapping("/{id}/rounds/{roundId}/members/{memberId}")
     public ResponseEntity<CertificationResponse> findMemberCertification(
-            @PathVariable Long certificationId
+            @PathVariable Long roundId,
+            @PathVariable Long memberId
     ) {
-        CertificationResponse response = studyService.findCertification(certificationId);
+        CertificationResponse response = studyService.findCertification(roundId, memberId);
         return ResponseEntity.ok(response);
     }
 
@@ -191,13 +193,14 @@ public class StudyController implements StudyApi {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/applied")
+    @GetMapping("/waiting")
     public ResponseEntity<List<StudyListItemResponse>> findAppliedStudies(
             @Authorization Member member,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(required = false) String search
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "APPLICANT") Role role
     ) {
-        List<StudyListItemResponse> response = studyService.findAppliedStudies(member, page, search);
+        List<StudyListItemResponse> response = studyService.findWaitingStudies(member, page, search, role);
         return ResponseEntity.ok(response);
     }
 
@@ -217,6 +220,15 @@ public class StudyController implements StudyApi {
     ) {
         List<RoundResponse> roundResponses = studyService.findRoundDetailsOfWeek(studyId, weekNumber);
         return ResponseEntity.ok(roundResponses);
+    }
+
+    @DeleteMapping("/{studyId}/exit")
+    public ResponseEntity<Void> exitStudy(
+            @Authorization Member member,
+            @PathVariable Long studyId
+    ) {
+        studyService.exit(member, studyId);
+        return ResponseEntity.ok().build();
     }
 }
 

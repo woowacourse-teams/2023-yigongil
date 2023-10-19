@@ -1,5 +1,6 @@
 package com.yigongil.backend.application;
 
+import com.yigongil.backend.domain.certification.Certification;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
@@ -87,6 +88,42 @@ public class StudyService {
         return toRecruitingStudyResponse(studies);
     }
 
+    @Transactional(readOnly = true)
+    public List<StudyListItemResponse> findWaitingStudies(Member member, int page, String search, Role role) {
+        Pageable pageable = PageStrategy.defaultPageStrategy(page);
+
+        Slice<Study> studies = studyRepository.findWaitingStudies(member.getId(), search, role, pageable);
+        return toRecruitingStudyResponse(studies);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MyStudyResponse> findMyStudies(Member member) {
+        List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndRoleNotAndStudyResult(
+                member.getId(),
+                Role.APPLICANT,
+                StudyResult.NONE
+        );
+
+        List<MyStudyResponse> response = new ArrayList<>();
+        for (StudyMember studyMember : studyMembers) {
+            Study study = studyMember.getStudy();
+            response.add(
+                    new MyStudyResponse(
+                            study.getId(),
+                            study.getProcessingStatus()
+                                 .getCode(),
+                            studyMember.getRole()
+                                       .getCode(),
+                            study.getName(),
+                            study.calculateAverageTier(),
+                            study.sizeOfCurrentMembers(),
+                            study.getNumberOfMaximumMembers()
+                    )
+            );
+        }
+        return response;
+    }
+
     @Transactional
     public void apply(Member member, Long studyId) {
         Study study = findStudyById(studyId);
@@ -114,7 +151,7 @@ public class StudyService {
     public StudyDetailResponse findStudyDetailByStudyId(Long studyId) {
         Study study = findStudyById(studyId);
 
-        List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRoleNot(studyId, Role.APPLICANT);
+        List<StudyMember> studyMembers = studyMemberRepository.findAllByStudyIdAndRoleNotAndStudyResult(studyId, Role.APPLICANT, StudyResult.NONE);
 
         return StudyDetailResponse.of(study, createStudyMemberResponses(studyMembers));
     }
@@ -165,34 +202,6 @@ public class StudyService {
         return ((double) (success * 100) / success + fail);
     }
 
-    @Transactional(readOnly = true)
-    public List<MyStudyResponse> findMyStudies(Member member) {
-        List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndRoleNotAndStudyResult(
-                member.getId(),
-                Role.APPLICANT,
-                StudyResult.NONE
-        );
-
-        List<MyStudyResponse> response = new ArrayList<>();
-        for (StudyMember studyMember : studyMembers) {
-            Study study = studyMember.getStudy();
-            response.add(
-                    new MyStudyResponse(
-                            study.getId(),
-                            study.getProcessingStatus()
-                                 .getCode(),
-                            studyMember.getRole()
-                                       .getCode(),
-                            study.getName(),
-                            study.calculateAverageTier(),
-                            study.sizeOfCurrentMembers(),
-                            study.getNumberOfMaximumMembers()
-                    )
-            );
-        }
-        return response;
-    }
-
     @Transactional
     public void deleteApplicant(Member member, Long studyId) {
         StudyMember applicant = findApplicantByMemberIdAndStudyId(member.getId(), studyId);
@@ -220,15 +229,10 @@ public class StudyService {
 
     @Transactional
     public void start(Member member, Long studyId, StudyStartRequest request) {
-        deleteLeftApplicants(studyId);
         List<DayOfWeek> meetingDaysOfTheWeek = createDayOfWeek(request.meetingDaysOfTheWeek());
 
         Study study = findStudyById(studyId);
         study.start(member, meetingDaysOfTheWeek, LocalDateTime.now());
-    }
-
-    private void deleteLeftApplicants(final Long studyId) {
-        studyMemberRepository.deleteAllByStudyIdAndRole(studyId, Role.APPLICANT);
     }
 
     private List<DayOfWeek> createDayOfWeek(List<String> daysOfTheWeek) {
@@ -273,8 +277,9 @@ public class StudyService {
     }
 
     @Transactional(readOnly = true)
-    public CertificationResponse findCertification(Long certificationId) {
-        return CertificationResponse.from(certificationService.findById(certificationId));
+    public CertificationResponse findCertification(Long roundId, Long memberId) {
+        Certification certification = certificationService.findByRoundIdAndMemberId(roundId, memberId);
+        return CertificationResponse.from(certification);
     }
 
     @Transactional(readOnly = true)
@@ -283,13 +288,6 @@ public class StudyService {
                           .stream()
                           .map(FeedPostResponse::from)
                           .toList();
-    }
-
-    public List<StudyListItemResponse> findAppliedStudies(Member member, int page, String search) {
-        Pageable pageable = PageStrategy.defaultPageStrategy(page);
-
-        Slice<Study> studies = studyRepository.findStudiesApplied(member.getId(), search, Role.APPLICANT, pageable);
-        return toRecruitingStudyResponse(studies);
     }
 
     private List<StudyListItemResponse> toRecruitingStudyResponse(Slice<Study> studies) {
@@ -310,5 +308,11 @@ public class StudyService {
         return roundsOfWeek.stream()
                            .map(RoundResponse::from)
                            .toList();
+    }
+
+    @Transactional
+    public void exit(Member member, Long studyId) {
+        Study study = findStudyById(studyId);
+        study.exit(member);
     }
 }

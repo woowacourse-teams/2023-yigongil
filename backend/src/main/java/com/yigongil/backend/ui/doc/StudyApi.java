@@ -243,7 +243,8 @@ public interface StudyApi {
     @SecurityRequirement(name = "token")
     @Operation(summary = "스터디 멤버 단일 인증 게시글 조회")
     ResponseEntity<CertificationResponse> findMemberCertification(
-            @Parameter(description = "인증 게시글 id") Long certificationId
+            @Parameter(description = "인증 게시 회차 id") Long roundId,
+            @Parameter(description = "작성자 id") Long memberId
     );
 
     @ApiResponses(

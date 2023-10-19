@@ -69,6 +69,7 @@ dependencies {
     // aws
     implementation platform('software.amazon.awssdk:bom:2.20.56')
     implementation 'software.amazon.awssdk:cloudwatch'
+    implementation 'software.amazon.awssdk:s3'
 
     // queryDsl-jpa
     implementation 'com.querydsl:querydsl-jpa:5.0.0'
@@ -83,5 +84,3 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
-

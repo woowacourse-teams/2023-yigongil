@@ -76,6 +76,10 @@ public class StudyMember extends BaseEntity {
         return this.role == Role.STUDY_MEMBER || isMaster();
     }
 
+    public boolean isApplicant() {
+        return this.role == Role.APPLICANT;
+    }
+
     public boolean isMaster() {
         return this.role == Role.MASTER;
     }
@@ -87,5 +91,9 @@ public class StudyMember extends BaseEntity {
         int totalExperience = successfulRoundCount * (defaultRoundExperience + additionalExperienceOfPeriodLength);
         member.addExperience(totalExperience);
         this.studyResult = StudyResult.SUCCESS;
+    }
+
+    public void failStudy() {
+        this.studyResult = StudyResult.FAIL;
     }
 }
