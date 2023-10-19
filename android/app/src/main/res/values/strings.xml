@@ -47,6 +47,7 @@
 
     <!--홈 탭-->
     <string name="home_study_list_must_do">Must Do</string>
+    <string name="hom_study_list_must_do_default_message">Must Do를 아직 등록하지 않았어요!</string>
     <string name="home_study_list_guide">Must Do를 인증하면 잔디씨앗을 드려요! \n스터디를 완주하면 잔디를 심어드려요!</string>
     <string name="home_no_study">참여중인 스터디가 없어요!\n스터디를 개설/참여 해볼까요?</string>
     <string name="home_study_list_date">D - %d</string>
@@ -115,6 +116,7 @@
     <string name="study_detail_notify_invalid_study">스터디를 찾을 수 없습니다.</string>
     <string name="study_detail_notify_cant_participant">더는 참가할 수 없어요</string>
     <string name="study_detail_not_yet">아직 준비중입니다</string>
+    <string name="study_detail_toast_study_start_failed">스터디 시작이 실패했습니다</string>
     <string name="item_study_detail_deleted_user_description">탈퇴한 유저에요</string>
     <string name="item_study_detail_study_success_rate">스터디 성공률 %d%%</string>
 
