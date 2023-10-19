@@ -156,6 +156,7 @@ public class Round extends BaseEntity {
         int doneCount = (int) roundOfMembers.stream()
                                             .filter(RoundOfMember::isDone)
                                             .count();
+        // TODO: 2023/10/19 잔디는 진행도가 아니다
 
         return doneCount * 100 / roundOfMembers.size();
     }

@@ -222,6 +222,7 @@ public class Study extends BaseEntity {
         deleteLeftApplicant();
 
         this.processingStatus = ProcessingStatus.PROCESSING;
+        this.meetingDaysCountPerWeek = daysOfTheWeek.size();
         initializeMeetingDaysOfTheWeek(daysOfTheWeek);
         initializeRounds(startAt.toLocalDate());
     }
@@ -418,6 +419,13 @@ public class Study extends BaseEntity {
     }
 
     private StudyMember findStudyMemberBy(Member member) {
+        return studyMembers.stream()
+                           .filter(studyMember -> studyMember.getMember().equals(member))
+                           .findAny()
+                           .orElseThrow(() -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", member.getGithubId()));
+    }
+
+    public StudyMember getStudyMemberByMember(Member member) {
         return studyMembers.stream()
                            .filter(studyMember -> studyMember.getMember().equals(member))
                            .findAny()
