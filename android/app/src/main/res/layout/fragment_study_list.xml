@@ -98,7 +98,7 @@
                     android:text="@string/study_list_chip_waiting"
                     android:textColor="@color/chip_text_color_checked_waiting"
                     app:chipBackgroundColor="@color/chip_color_checked_waiting"
-                    app:studyListFilter="@{filter.WAITING}" />
+                    app:studyListFilter="@{filter.WAITING_APPLICANT}" />
 
                 <com.created.team201.presentation.studyList.CustomChip
                     android:id="@+id/chip_study_list_accept"
@@ -108,7 +108,7 @@
                     android:text="@string/study_list_chip_accept"
                     android:textColor="@color/chip_text_color_checked_accepted"
                     app:chipBackgroundColor="@color/chip_color_checked_accpted"
-                    app:studyListFilter="@{filter.ACCEPTED}" />
+                    app:studyListFilter="@{filter.WAITING_MEMBER}" />
 
             </com.google.android.material.chip.ChipGroup>
 

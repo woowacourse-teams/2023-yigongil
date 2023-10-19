@@ -187,7 +187,7 @@ class StudyDetailViewModel @Inject constructor(
 
     private fun Role.toStudyDetailState(canStartStudy: Boolean): StudyDetailState = when (this) {
         Role.MASTER -> StudyDetailState.Master(canStartStudy)
-        Role.MEMBER -> StudyDetailState.Member
+        Role.STUDY_MEMBER -> StudyDetailState.Member
         Role.APPLICANT -> StudyDetailState.Applicant
         Role.NOTHING -> StudyDetailState.Nothing(isFullMember.value)
         Role.GUEST -> StudyDetailState.Guest(isFullMember.value)

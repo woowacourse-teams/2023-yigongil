@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.created.domain.model.Page
+import com.created.domain.model.Role
 import com.created.domain.repository.StudyListRepository
 import com.created.team201.presentation.studyList.model.StudyListFilter
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel
@@ -85,11 +86,10 @@ class StudyListViewModel @Inject constructor(
 
     fun refreshPage() {
         page = Page()
-        _studySummaries.value = listOf()
-        if (filterStatus == StudyListFilter.WAITING) {
-            loadAppliedPage()
-        } else {
-            loadPage()
+        _studySummaries.value = emptyList()
+        when (filterStatus) {
+            StudyListFilter.WAITING_APPLICANT, StudyListFilter.WAITING_MEMBER -> loadAppliedPage()
+            else -> loadPage()
         }
     }
 
@@ -116,7 +116,8 @@ class StudyListViewModel @Inject constructor(
 
     fun loadFilteredPage(filter: StudyListFilter) {
         filterStatus = filter
-        _isGuestMode.value = (filterStatus == StudyListFilter.WAITING) && isGuest
+        _isGuestMode.value =
+            ((filterStatus == StudyListFilter.WAITING_APPLICANT) or (filterStatus == StudyListFilter.WAITING_MEMBER)) and isGuest
         refreshPage()
     }
 
@@ -128,18 +129,32 @@ class StudyListViewModel @Inject constructor(
         }
         viewModelScope.launch {
             runCatching {
-                studyListRepository.getAppliedStudyList(recentSearchWord)
+                val waitingRole = getWaitingRole(filterStatus)
+                studyListRepository.getAppliedStudyList(recentSearchWord, waitingRole)
             }.onSuccess {
                 if (it.isNotEmpty()) {
                     _studySummaries.value = it.toUiModel()
                     return@launch
                 }
                 setNotFoundStudies()
+            }.onFailure {
             }
         }
     }
 
     fun updateIsGuest(isGuest: Boolean) {
         this.isGuest = isGuest
+    }
+
+    private fun getWaitingRole(filterStatus: StudyListFilter): Role {
+        return when (filterStatus) {
+            StudyListFilter.WAITING_APPLICANT -> Role.APPLICANT
+            StudyListFilter.WAITING_MEMBER -> Role.STUDY_MEMBER
+            else -> throw IllegalArgumentException(NOT_WAITING_FILTER_STATE_ERROR)
+        }
+    }
+
+    companion object {
+        private const val NOT_WAITING_FILTER_STATE_ERROR = "대기중 스터디가 아닙니다."
     }
 }
