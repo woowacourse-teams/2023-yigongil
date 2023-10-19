@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.viewModels
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsIntent.SHARE_STATE_OFF
@@ -20,6 +21,8 @@ import com.created.team201.presentation.login.LoginActivity
 import com.created.team201.presentation.setting.adapter.SettingAdapter
 import com.created.team201.presentation.setting.model.SettingType
 import com.created.team201.presentation.setting.model.SettingUiModel
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.UpdateAvailability
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -35,15 +38,9 @@ class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activit
         object : SettingClickListener {
             override fun onClick(itemId: Long) {
                 when (SettingType.valueOf(itemId)) {
-                    SettingType.NOTIFICATION -> {}
-                    SettingType.ACCOUNT -> {
-                        navigateToAccountSetting()
-                    }
-
-                    SettingType.POLICY -> {
-                        navigateToPolicy()
-                    }
-
+                    SettingType.NOTIFICATION -> Unit
+                    SettingType.ACCOUNT -> navigateToAccountSetting()
+                    SettingType.POLICY -> navigateToPolicy()
                     SettingType.LOGOUT -> {
                         removeDialog()
                         showDialog(
@@ -69,6 +66,7 @@ class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activit
         super.onCreate(savedInstanceState)
 
         initActionBar()
+        initVersionInformation()
         initSettingRecyclerView()
     }
 
@@ -79,9 +77,24 @@ class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activit
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    private fun initSettingRecyclerView() {
-        binding.rvSetting.hasFixedSize()
+    private fun initVersionInformation() {
+        binding.tvSettingVersion.text = BuildConfig.VERSION_NAME
 
+        val appUpdateManager = AppUpdateManagerFactory.create(this)
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                binding.tvSettingVersionUpdate.visibility = View.VISIBLE
+                binding.clSettingVersion.setOnClickListener {
+                    navigateToPlayStore()
+                }
+            } else {
+                binding.clSettingVersion.setOnClickListener { }
+                binding.tvSettingVersionUpdate.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun initSettingRecyclerView() {
         val decoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         ContextCompat.getDrawable(this, R.drawable.divider_recyclerview_line)?.let {
             decoration.setDrawable(it)
@@ -131,6 +144,15 @@ class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activit
             .launchUrl(this, Uri.parse(BuildConfig.TEAM201_POLICY))
     }
 
+    private fun navigateToPlayStore() {
+        startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse(URI_MARKET_FORMAT.format(packageName)),
+            ),
+        )
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
             android.R.id.home -> {
@@ -143,6 +165,7 @@ class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activit
 
     companion object {
         private const val TAG_DIALOG_LOGOUT = "TAG_DIALOG_LOGOUT"
+        private const val URI_MARKET_FORMAT = "market://details?id=%s"
 
         fun getIntent(context: Context): Intent =
             Intent(context, SettingActivity::class.java).also {

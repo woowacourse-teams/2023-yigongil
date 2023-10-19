@@ -8,6 +8,8 @@ import android.view.MotionEvent
 import android.view.MotionEvent.ACTION_DOWN
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.annotation.IdRes
 import androidx.fragment.app.Fragment
@@ -36,8 +38,25 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setBackPressedDispatcher()
         setObserveGuestRefreshState()
         setBottomNavigationView()
+    }
+
+    private fun setBackPressedDispatcher() {
+        var backPressedTime = 0L
+        onBackPressedDispatcher.addCallback {
+            if ((System.currentTimeMillis() - backPressedTime) > 3000L) {
+                backPressedTime = System.currentTimeMillis()
+                Toast.makeText(
+                    this@MainActivity,
+                    getString(R.string.main_toast_back_pressed),
+                    Toast.LENGTH_SHORT,
+                ).show()
+            } else {
+                finish()
+            }
+        }
     }
 
     private fun setObserveGuestRefreshState() {

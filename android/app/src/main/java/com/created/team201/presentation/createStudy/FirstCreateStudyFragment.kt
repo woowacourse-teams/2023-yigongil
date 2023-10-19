@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.created.team201.R
 import com.created.team201.databinding.FragmentFirstCreateStudyBinding
 import com.created.team201.presentation.common.BindingFragment
@@ -32,7 +34,6 @@ class FirstCreateStudyFragment :
         binding.viewModel = createStudyViewModel
         binding.onInputClickListener = ::setOnInputClick
     }
-
 
     private fun setOnInputClick(tag: String) {
         removeAllFragment()
@@ -68,9 +69,11 @@ class FirstCreateStudyFragment :
     }
 
     private fun setupCollectEnableNext() {
-        lifecycleScope.launch {
-            createStudyViewModel.isEnableFirstCreateStudyNext.collect { isEnable ->
-                binding.tvFirstCreateStudyBtnNext.isEnabled = isEnable
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                createStudyViewModel.isEnableFirstCreateStudyNext.collect { isEnable ->
+                    binding.tvFirstCreateStudyBtnNext.isEnabled = isEnable
+                }
             }
         }
     }

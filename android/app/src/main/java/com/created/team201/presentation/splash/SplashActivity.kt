@@ -64,7 +64,7 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
     }
 
     private fun observeAppUpdateInformation() {
-        splashViewModel.appUpdateInformation.observe(this) { appUpdateInformation ->
+        splashViewModel.appUpdateInformation.observe(this@SplashActivity) { appUpdateInformation ->
             with(com.created.team201.presentation.splash.model.AppUpdateType) {
                 showInAppUpdateDialog(
                     appUpdateType = from(appUpdateInformation.shouldUpdate),
