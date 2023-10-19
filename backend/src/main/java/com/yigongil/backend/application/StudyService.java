@@ -221,15 +221,10 @@ public class StudyService {
 
     @Transactional
     public void start(Member member, Long studyId, StudyStartRequest request) {
-        deleteLeftApplicants(studyId);
         List<DayOfWeek> meetingDaysOfTheWeek = createDayOfWeek(request.meetingDaysOfTheWeek());
 
         Study study = findStudyById(studyId);
         study.start(member, meetingDaysOfTheWeek, LocalDateTime.now());
-    }
-
-    private void deleteLeftApplicants(final Long studyId) {
-        studyMemberRepository.deleteAllByStudyIdAndRole(studyId, Role.APPLICANT);
     }
 
     private List<DayOfWeek> createDayOfWeek(List<String> daysOfTheWeek) {
