@@ -230,5 +230,11 @@ public class StudyController implements StudyApi {
         studyService.exit(member, studyId);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/created")
+    public ResponseEntity<List<StudyListItemResponse>> findAllStudiesCreated(@Authorization Member member) {
+        List<StudyListItemResponse> response = studyService.findAllStudiesCreatedByMember(member);
+        return ResponseEntity.ok(response);
+    }
 }
 

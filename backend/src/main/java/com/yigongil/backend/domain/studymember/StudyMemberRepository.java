@@ -15,14 +15,8 @@ public interface StudyMemberRepository extends Repository<StudyMember, Long> {
     @EntityGraph(attributePaths = "member")
     List<StudyMember> findAllByStudyIdAndRole(Long studyId, Role role);
 
-    @EntityGraph(attributePaths = "member")
-    List<StudyMember> findAllByStudyId(Long studyId);
-
     @EntityGraph(attributePaths = "study")
     List<StudyMember> findAllByMemberId(Long memberId);
-
-    @EntityGraph(attributePaths = "member")
-    List<StudyMember> findAllByStudyIdAndRoleNot(Long studyId, Role role);
 
     @EntityGraph(attributePaths = "member")
     List<StudyMember> findAllByStudyIdAndRoleNotAndStudyResult(Long studyId, Role role, StudyResult studyResult);
@@ -30,11 +24,7 @@ public interface StudyMemberRepository extends Repository<StudyMember, Long> {
     @EntityGraph(attributePaths = "study")
     List<StudyMember> findAllByMemberIdAndRoleNotAndStudyResult(Long memberId, Role role, StudyResult studyResult);
 
-    boolean existsByStudyIdAndMemberId(Long studyId, Long memberId);
-
     void delete(StudyMember studyMember);
 
     Long countByMemberIdAndStudyResult(Long memberId, StudyResult studyResult);
-
-    void deleteAllByStudyIdAndRole(Long studyId, Role role);
 }

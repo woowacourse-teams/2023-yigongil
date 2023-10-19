@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -314,5 +315,10 @@ public class StudyService {
     public void exit(Member member, Long studyId) {
         Study study = findStudyById(studyId);
         study.exit(member);
+    }
+
+    public List<StudyListItemResponse> findAllStudiesCreatedByMember(Member member) {
+        List<Study> studies = studyRepository.findAllByMasterIdAndProcessingStatus(member.getId(), ProcessingStatus.RECRUITING, Role.MASTER);
+        return toRecruitingStudyResponse(new SliceImpl<>(studies));
     }
 }
