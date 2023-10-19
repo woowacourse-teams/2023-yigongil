@@ -32,7 +32,6 @@ class SplashViewModel @Inject constructor(
     private val _onBoardingDoneState: MutableLiveData<OnBoardingDoneState> = MutableLiveData()
     val onBoardingDoneState: LiveData<OnBoardingDoneState> get() = _onBoardingDoneState
 
-
     fun getAppUpdateInformation(versionCode: Int) {
         splashRepository.getAppUpdateInformation(versionCode) { appUpdateInformation ->
             _appUpdateInformation.postValue(appUpdateInformation)

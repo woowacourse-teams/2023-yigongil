@@ -1,0 +1,5 @@
+<paths>
+    <cache-path
+        name="camera_images"
+        path="./" />
+</paths>

@@ -3,22 +3,31 @@ package com.created.team201.presentation.studyThread.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.created.domain.model.MustDo
 import com.created.team201.databinding.ItemThreadMustDoBinding
-import com.created.team201.presentation.studyThread.model.MustDoRecord
 
 class MustDoViewHolder(
-    private val binding: ItemThreadMustDoBinding
+    private val binding: ItemThreadMustDoBinding,
+    onMemberCertificationClick: (Long) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(item: MustDoRecord) {}
+
+    init {
+        binding.onMemberCertificationClick = onMemberCertificationClick
+    }
+
+    fun bind(item: MustDo) {
+        binding.item = item
+    }
 
     companion object {
-        fun from(parent: ViewGroup): MustDoViewHolder =
+        fun from(parent: ViewGroup, onMemberCertificationClick: (Long) -> Unit): MustDoViewHolder =
             MustDoViewHolder(
                 ItemThreadMustDoBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
-                    false
+                    false,
                 ),
+                onMemberCertificationClick,
             )
     }
 }

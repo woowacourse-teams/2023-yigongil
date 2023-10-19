@@ -6,9 +6,11 @@ import com.created.team201.presentation.studyList.model.StudyListFilter
 import com.google.android.material.chip.Chip
 
 class CustomChip(context: Context, attrs: AttributeSet) : Chip(context, attrs) {
-    lateinit var filter: StudyListFilter
+    private lateinit var _filter: StudyListFilter
+    val filter: StudyListFilter
+        get() = _filter
 
     fun setFilterState(filter: StudyListFilter) {
-        this.filter = filter
+        _filter = filter
     }
 }

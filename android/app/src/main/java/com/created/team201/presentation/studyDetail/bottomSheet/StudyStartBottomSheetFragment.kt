@@ -8,7 +8,6 @@ import com.created.team201.R
 import com.created.team201.databinding.FragmentStudyStartBottomSheetBinding
 import com.created.team201.presentation.common.BindingBottomSheetFragment
 import com.created.team201.presentation.studyDetail.StudyDetailViewModel
-import com.created.team201.presentation.studyThread.ThreadActivity
 
 class StudyStartBottomSheetFragment :
     BindingBottomSheetFragment<FragmentStudyStartBottomSheetBinding>(
@@ -51,7 +50,6 @@ class StudyStartBottomSheetFragment :
             binding.dowsStudyStartBottomSheetDayOfWeekSelector.getSelectedDays(),
         )
         dismiss()
-        startActivity(ThreadActivity.getIntent(requireContext(), studyId.toInt()))
     }
 
     private fun validateStudyId(studyId: Long) {

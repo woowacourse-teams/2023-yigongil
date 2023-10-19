@@ -1,6 +1,7 @@
 package com.created.team201.data.di
 
 import com.created.domain.repository.AuthRepository
+import com.created.domain.repository.CertificationRepository
 import com.created.domain.repository.CreateStudyRepository
 import com.created.domain.repository.GuestRepository
 import com.created.domain.repository.HomeRepository
@@ -12,8 +13,10 @@ import com.created.domain.repository.SettingRepository
 import com.created.domain.repository.SplashRepository
 import com.created.domain.repository.StudyDetailRepository
 import com.created.domain.repository.StudyListRepository
+import com.created.domain.repository.ThreadRepository
 import com.created.domain.repository.UpdateStudyRepository
 import com.created.team201.data.repository.DefaultAuthRepository
+import com.created.team201.data.repository.DefaultCertificationRepository
 import com.created.team201.data.repository.DefaultCreateStudyRepository
 import com.created.team201.data.repository.DefaultGuestRepository
 import com.created.team201.data.repository.DefaultHomeRepository
@@ -25,6 +28,7 @@ import com.created.team201.data.repository.DefaultSettingRepository
 import com.created.team201.data.repository.DefaultSplashRepository
 import com.created.team201.data.repository.DefaultStudyDetailRepository
 import com.created.team201.data.repository.DefaultStudyListRepository
+import com.created.team201.data.repository.DefaultThreadRepository
 import com.created.team201.data.repository.DefaultUpdateStudyRepository
 import dagger.Binds
 import dagger.Module
@@ -87,4 +91,12 @@ interface RepositoryModule {
     @Binds
     @Singleton
     fun bindDefaultUpdateStudyRepository(defaultUpdateStudyRepository: DefaultUpdateStudyRepository): UpdateStudyRepository
+
+    @Binds
+    @Singleton
+    fun bindDefaultThreadRepository(defaultThreadRepository: DefaultThreadRepository): ThreadRepository
+
+    @Binds
+    @Singleton
+    fun bindDefaultCertificationRepository(defaultCertificationRepository: DefaultCertificationRepository): CertificationRepository
 }

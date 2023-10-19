@@ -8,6 +8,9 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 dependencies {
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.7.3'
+
     // coroutine
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
 

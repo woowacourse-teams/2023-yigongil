@@ -55,6 +55,7 @@
                 android:id="@+id/cg_study_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:overScrollMode="ifContentScrolls"
                 android:paddingTop="8dp"
                 app:singleSelection="true">
 
@@ -65,8 +66,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/study_list_chip_all"
                     android:checked="true"
-                    android:textColor="@color/chip_text_color_checked_end"
-                    app:chipBackgroundColor="@color/chip_color_checked_end"
+                    android:textColor="@color/chip_text_color_checked_all"
+                    app:chipBackgroundColor="@color/chip_color_checked_all"
                     app:studyListFilter="@{filter.ALL}" />
 
                 <com.created.team201.presentation.studyList.CustomChip
@@ -97,11 +98,36 @@
                     android:text="@string/study_list_chip_waiting"
                     android:textColor="@color/chip_text_color_checked_waiting"
                     app:chipBackgroundColor="@color/chip_color_checked_waiting"
-                    app:studyListFilter="@{filter.WAITING}" />
+                    app:studyListFilter="@{filter.WAITING_APPLICANT}" />
+
+                <com.created.team201.presentation.studyList.CustomChip
+                    android:id="@+id/chip_study_list_accept"
+                    style="@style/chip_study_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/study_list_chip_accept"
+                    android:textColor="@color/chip_text_color_checked_accepted"
+                    app:chipBackgroundColor="@color/chip_color_checked_accpted"
+                    app:studyListFilter="@{filter.WAITING_MEMBER}" />
 
             </com.google.android.material.chip.ChipGroup>
 
         </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/tv_guest_information"
+            android:layout_width="0dp"
+            android:height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/pb_study_list_load"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hsv_study_list"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:textAppearance="@style/subtitle_r20"
+            android:textColor="@color/grey02_78808B"
+            app:isVisible="@{studyListViewModel.isGuestMode()}"
+            android:text="@string/guest_information_title" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srl_study_list"
@@ -112,6 +138,7 @@
             app:layout_constraintBottom_toTopOf="@id/pb_study_list_load"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:isVisible="@{!studyListViewModel.isGuestMode()}"
             app:layout_constraintTop_toBottomOf="@id/hsv_study_list">
 
             <androidx.recyclerview.widget.RecyclerView

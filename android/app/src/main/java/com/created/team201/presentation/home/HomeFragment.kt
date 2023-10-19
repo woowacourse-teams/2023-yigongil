@@ -11,7 +11,6 @@ import com.created.team201.databinding.FragmentHomeBinding
 import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.home.HomeViewModel.UserStudyState.Joined
 import com.created.team201.presentation.home.adapter.HomeAdapter
-import kotlinx.coroutines.flow.Flow
 import com.created.team201.presentation.studyThread.ThreadActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -30,12 +29,25 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         collectUiState()
     }
 
+    override fun onResume() {
+        super.onResume()
+        homeViewModel.updateUserStudy()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+
+        if (!hidden) {
+            homeViewModel.updateUserStudy()
+        }
+    }
+
     private fun setupViewModel() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = homeViewModel
     }
 
-    private fun navigateToThreadActivity(studyId: Int) {
+    private fun navigateToThreadActivity(studyId: Long) {
         startActivity(ThreadActivity.getIntent(requireContext(), studyId))
     }
 
@@ -51,5 +63,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
     private fun setupAdapter() {
         binding.rvHome.adapter = homeAdapter
+        binding.rvHome.setHasFixedSize(true)
     }
 }

@@ -51,7 +51,7 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
     private fun showInAppUpdateDialog(
         appUpdateType: com.created.team201.presentation.splash.model.AppUpdateType,
         title: String,
-        content: String
+        content: String,
     ) {
         InAppUpdateDialog(
             context = this,

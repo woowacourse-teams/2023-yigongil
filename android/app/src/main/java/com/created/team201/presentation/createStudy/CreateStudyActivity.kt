@@ -130,7 +130,7 @@ class CreateStudyActivity :
         setProgressIndicator(type)
 
         val (fragment: Fragment, isCreated: Boolean) = findFragment(
-            type
+            type,
         ) ?: createFragment(type)
 
         supportFragmentManager.commit {

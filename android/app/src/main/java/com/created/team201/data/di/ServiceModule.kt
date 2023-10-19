@@ -3,9 +3,11 @@ package com.created.team201.data.di
 import com.created.team201.data.di.qualifier.AuthRetrofit
 import com.created.team201.data.di.qualifier.DefaultRetrofit
 import com.created.team201.data.remote.api.AuthService
+import com.created.team201.data.remote.api.CertificationService
 import com.created.team201.data.remote.api.CommonStudyListService
 import com.created.team201.data.remote.api.CreateStudyService
 import com.created.team201.data.remote.api.HomeService
+import com.created.team201.data.remote.api.ImageService
 import com.created.team201.data.remote.api.MemberStudyListService
 import com.created.team201.data.remote.api.MyPageService
 import com.created.team201.data.remote.api.OnBoardingService
@@ -13,6 +15,7 @@ import com.created.team201.data.remote.api.ProfileService
 import com.created.team201.data.remote.api.ReportService
 import com.created.team201.data.remote.api.SettingService
 import com.created.team201.data.remote.api.StudyDetailService
+import com.created.team201.data.remote.api.ThreadService
 import com.created.team201.data.remote.api.UpdateStudyService
 import dagger.Module
 import dagger.Provides
@@ -84,4 +87,19 @@ object ServiceModule {
     @Provides
     fun provideSettingService(@AuthRetrofit retrofit: Retrofit): SettingService =
         retrofit.create(SettingService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideThreadService(@AuthRetrofit retrofit: Retrofit): ThreadService =
+        retrofit.create(ThreadService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideCertificationService(@AuthRetrofit retrofit: Retrofit): CertificationService =
+        retrofit.create(CertificationService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideImageService(@AuthRetrofit retrofit: Retrofit): ImageService =
+        retrofit.create(ImageService::class.java)
 }

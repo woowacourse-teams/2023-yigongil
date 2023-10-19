@@ -5,10 +5,6 @@
 
     <data>
 
-        <variable
-            name="vm"
-            type="com.created.team201.presentation.studyThread.ThreadViewModel" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,22 +27,25 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
             android:textAppearance="@style/picker_sb18"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/iv_thread_back_button"
-            app:layout_constraintEnd_toStartOf="@+id/iv_thread_more_button"
+            app:layout_constraintEnd_toStartOf="@+id/spinner_thread"
             app:layout_constraintStart_toEndOf="@+id/iv_thread_back_button"
             app:layout_constraintTop_toTopOf="@+id/iv_thread_back_button"
             tools:text="자두타먹는 스터디" />
 
-
-        <ImageView
-            android:id="@+id/iv_thread_more_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <Spinner
+            android:id="@+id/spinner_thread"
+            style="@style/text_m14"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_marginEnd="20dp"
-            android:src="@drawable/icn_more_vertical"
+            android:background="@drawable/icn_more_vertical"
+            android:overlapAnchor="false"
+            android:popupBackground="#20232B"
+            android:popupElevation="10dp"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/iv_thread_back_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_thread_back_button" />
@@ -58,6 +57,7 @@
             android:layout_marginTop="16dp"
             android:background="@color/black02_181B21"
             android:orientation="horizontal"
+            android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -70,11 +70,13 @@
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:orientation="vertical"
+            android:overScrollMode="never"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/view_thread_border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rv_must_do"
+            app:reverseLayout="true"
             tools:itemCount="2"
             tools:listitem="@layout/item_thread_comment" />
 
@@ -100,6 +102,10 @@
             android:hint="잡담 및 질답하기"
             android:inputType="text"
             android:padding="8dp"
+            android:textAppearance="@style/text_r16"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey02_78808B"
+            android:textCursorDrawable="@drawable/cursor_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iv_thread_direct_button"
             app:layout_constraintStart_toStartOf="parent" />
@@ -113,7 +119,6 @@
             app:layout_constraintBottom_toBottomOf="@+id/et_thread_input"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/et_thread_input" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.created.domain.model.Page
+import com.created.domain.model.Role
 import com.created.domain.repository.StudyListRepository
 import com.created.team201.presentation.studyList.model.StudyListFilter
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel
@@ -36,6 +37,11 @@ class StudyListViewModel @Inject constructor(
     val loadingState: LiveData<Boolean>
         get() = _loadingState
 
+    private var _isGuestMode = NonNullMutableLiveData(false)
+    val isGuestMode: NonNullLiveData<Boolean>
+        get() = _isGuestMode
+    private var isGuest = false
+
     private val _isNotFoundStudies: NonNullMutableLiveData<Boolean> = NonNullMutableLiveData(false)
     val isNotFoundStudies: NonNullLiveData<Boolean>
         get() = _isNotFoundStudies
@@ -47,7 +53,7 @@ class StudyListViewModel @Inject constructor(
         refreshPage()
     }
 
-    fun loadPage() {
+    private fun loadPage() {
         viewModelScope.launch {
             runCatching {
                 studyListRepository.getStudyList(filterStatus.name, page.index, recentSearchWord)
@@ -78,13 +84,12 @@ class StudyListViewModel @Inject constructor(
         _studySummaries.value = emptyList()
     }
 
-    fun refreshPage(isGuest: Boolean = true) {
+    fun refreshPage() {
         page = Page()
-        _studySummaries.value = listOf()
-        if (filterStatus == StudyListFilter.WAITING) {
-            loadAppliedPage(isGuest)
-        } else {
-            loadPage()
+        _studySummaries.value = emptyList()
+        when (filterStatus) {
+            StudyListFilter.WAITING_APPLICANT, StudyListFilter.WAITING_MEMBER -> loadAppliedPage()
+            else -> loadPage()
         }
     }
 
@@ -109,31 +114,47 @@ class StudyListViewModel @Inject constructor(
         recentSearchWord = searchWord
     }
 
-    fun loadFilteredPage(filter: StudyListFilter): Boolean {
-        if (filter == filterStatus) return false
+    fun loadFilteredPage(filter: StudyListFilter) {
         filterStatus = filter
+        _isGuestMode.value =
+            ((filterStatus == StudyListFilter.WAITING_APPLICANT) or (filterStatus == StudyListFilter.WAITING_MEMBER)) and isGuest
         refreshPage()
-        return true
     }
 
-    fun loadAppliedPage(isGuest: Boolean) {
-        filterStatus = StudyListFilter.WAITING
+    private fun loadAppliedPage() {
+        _isNotFoundStudies.value = false
+        _studySummaries.value = emptyList()
         if (isGuest) {
-            // 로그인이 필요한 페이지 입니다.
-            _isNotFoundStudies.value = false
-            _studySummaries.value = emptyList()
             return
         }
         viewModelScope.launch {
             runCatching {
-                studyListRepository.getAppliedStudyList(recentSearchWord)
+                val waitingRole = getWaitingRole(filterStatus)
+                studyListRepository.getAppliedStudyList(recentSearchWord, waitingRole)
             }.onSuccess {
                 if (it.isNotEmpty()) {
                     _studySummaries.value = it.toUiModel()
                     return@launch
                 }
                 setNotFoundStudies()
+            }.onFailure {
             }
         }
+    }
+
+    fun updateIsGuest(isGuest: Boolean) {
+        this.isGuest = isGuest
+    }
+
+    private fun getWaitingRole(filterStatus: StudyListFilter): Role {
+        return when (filterStatus) {
+            StudyListFilter.WAITING_APPLICANT -> Role.APPLICANT
+            StudyListFilter.WAITING_MEMBER -> Role.STUDY_MEMBER
+            else -> throw IllegalArgumentException(NOT_WAITING_FILTER_STATE_ERROR)
+        }
+    }
+
+    companion object {
+        private const val NOT_WAITING_FILTER_STATE_ERROR = "대기중 스터디가 아닙니다."
     }
 }

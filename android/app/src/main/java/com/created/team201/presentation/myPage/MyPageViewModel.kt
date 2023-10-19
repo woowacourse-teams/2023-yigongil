@@ -88,7 +88,7 @@ class MyPageViewModel @Inject constructor(
         viewModelScope.launch {
             profile.value?.let {
                 val newProfile = it.toDomain().updateProfileInformation(
-                    ProfileInformation(nickname.value.toDomain(), introduction.value)
+                    ProfileInformation(nickname.value.toDomain(), introduction.value),
                 )
                 myPageRepository.patchMyProfile(newProfile.profileInformation)
                     .onSuccess {
@@ -100,7 +100,6 @@ class MyPageViewModel @Inject constructor(
                     }.onFailure {
                         _modifyProfileState.value = State.FAIL
                     }
-
             }
         }
     }
@@ -218,11 +217,11 @@ class MyPageViewModel @Inject constructor(
     private fun ProfileInformation.toUiModel(): ProfileInformationUiModel =
         ProfileInformationUiModel(
             nickname = nickname.toUiModel(),
-            introduction = introduction
+            introduction = introduction,
         )
 
     private fun Nickname.toUiModel(): NicknameUiModel = NicknameUiModel(
-        nickname = nickname
+        nickname = nickname,
     )
 
     private fun ProfileUiModel.toDomain(): Profile = Profile(
@@ -239,11 +238,11 @@ class MyPageViewModel @Inject constructor(
     private fun ProfileInformationUiModel.toDomain(): ProfileInformation =
         ProfileInformation(
             nickname = nickname.toDomain(),
-            introduction = introduction
+            introduction = introduction,
         )
 
     private fun NicknameUiModel.toDomain(): Nickname = Nickname(
-        nickname = nickname
+        nickname = nickname,
     )
 
     companion object {

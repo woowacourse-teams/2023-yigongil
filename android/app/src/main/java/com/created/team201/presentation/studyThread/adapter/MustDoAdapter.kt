@@ -3,13 +3,14 @@ package com.created.team201.presentation.studyThread.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.created.team201.presentation.studyThread.model.MustDoRecord
+import com.created.domain.model.MustDo
 
-class MustDoAdapter : ListAdapter<MustDoRecord, MustDoViewHolder>(diffCallBack) {
+class MustDoAdapter(
+    private val onMemberCertificationClick: (Long) -> Unit,
+) : ListAdapter<MustDo, MustDoViewHolder>(diffCallBack) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MustDoViewHolder {
-        return MustDoViewHolder.from(parent)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MustDoViewHolder =
+        MustDoViewHolder.from(parent, onMemberCertificationClick)
 
     override fun onBindViewHolder(holder: MustDoViewHolder, position: Int) {
         holder.bind(getItem(position))
@@ -17,20 +18,12 @@ class MustDoAdapter : ListAdapter<MustDoRecord, MustDoViewHolder>(diffCallBack) 
 
     companion object {
         private val diffCallBack =
-            object : DiffUtil.ItemCallback<MustDoRecord>() {
-                override fun areItemsTheSame(
-                    oldItem: MustDoRecord,
-                    newItem: MustDoRecord
-                ): Boolean {
-                    return oldItem.userId == newItem.userId
-                }
+            object : DiffUtil.ItemCallback<MustDo>() {
+                override fun areItemsTheSame(oldItem: MustDo, newItem: MustDo): Boolean =
+                    oldItem.id == newItem.id
 
-                override fun areContentsTheSame(
-                    oldItem: MustDoRecord,
-                    newItem: MustDoRecord
-                ): Boolean {
-                    return oldItem == newItem
-                }
+                override fun areContentsTheSame(oldItem: MustDo, newItem: MustDo): Boolean =
+                    oldItem == newItem
             }
     }
 }
