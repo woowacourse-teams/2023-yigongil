@@ -470,4 +470,25 @@ public class StudySteps {
 
         assertThat(response.members()).map(StudyMemberResponse::id).doesNotContain(id);
     }
+
+    @Then("{string}는 {string} 스터디 구성원에 포함되어 있지않다.")
+    public void 지원자_삭제_검증(String githubId, String studyName) {
+        String token = sharedContext.getToken(githubId);
+        String studyId = (String) sharedContext.getParameter(studyName);
+
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .header(HttpHeaders.AUTHORIZATION, token)
+                                                        .when()
+                                                        .get("/studies/" + studyId)
+                                                        .then().log().all()
+                                                        .extract();
+
+        StudyDetailResponse studyDetailResponse = response.as(StudyDetailResponse.class);
+
+        Long id = sharedContext.getId(githubId);
+
+        boolean isExist = studyDetailResponse.members().stream()
+                                             .anyMatch(studyMemberResponse -> studyMemberResponse.id().equals(id));
+        assertThat(isExist).isFalse();
+    }
 }
