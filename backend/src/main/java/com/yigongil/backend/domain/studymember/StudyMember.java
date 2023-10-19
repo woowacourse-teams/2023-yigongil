@@ -76,6 +76,10 @@ public class StudyMember extends BaseEntity {
         return this.role == Role.STUDY_MEMBER || isMaster();
     }
 
+    public boolean isApplicant() {
+        return this.role == Role.APPLICANT;
+    }
+
     public boolean isMaster() {
         return this.role == Role.MASTER;
     }

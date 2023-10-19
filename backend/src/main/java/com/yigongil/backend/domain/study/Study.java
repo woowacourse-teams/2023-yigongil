@@ -219,9 +219,17 @@ public class Study extends BaseEntity {
         if (sizeOfCurrentMembers() == ONE_MEMBER) {
             throw new CannotStartException("스터디의 멤버가 한 명일 때는 시작할 수 없습니다.", id);
         }
+        deleteLeftApplicant();
+
         this.processingStatus = ProcessingStatus.PROCESSING;
         initializeMeetingDaysOfTheWeek(daysOfTheWeek);
         initializeRounds(startAt.toLocalDate());
+    }
+
+    private void deleteLeftApplicant() {
+        studyMembers.stream()
+                    .filter(StudyMember::isApplicant)
+                    .forEach(studyMember -> studyMembers.remove(studyMember));
     }
 
     private void initializeMeetingDaysOfTheWeek(List<DayOfWeek> daysOfTheWeek) {
