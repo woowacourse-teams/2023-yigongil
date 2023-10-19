@@ -83,6 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/icn_more"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/cl_member_info"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/cl_member_info" />

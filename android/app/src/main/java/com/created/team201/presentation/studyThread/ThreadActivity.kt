@@ -155,11 +155,20 @@ class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_
     }
 
     private fun showCertification() {
+        if (threadViewModel.mustDoContent.value?.isBlank() == true) {
+            showCertificationNonExistToast()
+            return
+        }
         if (threadViewModel.uiState.value !is Success) return
         when ((threadViewModel.uiState.value as Success).mustDo[MY_MUST_DO_IDX].isCertified) {
             true -> showCertificationIsDoneToast()
             false -> startActivity(CertificationActivity.getIntent(this, studyId))
         }
+    }
+
+    private fun showCertificationNonExistToast() {
+        Toast.makeText(this, R.string.certification_post_non_exist_message, Toast.LENGTH_SHORT)
+            .show()
     }
 
     private fun showCertificationIsDoneToast() {
