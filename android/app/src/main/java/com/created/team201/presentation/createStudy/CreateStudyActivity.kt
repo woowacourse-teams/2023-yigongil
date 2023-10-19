@@ -11,7 +11,9 @@ import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.created.team201.R
 import com.created.team201.databinding.ActivityCreateStudyBinding
 import com.created.team201.presentation.common.BindingActivity
@@ -84,25 +86,27 @@ class CreateStudyActivity :
     private fun setupCollectCreateStudyUiState() {
         lifecycleScope.launch {
             createStudyViewModel.createStudyUiState.collectLatest { createStudyUiState ->
-                when (createStudyUiState) {
-                    is Success -> {
-                        showToast(R.string.create_study_toast_create_study_success)
-                        startActivity(
-                            StudyDetailActivity.getIntent(
-                                this@CreateStudyActivity,
-                                createStudyUiState.studyId,
-                            ),
-                        )
+                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    when (createStudyUiState) {
+                        is Success -> {
+                            showToast(R.string.create_study_toast_create_study_success)
+                            startActivity(
+                                StudyDetailActivity.getIntent(
+                                    this@CreateStudyActivity,
+                                    createStudyUiState.studyId
+                                ),
+                            )
 
-                        finish()
+                            finish()
+                        }
+
+                        is Fail -> {
+                            showToast(R.string.create_study_toast_create_study_fail)
+                            finish()
+                        }
+
+                        is Idle -> throw IllegalArgumentException()
                     }
-
-                    is Fail -> {
-                        showToast(R.string.create_study_toast_create_study_fail)
-                        finish()
-                    }
-
-                    is Idle -> throw IllegalArgumentException()
                 }
             }
         }
@@ -114,8 +118,10 @@ class CreateStudyActivity :
 
     private fun setupCollectCreateStudyState() {
         lifecycleScope.launch {
-            createStudyViewModel.fragmentState.collect { fragmentState ->
-                showFragment(fragmentState.type)
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                createStudyViewModel.fragmentState.collect { fragmentState ->
+                    showFragment(fragmentState.type)
+                }
             }
         }
     }

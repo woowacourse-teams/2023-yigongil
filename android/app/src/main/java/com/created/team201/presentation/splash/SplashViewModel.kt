@@ -57,6 +57,8 @@ class SplashViewModel @Inject constructor(
                         } else {
                             _loginState.value = FAIL
                         }
+                    } else {
+                        _loginState.value = FAIL
                     }
                 }
 

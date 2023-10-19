@@ -19,9 +19,11 @@ class AuthInterceptor(
         val response = chain.proceed(newRequest)
 
         if (response.code == TOKEN_INVALID) {
-            Log.d(LOG_AUTH_INTERCEPTOR_TAG, "Failed because Old AccessToken")
-            response.close()
-            return putNewHeader(chain)
+            synchronized(this) {
+                Log.d(LOG_AUTH_INTERCEPTOR_TAG, "Failed because Old AccessToken")
+                response.close()
+                return putNewHeader(chain)
+            }
         }
 
         return response
