@@ -199,7 +199,7 @@ public class StudyService {
         if (success + fail == 0) {
             return 0;
         }
-        return ((double) (success * 100) / success + fail);
+        return ((double) success / (success + fail)) * 100;
     }
 
     @Transactional

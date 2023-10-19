@@ -1,10 +1,12 @@
 package com.yigongil.backend.acceptance.steps;
 
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.yigongil.backend.domain.study.ProcessingStatus;
+import com.yigongil.backend.response.MyProfileResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -72,5 +74,13 @@ public class StudyProgressStep {
         StudyDetailResponse studyDetailResponse = sharedContext.getResponse().as(StudyDetailResponse.class);
 
         assertThat(studyDetailResponse.members()).allMatch(studyMemberResponse -> studyMemberResponse.tier() == expected);
+    }
+
+    @Then("{string}의 스터디 성공률이 {int} 퍼센트이다")
+    public void 성공률_계산(String memberGIthubId, int expected) {
+        MyProfileResponse myProfileResponse = sharedContext.getResponse()
+                                                           .as(MyProfileResponse.class);
+
+        assertThat(myProfileResponse.successRate()).isEqualTo(expected);
     }
 }
