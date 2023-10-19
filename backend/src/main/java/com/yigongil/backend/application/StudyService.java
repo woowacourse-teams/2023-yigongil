@@ -87,6 +87,42 @@ public class StudyService {
         return toRecruitingStudyResponse(studies);
     }
 
+    @Transactional(readOnly = true)
+    public List<StudyListItemResponse> findWaitingStudies(Member member, int page, String search, Role role) {
+        Pageable pageable = PageStrategy.defaultPageStrategy(page);
+
+        Slice<Study> studies = studyRepository.findWaitingStudies(member.getId(), search, role, pageable);
+        return toRecruitingStudyResponse(studies);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MyStudyResponse> findMyStudies(Member member) {
+        List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndRoleNotAndStudyResult(
+                member.getId(),
+                Role.APPLICANT,
+                StudyResult.NONE
+        );
+
+        List<MyStudyResponse> response = new ArrayList<>();
+        for (StudyMember studyMember : studyMembers) {
+            Study study = studyMember.getStudy();
+            response.add(
+                    new MyStudyResponse(
+                            study.getId(),
+                            study.getProcessingStatus()
+                                 .getCode(),
+                            studyMember.getRole()
+                                       .getCode(),
+                            study.getName(),
+                            study.calculateAverageTier(),
+                            study.sizeOfCurrentMembers(),
+                            study.getNumberOfMaximumMembers()
+                    )
+            );
+        }
+        return response;
+    }
+
     @Transactional
     public void apply(Member member, Long studyId) {
         Study study = findStudyById(studyId);
@@ -163,34 +199,6 @@ public class StudyService {
             return 0;
         }
         return ((double) (success * 100) / success + fail);
-    }
-
-    @Transactional(readOnly = true)
-    public List<MyStudyResponse> findMyStudies(Member member) {
-        List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndRoleNotAndStudyResult(
-                member.getId(),
-                Role.APPLICANT,
-                StudyResult.NONE
-        );
-
-        List<MyStudyResponse> response = new ArrayList<>();
-        for (StudyMember studyMember : studyMembers) {
-            Study study = studyMember.getStudy();
-            response.add(
-                    new MyStudyResponse(
-                            study.getId(),
-                            study.getProcessingStatus()
-                                 .getCode(),
-                            studyMember.getRole()
-                                       .getCode(),
-                            study.getName(),
-                            study.calculateAverageTier(),
-                            study.sizeOfCurrentMembers(),
-                            study.getNumberOfMaximumMembers()
-                    )
-            );
-        }
-        return response;
     }
 
     @Transactional
@@ -278,13 +286,6 @@ public class StudyService {
                           .stream()
                           .map(FeedPostResponse::from)
                           .toList();
-    }
-
-    public List<StudyListItemResponse> findAppliedStudies(Member member, int page, String search) {
-        Pageable pageable = PageStrategy.defaultPageStrategy(page);
-
-        Slice<Study> studies = studyRepository.findStudiesApplied(member.getId(), search, Role.APPLICANT, pageable);
-        return toRecruitingStudyResponse(studies);
     }
 
     private List<StudyListItemResponse> toRecruitingStudyResponse(Slice<Study> studies) {
