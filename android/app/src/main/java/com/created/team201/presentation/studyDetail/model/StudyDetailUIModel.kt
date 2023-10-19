@@ -1,11 +1,13 @@
 package com.created.team201.presentation.studyDetail.model
 
+import com.created.domain.model.ProcessingStatus
 import com.created.domain.model.Role
 import com.created.domain.model.StudyDetail
 import com.created.team201.presentation.studyDetail.model.StudyMemberUIModel.Companion.toUiModel
 
 data class StudyDetailUIModel(
     val studyMasterId: Long,
+    val processingStatus: ProcessingStatus,
     val isMaster: Boolean,
     val name: String,
     val introduction: String,
@@ -20,6 +22,7 @@ data class StudyDetailUIModel(
     companion object {
         val INVALID_STUDY_DETAIL = StudyDetailUIModel(
             studyMasterId = 0,
+            processingStatus = ProcessingStatus.PROCESSING,
             isMaster = false,
             name = "",
             introduction = "",
@@ -35,6 +38,7 @@ data class StudyDetailUIModel(
         fun createFromStudyDetailRole(studyDetail: StudyDetail, role: Role): StudyDetailUIModel =
             StudyDetailUIModel(
                 studyMasterId = studyDetail.studyMasterId,
+                processingStatus = ProcessingStatus.valueOf(studyDetail.processingStatus),
                 isMaster = role == Role.MASTER,
                 name = studyDetail.name,
                 introduction = studyDetail.introduction,
