@@ -20,9 +20,12 @@ import com.created.team201.presentation.report.ReportActivity
 import com.created.team201.presentation.report.model.ReportCategory
 import com.created.team201.presentation.studyDetail.StudyDetailState.Guest
 import com.created.team201.presentation.studyDetail.StudyDetailState.Master
+import com.created.team201.presentation.studyDetail.StudyDetailViewModel.UIState.Loading
+import com.created.team201.presentation.studyDetail.StudyDetailViewModel.UIState.Success
 import com.created.team201.presentation.studyDetail.adapter.StudyParticipantsAdapter
 import com.created.team201.presentation.studyDetail.bottomSheet.StudyStartBottomSheetFragment
 import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
+import com.created.team201.presentation.studyThread.ThreadActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -209,12 +212,11 @@ class StudyDetailActivity :
     }
 
     private fun observeStartStudy() {
-        studyDetailViewModel.isStartStudy.observe(this) { isStartStudy ->
-            when (isStartStudy) {
-                true -> finish()
-                false -> Unit
-            }
-            studyDetailViewModel.isStartStudy.observe(this) { _ ->
+        studyDetailViewModel.startStudyState.observe(this) { startStudyState ->
+            when (startStudyState) {
+                Success -> navigateStudyThread()
+                Loading -> Unit
+                else -> showToast(R.string.study_detail_toast_study_start_failed)
             }
         }
     }
@@ -224,6 +226,12 @@ class StudyDetailActivity :
             binding.btnStudyDetailMain.isEnabled = cantStartStudy
         }
     }
+
+    private fun navigateStudyThread() {
+        startActivity(ThreadActivity.getIntent(this, studyId))
+        finish()
+    }
+
 
     private fun showToast(@StringRes stringRes: Int) =
         Toast.makeText(this, getString(stringRes), Toast.LENGTH_SHORT).show()
