@@ -89,6 +89,7 @@ class StudyListViewModel @Inject constructor(
         _studySummaries.value = emptyList()
         when (filterStatus) {
             StudyListFilter.WAITING_APPLICANT, StudyListFilter.WAITING_MEMBER -> loadAppliedPage()
+            StudyListFilter.CREATED -> loadCreatedPage()
             else -> loadPage()
         }
     }
@@ -116,9 +117,17 @@ class StudyListViewModel @Inject constructor(
 
     fun loadFilteredPage(filter: StudyListFilter) {
         filterStatus = filter
-        _isGuestMode.value =
-            ((filterStatus == StudyListFilter.WAITING_APPLICANT) or (filterStatus == StudyListFilter.WAITING_MEMBER)) and isGuest
+        _isGuestMode.value = isMemberFilter(filterStatus) and isGuest
         refreshPage()
+    }
+
+    private fun isMemberFilter(filterStatus: StudyListFilter): Boolean {
+        val memberFilter = arrayOf(
+            StudyListFilter.WAITING_APPLICANT,
+            StudyListFilter.WAITING_MEMBER,
+            StudyListFilter.CREATED,
+        )
+        return filterStatus in memberFilter
     }
 
     private fun loadAppliedPage() {
@@ -131,6 +140,26 @@ class StudyListViewModel @Inject constructor(
             runCatching {
                 val waitingRole = getWaitingRole(filterStatus)
                 studyListRepository.getAppliedStudyList(recentSearchWord, waitingRole)
+            }.onSuccess {
+                if (it.isNotEmpty()) {
+                    _studySummaries.value = it.toUiModel()
+                    return@launch
+                }
+                setNotFoundStudies()
+            }.onFailure {
+            }
+        }
+    }
+
+    private fun loadCreatedPage() {
+        _isNotFoundStudies.value = false
+        _studySummaries.value = emptyList()
+        if (isGuest) {
+            return
+        }
+        viewModelScope.launch {
+            runCatching {
+                studyListRepository.getCreatedStudyList()
             }.onSuccess {
                 if (it.isNotEmpty()) {
                     _studySummaries.value = it.toUiModel()

@@ -73,6 +73,7 @@
     <string name="study_list_chip_recruiting">모집중</string>
     <string name="study_list_chip_processing">진행중</string>
     <string name="study_list_chip_all">전체</string>
+    <string name="study_list_chip_created">개설한</string>
     <string name="study_list_chip_waiting">수락 대기중</string>
     <string name="study_list_chip_accept">시작 대기중</string>
     <string name="study_list_create">스터디 만들기</string>

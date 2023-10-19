@@ -24,4 +24,8 @@ class DefaultStudyListRepository @Inject constructor(
     override suspend fun getAppliedStudyList(searchWord: String?, role: Role): List<StudySummary> {
         return memberStudyListService.getAppliedStudyList(searchWord, role.name).toDomain()
     }
+
+    override suspend fun getCreatedStudyList(): List<StudySummary> {
+        return memberStudyListService.getCreatedStudyList().toDomain()
+    }
 }

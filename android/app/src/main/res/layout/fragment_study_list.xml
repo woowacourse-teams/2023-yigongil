@@ -110,6 +110,16 @@
                     app:chipBackgroundColor="@color/chip_color_checked_accpted"
                     app:studyListFilter="@{filter.WAITING_MEMBER}" />
 
+                <com.created.team201.presentation.studyList.CustomChip
+                    android:id="@+id/chip_study_list_created"
+                    style="@style/chip_study_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/study_list_chip_created"
+                    android:textColor="@color/chip_text_color_checked_created"
+                    app:chipBackgroundColor="@color/chip_color_checked_created"
+                    app:studyListFilter="@{filter.CREATED}" />
+
             </com.google.android.material.chip.ChipGroup>
 
         </HorizontalScrollView>

@@ -8,4 +8,6 @@ interface StudyListRepository {
     suspend fun getStudyList(status: String?, page: Int?, searchWord: String?): List<StudySummary>
 
     suspend fun getAppliedStudyList(searchWord: String?, role: Role): List<StudySummary>
+
+    suspend fun getCreatedStudyList(): List<StudySummary>
 }
