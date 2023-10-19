@@ -33,7 +33,7 @@ android {
         applicationId "com.created.team201"
         minSdk 26
         targetSdk 33
-        versionCode 2000201
+        versionCode 2000202
         versionName "2.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
