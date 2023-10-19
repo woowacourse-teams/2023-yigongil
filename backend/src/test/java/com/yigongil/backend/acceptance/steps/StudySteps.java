@@ -345,7 +345,22 @@ public class StudySteps {
         ExtractableResponse<Response> response = given().log().all()
                                                         .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
-                                                        .get("/studies/applied")
+                                                        .get("/studies/waiting")
+                                                        .then().log().all()
+                                                        .extract();
+
+        sharedContext.setResponse(response);
+    }
+
+    @When("{string}이 수락된 대기중 스터디 목록을 조회한다.")
+    public void 대기중_스터디_목록을_조회한다(String githubId) {
+        String token = sharedContext.getToken(githubId);
+
+        ExtractableResponse<Response> response = given().log().all()
+                                                        .param("role", "STUDY_MEMBER")
+                                                        .header(HttpHeaders.AUTHORIZATION, token)
+                                                        .when()
+                                                        .get("/studies/waiting")
                                                         .then().log().all()
                                                         .extract();
 
@@ -367,7 +382,7 @@ public class StudySteps {
                                                         .param("search", search)
                                                         .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
-                                                        .get("/studies/applied")
+                                                        .get("/studies/waiting")
                                                         .then().log().all()
                                                         .extract();
 
