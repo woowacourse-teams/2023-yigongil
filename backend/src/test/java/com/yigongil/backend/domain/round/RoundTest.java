@@ -8,12 +8,19 @@ import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NotStudyMasterException;
 import com.yigongil.backend.fixture.RoundFixture;
 import com.yigongil.backend.fixture.RoundOfMemberFixture;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
 
 
 class RoundTest {
+
+    private static final LocalDate LOCAL_DATE_OF_MONDAY = LocalDate.of(2023, 10, 9);
 
     @Nested
     class 머스트두_생성 {
@@ -107,6 +114,52 @@ class RoundTest {
 
             //then
             assertThat(result).isZero();
+        }
+    }
+
+    @Nested
+    class 남은_날짜_계산 {
+
+        @ParameterizedTest
+        @CsvSource(value = {
+                "MONDAY, 7",
+                "TUESDAY, 6",
+                "WEDNESDAY, 5",
+                "THURSDAY, 4",
+                "FRIDAY, 3",
+                "SATURDAY, 2",
+                "SUNDAY, 1"
+        })
+        void 라운드의_남은_날짜를_계산한다1(DayOfWeek dayOfWeek, int expected) {
+            //given
+            Round round = RoundFixture.아이디없는_라운드.toRoundWithCustomDayOfWeek(dayOfWeek);
+
+            //when
+            int actual = round.calculateLeftDaysFrom(LOCAL_DATE_OF_MONDAY);
+
+            //then
+            assertThat(actual).isEqualTo(expected);
+        }
+
+        @ParameterizedTest
+        @CsvSource(value = {
+            "MONDAY, 3",
+            "TUESDAY, 2",
+            "WEDNESDAY, 1",
+            "THURSDAY, 7",
+            "FRIDAY, 6",
+            "SATURDAY, 5",
+            "SUNDAY, 4"
+        })
+        void 라운드의_남은_날짜를_계산한다2(DayOfWeek dayOfWeek, int expected) {
+            //given
+            Round round = RoundFixture.아이디없는_라운드.toRoundWithCustomDayOfWeek(dayOfWeek);
+
+            //when
+            int actual = round.calculateLeftDaysFrom(LOCAL_DATE_OF_MONDAY.plusDays(3));
+
+            //then
+            assertThat(actual).isEqualTo(expected);
         }
     }
 }

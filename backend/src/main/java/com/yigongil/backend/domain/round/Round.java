@@ -193,8 +193,8 @@ public class Round extends BaseEntity {
     }
 
     public int calculateLeftDaysFrom(LocalDate date) {
-        int gap = meetingDayOfTheWeek.getDayOfWeek().getValue() - date.getDayOfWeek().getValue();
-        if (gap < 0) {
+        int gap = date.getDayOfWeek().getValue() - meetingDayOfTheWeek.getDayOfWeek().getValue();
+        if (gap <= 0) {
             return gap + DayOfWeek.values().length;
         }
         return gap;

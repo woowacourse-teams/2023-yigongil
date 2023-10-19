@@ -22,6 +22,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -225,18 +226,21 @@ public class StudySteps {
         sharedContext.setParameter("currentRoundNumber", 1);
     }
 
-    @When("{string}가 홈화면을 조회한다.")
-    public void 현재_회차를_조회한다(String githubId) {
-        String token = sharedContext.getToken(githubId);
+    @Given("{string}가 이름이 {string}인 스터디를 오늘과 같은 요일에 진행되도록 하여 시작한다.")
+    public void 스터디_시작2(String memberGithubId, String studyName) {
+        String token = sharedContext.getToken(memberGithubId);
+        String studyId = (String) sharedContext.getParameter(studyName);
+        StudyStartRequest request = new StudyStartRequest(List.of(LocalDate.now().getDayOfWeek().name()));
 
-        ExtractableResponse<Response> response = given().log().all()
-                                                        .header(HttpHeaders.AUTHORIZATION, token)
-                                                        .when()
-                                                        .get("/home")
-                                                        .then().log().all()
-                                                        .extract();
+        given().log().all()
+               .header(HttpHeaders.AUTHORIZATION, token)
+               .contentType(MediaType.APPLICATION_JSON_VALUE)
+               .body(request)
+               .when()
+               .patch("/studies/" + studyId + "/start")
+               .then().log().all();
 
-        sharedContext.setResponse(response);
+        sharedContext.setParameter("currentRoundNumber", 1);
     }
 
     @Given("{string}가 {string} 스터디의 정보를 제목-{string}, 정원-{string}명, 최소 주차-{string}주, 주당 진행 횟수-{string}회, 소개-{string}로 수정한다.")
