@@ -40,7 +40,7 @@ fun FeedsResponseDto.toFeeds(): Feeds = Feeds(
 )
 
 fun AuthorResponseDto.toAuthor(): Author = Author(
-    id = id.toLong(),
+    id = id,
     nickname = nickname,
     profileImageUrl = profileImageUrl,
 )
