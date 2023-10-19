@@ -226,9 +226,10 @@ public class Study extends BaseEntity {
     }
 
     private void deleteLeftApplicant() {
-        studyMembers.stream()
-                    .filter(StudyMember::isApplicant)
-                    .forEach(studyMember -> studyMembers.remove(studyMember));
+        List<StudyMember> currentApplicant = studyMembers.stream()
+                                                         .filter(StudyMember::isApplicant)
+                                                         .toList();
+        studyMembers.removeAll(currentApplicant);
     }
 
     private void initializeMeetingDaysOfTheWeek(List<DayOfWeek> daysOfTheWeek) {

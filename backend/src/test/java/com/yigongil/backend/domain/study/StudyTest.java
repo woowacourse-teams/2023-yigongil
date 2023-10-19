@@ -34,6 +34,23 @@ class StudyTest {
             study.permit(secondMember, study.getMaster());
         }
 
+        @Test
+        void 스터디를_시작할_때_지원자가_스터디_멤버에서_삭제된다() {
+            // given
+            Member applicant = MemberFixture.폰노이만.toMember();
+            study.apply(applicant);
+
+            // when
+            study.start(study.getMaster(), List.of(DayOfWeek.MONDAY),
+                    LOCAL_DATE_OF_MONDAY.atStartOfDay());
+
+            Boolean isApplicantExist = study.getStudyMembers().stream()
+                                            .anyMatch(studyMember -> studyMember.getMember().equals(applicant));
+
+            // then
+            assertThat(isApplicantExist).isFalse();
+        }
+
         @Nested
         class 스터디를_주_1회_한다면 {
 
@@ -120,7 +137,6 @@ class StudyTest {
             // then
             assertThat(nextRound.isNextDayOfWeek(currentRound.getDayOfWeek())).isTrue();
         }
-
     }
 
     @Test
