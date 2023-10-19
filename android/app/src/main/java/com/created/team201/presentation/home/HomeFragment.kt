@@ -34,6 +34,14 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         homeViewModel.updateUserStudy()
     }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+
+        if (!hidden) {
+            homeViewModel.updateUserStudy()
+        }
+    }
+
     private fun setupViewModel() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = homeViewModel

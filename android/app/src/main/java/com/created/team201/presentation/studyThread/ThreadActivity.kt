@@ -132,7 +132,7 @@ class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_
     private fun onClickMore(position: Int) {
         when (position) {
             MUST_DO -> {
-                // createBottomDialog
+                showMustDoBottomSheetFragment()
             }
 
             MUST_DO_CERTIFICATION -> {
@@ -176,6 +176,14 @@ class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_
         binding.rvMustDo.adapter = mustDoAdapter
         binding.rvMustDo.setHasFixedSize(true)
         binding.spinnerThread.adapter = moreAdapter
+    }
+
+    private fun showMustDoBottomSheetFragment() {
+        val mustDoBottomSheetFragment = MustDoBottomSheetFragment.newInstance(studyId)
+        mustDoBottomSheetFragment.show(
+            supportFragmentManager,
+            mustDoBottomSheetFragment.tag,
+        )
     }
 
     private fun View.hideKeyboard() {

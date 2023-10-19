@@ -43,8 +43,9 @@ class StudyDetailViewModel @Inject constructor(
         NonNullMutableLiveData(StudyDetailState.Nothing(true))
     val state: LiveData<StudyDetailState> get() = _state
 
-    private val _isStartStudy: NonNullMutableLiveData<Boolean> = NonNullMutableLiveData(false)
-    val isStartStudy: NonNullLiveData<Boolean> get() = _isStartStudy
+    private val _startStudyState: NonNullMutableLiveData<UIState> =
+        NonNullMutableLiveData(UIState.Loading)
+    val startStudyState: NonNullLiveData<UIState> get() = _startStudyState
 
     private val _isFullMember: NonNullMutableLiveData<Boolean> = NonNullMutableLiveData(false)
     val isFullMember: NonNullLiveData<Boolean> get() = _isFullMember
@@ -163,7 +164,9 @@ class StudyDetailViewModel @Inject constructor(
                 val studyStart = StudyStart(days.map { dayOfWeek -> dayOfWeek.toDomain() })
                 studyDetailRepository.startStudy(studyId, studyStart)
             }.onSuccess {
-                _isStartStudy.value = true
+                _startStudyState.value = UIState.Success
+            }.onFailure {
+                _startStudyState.value = UIState.Fail
             }
         }
     }
@@ -213,4 +216,11 @@ class StudyDetailViewModel @Inject constructor(
     private fun Nickname.toUiModel(): NicknameUiModel = NicknameUiModel(
         nickname = nickname,
     )
+
+    sealed interface UIState {
+        object Success : UIState
+        object Loading : UIState
+        object Fail : UIState
+        object Idle : UIState
+    }
 }

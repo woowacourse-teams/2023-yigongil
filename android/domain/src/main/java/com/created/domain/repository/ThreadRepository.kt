@@ -2,6 +2,7 @@ package com.created.domain.repository
 
 import com.created.domain.model.Feeds
 import com.created.domain.model.MustDoCertification
+import com.created.domain.model.WeeklyMustDo
 import kotlinx.coroutines.flow.Flow
 
 interface ThreadRepository {
@@ -16,5 +17,11 @@ interface ThreadRepository {
 
     fun getStudyInfo(studyId: Long)
 
-    fun getMustDo(studyId: Long)
+    suspend fun getWeeklyMustDo(studyId: Long, weekNumber: Int): List<WeeklyMustDo>
+
+    suspend fun putMustDo(roundId: Long, content: String)
+
+    suspend fun endStudy(studyId: Long)
+
+    suspend fun quitStudy(studyId: Long)
 }
