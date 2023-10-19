@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_rectangle_radius_10dp"
+        android:minWidth="300dp"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/tv_dialog_in_app_update_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="4dp"
+            android:textAppearance="@style/title_b20"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/in_app_update_dialog_title" />
+
+        <TextView
+            android:id="@+id/tv_dialog_in_app_update_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:paddingHorizontal="4dp"
+            android:textAppearance="@style/text_r16"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_dialog_in_app_update_title"
+            tools:text="@string/in_app_update_dialog_content" />
+
+        <TextView
+            android:id="@+id/tv_dialog_in_app_update_btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:paddingVertical="10dp"
+            android:text="@string/in_app_update_dialog_btn_cancel_text"
+            android:textAlignment="center"
+            android:textAppearance="@style/text_sb16"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_dialog_in_app_update_btn_ok"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_dialog_in_app_update_content"
+            tools:text="나중에 하기" />
+
+        <TextView
+            android:id="@+id/tv_dialog_in_app_update_btn_ok"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:paddingVertical="10dp"
+            android:text="@string/in_app_update_dialog_btn_ok_text"
+            android:textAlignment="center"
+            android:textAppearance="@style/text_sb16"
+            android:textColor="@color/green05_3AD353"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_dialog_in_app_update_btn_cancel"
+            app:layout_constraintTop_toBottomOf="@id/tv_dialog_in_app_update_content" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

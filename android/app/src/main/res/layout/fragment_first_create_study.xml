@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.created.team201.presentation.createStudy.CreateStudyViewModel" />
+
+        <variable
+            name="onInputClickListener"
+            type="kotlin.jvm.functions.Function1" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/tv_first_create_study_people_count_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/first_create_study_people_count_title"
+            android:textAppearance="@style/title_sb22"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_first_create_study_people_count_information"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/first_create_study_people_count_information"
+            android:textAppearance="@style/subtitle_r16"
+            android:textColor="@color/grey02_78808B"
+            app:layout_constraintEnd_toEndOf="@id/tv_first_create_study_people_count_title"
+            app:layout_constraintStart_toStartOf="@id/tv_first_create_study_people_count_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_first_create_study_people_count_title" />
+
+        <TextView
+            android:id="@+id/tv_first_create_study_people_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            android:drawablePadding="12dp"
+            android:gravity="center_vertical"
+            android:hint="@string/first_create_study_people_count_hint"
+            android:onClick="@{() -> onInputClickListener.invoke(@string/create_study_tag_people_count)}"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="16dp"
+            android:textAppearance="@style/text_r16"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey02_78808B"
+            app:drawableEndCompat="@drawable/ic_people_capacity"
+            app:drawableTint="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/tv_first_create_study_people_count_information"
+            app:layout_constraintStart_toStartOf="@id/tv_first_create_study_people_count_information"
+            app:layout_constraintTop_toBottomOf="@id/tv_first_create_study_people_count_information"
+            app:textFormatter="@{@string/first_create_study_formatter_information_people_count}"
+            app:textIntValue="@{viewModel.peopleCount}" />
+
+        <TextView
+            android:id="@+id/tv_first_create_study_study_date_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:text="@string/first_create_study_study_date_title"
+            android:textAppearance="@style/title_sb22"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_first_create_study_people_count" />
+
+        <TextView
+            android:id="@+id/tv_first_create_study_study_date_information"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/first_create_study_study_date_information"
+            android:textAppearance="@style/subtitle_r16"
+            android:textColor="@color/grey02_78808B"
+            app:layout_constraintEnd_toEndOf="@id/tv_first_create_study_study_date_title"
+            app:layout_constraintStart_toStartOf="@id/tv_first_create_study_study_date_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_first_create_study_study_date_title" />
+
+        <TextView
+            android:id="@+id/tv_first_create_study_study_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            android:drawablePadding="12dp"
+            android:gravity="center_vertical"
+            android:hint="@string/first_create_study_study_date_hint"
+            android:onClick="@{() -> onInputClickListener.invoke(@string/create_study_tag_study_date)}"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="16dp"
+            android:textAppearance="@style/text_r16"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey02_78808B"
+            app:drawableEndCompat="@drawable/ic_period"
+            app:drawableTint="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/tv_first_create_study_study_date_information"
+            app:layout_constraintStart_toStartOf="@id/tv_first_create_study_study_date_information"
+            app:layout_constraintTop_toBottomOf="@id/tv_first_create_study_study_date_information"
+            app:textFormatter="@{@string/first_create_study_formatter_information_study_date}"
+            app:textIntValue="@{viewModel.studyDate}" />
+
+        <TextView
+            android:id="@+id/tv_first_create_study_cycle_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:text="@string/first_create_study_cycle_title"
+            android:textAppearance="@style/title_sb22"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_first_create_study_study_date" />
+
+        <TextView
+            android:id="@+id/tv_first_create_study_cycle_information"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/first_create_study_cycle_information"
+            android:textAppearance="@style/subtitle_r16"
+            android:textColor="@color/grey02_78808B"
+            app:layout_constraintEnd_toEndOf="@id/tv_first_create_study_cycle_title"
+            app:layout_constraintStart_toStartOf="@id/tv_first_create_study_cycle_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_first_create_study_cycle_title" />
+
+        <TextView
+            android:id="@+id/tv_first_create_study_cycle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            android:drawablePadding="12dp"
+            android:gravity="center_vertical"
+            android:hint="@string/first_create_study_cycle_hint"
+            android:onClick="@{() -> onInputClickListener.invoke(@string/create_study_tag_cycle)}"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="16dp"
+            android:textAppearance="@style/text_r16"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey02_78808B"
+            app:drawableEndCompat="@drawable/ic_period"
+            app:drawableTint="@color/white"
+            app:layout_constraintEnd_toEndOf="@id/tv_first_create_study_cycle_information"
+            app:layout_constraintStart_toStartOf="@id/tv_first_create_study_cycle_information"
+            app:layout_constraintTop_toBottomOf="@id/tv_first_create_study_cycle_information"
+            app:textFormatter="@{@string/first_create_study_formatter_information_cycle}"
+            app:textIntValue="@{viewModel.cycle}" />
+
+        <TextView
+            android:id="@+id/tv_first_create_study_btn_next"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="28dp"
+            android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
+            android:onClick="@{() -> viewModel.navigateToNext()}"
+            android:paddingVertical="14dp"
+            android:text="@string/create_study_button_next"
+            android:textAlignment="center"
+            android:textAppearance="@style/button_sb20"
+            android:textColor="@color/tv_color_disabled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

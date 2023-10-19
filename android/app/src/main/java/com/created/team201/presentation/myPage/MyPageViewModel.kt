@@ -6,17 +6,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.created.domain.model.Nickname
 import com.created.domain.model.Profile
 import com.created.domain.model.ProfileInformation
 import com.created.domain.repository.MyPageRepository
-import com.created.team201.data.datasource.remote.MyPageDataSourceImpl
-import com.created.team201.data.remote.NetworkServiceModule
-import com.created.team201.data.repository.MyPageRepositoryImpl
 import com.created.team201.presentation.myPage.model.ProfileInformationUiModel
 import com.created.team201.presentation.myPage.model.ProfileType
 import com.created.team201.presentation.myPage.model.ProfileUiModel
@@ -25,10 +19,13 @@ import com.created.team201.presentation.onBoarding.model.NicknameUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
 import com.created.team201.util.addSourceList
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
+import javax.inject.Inject
 
-class MyPageViewModel(
+@HiltViewModel
+class MyPageViewModel @Inject constructor(
     private val myPageRepository: MyPageRepository,
 ) : ViewModel() {
     private val _profile: MutableLiveData<ProfileUiModel> = MutableLiveData()
@@ -91,7 +88,7 @@ class MyPageViewModel(
         viewModelScope.launch {
             profile.value?.let {
                 val newProfile = it.toDomain().updateProfileInformation(
-                    ProfileInformation(nickname.value.toDomain(), introduction.value)
+                    ProfileInformation(nickname.value.toDomain(), introduction.value),
                 )
                 myPageRepository.patchMyProfile(newProfile.profileInformation)
                     .onSuccess {
@@ -103,7 +100,6 @@ class MyPageViewModel(
                     }.onFailure {
                         _modifyProfileState.value = State.FAIL
                     }
-
             }
         }
     }
@@ -221,11 +217,11 @@ class MyPageViewModel(
     private fun ProfileInformation.toUiModel(): ProfileInformationUiModel =
         ProfileInformationUiModel(
             nickname = nickname.toUiModel(),
-            introduction = introduction
+            introduction = introduction,
         )
 
     private fun Nickname.toUiModel(): NicknameUiModel = NicknameUiModel(
-        nickname = nickname
+        nickname = nickname,
     )
 
     private fun ProfileUiModel.toDomain(): Profile = Profile(
@@ -242,26 +238,16 @@ class MyPageViewModel(
     private fun ProfileInformationUiModel.toDomain(): ProfileInformation =
         ProfileInformation(
             nickname = nickname.toDomain(),
-            introduction = introduction
+            introduction = introduction,
         )
 
     private fun NicknameUiModel.toDomain(): Nickname = Nickname(
-        nickname = nickname
+        nickname = nickname,
     )
 
     companion object {
         private val PATTERN_NICKNAME =
             Pattern.compile("^[_a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\\u318D\\u119E\\u11A2\\u2022\\u2025a\\u00B7\\uFE55]+$")
         private const val MAX_NICKNAME_LENGTH = 8
-
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                MyPageViewModel(
-                    myPageRepository = MyPageRepositoryImpl(
-                        MyPageDataSourceImpl(NetworkServiceModule.myPageService),
-                    ),
-                )
-            }
-        }
     }
 }

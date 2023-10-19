@@ -46,5 +46,55 @@
             app:layout_constraintTop_toBottomOf="@id/view_setting_toolbar_border_line"
             tools:listitem="@layout/item_setting" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_setting_version"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_setting">
+
+            <TextView
+                android:id="@+id/tv_setting_version_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:paddingHorizontal="16dp"
+                android:text="@string/setting_version_title"
+                android:textAppearance="@style/text_r16"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toStartOf="@id/tv_setting_version"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_setting_version_update"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:text="@string/setting_version_update"
+                android:textAppearance="@style/text_r16"
+                android:textColor="@color/grey02_78808B"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_setting_version_title" />
+
+            <TextView
+                android:id="@+id/tv_setting_version"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textAlignment="textEnd"
+                android:textAppearance="@style/text_r16"
+                android:textColor="@color/grey02_78808B"
+                app:layout_constraintBottom_toBottomOf="@id/tv_setting_version_update"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_setting_version_title"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="2.0.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

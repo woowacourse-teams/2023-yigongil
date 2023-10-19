@@ -6,11 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.created.team201.presentation.updateStudy.UpdateStudyViewModel" />
-
-        <variable
-            name="changeListener"
-            type="com.created.team201.presentation.updateStudy.custom.MultiPickerChangeListener" />
+            type="com.created.team201.presentation.createStudy.CreateStudyViewModel" />
 
         <variable
             name="onCancelClickListener"
@@ -47,30 +43,27 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginVertical="20dp"
-            android:text="@string/bottomSheetFragment_cycle_title_text"
+            android:text="@string/bottom_sheet_fragment_cycle_title_text"
             android:textAlignment="center"
             android:textAppearance="@style/picker_sb18"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@id/mp_cycle"
+            app:layout_constraintBottom_toTopOf="@id/sp_cycle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_create_study_cycle" />
 
-        <com.created.team201.presentation.updateStudy.custom.MultiPicker
-            android:id="@+id/mp_cycle"
-            changeListener="@{changeListener}"
-            android:layout_width="match_parent"
+        <com.created.team201.presentation.studyDetail.custom.SinglePicker
+            android:id="@+id/sp_cycle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:title="@string/single_picker_text_cycle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_cycle_bottom_sheet_title"
-            app:leftMaxValue="14"
-            app:leftMinValue="1"
-            app:leftValue="@{viewModel.cycle.date}"
-            app:rightDisplayNames="@array/multiPickerDisplayNames"
-            app:rightMaxValue="1"
-            app:rightMinValue="0"
-            app:rightValue="@{viewModel.cycle.unit.type}" />
+            app:maxValue="7"
+            app:minValue="1"
+            app:value="@{viewModel.cycle}" />
 
         <TextView
             android:id="@+id/tv_cycle_bottom_sheet_btn_cancel"
@@ -82,14 +75,14 @@
             android:backgroundTint="@color/green01_4039D353"
             android:onClick="@{() -> onCancelClickListener.invoke()}"
             android:paddingVertical="10dp"
-            android:text="@string/bottomSheetFragment_button_name_cancel"
+            android:text="@string/bottom_sheet_fragment_button_name_cancel"
             android:textAlignment="center"
             android:textAppearance="@style/button_sb18"
             android:textColor="@color/white01_66FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tv_cycle_bottom_sheet_btn_save"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mp_cycle" />
+            app:layout_constraintTop_toBottomOf="@id/sp_cycle" />
 
         <TextView
             android:id="@+id/tv_cycle_bottom_sheet_btn_save"
@@ -100,7 +93,7 @@
             android:backgroundTint="@color/green02_E639D353"
             android:onClick="@{() -> onSaveClickListener.invoke()}"
             android:paddingVertical="10dp"
-            android:text="@string/bottomSheetFragment_button_name_save"
+            android:text="@string/bottom_sheet_fragment_button_name_save"
             android:textAlignment="center"
             android:textAppearance="@style/button_sb18"
             android:textColor="@color/white"

@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="viewModel"
+            name="vm"
             type="com.created.team201.presentation.home.HomeViewModel" />
 
     </data>
@@ -25,7 +25,7 @@
             android:text="@string/home_no_study"
             android:textAppearance="@style/subtitle_r20"
             android:textColor="@color/grey02_78808B"
-            app:isVisible="@{!viewModel.studyExistence}"
+            app:hasStudy="@{vm.userStudyUiState}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,37 +36,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_home_logo" />
 
-        <TextView
-            android:id="@+id/tv_home_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="@{@string/home_welcome_phrase(viewModel.userName)}"
-            android:textAppearance="@style/title_sb22"
-            android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="@id/iv_home_logo"
-            app:layout_constraintTop_toBottomOf="@id/iv_home_logo" />
+        <View
+            android:id="@+id/view_home_border"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/black03_272C33"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_home_logo" />
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vp_home"
-            android:layout_width="match_parent"
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_home"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="28dp"
-            android:layout_marginBottom="28dp"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:orientation="horizontal"
-            app:isVisible="@{viewModel.studyExistence}"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="vertical"
+            android:overScrollMode="never"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_home_title"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_home_border"
+            tools:listitem="@layout/item_home_study_list">
 
-        </androidx.viewpager2.widget.ViewPager2>
+        </androidx.recyclerview.widget.RecyclerView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

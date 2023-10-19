@@ -8,6 +8,10 @@
         <variable
             name="studyListViewModel"
             type="com.created.team201.presentation.studyList.StudyListViewModel" />
+
+        <variable
+            name="filter"
+            type="com.created.team201.presentation.studyList.model.StudyListFilter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,23 +42,109 @@
             android:background="@color/black02_181B21"
             app:layout_constraintTop_toBottomOf="@id/tb_study_list" />
 
+        <HorizontalScrollView
+            android:id="@+id/hsv_study_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toTopOf="@id/srl_study_list"
+            app:layout_constraintTop_toBottomOf="@id/view_study_list_toolbar_boarder_line">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cg_study_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:overScrollMode="ifContentScrolls"
+                android:paddingTop="8dp"
+                app:singleSelection="true">
+
+                <com.created.team201.presentation.studyList.CustomChip
+                    android:id="@+id/chip_study_list_all"
+                    style="@style/chip_study_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/study_list_chip_all"
+                    android:checked="true"
+                    android:textColor="@color/chip_text_color_checked_all"
+                    app:chipBackgroundColor="@color/chip_color_checked_all"
+                    app:studyListFilter="@{filter.ALL}" />
+
+                <com.created.team201.presentation.studyList.CustomChip
+                    android:id="@+id/chip_study_list_recruiting"
+                    style="@style/chip_study_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/study_list_chip_recruiting"
+                    android:textColor="@color/chip_text_color_checked_recruiting"
+                    app:chipBackgroundColor="@color/chip_color_checked_recruiting"
+                    app:studyListFilter="@{filter.RECRUITING}" />
+
+                <com.created.team201.presentation.studyList.CustomChip
+                    android:id="@+id/chip_study_list_processing"
+                    style="@style/chip_study_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/study_list_chip_processing"
+                    android:textColor="@color/chip_text_color_checked_processing"
+                    app:chipBackgroundColor="@color/chip_color_checked_processing"
+                    app:studyListFilter="@{filter.PROCESSING}" />
+
+                <com.created.team201.presentation.studyList.CustomChip
+                    android:id="@+id/chip_study_list_waiting"
+                    style="@style/chip_study_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/study_list_chip_waiting"
+                    android:textColor="@color/chip_text_color_checked_waiting"
+                    app:chipBackgroundColor="@color/chip_color_checked_waiting"
+                    app:studyListFilter="@{filter.WAITING_APPLICANT}" />
+
+                <com.created.team201.presentation.studyList.CustomChip
+                    android:id="@+id/chip_study_list_accept"
+                    style="@style/chip_study_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/study_list_chip_accept"
+                    android:textColor="@color/chip_text_color_checked_accepted"
+                    app:chipBackgroundColor="@color/chip_color_checked_accpted"
+                    app:studyListFilter="@{filter.WAITING_MEMBER}" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/tv_guest_information"
+            android:layout_width="0dp"
+            android:height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/pb_study_list_load"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/hsv_study_list"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:textAppearance="@style/subtitle_r20"
+            android:textColor="@color/grey02_78808B"
+            app:isVisible="@{studyListViewModel.isGuestMode()}"
+            android:text="@string/guest_information_title" />
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srl_study_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintBottom_toTopOf="@id/pb_study_list_load"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_study_list_toolbar_boarder_line">
+            app:isVisible="@{!studyListViewModel.isGuestMode()}"
+            app:layout_constraintTop_toBottomOf="@id/hsv_study_list">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_study_list_list"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@drawable/bg_rectangle_radius_5dp_transparent"
                 android:orientation="vertical"
                 android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />

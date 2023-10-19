@@ -17,20 +17,12 @@ data class StudyDetailResponseDto(
     val numberOfMaximumMembers: Int,
     @SerialName("studyMasterId")
     val studyMasterId: Long,
-    @SerialName("role")
-    val role: Int,
-    @SerialName("startAt")
-    val startAt: String,
-    @SerialName("totalRoundCount")
-    val totalRoundCount: Int,
-    @SerialName("periodOfRound")
-    val periodOfRound: String,
-    @SerialName("currentRound")
-    val currentRound: Int,
+    @SerialName("meetingDaysCountPerWeek")
+    val meetingDaysCountPerWeek: Int,
     @SerialName("introduction")
     val introduction: String,
     @SerialName("members")
     val members: List<MemberResponseDto>,
-    @SerialName("rounds")
-    val rounds: List<RoundResponseDto>,
+    @SerialName("minimumWeeks")
+    val minimumWeeks: Int,
 )

@@ -66,11 +66,15 @@ jobs:
           BASE_URL: ${{ secrets.BASE_URL }}
           BASE_TEST_URL: ${{ secrets.BASE_TEST_URL }}
           POLICY: ${{ secrets.POLICY }}
+          FIREBASE_APP_VERSION_COLLECTION: ${{ secrets.FIREBASE_APP_VERSION_COLLECTION }}
+          GIT_HUB_TEST_URL: ${{ secrets.GIT_HUB_TEST_URL }}
           GIT_HUB_URL: ${{ secrets.GIT_HUB_URL }}
         run:
           echo -e "BASE_URL=\"$BASE_URL\"\n
           BASE_TEST_URL=\"$BASE_TEST_URL\"\n
           POLICY=\"$POLICY\"\n
+          FIREBASE_APP_VERSION_COLLECTION=\"$FIREBASE_APP_VERSION_COLLECTION\"\n
+          GIT_HUB_TEST_URL=\"$GIT_HUB_TEST_URL\"\n
           GIT_HUB_URL=\"$GIT_HUB_URL\"" >> local.properties
         working-directory: ${{ env.working-directory }}
 

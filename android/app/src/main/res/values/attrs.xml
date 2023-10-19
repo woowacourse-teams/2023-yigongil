@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="SinglePicker">
-        <attr name="singlePickerTitle" format="string" />
+        <attr name="android:title" />
         <attr name="value" format="integer" />
         <attr name="minValue" format="integer" />
         <attr name="maxValue" format="integer" />
@@ -31,5 +31,9 @@
 
     <declare-styleable name="Calendar">
         <attr name="maximumMonthRange" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="DayOfWeekSelector">
+        <attr name="canMultipleSelect" format="boolean" />
     </declare-styleable>
 </resources>

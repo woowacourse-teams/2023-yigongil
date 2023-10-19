@@ -1,9 +1,13 @@
 package com.created.team201.presentation.myPage
 
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
+import android.widget.GridLayout
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.view.forEach
+import androidx.core.view.setMargins
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import com.created.team201.R
@@ -13,20 +17,22 @@ import com.created.team201.presentation.myPage.MyPageViewModel.State.FAIL
 import com.created.team201.presentation.myPage.MyPageViewModel.State.IDLE
 import com.created.team201.presentation.myPage.MyPageViewModel.State.SUCCESS
 import com.created.team201.presentation.myPage.model.ProfileType
+import com.created.team201.presentation.myPage.model.TierProgress
 import com.created.team201.presentation.setting.SettingActivity
+import com.created.team201.presentation.studyDetail.model.Tier
 import com.created.team201.util.FirebaseLogUtil
 import com.created.team201.util.FirebaseLogUtil.SCREEN_MY_PAGE
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
-    private val myPageViewModel: MyPageViewModel by viewModels {
-        MyPageViewModel.Factory
-    }
+    private val myPageViewModel: MyPageViewModel by viewModels()
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
 
         if (hidden) {
-            myPageViewModel.loadProfile()
+            myPageViewModel.resetModifyProfile()
             myPageViewModel.setProfileType(ProfileType.VIEW)
         }
     }
@@ -46,8 +52,8 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         setNicknameValidate()
         setMyPageObserve()
         setOnProfileModifyClick()
+        observeProfile()
     }
-
 
     private fun initBinding() {
         binding.lifecycleOwner = viewLifecycleOwner
@@ -88,6 +94,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
             when (profileType) {
                 ProfileType.VIEW -> setProfileView(false)
                 ProfileType.MODIFY -> setProfileView(true)
+                else -> Unit
             }
         }
         myPageViewModel.modifyProfileState.observe(viewLifecycleOwner) { modifyProfileState ->
@@ -96,7 +103,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.myPage_toast_modify_profile_success),
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_SHORT,
                     ).show()
                 }
 
@@ -104,14 +111,13 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.myPage_toast_modify_profile_failed),
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_SHORT,
                     ).show()
                     myPageViewModel.resetModifyProfile()
                 }
 
                 IDLE -> throw IllegalStateException()
             }
-            myPageViewModel.loadProfile()
         }
     }
 
@@ -127,7 +133,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                     showDialog(
                         getString(R.string.myPage_dialog_modify_profile_title),
                         getString(R.string.myPage_dialog_modify_profile_content),
-                        onModifySaveClick()
+                        onModifySaveClick(),
                     )
                 }
 
@@ -139,11 +145,11 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
     private fun onModifySaveClick(): MyPageDialogClickListener =
         object : MyPageDialogClickListener {
             override fun onCancelClick() {
-                myPageViewModel.loadProfile()
+                myPageViewModel.resetModifyProfile()
                 Toast.makeText(
                     requireContext(),
                     getString(R.string.myPage_toast_modify_profile_cancel),
-                    Toast.LENGTH_SHORT
+                    Toast.LENGTH_SHORT,
                 ).show()
                 myPageViewModel.switchProfileType()
             }
@@ -186,7 +192,46 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         }
     }
 
+    private fun observeProfile() {
+        myPageViewModel.profile.observe(viewLifecycleOwner) { profile ->
+            val tierProgress =
+                TierProgress.of(Tier.of(profile.tier), profile.tierProgress).getTierProgressTable()
+            setupTierProgress(tierProgress)
+        }
+    }
+
+    private fun setupTierProgress(tierProgress: List<Int>) {
+        binding.glMyPageTierProgress.removeAllViews()
+        repeat(TOTAL_BLOCK_COUNT) {
+            val params: GridLayout.LayoutParams = getDefaultTierProgressBlockParams()
+
+            binding.glMyPageTierProgress.addView(
+                ImageView(requireContext()).apply {
+                    setImageResource(tierProgress[it])
+                    scaleType = ImageView.ScaleType.FIT_XY
+                    layoutParams = params
+                },
+            )
+        }
+    }
+
+    private fun getDefaultTierProgressBlockParams(): GridLayout.LayoutParams =
+        GridLayout.LayoutParams().apply {
+            width = resources.displayMetrics.widthPixels / DEFAULT_DENOMINATOR
+            height = width
+            setMargins(getDpToPixel(DEFAULT_BLOCK_MARGIN))
+        }
+
+    private fun getDpToPixel(dp: Int) = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        dp.toFloat(),
+        requireContext().resources.displayMetrics,
+    ).toInt()
+
     companion object {
         private const val TAG_DIALOG_MODIFY_PROFILE = "TAG_DIALOG_MODIFY_PROFILE"
+        private const val TOTAL_BLOCK_COUNT = 20
+        private const val DEFAULT_BLOCK_MARGIN = 2
+        private const val DEFAULT_DENOMINATOR = 18
     }
 }
