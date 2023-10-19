@@ -67,7 +67,7 @@ class StudyListViewModel @Inject constructor(
                     }
                     _studySummaries.value = emptyList()
                     newItems?.addAll(it.toUiModel())
-                    _studySummaries.value = newItems?.toList()
+                    _studySummaries.value = newItems?.toList()?.distinct()
                     page++
                     return@launch
                 }
