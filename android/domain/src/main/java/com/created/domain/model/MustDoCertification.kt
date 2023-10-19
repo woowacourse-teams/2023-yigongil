@@ -7,7 +7,7 @@ data class MustDoCertification(
     val others: List<MustDo>,
 ) {
     data class UpcomingRound(
-        val id: Int,
+        val id: Long,
         val weekNumber: Int,
     )
 }

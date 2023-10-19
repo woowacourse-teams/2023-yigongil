@@ -35,6 +35,9 @@ class ThreadViewModel @Inject constructor(
 
     private var myId: Long = DEFAULT_MY_ID
     private var studyId: Long = DEFAULT_STUDY_ID
+    private var _upComingRoundId: Long = DEFAULT_ROUND_ID
+    val upComingRoundId: Long
+        get() = _upComingRoundId
 
     private val _uiState: MutableStateFlow<ThreadUiState> = MutableStateFlow(ThreadUiState.Loading)
     val uiState: StateFlow<ThreadUiState> get() = _uiState.asStateFlow()
@@ -70,6 +73,7 @@ class ThreadViewModel @Inject constructor(
         getMyProfile()
         updateMustDoCertification()
         updateFeeds()
+        getMyProfile()
     }
 
     fun dispatchFeed(message: String) {
@@ -80,7 +84,7 @@ class ThreadViewModel @Inject constructor(
         }
     }
 
-    private fun updateMustDoCertification() {
+    fun updateMustDoCertification() {
         viewModelScope.launch {
             runCatching { threadRepository.getMustDoCertification(studyId) }
                 .onSuccess { mustDoCertification ->
@@ -88,6 +92,7 @@ class ThreadViewModel @Inject constructor(
                     _weekNumber.value = mustDoCertification.upcomingRound.weekNumber
                     updateMustDoCertificationInState(mustDoCertification)
                     updateWeeklyMustDos(studyId, weekNumber.value)
+                    _upComingRoundId = mustDoCertification.upcomingRound.id
                 }
         }
     }
@@ -224,6 +229,7 @@ class ThreadViewModel @Inject constructor(
     companion object {
         private const val DEFAULT_STUDY_ID = 0L
         private const val DEFAULT_MY_ID = -1L
+        private const val DEFAULT_ROUND_ID = -1L
         private const val DEFAULT_CURRENT_ROUND_ID = -1L
         private const val DEFAULT_CURRENT_WEEK_NUMBER = -1
         private const val FIRST_PAGE = 1

@@ -3,9 +3,11 @@ package com.created.team201.data.di
 import com.created.team201.data.di.qualifier.AuthRetrofit
 import com.created.team201.data.di.qualifier.DefaultRetrofit
 import com.created.team201.data.remote.api.AuthService
+import com.created.team201.data.remote.api.CertificationService
 import com.created.team201.data.remote.api.CommonStudyListService
 import com.created.team201.data.remote.api.CreateStudyService
 import com.created.team201.data.remote.api.HomeService
+import com.created.team201.data.remote.api.ImageService
 import com.created.team201.data.remote.api.MemberStudyListService
 import com.created.team201.data.remote.api.MyPageService
 import com.created.team201.data.remote.api.OnBoardingService
@@ -90,4 +92,14 @@ object ServiceModule {
     @Provides
     fun provideThreadService(@AuthRetrofit retrofit: Retrofit): ThreadService =
         retrofit.create(ThreadService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideCertificationService(@AuthRetrofit retrofit: Retrofit): CertificationService =
+        retrofit.create(CertificationService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideImageService(@AuthRetrofit retrofit: Retrofit): ImageService =
+        retrofit.create(ImageService::class.java)
 }

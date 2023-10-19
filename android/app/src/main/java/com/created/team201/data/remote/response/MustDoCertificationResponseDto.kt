@@ -29,7 +29,7 @@ data class MustDoCertificationResponseDto(
     @Serializable
     data class UpcomingRound(
         @SerialName("id")
-        val id: Int,
+        val id: Long,
         @SerialName("weekNumber")
         val weekNumber: Int,
     )
