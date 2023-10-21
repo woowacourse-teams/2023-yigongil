@@ -12,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
+import com.created.domain.model.Feeds
 import com.created.team201.R
 import com.created.team201.databinding.ActivityThreadBinding
 import com.created.team201.presentation.certification.CertificationActivity
@@ -81,7 +82,11 @@ class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_
     private fun showView(state: Success) {
         binding.tvThreadStudyName.text = state.studyName
         mustDoAdapter.submitList(state.mustDo)
-        threadAdapter.submitList(state.feeds)
+        threadAdapter.submitList(getFeeds(state.feeds))
+    }
+
+    private fun getFeeds(feeds: List<Feeds>): List<Feeds> {
+        return feeds.filterNot { it.author.nickname == null }
     }
 
     private fun setOnClickEvent() {
