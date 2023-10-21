@@ -19,9 +19,9 @@ data class MustDoCertificationResponseDto(
         @SerialName("id")
         val id: Int,
         @SerialName("nickname")
-        val nickname: String,
+        val nickname: String?,
         @SerialName("profileImageUrl")
-        val profileImageUrl: String,
+        val profileImageUrl: String?,
         @SerialName("isCertified")
         val isCertified: Boolean,
     )
