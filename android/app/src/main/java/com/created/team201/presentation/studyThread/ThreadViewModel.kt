@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.Feeds
+import com.created.domain.model.MustDo
 import com.created.domain.model.MustDoCertification
 import com.created.domain.model.MustDoStatus
 import com.created.domain.model.Role
@@ -22,7 +23,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -102,19 +102,23 @@ class ThreadViewModel @Inject constructor(
             _uiState.value =
                 (uiState.value as ThreadUiState.Success).copy(
                     studyName = certification.studyName,
-                    mustDo = listOf(certification.me) + certification.others,
+                    mustDo = getMembers(listOf(certification.me) + certification.others),
                 )
         } else {
             _uiState.value = ThreadUiState.Success(
                 studyName = certification.studyName,
-                mustDo = listOf(certification.me) + certification.others,
+                mustDo = getMembers(listOf(certification.me) + certification.others),
             )
         }
     }
 
+    private fun getMembers(members: List<MustDo>): List<MustDo> {
+        return members.filterNot { it.nickname == null }
+    }
+
     private fun updateFeeds() {
         viewModelScope.launch {
-            threadRepository.getFeeds(studyId).collectLatest {
+            threadRepository.getFeeds(studyId).collect {
                 updateFeedsInState(it)
             }
         }

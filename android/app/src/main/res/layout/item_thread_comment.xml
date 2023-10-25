@@ -96,6 +96,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="20dp"
+                android:maxLines="10"
                 android:text="@{item.content}"
                 android:textAppearance="@style/subtitle_r20"
                 android:textColor="@color/white"

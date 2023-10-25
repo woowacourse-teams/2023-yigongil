@@ -1,6 +1,5 @@
 package com.created.team201.data.repository
 
-import android.util.Log
 import com.created.domain.model.Feeds
 import com.created.domain.model.MustDoCertification
 import com.created.domain.model.WeeklyMustDo
@@ -59,7 +58,6 @@ class DefaultThreadRepository @Inject constructor(
     }
 
     override suspend fun putMustDo(roundId: Long, content: String) {
-        Log.d("bandal", "putMustDo: $roundId $content")
         threadService.putMustDo(roundId, MustDoContentRequestDto(content))
     }
 
