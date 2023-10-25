@@ -156,7 +156,7 @@
             android:layout_height="wrap_content"
             android:text="@string/study_list_not_found"
             android:textAppearance="@style/text_m18"
-            android:textColor="@color/white"
+            android:textColor="@color/grey02_78808B"
             app:isVisible="@{studyListViewModel.isNotFoundStudies}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
