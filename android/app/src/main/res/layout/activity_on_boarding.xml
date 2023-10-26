@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:editText="http://schemas.android.com/tools"
-    xmlns:textView="http://schemas.android.com/tools">
+    xmlns:editText="http://schemas.android.com/tools">
 
     <data>
 
@@ -50,12 +49,12 @@
             android:text="@string/onBoarding_nickname_title_text"
             android:textAppearance="@style/text_r16"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@id/tv_on_boarding_nickname_sub_title"
+            app:layout_constraintEnd_toStartOf="@id/tv_on_boarding_nickname_validate_introduction"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_on_boarding_sub_title" />
 
         <TextView
-            android:id="@+id/tv_on_boarding_nickname_sub_title"
+            android:id="@+id/tv_on_boarding_nickname_validate_introduction"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -72,7 +71,7 @@
             android:layout_height="58dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/bg_rectangle_radius_10dp"
+            android:background="@drawable/et_color_focused"
             android:hint="@string/onBoarding_nickname_hint_text"
             android:importantForAutofill="no"
             android:inputType="text"
@@ -89,17 +88,6 @@
             editText:inputFilter="@{viewModel.getInputFilter()}" />
 
         <TextView
-            android:id="@+id/tv_on_boarding_nickname_validate_introduction"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textAppearance="@style/description_r12"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/et_on_boarding_nickname"
-            app:layout_constraintTop_toBottomOf="@id/et_on_boarding_nickname"
-            textView:nicknameState="@{viewModel.nicknameState}" />
-
-        <TextView
             android:id="@+id/tv_on_boarding_introduction_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -110,7 +98,7 @@
             android:textColor="@color/white"
             app:layout_constraintEnd_toStartOf="@id/tv_on_boarding_introduction_sub_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_on_boarding_nickname_validate_introduction" />
+            app:layout_constraintTop_toBottomOf="@id/et_on_boarding_nickname" />
 
         <TextView
             android:id="@+id/tv_on_boarding_introduction_sub_title"
@@ -130,7 +118,7 @@
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/bg_rectangle_radius_10dp"
+            android:background="@drawable/et_color_focused"
             android:gravity="top"
             android:hint="@string/onBoarding_introduction_hint_text"
             android:importantForAutofill="no"
