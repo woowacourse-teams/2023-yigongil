@@ -55,15 +55,15 @@ class OnBoardingViewModel @Inject constructor(
         get() = _isEnableSave
 
     fun setNickname(nickname: String) {
-        _nicknameState.value = NicknameState.UNAVAILABLE
         _nickname.value = NicknameUiModel(nickname)
+        getAvailableNickname()
     }
 
     fun setIntroduction(introduction: String) {
         _introduction.value = introduction
     }
 
-    fun getAvailableNickname() {
+    private fun getAvailableNickname() {
         viewModelScope.launch {
             runCatching {
                 nickname.value.toDomain()
@@ -121,7 +121,6 @@ class OnBoardingViewModel @Inject constructor(
                     return text
                 }
 
-                _nicknameState.value = NicknameState.UNAVAILABLE
                 return ""
             }
         },

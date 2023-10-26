@@ -26,20 +26,13 @@ class OnBoardingActivity :
         super.onCreate(savedInstanceState)
 
         initBinding()
-        setValidateEditText()
-        setObserveOnBoardingResult()
+        observeOnBoardingResult()
+        observeNicknameState()
     }
 
     private fun initBinding() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-    }
-
-    private fun setValidateEditText() {
-        binding.etOnBoardingNickname.setOnFocusChangeListener { _, focus ->
-            if (focus) return@setOnFocusChangeListener
-            viewModel.getAvailableNickname()
-        }
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -55,7 +48,7 @@ class OnBoardingActivity :
         return super.dispatchTouchEvent(ev)
     }
 
-    private fun setObserveOnBoardingResult() {
+    private fun observeOnBoardingResult() {
         viewModel.onBoardingState.observe(this) { state ->
             when (state) {
                 SUCCESS -> {
@@ -68,6 +61,13 @@ class OnBoardingActivity :
 
                 IDLE -> throw IllegalStateException()
             }
+        }
+    }
+
+    private fun observeNicknameState() {
+        viewModel.nicknameState.observe(this) { state ->
+            binding.tvOnBoardingNicknameValidateIntroduction.text = getString(state.introduction)
+            binding.tvOnBoardingNicknameValidateIntroduction.setTextColor(getColor(state.color))
         }
     }
 
