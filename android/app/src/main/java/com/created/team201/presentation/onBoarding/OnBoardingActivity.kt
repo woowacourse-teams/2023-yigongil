@@ -9,6 +9,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.created.team201.R
 import com.created.team201.databinding.ActivityOnBoardingBinding
 import com.created.team201.presentation.common.BindingActivity
@@ -17,6 +20,7 @@ import com.created.team201.presentation.onBoarding.OnBoardingViewModel.State.FAI
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.State.IDLE
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.State.SUCCESS
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class OnBoardingActivity :
@@ -65,9 +69,14 @@ class OnBoardingActivity :
     }
 
     private fun observeNicknameState() {
-        viewModel.nicknameState.observe(this) { state ->
-            binding.tvOnBoardingNicknameValidateIntroduction.text = getString(state.introduction)
-            binding.tvOnBoardingNicknameValidateIntroduction.setTextColor(getColor(state.color))
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.nicknameState.collect { state ->
+                    binding.tvOnBoardingNicknameValidateIntroduction.text =
+                        getString(state.introduction)
+                    binding.tvOnBoardingNicknameValidateIntroduction.setTextColor(getColor(state.color))
+                }
+            }
         }
     }
 

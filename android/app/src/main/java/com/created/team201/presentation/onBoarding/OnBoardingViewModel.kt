@@ -7,16 +7,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.Nickname
 import com.created.domain.model.OnBoarding
 import com.created.domain.repository.OnBoardingRepository
 import com.created.team201.presentation.onBoarding.model.NicknameState
 import com.created.team201.presentation.onBoarding.model.NicknameUiModel
-import com.created.team201.util.NonNullLiveData
-import com.created.team201.util.NonNullMutableLiveData
 import com.created.team201.util.addSourceList
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -25,23 +27,24 @@ import javax.inject.Inject
 class OnBoardingViewModel @Inject constructor(
     private val onBoardingRepository: OnBoardingRepository,
 ) : ViewModel() {
-    private val _nickname: NonNullMutableLiveData<NicknameUiModel> = NonNullMutableLiveData(
+    private val _nickname: MutableStateFlow<NicknameUiModel> = MutableStateFlow(
         NicknameUiModel(""),
     )
-    val nickname: NonNullLiveData<NicknameUiModel>
-        get() = _nickname
 
-    private val _introduction: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
-    val introduction: NonNullLiveData<String>
-        get() = _introduction
+    private val _introduction: MutableStateFlow<String> = MutableStateFlow("")
 
-    private val _nicknameState: MutableLiveData<NicknameState> = MutableLiveData()
-    val nicknameState: LiveData<NicknameState>
-        get() = _nicknameState
+    private val _nicknameState: MutableStateFlow<NicknameState> =
+        MutableStateFlow(NicknameState.UNAVAILABLE)
+    val nicknameState: StateFlow<NicknameState>
+        get() = _nicknameState.asStateFlow()
 
     private val _isEnableSave: MediatorLiveData<Boolean> =
         MediatorLiveData<Boolean>().apply {
-            addSourceList(nickname, nicknameState, introduction) {
+            addSourceList(
+                _nickname.asLiveData(),
+                nicknameState.asLiveData(),
+                _introduction.asLiveData()
+            ) {
                 isInitializeOnBoarding()
             }
         }
@@ -66,7 +69,7 @@ class OnBoardingViewModel @Inject constructor(
     private fun getAvailableNickname() {
         viewModelScope.launch {
             runCatching {
-                nickname.value.toDomain()
+                _nickname.value.toDomain()
             }.onSuccess {
                 onBoardingRepository.getAvailableNickname(it)
                     .onSuccess { result ->
@@ -89,7 +92,7 @@ class OnBoardingViewModel @Inject constructor(
         isSaveOnBoarding = true
 
         viewModelScope.launch {
-            OnBoarding(nickname.value.toDomain(), introduction.value).apply {
+            OnBoarding(_nickname.value.toDomain(), _introduction.value).apply {
                 onBoardingRepository.patchOnBoarding(this)
                     .onSuccess {
                         _onBoardingState.value = State.SUCCESS
@@ -128,9 +131,9 @@ class OnBoardingViewModel @Inject constructor(
     )
 
     private fun isInitializeOnBoarding(): Boolean =
-        nickname.value.nickname.isBlank().not() &&
+        _nickname.value.nickname.isBlank().not() &&
                 nicknameState.value == NicknameState.AVAILABLE &&
-                introduction.value.isBlank().not()
+                _introduction.value.isBlank().not()
 
     private fun NicknameUiModel.toDomain(): Nickname = Nickname(nickname = nickname)
 
