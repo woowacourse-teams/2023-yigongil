@@ -61,10 +61,8 @@ class OnBoardingViewModel @Inject constructor(
         }
     }
 
-    fun setNickname(nickname: CharSequence) {
-        viewModelScope.launch {
-            _nickname.value = nickname.toString()
-        }
+    fun setNickname(nickname: String) {
+        _nickname.value = nickname
     }
 
     fun setIntroduction(introduction: String) {

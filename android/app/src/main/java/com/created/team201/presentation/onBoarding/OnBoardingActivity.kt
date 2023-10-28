@@ -9,9 +9,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doOnTextChanged
 import com.created.team201.R
 import com.created.team201.databinding.ActivityOnBoardingBinding
-import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.main.MainActivity
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.Event.EnableSave
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.Event.SaveOnBoarding
@@ -20,20 +21,21 @@ import com.created.team201.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class OnBoardingActivity :
-    BindingActivity<ActivityOnBoardingBinding>(R.layout.activity_on_boarding) {
+class OnBoardingActivity : AppCompatActivity() {
     private val viewModel: OnBoardingViewModel by viewModels()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        initBinding()
-        collectOnBoardingEvent()
-        collectNicknameState()
+    private val binding: ActivityOnBoardingBinding by lazy {
+        ActivityOnBoardingBinding.inflate(layoutInflater)
     }
 
-    private fun initBinding() {
-        binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(binding.root)
+
+        setNicknameInputFilter()
+        setInputTextChanged()
+        setSaveOnBoardingEvent()
+        collectOnBoardingEvent()
+        collectNicknameState()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -47,6 +49,26 @@ class OnBoardingActivity :
         }
 
         return super.dispatchTouchEvent(ev)
+    }
+
+    private fun setNicknameInputFilter() {
+        binding.etOnBoardingNickname.filters = viewModel.getInputFilter()
+    }
+
+    private fun setInputTextChanged() {
+        binding.etOnBoardingNickname.doOnTextChanged { text, _, _, _ ->
+            viewModel.setNickname(text.toString())
+        }
+
+        binding.etOnBoardingIntroduction.doOnTextChanged { text, _, _, _ ->
+            viewModel.setIntroduction(text.toString())
+        }
+    }
+
+    private fun setSaveOnBoardingEvent() {
+        binding.tvOnBoardingBtnSave.setOnClickListener {
+            viewModel.patchOnBoarding()
+        }
     }
 
     private fun collectOnBoardingEvent() {

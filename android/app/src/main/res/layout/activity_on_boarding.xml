@@ -1,157 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:editText="http://schemas.android.com/tools">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <data>
+    <TextView
+        android:id="@+id/tv_on_boarding_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
+        android:text="@string/onBoarding_title_text"
+        android:textAppearance="@style/title_b20"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <variable
-            name="viewModel"
-            type="com.created.team201.presentation.onBoarding.OnBoardingViewModel" />
-    </data>
+    <TextView
+        android:id="@+id/tv_on_boarding_sub_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/onBoarding_sub_title_text"
+        android:textAppearance="@style/subtitle_r16"
+        android:textColor="@color/grey01_C5C5C5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tv_on_boarding_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_on_boarding_title" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tv_on_boarding_nickname_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
+        android:text="@string/onBoarding_nickname_title_text"
+        android:textAppearance="@style/text_r16"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@id/tv_on_boarding_nickname_validate_introduction"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_on_boarding_sub_title" />
 
-        <TextView
-            android:id="@+id/tv_on_boarding_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="48dp"
-            android:onTextChanged="@{(text, start, before, count) -> viewModel.setIntroduction(text.toString())}"
-            android:text="@string/onBoarding_title_text"
-            android:textAppearance="@style/title_b20"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/tv_on_boarding_nickname_validate_introduction"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/onBoarding_nickname_sub_title_text"
+        android:textAppearance="@style/description_r12"
+        android:textColor="@color/grey01_C5C5C5"
+        app:layout_constraintBottom_toBottomOf="@id/tv_on_boarding_nickname_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_on_boarding_nickname_title" />
 
-        <TextView
-            android:id="@+id/tv_on_boarding_sub_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/onBoarding_sub_title_text"
-            android:textAppearance="@style/subtitle_r16"
-            android:textColor="@color/grey01_C5C5C5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tv_on_boarding_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_on_boarding_title" />
+    <EditText
+        android:id="@+id/et_on_boarding_nickname"
+        android:layout_width="0dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/et_color_focused"
+        android:hint="@string/onBoarding_nickname_hint_text"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:maxLength="8"
+        android:maxLines="1"
+        android:paddingHorizontal="12dp"
+        android:textAppearance="@style/text_r16"
+        android:textColor="@color/white"
+        android:textColorHint="@color/grey02_78808B"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tv_on_boarding_nickname_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_on_boarding_nickname_title" />
 
-        <TextView
-            android:id="@+id/tv_on_boarding_nickname_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="48dp"
-            android:text="@string/onBoarding_nickname_title_text"
-            android:textAppearance="@style/text_r16"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@id/tv_on_boarding_nickname_validate_introduction"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_on_boarding_sub_title" />
+    <TextView
+        android:id="@+id/tv_on_boarding_introduction_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
+        android:text="@string/onBoarding_introduction_title_text"
+        android:textAppearance="@style/text_r16"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toStartOf="@id/tv_on_boarding_introduction_sub_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_on_boarding_nickname" />
 
-        <TextView
-            android:id="@+id/tv_on_boarding_nickname_validate_introduction"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:text="@string/onBoarding_nickname_sub_title_text"
-            android:textAppearance="@style/description_r12"
-            android:textColor="@color/grey01_C5C5C5"
-            app:layout_constraintBottom_toBottomOf="@id/tv_on_boarding_nickname_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_on_boarding_nickname_title" />
+    <TextView
+        android:id="@+id/tv_on_boarding_introduction_sub_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/onBoarding_introduction_sub_title_text"
+        android:textAppearance="@style/description_r12"
+        android:textColor="@color/grey01_C5C5C5"
+        app:layout_constraintBottom_toBottomOf="@id/tv_on_boarding_introduction_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_on_boarding_introduction_title" />
 
-        <EditText
-            android:id="@+id/et_on_boarding_nickname"
-            android:layout_width="0dp"
-            android:layout_height="58dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/et_color_focused"
-            android:hint="@string/onBoarding_nickname_hint_text"
-            android:importantForAutofill="no"
-            android:inputType="text"
-            android:maxLength="8"
-            android:maxLines="1"
-            android:onTextChanged="@{(text, start, before, count) -> viewModel.setNickname(text)}"
-            android:paddingHorizontal="12dp"
-            android:textAppearance="@style/text_r16"
-            android:textColor="@color/white"
-            android:textColorHint="@color/grey02_78808B"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tv_on_boarding_nickname_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_on_boarding_nickname_title"
-            editText:inputFilter="@{viewModel.getInputFilter()}" />
+    <EditText
+        android:id="@+id/et_on_boarding_introduction"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/et_color_focused"
+        android:gravity="top"
+        android:hint="@string/onBoarding_introduction_hint_text"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine|textNoSuggestions"
+        android:maxLength="200"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="12dp"
+        android:textAppearance="@style/text_r16"
+        android:textColor="@color/white"
+        android:textColorHint="@color/grey02_78808B"
+        app:layout_constraintDimensionRatio="H, 2:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tv_on_boarding_introduction_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_on_boarding_introduction_title" />
 
-        <TextView
-            android:id="@+id/tv_on_boarding_introduction_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="36dp"
-            android:text="@string/onBoarding_introduction_title_text"
-            android:textAppearance="@style/text_r16"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@id/tv_on_boarding_introduction_sub_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_on_boarding_nickname" />
+    <TextView
+        android:id="@+id/tv_on_boarding_btn_save"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="28dp"
+        android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
+        android:enabled="false"
+        android:paddingVertical="14dp"
+        android:text="@string/onBoarding_btn_text"
+        android:textAlignment="center"
+        android:textAppearance="@style/button_sb20"
+        android:textColor="@color/tv_color_disabled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_on_boarding_introduction_sub_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:text="@string/onBoarding_introduction_sub_title_text"
-            android:textAppearance="@style/description_r12"
-            android:textColor="@color/grey01_C5C5C5"
-            app:layout_constraintBottom_toBottomOf="@id/tv_on_boarding_introduction_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tv_on_boarding_introduction_title" />
-
-        <EditText
-            android:id="@+id/et_on_boarding_introduction"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/et_color_focused"
-            android:gravity="top"
-            android:hint="@string/onBoarding_introduction_hint_text"
-            android:importantForAutofill="no"
-            android:inputType="textMultiLine|textNoSuggestions"
-            android:maxLength="200"
-            android:onTextChanged="@{(text, start, before, count) -> viewModel.setIntroduction(text.toString())}"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="12dp"
-            android:textAppearance="@style/text_r16"
-            android:textColor="@color/white"
-            android:textColorHint="@color/grey02_78808B"
-            app:layout_constraintDimensionRatio="H, 2:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tv_on_boarding_introduction_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_on_boarding_introduction_title" />
-
-        <TextView
-            android:id="@+id/tv_on_boarding_btn_save"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="28dp"
-            android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
-            android:enabled="false"
-            android:onClick="@{() -> viewModel.patchOnBoarding()}"
-            android:paddingVertical="14dp"
-            android:text="@string/onBoarding_btn_text"
-            android:textAlignment="center"
-            android:textAppearance="@style/button_sb20"
-            android:textColor="@color/tv_color_disabled"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>
