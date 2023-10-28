@@ -1,6 +1,7 @@
 package com.yigongil.backend.domain.round;
 
 import com.yigongil.backend.domain.BaseEntity;
+import com.yigongil.backend.domain.event.MustDoUpdatedEvent;
 import com.yigongil.backend.domain.meetingdayoftheweek.MeetingDayOfTheWeek;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
@@ -106,6 +107,7 @@ public class Round extends BaseEntity {
         validateTodoLength(content);
         validateMaster(author);
         mustDo = content;
+        registerEvent(new MustDoUpdatedEvent(study.getId(), study.getName(), content));
     }
 
     public void validateMaster(Member member) {

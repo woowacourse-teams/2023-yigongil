@@ -1,6 +1,6 @@
 package com.yigongil.backend.application;
 
-import com.yigongil.backend.domain.event.MemberDeleteEvent;
+import com.yigongil.backend.domain.event.MemberDeletedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -15,7 +15,7 @@ public class StudyEventListener {
     }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-    public void listenMemberDeleteEvent(MemberDeleteEvent event) {
+    public void listenMemberDeleteEvent(MemberDeletedEvent event) {
         studyService.deleteByMasterId(event.memberId());
     }
 }

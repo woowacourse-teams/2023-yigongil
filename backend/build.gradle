@@ -76,6 +76,9 @@ dependencies {
     annotationProcessor "javax.persistence:javax.persistence-api"
     annotationProcessor "javax.annotation:javax.annotation-api"
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
+
+    // fcm
+    implementation 'com.google.firebase:firebase-admin:9.1.1'
 }
 
 tasks.named('test') {

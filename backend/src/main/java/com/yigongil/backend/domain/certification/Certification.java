@@ -1,6 +1,7 @@
 package com.yigongil.backend.domain.certification;
 
 import com.yigongil.backend.domain.BaseEntity;
+import com.yigongil.backend.domain.event.CertificationCreatedEvent;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.Study;
@@ -11,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PostPersist;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -58,5 +60,10 @@ public class Certification extends BaseEntity {
         this.imageUrl = imageUrl;
         this.createdAt = createdAt;
         this.round = round;
+    }
+
+    @PostPersist
+    public void registerCreatedEvent() {
+        registerEvent(new CertificationCreatedEvent(study.getId(), study.getName(), author.getGithubId()));
     }
 }

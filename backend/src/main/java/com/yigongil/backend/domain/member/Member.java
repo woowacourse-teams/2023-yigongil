@@ -1,7 +1,7 @@
 package com.yigongil.backend.domain.member;
 
 import com.yigongil.backend.domain.BaseEntity;
-import com.yigongil.backend.domain.event.MemberDeleteEvent;
+import com.yigongil.backend.domain.event.MemberDeletedEvent;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -103,7 +103,7 @@ public class Member extends BaseEntity {
 
     @PreRemove
     public void registerDeleteEvent() {
-        register(new MemberDeleteEvent(id));
+        registerEvent(new MemberDeletedEvent(id));
     }
 
     public void addExperience(int exp) {

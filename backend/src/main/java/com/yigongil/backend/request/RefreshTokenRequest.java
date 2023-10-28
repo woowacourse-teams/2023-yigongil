@@ -1,6 +1,6 @@
 package com.yigongil.backend.request;
 
-public record TokenRequest(
+public record RefreshTokenRequest(
         String refreshToken
 ) {
 

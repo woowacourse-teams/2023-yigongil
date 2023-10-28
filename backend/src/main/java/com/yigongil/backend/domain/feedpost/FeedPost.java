@@ -1,6 +1,7 @@
 package com.yigongil.backend.domain.feedpost;
 
 import com.yigongil.backend.domain.BaseEntity;
+import com.yigongil.backend.domain.event.FeedPostCreatedEvent;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.Study;
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PostPersist;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -52,6 +54,18 @@ public class FeedPost extends BaseEntity {
         this.content = content;
         this.imageUrl = imageUrl;
         this.createdAt = createdAt;
+    }
+
+    @PostPersist
+    public void registerCreatedEvent() {
+        registerEvent(new FeedPostCreatedEvent(
+                study.getId(),
+                study.getName(),
+                author.getGithubId(),
+                content,
+                imageUrl,
+                createdAt,
+        ));
     }
 
     @Override

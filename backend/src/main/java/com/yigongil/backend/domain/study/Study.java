@@ -1,6 +1,10 @@
 package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.domain.BaseEntity;
+import com.yigongil.backend.domain.event.StudyAppliedEvent;
+import com.yigongil.backend.domain.event.StudyCreatedEvent;
+import com.yigongil.backend.domain.event.StudyPermittedEvent;
+import com.yigongil.backend.domain.event.StudyStartedEvent;
 import com.yigongil.backend.domain.meetingdayoftheweek.MeetingDayOfTheWeek;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
@@ -33,6 +37,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PostPersist;
 import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.Cascade;
@@ -151,6 +156,11 @@ public class Study extends BaseEntity {
                     .build();
     }
 
+    @PostPersist
+    public void registerCreatedEvent() {
+        registerEvent(new StudyCreatedEvent(id, getMaster().getId()));
+    }
+
     private void validateNumberOfMaximumMembers(Integer numberOfMaximumMembers) {
         if (numberOfMaximumMembers < MIN_MEMBER_SIZE || numberOfMaximumMembers > MAX_MEMBER_SIZE) {
             throw new InvalidNumberOfMaximumStudyMember(
@@ -193,6 +203,8 @@ public class Study extends BaseEntity {
                     .filter(studyMember -> studyMember.getMember().equals(applicant))
                     .findAny()
                     .ifPresent(StudyMember::participate);
+
+        registerEvent(new StudyPermittedEvent(applicant.getId(), id, name));
     }
 
     public void validateMemberSize() {
@@ -224,6 +236,7 @@ public class Study extends BaseEntity {
         this.processingStatus = ProcessingStatus.PROCESSING;
         initializeMeetingDaysOfTheWeek(daysOfTheWeek);
         initializeRounds(startAt.toLocalDate());
+        registerEvent(new StudyStartedEvent(id, name));
     }
 
     private void deleteLeftApplicant() {
@@ -398,6 +411,8 @@ public class Study extends BaseEntity {
                                     .member(member)
                                     .studyResult(StudyResult.NONE)
                                     .build());
+
+        registerEvent(new StudyAppliedEvent(getMaster().getId(), name, member.getGithubId()));
     }
 
     private void validateApplicant(Member member) {

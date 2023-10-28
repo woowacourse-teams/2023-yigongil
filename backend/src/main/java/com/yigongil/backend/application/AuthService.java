@@ -5,7 +5,7 @@ import com.yigongil.backend.config.oauth.GithubOauth;
 import com.yigongil.backend.config.oauth.GithubProfileResponse;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.member.MemberRepository;
-import com.yigongil.backend.request.TokenRequest;
+import com.yigongil.backend.request.RefreshTokenRequest;
 import com.yigongil.backend.response.TokenResponse;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -40,7 +40,7 @@ public class AuthService {
         return createTokens(id);
     }
 
-    public TokenResponse refresh(TokenRequest request) {
+    public TokenResponse refresh(RefreshTokenRequest request) {
         String refreshToken = request.refreshToken();
 
         jwtTokenProvider.detectTokenTheft(refreshToken);

@@ -1,22 +1,17 @@
 package com.yigongil.backend.domain;
 
-import com.yigongil.backend.domain.event.DomainEvent;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.domain.AfterDomainEventPublication;
-import org.springframework.data.domain.DomainEvents;
+import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
-public abstract class BaseEntity {
+public abstract class BaseEntity extends AbstractAggregateRoot<BaseEntity> {
 
     @CreatedDate
     @Column(nullable = false)
@@ -24,23 +19,6 @@ public abstract class BaseEntity {
 
     @LastModifiedDate
     protected LocalDateTime updatedAt;
-
-    @Transient
-    private Collection<DomainEvent> domainEvents = new ArrayList<>();
-
-    @DomainEvents
-    public Collection<DomainEvent> events() {
-        return domainEvents;
-    }
-
-    @AfterDomainEventPublication
-    public void clear() {
-        domainEvents.clear();
-    }
-
-    protected void register(DomainEvent event) {
-        domainEvents.add(event);
-    }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
