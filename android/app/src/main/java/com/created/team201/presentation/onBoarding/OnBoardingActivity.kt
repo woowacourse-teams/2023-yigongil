@@ -30,7 +30,6 @@ class OnBoardingActivity :
         super.onCreate(savedInstanceState)
 
         initBinding()
-        setNicknameChangedListener()
         observeOnBoardingResult()
         observeNicknameState()
     }
@@ -51,10 +50,6 @@ class OnBoardingActivity :
         }
 
         return super.dispatchTouchEvent(ev)
-    }
-
-    private fun setNicknameChangedListener() {
-//        viewModel.setNickname(binding.etOnBoardingNickname.textChangesToFlow())
     }
 
     private fun observeOnBoardingResult() {
