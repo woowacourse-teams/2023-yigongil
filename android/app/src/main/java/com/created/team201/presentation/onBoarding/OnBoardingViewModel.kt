@@ -5,7 +5,6 @@ import android.text.InputFilter.LengthFilter
 import android.text.Spanned
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -16,8 +15,11 @@ import com.created.team201.presentation.onBoarding.model.NicknameState
 import com.created.team201.util.addSourceList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
@@ -51,10 +53,8 @@ class OnBoardingViewModel @Inject constructor(
             }
         }
 
-    private var isSaveOnBoarding: Boolean = false
-    private val _onBoardingState: MutableLiveData<State> = MutableLiveData<State>()
-    val onBoardingState: LiveData<State>
-        get() = _onBoardingState
+    private val _onBoardingEvent: MutableSharedFlow<Event> = MutableSharedFlow()
+    val onBoardingEvent: SharedFlow<Event> get() = _onBoardingEvent.asSharedFlow()
 
     val isEnableSave: LiveData<Boolean>
         get() = _isEnableSave
@@ -106,26 +106,21 @@ class OnBoardingViewModel @Inject constructor(
     }
 
     fun patchOnBoarding() {
-        if (isSaveOnBoarding) return
-        isSaveOnBoarding = true
-
         viewModelScope.launch {
             OnBoarding(Nickname(nickname.value), _introduction.value).apply {
                 onBoardingRepository.patchOnBoarding(this)
                     .onSuccess {
-                        _onBoardingState.value = State.SUCCESS
+                        _onBoardingEvent.emit(Event.SaveOnBoarding)
                     }.onFailure {
-                        _onBoardingState.value = State.FAIL
-                        isSaveOnBoarding = false
+                        _onBoardingEvent.emit(Event.ShowToast)
                     }
             }
         }
     }
 
-    sealed interface State {
-        object SUCCESS : State
-        object FAIL : State
-        object IDLE : State
+    sealed interface Event {
+        object ShowToast : Event
+        object SaveOnBoarding : Event
     }
 
     fun getInputFilter(): Array<InputFilter> = arrayOf(
