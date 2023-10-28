@@ -121,7 +121,7 @@ class OnBoardingViewModel @Inject constructor(
     sealed interface Event {
         object ShowToast : Event
         object SaveOnBoarding : Event
-        class EnableSave(val isEnable: Boolean) : Event
+        data class EnableSave(val isEnable: Boolean) : Event
     }
 
     fun getInputFilter(): Array<InputFilter> = arrayOf(
