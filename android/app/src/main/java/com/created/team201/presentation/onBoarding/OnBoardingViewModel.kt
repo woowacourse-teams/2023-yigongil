@@ -78,15 +78,15 @@ class OnBoardingViewModel @Inject constructor(
             _nickname.debounce(700)
                 .filter { text -> text.isNotEmpty() }
                 .onEach {
-                    getAvailableNickname()
+                    validateNickname(nickname.value)
                 }.launchIn(this@launch)
         }
     }
 
-    private fun getAvailableNickname() {
+    private fun validateNickname(nickname: String) {
         viewModelScope.launch {
             runCatching {
-                Nickname(nickname.value)
+                Nickname(nickname)
             }.onSuccess {
                 onBoardingRepository.getAvailableNickname(it)
                     .onSuccess { result ->
