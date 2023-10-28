@@ -16,7 +16,6 @@ import com.created.team201.presentation.onBoarding.model.NicknameState
 import com.created.team201.presentation.onBoarding.model.NicknameUiModel
 import com.created.team201.util.addSourceList
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,16 +31,14 @@ import javax.inject.Inject
 class OnBoardingViewModel @Inject constructor(
     private val onBoardingRepository: OnBoardingRepository,
 ) : ViewModel() {
-    private val _nickname: MutableStateFlow<NicknameUiModel> = MutableStateFlow(
-        NicknameUiModel(""),
-    )
+    private val _nickname: MutableStateFlow<String> = MutableStateFlow("")
+    val nickname: StateFlow<String> get() = _nickname.asStateFlow()
 
     private val _introduction: MutableStateFlow<String> = MutableStateFlow("")
 
     private val _nicknameState: MutableStateFlow<NicknameState> =
         MutableStateFlow(NicknameState.UNAVAILABLE)
-    val nicknameState: StateFlow<NicknameState>
-        get() = _nicknameState.asStateFlow()
+    val nicknameState: StateFlow<NicknameState> get() = _nicknameState.asStateFlow()
 
     private val _isEnableSave: MediatorLiveData<Boolean> =
         MediatorLiveData<Boolean>().apply {
@@ -62,14 +59,13 @@ class OnBoardingViewModel @Inject constructor(
     val isEnableSave: LiveData<Boolean>
         get() = _isEnableSave
 
-    fun setNickname(nickname: Flow<CharSequence?>) {
+    init {
+        initValidateNicknameDebounce()
+    }
+
+    fun setNickname(nickname: CharSequence) {
         viewModelScope.launch {
-            nickname.debounce(700)
-                .filter { text -> text?.length!! > 0 }
-                .onEach {
-                    _nickname.value = NicknameUiModel(it.toString())
-                    getAvailableNickname()
-                }.launchIn(this@launch)
+            _nickname.value = nickname.toString()
         }
     }
 
@@ -77,10 +73,20 @@ class OnBoardingViewModel @Inject constructor(
         _introduction.value = introduction
     }
 
+    private fun initValidateNicknameDebounce() {
+        viewModelScope.launch {
+            _nickname.debounce(700)
+                .filter { text -> text.isNotEmpty() }
+                .onEach {
+                    getAvailableNickname()
+                }.launchIn(this@launch)
+        }
+    }
+
     private fun getAvailableNickname() {
         viewModelScope.launch {
             runCatching {
-                _nickname.value.toDomain()
+                Nickname(nickname.value)
             }.onSuccess {
                 onBoardingRepository.getAvailableNickname(it)
                     .onSuccess { result ->
@@ -103,7 +109,7 @@ class OnBoardingViewModel @Inject constructor(
         isSaveOnBoarding = true
 
         viewModelScope.launch {
-            OnBoarding(_nickname.value.toDomain(), _introduction.value).apply {
+            OnBoarding(Nickname(nickname.value), _introduction.value).apply {
                 onBoardingRepository.patchOnBoarding(this)
                     .onSuccess {
                         _onBoardingState.value = State.SUCCESS
@@ -131,6 +137,10 @@ class OnBoardingViewModel @Inject constructor(
                 dStart: Int,
                 dEnd: Int,
             ): CharSequence {
+                if (text.toString() != nickname.value) {
+                    _nicknameState.value = NicknameState.UNAVAILABLE
+                }
+
                 if (text.isBlank() || PATTERN_NICKNAME.matcher(text).matches()) {
                     return text
                 }
@@ -142,7 +152,7 @@ class OnBoardingViewModel @Inject constructor(
     )
 
     private fun isInitializeOnBoarding(): Boolean =
-        _nickname.value.nickname.isBlank().not() &&
+        _nickname.value.isBlank().not() &&
                 nicknameState.value == NicknameState.AVAILABLE &&
                 _introduction.value.isBlank().not()
 
