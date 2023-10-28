@@ -13,9 +13,9 @@ import com.created.domain.model.Nickname
 import com.created.domain.model.OnBoarding
 import com.created.domain.repository.OnBoardingRepository
 import com.created.team201.presentation.onBoarding.model.NicknameState
-import com.created.team201.presentation.onBoarding.model.NicknameUiModel
 import com.created.team201.util.addSourceList
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -73,6 +73,7 @@ class OnBoardingViewModel @Inject constructor(
         _introduction.value = introduction
     }
 
+    @OptIn(FlowPreview::class)
     private fun initValidateNicknameDebounce() {
         viewModelScope.launch {
             _nickname.debounce(700)
@@ -155,8 +156,6 @@ class OnBoardingViewModel @Inject constructor(
         _nickname.value.isBlank().not() &&
                 nicknameState.value == NicknameState.AVAILABLE &&
                 _introduction.value.isBlank().not()
-
-    private fun NicknameUiModel.toDomain(): Nickname = Nickname(nickname = nickname)
 
     companion object {
         private val PATTERN_NICKNAME =
