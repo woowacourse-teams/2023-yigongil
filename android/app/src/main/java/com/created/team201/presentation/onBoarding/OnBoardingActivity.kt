@@ -19,6 +19,7 @@ import com.created.team201.presentation.main.MainActivity
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.State.FAIL
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.State.IDLE
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.State.SUCCESS
+import com.created.team201.presentation.onBoarding.util.textChangesToFlow
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -30,6 +31,7 @@ class OnBoardingActivity :
         super.onCreate(savedInstanceState)
 
         initBinding()
+        setNicknameChangedListener()
         observeOnBoardingResult()
         observeNicknameState()
     }
@@ -50,6 +52,10 @@ class OnBoardingActivity :
         }
 
         return super.dispatchTouchEvent(ev)
+    }
+
+    private fun setNicknameChangedListener() {
+        viewModel.setNickname(binding.etOnBoardingNickname.textChangesToFlow())
     }
 
     private fun observeOnBoardingResult() {

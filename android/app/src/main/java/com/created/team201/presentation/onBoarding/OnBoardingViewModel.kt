@@ -16,9 +16,14 @@ import com.created.team201.presentation.onBoarding.model.NicknameState
 import com.created.team201.presentation.onBoarding.model.NicknameUiModel
 import com.created.team201.util.addSourceList
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -57,9 +62,15 @@ class OnBoardingViewModel @Inject constructor(
     val isEnableSave: LiveData<Boolean>
         get() = _isEnableSave
 
-    fun setNickname(nickname: String) {
-        _nickname.value = NicknameUiModel(nickname)
-        getAvailableNickname()
+    fun setNickname(nickname: Flow<CharSequence?>) {
+        viewModelScope.launch {
+            nickname.debounce(700)
+                .filter { text -> text?.length!! > 0 }
+                .onEach {
+                    _nickname.value = NicknameUiModel(it.toString())
+                    getAvailableNickname()
+                }.launchIn(this@launch)
+        }
     }
 
     fun setIntroduction(introduction: String) {

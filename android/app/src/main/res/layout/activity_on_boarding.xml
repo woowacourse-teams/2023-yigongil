@@ -77,7 +77,6 @@
             android:inputType="text"
             android:maxLength="8"
             android:maxLines="1"
-            android:onTextChanged="@{(text, start, before, count) -> viewModel.setNickname(text.toString())}"
             android:paddingHorizontal="12dp"
             android:textAppearance="@style/text_r16"
             android:textColor="@color/white"
