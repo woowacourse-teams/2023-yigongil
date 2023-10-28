@@ -3,16 +3,12 @@ package com.created.team201.presentation.onBoarding
 import android.text.InputFilter
 import android.text.InputFilter.LengthFilter
 import android.text.Spanned
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.Nickname
 import com.created.domain.model.OnBoarding
 import com.created.domain.repository.OnBoardingRepository
 import com.created.team201.presentation.onBoarding.model.NicknameState
-import com.created.team201.util.addSourceList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -21,6 +17,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
@@ -42,25 +39,26 @@ class OnBoardingViewModel @Inject constructor(
         MutableStateFlow(NicknameState.UNAVAILABLE)
     val nicknameState: StateFlow<NicknameState> get() = _nicknameState.asStateFlow()
 
-    private val _isEnableSave: MediatorLiveData<Boolean> =
-        MediatorLiveData<Boolean>().apply {
-            addSourceList(
-                _nickname.asLiveData(),
-                nicknameState.asLiveData(),
-                _introduction.asLiveData()
-            ) {
-                isInitializeOnBoarding()
-            }
-        }
-
     private val _onBoardingEvent: MutableSharedFlow<Event> = MutableSharedFlow()
     val onBoardingEvent: SharedFlow<Event> get() = _onBoardingEvent.asSharedFlow()
 
-    val isEnableSave: LiveData<Boolean>
-        get() = _isEnableSave
-
     init {
         initValidateNicknameDebounce()
+        collectRequiredOnBoarding()
+    }
+
+    private fun collectRequiredOnBoarding() {
+        viewModelScope.launch {
+            combine(
+                nickname,
+                nicknameState,
+                _introduction
+            ) { nickname, nicknameState, introduction ->
+                return@combine isInitializeOnBoarding(nickname, nicknameState, introduction)
+            }.collect { isEnable ->
+                _onBoardingEvent.emit(Event.EnableSave(isEnable))
+            }
+        }
     }
 
     fun setNickname(nickname: CharSequence) {
@@ -107,13 +105,17 @@ class OnBoardingViewModel @Inject constructor(
 
     fun patchOnBoarding() {
         viewModelScope.launch {
-            OnBoarding(Nickname(nickname.value), _introduction.value).apply {
-                onBoardingRepository.patchOnBoarding(this)
-                    .onSuccess {
-                        _onBoardingEvent.emit(Event.SaveOnBoarding)
-                    }.onFailure {
-                        _onBoardingEvent.emit(Event.ShowToast)
-                    }
+            runCatching {
+                Nickname(nickname.value)
+            }.onSuccess { nickname ->
+                OnBoarding(nickname, _introduction.value).apply {
+                    onBoardingRepository.patchOnBoarding(this)
+                        .onSuccess {
+                            _onBoardingEvent.emit(Event.SaveOnBoarding)
+                        }.onFailure {
+                            _onBoardingEvent.emit(Event.ShowToast)
+                        }
+                }
             }
         }
     }
@@ -121,6 +123,7 @@ class OnBoardingViewModel @Inject constructor(
     sealed interface Event {
         object ShowToast : Event
         object SaveOnBoarding : Event
+        class EnableSave(val isEnable: Boolean) : Event
     }
 
     fun getInputFilter(): Array<InputFilter> = arrayOf(
@@ -147,10 +150,14 @@ class OnBoardingViewModel @Inject constructor(
         LengthFilter(MAX_NICKNAME_LENGTH),
     )
 
-    private fun isInitializeOnBoarding(): Boolean =
-        _nickname.value.isBlank().not() &&
-                nicknameState.value == NicknameState.AVAILABLE &&
-                _introduction.value.isBlank().not()
+    private fun isInitializeOnBoarding(
+        nickname: String,
+        nicknameState: NicknameState,
+        introduction: String,
+    ): Boolean =
+        nickname.isBlank().not() &&
+                nicknameState == NicknameState.AVAILABLE &&
+                introduction.isBlank().not()
 
     companion object {
         private val PATTERN_NICKNAME =

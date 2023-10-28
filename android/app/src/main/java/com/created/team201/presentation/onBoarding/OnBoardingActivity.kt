@@ -16,11 +16,11 @@ import com.created.team201.R
 import com.created.team201.databinding.ActivityOnBoardingBinding
 import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.main.MainActivity
+import com.created.team201.presentation.onBoarding.OnBoardingViewModel.Event.EnableSave
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.Event.SaveOnBoarding
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.Event.ShowToast
 import com.created.team201.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -55,10 +55,11 @@ class OnBoardingActivity :
 
     private fun observeOnBoardingResult() {
         repeatOnStarted {
-            viewModel.onBoardingEvent.collectLatest { event ->
+            viewModel.onBoardingEvent.collect { event ->
                 when (event) {
                     ShowToast -> showToast(getString(R.string.onBoarding_toast_fail))
                     SaveOnBoarding -> navigateToMain()
+                    is EnableSave -> binding.tvOnBoardingBtnSave.isEnabled = event.isEnable
                 }
             }
         }

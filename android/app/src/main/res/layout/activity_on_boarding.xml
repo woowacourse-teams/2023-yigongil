@@ -142,7 +142,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="28dp"
             android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
-            android:enabled="@{viewModel.isEnableSave()}"
+            android:enabled="false"
             android:onClick="@{() -> viewModel.patchOnBoarding()}"
             android:paddingVertical="14dp"
             android:text="@string/onBoarding_btn_text"
