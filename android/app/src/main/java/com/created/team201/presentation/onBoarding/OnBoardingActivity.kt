@@ -19,6 +19,7 @@ import com.created.team201.presentation.onBoarding.OnBoardingViewModel.Event.Sav
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.Event.ShowToast
 import com.created.team201.util.repeatOnStarted
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class OnBoardingActivity : AppCompatActivity() {
@@ -73,11 +74,13 @@ class OnBoardingActivity : AppCompatActivity() {
 
     private fun collectOnBoardingEvent() {
         repeatOnStarted {
-            viewModel.onBoardingEvent.collect { event ->
-                when (event) {
-                    ShowToast -> showToast(getString(R.string.onBoarding_toast_fail))
-                    SaveOnBoarding -> navigateToMain()
-                    is EnableSave -> binding.tvOnBoardingBtnSave.isEnabled = event.isEnable
+            launch {
+                viewModel.onBoardingEvent.collect { event ->
+                    when (event) {
+                        ShowToast -> showToast(getString(R.string.onBoarding_toast_fail))
+                        SaveOnBoarding -> navigateToMain()
+                        is EnableSave -> binding.tvOnBoardingBtnSave.isEnabled = event.isEnable
+                    }
                 }
             }
         }
@@ -85,10 +88,16 @@ class OnBoardingActivity : AppCompatActivity() {
 
     private fun collectNicknameState() {
         repeatOnStarted {
-            viewModel.nicknameState.collect { nicknameState ->
-                binding.tvOnBoardingNicknameValidateIntroduction.text =
-                    getString(nicknameState.introduction)
-                binding.tvOnBoardingNicknameValidateIntroduction.setTextColor(getColor(nicknameState.color))
+            launch {
+                viewModel.nicknameState.collect { nicknameState ->
+                    binding.tvOnBoardingNicknameValidateIntroduction.text =
+                        getString(nicknameState.introduction)
+                    binding.tvOnBoardingNicknameValidateIntroduction.setTextColor(
+                        getColor(
+                            nicknameState.color
+                        )
+                    )
+                }
             }
         }
     }
