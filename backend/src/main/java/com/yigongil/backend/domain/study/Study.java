@@ -207,8 +207,8 @@ public class Study extends BaseEntity {
                                  .count();
     }
 
-    public boolean isCurrentRoundEndAt(LocalDate today) {
-        return getCurrentRound().isEndAt(today);
+    public boolean isCurrentRoundEndAt(LocalDate yesterday) {
+        return getCurrentRound().isEndAt(yesterday);
     }
 
     public void start(Member member, List<DayOfWeek> daysOfTheWeek, LocalDateTime startAt) {
