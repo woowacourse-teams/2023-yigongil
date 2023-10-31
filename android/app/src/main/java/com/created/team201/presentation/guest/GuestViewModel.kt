@@ -27,8 +27,8 @@ class GuestViewModel @Inject constructor(
     private val _refreshState: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     val refreshState: LiveData<Boolean> get() = _refreshState
 
-    fun refresh() {
-        _refreshState.value = true
+    fun refresh(isRefreshed: Boolean) {
+        _refreshState.value = isRefreshed
     }
 
     fun signUp(token: String) {

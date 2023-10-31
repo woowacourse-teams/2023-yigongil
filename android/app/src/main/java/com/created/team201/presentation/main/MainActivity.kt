@@ -66,40 +66,34 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
                 val itemId = binding.bnvMain.selectedItemId
                 val fragmentType = FragmentType.valueOf(itemId)
                 showFragment(fragmentType)
+            } else {
+                binding.bnvMain.selectedItemId = R.id.menu_study_list
             }
         }
     }
 
     private fun setBottomNavigationView() {
         binding.bnvMain.setOnItemSelectedListener(::displayFragment)
-        binding.bnvMain.selectedItemId = R.id.menu_home
+        binding.bnvMain.selectedItemId = when (mainViewModel.isGuest) {
+            true -> R.id.menu_study_list
+            false -> R.id.menu_home
+        }
     }
 
     private fun displayFragment(item: MenuItem): Boolean {
         when (FragmentType.valueOf(item.itemId)) {
-            HOME -> showOriginOrGuest(HOME)
+            HOME -> showOriginOrLogin(HOME)
             STUDY_LIST -> showFragment(STUDY_LIST)
-            CHAT -> showOriginOrGuest(CHAT)
+            CHAT -> showOriginOrLogin(CHAT)
             MY_PAGE -> showOriginOrLogin(MY_PAGE)
             else -> throw IllegalStateException()
         }
         return true
     }
 
-    private fun showOriginOrGuest(type: FragmentType) {
-        when (mainViewModel.isGuest) {
-            true -> showFragment(GUEST)
-            false -> showFragment(type)
-        }
-    }
-
     private fun showOriginOrLogin(type: FragmentType) {
         when (mainViewModel.isGuest) {
-            true -> {
-                showFragment(GUEST)
-                showLoginBottomSheetDialog()
-            }
-
+            true -> showLoginBottomSheetDialog()
             false -> showFragment(type)
         }
     }

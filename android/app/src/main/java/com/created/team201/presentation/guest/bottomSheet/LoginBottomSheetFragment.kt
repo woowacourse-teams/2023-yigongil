@@ -48,6 +48,14 @@ class LoginBottomSheetFragment :
         setClickEventOnLoginButton()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        if (guestViewModel.signUpState.value != SUCCESS) {
+            guestViewModel.refresh(false)
+        }
+    }
+
     private fun initBinding() {
         binding.lifecycleOwner = viewLifecycleOwner
     }
@@ -72,7 +80,7 @@ class LoginBottomSheetFragment :
             when (onBoardingDoneState) {
                 is OnBoardingDoneState.Success -> {
                     if (onBoardingDoneState.isDone) {
-                        guestViewModel.refresh()
+                        guestViewModel.refresh(true)
                         this.dismiss()
                         if (parentFragment is BottomSheetListener) {
                             (parentFragment as BottomSheetListener).onBottomSheetClosed()
