@@ -100,9 +100,12 @@
             android:background="@drawable/bg_rectangle_radius_10dp_black02"
             android:ems="10"
             android:hint="잡담 및 질답하기"
-            android:inputType="text"
+            android:inputType="textMultiLine"
             android:maxLength="200"
+            android:maxLines="4"
+            android:minHeight="40dp"
             android:padding="8dp"
+            android:scrollbars="vertical"
             android:textAppearance="@style/text_r16"
             android:textColor="@color/white"
             android:textColorHint="@color/grey02_78808B"
@@ -116,10 +119,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"
             android:src="@drawable/icn_direct_message_btn"
-            app:layout_constraintBottom_toBottomOf="@+id/et_thread_input"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/et_thread_input" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
