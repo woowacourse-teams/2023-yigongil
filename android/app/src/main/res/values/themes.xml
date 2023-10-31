@@ -54,6 +54,8 @@
         <item name="android:editTextColor">@color/white</item>
         <!-- Hint text color -->
         <item name="android:textColorHint">@color/grey01_C5C5C5</item>
+
+        <item name="android:colorControlNormal">@color/white</item>
     </style>
 
 </resources>
