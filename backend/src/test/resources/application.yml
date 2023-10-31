@@ -1,41 +1,25 @@
 spring:
-  config:
-    import:
-      - classpath:/yigongil-private/application-dev.yml
-      - classpath:/yigongil-private/application-prod.yml
   profiles:
-    active: local
+    active: test
 
-springdoc:
-  api-docs:
-    path: "/api-docs"
-  swagger-ui:
-    disable-swagger-default-url: true
-    url: "/api-docs"
-    path: "/api"
-    display-request-duration: true
-server:
-  shutdown: graceful
 ---
 
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: test
   datasource:
-    url: jdbc:h2:mem:~/testdb;MODE=MySQL
+    url: jdbc:h2:mem:~/test;MODE=MySQL
+    username: sa
     driver-class-name: org.h2.Driver
   jpa:
-    hibernate:
-      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
         show_sql: true
+    hibernate:
+      ddl-auto: update
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-  h2:
-    console:
-      enabled: true
   flyway:
     enabled: false
 
@@ -55,8 +39,5 @@ oauth2:
       user-info-uri: http://localhost:8080/fakeInfo
 
 jwt:
-  expiration: 60
-  key: qkljwnqdjnqjkdnqdwkdkm31i4j1dasksmd
-
-swagger:
-  server-url: "https://localhost:8080/v1"
+  expiration: 5
+  key: qkljwnqdjnqjkdnqdwkdkm31i4j1dasksmdasdsadsasdafef113
