@@ -9,37 +9,33 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doOnTextChanged
 import com.created.team201.R
 import com.created.team201.databinding.ActivityOnBoardingBinding
-import com.created.team201.presentation.common.BindingActivity
 import com.created.team201.presentation.main.MainActivity
-import com.created.team201.presentation.onBoarding.OnBoardingViewModel.State.FAIL
-import com.created.team201.presentation.onBoarding.OnBoardingViewModel.State.IDLE
-import com.created.team201.presentation.onBoarding.OnBoardingViewModel.State.SUCCESS
+import com.created.team201.presentation.onBoarding.OnBoardingViewModel.Event.EnableSave
+import com.created.team201.presentation.onBoarding.OnBoardingViewModel.Event.SaveOnBoarding
+import com.created.team201.presentation.onBoarding.OnBoardingViewModel.Event.ShowToast
+import com.created.team201.util.collectOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class OnBoardingActivity :
-    BindingActivity<ActivityOnBoardingBinding>(R.layout.activity_on_boarding) {
+class OnBoardingActivity : AppCompatActivity() {
     private val viewModel: OnBoardingViewModel by viewModels()
+    private val binding: ActivityOnBoardingBinding by lazy {
+        ActivityOnBoardingBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(binding.root)
 
-        initBinding()
-        setValidateEditText()
-        setObserveOnBoardingResult()
-    }
-
-    private fun initBinding() {
-        binding.lifecycleOwner = this
-        binding.viewModel = viewModel
-    }
-
-    private fun setValidateEditText() {
-        binding.etOnBoardingNickname.setOnFocusChangeListener { _, focus ->
-            if (focus) return@setOnFocusChangeListener
-            viewModel.getAvailableNickname()
-        }
+        setNicknameInputFilter()
+        setInputTextChanged()
+        setSaveOnBoardingEvent()
+        collectOnBoardingEvent()
+        collectNicknameState()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -55,19 +51,40 @@ class OnBoardingActivity :
         return super.dispatchTouchEvent(ev)
     }
 
-    private fun setObserveOnBoardingResult() {
-        viewModel.onBoardingState.observe(this) { state ->
-            when (state) {
-                SUCCESS -> {
-                    navigateToMain()
-                }
+    private fun setNicknameInputFilter() {
+        binding.etOnBoardingNickname.filters = viewModel.getInputFilter()
+    }
 
-                FAIL -> {
-                    showToast(getString(R.string.onBoarding_toast_fail))
-                }
+    private fun setInputTextChanged() {
+        binding.etOnBoardingNickname.doOnTextChanged { text, _, _, _ ->
+            viewModel.setNickname(text.toString())
+        }
 
-                IDLE -> throw IllegalStateException()
+        binding.etOnBoardingIntroduction.doOnTextChanged { text, _, _, _ ->
+            viewModel.setIntroduction(text.toString())
+        }
+    }
+
+    private fun setSaveOnBoardingEvent() {
+        binding.tvOnBoardingBtnSave.setOnClickListener {
+            viewModel.patchOnBoarding()
+        }
+    }
+
+    private fun collectOnBoardingEvent() {
+        viewModel.onBoardingEvent.collectOnStarted(this) { event ->
+            when (event) {
+                ShowToast -> showToast(getString(R.string.onBoarding_toast_fail))
+                SaveOnBoarding -> navigateToMain()
+                is EnableSave -> binding.tvOnBoardingBtnSave.isEnabled = event.isEnable
             }
+        }
+    }
+
+    private fun collectNicknameState() {
+        viewModel.nicknameState.collectOnStarted(this) { nicknameState ->
+            binding.tvOnBoardingNicknameValidateIntroduction.text = getString(nicknameState.introduction)
+            binding.tvOnBoardingNicknameValidateIntroduction.setTextColor(getColor(nicknameState.color))
         }
     }
 
