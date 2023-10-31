@@ -294,6 +294,7 @@
 
     <!-- 스레드 뷰 -->
     <string name="thread_blank_input_toast_title">내용을 입력해 주세요</string>
+    <string name="thread_input_hint">잡담 및 질답하기</string>
 
     <!-- 스레드 Must Do 바텀시트 다이얼로그 -->
     <string name="thread_must_do_bottom_sheet_fragment_weeks">%d주차</string>
