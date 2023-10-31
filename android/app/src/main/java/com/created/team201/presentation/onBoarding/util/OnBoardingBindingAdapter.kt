@@ -1,4 +1,4 @@
-package com.created.team201.presentation.onBoarding
+package com.created.team201.presentation.onBoarding.util
 
 import android.text.InputFilter
 import android.widget.EditText
