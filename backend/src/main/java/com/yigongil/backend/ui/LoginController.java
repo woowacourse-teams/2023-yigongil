@@ -4,6 +4,7 @@ import com.yigongil.backend.application.AuthService;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.infra.MessagingService;
+import com.yigongil.backend.request.MessagingTokenRequest;
 import com.yigongil.backend.request.RefreshTokenRequest;
 import com.yigongil.backend.response.TokenResponse;
 import com.yigongil.backend.ui.doc.LoginApi;
@@ -22,7 +23,7 @@ public class LoginController implements LoginApi {
     private final AuthService authService;
     private final MessagingService messagingService;
 
-    public LoginController(AuthService authService, final MessagingService messagingService) {
+    public LoginController(AuthService authService, MessagingService messagingService) {
         this.authService = authService;
         this.messagingService = messagingService;
     }
@@ -33,10 +34,10 @@ public class LoginController implements LoginApi {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/firebase/tokens")
+    @PostMapping("/messaging/tokens")
     public ResponseEntity<Void> registerDevice(
             @Authorization Member member,
-            @RequestBody FirebaseTokenRequest request
+            @RequestBody MessagingTokenRequest request
     ) {
         messagingService.registerToken(request.token(), member);
         return ResponseEntity.ok().build();

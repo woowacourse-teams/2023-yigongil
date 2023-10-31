@@ -33,6 +33,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,9 @@ public class StudyService {
     private final CertificationService certificationService;
     private final FeedService feedService;
     private final RoundRepository roundRepository;
+
+    @Autowired
+    EntityManager em;
 
     public StudyService(
             StudyRepository studyRepository,
@@ -128,6 +133,7 @@ public class StudyService {
     public void apply(Member member, Long studyId) {
         Study study = findStudyById(studyId);
         study.apply(member);
+//        studyRepository.save(study);
     }
 
     @Transactional

@@ -1,6 +1,7 @@
 package com.yigongil.backend.acceptance.steps;
 
 import com.yigongil.backend.config.auth.JwtTokenProvider;
+import com.yigongil.backend.domain.member.Member;
 import io.cucumber.spring.ScenarioScope;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
@@ -17,6 +18,7 @@ public class SharedContext {
 
     private ExtractableResponse<Response> response;
     private final Map<String, Object> parameters = new HashMap<>();
+    private final Map<String, Member> members = new HashMap<>();
     private final Map<String, String> tokens = new HashMap<>();
 
     @Autowired
@@ -64,5 +66,13 @@ public class SharedContext {
 
     public String getToken(String userName) {
         return tokens.get(userName);
+    }
+
+    public void setMember(final String githubId, final Member member) {
+        members.put(githubId, member);
+    }
+
+    public Member getMember(final String githubId) {
+        return members.get(githubId);
     }
 }

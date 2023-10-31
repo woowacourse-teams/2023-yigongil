@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.request.ProfileUpdateRequest;
 import com.yigongil.backend.response.NicknameValidationResponse;
 import com.yigongil.backend.response.OnboardingCheckResponse;
@@ -45,6 +46,14 @@ public class MemberSteps {
 
         sharedContext.setTokens(githubId, tokenResponse.accessToken());
         sharedContext.setId(githubId, tokenResponse.accessToken());
+        Member member = Member.builder()
+                              .id(sharedContext.getId(githubId))
+                              .githubId(githubId)
+                              .nickname(githubId)
+                              .profileImageUrl("this_is_fake_image_url")
+                              .isOnboardingDone(true)
+                              .build();
+        sharedContext.setMember(githubId, member);
         sharedContext.setRefresh(githubId, tokenResponse.refreshToken());
     }
 

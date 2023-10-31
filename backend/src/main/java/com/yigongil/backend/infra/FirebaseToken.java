@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import lombok.Getter;
 
 @Getter
-public class FirebaseMember extends BaseEntity {
+public class FirebaseToken extends BaseEntity {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -25,10 +25,10 @@ public class FirebaseMember extends BaseEntity {
     @Column(name = "token", nullable = false)
     private String token;
 
-    protected FirebaseMember() {
+    protected FirebaseToken() {
     }
 
-    public FirebaseMember(Member member, String token) {
+    public FirebaseToken(Member member, String token) {
         this.member = member;
         this.token = token;
     }

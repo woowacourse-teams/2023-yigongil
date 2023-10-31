@@ -12,7 +12,7 @@ import org.springframework.core.io.ClassPathResource;
 
 @Profile(value = {"prod", "dev"})
 @Configuration
-public class FirebaseConfig {
+public class FirebaseMessagingConfig {
 
     @Bean
     public FirebaseMessaging messagingService(FirebaseApp firebaseApp) {

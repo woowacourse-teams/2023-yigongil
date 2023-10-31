@@ -64,7 +64,7 @@ public class FeedPost extends BaseEntity {
                 author.getGithubId(),
                 content,
                 imageUrl,
-                createdAt,
+                createdAt
         ));
     }
 
