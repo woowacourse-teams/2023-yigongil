@@ -101,6 +101,7 @@
             android:ems="10"
             android:hint="잡담 및 질답하기"
             android:inputType="text"
+            android:maxLength="200"
             android:padding="8dp"
             android:textAppearance="@style/text_r16"
             android:textColor="@color/white"

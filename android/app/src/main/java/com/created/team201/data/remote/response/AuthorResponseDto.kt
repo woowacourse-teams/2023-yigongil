@@ -8,7 +8,7 @@ data class AuthorResponseDto(
     @SerialName("id")
     val id: Long,
     @SerialName("nickname")
-    val nickname: String,
+    val nickname: String?,
     @SerialName("profileImageUrl")
-    val profileImageUrl: String,
+    val profileImageUrl: String?,
 )
