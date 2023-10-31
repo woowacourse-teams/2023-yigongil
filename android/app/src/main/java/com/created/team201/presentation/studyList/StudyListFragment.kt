@@ -22,6 +22,7 @@ import com.created.team201.presentation.main.MainViewModel
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
 import com.created.team201.presentation.studyList.adapter.StudyListAdapter
 import com.created.team201.presentation.studyList.model.StudyListFilter
+import com.created.team201.presentation.studyList.model.StudyListFilter.Companion.isGuestOnly
 import com.created.team201.util.FirebaseLogUtil
 import com.created.team201.util.FirebaseLogUtil.SCREEN_STUDY_LIST
 import com.google.android.material.chip.ChipGroup
@@ -235,9 +236,6 @@ class StudyListFragment :
 
     private fun setupStudyList() {
         studyListViewModel.initPage()
-        binding.tvGuestInformation.setOnClickListener {
-            showLoginBottomSheetDialog()
-        }
     }
 
     private fun studyListClickListener() = object : StudyListClickListener {
@@ -256,6 +254,9 @@ class StudyListFragment :
         studyListViewModel.updateIsGuest(mainViewModel.isGuest)
         val filter = getStudyListFilter(group)
         studyListViewModel.loadFilteredPage(filter)
+        if (mainViewModel.isGuest and filter.isGuestOnly()) {
+            showLoginBottomSheetDialog()
+        }
     }
 
     private fun getStudyListFilter(group: ChipGroup): StudyListFilter {
