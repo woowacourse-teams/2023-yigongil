@@ -96,6 +96,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="20dp"
+                android:autoLink="web|email"
                 android:maxLines="10"
                 android:text="@{item.content}"
                 android:textAppearance="@style/subtitle_r20"
@@ -105,7 +106,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cl_member_info"
-                tools:text="아아 언제다하냐 진짜 ㅋㅋ" />
+                tools:text="스터디 날짜가 언제인가요?" />
 
             <View
                 android:id="@+id/view_thread_comment_border"

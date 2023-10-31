@@ -29,10 +29,10 @@
             android:layout_marginStart="12dp"
             android:textAppearance="@style/picker_sb18"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_thread_back_button"
-            app:layout_constraintEnd_toStartOf="@+id/spinner_thread"
-            app:layout_constraintStart_toEndOf="@+id/iv_thread_back_button"
-            app:layout_constraintTop_toTopOf="@+id/iv_thread_back_button"
+            app:layout_constraintBottom_toBottomOf="@id/iv_thread_back_button"
+            app:layout_constraintEnd_toStartOf="@id/spinner_thread"
+            app:layout_constraintStart_toEndOf="@id/iv_thread_back_button"
+            app:layout_constraintTop_toTopOf="@id/iv_thread_back_button"
             tools:text="자두타먹는 스터디" />
 
         <Spinner
@@ -46,7 +46,7 @@
             android:popupBackground="#20232B"
             android:popupElevation="10dp"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_thread_back_button"
+            app:layout_constraintBottom_toBottomOf="@id/iv_thread_back_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_thread_back_button" />
 
@@ -61,7 +61,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_thread_back_button"
+            app:layout_constraintTop_toBottomOf="@id/iv_thread_back_button"
             tools:listitem="@layout/item_thread_must_do" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -75,7 +75,7 @@
             app:layout_constraintBottom_toTopOf="@+id/view_thread_border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rv_must_do"
+            app:layout_constraintTop_toBottomOf="@id/rv_must_do"
             app:reverseLayout="true"
             tools:itemCount="2"
             tools:listitem="@layout/item_thread_comment" />
@@ -111,7 +111,7 @@
             android:textColorHint="@color/grey02_78808B"
             android:textCursorDrawable="@drawable/cursor_color"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/iv_thread_direct_button"
+            app:layout_constraintEnd_toStartOf="@id/iv_thread_direct_button"
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
