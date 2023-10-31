@@ -17,9 +17,8 @@ import com.created.team201.presentation.main.MainActivity
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.Event.EnableSave
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.Event.SaveOnBoarding
 import com.created.team201.presentation.onBoarding.OnBoardingViewModel.Event.ShowToast
-import com.created.team201.util.repeatOnStarted
+import com.created.team201.util.collectOnStarted
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class OnBoardingActivity : AppCompatActivity() {
@@ -73,32 +72,19 @@ class OnBoardingActivity : AppCompatActivity() {
     }
 
     private fun collectOnBoardingEvent() {
-        repeatOnStarted {
-            launch {
-                viewModel.onBoardingEvent.collect { event ->
-                    when (event) {
-                        ShowToast -> showToast(getString(R.string.onBoarding_toast_fail))
-                        SaveOnBoarding -> navigateToMain()
-                        is EnableSave -> binding.tvOnBoardingBtnSave.isEnabled = event.isEnable
-                    }
-                }
+        viewModel.onBoardingEvent.collectOnStarted(this) { event ->
+            when (event) {
+                ShowToast -> showToast(getString(R.string.onBoarding_toast_fail))
+                SaveOnBoarding -> navigateToMain()
+                is EnableSave -> binding.tvOnBoardingBtnSave.isEnabled = event.isEnable
             }
         }
     }
 
     private fun collectNicknameState() {
-        repeatOnStarted {
-            launch {
-                viewModel.nicknameState.collect { nicknameState ->
-                    binding.tvOnBoardingNicknameValidateIntroduction.text =
-                        getString(nicknameState.introduction)
-                    binding.tvOnBoardingNicknameValidateIntroduction.setTextColor(
-                        getColor(
-                            nicknameState.color
-                        )
-                    )
-                }
-            }
+        viewModel.nicknameState.collectOnStarted(this) { nicknameState ->
+            binding.tvOnBoardingNicknameValidateIntroduction.text = getString(nicknameState.introduction)
+            binding.tvOnBoardingNicknameValidateIntroduction.setTextColor(getColor(nicknameState.color))
         }
     }
 
