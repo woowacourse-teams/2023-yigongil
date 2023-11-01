@@ -1,6 +1,6 @@
 package com.yigongil.backend.domain.report;
 
-import com.yigongil.backend.domain.BaseEntity;
+import com.yigongil.backend.domain.base.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.exception.InvalidReportContentLengthException;
 import com.yigongil.backend.exception.InvalidReportTitleLengthException;

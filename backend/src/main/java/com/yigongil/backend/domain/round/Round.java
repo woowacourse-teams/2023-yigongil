@@ -1,6 +1,6 @@
 package com.yigongil.backend.domain.round;
 
-import com.yigongil.backend.domain.BaseEntity;
+import com.yigongil.backend.domain.base.BaseEntity;
 import com.yigongil.backend.domain.meetingdayoftheweek.MeetingDayOfTheWeek;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;

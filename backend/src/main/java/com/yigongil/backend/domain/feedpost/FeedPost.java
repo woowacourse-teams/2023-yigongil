@@ -1,6 +1,6 @@
 package com.yigongil.backend.domain.feedpost;
 
-import com.yigongil.backend.domain.BaseEntity;
+import com.yigongil.backend.domain.base.BaseEntity;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.Study;
 import java.time.LocalDateTime;
