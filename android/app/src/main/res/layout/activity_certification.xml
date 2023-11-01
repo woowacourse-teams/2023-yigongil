@@ -66,6 +66,7 @@
             android:maxLines="6"
             android:paddingHorizontal="16dp"
             android:paddingVertical="12dp"
+            android:scrollbars="vertical"
             android:textAppearance="@style/text_r14"
             android:textColor="@color/white"
             android:textColorHint="@color/grey02_78808B"
