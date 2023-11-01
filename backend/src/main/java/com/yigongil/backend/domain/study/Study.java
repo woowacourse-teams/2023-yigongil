@@ -252,7 +252,7 @@ public class Study extends BaseEntity {
     private List<Round> createRoundsOfFirstWeek(final LocalDate startAt) {
         List<Round> rounds = meetingDaysOfTheWeek.stream()
                                                  .filter(meetingDayOfTheWeek -> meetingDayOfTheWeek.comesNext(startAt.getDayOfWeek()))
-                                                 .map(meetingDayOfTheWeek -> Round.of(meetingDayOfTheWeek, this, FIRST_WEEK))
+                                                 .map(meetingDayOfTheWeek -> Round.of(meetingDayOfTheWeek.getDayOfWeek(), this, FIRST_WEEK))
                                                  .toList();
         if (rounds.isEmpty()) {
             rounds = createRoundsOf(FIRST_WEEK);
@@ -291,14 +291,15 @@ public class Study extends BaseEntity {
 
     private Round findFirstRoundOf(int nextWeekNumber) {
         return rounds.stream()
-                     .filter(round -> round.isSameWeek(nextWeekNumber) && round.isSameDayOfWeek(findFirstMeetingDayOfTheWeek()))
+                     .filter(round -> round.isSameWeek(nextWeekNumber) && round.isSameDayOfWeek(findFirstDayOfTheWeek()))
                      .findAny()
                      .orElseThrow(() -> new RoundNotFoundException("다음 주차의 라운드가 존재하지 않습니다.", getCurrentRound().getWeekNumber()));
     }
 
-    private MeetingDayOfTheWeek findFirstMeetingDayOfTheWeek() {
+    private DayOfWeek findFirstDayOfTheWeek() {
         return meetingDaysOfTheWeek.stream()
                                    .min(Comparator.comparing(MeetingDayOfTheWeek::getOrder))
+                                   .map(MeetingDayOfTheWeek::getDayOfWeek)
                                    .orElseThrow();
     }
 
@@ -387,7 +388,7 @@ public class Study extends BaseEntity {
 
     private List<Round> createRoundsOf(Integer weekNumber) {
         return meetingDaysOfTheWeek.stream()
-                                   .map(meetingDayOfTheWeek -> Round.of(meetingDayOfTheWeek, this, weekNumber))
+                                   .map(meetingDayOfTheWeek -> Round.of(meetingDayOfTheWeek.getDayOfWeek(), this, weekNumber))
                                    .toList();
     }
 

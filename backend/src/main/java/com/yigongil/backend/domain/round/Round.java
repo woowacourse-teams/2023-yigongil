@@ -1,7 +1,6 @@
 package com.yigongil.backend.domain.round;
 
 import com.yigongil.backend.domain.base.BaseEntity;
-import com.yigongil.backend.domain.meetingdayoftheweek.MeetingDayOfTheWeek;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.study.Study;
@@ -60,9 +59,8 @@ public class Round extends BaseEntity {
     @JoinColumn(name = "round_id", nullable = false)
     private List<RoundOfMember> roundOfMembers = new ArrayList<>();
 
-    @Cascade(CascadeType.PERSIST)
-    @ManyToOne(fetch = FetchType.LAZY)
-    private MeetingDayOfTheWeek meetingDayOfTheWeek;
+    @Enumerated(EnumType.ORDINAL)
+    private DayOfWeek dayOfWeek;
 
     @Column(nullable = false)
     private Integer weekNumber;
@@ -80,7 +78,7 @@ public class Round extends BaseEntity {
             String mustDo,
             Member master,
             List<RoundOfMember> roundOfMembers,
-            MeetingDayOfTheWeek meetingDayOfTheWeek,
+            DayOfWeek dayOfWeek,
             Integer weekNumber
     ) {
         this.id = id;
@@ -88,14 +86,14 @@ public class Round extends BaseEntity {
         this.mustDo = mustDo;
         this.master = master;
         this.roundOfMembers = roundOfMembers == null ? new ArrayList<>() : roundOfMembers;
-        this.meetingDayOfTheWeek = meetingDayOfTheWeek;
+        this.dayOfWeek = dayOfWeek;
         this.weekNumber = weekNumber;
     }
 
-    public static Round of(MeetingDayOfTheWeek meetingDayOfTheWeek, Study study, Integer weekNumber) {
+    public static Round of(DayOfWeek dayOfWeek, Study study, Integer weekNumber) {
         return Round.builder()
                     .study(study)
-                    .meetingDayOfTheWeek(meetingDayOfTheWeek)
+                    .dayOfWeek(dayOfWeek)
                     .weekNumber(weekNumber)
                     .master(study.getMaster())
                     .roundOfMembers(RoundOfMember.from(study))
@@ -140,7 +138,7 @@ public class Round extends BaseEntity {
     }
 
     public boolean isEndAt(LocalDate date) {
-        return meetingDayOfTheWeek.isSameDayOfWeek(date.getDayOfWeek());
+        return dayOfWeek == date.getDayOfWeek();
     }
 
     public RoundOfMember findRoundOfMemberBy(Member member) {
@@ -180,12 +178,12 @@ public class Round extends BaseEntity {
         return this.weekNumber == weekNumber;
     }
 
-    public boolean isSameDayOfWeek(MeetingDayOfTheWeek meetingDayOfTheWeek) {
-        return this.meetingDayOfTheWeek.equals(meetingDayOfTheWeek);
+    public boolean isSameDayOfWeek(DayOfWeek dayOfWeek) {
+        return this.dayOfWeek.equals(dayOfWeek);
     }
 
     public boolean isNextDayOfWeek(DayOfWeek dayOfWeek) {
-        return this.meetingDayOfTheWeek.comesNext(dayOfWeek);
+        return this.dayOfWeek.getValue() > dayOfWeek.getValue();
     }
 
     public boolean isInProgress() {
@@ -193,15 +191,11 @@ public class Round extends BaseEntity {
     }
 
     public int calculateLeftDaysFrom(LocalDate date) {
-        int gap = meetingDayOfTheWeek.getDayOfWeek().getValue() - date.getDayOfWeek().getValue();
+        int gap = dayOfWeek.getValue() - date.getDayOfWeek().getValue();
         if (gap < 0) {
             return gap + DayOfWeek.values().length;
         }
         return gap;
-    }
-
-    public DayOfWeek getDayOfWeek() {
-        return meetingDayOfTheWeek.getDayOfWeek();
     }
 
     public boolean isBeforeOrSame(Integer minimumWeeks) {
