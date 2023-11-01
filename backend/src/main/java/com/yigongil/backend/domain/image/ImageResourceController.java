@@ -1,6 +1,5 @@
-package com.yigongil.backend.ui;
+package com.yigongil.backend.domain.image;
 
-import com.yigongil.backend.application.ImageResourceService;
 import java.net.URI;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;

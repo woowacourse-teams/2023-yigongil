@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.mockito.BDDMockito.willReturn;
 
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.round.MustDoService;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;

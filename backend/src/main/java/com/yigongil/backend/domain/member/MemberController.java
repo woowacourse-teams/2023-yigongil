@@ -1,8 +1,6 @@
-package com.yigongil.backend.ui;
+package com.yigongil.backend.domain.member;
 
-import com.yigongil.backend.application.MemberService;
 import com.yigongil.backend.config.auth.Authorization;
-import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.request.ProfileUpdateRequest;
 import com.yigongil.backend.response.MyProfileResponse;
 import com.yigongil.backend.response.NicknameValidationResponse;

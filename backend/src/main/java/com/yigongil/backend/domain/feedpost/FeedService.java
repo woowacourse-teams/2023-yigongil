@@ -1,7 +1,5 @@
-package com.yigongil.backend.application;
+package com.yigongil.backend.domain.feedpost;
 
-import com.yigongil.backend.domain.feedpost.FeedPost;
-import com.yigongil.backend.domain.feedpost.FeedPostRepository;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.request.FeedPostCreateRequest;

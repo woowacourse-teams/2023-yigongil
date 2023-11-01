@@ -13,12 +13,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yigongil.backend.application.MemberService;
 import com.yigongil.backend.config.AuthConfig;
 import com.yigongil.backend.config.auth.AuthContext;
 import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.member.MemberController;
 import com.yigongil.backend.domain.member.MemberRepository;
+import com.yigongil.backend.domain.member.MemberService;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.request.ProfileUpdateRequest;
 import com.yigongil.backend.response.NicknameValidationResponse;
@@ -63,7 +64,6 @@ class MemberControllerTest {
 
     @MockBean
     private InternalServerErrorMessageConverter internalServerErrorMessageConverter;
-
 
 
     @Test

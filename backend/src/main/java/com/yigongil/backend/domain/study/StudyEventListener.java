@@ -1,4 +1,4 @@
-package com.yigongil.backend.application;
+package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.domain.event.MemberDeleteEvent;
 import org.springframework.stereotype.Component;

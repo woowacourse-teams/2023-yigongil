@@ -10,10 +10,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yigongil.backend.application.MustDoService;
 import com.yigongil.backend.config.auth.AuthContext;
 import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.domain.member.MemberRepository;
+import com.yigongil.backend.domain.round.MustDoController;
+import com.yigongil.backend.domain.round.MustDoService;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.request.MustDoUpdateRequest;
 import com.yigongil.backend.ui.exceptionhandler.InternalServerErrorMessageConverter;

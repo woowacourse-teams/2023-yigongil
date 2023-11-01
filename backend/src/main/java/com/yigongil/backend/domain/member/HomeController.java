@@ -1,8 +1,7 @@
-package com.yigongil.backend.ui;
+package com.yigongil.backend.domain.member;
 
-import com.yigongil.backend.application.RoundService;
 import com.yigongil.backend.config.auth.Authorization;
-import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.round.RoundService;
 import com.yigongil.backend.response.UpcomingStudyResponse;
 import com.yigongil.backend.ui.doc.HomeApi;
 import java.util.List;

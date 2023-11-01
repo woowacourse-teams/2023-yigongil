@@ -1,6 +1,5 @@
-package com.yigongil.backend.ui;
+package com.yigongil.backend.domain.report;
 
-import com.yigongil.backend.application.ReportService;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.request.MemberReportCreateRequest;

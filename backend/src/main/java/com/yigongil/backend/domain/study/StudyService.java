@@ -1,14 +1,12 @@
-package com.yigongil.backend.application;
+package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.domain.certification.Certification;
+import com.yigongil.backend.domain.certification.CertificationService;
+import com.yigongil.backend.domain.feedpost.FeedService;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
-import com.yigongil.backend.domain.study.PageStrategy;
-import com.yigongil.backend.domain.study.ProcessingStatus;
-import com.yigongil.backend.domain.study.Study;
-import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
