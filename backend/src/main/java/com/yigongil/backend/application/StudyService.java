@@ -223,7 +223,7 @@ public class StudyService {
         List<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.PROCESSING);
 
         studies.stream()
-               .filter(study -> study.isCurrentRoundEndAt(today))
+               .filter(study -> study.isCurrentRoundEndAt(today.minusDays(1)))
                .forEach(Study::updateToNextRound);
     }
 
