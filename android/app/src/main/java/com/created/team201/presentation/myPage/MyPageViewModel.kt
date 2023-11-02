@@ -111,11 +111,8 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun resetModifyProfile() {
-        profile.value.also {
-            _nickname.value = it.profileInformation.nickname.nickname
-            _introduction.value = it.profileInformation.introduction
-        }
-        _profile.value = profile.value
+        _nickname.value = profile.value.profileInformation.nickname.nickname
+        _introduction.value = profile.value.profileInformation.introduction
     }
 
     fun loadProfile() {

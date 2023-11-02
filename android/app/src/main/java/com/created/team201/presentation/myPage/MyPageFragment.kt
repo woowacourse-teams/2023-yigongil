@@ -77,6 +77,7 @@ class MyPageFragment : Fragment() {
         setActionBar()
         setOnProfileModifyClick()
         setEditTextChangeListener()
+        collectMyProfileInformation()
         collectMyProfileType()
         collectModifyProfileState()
         collectNicknameState()
@@ -153,11 +154,23 @@ class MyPageFragment : Fragment() {
 
     private fun setEditTextChangeListener() {
         binding.etMyPageProfileNickname.filters = myPageViewModel.getInputFilter()
-        binding.etMyPageProfileNickname.doOnTextChanged { text, _, _, _ ->
+        binding.etMyPageProfileNickname.doOnTextChanged { text, start, before, count ->
             myPageViewModel.setNickname(text.toString())
         }
         binding.etMyPageProfileIntroduction.doOnTextChanged { text, _, _, _ ->
             myPageViewModel.setIntroduction(text.toString())
+        }
+    }
+
+    private fun collectMyProfileInformation() {
+        myPageViewModel.nickname.collectOnStarted(viewLifecycleOwner) { nickname ->
+            if (binding.etMyPageProfileNickname.text.toString() == nickname) return@collectOnStarted
+            binding.etMyPageProfileNickname.setText(nickname)
+        }
+
+        myPageViewModel.introduction.collectOnStarted(viewLifecycleOwner) { introduction ->
+            if (binding.etMyPageProfileIntroduction.text.toString() == introduction) return@collectOnStarted
+            binding.etMyPageProfileIntroduction.setText(introduction)
         }
     }
 
