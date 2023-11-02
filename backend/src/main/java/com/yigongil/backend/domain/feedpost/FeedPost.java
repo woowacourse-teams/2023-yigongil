@@ -31,7 +31,7 @@ public class FeedPost extends BaseEntity {
     @JoinColumn(name = "study_id")
     private Study study;
 
-    @Column(length = 1000)
+    @Column(length = 1000, nullable = false)
     private String content;
 
     private String imageUrl;
