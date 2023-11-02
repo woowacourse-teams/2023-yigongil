@@ -35,7 +35,7 @@ public enum RoundFixture {
                     .id(id)
                     .mustDo(content)
                     .master(master)
-                    .roundOfMembers(new ArrayList<>(List.of(RoundOfMemberFixture.김진우_라운드_삼.toRoundOfMember(), RoundOfMemberFixture.노이만_라오멤.toRoundOfMember())))
+                    .roundOfMembers(new ArrayList<>(List.of(RoundOfMemberFixture.김진우_라오멤.toRoundOfMember(), RoundOfMemberFixture.노이만_라오멤.toRoundOfMember())))
                     .build();
     }
 
@@ -43,11 +43,12 @@ public enum RoundFixture {
         List<RoundOfMember> roundOfMembers = Arrays.stream(roundOfMemberFixtures)
                                                    .map(RoundOfMemberFixture::toRoundOfMember)
                                                    .toList();
+
         return Round.builder()
                     .id(id)
                     .mustDo(content)
                     .master(master)
-                    .roundOfMembers(roundOfMembers)
+                    .roundOfMembers(new ArrayList<>(roundOfMembers))
                     .build();
     }
 }

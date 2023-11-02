@@ -85,6 +85,10 @@ public class StudyMember extends BaseEntity {
         return this.role == Role.MASTER;
     }
 
+    public boolean isExit() {
+        return this.role == Role.EXIT;
+    }
+
     public void completeSuccessfully() {
         int totalExperience = calculateAccumulatedExperience();
         member.addExperience(totalExperience);
@@ -98,7 +102,8 @@ public class StudyMember extends BaseEntity {
         return successfulRoundCount * (defaultRoundExperience + additionalExperienceOfPeriodLength);
     }
 
-    public void failStudy() {
+    public void exit() {
+        this.role = Role.EXIT;
         this.studyResult = StudyResult.FAIL;
     }
 

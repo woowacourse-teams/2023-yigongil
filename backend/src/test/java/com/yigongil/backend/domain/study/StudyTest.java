@@ -2,9 +2,11 @@ package com.yigongil.backend.domain.study;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
+import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.fixture.MemberFixture;
@@ -168,5 +170,51 @@ class StudyTest {
         // then
         assertThatThrownBy(() -> study.apply(member3))
                 .isInstanceOf(InvalidMemberSizeException.class);
+    }
+
+    @Nested
+    class 스터디_탈퇴 {
+        @Test
+        void 스터디_탈퇴() {
+            // given
+            Study study = StudyFixture.자바_스터디_모집중.toStudy();
+            Member master = MemberFixture.김진우.toMember();
+            Member member1 = MemberFixture.마틴파울러.toMember();
+            study.apply(member1);
+            study.permit(member1, master);
+
+            Member member2 = MemberFixture.폰노이만.toMember();
+            study.apply(member2);
+            study.permit(member2, master);
+
+            StudyMember studyMember1 = study.getStudyMembers().stream()
+                                            .filter(studyMember -> studyMember.getMember()
+                                                                              .equals(member1))
+                                            .findAny()
+                                            .get();
+            // when
+            study.exit(member1);
+
+            // then
+            assertAll(
+                    () -> assertThat(study.sizeOfCurrentMembers()).isEqualTo(2),
+                    () -> assertThat(studyMember1.isExit()).isTrue()
+            );
+
+        }
+
+        @Test
+        void 멤버의_수가_2명_이하면_예외가_발생한다() {
+            // given
+            Study study = StudyFixture.자바_스터디_모집중_정원_2.toStudy();
+            Member master = MemberFixture.김진우.toMember();
+            Member member = MemberFixture.마틴파울러.toMember();
+            study.apply(member);
+            study.permit(member, master);
+
+            // when, then
+            assertThatThrownBy(() -> study.exit(member))
+                    .isInstanceOf(InvalidMemberSizeException.class);
+        }
     }
 }
