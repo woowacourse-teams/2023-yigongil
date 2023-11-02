@@ -3,6 +3,7 @@ package com.created.team201.presentation.myPage
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
+import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.Toast
@@ -161,8 +162,8 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         }
 
     private fun setProfileView(enabled: Boolean) {
+        setIntroductionReadWriteMode(enabled)
         binding.etMyPageProfileNickname.isEnabled = enabled
-        binding.etMyPageProfileIntroduction.isEnabled = enabled
         binding.etMyPageProfileNickname.requestFocus(View.FOCUS_UP)
         binding.tvMyPageNicknameValidateIntroduction.visibility =
             if (enabled) View.VISIBLE else View.GONE
@@ -171,6 +172,24 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         }
         binding.tvMyPageBtnModifyProfile.text =
             if (enabled) getString(R.string.myPage_button_save_profile) else getString(R.string.myPage_button_modify_profile)
+    }
+
+    private fun setIntroductionReadWriteMode(enabled: Boolean) {
+        with(binding.etMyPageProfileIntroduction) {
+            when (enabled) {
+                true -> {
+                    linksClickable = enabled.not()
+                    isCursorVisible = enabled
+                    keyListener = EditText(requireContext()).keyListener
+                }
+
+                false -> {
+                    linksClickable = enabled.not()
+                    isCursorVisible = enabled
+                    keyListener = null
+                }
+            }
+        }
     }
 
     private fun showDialog(
