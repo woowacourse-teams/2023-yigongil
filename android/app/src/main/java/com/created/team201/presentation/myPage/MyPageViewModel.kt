@@ -37,10 +37,9 @@ class MyPageViewModel @Inject constructor(
     val profileType: StateFlow<ProfileType>
         get() = _profileType.asStateFlow()
 
-    private val _nicknameState: NonNullMutableLiveData<NicknameState> =
-        NonNullMutableLiveData(NicknameState.AVAILABLE)
-    val nicknameState: NonNullLiveData<NicknameState>
-        get() = _nicknameState
+    private val _nicknameState: MutableStateFlow<NicknameState> = MutableStateFlow(NicknameState.AVAILABLE)
+    val nicknameState: StateFlow<NicknameState>
+        get() = _nicknameState.asStateFlow()
 
     private val _nickname: MutableStateFlow<Nickname> = MutableStateFlow(Nickname("닉네임"))
     val nickname: StateFlow<Nickname>
@@ -59,7 +58,7 @@ class MyPageViewModel @Inject constructor(
             addSourceList(
                 profileType.asLiveData(),
                 nickname.asLiveData(),
-                nicknameState,
+                nicknameState.asLiveData(),
                 introduction
             ) {
                 isInitializeProfileInformation()
