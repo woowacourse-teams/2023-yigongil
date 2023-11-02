@@ -14,8 +14,6 @@ import com.created.domain.model.ProfileInformation
 import com.created.domain.repository.MyPageRepository
 import com.created.team201.presentation.myPage.model.ProfileType
 import com.created.team201.presentation.onBoarding.model.NicknameState
-import com.created.team201.util.NonNullLiveData
-import com.created.team201.util.NonNullMutableLiveData
 import com.created.team201.util.addSourceList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +35,8 @@ class MyPageViewModel @Inject constructor(
     val profileType: StateFlow<ProfileType>
         get() = _profileType.asStateFlow()
 
-    private val _nicknameState: MutableStateFlow<NicknameState> = MutableStateFlow(NicknameState.AVAILABLE)
+    private val _nicknameState: MutableStateFlow<NicknameState> =
+        MutableStateFlow(NicknameState.AVAILABLE)
     val nicknameState: StateFlow<NicknameState>
         get() = _nicknameState.asStateFlow()
 
@@ -45,9 +44,9 @@ class MyPageViewModel @Inject constructor(
     val nickname: StateFlow<Nickname>
         get() = _nickname.asStateFlow()
 
-    private val _introduction: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
-    val introduction: NonNullLiveData<String>
-        get() = _introduction
+    private val _introduction: MutableStateFlow<String> = MutableStateFlow("")
+    val introduction: StateFlow<String>
+        get() = _introduction.asStateFlow()
 
     private val _modifyProfileState: MutableLiveData<State> = MutableLiveData()
     val modifyProfileState: LiveData<State>
@@ -59,7 +58,7 @@ class MyPageViewModel @Inject constructor(
                 profileType.asLiveData(),
                 nickname.asLiveData(),
                 nicknameState.asLiveData(),
-                introduction
+                introduction.asLiveData()
             ) {
                 isInitializeProfileInformation()
             }
