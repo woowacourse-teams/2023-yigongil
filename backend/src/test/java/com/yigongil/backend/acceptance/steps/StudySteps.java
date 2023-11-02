@@ -22,6 +22,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -222,8 +223,24 @@ public class StudySteps {
                .when()
                .patch("/studies/" + studyId + "/start")
                .then().log().all();
+    }
 
-        sharedContext.setParameter("currentRoundNumber", 1);
+    @Given("{string}가 이름이 {string}인 스터디를 내일에 해당하는 요일에 진행되도록 하여 시작한다.")
+    public void 스터디_시작_내일에_해당하는_요일(String memberGithubId, String studyName) {
+        String token = sharedContext.getToken(memberGithubId);
+        String studyId = (String) sharedContext.getParameter(studyName);
+
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+        DayOfWeek dayOfWeek = tomorrow.getDayOfWeek();
+        StudyStartRequest request = new StudyStartRequest(List.of(dayOfWeek.name()));
+
+        given().log().all()
+               .header(HttpHeaders.AUTHORIZATION, token)
+               .contentType(MediaType.APPLICATION_JSON_VALUE)
+               .body(request)
+               .when()
+               .patch("/studies/" + studyId + "/start")
+               .then().log().all();
     }
 
     @Given("{string}가 이름이 {string}인 스터디를 오늘과 같은 요일에 진행되도록 하여 시작한다.")
