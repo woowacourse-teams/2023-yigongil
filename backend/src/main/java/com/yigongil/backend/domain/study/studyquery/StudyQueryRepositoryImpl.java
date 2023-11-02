@@ -1,5 +1,6 @@
 package com.yigongil.backend.domain.study.studyquery;
 
+import static com.yigongil.backend.domain.member.QMember.member;
 import static com.yigongil.backend.domain.study.QStudy.study;
 import static com.yigongil.backend.domain.studymember.QStudyMember.studyMember;
 
@@ -32,13 +33,20 @@ public class StudyQueryRepositoryImpl implements StudyQueryRepository {
     @Override
     public Slice<Study> findStudiesByConditions(String search, ProcessingStatus status, Pageable page) {
 
-        List<Study> studies = queryFactory.selectFrom(study)
+        List<Long> studyIds = queryFactory.select(study.id)
+                                          .from(study)
                                           .where(searchEq(search), statusEq(status))
                                           .offset(page.getOffset())
                                           .limit(page.getPageSize())
                                           .orderBy(orderSpecifier(page))
                                           .fetch();
 
+        List<Study> studies = queryFactory.selectFrom(study)
+                                          .join(study.studyMembers, studyMember).fetchJoin()
+                                          .join(studyMember.member, member).fetchJoin()
+                                          .where(study.id.in(studyIds))
+                                          .orderBy(orderSpecifier(page))
+                                          .fetch();
         return new SliceImpl<>(studies);
     }
 
