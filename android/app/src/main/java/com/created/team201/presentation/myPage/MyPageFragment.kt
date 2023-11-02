@@ -1,5 +1,6 @@
 package com.created.team201.presentation.myPage
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.forEach
 import androidx.core.view.setMargins
 import androidx.core.widget.doOnTextChanged
@@ -122,8 +124,8 @@ class MyPageFragment : Fragment() {
     }
 
     private fun setProfileView(enabled: Boolean) {
+        setNicknameReadWriteMode(enabled)
         setIntroductionReadWriteMode(enabled)
-        binding.etMyPageProfileNickname.isEnabled = enabled
         binding.etMyPageProfileNickname.requestFocus(View.FOCUS_UP)
         binding.tvMyPageNicknameValidateIntroduction.visibility =
             if (enabled) View.VISIBLE else View.GONE
@@ -132,6 +134,30 @@ class MyPageFragment : Fragment() {
         }
         binding.tvMyPageBtnModifyProfile.text =
             if (enabled) getString(R.string.myPage_button_save_profile) else getString(R.string.myPage_button_modify_profile)
+    }
+
+    private fun setNicknameReadWriteMode(enabled: Boolean) {
+        with(binding.etMyPageProfileNickname) {
+            isEnabled = enabled
+            when (enabled) {
+                true -> {
+                    backgroundTintList =
+                        ColorStateList.valueOf(requireContext().getColor(R.color.green02_E639D353))
+                    setCompoundDrawablesWithIntrinsicBounds(
+                        null,
+                        null,
+                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_edit_16),
+                        null,
+                    )
+                }
+
+                false -> {
+                    backgroundTintList =
+                        ColorStateList.valueOf(requireContext().getColor(R.color.transparent))
+                    setCompoundDrawables(null, null, null, null)
+                }
+            }
+        }
     }
 
     private fun setIntroductionReadWriteMode(enabled: Boolean) {
