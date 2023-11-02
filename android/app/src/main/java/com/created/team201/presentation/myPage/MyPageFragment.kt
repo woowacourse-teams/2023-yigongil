@@ -92,11 +92,10 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
     }
 
     private fun setMyPageObserve() {
-        myPageViewModel.profileType.observe(viewLifecycleOwner) { profileType ->
+        myPageViewModel.profileType.collectOnStarted(viewLifecycleOwner) { profileType ->
             when (profileType) {
                 ProfileType.VIEW -> setProfileView(false)
                 ProfileType.MODIFY -> setProfileView(true)
-                else -> Unit
             }
         }
         myPageViewModel.modifyProfileState.observe(viewLifecycleOwner) { modifyProfileState ->

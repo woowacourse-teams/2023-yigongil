@@ -33,9 +33,9 @@ class MyPageViewModel @Inject constructor(
     val profile: StateFlow<Profile>
         get() = _profile.asStateFlow()
 
-    private val _profileType: MutableLiveData<ProfileType> = MutableLiveData()
-    val profileType: LiveData<ProfileType>
-        get() = _profileType
+    private val _profileType: MutableStateFlow<ProfileType> = MutableStateFlow(ProfileType.VIEW)
+    val profileType: StateFlow<ProfileType>
+        get() = _profileType.asStateFlow()
 
     private val _nicknameState: NonNullMutableLiveData<NicknameState> =
         NonNullMutableLiveData(NicknameState.AVAILABLE)
@@ -56,7 +56,12 @@ class MyPageViewModel @Inject constructor(
 
     private val _isModifyEnabled: MediatorLiveData<Boolean> =
         MediatorLiveData<Boolean>().apply {
-            addSourceList(profileType, nickname.asLiveData(), nicknameState, introduction) {
+            addSourceList(
+                profileType.asLiveData(),
+                nickname.asLiveData(),
+                nicknameState,
+                introduction
+            ) {
                 isInitializeProfileInformation()
             }
         }
@@ -149,8 +154,7 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun switchProfileType() {
-        val profileType = profileType.value ?: return
-        _profileType.value = when (profileType) {
+        _profileType.value = when (profileType.value) {
             ProfileType.VIEW -> ProfileType.MODIFY
             ProfileType.MODIFY -> ProfileType.VIEW
         }
