@@ -12,6 +12,7 @@ import com.created.team201.presentation.myPage.MyPageViewModel.Event.EnableModif
 import com.created.team201.presentation.myPage.model.ProfileType
 import com.created.team201.presentation.onBoarding.model.NicknameState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -19,6 +20,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -40,8 +45,8 @@ class MyPageViewModel @Inject constructor(
     val nicknameState: StateFlow<NicknameState>
         get() = _nicknameState.asStateFlow()
 
-    private val _nickname: MutableStateFlow<Nickname> = MutableStateFlow(Nickname("닉네임"))
-    val nickname: StateFlow<Nickname>
+    private val _nickname: MutableStateFlow<String> = MutableStateFlow("")
+    val nickname: StateFlow<String>
         get() = _nickname.asStateFlow()
 
     private val _introduction: MutableStateFlow<String> = MutableStateFlow("")
@@ -56,7 +61,33 @@ class MyPageViewModel @Inject constructor(
     val myPageEvent: SharedFlow<Event> = _myPageEvent.asSharedFlow()
 
     init {
+        initValidateNicknameDebounce()
         collectRequiredToModifyMyPage()
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun initValidateNicknameDebounce() {
+        viewModelScope.launch {
+            _nickname.debounce(700)
+                .filter { text -> text.isNotEmpty() }
+                .onEach {
+                    validateNickname(nickname.value)
+                }.launchIn(this@launch)
+        }
+    }
+
+    private fun validateNickname(nickname: String) {
+        runCatching {
+            if (isSamePreviousNickname(nickname)) {
+                _nicknameState.value = NicknameState.AVAILABLE
+                return
+            }
+            Nickname(nickname)
+        }.onSuccess {
+            getAvailableNickname(it)
+        }.onFailure {
+            _nicknameState.value = NicknameState.UNAVAILABLE
+        }
     }
 
     private fun collectRequiredToModifyMyPage() {
@@ -81,7 +112,7 @@ class MyPageViewModel @Inject constructor(
 
     fun resetModifyProfile() {
         profile.value.also {
-            _nickname.value = it.profileInformation.nickname
+            _nickname.value = it.profileInformation.nickname.nickname
             _introduction.value = it.profileInformation.introduction
         }
         _profile.value = profile.value
@@ -93,7 +124,7 @@ class MyPageViewModel @Inject constructor(
                 .onSuccess {
                     _profile.value = it
                     _nicknameState.value = NicknameState.AVAILABLE
-                    _nickname.value = it.profileInformation.nickname
+                    _nickname.value = it.profileInformation.nickname.nickname
                     _introduction.value = it.profileInformation.introduction
                 }.onFailure { }
         }
@@ -101,9 +132,11 @@ class MyPageViewModel @Inject constructor(
 
     fun patchMyProfile() {
         viewModelScope.launch {
-            profile.value.also {
-                val newProfile = it.updateProfileInformation(
-                    ProfileInformation(nickname.value, introduction.value),
+            runCatching {
+                Nickname(nickname.value)
+            }.onSuccess {
+                val newProfile = profile.value.updateProfileInformation(
+                    ProfileInformation(Nickname(nickname.value), introduction.value),
                 )
                 myPageRepository.patchMyProfile(newProfile.profileInformation)
                     .onSuccess {
@@ -114,20 +147,6 @@ class MyPageViewModel @Inject constructor(
                         _modifyProfileState.value = State.Fail
                     }
             }
-        }
-    }
-
-    fun checkAvailableNickname() {
-        runCatching {
-            if (isSamePreviousNickname(nickname.value.nickname)) {
-                _nicknameState.value = NicknameState.AVAILABLE
-                return
-            }
-            nickname.value
-        }.onSuccess {
-            getAvailableNickname(it)
-        }.onFailure {
-            _nicknameState.value = NicknameState.UNAVAILABLE
         }
     }
 
@@ -159,7 +178,7 @@ class MyPageViewModel @Inject constructor(
         if (isSamePreviousNickname(nickname).not()) {
             _nicknameState.value = NicknameState.UNAVAILABLE
         }
-        _nickname.value = Nickname(nickname)
+        _nickname.value = nickname
     }
 
     fun setIntroduction(introduction: String) {
@@ -200,7 +219,7 @@ class MyPageViewModel @Inject constructor(
 
     private fun isInitializeProfileInformation(
         profileType: ProfileType,
-        nickname: Nickname,
+        nickname: String,
         nicknameState: NicknameState,
         introduction: String,
     ): Boolean {
@@ -210,7 +229,7 @@ class MyPageViewModel @Inject constructor(
 
         if (
             profileType == ProfileType.MODIFY &&
-            nickname.nickname.isBlank().not() &&
+            nickname.isBlank().not() &&
             nicknameState == NicknameState.AVAILABLE &&
             introduction.isBlank().not()
         ) {

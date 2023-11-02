@@ -75,7 +75,6 @@ class MyPageFragment : Fragment() {
 
         initMyProfile()
         setActionBar()
-        setNicknameValidate()
         setOnProfileModifyClick()
         setEditTextChangeListener()
         collectMyProfileType()
@@ -105,13 +104,6 @@ class MyPageFragment : Fragment() {
 
     private fun navigateToSetting() {
         startActivity(SettingActivity.getIntent(requireContext()))
-    }
-
-    private fun setNicknameValidate() {
-        binding.etMyPageProfileNickname.setOnFocusChangeListener { _, focus ->
-            if (focus) return@setOnFocusChangeListener
-            myPageViewModel.checkAvailableNickname()
-        }
     }
 
     private fun setOnProfileModifyClick() {
