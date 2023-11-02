@@ -23,6 +23,7 @@ import com.created.team201.presentation.setting.SettingActivity
 import com.created.team201.presentation.studyDetail.model.Tier
 import com.created.team201.util.FirebaseLogUtil
 import com.created.team201.util.FirebaseLogUtil.SCREEN_MY_PAGE
+import com.created.team201.util.collectOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -212,7 +213,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
     }
 
     private fun observeProfile() {
-        myPageViewModel.profile.observe(viewLifecycleOwner) { profile ->
+        myPageViewModel.profile.collectOnStarted(viewLifecycleOwner) { profile ->
             val tierProgress =
                 TierProgress.of(Tier.of(profile.tier), profile.tierProgress).getTierProgressTable()
             setupTierProgress(tierProgress)

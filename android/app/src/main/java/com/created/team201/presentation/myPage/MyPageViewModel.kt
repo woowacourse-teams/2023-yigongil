@@ -6,20 +6,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.Nickname
 import com.created.domain.model.Profile
 import com.created.domain.model.ProfileInformation
 import com.created.domain.repository.MyPageRepository
-import com.created.team201.presentation.myPage.model.ProfileInformationUiModel
 import com.created.team201.presentation.myPage.model.ProfileType
-import com.created.team201.presentation.myPage.model.ProfileUiModel
 import com.created.team201.presentation.onBoarding.model.NicknameState
-import com.created.team201.presentation.onBoarding.model.NicknameUiModel
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData
 import com.created.team201.util.addSourceList
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -28,9 +29,9 @@ import javax.inject.Inject
 class MyPageViewModel @Inject constructor(
     private val myPageRepository: MyPageRepository,
 ) : ViewModel() {
-    private val _profile: MutableLiveData<ProfileUiModel> = MutableLiveData()
-    val profile: LiveData<ProfileUiModel>
-        get() = _profile
+    private val _profile: MutableStateFlow<Profile> = MutableStateFlow(DEFAULT_PROFILE)
+    val profile: StateFlow<Profile>
+        get() = _profile.asStateFlow()
 
     private val _profileType: MutableLiveData<ProfileType> = MutableLiveData()
     val profileType: LiveData<ProfileType>
@@ -41,11 +42,9 @@ class MyPageViewModel @Inject constructor(
     val nicknameState: NonNullLiveData<NicknameState>
         get() = _nicknameState
 
-    private val _nickname: NonNullMutableLiveData<NicknameUiModel> = NonNullMutableLiveData(
-        NicknameUiModel(""),
-    )
-    val nickname: NonNullLiveData<NicknameUiModel>
-        get() = _nickname
+    private val _nickname: MutableStateFlow<Nickname> = MutableStateFlow(Nickname("닉네임"))
+    val nickname: StateFlow<Nickname>
+        get() = _nickname.asStateFlow()
 
     private val _introduction: NonNullMutableLiveData<String> = NonNullMutableLiveData("")
     val introduction: NonNullLiveData<String>
@@ -57,7 +56,7 @@ class MyPageViewModel @Inject constructor(
 
     private val _isModifyEnabled: MediatorLiveData<Boolean> =
         MediatorLiveData<Boolean>().apply {
-            addSourceList(profileType, nickname, nicknameState, introduction) {
+            addSourceList(profileType, nickname.asLiveData(), nicknameState, introduction) {
                 isInitializeProfileInformation()
             }
         }
@@ -65,7 +64,7 @@ class MyPageViewModel @Inject constructor(
         get() = _isModifyEnabled
 
     fun resetModifyProfile() {
-        profile.value?.let {
+        profile.value.let {
             _nickname.value = it.profileInformation.nickname
             _introduction.value = it.profileInformation.introduction
         }
@@ -76,9 +75,9 @@ class MyPageViewModel @Inject constructor(
         viewModelScope.launch {
             myPageRepository.getMyPage()
                 .onSuccess {
-                    _profile.value = it.toUiModel()
+                    _profile.value = it
                     _nicknameState.value = NicknameState.AVAILABLE
-                    _nickname.value = it.profileInformation.nickname.toUiModel()
+                    _nickname.value = it.profileInformation.nickname
                     _introduction.value = it.profileInformation.introduction
                 }.onFailure { }
         }
@@ -86,17 +85,15 @@ class MyPageViewModel @Inject constructor(
 
     fun patchMyProfile() {
         viewModelScope.launch {
-            profile.value?.let {
-                val newProfile = it.toDomain().updateProfileInformation(
-                    ProfileInformation(nickname.value.toDomain(), introduction.value),
+            profile.value.also {
+                val newProfile = it.updateProfileInformation(
+                    ProfileInformation(nickname.value, introduction.value),
                 )
                 myPageRepository.patchMyProfile(newProfile.profileInformation)
                     .onSuccess {
                         _modifyProfileState.value = State.SUCCESS
-                        _profile.value = profile.value?.run {
-                            toDomain().updateProfileInformation(newProfile.profileInformation)
-                                .toUiModel()
-                        }
+                        _profile.value =
+                            profile.value.updateProfileInformation(newProfile.profileInformation)
                     }.onFailure {
                         _modifyProfileState.value = State.FAIL
                     }
@@ -110,7 +107,7 @@ class MyPageViewModel @Inject constructor(
                 _nicknameState.value = NicknameState.AVAILABLE
                 return
             }
-            nickname.value.toDomain()
+            nickname.value
         }.onSuccess {
             getAvailableNickname(it)
         }.onFailure {
@@ -134,13 +131,13 @@ class MyPageViewModel @Inject constructor(
     }
 
     private fun isSamePreviousNickname(currentNickname: String): Boolean =
-        profile.value?.profileInformation?.nickname?.nickname == currentNickname
+        profile.value.profileInformation.nickname.nickname == currentNickname
 
     fun setNickname(nickname: String) {
         if (isSamePreviousNickname(nickname).not()) {
             _nicknameState.value = NicknameState.UNAVAILABLE
         }
-        _nickname.value = NicknameUiModel(nickname)
+        _nickname.value = Nickname(nickname)
     }
 
     fun setIntroduction(introduction: String) {
@@ -203,51 +200,19 @@ class MyPageViewModel @Inject constructor(
         object IDLE : State
     }
 
-    private fun Profile.toUiModel(): ProfileUiModel = ProfileUiModel(
-        githubId = githubId,
-        id = id,
-        profileInformation = profileInformation.toUiModel(),
-        profileImageUrl = profileImageUrl,
-        successRate = successRate,
-        successfulRoundCount = successfulRoundCount,
-        tier = tier,
-        tierProgress = tierProgress,
-    )
-
-    private fun ProfileInformation.toUiModel(): ProfileInformationUiModel =
-        ProfileInformationUiModel(
-            nickname = nickname.toUiModel(),
-            introduction = introduction,
-        )
-
-    private fun Nickname.toUiModel(): NicknameUiModel = NicknameUiModel(
-        nickname = nickname,
-    )
-
-    private fun ProfileUiModel.toDomain(): Profile = Profile(
-        githubId = githubId,
-        id = id,
-        profileInformation = profileInformation.toDomain(),
-        profileImageUrl = profileImageUrl,
-        successRate = successRate,
-        successfulRoundCount = successfulRoundCount,
-        tier = tier,
-        tierProgress = tierProgress,
-    )
-
-    private fun ProfileInformationUiModel.toDomain(): ProfileInformation =
-        ProfileInformation(
-            nickname = nickname.toDomain(),
-            introduction = introduction,
-        )
-
-    private fun NicknameUiModel.toDomain(): Nickname = Nickname(
-        nickname = nickname,
-    )
-
     companion object {
         private val PATTERN_NICKNAME =
             Pattern.compile("^[_a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\\u318D\\u119E\\u11A2\\u2022\\u2025a\\u00B7\\uFE55]+$")
         private const val MAX_NICKNAME_LENGTH = 8
+        private val DEFAULT_PROFILE = Profile(
+            githubId = "",
+            id = -1L,
+            profileInformation = ProfileInformation(Nickname("닉네임"), ""),
+            profileImageUrl = null,
+            successRate = 0.0,
+            successfulRoundCount = 0,
+            tier = 1,
+            tierProgress = 0,
+        )
     }
 }
