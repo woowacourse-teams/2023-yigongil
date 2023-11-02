@@ -52,7 +52,7 @@ class LoginBottomSheetFragment :
         super.onDestroyView()
 
         if (guestViewModel.signUpState.value != SUCCESS) {
-            guestViewModel.refresh(false)
+            guestViewModel.updateRefreshState(false)
         }
     }
 
@@ -80,7 +80,7 @@ class LoginBottomSheetFragment :
             when (onBoardingDoneState) {
                 is OnBoardingDoneState.Success -> {
                     if (onBoardingDoneState.isDone) {
-                        guestViewModel.refresh(true)
+                        guestViewModel.updateRefreshState(true)
                         this.dismiss()
                         if (parentFragment is BottomSheetListener) {
                             (parentFragment as BottomSheetListener).onBottomSheetClosed()
