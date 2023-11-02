@@ -83,7 +83,6 @@ class MyPageFragment : Fragment() {
         collectNicknameState()
         collectMyProfile()
         collectMyPageEvent()
-        observeProfile()
     }
 
     private fun setActionBar() {
@@ -252,6 +251,12 @@ class MyPageFragment : Fragment() {
                 getString(R.string.profile_success_rate_format, profile.successRate)
             binding.layoutMyPageTodoSuccessRate.result =
                 getString(R.string.profile_todo_success_rate_format, profile.successfulRoundCount)
+            setupTierProgress(
+                TierProgress.of(
+                    Tier.of(profile.tier),
+                    profile.tierProgress,
+                ).getTierProgressTable(),
+            )
         }
     }
 
@@ -277,14 +282,6 @@ class MyPageFragment : Fragment() {
                 ModifyMyPage -> myPageViewModel.patchMyProfile()
                 is EnableModify -> binding.tvMyPageBtnModifyProfile.isEnabled = event.isEnable
             }
-        }
-    }
-
-    private fun observeProfile() {
-        myPageViewModel.profile.collectOnStarted(viewLifecycleOwner) { profile ->
-            val tierProgress =
-                TierProgress.of(Tier.of(profile.tier), profile.tierProgress).getTierProgressTable()
-            setupTierProgress(tierProgress)
         }
     }
 
