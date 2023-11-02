@@ -73,16 +73,21 @@ class MyPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setActionBar()
         initMyProfile()
+        setActionBar()
         setNicknameValidate()
-        setMyPageObserve()
         setOnProfileModifyClick()
-        setNicknameInputFilter()
         setEditTextChangeListener()
+        collectMyProfileType()
+        collectModifyProfileState()
         collectNicknameState()
         collectMyProfile()
         collectMyPageEvent()
+    }
+
+    private fun initMyProfile() {
+        myPageViewModel.loadProfile()
+        myPageViewModel.setProfileType(ProfileType.VIEW)
     }
 
     private fun setActionBar() {
@@ -102,40 +107,10 @@ class MyPageFragment : Fragment() {
         startActivity(SettingActivity.getIntent(requireContext()))
     }
 
-    private fun initMyProfile() {
-        myPageViewModel.loadProfile()
-        myPageViewModel.setProfileType(ProfileType.VIEW)
-    }
-
     private fun setNicknameValidate() {
         binding.etMyPageProfileNickname.setOnFocusChangeListener { _, focus ->
             if (focus) return@setOnFocusChangeListener
             myPageViewModel.checkAvailableNickname()
-        }
-    }
-
-    private fun setMyPageObserve() {
-        myPageViewModel.profileType.collectOnStarted(viewLifecycleOwner) { profileType ->
-            when (profileType) {
-                ProfileType.VIEW -> setProfileView(false)
-                ProfileType.MODIFY -> setProfileView(true)
-            }
-        }
-        myPageViewModel.modifyProfileState.collectOnStarted(viewLifecycleOwner) { modifyProfileState ->
-            when (modifyProfileState) {
-                Loading -> Unit
-                Success -> {
-                    myPageViewModel.changeMyPageEvent(
-                        ShowToast(getString(R.string.myPage_toast_modify_profile_success))
-                    )
-                }
-
-                Fail -> {
-                    myPageViewModel.changeMyPageEvent(
-                        ShowToast(getString(R.string.myPage_toast_modify_profile_failed))
-                    )
-                }
-            }
         }
     }
 
@@ -152,22 +127,6 @@ class MyPageFragment : Fragment() {
             }
         }
     }
-
-    private fun onModifySaveClick(): MyPageDialogClickListener =
-        object : MyPageDialogClickListener {
-            override fun onCancelClick() {
-                myPageViewModel.changeMyPageEvent(
-                    ShowToast(getString(R.string.myPage_toast_modify_profile_cancel))
-                )
-                myPageViewModel.resetModifyProfile()
-                myPageViewModel.switchProfileType()
-            }
-
-            override fun onOkClick() {
-                myPageViewModel.changeMyPageEvent(ModifyMyPage)
-                myPageViewModel.switchProfileType()
-            }
-        }
 
     private fun setProfileView(enabled: Boolean) {
         setIntroductionReadWriteMode(enabled)
@@ -200,35 +159,42 @@ class MyPageFragment : Fragment() {
         }
     }
 
-    private fun showDialog(
-        title: String,
-        content: String,
-        myPageDialogClickListener: MyPageDialogClickListener,
-    ) {
-        MyPageDialog(title, content, myPageDialogClickListener).show(
-            childFragmentManager,
-            TAG_DIALOG_MODIFY_PROFILE,
-        )
-    }
-
-    private fun removeDialog() {
-        childFragmentManager.findFragmentByTag(TAG_DIALOG_MODIFY_PROFILE)?.let {
-            childFragmentManager.commit {
-                remove(it)
-            }
-        }
-    }
-
-    private fun setNicknameInputFilter() {
-        binding.etMyPageProfileNickname.filters = myPageViewModel.getInputFilter()
-    }
-
     private fun setEditTextChangeListener() {
+        binding.etMyPageProfileNickname.filters = myPageViewModel.getInputFilter()
         binding.etMyPageProfileNickname.doOnTextChanged { text, _, _, _ ->
             myPageViewModel.setNickname(text.toString())
         }
         binding.etMyPageProfileIntroduction.doOnTextChanged { text, _, _, _ ->
             myPageViewModel.setIntroduction(text.toString())
+        }
+    }
+
+    private fun collectMyProfileType() {
+        myPageViewModel.profileType.collectOnStarted(viewLifecycleOwner) { profileType ->
+            when (profileType) {
+                ProfileType.VIEW -> setProfileView(false)
+                ProfileType.MODIFY -> setProfileView(true)
+            }
+        }
+    }
+
+    private fun collectModifyProfileState() {
+
+        myPageViewModel.modifyProfileState.collectOnStarted(viewLifecycleOwner) { modifyProfileState ->
+            when (modifyProfileState) {
+                Loading -> Unit
+                Success -> {
+                    myPageViewModel.changeMyPageEvent(
+                        ShowToast(getString(R.string.myPage_toast_modify_profile_success))
+                    )
+                }
+
+                Fail -> {
+                    myPageViewModel.changeMyPageEvent(
+                        ShowToast(getString(R.string.myPage_toast_modify_profile_failed))
+                    )
+                }
+            }
         }
     }
 
@@ -284,6 +250,41 @@ class MyPageFragment : Fragment() {
             }
         }
     }
+
+    private fun removeDialog() {
+        childFragmentManager.findFragmentByTag(TAG_DIALOG_MODIFY_PROFILE)?.let {
+            childFragmentManager.commit {
+                remove(it)
+            }
+        }
+    }
+
+    private fun showDialog(
+        title: String,
+        content: String,
+        myPageDialogClickListener: MyPageDialogClickListener,
+    ) {
+        MyPageDialog(title, content, myPageDialogClickListener).show(
+            childFragmentManager,
+            TAG_DIALOG_MODIFY_PROFILE,
+        )
+    }
+
+    private fun onModifySaveClick(): MyPageDialogClickListener =
+        object : MyPageDialogClickListener {
+            override fun onCancelClick() {
+                myPageViewModel.changeMyPageEvent(
+                    ShowToast(getString(R.string.myPage_toast_modify_profile_cancel))
+                )
+                myPageViewModel.resetModifyProfile()
+                myPageViewModel.switchProfileType()
+            }
+
+            override fun onOkClick() {
+                myPageViewModel.changeMyPageEvent(ModifyMyPage)
+                myPageViewModel.switchProfileType()
+            }
+        }
 
     private fun setupTierProgress(tierProgress: List<Int>) {
         binding.glMyPageTierProgress.removeAllViews()
