@@ -14,9 +14,9 @@ import androidx.fragment.app.viewModels
 import com.created.team201.R
 import com.created.team201.databinding.FragmentMyPageBinding
 import com.created.team201.presentation.common.BindingFragment
-import com.created.team201.presentation.myPage.MyPageViewModel.State.FAIL
-import com.created.team201.presentation.myPage.MyPageViewModel.State.IDLE
-import com.created.team201.presentation.myPage.MyPageViewModel.State.SUCCESS
+import com.created.team201.presentation.myPage.MyPageViewModel.State.Fail
+import com.created.team201.presentation.myPage.MyPageViewModel.State.Loading
+import com.created.team201.presentation.myPage.MyPageViewModel.State.Success
 import com.created.team201.presentation.myPage.model.ProfileType
 import com.created.team201.presentation.myPage.model.TierProgress
 import com.created.team201.presentation.setting.SettingActivity
@@ -98,9 +98,10 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                 ProfileType.MODIFY -> setProfileView(true)
             }
         }
-        myPageViewModel.modifyProfileState.observe(viewLifecycleOwner) { modifyProfileState ->
+        myPageViewModel.modifyProfileState.collectOnStarted(viewLifecycleOwner) { modifyProfileState ->
             when (modifyProfileState) {
-                SUCCESS -> {
+                Loading -> Unit
+                Success -> {
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.myPage_toast_modify_profile_success),
@@ -108,7 +109,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                     ).show()
                 }
 
-                FAIL -> {
+                Fail -> {
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.myPage_toast_modify_profile_failed),
@@ -116,8 +117,6 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                     ).show()
                     myPageViewModel.resetModifyProfile()
                 }
-
-                IDLE -> throw IllegalStateException()
             }
         }
     }
@@ -137,8 +136,6 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                         onModifySaveClick(),
                     )
                 }
-
-                else -> throw IllegalStateException()
             }
         }
     }

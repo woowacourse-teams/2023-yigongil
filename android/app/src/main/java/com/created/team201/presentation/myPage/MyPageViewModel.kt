@@ -4,7 +4,6 @@ import android.text.InputFilter
 import android.text.Spanned
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -48,9 +47,9 @@ class MyPageViewModel @Inject constructor(
     val introduction: StateFlow<String>
         get() = _introduction.asStateFlow()
 
-    private val _modifyProfileState: MutableLiveData<State> = MutableLiveData()
-    val modifyProfileState: LiveData<State>
-        get() = _modifyProfileState
+    private val _modifyProfileState: MutableStateFlow<State> = MutableStateFlow(State.Loading)
+    val modifyProfileState: StateFlow<State>
+        get() = _modifyProfileState.asStateFlow()
 
     private val _isModifyEnabled: MediatorLiveData<Boolean> =
         MediatorLiveData<Boolean>().apply {
@@ -94,11 +93,11 @@ class MyPageViewModel @Inject constructor(
                 )
                 myPageRepository.patchMyProfile(newProfile.profileInformation)
                     .onSuccess {
-                        _modifyProfileState.value = State.SUCCESS
+                        _modifyProfileState.value = State.Success
                         _profile.value =
                             profile.value.updateProfileInformation(newProfile.profileInformation)
                     }.onFailure {
-                        _modifyProfileState.value = State.FAIL
+                        _modifyProfileState.value = State.Fail
                     }
             }
         }
@@ -197,9 +196,9 @@ class MyPageViewModel @Inject constructor(
     }
 
     sealed interface State {
-        object SUCCESS : State
-        object FAIL : State
-        object IDLE : State
+        object Loading : State
+        object Success : State
+        object Fail : State
     }
 
     companion object {
