@@ -40,6 +40,7 @@ class StudyListFragment :
     private val studyListAdapter: StudyListAdapter by lazy {
         StudyListAdapter(studyListClickListener())
     }
+    private val loginBottomSheetFragment: LoginBottomSheetFragment = LoginBottomSheetFragment()
 
     override fun onResume() {
         super.onResume()
@@ -180,7 +181,7 @@ class StudyListFragment :
 
     private fun showLoginBottomSheetDialog() {
         removeAllFragment()
-        LoginBottomSheetFragment().show(
+        loginBottomSheetFragment.show(
             childFragmentManager,
             LoginBottomSheetFragment.TAG_LOGIN_BOTTOM_SHEET,
         )
