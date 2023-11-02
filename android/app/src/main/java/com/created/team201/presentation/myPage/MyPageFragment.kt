@@ -2,18 +2,22 @@ package com.created.team201.presentation.myPage
 
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.view.forEach
 import androidx.core.view.setMargins
+import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
 import com.created.team201.R
 import com.created.team201.databinding.FragmentMyPageBinding
-import com.created.team201.presentation.common.BindingFragment
 import com.created.team201.presentation.myPage.MyPageViewModel.Event.EnableModify
 import com.created.team201.presentation.myPage.MyPageViewModel.Event.ModifyMyPage
 import com.created.team201.presentation.myPage.MyPageViewModel.Event.ShowDialog
@@ -31,8 +35,10 @@ import com.created.team201.util.collectOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
+class MyPageFragment : Fragment() {
     private val myPageViewModel: MyPageViewModel by viewModels()
+    private var _binding: FragmentMyPageBinding? = null
+    private val binding: FragmentMyPageBinding get() = _binding!!
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
@@ -49,22 +55,35 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         FirebaseLogUtil.logScreenEvent(SCREEN_MY_PAGE, this@MyPageFragment.javaClass.simpleName)
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMyPageBinding.inflate(layoutInflater)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        _binding = null
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initBinding()
         setActionBar()
         initMyProfile()
         setNicknameValidate()
         setMyPageObserve()
         setOnProfileModifyClick()
+        setNicknameInputFilter()
+        setEditTextChangeListener()
+        collectNicknameState()
+        collectMyProfile()
         collectMyPageEvent()
         observeProfile()
-    }
-
-    private fun initBinding() {
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewModel = myPageViewModel
     }
 
     private fun setActionBar() {
@@ -199,6 +218,47 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                 remove(it)
             }
         }
+    }
+
+    private fun setNicknameInputFilter() {
+        binding.etMyPageProfileNickname.filters = myPageViewModel.getInputFilter()
+    }
+
+    private fun setEditTextChangeListener() {
+        binding.etMyPageProfileNickname.doOnTextChanged { text, _, _, _ ->
+            myPageViewModel.setNickname(text.toString())
+        }
+        binding.etMyPageProfileIntroduction.doOnTextChanged { text, _, _, _ ->
+            myPageViewModel.setIntroduction(text.toString())
+        }
+    }
+
+    private fun collectNicknameState() {
+        myPageViewModel.nicknameState.collectOnStarted(viewLifecycleOwner) { state ->
+            with(binding.tvMyPageNicknameValidateIntroduction) {
+                text = getString(state.introduction)
+                setTextColor(requireContext().getColor(state.color))
+            }
+        }
+    }
+
+    private fun collectMyProfile() {
+        myPageViewModel.profile.collectOnStarted(viewLifecycleOwner) { profile ->
+            binding.ivMyPageProfile.loadImageUrl(profile.profileImageUrl)
+            binding.tvMyPageProfileId.text = profile.githubId
+            binding.etMyPageProfileNickname.setText(profile.profileInformation.nickname.nickname)
+            binding.etMyPageProfileIntroduction.setText(profile.profileInformation.introduction)
+            binding.layoutMyPageStudySuccessRate.result =
+                getString(R.string.profile_success_rate_format, profile.successRate)
+            binding.layoutMyPageTodoSuccessRate.result =
+                getString(R.string.profile_todo_success_rate_format, profile.successfulRoundCount)
+        }
+    }
+
+    private fun ImageView.loadImageUrl(imageUrl: String?) {
+        Glide.with(requireContext())
+            .load(imageUrl)
+            .into(this)
     }
 
     private fun collectMyPageEvent() {
