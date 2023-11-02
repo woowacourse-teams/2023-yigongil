@@ -164,12 +164,14 @@ class MyPageFragment : Fragment() {
         with(binding.etMyPageProfileIntroduction) {
             when (enabled) {
                 true -> {
+                    background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_stroke_fill_color_5dp)
                     linksClickable = enabled.not()
                     isCursorVisible = enabled
                     keyListener = EditText(requireContext()).keyListener
                 }
 
                 false -> {
+                    background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_rectangle_radius_5dp)
                     linksClickable = enabled.not()
                     isCursorVisible = enabled
                     keyListener = null
