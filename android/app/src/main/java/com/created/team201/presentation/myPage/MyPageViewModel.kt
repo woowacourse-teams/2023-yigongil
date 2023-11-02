@@ -2,22 +2,23 @@ package com.created.team201.presentation.myPage
 
 import android.text.InputFilter
 import android.text.Spanned
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.Nickname
 import com.created.domain.model.Profile
 import com.created.domain.model.ProfileInformation
 import com.created.domain.repository.MyPageRepository
+import com.created.team201.presentation.myPage.MyPageViewModel.Event.EnableModify
 import com.created.team201.presentation.myPage.model.ProfileType
 import com.created.team201.presentation.onBoarding.model.NicknameState
-import com.created.team201.util.addSourceList
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 import javax.inject.Inject
@@ -51,22 +52,35 @@ class MyPageViewModel @Inject constructor(
     val modifyProfileState: StateFlow<State>
         get() = _modifyProfileState.asStateFlow()
 
-    private val _isModifyEnabled: MediatorLiveData<Boolean> =
-        MediatorLiveData<Boolean>().apply {
-            addSourceList(
-                profileType.asLiveData(),
-                nickname.asLiveData(),
-                nicknameState.asLiveData(),
-                introduction.asLiveData()
-            ) {
-                isInitializeProfileInformation()
+    private val _myPageEvent: MutableSharedFlow<Event> = MutableSharedFlow()
+    val myPageEvent: SharedFlow<Event> = _myPageEvent.asSharedFlow()
+
+    init {
+        collectRequiredToModifyMyPage()
+    }
+
+    private fun collectRequiredToModifyMyPage() {
+        viewModelScope.launch {
+            combine(
+                profileType,
+                nickname,
+                nicknameState,
+                introduction,
+            ) { profileType, nickname, nicknameState, introduction ->
+                return@combine isInitializeProfileInformation(
+                    profileType,
+                    nickname,
+                    nicknameState,
+                    introduction
+                )
+            }.collect { isEnable ->
+                _myPageEvent.emit(EnableModify(isEnable))
             }
         }
-    val isModifyEnabled: LiveData<Boolean>
-        get() = _isModifyEnabled
+    }
 
     fun resetModifyProfile() {
-        profile.value.let {
+        profile.value.also {
             _nickname.value = it.profileInformation.nickname
             _introduction.value = it.profileInformation.introduction
         }
@@ -114,6 +128,12 @@ class MyPageViewModel @Inject constructor(
             getAvailableNickname(it)
         }.onFailure {
             _nicknameState.value = NicknameState.UNAVAILABLE
+        }
+    }
+
+    fun changeMyPageEvent(event: Event) {
+        viewModelScope.launch {
+            _myPageEvent.emit(event)
         }
     }
 
@@ -178,16 +198,21 @@ class MyPageViewModel @Inject constructor(
         InputFilter.LengthFilter(MAX_NICKNAME_LENGTH),
     )
 
-    private fun isInitializeProfileInformation(): Boolean {
-        if (profileType.value == ProfileType.VIEW) {
+    private fun isInitializeProfileInformation(
+        profileType: ProfileType,
+        nickname: Nickname,
+        nicknameState: NicknameState,
+        introduction: String,
+    ): Boolean {
+        if (profileType == ProfileType.VIEW) {
             return true
         }
 
         if (
-            profileType.value == ProfileType.MODIFY &&
-            nickname.value.nickname.isBlank().not() &&
-            nicknameState.value == NicknameState.AVAILABLE &&
-            introduction.value.isBlank().not()
+            profileType == ProfileType.MODIFY &&
+            nickname.nickname.isBlank().not() &&
+            nicknameState == NicknameState.AVAILABLE &&
+            introduction.isBlank().not()
         ) {
             return true
         }
@@ -199,6 +224,13 @@ class MyPageViewModel @Inject constructor(
         object Loading : State
         object Success : State
         object Fail : State
+    }
+
+    sealed interface Event {
+        data class ShowToast(val message: String) : Event
+        object ShowDialog : Event
+        object ModifyMyPage : Event
+        data class EnableModify(val isEnable: Boolean) : Event
     }
 
     companion object {

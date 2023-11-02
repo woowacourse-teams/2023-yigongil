@@ -14,6 +14,10 @@ import androidx.fragment.app.viewModels
 import com.created.team201.R
 import com.created.team201.databinding.FragmentMyPageBinding
 import com.created.team201.presentation.common.BindingFragment
+import com.created.team201.presentation.myPage.MyPageViewModel.Event.EnableModify
+import com.created.team201.presentation.myPage.MyPageViewModel.Event.ModifyMyPage
+import com.created.team201.presentation.myPage.MyPageViewModel.Event.ShowDialog
+import com.created.team201.presentation.myPage.MyPageViewModel.Event.ShowToast
 import com.created.team201.presentation.myPage.MyPageViewModel.State.Fail
 import com.created.team201.presentation.myPage.MyPageViewModel.State.Loading
 import com.created.team201.presentation.myPage.MyPageViewModel.State.Success
@@ -54,6 +58,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         setNicknameValidate()
         setMyPageObserve()
         setOnProfileModifyClick()
+        collectMyPageEvent()
         observeProfile()
     }
 
@@ -102,20 +107,15 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
             when (modifyProfileState) {
                 Loading -> Unit
                 Success -> {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.myPage_toast_modify_profile_success),
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                    myPageViewModel.changeMyPageEvent(
+                        ShowToast(getString(R.string.myPage_toast_modify_profile_success))
+                    )
                 }
 
                 Fail -> {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.myPage_toast_modify_profile_failed),
-                        Toast.LENGTH_SHORT,
-                    ).show()
-                    myPageViewModel.resetModifyProfile()
+                    myPageViewModel.changeMyPageEvent(
+                        ShowToast(getString(R.string.myPage_toast_modify_profile_failed))
+                    )
                 }
             }
         }
@@ -129,12 +129,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                 }
 
                 ProfileType.MODIFY -> {
-                    removeDialog()
-                    showDialog(
-                        getString(R.string.myPage_dialog_modify_profile_title),
-                        getString(R.string.myPage_dialog_modify_profile_content),
-                        onModifySaveClick(),
-                    )
+                    myPageViewModel.changeMyPageEvent(ShowDialog)
                 }
             }
         }
@@ -143,17 +138,15 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
     private fun onModifySaveClick(): MyPageDialogClickListener =
         object : MyPageDialogClickListener {
             override fun onCancelClick() {
+                myPageViewModel.changeMyPageEvent(
+                    ShowToast(getString(R.string.myPage_toast_modify_profile_cancel))
+                )
                 myPageViewModel.resetModifyProfile()
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.myPage_toast_modify_profile_cancel),
-                    Toast.LENGTH_SHORT,
-                ).show()
                 myPageViewModel.switchProfileType()
             }
 
             override fun onOkClick() {
-                myPageViewModel.patchMyProfile()
+                myPageViewModel.changeMyPageEvent(ModifyMyPage)
                 myPageViewModel.switchProfileType()
             }
         }
@@ -208,6 +201,25 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         }
     }
 
+    private fun collectMyPageEvent() {
+        myPageViewModel.myPageEvent.collectOnStarted(viewLifecycleOwner) { event ->
+            when (event) {
+                is ShowToast -> showToast(event.message)
+                ShowDialog -> {
+                    removeDialog()
+                    showDialog(
+                        getString(R.string.myPage_dialog_modify_profile_title),
+                        getString(R.string.myPage_dialog_modify_profile_content),
+                        onModifySaveClick(),
+                    )
+                }
+
+                ModifyMyPage -> myPageViewModel.patchMyProfile()
+                is EnableModify -> binding.tvMyPageBtnModifyProfile.isEnabled = event.isEnable
+            }
+        }
+    }
+
     private fun observeProfile() {
         myPageViewModel.profile.collectOnStarted(viewLifecycleOwner) { profile ->
             val tierProgress =
@@ -243,6 +255,9 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         dp.toFloat(),
         requireContext().resources.displayMetrics,
     ).toInt()
+
+    private fun showToast(message: String) =
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
 
     companion object {
         private const val TAG_DIALOG_MODIFY_PROFILE = "TAG_DIALOG_MODIFY_PROFILE"
