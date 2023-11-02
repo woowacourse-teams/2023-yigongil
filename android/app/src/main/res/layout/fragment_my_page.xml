@@ -164,7 +164,7 @@
                     app:layout_constraintStart_toEndOf="@id/view_my_page_success_rate_border_line"
                     app:layout_constraintTop_toTopOf="@id/layout_my_page_study_success_rate"
                     app:result="@{@string/profile_todo_success_rate_format(viewModel.profile.successfulRoundCount)}"
-                    app:title="@{@string/myPage_todo_success_rate_title}" />
+                    app:title="@{@string/myPage_mustdo_success_rate_title}" />
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
