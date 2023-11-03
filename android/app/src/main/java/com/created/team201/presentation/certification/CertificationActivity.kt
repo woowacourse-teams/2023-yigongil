@@ -134,9 +134,10 @@ class CertificationActivity :
     private fun setupPostButtonListener() {
         binding.tvCertificationPostButton.setOnClickListener {
             val studyId = intent.getLongExtra(KEY_STUDY_ID, KEY_NOT_FOUND_STUDY_ID)
-            certificationViewModel.uiState.value.imageUrl.toUri().toAdjustImageFile(this)?.let { file ->
-                certificationViewModel.updateCertification(file, studyId)
-            }
+            certificationViewModel.uiState.value.imageUrl.toUri().toAdjustImageFile(this)
+                ?.let { file ->
+                    certificationViewModel.updateCertification(file, studyId)
+                }
         }
     }
 

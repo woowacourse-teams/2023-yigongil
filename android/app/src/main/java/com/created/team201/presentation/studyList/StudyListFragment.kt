@@ -221,8 +221,8 @@ class StudyListFragment :
 
                 if (binding.srlStudyList.isRefreshing ||
                     binding.pbStudyListLoad.visibility == VISIBLE
-                    // 이거 있으면 무스가 안되어서.. 잠깐 막아둡니다.
-                    // || totalItemHeight < recyclerViewHeight
+                // 이거 있으면 무스가 안되어서.. 잠깐 막아둡니다.
+                // || totalItemHeight < recyclerViewHeight
                 ) {
                     return
                 }

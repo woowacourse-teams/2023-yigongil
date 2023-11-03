@@ -14,14 +14,14 @@ fun MustDoCertificationResponseDto.toDomain(): MustDoCertification = MustDoCerti
     me = me.toMustDo(),
     others = others.map { it.toMustDo() },
 
-)
+    )
 
 fun MustDoCertificationResponseDto.UpcomingRound.toUpcomingRound(): MustDoCertification.UpcomingRound =
     MustDoCertification.UpcomingRound(
         id = id,
         weekNumber = weekNumber,
 
-    )
+        )
 
 fun MustDoCertificationResponseDto.User.toMustDo(): MustDo = MustDo(
     id = id,
