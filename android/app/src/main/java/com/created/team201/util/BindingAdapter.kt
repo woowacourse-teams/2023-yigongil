@@ -5,7 +5,6 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.created.team201.presentation.home.HomeViewModel.*
-import com.created.team201.presentation.home.HomeViewModel.UserStudyState.*
 
 object BindingAdapter {
 
@@ -48,15 +47,6 @@ object BindingAdapter {
             Glide.with(imageview.context)
                 .load(it)
                 .into(imageview)
-        }
-    }
-
-    @JvmStatic
-    @BindingAdapter("hasStudy")
-    fun setVisibleOfHome(view: View, userStudyState: UserStudyState?) {
-        when (userStudyState is UserStudyState.Nothing) {
-            true -> view.visibility = View.VISIBLE
-            false -> view.visibility = View.GONE
         }
     }
 
