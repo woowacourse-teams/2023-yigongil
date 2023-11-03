@@ -42,6 +42,7 @@
     <!-- 비회원 뷰 -->
     <string name="guest_information_title">로그인이 필요한 서비스입니다.</string>
     <string name="guest_toast_can_not_report">비회원은 신고할 수 없습니다</string>
+    <string name="guest_login_button">로그인하러 가기 ></string>
 
     <!-- 로그인 바텀 시트 다이얼로그 뷰 -->
     <string name="loginBottomSheetFragment_information_title">로그인 이후 서비스 이용이 가능합니다.</string>
