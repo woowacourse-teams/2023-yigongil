@@ -1,7 +1,7 @@
 package com.created.team201.data.remote.interceptor
 
 import android.util.Log
-import com.created.domain.repository.AuthRepository
+import com.created.team201.data.repository.AuthRepository
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response

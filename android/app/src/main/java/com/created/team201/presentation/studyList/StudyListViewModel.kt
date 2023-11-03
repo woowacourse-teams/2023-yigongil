@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.created.domain.model.Page
 import com.created.domain.model.Role
-import com.created.domain.repository.StudyListRepository
+import com.created.team201.data.repository.StudyListRepository
 import com.created.team201.presentation.studyList.model.StudyListFilter
 import com.created.team201.presentation.studyList.model.StudyListFilter.Companion.isGuestOnly
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel

@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.created.domain.repository.AuthRepository
-import com.created.domain.repository.OnBoardingRepository
+import com.created.team201.data.repository.AuthRepository
+import com.created.team201.data.repository.OnBoardingRepository
 import com.created.team201.presentation.guest.GuestViewModel.State.FAIL
 import com.created.team201.presentation.guest.GuestViewModel.State.SUCCESS
 import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState

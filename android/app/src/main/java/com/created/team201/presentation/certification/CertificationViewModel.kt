@@ -3,7 +3,7 @@ package com.created.team201.presentation.certification
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.Certification
-import com.created.domain.repository.CertificationRepository
+import com.created.team201.data.repository.CertificationRepository
 import com.created.team201.presentation.certification.model.CertificationUiState
 import com.created.team201.util.NonNullLiveData
 import com.created.team201.util.NonNullMutableLiveData

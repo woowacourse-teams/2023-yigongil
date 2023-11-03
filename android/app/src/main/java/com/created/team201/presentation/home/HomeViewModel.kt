@@ -3,7 +3,7 @@ package com.created.team201.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.UserStudy
-import com.created.domain.repository.HomeRepository
+import com.created.team201.data.repository.UserStudyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -15,10 +15,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val homeRepository: HomeRepository,
+    private val userStudyRepository: UserStudyRepository,
 ) : ViewModel() {
 
-    val uiState: StateFlow<HomeUiState> = flow { emit(homeRepository.getUserStudies()) }
+    val uiState: StateFlow<HomeUiState> = flow { emit(userStudyRepository.getUserStudies()) }
         .map { HomeUiState.Success(it) }
         .catch { HomeUiState.Failed }
         .stateIn(
