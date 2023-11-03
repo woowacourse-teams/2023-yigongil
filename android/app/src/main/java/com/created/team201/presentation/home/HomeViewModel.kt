@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val homeRepository: HomeRepository
+    private val homeRepository: HomeRepository,
 ) : ViewModel() {
 
     private val uiState: StateFlow<HomeUiState> = flow { emit(homeRepository.getUserStudies()) }
