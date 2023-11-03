@@ -2,7 +2,7 @@ package com.created.team201.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.created.domain.model.UserStudy
+import com.created.team201.data.model.UserStudyEntity
 import com.created.team201.data.repository.UserStudyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,7 +29,7 @@ class HomeViewModel @Inject constructor(
 }
 
 sealed interface HomeUiState {
-    data class Success(val userStudies: List<UserStudy>) : HomeUiState
+    data class Success(val userStudies: List<UserStudyEntity>) : HomeUiState
     object Loading : HomeUiState
     object Failed : HomeUiState
 }
