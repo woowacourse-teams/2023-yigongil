@@ -25,24 +25,11 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         super.onViewCreated(view, savedInstanceState)
 
         setupAdapter()
-        setupViewModel()
+        setUpView()
         collectUiState()
     }
 
-    override fun onResume() {
-        super.onResume()
-        homeViewModel.updateUserStudy()
-    }
-
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-
-        if (!hidden) {
-            homeViewModel.updateUserStudy()
-        }
-    }
-
-    private fun setupViewModel() {
+    private fun setUpView() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.vm = homeViewModel
     }
