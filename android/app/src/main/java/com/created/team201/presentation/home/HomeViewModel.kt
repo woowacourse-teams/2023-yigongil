@@ -18,7 +18,7 @@ class HomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
 ) : ViewModel() {
 
-    private val uiState: StateFlow<HomeUiState> = flow { emit(homeRepository.getUserStudies()) }
+    val uiState: StateFlow<HomeUiState> = flow { emit(homeRepository.getUserStudies()) }
         .map { HomeUiState.Success(it) }
         .catch { HomeUiState.Failed }
         .stateIn(
