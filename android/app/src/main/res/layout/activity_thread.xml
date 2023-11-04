@@ -101,7 +101,7 @@
             android:ems="10"
             android:hint="@string/thread_input_hint"
             android:inputType="textMultiLine"
-            android:maxLength="200"
+            android:maxLength="1000"
             android:maxLines="4"
             android:minHeight="40dp"
             android:padding="8dp"

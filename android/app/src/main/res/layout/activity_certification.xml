@@ -62,7 +62,7 @@
             android:background="@drawable/bg_rectangle_radius_5dp"
             android:gravity="top"
             android:hint="@string/certification_post_body_hint"
-            android:maxLength="250"
+            android:maxLength="1000"
             android:maxLines="6"
             android:paddingHorizontal="16dp"
             android:paddingVertical="12dp"
