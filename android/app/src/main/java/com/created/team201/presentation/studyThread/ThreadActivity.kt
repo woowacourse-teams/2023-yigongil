@@ -105,8 +105,6 @@ class ThreadActivity : BindingActivity<ActivityThreadBinding>(R.layout.activity_
             threadViewModel.dispatchFeed(message)
             binding.etThreadInput.run {
                 text.clear()
-                clearFocus()
-                hideKeyboard()
             }
         }
     }
