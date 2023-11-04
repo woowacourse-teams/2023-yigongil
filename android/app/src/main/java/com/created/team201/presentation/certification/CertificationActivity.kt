@@ -5,8 +5,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.view.MotionEvent
-import android.view.inputmethod.InputMethodManager
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -48,21 +48,8 @@ class CertificationActivity :
         setupGalleryButtonListener()
         setupCameraButtonListener()
         setupPostButtonListener()
+        setupBodyTextChangedListener()
         observeUiState()
-    }
-
-    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        onHideKeyBoard()
-
-        return super.dispatchTouchEvent(ev)
-    }
-
-    private fun onHideKeyBoard() {
-        val imm: InputMethodManager =
-            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-        binding.etCertificationBody.clearFocus()
-        certificationViewModel.updateContent(binding.etCertificationBody.text.toString())
     }
 
     private fun setupBinding() {
@@ -134,10 +121,24 @@ class CertificationActivity :
     private fun setupPostButtonListener() {
         binding.tvCertificationPostButton.setOnClickListener {
             val studyId = intent.getLongExtra(KEY_STUDY_ID, KEY_NOT_FOUND_STUDY_ID)
-            certificationViewModel.uiState.value.imageUrl.toUri().toAdjustImageFile(this)?.let { file ->
-                certificationViewModel.updateCertification(file, studyId)
+            certificationViewModel.uiState.value.imageUrl.toUri().toAdjustImageFile(this)
+                ?.let { file ->
+                    certificationViewModel.updateCertification(file, studyId)
+                }
+        }
+    }
+
+    private fun setupBodyTextChangedListener() {
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                certificationViewModel.updateContent(binding.etCertificationBody.text.toString())
             }
         }
+        binding.etCertificationBody.addTextChangedListener(textWatcher)
     }
 
     private fun observeUiState() {
