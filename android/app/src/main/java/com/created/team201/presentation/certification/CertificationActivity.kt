@@ -5,6 +5,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -46,6 +48,7 @@ class CertificationActivity :
         setupGalleryButtonListener()
         setupCameraButtonListener()
         setupPostButtonListener()
+        setupBodyTextChangedListener()
         observeUiState()
     }
 
@@ -123,6 +126,19 @@ class CertificationActivity :
                     certificationViewModel.updateCertification(file, studyId)
                 }
         }
+    }
+
+    private fun setupBodyTextChangedListener() {
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                certificationViewModel.updateContent(binding.etCertificationBody.text.toString())
+            }
+        }
+        binding.etCertificationBody.addTextChangedListener(textWatcher)
     }
 
     private fun observeUiState() {
