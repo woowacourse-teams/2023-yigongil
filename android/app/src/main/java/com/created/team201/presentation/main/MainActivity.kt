@@ -17,7 +17,7 @@ import androidx.fragment.app.commit
 import com.created.team201.R
 import com.created.team201.databinding.ActivityMainBinding
 import com.created.team201.presentation.chat.ChatFragment
-import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.common.BindingViewActivity
 import com.created.team201.presentation.guest.GuestFragment
 import com.created.team201.presentation.guest.GuestViewModel
 import com.created.team201.presentation.guest.bottomSheet.LoginBottomSheetFragment
@@ -32,7 +32,7 @@ import com.created.team201.presentation.studyList.StudyListFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
+class MainActivity : BindingViewActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
     private val mainViewModel: MainViewModel by viewModels()
     private val guestViewModel: GuestViewModel by viewModels()
 
