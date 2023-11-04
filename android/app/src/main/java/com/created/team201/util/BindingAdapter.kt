@@ -49,13 +49,4 @@ object BindingAdapter {
                 .into(imageview)
         }
     }
-
-    @JvmStatic
-    @BindingAdapter("isMaster")
-    fun setVisibleOfHomeStudy(view: View, isMaster: Boolean) {
-        when (isMaster) {
-            true -> view.visibility = View.VISIBLE
-            false -> view.visibility = View.GONE
-        }
-    }
 }

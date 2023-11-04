@@ -3,7 +3,7 @@ package com.created.team201.presentation.home
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import com.created.domain.model.UserStudy
+import com.created.team201.data.model.UserStudyEntity
 import com.created.team201.databinding.FragmentHomeBinding
 import com.created.team201.presentation.common.BindingViewFragment
 import com.created.team201.presentation.home.adapter.HomeAdapter
@@ -35,24 +35,20 @@ class HomeFragment : BindingViewFragment<FragmentHomeBinding>(FragmentHomeBindin
     private fun collectUiState() {
         homeViewModel.uiState.collectOnStarted(this) { uiState ->
             when (uiState) {
-                is HomeUiState.Success -> {
-                    when (uiState.userStudies.isEmpty()) {
-                        true -> binding.tvHomeNoStudy.visibility = View.VISIBLE
-                        false -> {
-                            binding.tvHomeNoStudy.visibility = View.INVISIBLE
-                            setUpView(uiState.userStudies)
-                        }
-                    }
-                }
-
+                is HomeUiState.Success -> setUpView(uiState.userStudies)
                 is HomeUiState.Loading -> {}
-
                 is HomeUiState.Failed -> {}
             }
         }
     }
 
-    private fun setUpView(userStudies: List<UserStudy>) {
-        homeAdapter.submitList(userStudies)
+    private fun setUpView(userStudies: List<UserStudyEntity>) {
+        when (userStudies.isEmpty()) {
+            true -> binding.tvHomeNoStudy.visibility = View.VISIBLE
+            false -> {
+                binding.tvHomeNoStudy.visibility = View.INVISIBLE
+                homeAdapter.submitList(userStudies)
+            }
+        }
     }
 }
