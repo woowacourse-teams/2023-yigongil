@@ -236,10 +236,8 @@ class MyPageViewModel @Inject constructor(
         return false
     }
 
-    sealed interface State {
-        object Loading : State
-        object Success : State
-        object Fail : State
+    enum class State {
+        Loading, Success, Fail
     }
 
     sealed interface Event {
