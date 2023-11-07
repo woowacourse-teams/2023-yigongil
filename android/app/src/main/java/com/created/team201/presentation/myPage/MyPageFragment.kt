@@ -76,9 +76,9 @@ class MyPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initMyProfile()
-        setActionBar()
-        setOnProfileModifyClick()
-        setEditTextChangeListener()
+        setupActionBar()
+        setupOnProfileModifyClick()
+        setupEditTextChangeListener()
         collectMyProfileInformation()
         collectMyProfileType()
         collectModifyProfileState()
@@ -92,7 +92,7 @@ class MyPageFragment : Fragment() {
         myPageViewModel.setProfileType(ProfileType.VIEW)
     }
 
-    private fun setActionBar() {
+    private fun setupActionBar() {
         binding.tbMyPage.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_my_page_setting -> {
@@ -109,7 +109,7 @@ class MyPageFragment : Fragment() {
         startActivity(SettingActivity.getIntent(requireContext()))
     }
 
-    private fun setOnProfileModifyClick() {
+    private fun setupOnProfileModifyClick() {
         binding.tvMyPageBtnModifyProfile.setOnClickListener {
             when (myPageViewModel.profileType.value) {
                 ProfileType.VIEW -> {
@@ -180,7 +180,7 @@ class MyPageFragment : Fragment() {
         }
     }
 
-    private fun setEditTextChangeListener() {
+    private fun setupEditTextChangeListener() {
         binding.etMyPageProfileNickname.filters = myPageViewModel.getInputFilter()
         binding.etMyPageProfileNickname.doOnTextChanged { text, start, before, count ->
             myPageViewModel.setNickname(text.toString())
