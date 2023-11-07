@@ -15,6 +15,11 @@
 
         <!-- 바텀 시트 다이얼로그 스타일 적용 -->
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
+
+        <!-- Text, EditText 하이라이트 및 입력 커서 스타일 적용 -->
+        <item name="android:textColorLink">@color/green02_E639D353</item>
+        <item name="android:textColorHighlight">@color/green04_26A641</item>
+        <item name="colorControlActivated">@color/green04_26A641</item>
     </style>
 
     <style name="Theme.Team201" parent="Base.Theme.Team201" />

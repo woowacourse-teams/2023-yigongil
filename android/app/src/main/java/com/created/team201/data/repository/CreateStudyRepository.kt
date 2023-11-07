@@ -1,15 +1,15 @@
 package com.created.team201.data.repository
 
 import com.created.domain.model.CreateStudy
-import com.created.domain.repository.CreateStudyRepository
 import com.created.team201.data.mapper.toRequestDto
 import com.created.team201.data.remote.api.CreateStudyService
 import javax.inject.Inject
 
-class DefaultCreateStudyRepository @Inject constructor(
+class CreateStudyRepository @Inject constructor(
     private val createStudyService: CreateStudyService,
-) : CreateStudyRepository {
-    override suspend fun createStudy(createStudy: CreateStudy): Result<Long> {
+) {
+
+    suspend fun createStudy(createStudy: CreateStudy): Result<Long> {
         return runCatching {
             val location = createStudyService.createStudy(createStudy.toRequestDto())
 

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.created.domain.model.Nickname
 import com.created.domain.model.Profile
 import com.created.domain.model.ProfileInformation
-import com.created.domain.repository.MyPageRepository
+import com.created.team201.data.repository.MyPageRepository
 import com.created.team201.presentation.myPage.MyPageViewModel.Event.EnableModify
 import com.created.team201.presentation.myPage.model.ProfileType
 import com.created.team201.presentation.onBoarding.model.NicknameState

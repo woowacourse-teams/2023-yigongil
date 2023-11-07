@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class HomeStudyResponseDto(
+data class UserStudyResponseDto(
     @SerialName("id")
     val studyId: Long,
     @SerialName("name")
