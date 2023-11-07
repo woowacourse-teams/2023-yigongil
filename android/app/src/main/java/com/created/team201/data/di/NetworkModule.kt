@@ -1,12 +1,12 @@
 package com.created.team201.data.di
 
 import android.util.Log
-import com.created.domain.repository.AuthRepository
 import com.created.team201.BuildConfig.TEAM201_BASE_URL
 import com.created.team201.data.di.qualifier.AuthRetrofit
 import com.created.team201.data.di.qualifier.DefaultRetrofit
 import com.created.team201.data.remote.CallAdapterFactory
 import com.created.team201.data.remote.interceptor.AuthInterceptor
+import com.created.team201.data.repository.AuthRepository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides

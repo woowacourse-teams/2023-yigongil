@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.AppUpdateInformation
 import com.created.domain.model.response.NetworkResponse
-import com.created.domain.repository.AuthRepository
-import com.created.domain.repository.OnBoardingRepository
-import com.created.domain.repository.SplashRepository
+import com.created.team201.data.repository.AuthRepository
+import com.created.team201.data.repository.OnBoardingRepository
+import com.created.team201.data.repository.SplashRepository
 import com.created.team201.presentation.onBoarding.model.OnBoardingDoneState
 import com.created.team201.presentation.splash.SplashViewModel.State.FAIL
 import com.created.team201.presentation.splash.SplashViewModel.State.SUCCESS

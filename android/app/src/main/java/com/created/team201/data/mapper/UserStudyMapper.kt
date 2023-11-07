@@ -1,11 +1,10 @@
 package com.created.team201.data.mapper
 
-import com.created.domain.model.UserStudy
-import com.created.team201.data.remote.response.HomeStudyResponseDto
+import com.created.team201.data.model.UserStudyEntity
+import com.created.team201.data.remote.response.UserStudyResponseDto
 
-
-fun HomeStudyResponseDto.toUserStudy(): UserStudy =
-    UserStudy(
+fun UserStudyResponseDto.toUserStudyEntity(): UserStudyEntity =
+    UserStudyEntity(
         isMaster = isMaster,
         studyId = studyId,
         studyName = studyName,

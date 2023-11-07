@@ -2,17 +2,16 @@ package com.created.team201.data.repository
 
 import android.util.Log
 import com.created.domain.model.AppUpdateInformation
-import com.created.domain.repository.SplashRepository
 import com.created.team201.BuildConfig
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import javax.inject.Inject
 
-class DefaultSplashRepository @Inject constructor() : SplashRepository {
-    override fun getAppUpdateInformation(
+class SplashRepository {
+
+    fun getAppUpdateInformation(
         versionCode: Int,
         onAppUpdateInformationEvent: (AppUpdateInformation) -> Unit,
     ) {

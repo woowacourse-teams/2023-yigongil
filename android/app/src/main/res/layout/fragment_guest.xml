@@ -20,9 +20,9 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="40dp"
             android:importantForAccessibility="no"
+            android:src="@drawable/ic_logo"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_home_logo" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_home_no_study"

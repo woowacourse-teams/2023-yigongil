@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.Nickname
 import com.created.domain.model.OnBoarding
-import com.created.domain.repository.OnBoardingRepository
+import com.created.team201.data.repository.OnBoardingRepository
 import com.created.team201.presentation.onBoarding.model.NicknameState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview

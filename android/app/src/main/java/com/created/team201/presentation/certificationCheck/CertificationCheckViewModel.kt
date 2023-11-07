@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.created.domain.repository.CertificationRepository
+import com.created.team201.data.repository.CertificationRepository
 import com.created.team201.presentation.certificationCheck.model.MemberCertificationUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

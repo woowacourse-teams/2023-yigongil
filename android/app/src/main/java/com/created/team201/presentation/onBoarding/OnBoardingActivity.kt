@@ -83,7 +83,8 @@ class OnBoardingActivity : AppCompatActivity() {
 
     private fun collectNicknameState() {
         viewModel.nicknameState.collectOnStarted(this) { nicknameState ->
-            binding.tvOnBoardingNicknameValidateIntroduction.text = getString(nicknameState.introduction)
+            binding.tvOnBoardingNicknameValidateIntroduction.text =
+                getString(nicknameState.introduction)
             binding.tvOnBoardingNicknameValidateIntroduction.setTextColor(getColor(nicknameState.color))
         }
     }

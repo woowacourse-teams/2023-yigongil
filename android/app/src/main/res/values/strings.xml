@@ -32,7 +32,7 @@
     <string name="onBoarding_toast_fail">소개 저장에 실패했습니다</string>
 
     <!--메인 뷰-->
-    <string name="main_ic_home">홈</string>
+    <string name="main_ic_home">내 스터디</string>
     <string name="main_ic_study_list">스터디목록</string>
     <string name="main_ic_study_manage">스터디관리</string>
     <string name="main_ic_chat">쪽지</string>
@@ -50,8 +50,8 @@
     <!--홈 탭-->
     <string name="home_study_list_must_do">Must Do</string>
     <string name="hom_study_list_must_do_default_message">Must Do를 아직 등록하지 않았어요!</string>
-    <string name="home_study_list_guide">Must Do를 인증하면 잔디씨앗을 드려요! \n스터디를 완주하면 잔디를 심어드려요!</string>
-    <string name="home_no_study">참여중인 스터디가 없어요!\n스터디를 개설/참여 해볼까요?</string>
+    <string name="home_study_list_guide">Must Do를 인증하면 잔디조각을 드려요! \n스터디를 완주할 시 내 티어 잔디가 심어져요!</string>
+    <string name="home_no_study">참여중인 스터디가 없어요!</string>
     <string name="home_study_list_date">D - %d</string>
     <string name="home_study_list_grass_count">%d개</string>
 

@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.ReportStudy
 import com.created.domain.model.ReportUser
-import com.created.domain.repository.ReportRepository
+import com.created.team201.data.repository.ReportRepository
 import com.created.team201.presentation.report.model.DateUiModel
 import com.created.team201.presentation.report.model.ReportStudyUiModel
 import com.created.team201.presentation.report.model.ReportUserUiModel

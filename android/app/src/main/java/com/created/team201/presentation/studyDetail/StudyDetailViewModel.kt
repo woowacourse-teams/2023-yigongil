@@ -9,9 +9,9 @@ import com.created.domain.model.ProfileInformation
 import com.created.domain.model.Role
 import com.created.domain.model.StudyDetail
 import com.created.domain.model.StudyStart
-import com.created.domain.repository.GuestRepository
-import com.created.domain.repository.StudyDetailRepository
 import com.created.team201.data.mapper.toDomain
+import com.created.team201.data.repository.GuestRepository
+import com.created.team201.data.repository.StudyDetailRepository
 import com.created.team201.presentation.common.customview.dayofselector.DayOfWeek
 import com.created.team201.presentation.myPage.model.ProfileInformationUiModel
 import com.created.team201.presentation.myPage.model.ProfileUiModel
