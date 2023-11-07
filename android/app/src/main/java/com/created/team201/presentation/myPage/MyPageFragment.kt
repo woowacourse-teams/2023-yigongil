@@ -3,9 +3,7 @@ package com.created.team201.presentation.myPage
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.ImageView
@@ -14,12 +12,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.forEach
 import androidx.core.view.setMargins
 import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.created.team201.R
 import com.created.team201.databinding.FragmentMyPageBinding
+import com.created.team201.presentation.common.BindingViewFragment
 import com.created.team201.presentation.myPage.MyPageViewModel.Event.EnableModify
 import com.created.team201.presentation.myPage.MyPageViewModel.Event.ModifyMyPage
 import com.created.team201.presentation.myPage.MyPageViewModel.Event.ShowDialog
@@ -37,10 +35,8 @@ import com.created.team201.util.collectOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MyPageFragment : Fragment() {
+class MyPageFragment : BindingViewFragment<FragmentMyPageBinding>(FragmentMyPageBinding::inflate) {
     private val myPageViewModel: MyPageViewModel by viewModels()
-    private var _binding: FragmentMyPageBinding? = null
-    private val binding: FragmentMyPageBinding get() = _binding!!
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
@@ -55,21 +51,6 @@ class MyPageFragment : Fragment() {
         super.onResume()
 
         FirebaseLogUtil.logScreenEvent(SCREEN_MY_PAGE, this@MyPageFragment.javaClass.simpleName)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentMyPageBinding.inflate(layoutInflater)
-        return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        _binding = null
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -164,14 +145,20 @@ class MyPageFragment : Fragment() {
         with(binding.etMyPageProfileIntroduction) {
             when (enabled) {
                 true -> {
-                    background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_stroke_fill_color_5dp)
+                    background = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.bg_stroke_fill_color_5dp
+                    )
                     linksClickable = enabled.not()
                     isCursorVisible = enabled
                     keyListener = EditText(requireContext()).keyListener
                 }
 
                 false -> {
-                    background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_rectangle_radius_5dp)
+                    background = ContextCompat.getDrawable(
+                        requireContext(),
+                        R.drawable.bg_rectangle_radius_5dp
+                    )
                     linksClickable = enabled.not()
                     isCursorVisible = enabled
                     keyListener = null
