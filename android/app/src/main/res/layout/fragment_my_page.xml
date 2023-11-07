@@ -115,40 +115,40 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_my_page_nickname_validate_introduction" />
 
-                <include
-                    android:id="@+id/layout_my_page_study_success_rate"
-                    layout="@layout/layout_user_study_result_information"
+                <com.created.team201.presentation.myPage.custom.UserStudyResult
+                    android:id="@+id/user_study_result_my_page_study_success_rate"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="52dp"
-                    app:icon="@{@drawable/ic_success_rate}"
+                    android:title="@string/myPage_study_success_rate_title"
                     app:layout_constraintEnd_toStartOf="@id/view_my_page_success_rate_border_line"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_my_page_btn_modify_profile"
-                    app:title="@{@string/myPage_study_success_rate_title}" />
+                    app:userStudyIconResource="@drawable/ic_success_rate"
+                    app:userStudyResultResource="@string/profile_success_rate_format" />
 
                 <View
                     android:id="@+id/view_my_page_success_rate_border_line"
                     android:layout_width="1dp"
                     android:layout_height="0dp"
                     android:background="@color/black03_272C33"
-                    app:layout_constraintBottom_toBottomOf="@id/layout_my_page_study_success_rate"
+                    app:layout_constraintBottom_toBottomOf="@id/user_study_result_my_page_study_success_rate"
                     app:layout_constraintDimensionRatio="H,0.1:5"
-                    app:layout_constraintEnd_toStartOf="@id/layout_my_page_todo_success_rate"
-                    app:layout_constraintStart_toEndOf="@id/layout_my_page_study_success_rate"
-                    app:layout_constraintTop_toTopOf="@id/layout_my_page_study_success_rate" />
+                    app:layout_constraintEnd_toStartOf="@id/user_study_result_my_page_mustdo_success_rate"
+                    app:layout_constraintStart_toEndOf="@id/user_study_result_my_page_study_success_rate"
+                    app:layout_constraintTop_toTopOf="@id/user_study_result_my_page_study_success_rate" />
 
-                <include
-                    android:id="@+id/layout_my_page_todo_success_rate"
-                    layout="@layout/layout_user_study_result_information"
+
+                <com.created.team201.presentation.myPage.custom.UserStudyResult
+                    android:id="@+id/user_study_result_my_page_mustdo_success_rate"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    app:icon="@{@drawable/ic_todo_count}"
+                    android:title="@string/myPage_mustdo_success_rate_title"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/view_my_page_success_rate_border_line"
-                    app:layout_constraintTop_toTopOf="@id/layout_my_page_study_success_rate"
-                    app:title="@{@string/myPage_mustdo_success_rate_title}" />
-
+                    app:layout_constraintTop_toTopOf="@id/user_study_result_my_page_study_success_rate"
+                    app:userStudyIconResource="@drawable/ic_todo_count"
+                    app:userStudyResultResource="@string/profile_mustdo_success_rate_format" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_my_page_tier_progress"
@@ -159,7 +159,7 @@
                     android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/layout_my_page_study_success_rate">
+                    app:layout_constraintTop_toBottomOf="@id/user_study_result_my_page_study_success_rate">
 
                     <GridLayout
                         android:id="@+id/gl_my_page_tier_progress"

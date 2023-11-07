@@ -237,8 +237,8 @@
     <string name="myPage_toast_modify_profile_failed">프로필 수정에 실패했습니다</string>
     <string name="myPage_toast_modify_profile_cancel">프로필 수정을 취소했습니다</string>
 
-    <string name="profile_success_rate_format">%.1f%%</string>
-    <string name="profile_todo_success_rate_format">%d회</string>
+    <string name="profile_success_rate_format">%s%%</string>
+    <string name="profile_mustdo_success_rate_format">%s회</string>
 
     <!-- 프로필 뷰 -->
     <string name="profile_report_button_menu">신고</string>

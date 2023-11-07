@@ -233,10 +233,8 @@ class MyPageFragment : BindingViewFragment<FragmentMyPageBinding>(FragmentMyPage
             binding.tvMyPageProfileId.text = profile.githubId
             binding.etMyPageProfileNickname.setText(profile.profileInformation.nickname.nickname)
             binding.etMyPageProfileIntroduction.setText(profile.profileInformation.introduction)
-            binding.layoutMyPageStudySuccessRate.result =
-                getString(R.string.profile_success_rate_format, profile.successRate)
-            binding.layoutMyPageTodoSuccessRate.result =
-                getString(R.string.profile_todo_success_rate_format, profile.successfulRoundCount)
+            binding.userStudyResultMyPageStudySuccessRate.setResult(profile.successRate.toString())
+            binding.userStudyResultMyPageMustdoSuccessRate.setResult(profile.successfulRoundCount.toString())
             setupTierProgress(
                 TierProgress.of(
                     Tier.of(profile.tier),
