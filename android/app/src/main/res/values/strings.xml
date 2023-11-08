@@ -223,6 +223,8 @@
     <!-- 마이페이지 뷰 -->
     <string name="myPage_menu_title_setting">설정</string>
     <string name="myPage_toolbar_title">마이페이지</string>
+    <string name="modifyMyProfile_toolbar_title">마이페이지 수정</string>
+    <string name="modifyMyProfile_menu_title_save">저장</string>
     <string name="myPage_button_save_profile">변경사항 저장</string>
     <string name="myPage_button_modify_profile">프로필 수정</string>
     <string name="myPage_study_success_rate_title">스터디 성공률</string>

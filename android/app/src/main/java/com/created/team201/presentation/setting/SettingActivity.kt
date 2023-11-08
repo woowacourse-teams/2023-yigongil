@@ -167,9 +167,6 @@ class SettingActivity : BindingActivity<ActivitySettingBinding>(R.layout.activit
         private const val TAG_DIALOG_LOGOUT = "TAG_DIALOG_LOGOUT"
         private const val URI_MARKET_FORMAT = "market://details?id=%s"
 
-        fun getIntent(context: Context): Intent =
-            Intent(context, SettingActivity::class.java).also {
-                it.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            }
+        fun getIntent(context: Context): Intent = Intent(context, SettingActivity::class.java)
     }
 }

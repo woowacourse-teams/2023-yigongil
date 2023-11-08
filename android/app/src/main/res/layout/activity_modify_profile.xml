@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/tb_modify_my_page"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black01_0D1117"
+        android:elevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu_modify_profile"
+        app:title="@string/modifyMyProfile_toolbar_title"
+        app:titleCentered="true"
+        app:titleTextAppearance="@style/header_sb16"
+        app:titleTextColor="@color/white" />
+
+    <View
+        android:id="@+id/view_modify_my_page_toolbar_border_line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/black02_181B21"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tb_modify_my_page" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_modify_my_page_toolbar_border_line">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_modify_profile"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="34dp"
+                android:padding="2dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/circleImageView"
+                app:strokeColor="@color/grey02_78808B"
+                app:strokeWidth="1dp" />
+
+            <EditText
+                android:id="@+id/et_modify_profile_nickname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="16dp"
+                android:drawablePadding="4dp"
+                android:ellipsize="end"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLength="8"
+                android:maxLines="1"
+                android:textAppearance="@style/name_sb20"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_modify_profile"
+                app:layout_constraintTop_toTopOf="@id/iv_modify_profile" />
+
+            <TextView
+                android:id="@+id/tv_modify_profile_id"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/text_r14"
+                android:textColor="@color/grey02_78808B"
+                app:layout_constraintEnd_toEndOf="@id/et_modify_profile_nickname"
+                app:layout_constraintStart_toStartOf="@id/et_modify_profile_nickname"
+                app:layout_constraintTop_toBottomOf="@id/et_modify_profile_nickname" />
+
+            <TextView
+                android:id="@+id/tv_modify_my_page_nickname_validate_introduction"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:maxLines="1"
+                android:textAlignment="center"
+                android:textAppearance="@style/description_r12"
+                app:layout_constraintBottom_toTopOf="@id/et_modify_profile_introduction"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_modify_profile" />
+
+            <EditText
+                android:id="@+id/et_modify_profile_introduction"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:autoLink="web|email"
+                android:background="@drawable/bg_rectangle_radius_5dp"
+                android:fadeScrollbars="false"
+                android:hint="@string/onBoarding_introduction_hint_text"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:maxLength="200"
+                android:maxLines="6"
+                android:padding="16dp"
+                android:scrollbars="vertical"
+                android:textAppearance="@style/text_r16"
+                android:textColor="@color/white"
+                android:textColorHint="@color/grey02_78808B"
+                android:textIsSelectable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_modify_my_page_nickname_validate_introduction" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

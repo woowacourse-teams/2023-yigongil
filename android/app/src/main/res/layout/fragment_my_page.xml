@@ -55,8 +55,8 @@
                     app:strokeColor="@color/grey02_78808B"
                     app:strokeWidth="1dp" />
 
-                <EditText
-                    android:id="@+id/et_my_page_profile_nickname"
+                <TextView
+                    android:id="@+id/tv_my_page_profile_nickname"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
@@ -64,9 +64,6 @@
                     android:layout_marginEnd="16dp"
                     android:drawablePadding="4dp"
                     android:ellipsize="end"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:maxLength="8"
                     android:maxLines="1"
                     android:textAppearance="@style/name_sb20"
                     android:textColor="@color/white"
@@ -83,22 +80,9 @@
                     android:maxLines="1"
                     android:textAppearance="@style/text_r14"
                     android:textColor="@color/grey02_78808B"
-                    app:layout_constraintEnd_toEndOf="@id/et_my_page_profile_nickname"
-                    app:layout_constraintStart_toStartOf="@id/et_my_page_profile_nickname"
-                    app:layout_constraintTop_toBottomOf="@id/et_my_page_profile_nickname" />
-
-                <TextView
-                    android:id="@+id/tv_my_page_nickname_validate_introduction"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:maxLines="1"
-                    android:textAlignment="center"
-                    android:textAppearance="@style/description_r12"
-                    app:layout_constraintBottom_toTopOf="@id/tv_my_page_btn_modify_profile"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/iv_my_page_profile" />
+                    app:layout_constraintEnd_toEndOf="@id/tv_my_page_profile_nickname"
+                    app:layout_constraintStart_toStartOf="@id/tv_my_page_profile_nickname"
+                    app:layout_constraintTop_toBottomOf="@id/tv_my_page_profile_nickname" />
 
                 <TextView
                     android:id="@+id/tv_my_page_btn_modify_profile"
@@ -108,12 +92,13 @@
                     android:layout_marginTop="20dp"
                     android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
                     android:paddingVertical="14dp"
+                    android:text="@string/myPage_button_modify_profile"
                     android:textAlignment="center"
                     android:textAppearance="@style/button_sb18"
                     android:textColor="@color/tv_color_disabled"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_my_page_nickname_validate_introduction" />
+                    app:layout_constraintTop_toBottomOf="@id/iv_my_page_profile" />
 
                 <com.created.team201.presentation.myPage.custom.UserStudyResult
                     android:id="@+id/user_study_result_my_page_study_success_rate"
@@ -252,8 +237,8 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <EditText
-                    android:id="@+id/et_my_page_profile_introduction"
+                <TextView
+                    android:id="@+id/tv_my_page_profile_introduction"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="40dp"
@@ -262,7 +247,6 @@
                     android:fadeScrollbars="false"
                     android:hint="@string/onBoarding_introduction_hint_text"
                     android:importantForAutofill="no"
-                    android:inputType="textMultiLine"
                     android:maxLength="200"
                     android:maxLines="6"
                     android:padding="16dp"

@@ -9,7 +9,6 @@ import com.created.domain.model.Profile
 import com.created.domain.model.ProfileInformation
 import com.created.team201.data.repository.MyPageRepository
 import com.created.team201.presentation.myPage.MyPageViewModel.Event.EnableModify
-import com.created.team201.presentation.myPage.model.ProfileType
 import com.created.team201.presentation.onBoarding.model.NicknameState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
@@ -35,10 +34,6 @@ class MyPageViewModel @Inject constructor(
     private val _profile: MutableStateFlow<Profile> = MutableStateFlow(DEFAULT_PROFILE)
     val profile: StateFlow<Profile>
         get() = _profile.asStateFlow()
-
-    private val _profileType: MutableStateFlow<ProfileType> = MutableStateFlow(ProfileType.VIEW)
-    val profileType: StateFlow<ProfileType>
-        get() = _profileType.asStateFlow()
 
     private val _nicknameState: MutableStateFlow<NicknameState> =
         MutableStateFlow(NicknameState.AVAILABLE)
@@ -93,13 +88,11 @@ class MyPageViewModel @Inject constructor(
     private fun collectRequiredToModifyMyPage() {
         viewModelScope.launch {
             combine(
-                profileType,
                 nickname,
                 nicknameState,
                 introduction,
-            ) { profileType, nickname, nicknameState, introduction ->
+            ) { nickname, nicknameState, introduction ->
                 return@combine isInitializeProfileInformation(
-                    profileType,
                     nickname,
                     nicknameState,
                     introduction
@@ -108,11 +101,6 @@ class MyPageViewModel @Inject constructor(
                 _myPageEvent.emit(EnableModify(isEnable))
             }
         }
-    }
-
-    fun resetModifyProfile() {
-        _nickname.value = profile.value.profileInformation.nickname.nickname
-        _introduction.value = profile.value.profileInformation.introduction
     }
 
     fun loadProfile() {
@@ -153,6 +141,12 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
+    fun setMyPageEvent(event: Event) {
+        viewModelScope.launch {
+            _myPageEvent.emit(event)
+        }
+    }
+
     private fun getAvailableNickname(nickname: Nickname) {
         viewModelScope.launch {
             myPageRepository.getAvailableNickname(nickname)
@@ -182,17 +176,6 @@ class MyPageViewModel @Inject constructor(
         _introduction.value = introduction
     }
 
-    fun setProfileType(type: ProfileType) {
-        _profileType.value = type
-    }
-
-    fun switchProfileType() {
-        _profileType.value = when (profileType.value) {
-            ProfileType.VIEW -> ProfileType.MODIFY
-            ProfileType.MODIFY -> ProfileType.VIEW
-        }
-    }
-
     fun getInputFilter(): Array<InputFilter> = arrayOf(
         object : InputFilter {
             override fun filter(
@@ -215,17 +198,12 @@ class MyPageViewModel @Inject constructor(
     )
 
     private fun isInitializeProfileInformation(
-        profileType: ProfileType,
         nickname: String,
         nicknameState: NicknameState,
         introduction: String,
     ): Boolean {
-        if (profileType == ProfileType.VIEW) {
-            return true
-        }
 
         if (
-            profileType == ProfileType.MODIFY &&
             nickname.isBlank().not() &&
             nicknameState == NicknameState.AVAILABLE &&
             introduction.isBlank().not()
@@ -242,7 +220,8 @@ class MyPageViewModel @Inject constructor(
 
     sealed interface Event {
         data class ShowToast(val message: String) : Event
-        object ShowDialog : Event
+        object NavigateToSetting : Event
+        object NavigateToModify : Event
         object ModifyMyPage : Event
         data class EnableModify(val isEnable: Boolean) : Event
     }

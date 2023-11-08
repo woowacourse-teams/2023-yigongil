@@ -1,31 +1,19 @@
 package com.created.team201.presentation.myPage
 
-import android.content.res.ColorStateList
+import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
-import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.ImageView
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.view.forEach
 import androidx.core.view.setMargins
-import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.commit
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.created.team201.R
 import com.created.team201.databinding.FragmentMyPageBinding
 import com.created.team201.presentation.common.BindingViewFragment
-import com.created.team201.presentation.myPage.MyPageViewModel.Event.EnableModify
-import com.created.team201.presentation.myPage.MyPageViewModel.Event.ModifyMyPage
-import com.created.team201.presentation.myPage.MyPageViewModel.Event.ShowDialog
-import com.created.team201.presentation.myPage.MyPageViewModel.Event.ShowToast
-import com.created.team201.presentation.myPage.MyPageViewModel.State.Fail
-import com.created.team201.presentation.myPage.MyPageViewModel.State.Loading
-import com.created.team201.presentation.myPage.MyPageViewModel.State.Success
-import com.created.team201.presentation.myPage.model.ProfileType
+import com.created.team201.presentation.myPage.MyPageViewModel.Event.NavigateToModify
+import com.created.team201.presentation.myPage.MyPageViewModel.Event.NavigateToSetting
 import com.created.team201.presentation.myPage.model.TierProgress
 import com.created.team201.presentation.setting.SettingActivity
 import com.created.team201.presentation.studyDetail.model.Tier
@@ -36,16 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyPageFragment : BindingViewFragment<FragmentMyPageBinding>(FragmentMyPageBinding::inflate) {
-    private val myPageViewModel: MyPageViewModel by viewModels()
-
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-
-        if (hidden) {
-            myPageViewModel.resetModifyProfile()
-            myPageViewModel.setProfileType(ProfileType.VIEW)
-        }
-    }
+    private val myPageViewModel: MyPageViewModel by activityViewModels()
 
     override fun onResume() {
         super.onResume()
@@ -59,25 +38,17 @@ class MyPageFragment : BindingViewFragment<FragmentMyPageBinding>(FragmentMyPage
         initMyProfile()
         setupActionBar()
         setupOnProfileModifyClick()
-        setupEditTextChangeListener()
-        collectMyProfileInformation()
-        collectMyProfileType()
-        collectModifyProfileState()
-        collectNicknameState()
         collectMyProfile()
         collectMyPageEvent()
     }
 
-    private fun initMyProfile() {
-        myPageViewModel.loadProfile()
-        myPageViewModel.setProfileType(ProfileType.VIEW)
-    }
+    private fun initMyProfile() = myPageViewModel.loadProfile()
 
     private fun setupActionBar() {
         binding.tbMyPage.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_my_page_setting -> {
-                    navigateToSetting()
+                    myPageViewModel.setMyPageEvent(NavigateToSetting)
                     true
                 }
 
@@ -86,144 +57,9 @@ class MyPageFragment : BindingViewFragment<FragmentMyPageBinding>(FragmentMyPage
         }
     }
 
-    private fun navigateToSetting() {
-        startActivity(SettingActivity.getIntent(requireContext()))
-    }
-
     private fun setupOnProfileModifyClick() {
         binding.tvMyPageBtnModifyProfile.setOnClickListener {
-            when (myPageViewModel.profileType.value) {
-                ProfileType.VIEW -> {
-                    myPageViewModel.switchProfileType()
-                }
-
-                ProfileType.MODIFY -> {
-                    myPageViewModel.changeMyPageEvent(ShowDialog)
-                }
-            }
-        }
-    }
-
-    private fun setProfileView(enabled: Boolean) {
-        setNicknameReadWriteMode(enabled)
-        setIntroductionReadWriteMode(enabled)
-        binding.etMyPageProfileNickname.requestFocus(View.FOCUS_UP)
-        binding.tvMyPageNicknameValidateIntroduction.visibility =
-            if (enabled) View.VISIBLE else View.GONE
-        binding.tbMyPage.menu.forEach { item ->
-            item.isVisible = !enabled
-        }
-        binding.tvMyPageBtnModifyProfile.text =
-            if (enabled) getString(R.string.myPage_button_save_profile) else getString(R.string.myPage_button_modify_profile)
-    }
-
-    private fun setNicknameReadWriteMode(enabled: Boolean) {
-        with(binding.etMyPageProfileNickname) {
-            isEnabled = enabled
-            when (enabled) {
-                true -> {
-                    backgroundTintList =
-                        ColorStateList.valueOf(requireContext().getColor(R.color.green02_E639D353))
-                    setCompoundDrawablesWithIntrinsicBounds(
-                        null,
-                        null,
-                        ContextCompat.getDrawable(requireContext(), R.drawable.ic_edit_16),
-                        null,
-                    )
-                }
-
-                false -> {
-                    backgroundTintList =
-                        ColorStateList.valueOf(requireContext().getColor(R.color.transparent))
-                    setCompoundDrawables(null, null, null, null)
-                }
-            }
-        }
-    }
-
-    private fun setIntroductionReadWriteMode(enabled: Boolean) {
-        with(binding.etMyPageProfileIntroduction) {
-            when (enabled) {
-                true -> {
-                    background = ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.bg_stroke_fill_color_5dp
-                    )
-                    linksClickable = enabled.not()
-                    isCursorVisible = enabled
-                    keyListener = EditText(requireContext()).keyListener
-                }
-
-                false -> {
-                    background = ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.bg_rectangle_radius_5dp
-                    )
-                    linksClickable = enabled.not()
-                    isCursorVisible = enabled
-                    keyListener = null
-                }
-            }
-        }
-    }
-
-    private fun setupEditTextChangeListener() {
-        binding.etMyPageProfileNickname.filters = myPageViewModel.getInputFilter()
-        binding.etMyPageProfileNickname.doOnTextChanged { text, start, before, count ->
-            myPageViewModel.setNickname(text.toString())
-        }
-        binding.etMyPageProfileIntroduction.doOnTextChanged { text, _, _, _ ->
-            myPageViewModel.setIntroduction(text.toString())
-        }
-    }
-
-    private fun collectMyProfileInformation() {
-        myPageViewModel.nickname.collectOnStarted(viewLifecycleOwner) { nickname ->
-            if (binding.etMyPageProfileNickname.text.toString() == nickname) return@collectOnStarted
-            binding.etMyPageProfileNickname.setText(nickname)
-        }
-
-        myPageViewModel.introduction.collectOnStarted(viewLifecycleOwner) { introduction ->
-            if (binding.etMyPageProfileIntroduction.text.toString() == introduction) return@collectOnStarted
-            binding.etMyPageProfileIntroduction.setText(introduction)
-        }
-    }
-
-    private fun collectMyProfileType() {
-        myPageViewModel.profileType.collectOnStarted(viewLifecycleOwner) { profileType ->
-            when (profileType) {
-                ProfileType.VIEW -> setProfileView(false)
-                ProfileType.MODIFY -> setProfileView(true)
-            }
-        }
-    }
-
-    private fun collectModifyProfileState() {
-
-        myPageViewModel.modifyProfileState.collectOnStarted(viewLifecycleOwner) { modifyProfileState ->
-            when (modifyProfileState) {
-                Loading -> Unit
-                Success -> {
-                    myPageViewModel.changeMyPageEvent(
-                        ShowToast(getString(R.string.myPage_toast_modify_profile_success))
-                    )
-                }
-
-                Fail -> {
-                    myPageViewModel.changeMyPageEvent(
-                        ShowToast(getString(R.string.myPage_toast_modify_profile_failed))
-                    )
-                }
-            }
-        }
-    }
-
-    private fun collectNicknameState() {
-        myPageViewModel.nicknameState.collectOnStarted(viewLifecycleOwner) { state ->
-            with(binding.tvMyPageNicknameValidateIntroduction) {
-                text = getString(state.introduction)
-                setTextColor(requireContext().getColor(state.color))
-            }
+            myPageViewModel.setMyPageEvent(NavigateToModify)
         }
     }
 
@@ -231,8 +67,8 @@ class MyPageFragment : BindingViewFragment<FragmentMyPageBinding>(FragmentMyPage
         myPageViewModel.profile.collectOnStarted(viewLifecycleOwner) { profile ->
             binding.ivMyPageProfile.loadImageUrl(profile.profileImageUrl)
             binding.tvMyPageProfileId.text = profile.githubId
-            binding.etMyPageProfileNickname.setText(profile.profileInformation.nickname.nickname)
-            binding.etMyPageProfileIntroduction.setText(profile.profileInformation.introduction)
+            binding.tvMyPageProfileNickname.text = profile.profileInformation.nickname.nickname
+            binding.tvMyPageProfileIntroduction.text = profile.profileInformation.introduction
             binding.userStudyResultMyPageStudySuccessRate.setResult(profile.successRate.toString())
             binding.userStudyResultMyPageMustdoSuccessRate.setResult(profile.successfulRoundCount.toString())
             setupTierProgress(
@@ -253,56 +89,28 @@ class MyPageFragment : BindingViewFragment<FragmentMyPageBinding>(FragmentMyPage
     private fun collectMyPageEvent() {
         myPageViewModel.myPageEvent.collectOnStarted(viewLifecycleOwner) { event ->
             when (event) {
-                is ShowToast -> showToast(event.message)
-                ShowDialog -> {
-                    removeDialog()
-                    showDialog(
-                        getString(R.string.myPage_dialog_modify_profile_title),
-                        getString(R.string.myPage_dialog_modify_profile_content),
-                        onModifySaveClick(),
-                    )
-                }
-
-                ModifyMyPage -> myPageViewModel.patchMyProfile()
-                is EnableModify -> binding.tvMyPageBtnModifyProfile.isEnabled = event.isEnable
+                NavigateToModify -> navigateToModify()
+                NavigateToSetting -> navigateToSetting()
+                else -> Unit
             }
         }
     }
 
-    private fun removeDialog() {
-        childFragmentManager.findFragmentByTag(TAG_DIALOG_MODIFY_PROFILE)?.let {
-            childFragmentManager.commit {
-                remove(it)
-            }
-        }
-    }
-
-    private fun showDialog(
-        title: String,
-        content: String,
-        myPageDialogClickListener: MyPageDialogClickListener,
-    ) {
-        MyPageDialog(title, content, myPageDialogClickListener).show(
-            childFragmentManager,
-            TAG_DIALOG_MODIFY_PROFILE,
+    private fun navigateToModify() {
+        startActivity(
+            ModifyProfileActivity.getIntent(requireContext()).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
         )
     }
 
-    private fun onModifySaveClick(): MyPageDialogClickListener =
-        object : MyPageDialogClickListener {
-            override fun onCancelClick() {
-                myPageViewModel.changeMyPageEvent(
-                    ShowToast(getString(R.string.myPage_toast_modify_profile_cancel))
-                )
-                myPageViewModel.resetModifyProfile()
-                myPageViewModel.switchProfileType()
-            }
-
-            override fun onOkClick() {
-                myPageViewModel.changeMyPageEvent(ModifyMyPage)
-                myPageViewModel.switchProfileType()
-            }
-        }
+    private fun navigateToSetting() {
+        startActivity(
+            SettingActivity.getIntent(requireContext()).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            },
+        )
+    }
 
     private fun setupTierProgress(tierProgress: List<Int>) {
         binding.glMyPageTierProgress.removeAllViews()
@@ -332,11 +140,7 @@ class MyPageFragment : BindingViewFragment<FragmentMyPageBinding>(FragmentMyPage
         requireContext().resources.displayMetrics,
     ).toInt()
 
-    private fun showToast(message: String) =
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-
     companion object {
-        private const val TAG_DIALOG_MODIFY_PROFILE = "TAG_DIALOG_MODIFY_PROFILE"
         private const val TOTAL_BLOCK_COUNT = 20
         private const val DEFAULT_BLOCK_MARGIN = 2
         private const val DEFAULT_DENOMINATOR = 18
