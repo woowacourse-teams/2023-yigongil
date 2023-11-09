@@ -141,7 +141,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/view_profile_rate_board_border_line"
                     app:layout_constraintTop_toTopOf="@id/layout_profile_study_success_rate"
-                    app:result="@{@string/profile_todo_success_rate_format(viewModel.profile.profile.successfulRoundCount)}"
+                    app:result="@{@string/profile_mustdo_success_rate_format(viewModel.profile.profile.successfulRoundCount)}"
                     app:title="@{@string/profile_todo_success_rate}" />
 
                 <TextView
