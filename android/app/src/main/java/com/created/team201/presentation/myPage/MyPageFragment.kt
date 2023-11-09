@@ -8,12 +8,14 @@ import android.widget.GridLayout
 import android.widget.ImageView
 import androidx.core.view.setMargins
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.commit
 import com.bumptech.glide.Glide
 import com.created.team201.R
 import com.created.team201.databinding.FragmentMyPageBinding
 import com.created.team201.presentation.common.BindingViewFragment
-import com.created.team201.presentation.myPage.MyPageViewModel.Event.NavigateToModify
-import com.created.team201.presentation.myPage.MyPageViewModel.Event.NavigateToSetting
+import com.created.team201.presentation.myPage.ModifyProfileFragment.Companion.TAG_MODIFY_FRAGMENT
+import com.created.team201.presentation.myPage.MyPageViewModel.Event.NAVIGATE_TO_MODIFY
+import com.created.team201.presentation.myPage.MyPageViewModel.Event.NAVIGATE_TO_SETTING
 import com.created.team201.presentation.myPage.model.TierProgress
 import com.created.team201.presentation.setting.SettingActivity
 import com.created.team201.presentation.studyDetail.model.Tier
@@ -48,7 +50,7 @@ class MyPageFragment : BindingViewFragment<FragmentMyPageBinding>(FragmentMyPage
         binding.tbMyPage.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_my_page_setting -> {
-                    myPageViewModel.setMyPageEvent(NavigateToSetting)
+                    myPageViewModel.changeMyPageEvent(NAVIGATE_TO_SETTING)
                     true
                 }
 
@@ -59,7 +61,7 @@ class MyPageFragment : BindingViewFragment<FragmentMyPageBinding>(FragmentMyPage
 
     private fun setupOnProfileModifyClick() {
         binding.tvMyPageBtnModifyProfile.setOnClickListener {
-            myPageViewModel.setMyPageEvent(NavigateToModify)
+            myPageViewModel.changeMyPageEvent(NAVIGATE_TO_MODIFY)
         }
     }
 
@@ -89,20 +91,14 @@ class MyPageFragment : BindingViewFragment<FragmentMyPageBinding>(FragmentMyPage
     private fun collectMyPageEvent() {
         myPageViewModel.myPageEvent.collectOnStarted(viewLifecycleOwner) { event ->
             when (event) {
-                NavigateToModify -> navigateToModify()
-                NavigateToSetting -> navigateToSetting()
+                NAVIGATE_TO_MODIFY -> navigateToModify()
+                NAVIGATE_TO_SETTING -> navigateToSetting()
                 else -> Unit
             }
         }
     }
 
-    private fun navigateToModify() {
-        startActivity(
-            ModifyProfileActivity.getIntent(requireContext()).apply {
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-            },
-        )
-    }
+    private fun navigateToModify() = showFragment(TAG_MODIFY_FRAGMENT)
 
     private fun navigateToSetting() {
         startActivity(
@@ -110,6 +106,19 @@ class MyPageFragment : BindingViewFragment<FragmentMyPageBinding>(FragmentMyPage
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             },
         )
+    }
+
+    private fun showFragment(tag: String) {
+        removeDialog(tag)
+        ModifyProfileFragment().show(childFragmentManager, tag)
+    }
+
+    private fun removeDialog(tag: String) {
+        childFragmentManager.findFragmentByTag(tag)?.let {
+            childFragmentManager.commit {
+                remove(it)
+            }
+        }
     }
 
     private fun setupTierProgress(tierProgress: List<Int>) {

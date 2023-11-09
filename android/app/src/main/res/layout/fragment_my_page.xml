@@ -60,26 +60,26 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:layout_marginTop="12dp"
                     android:layout_marginEnd="16dp"
-                    android:drawablePadding="4dp"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textAppearance="@style/name_sb20"
                     android:textColor="@color/white"
+                    app:layout_constraintBottom_toTopOf="@id/tv_my_page_profile_id"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/iv_my_page_profile"
-                    app:layout_constraintTop_toTopOf="@id/iv_my_page_profile" />
+                    app:layout_constraintTop_toTopOf="@id/iv_my_page_profile"
+                    app:layout_constraintVertical_chainStyle="packed" />
 
                 <TextView
                     android:id="@+id/tv_my_page_profile_id"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textAppearance="@style/text_r14"
                     android:textColor="@color/grey02_78808B"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_my_page_profile"
                     app:layout_constraintEnd_toEndOf="@id/tv_my_page_profile_nickname"
                     app:layout_constraintStart_toStartOf="@id/tv_my_page_profile_nickname"
                     app:layout_constraintTop_toBottomOf="@id/tv_my_page_profile_nickname" />

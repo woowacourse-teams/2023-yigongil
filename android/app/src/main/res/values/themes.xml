@@ -66,4 +66,13 @@
         <item name="android:colorControlNormal">@color/white</item>
     </style>
 
+    <!-- No margin Dialog -->
+    <style name="NoMarginDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:textColorLink">@color/green02_E639D353</item>
+        <item name="android:textColorHighlight">@color/green04_26A641</item>
+        <item name="colorControlActivated">@color/green04_26A641</item>
+        <item name="android:windowBackground">@color/black01_0D1117</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
 </resources>

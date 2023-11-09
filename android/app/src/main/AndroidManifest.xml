@@ -30,9 +30,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.myPage.ModifyProfileActivity"
-            android:exported="false" />
-        <activity
             android:name=".presentation.certificationCheck.CertificationCheckActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

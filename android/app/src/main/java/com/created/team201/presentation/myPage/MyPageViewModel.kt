@@ -8,7 +8,6 @@ import com.created.domain.model.Nickname
 import com.created.domain.model.Profile
 import com.created.domain.model.ProfileInformation
 import com.created.team201.data.repository.MyPageRepository
-import com.created.team201.presentation.myPage.MyPageViewModel.Event.EnableModify
 import com.created.team201.presentation.onBoarding.model.NicknameState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
@@ -18,7 +17,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
@@ -48,16 +46,11 @@ class MyPageViewModel @Inject constructor(
     val introduction: StateFlow<String>
         get() = _introduction.asStateFlow()
 
-    private val _modifyProfileState: MutableStateFlow<State> = MutableStateFlow(State.Loading)
-    val modifyProfileState: StateFlow<State>
-        get() = _modifyProfileState.asStateFlow()
-
     private val _myPageEvent: MutableSharedFlow<Event> = MutableSharedFlow()
     val myPageEvent: SharedFlow<Event> = _myPageEvent.asSharedFlow()
 
     init {
         initValidateNicknameDebounce()
-        collectRequiredToModifyMyPage()
     }
 
     @OptIn(FlowPreview::class)
@@ -85,30 +78,11 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    private fun collectRequiredToModifyMyPage() {
-        viewModelScope.launch {
-            combine(
-                nickname,
-                nicknameState,
-                introduction,
-            ) { nickname, nicknameState, introduction ->
-                return@combine isInitializeProfileInformation(
-                    nickname,
-                    nicknameState,
-                    introduction
-                )
-            }.collect { isEnable ->
-                _myPageEvent.emit(EnableModify(isEnable))
-            }
-        }
-    }
-
     fun loadProfile() {
         viewModelScope.launch {
             myPageRepository.getMyPage()
                 .onSuccess {
                     _profile.value = it
-                    _nicknameState.value = NicknameState.AVAILABLE
                     _nickname.value = it.profileInformation.nickname.nickname
                     _introduction.value = it.profileInformation.introduction
                 }.onFailure { }
@@ -116,32 +90,27 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun patchMyProfile() {
+        if (nicknameState.value != NicknameState.AVAILABLE) return
         viewModelScope.launch {
             runCatching {
                 Nickname(nickname.value)
             }.onSuccess {
-                val newProfile = profile.value.updateProfileInformation(
+                val updateProfile = profile.value.updateProfileInformation(
                     ProfileInformation(Nickname(nickname.value), introduction.value),
                 )
-                myPageRepository.patchMyProfile(newProfile.profileInformation)
+                myPageRepository.patchMyProfile(updateProfile.profileInformation)
                     .onSuccess {
-                        _modifyProfileState.value = State.Success
+                        _myPageEvent.emit(Event.SAVE_SUCCESS)
                         _profile.value =
-                            profile.value.updateProfileInformation(newProfile.profileInformation)
+                            profile.value.updateProfileInformation(updateProfile.profileInformation)
                     }.onFailure {
-                        _modifyProfileState.value = State.Fail
+                        _myPageEvent.emit(Event.SAVE_FAILURE)
                     }
             }
         }
     }
 
     fun changeMyPageEvent(event: Event) {
-        viewModelScope.launch {
-            _myPageEvent.emit(event)
-        }
-    }
-
-    fun setMyPageEvent(event: Event) {
         viewModelScope.launch {
             _myPageEvent.emit(event)
         }
@@ -197,33 +166,12 @@ class MyPageViewModel @Inject constructor(
         InputFilter.LengthFilter(MAX_NICKNAME_LENGTH),
     )
 
-    private fun isInitializeProfileInformation(
-        nickname: String,
-        nicknameState: NicknameState,
-        introduction: String,
-    ): Boolean {
-
-        if (
-            nickname.isBlank().not() &&
-            nicknameState == NicknameState.AVAILABLE &&
-            introduction.isBlank().not()
-        ) {
-            return true
-        }
-
-        return false
-    }
-
-    enum class State {
-        Loading, Success, Fail
-    }
-
-    sealed interface Event {
-        data class ShowToast(val message: String) : Event
-        object NavigateToSetting : Event
-        object NavigateToModify : Event
-        object ModifyMyPage : Event
-        data class EnableModify(val isEnable: Boolean) : Event
+    enum class Event {
+        SAVE_SUCCESS,
+        SAVE_FAILURE,
+        NAVIGATE_TO_SETTING,
+        NAVIGATE_TO_MODIFY,
+        MODIFY_PROFILE,
     }
 
     companion object {
