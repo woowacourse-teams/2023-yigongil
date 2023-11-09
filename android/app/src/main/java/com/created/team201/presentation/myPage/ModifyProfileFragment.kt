@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.commit
 import com.bumptech.glide.Glide
 import com.created.team201.R
 import com.created.team201.databinding.FragmentModifyProfileBinding
@@ -62,9 +61,7 @@ class ModifyProfileFragment : DialogFragment() {
 
     private fun setupActionBar() {
         binding.tbModifyMyPage.setNavigationOnClickListener {
-            parentFragmentManager.commit {
-                remove(this@ModifyProfileFragment)
-            }
+            dismiss()
         }
 
         binding.tbModifyMyPage.setOnMenuItemClickListener { item ->
