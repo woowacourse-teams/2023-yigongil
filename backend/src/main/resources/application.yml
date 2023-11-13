@@ -60,3 +60,6 @@ jwt:
 
 swagger:
   server-url: "https://localhost:8080/v1"
+
+slack:
+  webhook-url: http:locallocalclocal
