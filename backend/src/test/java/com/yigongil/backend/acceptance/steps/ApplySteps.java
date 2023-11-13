@@ -37,6 +37,25 @@ public class ApplySteps {
         sharedContext.setResponse(response);
     }
 
+    @Given("깃허브 아이디가 {string}인 멤버가 이름이 {string}스터디 {int}개에 신청한다.")
+    public void 스터디_신청(String githubId, String studyName, Integer count) {
+        String token = sharedContext.getToken(githubId);
+        for (int i = 0; i < count; i++) {
+            String realName = studyName + i;
+            ExtractableResponse<Response> response = given().log()
+                                                            .all()
+                                                            .header(HttpHeaders.AUTHORIZATION, token)
+                                                            .when()
+                                                            .post("/studies/" + sharedContext.getParameter(realName) + "/applicants")
+                                                            .then()
+                                                            .log()
+                                                            .all()
+                                                            .extract();
+
+            sharedContext.setResponse(response);
+        }
+    }
+
     @When("{string}가 이름이 {string}인 스터디의 신청자를 조회한다.")
     public void 스터디_신청자_조회(String masterGithubId, String studyName) {
         ExtractableResponse<Response> response =
@@ -78,6 +97,26 @@ public class ApplySteps {
                        .extract();
 
         sharedContext.setResponse(response);
+    }
+
+    @When("{string}가 {string}의 {string} 스터디 {int}개 신청을 수락한다.")
+    public void 스터디_신청_수락(String masterName, String memberName, String studyName, Integer count) {
+        for (int i = 0; i < count; i++) {
+            String realName = studyName + i;
+            Object studyId = sharedContext.getParameter(realName);
+            Object memberId = sharedContext.getParameter(memberName);
+
+            ExtractableResponse<Response> response =
+                given().log().all()
+                       .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(masterName))
+                       .when()
+                       .patch("/studies/{studyId}/applicants/{memberId}", studyId, memberId)
+                       .then()
+                       .log().all()
+                       .extract();
+
+            sharedContext.setResponse(response);
+        }
     }
 
     @Then("{string}는 {string} 스터디의 스터디원으로 추가되어 있다.")

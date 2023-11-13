@@ -28,6 +28,11 @@ import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyListItemResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.response.StudyMemberRoleResponse;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -48,11 +53,12 @@ public class StudyService {
     private final RoundRepository roundRepository;
 
     public StudyService(
-            StudyRepository studyRepository,
-            StudyMemberRepository studyMemberRepository,
-            CertificationService certificationService,
-            FeedService feedService,
-            final RoundRepository roundRepository) {
+        StudyRepository studyRepository,
+        StudyMemberRepository studyMemberRepository,
+        CertificationService certificationService,
+        FeedService feedService,
+        RoundRepository roundRepository
+    ) {
         this.studyRepository = studyRepository;
         this.studyMemberRepository = studyMemberRepository;
         this.certificationService = certificationService;
@@ -69,19 +75,20 @@ public class StudyService {
 
     private Study createStudy(StudyUpdateRequest request, Member member) {
         Study study = Study.initializeStudyOf(
-                request.name(),
-                request.introduction(),
-                request.numberOfMaximumMembers(),
-                request.minimumWeeks(),
-                request.meetingDaysCountPerWeek(),
-                member
+            request.name(),
+            request.introduction(),
+            request.numberOfMaximumMembers(),
+            request.minimumWeeks(),
+            request.meetingDaysCountPerWeek(),
+            member
         );
         studyRepository.save(study);
         return study;
     }
 
     @Transactional(readOnly = true)
-    public List<StudyListItemResponse> findStudies(int page, String search, ProcessingStatus status) {
+    public List<StudyListItemResponse> findStudies(int page, String search,
+        ProcessingStatus status) {
         Pageable pageable = PageStrategy.defaultPageStrategy(page);
 
         Slice<Study> studies = studyRepository.findStudiesByConditions(search, status, pageable);
@@ -99,9 +106,9 @@ public class StudyService {
     @Transactional(readOnly = true)
     public List<MyStudyResponse> findMyStudies(Member member) {
         List<StudyMember> studyMembers = studyMemberRepository.findAllByMemberIdAndRoleNotAndStudyResult(
-                member.getId(),
-                Role.APPLICANT,
-                StudyResult.NONE
+            member.getId(),
+            Role.APPLICANT,
+            StudyResult.NONE
         );
 
         List<MyStudyResponse> response = new ArrayList<>();
@@ -184,12 +191,12 @@ public class StudyService {
         Member member = studyMember.getMember();
 
         return new StudyMemberResponse(
-                member.getId(),
-                member.getTier().getOrder(),
-                member.getNickname(),
-                calculateSuccessRate(member),
-                member.getProfileImageUrl(),
-                member.isDeleted()
+            member.getId(),
+            member.getTier().getOrder(),
+            member.getNickname(),
+            calculateSuccessRate(member),
+            member.getProfileImageUrl(),
+            member.isDeleted()
         );
     }
 
@@ -210,8 +217,8 @@ public class StudyService {
 
     private StudyMember findApplicantByMemberIdAndStudyId(Long memberId, Long studyId) {
         StudyMember studyMember = studyMemberRepository
-                .findByStudyIdAndMemberId(studyId, memberId)
-                .orElseThrow(() -> new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId));
+            .findByStudyIdAndMemberId(studyId, memberId)
+            .orElseThrow(() -> new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId));
         if (studyMember.isNotApplicant()) {
             throw new ApplicantNotFoundException("해당 지원자가 존재하지 않습니다.", memberId);
         }
@@ -220,13 +227,31 @@ public class StudyService {
 
     @Transactional
     public void proceedRound(LocalDate today) {
-        List<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.PROCESSING);
+        long from = System.currentTimeMillis();
+        List<Study> studies = studyRepository.findAllByProcessingStatus(
+            ProcessingStatus.PROCESSING);
 
         studies.stream()
                .filter(study -> study.isCurrentRoundEndAt(today.minusDays(1)))
                .forEach(Study::updateToNextRound);
-    }
+        Runtime runtime = Runtime.getRuntime();
+        long totalMemory = runtime.totalMemory();
+        long freeMemory = runtime.freeMemory();
+        long usedMemory = (totalMemory - freeMemory) / 1000000;
 
+        long to = System.currentTimeMillis();
+        Path path = Paths.get("time_test.txt");
+        try {
+            if (Files.exists(path)) {
+                Files.write(path, ("time spent to proceed Round \nstudy size: " + studies.size() + "\ntotal time spent: " + (to - from) + "\nThe JVM is using " + usedMemory + " MB of memory." + "\n\n").getBytes(), StandardOpenOption.APPEND);
+            } else {
+                Files.createFile(path);
+                Files.write(path, ("time spent to proceed Round \nstudy size: " + studies.size() + "\ntotal time spent: " + (to - from) + "\n\n").getBytes());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     @Transactional
     public void start(Member member, Long studyId, StudyStartRequest request) {
         List<DayOfWeek> meetingDaysOfTheWeek = createDayOfWeek(request.meetingDaysOfTheWeek());
@@ -245,12 +270,12 @@ public class StudyService {
     public void update(Member member, Long studyId, StudyUpdateRequest request) {
         Study study = findStudyById(studyId);
         study.updateInformation(
-                member,
-                request.name(),
-                request.numberOfMaximumMembers(),
-                request.introduction(),
-                request.minimumWeeks(),
-                request.meetingDaysCountPerWeek()
+            member,
+            request.name(),
+            request.numberOfMaximumMembers(),
+            request.introduction(),
+            request.minimumWeeks(),
+            request.meetingDaysCountPerWeek()
         );
     }
 
@@ -273,7 +298,8 @@ public class StudyService {
     public MembersCertificationResponse findAllMembersCertification(Member member, Long studyId) {
         Study study = findStudyById(studyId);
         final List<RoundOfMember> roundOfMembers = study.getCurrentRoundOfMembers();
-        return MembersCertificationResponse.of(study.getName(), study.getCurrentRound(), member, roundOfMembers);
+        return MembersCertificationResponse.of(study.getName(), study.getCurrentRound(), member,
+            roundOfMembers);
     }
 
     @Transactional(readOnly = true)
