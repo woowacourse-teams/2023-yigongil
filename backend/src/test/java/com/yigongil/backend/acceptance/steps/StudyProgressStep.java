@@ -29,7 +29,7 @@ public class StudyProgressStep {
 
     @Given("{int}일이 지난다.")
     public void 시간_소요(int days) {
-        given().when()
+        given().log().all().when()
                .put("/fake/proceed?days=" + days)
                .then()
                .log()
@@ -43,7 +43,7 @@ public class StudyProgressStep {
         LocalDate sunday = today.with(DayOfWeek.SUNDAY);
         long daysUntilSunday = ChronoUnit.DAYS.between(today, sunday);
 
-        given().when()
+        given().log().all().when()
                .put("/fake/proceed?days=" + daysUntilSunday)
                .then()
                .log()
