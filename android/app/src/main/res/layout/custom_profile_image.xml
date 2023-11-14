@@ -21,8 +21,9 @@
 
         <ImageView
             android:id="@+id/iv_custom_profile_image"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
             android:layout_gravity="center"
             android:contentDescription="@string/custom_profile_image_content_description"
             tools:src="@drawable/ic_launcher_foreground" />
