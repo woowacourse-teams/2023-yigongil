@@ -3,6 +3,7 @@ package com.yigongil.backend.fixture;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
+import com.yigongil.backend.domain.study.Study;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +34,16 @@ public enum RoundFixture {
     public Round toRound() {
         return Round.builder()
                     .id(id)
+                    .mustDo(content)
+                    .master(master)
+                    .roundOfMembers(new ArrayList<>(List.of(RoundOfMemberFixture.김진우_라운드_삼.toRoundOfMember(), RoundOfMemberFixture.노이만_라오멤.toRoundOfMember())))
+                    .build();
+    }
+
+    public Round toRoundWithStudy(Study study) {
+        return Round.builder()
+                    .id(id)
+                    .study(study)
                     .mustDo(content)
                     .master(master)
                     .roundOfMembers(new ArrayList<>(List.of(RoundOfMemberFixture.김진우_라운드_삼.toRoundOfMember(), RoundOfMemberFixture.노이만_라오멤.toRoundOfMember())))

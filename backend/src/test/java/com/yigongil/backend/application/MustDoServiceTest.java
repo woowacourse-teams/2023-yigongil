@@ -8,8 +8,10 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
+import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.fixture.MemberFixture;
+import com.yigongil.backend.fixture.StudyFixture;
 import com.yigongil.backend.request.MustDoUpdateRequest;
 import java.util.List;
 import java.util.Optional;
@@ -40,8 +42,12 @@ class MustDoServiceTest {
         RoundOfMember roundOfMember = RoundOfMember.builder()
                                                    .member(member)
                                                    .build();
+
+        Study study = StudyFixture.자바_스터디_모집중_ID_1.toStudyWithMaster(member);
+
         round = Round.builder()
                      .id(3L)
+                     .study(study)
                      .roundOfMembers(List.of(roundOfMember))
                      .master(member)
                      .mustDo(null)

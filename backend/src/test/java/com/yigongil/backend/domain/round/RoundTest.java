@@ -1,17 +1,18 @@
 package com.yigongil.backend.domain.round;
 
+import static com.yigongil.backend.fixture.RoundFixture.아이디_삼_머스트두없는_라운드;
+import static com.yigongil.backend.fixture.RoundFixture.아이디없는_라운드;
+import static com.yigongil.backend.fixture.StudyFixture.자바_스터디_모집중_ID_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NotStudyMasterException;
-import com.yigongil.backend.fixture.RoundFixture;
 import com.yigongil.backend.fixture.RoundOfMemberFixture;
 import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
 
 class RoundTest {
 
@@ -21,7 +22,7 @@ class RoundTest {
         @Test
         void 정상생성한다() {
             //given
-            Round round = RoundFixture.아이디_삼_머스트두없는_라운드.toRound();
+            Round round = 아이디_삼_머스트두없는_라운드.toRoundWithStudy(자바_스터디_모집중_ID_1.toStudy());
 
             //then
             round.updateMustDo(round.getMaster(), " 머스트두");
@@ -33,7 +34,7 @@ class RoundTest {
         @Test
         void 스터디_마스터가_아니라면_예외를_던진다() {
             //given
-            Round round = RoundFixture.아이디_삼_머스트두없는_라운드.toRound();
+            Round round = 아이디_삼_머스트두없는_라운드.toRound();
             final Member another = Member.builder()
                                          .id(3L)
                                          .introduction("소개")
@@ -50,10 +51,11 @@ class RoundTest {
         @Test
         void 길이가_20자를_넘으면_예외를_던진다() {
             //given
-            final Round round = RoundFixture.아이디_삼_머스트두없는_라운드.toRound();
+            final Round round = 아이디_삼_머스트두없는_라운드.toRound();
 
             //when
-            ThrowingCallable throwable = () -> round.updateMustDo(round.getMaster(), "굉장히긴머스트두길이입니다이십자도넘을수도있어");
+            ThrowingCallable throwable = () -> round.updateMustDo(round.getMaster(),
+                    "굉장히긴머스트두길이입니다이십자도넘을수도있어");
 
             //then
             assertThatThrownBy(throwable).isInstanceOf(InvalidTodoLengthException.class);
@@ -63,7 +65,7 @@ class RoundTest {
     @Test
     void 멤버의_머스트두_완료여부를_반환한다() {
         //given
-        Round round = RoundFixture.아이디없는_라운드.toRound();
+        Round round = 아이디없는_라운드.toRound();
         Member master = round.getMaster();
 
         //when
@@ -79,7 +81,7 @@ class RoundTest {
         @Test
         void 멤버들의_진행률을_계산한다() {
             //given
-            Round round = RoundFixture.아이디없는_라운드.toRoundWithRoundOfMember(
+            Round round = 아이디없는_라운드.toRoundWithRoundOfMember(
                     RoundOfMemberFixture.노이만_라오멤,
                     RoundOfMemberFixture.노이만_라오멤,
                     RoundOfMemberFixture.노이만_라오멤
@@ -96,7 +98,7 @@ class RoundTest {
         @Test
         void 머스트두를_완료한_멤버가_없다() {
             //given
-            Round round = RoundFixture.아이디없는_라운드.toRoundWithRoundOfMember(
+            Round round = 아이디없는_라운드.toRoundWithRoundOfMember(
                     RoundOfMemberFixture.노이만_라오멤,
                     RoundOfMemberFixture.노이만_라오멤,
                     RoundOfMemberFixture.노이만_라오멤

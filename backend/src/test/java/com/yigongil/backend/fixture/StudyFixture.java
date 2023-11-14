@@ -12,6 +12,7 @@ import java.util.List;
 public enum StudyFixture {
 
     자바_스터디_모집중(null, LocalDateTime.now(), "자바", "스터디소개", ProcessingStatus.RECRUITING, 4, 2, 4),
+    자바_스터디_모집중_ID_1(1L, LocalDateTime.now(), "자바", "스터디소개", ProcessingStatus.RECRUITING, 4, 2, 4),
     자바_스터디_모집중_정원_2(null, LocalDateTime.now(), "자바", "스터디소개", ProcessingStatus.RECRUITING, 2, 2, 4)
     ;
 
