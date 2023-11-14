@@ -21,13 +21,13 @@ class HomeViewHolder(
         with(binding) {
             tvHomeStudyListStudyName.text = userStudy.studyName
             tvHomeStudyListGrassSeedCount.text = root.context.getString(
-                    R.string.home_study_list_grass_count,
-                    userStudy.grassSeedsCount
-                )
+                R.string.home_study_list_grass_count,
+                userStudy.grassSeedsCount,
+            )
             tvHomeStudyListDDay.text = root.context.getString(
-                    R.string.home_study_list_date,
-                    userStudy.studyId
-                )
+                R.string.home_study_list_date,
+                userStudy.leftDays,
+            )
             ivHomeStudyListMaster.visibility = when (userStudy.isMaster) {
                 true -> View.VISIBLE
                 false -> View.GONE
