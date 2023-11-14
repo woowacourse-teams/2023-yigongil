@@ -40,19 +40,19 @@ class CustomProfileImage @JvmOverloads constructor(
                             ).color,
                         ),
                     )
-                Glide.with(profileImage.context)
-                    .load(getString(R.styleable.CustomProfileImage_glideCircleImageUrl))
-                    .circleCrop()
-                    .into(profileImage)
+
+                setGlideCircleImageUrl(getString(R.styleable.CustomProfileImage_glideCircleImageUrl))
             }.also { recycle() }
         }
     }
 
-    fun setGlideCircleImageUrl(image: String) {
-        Glide.with(profileImage.context)
-            .load(image)
-            .circleCrop()
-            .into(profileImage)
+    fun setGlideCircleImageUrl(imageUrl: String?) {
+        imageUrl?.let {
+            Glide.with(profileImage.context)
+                .load(imageUrl)
+                .circleCrop()
+                .into(profileImage)
+        }
     }
 
     fun setBorderProgress(successRate: Int) {
