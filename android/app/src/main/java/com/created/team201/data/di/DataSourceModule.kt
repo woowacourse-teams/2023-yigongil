@@ -21,5 +21,4 @@ interface DataSourceModule {
     @Singleton
     @Binds
     fun bindDefaultTokenDataSource(defaultTokenDataSource: DefaultTokenDataSource): TokenDataSource
-
 }

@@ -6,7 +6,6 @@ import com.created.team201.data.remote.api.AuthService
 import com.created.team201.data.remote.api.CertificationService
 import com.created.team201.data.remote.api.CommonStudyListService
 import com.created.team201.data.remote.api.CreateStudyService
-import com.created.team201.data.remote.api.HomeService
 import com.created.team201.data.remote.api.ImageService
 import com.created.team201.data.remote.api.MemberStudyListService
 import com.created.team201.data.remote.api.MyPageService
@@ -17,6 +16,7 @@ import com.created.team201.data.remote.api.SettingService
 import com.created.team201.data.remote.api.StudyDetailService
 import com.created.team201.data.remote.api.ThreadService
 import com.created.team201.data.remote.api.UpdateStudyService
+import com.created.team201.data.remote.api.UserStudyService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -55,8 +55,8 @@ object ServiceModule {
 
     @Singleton
     @Provides
-    fun provideHomeService(@AuthRetrofit retrofit: Retrofit): HomeService =
-        retrofit.create(HomeService::class.java)
+    fun provideUserStudyService(@AuthRetrofit retrofit: Retrofit): UserStudyService =
+        retrofit.create(UserStudyService::class.java)
 
     @Singleton
     @Provides

@@ -7,8 +7,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.created.domain.model.Page
 import com.created.domain.model.Role
-import com.created.domain.repository.StudyListRepository
+import com.created.team201.data.repository.StudyListRepository
 import com.created.team201.presentation.studyList.model.StudyListFilter
+import com.created.team201.presentation.studyList.model.StudyListFilter.Companion.isGuestOnly
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel
 import com.created.team201.presentation.studyList.model.StudySummaryUiModel.Companion.toUiModel
 import com.created.team201.util.NonNullLiveData
@@ -116,8 +117,7 @@ class StudyListViewModel @Inject constructor(
 
     fun loadFilteredPage(filter: StudyListFilter) {
         filterStatus = filter
-        _isGuestMode.value =
-            ((filterStatus == StudyListFilter.WAITING_APPLICANT) or (filterStatus == StudyListFilter.WAITING_MEMBER)) and isGuest
+        _isGuestMode.value = filter.isGuestOnly() and isGuest
         refreshPage()
     }
 

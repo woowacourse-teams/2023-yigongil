@@ -16,8 +16,8 @@ fun Uri.toAdjustImageFile(context: Context): File? {
 
     val orientation = context.contentResolver
         .openInputStream(this)?.use {
-        ExifInterface(it)
-    }?.getAttribute(ExifInterface.TAG_ORIENTATION)
+            ExifInterface(it)
+        }?.getAttribute(ExifInterface.TAG_ORIENTATION)
     orientation?.let { file.setOrientation(it) }
 
     return file
@@ -26,8 +26,8 @@ fun Uri.toAdjustImageFile(context: Context): File? {
 private fun Uri.toBitmap(context: Context): Bitmap? {
     return context.contentResolver
         .openInputStream(this)?.use {
-        BitmapFactory.decodeStream(it)
-    }
+            BitmapFactory.decodeStream(it)
+        }
 }
 
 private fun createAdjustImageFile(bitmap: Bitmap, directory: File): File {

@@ -22,6 +22,7 @@ import com.created.team201.presentation.main.MainViewModel
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
 import com.created.team201.presentation.studyList.adapter.StudyListAdapter
 import com.created.team201.presentation.studyList.model.StudyListFilter
+import com.created.team201.presentation.studyList.model.StudyListFilter.Companion.isGuestOnly
 import com.created.team201.util.FirebaseLogUtil
 import com.created.team201.util.FirebaseLogUtil.SCREEN_STUDY_LIST
 import com.google.android.material.chip.ChipGroup
@@ -39,6 +40,7 @@ class StudyListFragment :
     private val studyListAdapter: StudyListAdapter by lazy {
         StudyListAdapter(studyListClickListener())
     }
+    private val loginBottomSheetFragment: LoginBottomSheetFragment = LoginBottomSheetFragment()
 
     override fun onResume() {
         super.onResume()
@@ -179,7 +181,7 @@ class StudyListFragment :
 
     private fun showLoginBottomSheetDialog() {
         removeAllFragment()
-        LoginBottomSheetFragment().show(
+        loginBottomSheetFragment.show(
             childFragmentManager,
             LoginBottomSheetFragment.TAG_LOGIN_BOTTOM_SHEET,
         )
@@ -219,8 +221,8 @@ class StudyListFragment :
 
                 if (binding.srlStudyList.isRefreshing ||
                     binding.pbStudyListLoad.visibility == VISIBLE
-                    // 이거 있으면 무스가 안되어서.. 잠깐 막아둡니다.
-                    // || totalItemHeight < recyclerViewHeight
+                // 이거 있으면 무스가 안되어서.. 잠깐 막아둡니다.
+                // || totalItemHeight < recyclerViewHeight
                 ) {
                     return
                 }
@@ -235,9 +237,6 @@ class StudyListFragment :
 
     private fun setupStudyList() {
         studyListViewModel.initPage()
-        binding.tvGuestInformation.setOnClickListener {
-            showLoginBottomSheetDialog()
-        }
     }
 
     private fun studyListClickListener() = object : StudyListClickListener {
@@ -256,6 +255,9 @@ class StudyListFragment :
         studyListViewModel.updateIsGuest(mainViewModel.isGuest)
         val filter = getStudyListFilter(group)
         studyListViewModel.loadFilteredPage(filter)
+        if (mainViewModel.isGuest and filter.isGuestOnly()) {
+            showLoginBottomSheetDialog()
+        }
     }
 
     private fun getStudyListFilter(group: ChipGroup): StudyListFilter {

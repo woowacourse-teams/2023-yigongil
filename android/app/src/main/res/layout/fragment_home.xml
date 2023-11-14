@@ -1,73 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-
-        <variable
-            name="vm"
-            type="com.created.team201.presentation.home.HomeViewModel" />
-
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".presentation.home.HomeFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.home.HomeFragment">
 
 
-        <TextView
-            android:id="@+id/tv_home_no_study"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/home_no_study"
-            android:textAppearance="@style/subtitle_r20"
-            android:textColor="@color/grey02_78808B"
-            app:hasStudy="@{vm.userStudyUiState}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/tv_home_no_study"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/home_no_study"
+        android:textAppearance="@style/subtitle_r20"
+        android:textColor="@color/grey02_78808B"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/iv_home_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_home_logo" />
+    <ImageView
+        android:id="@+id/iv_home_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <View
-            android:id="@+id/view_home_border"
-            android:layout_width="0dp"
-            android:layout_height="2dp"
-            android:layout_marginTop="16dp"
-            android:background="@color/black03_272C33"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_home_logo" />
+    <View
+        android:id="@+id/view_home_border"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/black03_272C33"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_home_logo" />
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_home"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:orientation="vertical"
-            android:overScrollMode="never"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_home_border"
-            tools:listitem="@layout/item_home_study_list">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_home"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical"
+        android:overScrollMode="never"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_home_border"
+        tools:listitem="@layout/item_home_study_list">
 
-        </androidx.recyclerview.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>

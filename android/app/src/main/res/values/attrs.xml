@@ -36,4 +36,11 @@
     <declare-styleable name="DayOfWeekSelector">
         <attr name="canMultipleSelect" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="UserStudyResult">
+        <attr name="android:title" format="string" />
+        <attr name="userStudyResult" format="string" />
+        <attr name="userStudyResultResource" format="dimension" />
+        <attr name="userStudyIconResource" format="dimension" />
+    </declare-styleable>
 </resources>

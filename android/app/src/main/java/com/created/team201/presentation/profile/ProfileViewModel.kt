@@ -10,8 +10,8 @@ import com.created.domain.model.Period
 import com.created.domain.model.Profile
 import com.created.domain.model.ProfileInformation
 import com.created.domain.model.UserProfile
-import com.created.domain.repository.GuestRepository
-import com.created.domain.repository.ProfileRepository
+import com.created.team201.data.repository.GuestRepository
+import com.created.team201.data.repository.ProfileRepository
 import com.created.team201.presentation.myPage.model.ProfileInformationUiModel
 import com.created.team201.presentation.myPage.model.ProfileUiModel
 import com.created.team201.presentation.onBoarding.model.NicknameUiModel
