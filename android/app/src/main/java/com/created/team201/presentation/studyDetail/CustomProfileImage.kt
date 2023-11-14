@@ -15,8 +15,7 @@ import com.created.team201.presentation.studyDetail.model.Tier
 class CustomProfileImage @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-) : LinearLayout(context, attrs, defStyleAttr) {
+) : LinearLayout(context, attrs) {
 
     private val binding: CustomProfileImageBinding by lazy {
         CustomProfileImageBinding.inflate(LayoutInflater.from(context), this, true)
