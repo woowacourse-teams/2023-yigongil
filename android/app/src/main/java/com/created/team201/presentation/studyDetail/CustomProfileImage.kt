@@ -49,7 +49,7 @@ class CustomProfileImage @JvmOverloads constructor(
     fun setGlideCircleImageUrl(imageUrl: String?) {
         imageUrl?.let {
             Glide.with(profileImage.context)
-                .load(imageUrl)
+                .load(it)
                 .circleCrop()
                 .into(profileImage)
         }
