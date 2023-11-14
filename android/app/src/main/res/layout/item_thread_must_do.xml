@@ -23,8 +23,8 @@
 
         <com.created.team201.presentation.studyDetail.CustomProfileImage
             android:id="@+id/fl_item_must_do_profile_image"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="8dp"

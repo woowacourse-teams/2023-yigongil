@@ -18,16 +18,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="6dp"
+        android:padding="8dp"
         android:background="@drawable/bg_rectangle_radius_5dp"
         android:minHeight="60dp"
         android:onClick="@{() -> studyMemberClickListener.onUserClick(studyMember.id)}">
 
         <com.created.team201.presentation.studyDetail.CustomProfileImage
             android:id="@+id/fl_item_study_detail_profile_image"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             app:borderProgress="@{studyMember.successRate}"
             app:glideCircleImageUrl="@{studyMember.profileImageUrl}"
             app:layout_constraintStart_toStartOf="parent"
@@ -87,10 +86,10 @@
 
         <TextView
             android:id="@+id/btn_item_study_detail_accept"
-            android:layout_width="40dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="8dp"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:paddingVertical="10dp"
+            android:layout_marginTop="4dp"
             android:background="@drawable/bg_rectangle_radius_5dp"
             android:gravity="center"
             android:onClick="@{() -> studyMemberClickListener.onAcceptApplicantClick(studyMember.id)}"

@@ -15,8 +15,7 @@ import com.created.team201.presentation.studyDetail.model.Tier
 class CustomProfileImage @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-) : LinearLayout(context, attrs, defStyleAttr) {
+) : LinearLayout(context, attrs) {
 
     private val binding: CustomProfileImageBinding by lazy {
         CustomProfileImageBinding.inflate(LayoutInflater.from(context), this, true)
@@ -41,19 +40,19 @@ class CustomProfileImage @JvmOverloads constructor(
                             ).color,
                         ),
                     )
-                Glide.with(profileImage.context)
-                    .load(getString(R.styleable.CustomProfileImage_glideCircleImageUrl))
-                    .circleCrop()
-                    .into(profileImage)
+
+                setGlideCircleImageUrl(getString(R.styleable.CustomProfileImage_glideCircleImageUrl))
             }.also { recycle() }
         }
     }
 
-    fun setGlideCircleImageUrl(image: String) {
-        Glide.with(profileImage.context)
-            .load(image)
-            .circleCrop()
-            .into(profileImage)
+    fun setGlideCircleImageUrl(imageUrl: String?) {
+        imageUrl?.let {
+            Glide.with(profileImage.context)
+                .load(it)
+                .circleCrop()
+                .into(profileImage)
+        }
     }
 
     fun setBorderProgress(successRate: Int) {
