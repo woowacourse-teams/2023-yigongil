@@ -15,6 +15,14 @@
 
         <!-- 바텀 시트 다이얼로그 스타일 적용 -->
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
+
+        <!-- Text, EditText 하이라이트 및 입력 커서 스타일 적용 -->
+        <item name="android:textColorLink">@color/green02_E639D353</item>
+        <item name="android:textColorHighlight">@color/green04_26A641</item>
+        <item name="colorControlActivated">@color/green04_26A641</item>
+
+        <!-- ActionBar Menu Text Color -->
+        <item name="android:actionMenuTextColor">@color/white</item>
     </style>
 
     <style name="Theme.Team201" parent="Base.Theme.Team201" />
@@ -56,6 +64,15 @@
         <item name="android:textColorHint">@color/grey01_C5C5C5</item>
 
         <item name="android:colorControlNormal">@color/white</item>
+    </style>
+
+    <!-- No margin Dialog -->
+    <style name="NoMarginDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:textColorLink">@color/green02_E639D353</item>
+        <item name="android:textColorHighlight">@color/green04_26A641</item>
+        <item name="colorControlActivated">@color/green04_26A641</item>
+        <item name="android:windowBackground">@color/black01_0D1117</item>
+        <item name="android:windowIsFloating">false</item>
     </style>
 
 </resources>

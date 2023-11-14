@@ -11,9 +11,9 @@ import com.created.domain.model.MustDoCertification
 import com.created.domain.model.MustDoStatus
 import com.created.domain.model.Role
 import com.created.domain.model.WeeklyMustDo
-import com.created.domain.repository.MyPageRepository
-import com.created.domain.repository.StudyDetailRepository
-import com.created.domain.repository.ThreadRepository
+import com.created.team201.data.repository.MyPageRepository
+import com.created.team201.data.repository.StudyDetailRepository
+import com.created.team201.data.repository.ThreadRepository
 import com.created.team201.presentation.common.customview.dayofselector.DayOfWeek
 import com.created.team201.presentation.studyDetail.model.StudyDetailUIModel
 import com.created.team201.presentation.studyThread.model.WeeklyMustDoUiModel
