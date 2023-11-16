@@ -1,4 +1,4 @@
-package com.yigongil.backend.application;
+package com.yigongil.backend.domain.image;
 
 import com.yigongil.backend.exception.ImageToBytesException;
 import com.yigongil.backend.exception.InvalidImageExtensionException;

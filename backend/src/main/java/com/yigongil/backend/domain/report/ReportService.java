@@ -1,10 +1,9 @@
-package com.yigongil.backend.application;
+package com.yigongil.backend.domain.report;
 
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.report.MemberReport;
-import com.yigongil.backend.domain.report.ReportRepository;
-import com.yigongil.backend.domain.report.StudyReport;
+import com.yigongil.backend.domain.member.MemberService;
 import com.yigongil.backend.domain.study.Study;
+import com.yigongil.backend.domain.study.StudyService;
 import com.yigongil.backend.request.MemberReportCreateRequest;
 import com.yigongil.backend.request.StudyReportCreateRequest;
 import org.springframework.stereotype.Service;

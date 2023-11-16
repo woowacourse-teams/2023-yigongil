@@ -1,6 +1,6 @@
 package com.yigongil.backend.domain.meetingdayoftheweek;
 
-import com.yigongil.backend.domain.BaseEntity;
+import com.yigongil.backend.domain.base.BaseEntity;
 import com.yigongil.backend.domain.study.Study;
 import java.time.DayOfWeek;
 import javax.persistence.Entity;

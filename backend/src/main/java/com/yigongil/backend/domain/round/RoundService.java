@@ -1,8 +1,6 @@
-package com.yigongil.backend.application;
+package com.yigongil.backend.domain.round;
 
 import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.round.Round;
-import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;

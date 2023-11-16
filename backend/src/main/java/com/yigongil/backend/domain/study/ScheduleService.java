@@ -1,4 +1,4 @@
-package com.yigongil.backend.application;
+package com.yigongil.backend.domain.study;
 
 import java.time.LocalDate;
 import org.springframework.scheduling.annotation.Scheduled;

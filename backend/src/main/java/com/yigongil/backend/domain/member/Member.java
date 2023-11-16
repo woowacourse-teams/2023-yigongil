@@ -1,6 +1,6 @@
 package com.yigongil.backend.domain.member;
 
-import com.yigongil.backend.domain.BaseEntity;
+import com.yigongil.backend.domain.base.BaseRootEntity;
 import com.yigongil.backend.domain.event.MemberDeleteEvent;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -17,11 +17,7 @@ import org.hibernate.annotations.SQLDelete;
 @Getter
 @SQLDelete(sql = Member.DELETE_QUERY)
 @Entity
-public class Member extends BaseEntity {
-
-    private static final int MASTER_NUMBER = 0;
-    private static final int PARTICIPANT_NUMBER = 1;
-    private static final int MAXIMUM_TIER = 5;
+public class Member extends BaseRootEntity {
 
     protected static final String DELETE_QUERY = """
             update member
@@ -32,7 +28,9 @@ public class Member extends BaseEntity {
             deleted = true
             where id = ?
             """;
-
+    private static final int MASTER_NUMBER = 0;
+    private static final int PARTICIPANT_NUMBER = 1;
+    private static final int MAXIMUM_TIER = 5;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -103,7 +101,7 @@ public class Member extends BaseEntity {
 
     @PreRemove
     public void registerDeleteEvent() {
-        register(new MemberDeleteEvent(id));
+        registerEvent(new MemberDeleteEvent(id));
     }
 
     public void addExperience(int exp) {
