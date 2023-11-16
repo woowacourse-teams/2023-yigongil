@@ -5,7 +5,6 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.study.Study;
 import java.time.LocalDateTime;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,7 +30,6 @@ public class Certification extends BaseEntity {
     @JoinColumn(name = "study_id")
     private Study study;
 
-    @Column(length = 1000)
     private String content;
 
     private String imageUrl;

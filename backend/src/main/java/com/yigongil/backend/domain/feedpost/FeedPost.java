@@ -5,7 +5,6 @@ import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.study.Study;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,7 +30,6 @@ public class FeedPost extends BaseEntity {
     @JoinColumn(name = "study_id")
     private Study study;
 
-    @Column(length = 1000, nullable = false)
     private String content;
 
     private String imageUrl;

@@ -2,20 +2,15 @@ package com.yigongil.backend.acceptance.steps;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import com.yigongil.backend.domain.study.ProcessingStatus;
-import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
-import com.yigongil.backend.response.UpcomingRoundResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAdjusters;
 import org.junit.Ignore;
 import org.springframework.http.HttpHeaders;
 
@@ -31,34 +26,6 @@ public class StudyProgressStep {
     public void 시간_소요(int days) {
         given().when()
                .put("/fake/proceed?days=" + days)
-               .then()
-               .log()
-               .all()
-               .extract();
-    }
-
-    @Given("이번주 일요일이 됐다.")
-    public void 이번주_일요일() {
-        LocalDate today = LocalDate.now();
-        LocalDate sunday = today.with(DayOfWeek.SUNDAY);
-        long daysUntilSunday = ChronoUnit.DAYS.between(today, sunday);
-
-        given().when()
-               .put("/fake/proceed?days=" + daysUntilSunday)
-               .then()
-               .log()
-               .all()
-               .extract();
-    }
-
-    @Given("다음주 월요일이 됐다.")
-    public void 다음주_월요일() {
-        LocalDate today = LocalDate.now();
-        LocalDate nextMonday = today.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
-        long daysUntilNextMonday = ChronoUnit.DAYS.between(today, nextMonday);
-
-        given().when()
-               .put("/fake/proceed?days=" + daysUntilNextMonday)
                .then()
                .log()
                .all()
@@ -85,21 +52,12 @@ public class StudyProgressStep {
     @Ignore("스터디라운드 -> 주차반영까지 무시") // TODO: 스터디라운드 -> 주차반영
     @Then("스터디의 현재 주차가 {int}로 변경되어 있다.")
     public void 스터디_현재_회차_조회(int expectedWeekNumber) {
-        UpcomingRoundResponse response = sharedContext.getResponse()
-                                                      .as(MembersCertificationResponse.class)
-                                                      .upcomingRound();
+        StudyDetailResponse studyDetailResponse = sharedContext.getResponse().as(StudyDetailResponse.class);
 
-        assertThat(response.weekNumber()).isEqualTo(expectedWeekNumber);
-
-    }
-
-    @Then("스터디의 현재 주차가 1에서 변경되지 않았다.")
-    public void 스터디_주차_변경되지_않았다() {
-        UpcomingRoundResponse response = sharedContext.getResponse()
-                                                      .as(MembersCertificationResponse.class)
-                                                      .upcomingRound();
-
-        assertThat(response.weekNumber()).isEqualTo(1);
+        assertAll(
+//                () -> assertThat(studyDetailResponse.currentRound()).isEqualTo(expectedWeekNumber),
+                () -> assertThat(studyDetailResponse.processingStatus()).isEqualTo(ProcessingStatus.PROCESSING.getCode())
+        );
     }
 
     @Then("스터디가 종료되어 있다.")
