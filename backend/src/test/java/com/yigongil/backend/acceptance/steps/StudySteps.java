@@ -22,6 +22,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -214,6 +216,39 @@ public class StudySteps {
         String studyId = (String) sharedContext.getParameter(studyName);
         StudyStartRequest request = new StudyStartRequest(Arrays.stream(days.split(",")).map(String::strip).toList());
 
+        MembersCertificationResponse membersCertificationResponse = given().log().all()
+                                                                           .header(HttpHeaders.AUTHORIZATION,
+                                                                                   token)
+                                                                           .when()
+                                                                           .get("/studies/" + studyId + "/certifications")
+                                                                           .then().log().all()
+                                                                           .extract()
+                                                                           .as(MembersCertificationResponse.class);
+
+        List<RoundResponse> roundResponses = given().log().all()
+                                                    .header(HttpHeaders.AUTHORIZATION, token)
+                                                    .when()
+                                                    .get("/studies/" + studyId + "/rounds?weekNumber=" + membersCertificationResponse.upcomingRound().weekNumber())
+                                                    .then().log().all()
+                                                    .extract()
+                                                    .response()
+                                                    .jsonPath().getList(".", RoundResponse.class);
+
+        RoundResponse round = roundResponses.stream()
+                                            .filter(roundResponse -> roundResponse.status() == RoundStatus.IN_PROGRESS)
+                                            .findAny()
+                                            .get();
+
+        sharedContext.setParameter("round", round);
+        sharedContext.setParameter("roundId", round.id());
+    }
+
+    @Given("{string}가 이름이 {string}인 스터디를 {string}에 진행되도록 하여 시작한다.")
+    public void 스터디_시작(String memberGithubId, String studyName, String days) {
+        String token = sharedContext.getToken(memberGithubId);
+        String studyId = (String) sharedContext.getParameter(studyName);
+        StudyStartRequest request = new StudyStartRequest(Arrays.stream(days.split(",")).map(String::strip).toList());
+
         given().log().all()
                .header(HttpHeaders.AUTHORIZATION, token)
                .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -221,8 +256,24 @@ public class StudySteps {
                .when()
                .patch("/studies/" + studyId + "/start")
                .then().log().all();
+    }
 
-        sharedContext.setParameter("currentRoundNumber", 1);
+    @Given("{string}가 이름이 {string}인 스터디를 내일에 해당하는 요일에 진행되도록 하여 시작한다.")
+    public void 스터디_시작_내일에_해당하는_요일(String memberGithubId, String studyName) {
+        String token = sharedContext.getToken(memberGithubId);
+        String studyId = (String) sharedContext.getParameter(studyName);
+
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+        DayOfWeek dayOfWeek = tomorrow.getDayOfWeek();
+        StudyStartRequest request = new StudyStartRequest(List.of(dayOfWeek.name()));
+
+        given().log().all()
+               .header(HttpHeaders.AUTHORIZATION, token)
+               .contentType(MediaType.APPLICATION_JSON_VALUE)
+               .body(request)
+               .when()
+               .patch("/studies/" + studyId + "/start")
+               .then().log().all();
     }
 
     @When("{string}가 홈화면을 조회한다.")

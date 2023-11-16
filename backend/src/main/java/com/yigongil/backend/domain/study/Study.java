@@ -207,8 +207,8 @@ public class Study extends BaseEntity {
                                  .count();
     }
 
-    public boolean isCurrentRoundEndAt(LocalDate today) {
-        return getCurrentRound().isEndAt(today);
+    public boolean isCurrentRoundEndAt(LocalDate date) {
+        return getCurrentRound().isEndAt(date);
     }
 
     public void start(Member member, List<DayOfWeek> daysOfTheWeek, LocalDateTime startAt) {
@@ -344,7 +344,7 @@ public class Study extends BaseEntity {
     public void completeRound(Member member) {
         getCurrentRound().completeRound(member);
     }
-
+    
     public List<RoundOfMember> getCurrentRoundOfMembers() {
         return getCurrentRound().getRoundOfMembers();
     }
