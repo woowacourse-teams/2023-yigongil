@@ -35,6 +35,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.OnDelete;
@@ -73,6 +74,7 @@ public class Study extends BaseEntity {
 
     @Cascade(CascadeType.PERSIST)
     @OneToMany(mappedBy = "study", orphanRemoval = true, fetch = FetchType.LAZY)
+    @BatchSize(size = 10)
     private List<MeetingDayOfTheWeek> meetingDaysOfTheWeek = new ArrayList<>();
 
     @Column(nullable = false)
@@ -91,6 +93,7 @@ public class Study extends BaseEntity {
 
     @Cascade(CascadeType.PERSIST)
     @OnDelete(action = OnDeleteAction.CASCADE)
+//    @BatchSize(size = 10)
     @OneToMany(mappedBy = "study", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Round> rounds = new ArrayList<>();
 

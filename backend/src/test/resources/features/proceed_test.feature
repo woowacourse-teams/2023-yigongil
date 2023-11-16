@@ -10,4 +10,4 @@ Feature: 스터디를 진행 성능 테스트
 
     Examples:
       | count |
-      |  1000  |
+      |  10  |

@@ -15,7 +15,6 @@ public interface StudyRepository extends Repository<Study, Long>, StudyQueryRepo
 
     Study save(Study study);
 
-    @EntityGraph(attributePaths = {"rounds"})
     Optional<Study> findById(Long studyId);
 
     List<Study> findAllByProcessingStatus(ProcessingStatus processingStatus);

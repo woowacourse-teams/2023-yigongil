@@ -38,6 +38,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -47,6 +49,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class StudyService {
 
     private final StudyRepository studyRepository;
+    @Autowired
+    private EntityManager entityManager;
     private final StudyMemberRepository studyMemberRepository;
     private final CertificationService certificationService;
     private final FeedService feedService;
@@ -227,6 +231,9 @@ public class StudyService {
 
     @Transactional
     public void proceedRound(LocalDate today) {
+        entityManager.flush();
+        entityManager.clear();
+        System.out.println("StudyService.proceedRound");
         long from = System.currentTimeMillis();
         List<Study> studies = studyRepository.findAllByProcessingStatus(
             ProcessingStatus.PROCESSING);
