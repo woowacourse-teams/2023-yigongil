@@ -21,6 +21,7 @@ Feature: 스터디를 진행한다
     Given "jinwoo"가 "noiman"의 "자바1" 스터디 신청을 수락한다.
     Given "jinwoo"가 이름이 "자바1"인 스터디를 "MONDAY"에 진행되도록 하여 시작한다.
     Given 7일이 지난다.
+
     When "jinwoo"가 "자바1" 스터디의 인증 목록을 조회한다.
     Then 스터디의 현재 주차가 2로 변경되어 있다.
 
@@ -74,7 +75,6 @@ Feature: 스터디를 진행한다
     Given 깃허브 아이디가 "noiman"인 멤버가 이름이 "자바1"스터디에 신청한다.
     Given "jinwoo"가 "noiman"의 "자바1" 스터디 신청을 수락한다.
     Given "jinwoo"가 이름이 "자바1"인 스터디를 "MONDAY"에 진행되도록 하여 시작한다.
-
     Given "jinwoo"가 이름이 "자바1"인 스터디의 현재 주차를 통해 현재 회차를 찾는다.
     Given "jinwoo"가 찾은 회차에 "이번주 머두"로 머스트두를 추가한다.
 

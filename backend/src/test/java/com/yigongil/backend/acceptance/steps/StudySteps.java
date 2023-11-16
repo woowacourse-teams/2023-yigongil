@@ -216,6 +216,39 @@ public class StudySteps {
         String studyId = (String) sharedContext.getParameter(studyName);
         StudyStartRequest request = new StudyStartRequest(Arrays.stream(days.split(",")).map(String::strip).toList());
 
+        MembersCertificationResponse membersCertificationResponse = given().log().all()
+                                                                           .header(HttpHeaders.AUTHORIZATION,
+                                                                                   token)
+                                                                           .when()
+                                                                           .get("/studies/" + studyId + "/certifications")
+                                                                           .then().log().all()
+                                                                           .extract()
+                                                                           .as(MembersCertificationResponse.class);
+
+        List<RoundResponse> roundResponses = given().log().all()
+                                                    .header(HttpHeaders.AUTHORIZATION, token)
+                                                    .when()
+                                                    .get("/studies/" + studyId + "/rounds?weekNumber=" + membersCertificationResponse.upcomingRound().weekNumber())
+                                                    .then().log().all()
+                                                    .extract()
+                                                    .response()
+                                                    .jsonPath().getList(".", RoundResponse.class);
+
+        RoundResponse round = roundResponses.stream()
+                                            .filter(roundResponse -> roundResponse.status() == RoundStatus.IN_PROGRESS)
+                                            .findAny()
+                                            .get();
+
+        sharedContext.setParameter("round", round);
+        sharedContext.setParameter("roundId", round.id());
+    }
+
+    @Given("{string}가 이름이 {string}인 스터디를 {string}에 진행되도록 하여 시작한다.")
+    public void 스터디_시작(String memberGithubId, String studyName, String days) {
+        String token = sharedContext.getToken(memberGithubId);
+        String studyId = (String) sharedContext.getParameter(studyName);
+        StudyStartRequest request = new StudyStartRequest(Arrays.stream(days.split(",")).map(String::strip).toList());
+
         given().log().all()
                .header(HttpHeaders.AUTHORIZATION, token)
                .contentType(MediaType.APPLICATION_JSON_VALUE)

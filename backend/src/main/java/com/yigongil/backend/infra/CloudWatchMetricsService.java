@@ -1,5 +1,6 @@
 package com.yigongil.backend.infra;
 
+import java.util.ArrayList;
 import org.springframework.boot.actuate.metrics.MetricsEndpoint;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -39,21 +40,24 @@ public class CloudWatchMetricsService {
                     .flatMap(tag -> tag.getValues().stream())
                     .toList();
 
+            List<MetricDatum> datums = new ArrayList<>();
+
             for (String uri : uris) {
                 MetricDatum datum = MetricDatum.builder()
                         .metricName("http.server.requests." + sample.getStatistic())
                         .value(sample.getValue())
-                        .unit(StandardUnit.COUNT)
+                        .unit(StandardUnit.SECONDS)
                         .dimensions(Dimension.builder().name("URI").value(uri).build())
                         .build();
-
-                PutMetricDataRequest request = PutMetricDataRequest.builder()
-                        .namespace("yigongil-prod")
-                        .metricData(datum)
-                        .build();
-
-                CLOUD_WATCH_CLIENT.putMetricData(request);
+                datums.add(datum);
             }
+
+            PutMetricDataRequest request = PutMetricDataRequest.builder()
+                                                               .namespace("yigongil-prod")
+                                                               .metricData(datums)
+                                                               .build();
+
+            CLOUD_WATCH_CLIENT.putMetricData(request);
         }
     }
 }

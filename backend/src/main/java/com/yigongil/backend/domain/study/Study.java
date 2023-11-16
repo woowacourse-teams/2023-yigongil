@@ -344,7 +344,7 @@ public class Study extends BaseEntity {
     public void completeRound(Member member) {
         getCurrentRound().completeRound(member);
     }
-
+    
     public List<RoundOfMember> getCurrentRoundOfMembers() {
         return getCurrentRound().getRoundOfMembers();
     }
