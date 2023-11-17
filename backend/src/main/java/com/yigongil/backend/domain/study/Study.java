@@ -89,7 +89,7 @@ public class Study extends BaseEntity {
     @Column
     private Long currentRoundNumber;
 
-    @Cascade(CascadeType.PERSIST)
+    @Cascade({CascadeType.MERGE, CascadeType.PERSIST})
     @OneToMany(mappedBy = "study", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<StudyMember> studyMembers = new ArrayList<>();
 
