@@ -9,3 +9,4 @@ Feature: 알림을 발송한다.
     Given "noiman"가 토큰을 메시지 서비스에 등록한다.
 
     Then "jinwoo"가 "noiman"의 "자바1" 스터디 신청 알림을 받는다.
+    Then "jinwoo"가 "noiman"의 신청을 수락하고, "자바1" 스터디 신청 수락 알림을 받는다.

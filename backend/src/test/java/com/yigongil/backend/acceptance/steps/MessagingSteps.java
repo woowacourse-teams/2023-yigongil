@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.domain.event.StudyAppliedEvent;
+import com.yigongil.backend.domain.event.StudyPermittedEvent;
 import com.yigongil.backend.infra.MessagingService;
 import com.yigongil.backend.request.MessagingTokenRequest;
 import io.cucumber.java.en.Then;
@@ -66,5 +67,30 @@ public class MessagingSteps {
                 applicantGithubId
         );
         verify(messagingService).sendNotificationOfApplicant(appliedEvent);
+    }
+
+    @Then("{string}가 {string}의 신청을 수락하고, {string} 스터디 신청 수락 알림을 받는다.")
+    public void 신청수락_알림_발송(
+            String masterGithubId,
+            String permittedMemberGithubId,
+            String studyName
+    ) {
+        Object studyId = sharedContext.getParameter(studyName);
+        Object memberId = sharedContext.getParameter(permittedMemberGithubId);
+
+        given().log().all()
+               .header(HttpHeaders.AUTHORIZATION, sharedContext.getToken(masterGithubId))
+               .when()
+               .patch("/studies/{studyId}/applicants/{memberId}", studyId, memberId)
+               .then()
+               .log().all()
+               .extract();
+
+        StudyPermittedEvent studyPermittedEvent = new StudyPermittedEvent(
+                Long.parseLong(String.valueOf(memberId)),
+                Long.parseLong(String.valueOf(studyId)),
+                studyName
+        );
+        verify(messagingService).sendNotificationOfPermitted(studyPermittedEvent);
     }
 }

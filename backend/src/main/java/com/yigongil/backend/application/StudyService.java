@@ -163,6 +163,7 @@ public class StudyService {
         Study study = studyMember.getStudy();
 
         study.permit(studyMember.getMember(), master);
+        studyRepository.save(study);
     }
 
     @Transactional(readOnly = true)
