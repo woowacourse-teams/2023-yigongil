@@ -1,4 +1,4 @@
-package com.yigongil.backend.domain.member;
+package com.yigongil.backend.domain.member.domain;
 
 import com.yigongil.backend.domain.base.BaseRootEntity;
 import com.yigongil.backend.domain.event.MemberDeleteEvent;

@@ -1,7 +1,7 @@
 package com.yigongil.backend.config.auth;
 
-import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.member.MemberRepository;
+import com.yigongil.backend.domain.member.domain.Member;
+import com.yigongil.backend.domain.member.domain.MemberRepository;
 import com.yigongil.backend.exception.AuthorizationException;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;

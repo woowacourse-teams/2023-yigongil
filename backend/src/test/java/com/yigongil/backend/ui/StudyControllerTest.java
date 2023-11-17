@@ -13,7 +13,7 @@ import com.yigongil.backend.config.auth.AuthContext;
 import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.domain.certification.CertificationService;
 import com.yigongil.backend.domain.feedpost.FeedService;
-import com.yigongil.backend.domain.member.MemberRepository;
+import com.yigongil.backend.domain.member.domain.MemberRepository;
 import com.yigongil.backend.domain.round.MustDoService;
 import com.yigongil.backend.domain.study.StudyController;
 import com.yigongil.backend.domain.study.StudyService;

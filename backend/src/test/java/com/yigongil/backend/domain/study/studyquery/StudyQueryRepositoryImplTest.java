@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.yigongil.backend.config.JpaConfig;
 import com.yigongil.backend.config.QueryFactoryConfig;
-import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.member.MemberRepository;
+import com.yigongil.backend.domain.member.domain.Member;
+import com.yigongil.backend.domain.member.domain.MemberRepository;
 import com.yigongil.backend.domain.study.PageStrategy;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;

@@ -1,6 +1,6 @@
 package com.yigongil.backend.domain.report;
 
-import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.exception.InvalidReportException;
 import java.time.LocalDate;
 import javax.persistence.Entity;

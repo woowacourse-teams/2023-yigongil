@@ -1,7 +1,7 @@
 package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.config.auth.Authorization;
-import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;

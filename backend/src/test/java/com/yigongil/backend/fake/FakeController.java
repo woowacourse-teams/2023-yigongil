@@ -1,8 +1,8 @@
 package com.yigongil.backend.fake;
 
 import com.yigongil.backend.config.auth.JwtTokenProvider;
-import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.member.MemberRepository;
+import com.yigongil.backend.domain.member.domain.Member;
+import com.yigongil.backend.domain.member.domain.MemberRepository;
 import com.yigongil.backend.domain.study.StudyService;
 import com.yigongil.backend.response.TokenResponse;
 import java.time.LocalDate;

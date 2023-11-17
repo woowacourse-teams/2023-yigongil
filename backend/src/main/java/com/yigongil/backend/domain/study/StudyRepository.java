@@ -1,6 +1,6 @@
 package com.yigongil.backend.domain.study;
 
-import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.study.studyquery.StudyQueryRepository;
 import com.yigongil.backend.domain.studymember.Role;
 import java.util.List;

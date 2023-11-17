@@ -1,6 +1,6 @@
 package com.yigongil.backend.domain.round;
 
-import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.request.MustDoUpdateRequest;
 import org.springframework.stereotype.Service;

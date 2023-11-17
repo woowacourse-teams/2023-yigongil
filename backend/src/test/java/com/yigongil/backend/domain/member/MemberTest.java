@@ -3,6 +3,7 @@ package com.yigongil.backend.domain.member;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
+import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.exception.InvalidIntroductionLengthException;
 import com.yigongil.backend.exception.InvalidNicknameLengthException;
 import com.yigongil.backend.exception.InvalidNicknamePatternException;

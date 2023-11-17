@@ -3,6 +3,7 @@ package com.yigongil.backend.domain.member;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.yigongil.backend.domain.member.domain.Tier;
 import org.junit.jupiter.api.Test;
 
 class TierTest {

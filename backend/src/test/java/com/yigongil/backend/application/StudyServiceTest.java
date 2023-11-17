@@ -6,7 +6,7 @@ import static org.mockito.Mockito.mock;
 
 import com.yigongil.backend.domain.certification.CertificationService;
 import com.yigongil.backend.domain.feedpost.FeedService;
-import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.domain.study.StudyService;

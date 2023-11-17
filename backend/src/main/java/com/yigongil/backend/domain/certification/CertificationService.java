@@ -1,6 +1,6 @@
 package com.yigongil.backend.domain.certification;
 
-import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.exception.NoCertificationException;
 import com.yigongil.backend.request.CertificationCreateRequest;

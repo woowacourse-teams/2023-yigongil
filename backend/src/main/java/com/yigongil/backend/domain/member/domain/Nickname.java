@@ -1,4 +1,4 @@
-package com.yigongil.backend.domain.member;
+package com.yigongil.backend.domain.member.domain;
 
 import com.yigongil.backend.exception.InvalidNicknameLengthException;
 import com.yigongil.backend.exception.InvalidNicknamePatternException;

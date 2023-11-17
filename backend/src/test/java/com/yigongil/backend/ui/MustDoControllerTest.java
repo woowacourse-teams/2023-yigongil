@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.config.auth.AuthContext;
 import com.yigongil.backend.config.auth.JwtTokenProvider;
-import com.yigongil.backend.domain.member.MemberRepository;
+import com.yigongil.backend.domain.member.domain.MemberRepository;
 import com.yigongil.backend.domain.round.MustDoController;
 import com.yigongil.backend.domain.round.MustDoService;
 import com.yigongil.backend.fixture.MemberFixture;

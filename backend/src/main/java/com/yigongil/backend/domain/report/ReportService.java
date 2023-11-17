@@ -1,7 +1,7 @@
 package com.yigongil.backend.domain.report;
 
-import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.member.MemberService;
+import com.yigongil.backend.domain.member.domain.Member;
+import com.yigongil.backend.domain.member.domain.MemberRepository;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyService;
 import com.yigongil.backend.request.MemberReportCreateRequest;
@@ -13,22 +13,22 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReportService {
 
     private final ReportRepository reportRepository;
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
     private final StudyService studyService;
 
     public ReportService(
             ReportRepository reportRepository,
-            MemberService memberService,
+            MemberRepository memberRepository,
             StudyService studyService
     ) {
         this.reportRepository = reportRepository;
-        this.memberService = memberService;
+        this.memberRepository = memberRepository;
         this.studyService = studyService;
     }
 
     @Transactional
     public void reportMember(Member reporter, MemberReportCreateRequest request) {
-        Member reportedMember = memberService.findMemberById(request.reportedMemberId());
+        Member reportedMember = memberRepository.getById(request.reportedMemberId());
         reportRepository.save(
                 MemberReport.builder()
                             .reporter(reporter)

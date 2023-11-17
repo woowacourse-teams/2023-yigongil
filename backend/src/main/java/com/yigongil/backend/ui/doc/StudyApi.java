@@ -1,6 +1,6 @@
 package com.yigongil.backend.ui.doc;
 
-import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;

@@ -1,4 +1,4 @@
-package com.yigongil.backend.domain.member;
+package com.yigongil.backend.domain.member.domain;
 
 import java.util.Arrays;
 import java.util.Comparator;

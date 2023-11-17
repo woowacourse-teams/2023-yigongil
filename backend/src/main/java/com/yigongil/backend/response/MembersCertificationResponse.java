@@ -1,6 +1,6 @@
 package com.yigongil.backend.response;
 
-import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.exception.NotStudyMemberException;

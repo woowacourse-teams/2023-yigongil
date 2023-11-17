@@ -1,7 +1,7 @@
 package com.yigongil.backend.domain.studymember;
 
 import com.yigongil.backend.domain.base.BaseEntity;
-import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.study.Study;
 import java.util.Objects;
 import javax.persistence.Column;
