@@ -6,12 +6,14 @@ import static org.mockito.Mockito.verify;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yigongil.backend.domain.event.CertificationCreatedEvent;
 import com.yigongil.backend.domain.event.MustDoUpdatedEvent;
 import com.yigongil.backend.domain.event.StudyAppliedEvent;
 import com.yigongil.backend.domain.event.StudyPermittedEvent;
 import com.yigongil.backend.domain.event.StudyStartedEvent;
 import com.yigongil.backend.domain.round.RoundStatus;
 import com.yigongil.backend.infra.MessagingService;
+import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.MessagingTokenRequest;
 import com.yigongil.backend.request.MustDoUpdateRequest;
@@ -33,7 +35,8 @@ public class MessagingSteps {
     private final SharedContext sharedContext;
     private final MessagingService messagingService;
 
-    public MessagingSteps(ObjectMapper objectMapper, SharedContext sharedContext, MessagingService messagingService) {
+    public MessagingSteps(ObjectMapper objectMapper, SharedContext sharedContext,
+            MessagingService messagingService) {
         this.objectMapper = objectMapper;
         this.sharedContext = sharedContext;
         this.messagingService = messagingService;
@@ -65,7 +68,9 @@ public class MessagingSteps {
                                                         .all()
                                                         .header(HttpHeaders.AUTHORIZATION, token)
                                                         .when()
-                                                        .post("/studies/" + sharedContext.getParameter(studyName) + "/applicants")
+                                                        .post("/studies/"
+                                                                + sharedContext.getParameter(
+                                                                studyName) + "/applicants")
                                                         .then()
                                                         .log()
                                                         .all()
@@ -133,9 +138,12 @@ public class MessagingSteps {
         String studyId = (String) sharedContext.getParameter(studyName);
 
         MembersCertificationResponse membersCertificationResponse = given().log().all()
-                                                                           .header(HttpHeaders.AUTHORIZATION, token)
+                                                                           .header(HttpHeaders.AUTHORIZATION,
+                                                                                   token)
                                                                            .when()
-                                                                           .get("/studies/" + studyId + "/certifications")
+                                                                           .get("/studies/"
+                                                                                   + studyId
+                                                                                   + "/certifications")
                                                                            .then().log().all()
                                                                            .extract()
                                                                            .as(MembersCertificationResponse.class);
@@ -143,14 +151,18 @@ public class MessagingSteps {
         List<RoundResponse> roundResponses = given().log().all()
                                                     .header(HttpHeaders.AUTHORIZATION, token)
                                                     .when()
-                                                    .get("/studies/" + studyId + "/rounds?weekNumber=" + membersCertificationResponse.upcomingRound().weekNumber())
+                                                    .get("/studies/" + studyId
+                                                            + "/rounds?weekNumber="
+                                                            + membersCertificationResponse.upcomingRound()
+                                                                                          .weekNumber())
                                                     .then().log().all()
                                                     .extract()
                                                     .response()
                                                     .jsonPath().getList(".", RoundResponse.class);
 
         RoundResponse round = roundResponses.stream()
-                                            .filter(roundResponse -> roundResponse.status() == RoundStatus.IN_PROGRESS)
+                                            .filter(roundResponse -> roundResponse.status()
+                                                    == RoundStatus.IN_PROGRESS)
                                             .findAny()
                                             .get();
 
@@ -175,7 +187,8 @@ public class MessagingSteps {
     @Then("{string}가 {string}스터디 피드에 {string}의 글을 작성한다. 피드 등록 알림이 발송된다.")
     public void 피드등록_알림_발송(String memberGithubId, String studyName, String feedContent) {
         String token = sharedContext.getToken(memberGithubId);
-        FeedPostCreateRequest request = new FeedPostCreateRequest(feedContent, "https://yigongil.png");
+        FeedPostCreateRequest request = new FeedPostCreateRequest(feedContent,
+                "https://yigongil.png");
 
         given().log().all()
                .header(HttpHeaders.AUTHORIZATION, token)
@@ -187,5 +200,32 @@ public class MessagingSteps {
                .statusCode(HttpStatus.OK.value());
 
         verify(messagingService).sendNotificationOfFeedPostCreated(any());
+    }
+
+    @Then("{string}가 {string}스터디 피드에 {string}의 인증 글을 작성한다. 인증 등록 알림이 발송된다.")
+    public void 인증등록_알림_발송(String memberGithubId, String studyName, String certificationContent) {
+        String token = sharedContext.getToken(memberGithubId);
+        String studyId = (String) sharedContext.getParameter(studyName);
+
+        CertificationCreateRequest request = new CertificationCreateRequest(
+                certificationContent,
+                "https://yigongil.png"
+        );
+
+        given().log().all()
+               .header(HttpHeaders.AUTHORIZATION, token)
+               .contentType("application/json")
+               .body(request)
+               .when()
+               .post("/studies/{studyId}/certifications", studyId)
+               .then().log().all()
+               .statusCode(HttpStatus.CREATED.value());
+
+        CertificationCreatedEvent certificationCreatedEvent = new CertificationCreatedEvent(
+                Long.valueOf(studyId),
+                studyName,
+                memberGithubId
+        );
+        verify(messagingService).sendNotificationOfCertificationCreated(certificationCreatedEvent);
     }
 }
