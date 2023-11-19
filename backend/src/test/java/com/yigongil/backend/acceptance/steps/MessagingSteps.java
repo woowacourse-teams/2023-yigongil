@@ -1,6 +1,7 @@
 package com.yigongil.backend.acceptance.steps;
 
 import static io.restassured.RestAssured.given;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,6 +12,7 @@ import com.yigongil.backend.domain.event.StudyPermittedEvent;
 import com.yigongil.backend.domain.event.StudyStartedEvent;
 import com.yigongil.backend.domain.round.RoundStatus;
 import com.yigongil.backend.infra.MessagingService;
+import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.MessagingTokenRequest;
 import com.yigongil.backend.request.MustDoUpdateRequest;
 import com.yigongil.backend.request.StudyStartRequest;
@@ -168,5 +170,22 @@ public class MessagingSteps {
                 mustDoContent
         );
         verify(messagingService).sendNotificationOfMustDoUpdated(mustDoUpdatedEvent);
+    }
+
+    @Then("{string}가 {string}스터디 피드에 {string}의 글을 작성한다. 피드 등록 알림이 발송된다.")
+    public void 피드등록_알림_발송(String memberGithubId, String studyName, String feedContent) {
+        String token = sharedContext.getToken(memberGithubId);
+        FeedPostCreateRequest request = new FeedPostCreateRequest(feedContent, "https://yigongil.png");
+
+        given().log().all()
+               .header(HttpHeaders.AUTHORIZATION, token)
+               .contentType(MediaType.APPLICATION_JSON_VALUE)
+               .body(request)
+               .when()
+               .post("/studies/{studyId}/feeds", sharedContext.getParameter(studyName))
+               .then().log().all()
+               .statusCode(HttpStatus.OK.value());
+
+        verify(messagingService).sendNotificationOfFeedPostCreated(any());
     }
 }
