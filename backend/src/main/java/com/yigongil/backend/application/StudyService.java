@@ -1,6 +1,8 @@
 package com.yigongil.backend.application;
 
 import com.yigongil.backend.domain.certification.Certification;
+import com.yigongil.backend.domain.meetingdayoftheweek.MeetingDayOfTheWeek;
+import com.yigongil.backend.domain.meetingdayoftheweek.MeetingDayOfTheWeekRepository;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
@@ -46,18 +48,21 @@ public class StudyService {
     private final CertificationService certificationService;
     private final FeedService feedService;
     private final RoundRepository roundRepository;
+    private final MeetingDayOfTheWeekRepository meetingDayOfTheWeekRepository;
 
     public StudyService(
             StudyRepository studyRepository,
             StudyMemberRepository studyMemberRepository,
             CertificationService certificationService,
             FeedService feedService,
-            final RoundRepository roundRepository) {
+            final RoundRepository roundRepository,
+            MeetingDayOfTheWeekRepository meetingDayOfTheWeekRepository) {
         this.studyRepository = studyRepository;
         this.studyMemberRepository = studyMemberRepository;
         this.certificationService = certificationService;
         this.feedService = feedService;
         this.roundRepository = roundRepository;
+        this.meetingDayOfTheWeekRepository = meetingDayOfTheWeekRepository;
     }
 
     @Transactional
@@ -232,9 +237,12 @@ public class StudyService {
     @Transactional
     public void start(Member member, Long studyId, StudyStartRequest request) {
         List<DayOfWeek> meetingDaysOfTheWeek = createDayOfWeek(request.meetingDaysOfTheWeek());
-
         Study study = findStudyById(studyId);
         study.start(member, meetingDaysOfTheWeek, LocalDateTime.now());
+        for (MeetingDayOfTheWeek meetingDayOfTheWeek : study.getMeetingDaysOfTheWeek()) {
+            meetingDayOfTheWeekRepository.save(meetingDayOfTheWeek);
+        }
+        studyRepository.save(study);
     }
 
     private List<DayOfWeek> createDayOfWeek(List<String> daysOfTheWeek) {

@@ -23,6 +23,7 @@ public class MustDoService {
     public void updateMustDo(Member member, Long roundId, MustDoUpdateRequest request) {
         Round round = findRoundById(roundId);
         round.updateMustDo(member, request.content());
+        roundRepository.save(round);
     }
 
     private Round findRoundById(Long roundId) {

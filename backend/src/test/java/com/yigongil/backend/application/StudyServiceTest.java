@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
+import com.yigongil.backend.domain.meetingdayoftheweek.MeetingDayOfTheWeekRepository;
 import com.yigongil.backend.domain.member.Member;
 import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.study.StudyRepository;
@@ -29,7 +30,8 @@ class StudyServiceTest {
             studyMemberRepository,
             mock(CertificationService.class),
             mock(FeedService.class),
-            mock(RoundRepository.class)
+            mock(RoundRepository.class),
+            mock(MeetingDayOfTheWeekRepository.class)
     );
 
     @Nested

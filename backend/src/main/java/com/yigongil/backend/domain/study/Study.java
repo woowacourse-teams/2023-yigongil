@@ -94,7 +94,7 @@ public class Study extends BaseEntity {
     private List<StudyMember> studyMembers = new ArrayList<>();
 
 
-    @Cascade(CascadeType.PERSIST)
+    @Cascade({CascadeType.PERSIST, CascadeType.MERGE})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "study", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Round> rounds = new ArrayList<>();
