@@ -2,7 +2,6 @@ package com.yigongil.backend.domain.round;
 
 import com.yigongil.backend.domain.base.BaseEntity;
 import com.yigongil.backend.domain.member.domain.Member;
-import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NecessaryTodoNotExistException;

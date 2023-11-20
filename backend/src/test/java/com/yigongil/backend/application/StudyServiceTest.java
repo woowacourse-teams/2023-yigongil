@@ -4,10 +4,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-import com.yigongil.backend.domain.certification.CertificationService;
-import com.yigongil.backend.domain.feedpost.FeedService;
 import com.yigongil.backend.domain.member.domain.Member;
-import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.domain.study.StudyService;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
@@ -29,8 +26,7 @@ class StudyServiceTest {
 
     private final StudyService studyService = new StudyService(
             studyRepository,
-            studyMemberRepository,
-            mock(RoundRepository.class)
+            studyMemberRepository
     );
 
     @Nested

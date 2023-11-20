@@ -5,6 +5,9 @@ import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.domain.studymember.StudyMember;
+import com.yigongil.backend.exception.RoundNotFoundException;
+import com.yigongil.backend.request.MustDoUpdateRequest;
+import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.UpcomingStudyResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -50,5 +53,33 @@ public class RoundService {
         }
 
         return upcomingStudyResponses;
+    }
+
+    @Transactional
+    public void updateMustDo(Member member, Long roundId, MustDoUpdateRequest request) {
+        Round round = findRoundById(roundId);
+        round.updateMustDo(member, request.content());
+    }
+
+    private Round findRoundById(Long roundId) {
+        return roundRepository.findById(roundId)
+                              .orElseThrow(() -> new RoundNotFoundException("존재하지 않는 회차입니다.", roundId));
+    }
+
+    @Transactional(readOnly = true)
+    public List<RoundResponse> findRoundDetailsOfWeek(Long id, Integer weekNumber) {
+        List<Round> roundsOfWeek = roundRepository.findAllByStudyIdAndWeekNumber(id, weekNumber);
+        return roundsOfWeek.stream()
+                           .map(RoundResponse::from)
+                           .toList();
+    }
+
+    @Transactional
+    public void proceedRound(LocalDate today) {
+        List<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.PROCESSING);
+
+        studies.stream()
+               .filter(study -> study.isCurrentRoundEndAt(today.minusDays(1)))
+               .forEach(Study::updateToNextRound);
     }
 }

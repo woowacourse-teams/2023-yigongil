@@ -5,7 +5,6 @@ import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.request.StudyStartRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.MyStudyResponse;
-import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyListItemResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
@@ -178,12 +177,5 @@ public interface StudyApi {
     ResponseEntity<StudyMemberRoleResponse> getStudyMemberRole(
             @Schema(hidden = true) Member member,
             @Parameter(description = "멤버가 속해 있는 스터디 id", required = true) Long studyId
-    );
-
-    @SecurityRequirement(name = "token")
-    @Operation(summary = "주별 회차 정보 조회")
-    ResponseEntity<List<RoundResponse>> findRoundDetailsOfWeek(
-            @Parameter(description = "조회할 스터디 id", required = true) Long studyId,
-            @Parameter(description = "조회할 주차", required = true) Integer weekNumber
     );
 }

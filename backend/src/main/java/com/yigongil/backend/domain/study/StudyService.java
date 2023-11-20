@@ -1,8 +1,6 @@
 package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.domain.member.domain.Member;
-import com.yigongil.backend.domain.round.Round;
-import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
@@ -12,13 +10,11 @@ import com.yigongil.backend.exception.StudyNotFoundException;
 import com.yigongil.backend.request.StudyStartRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.MyStudyResponse;
-import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
 import com.yigongil.backend.response.StudyListItemResponse;
 import com.yigongil.backend.response.StudyMemberResponse;
 import com.yigongil.backend.response.StudyMemberRoleResponse;
 import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,16 +28,13 @@ public class StudyService {
 
     private final StudyRepository studyRepository;
     private final StudyMemberRepository studyMemberRepository;
-    private final RoundRepository roundRepository;
 
     public StudyService(
             StudyRepository studyRepository,
-            StudyMemberRepository studyMemberRepository,
-            RoundRepository roundRepository
+            StudyMemberRepository studyMemberRepository
     ) {
         this.studyRepository = studyRepository;
         this.studyMemberRepository = studyMemberRepository;
-        this.roundRepository = roundRepository;
     }
 
     @Transactional
@@ -191,15 +184,6 @@ public class StudyService {
     }
 
     @Transactional
-    public void proceedRound(LocalDate today) {
-        List<Study> studies = studyRepository.findAllByProcessingStatus(ProcessingStatus.PROCESSING);
-
-        studies.stream()
-               .filter(study -> study.isCurrentRoundEndAt(today.minusDays(1)))
-               .forEach(Study::updateToNextRound);
-    }
-
-    @Transactional
     public void start(Member member, Long studyId, StudyStartRequest request) {
         List<DayOfWeek> meetingDaysOfTheWeek = createDayOfWeek(request.meetingDaysOfTheWeek());
 
@@ -251,14 +235,6 @@ public class StudyService {
     public void finish(Member member, Long studyId) {
         Study study = findStudyById(studyId);
         study.finishStudy(member);
-    }
-
-    @Transactional(readOnly = true)
-    public List<RoundResponse> findRoundDetailsOfWeek(Long id, Integer weekNumber) {
-        List<Round> roundsOfWeek = roundRepository.findAllByStudyIdAndWeekNumber(id, weekNumber);
-        return roundsOfWeek.stream()
-                           .map(RoundResponse::from)
-                           .toList();
     }
 
     @Transactional

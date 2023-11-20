@@ -13,8 +13,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yigongil.backend.config.auth.AuthContext;
 import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.domain.member.domain.MemberRepository;
-import com.yigongil.backend.domain.round.MustDoController;
-import com.yigongil.backend.domain.round.MustDoService;
+import com.yigongil.backend.domain.round.RoundController;
+import com.yigongil.backend.domain.round.RoundService;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.request.MustDoUpdateRequest;
 import com.yigongil.backend.ui.exceptionhandler.InternalServerErrorMessageConverter;
@@ -29,8 +29,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(MustDoController.class)
-class MustDoControllerTest {
+@WebMvcTest(RoundController.class)
+class RoundControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,7 +39,7 @@ class MustDoControllerTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private MustDoService mustDoService;
+    private RoundService roundService;
 
     @MockBean
     private MemberRepository memberRepository;
@@ -65,7 +65,7 @@ class MustDoControllerTest {
     void 머스트두를_생성한다() throws Exception {
         MustDoUpdateRequest request = new MustDoUpdateRequest("첫 머스트두");
 
-        willDoNothing().given(mustDoService).updateMustDo(MemberFixture.김진우.toMember(), 1L, request);
+        willDoNothing().given(roundService).updateMustDo(MemberFixture.김진우.toMember(), 1L, request);
 
         mockMvc.perform(put("/rounds/1/todos")
                        .header(HttpHeaders.AUTHORIZATION, "1")
@@ -79,7 +79,7 @@ class MustDoControllerTest {
     void 머스트두를_업데이트한다() throws Exception {
         MustDoUpdateRequest request = new MustDoUpdateRequest("수정");
 
-        willDoNothing().given(mustDoService).updateMustDo(MemberFixture.김진우.toMember(), 1L, request);
+        willDoNothing().given(roundService).updateMustDo(MemberFixture.김진우.toMember(), 1L, request);
 
         mockMvc.perform(put("/rounds/1/todos")
                        .header(HttpHeaders.AUTHORIZATION, "1")
@@ -88,6 +88,6 @@ class MustDoControllerTest {
                .andDo(print())
                .andExpect(status().isOk());
 
-        verify(mustDoService, only()).updateMustDo(MemberFixture.김진우.toMember(), 1L, request);
+        verify(roundService, only()).updateMustDo(MemberFixture.김진우.toMember(), 1L, request);
     }
 }

@@ -3,7 +3,7 @@ package com.yigongil.backend.query.certification;
 import com.yigongil.backend.domain.certification.Certification;
 import com.yigongil.backend.domain.certification.CertificationRepository;
 import com.yigongil.backend.domain.member.domain.Member;
-import com.yigongil.backend.domain.roundofmember.RoundOfMember;
+import com.yigongil.backend.domain.round.RoundOfMember;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.response.CertificationResponse;

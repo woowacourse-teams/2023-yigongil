@@ -3,7 +3,7 @@ package com.yigongil.backend.fake;
 import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.member.domain.MemberRepository;
-import com.yigongil.backend.domain.study.StudyService;
+import com.yigongil.backend.domain.round.RoundService;
 import com.yigongil.backend.response.TokenResponse;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -22,12 +22,16 @@ public class FakeController {
 
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final StudyService studyService;
+    private final RoundService roundService;
 
-    public FakeController(MemberRepository memberRepository, JwtTokenProvider jwtTokenProvider, StudyService studyService) {
+    public FakeController(
+        MemberRepository memberRepository,
+        JwtTokenProvider jwtTokenProvider,
+        RoundService roundService
+    ) {
         this.memberRepository = memberRepository;
         this.jwtTokenProvider = jwtTokenProvider;
-        this.studyService = studyService;
+        this.roundService = roundService;
     }
 
     @GetMapping("/login/fake/tokens")
@@ -48,7 +52,7 @@ public class FakeController {
     @PutMapping("/fake/proceed")
     public ResponseEntity<Void> proceed(@RequestParam Integer days) {
         for (int i = 1; i <= days; i++) {
-            studyService.proceedRound(LocalDate.now().plusDays(i));
+            roundService.proceedRound(LocalDate.now().plusDays(i));
         }
         return ResponseEntity.ok().build();
     }

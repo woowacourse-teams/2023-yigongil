@@ -14,7 +14,7 @@ import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.domain.certification.CertificationService;
 import com.yigongil.backend.domain.feedpost.FeedService;
 import com.yigongil.backend.domain.member.domain.MemberRepository;
-import com.yigongil.backend.domain.round.MustDoService;
+import com.yigongil.backend.domain.round.RoundService;
 import com.yigongil.backend.domain.study.StudyController;
 import com.yigongil.backend.domain.study.StudyService;
 import com.yigongil.backend.fixture.MemberFixture;
@@ -44,7 +44,7 @@ class StudyControllerTest {
     private StudyService studyService;
 
     @MockBean
-    private MustDoService mustDoService;
+    private RoundService roundService;
 
     @MockBean
     private MemberRepository memberRepository;

@@ -1,5 +1,6 @@
 package com.yigongil.backend.domain.study;
 
+import com.yigongil.backend.domain.round.RoundService;
 import java.time.LocalDate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -8,15 +9,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ScheduleService {
 
-    private final StudyService studyService;
+    private final RoundService roundService;
 
-    public ScheduleService(StudyService studyService) {
-        this.studyService = studyService;
+    public ScheduleService(RoundService roundService) {
+        this.roundService = roundService;
     }
 
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void proceedRoundPerDay() {
-        studyService.proceedRound(LocalDate.now());
+        roundService.proceedRound(LocalDate.now());
     }
 }
