@@ -11,4 +11,6 @@ public interface RoundRepository extends Repository<Round, Long> {
     Optional<Round> findById(Long id);
 
     List<Round> findAllByStudyIdAndWeekNumber(Long studyId, Integer weekNumber);
+
+    Round save(Round round);
 }

@@ -189,6 +189,7 @@ public class StudyService {
 
         Study study = findStudyById(studyId);
         study.start(member, meetingDaysOfTheWeek, LocalDateTime.now());
+        studyRepository.save(study);
     }
 
     private List<DayOfWeek> createDayOfWeek(List<String> daysOfTheWeek) {

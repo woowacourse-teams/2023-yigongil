@@ -226,8 +226,7 @@ public class Study extends BaseRootEntity {
         this.processingStatus = ProcessingStatus.PROCESSING;
         this.meetingDaysCountPerWeek = daysOfTheWeek.size();
         initializeMeetingDaysOfTheWeek(daysOfTheWeek);
-        initializeRounds(startAt.toLocalDate());
-//        registerEvent()
+        registerEvent(new StudyStartedEvent(id, dayOfWeeks, startAt.toLocalDate()));
     }
 
     private void deleteLeftApplicant() {
@@ -239,23 +238,6 @@ public class Study extends BaseRootEntity {
 
     private void initializeMeetingDaysOfTheWeek(List<DayOfWeek> dayOfWeeks) {
         this.dayOfWeeks.addAll(dayOfWeeks);
-    }
-
-    private void initializeRounds(LocalDate startAt) {
-        this.rounds.addAll(createRoundsOfFirstWeek(startAt));
-        this.rounds.addAll(createRoundsOf(FIRST_WEEK + 1));
-        rounds.get(0).proceed();
-    }
-
-    private List<Round> createRoundsOfFirstWeek(final LocalDate startAt) {
-        List<Round> rounds = dayOfWeeks.stream()
-                                       .filter(dayOfWeek -> dayOfWeek.compareTo(startAt.getDayOfWeek()) > 0)
-                                       .map(dayOfWeek -> Round.of(dayOfWeek, this, FIRST_WEEK))
-                                       .toList();
-        if (rounds.isEmpty()) {
-            rounds = createRoundsOf(FIRST_WEEK);
-        }
-        return rounds;
     }
 
     public void validateMaster(Member candidate) {
@@ -273,6 +255,12 @@ public class Study extends BaseRootEntity {
             rounds.addAll(createRoundsOf(nextRound.getWeekNumber() + 1));
         }
         updateCurrentRound(nextRound);
+    }
+
+    private List<Round> createRoundsOf(Integer weekNumber) {
+        return dayOfWeeks.stream()
+                         .map(dayOfWeek -> Round.of(dayOfWeek, this, weekNumber))
+                         .toList();
     }
 
     private void updateCurrentRound(Round upcomingRound) {
@@ -381,12 +369,6 @@ public class Study extends BaseRootEntity {
         this.introduction = introduction;
         this.minimumWeeks = minimumWeeks;
         this.meetingDaysCountPerWeek = meetingDaysCountPerWeek;
-    }
-
-    private List<Round> createRoundsOf(Integer weekNumber) {
-        return dayOfWeeks.stream()
-                         .map(dayOfWeek -> Round.of(dayOfWeek, this, weekNumber))
-                         .toList();
     }
 
     public void apply(Member member) {
