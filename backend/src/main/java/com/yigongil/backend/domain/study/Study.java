@@ -1,7 +1,6 @@
 package com.yigongil.backend.domain.study;
 
-import com.yigongil.backend.domain.base.BaseEntity;
-import com.yigongil.backend.domain.meetingdayoftheweek.MeetingDayOfTheWeek;
+import com.yigongil.backend.domain.base.BaseRootEntity;
 import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundOfMember;
@@ -24,7 +23,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -42,7 +43,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Entity
-public class Study extends BaseEntity {
+public class Study extends BaseRootEntity {
 
     private static final int ONE_MEMBER = 1;
     private static final int MIN_NAME_LENGTH = 1;
@@ -71,9 +72,10 @@ public class Study extends BaseEntity {
 
     private LocalDateTime endAt;
 
-    @Cascade(CascadeType.PERSIST)
-    @OneToMany(mappedBy = "study", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<MeetingDayOfTheWeek> meetingDaysOfTheWeek = new ArrayList<>();
+    @ElementCollection(targetClass = DayOfWeek.class)
+    @CollectionTable(name = "day_of_week")
+    @Enumerated(EnumType.ORDINAL)
+    private List<DayOfWeek> dayOfWeeks = new ArrayList<>();
 
     @Column(nullable = false)
     private Integer minimumWeeks;
@@ -225,6 +227,7 @@ public class Study extends BaseEntity {
         this.meetingDaysCountPerWeek = daysOfTheWeek.size();
         initializeMeetingDaysOfTheWeek(daysOfTheWeek);
         initializeRounds(startAt.toLocalDate());
+//        registerEvent()
     }
 
     private void deleteLeftApplicant() {
@@ -234,13 +237,8 @@ public class Study extends BaseEntity {
         studyMembers.removeAll(currentApplicant);
     }
 
-    private void initializeMeetingDaysOfTheWeek(List<DayOfWeek> daysOfTheWeek) {
-        this.meetingDaysOfTheWeek.addAll(daysOfTheWeek.stream()
-                                                      .map(dayOfTheWeek -> MeetingDayOfTheWeek.builder()
-                                                                                              .dayOfWeek(dayOfTheWeek)
-                                                                                              .study(this)
-                                                                                              .build())
-                                                      .toList());
+    private void initializeMeetingDaysOfTheWeek(List<DayOfWeek> dayOfWeeks) {
+        this.dayOfWeeks.addAll(dayOfWeeks);
     }
 
     private void initializeRounds(LocalDate startAt) {
@@ -250,10 +248,10 @@ public class Study extends BaseEntity {
     }
 
     private List<Round> createRoundsOfFirstWeek(final LocalDate startAt) {
-        List<Round> rounds = meetingDaysOfTheWeek.stream()
-                                                 .filter(meetingDayOfTheWeek -> meetingDayOfTheWeek.comesNext(startAt.getDayOfWeek()))
-                                                 .map(meetingDayOfTheWeek -> Round.of(meetingDayOfTheWeek.getDayOfWeek(), this, FIRST_WEEK))
-                                                 .toList();
+        List<Round> rounds = dayOfWeeks.stream()
+                                       .filter(dayOfWeek -> dayOfWeek.compareTo(startAt.getDayOfWeek()) > 0)
+                                       .map(dayOfWeek -> Round.of(dayOfWeek, this, FIRST_WEEK))
+                                       .toList();
         if (rounds.isEmpty()) {
             rounds = createRoundsOf(FIRST_WEEK);
         }
@@ -297,10 +295,9 @@ public class Study extends BaseEntity {
     }
 
     private DayOfWeek findFirstDayOfTheWeek() {
-        return meetingDaysOfTheWeek.stream()
-                                   .min(Comparator.comparing(MeetingDayOfTheWeek::getOrder))
-                                   .map(MeetingDayOfTheWeek::getDayOfWeek)
-                                   .orElseThrow();
+        return dayOfWeeks.stream()
+                         .min(Comparator.comparing(DayOfWeek::getValue))
+                         .orElseThrow();
     }
 
     public void finishStudy(Member master) {
@@ -387,9 +384,9 @@ public class Study extends BaseEntity {
     }
 
     private List<Round> createRoundsOf(Integer weekNumber) {
-        return meetingDaysOfTheWeek.stream()
-                                   .map(meetingDayOfTheWeek -> Round.of(meetingDayOfTheWeek.getDayOfWeek(), this, weekNumber))
-                                   .toList();
+        return dayOfWeeks.stream()
+                         .map(dayOfWeek -> Round.of(dayOfWeek, this, weekNumber))
+                         .toList();
     }
 
     public void apply(Member member) {
