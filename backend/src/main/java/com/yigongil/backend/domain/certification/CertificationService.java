@@ -2,7 +2,7 @@ package com.yigongil.backend.domain.certification;
 
 import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.study.Study;
-import com.yigongil.backend.exception.NoCertificationException;
+import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.request.CertificationCreateRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,13 +11,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class CertificationService {
 
     private final CertificationRepository certificationRepository;
+    private final StudyRepository studyRepository;
 
-    public CertificationService(CertificationRepository certificationRepository) {
+    public CertificationService(CertificationRepository certificationRepository, StudyRepository studyRepository) {
         this.certificationRepository = certificationRepository;
+        this.studyRepository = studyRepository;
     }
 
     @Transactional
-    public Certification createCertification(Study study, Member member, CertificationCreateRequest request) {
+    public Long createCertification(Member member, Long studyId, CertificationCreateRequest request) {
+        Study study = studyRepository.getById(studyId);
+        return createCertification(study, member, request).getId();
+    }
+
+    private Certification createCertification(Study study, Member member, CertificationCreateRequest request) {
         Certification feedPost = Certification.builder()
                                               .author(member)
                                               .study(study)
@@ -27,11 +34,5 @@ public class CertificationService {
                                               .build();
         study.completeRound(member);
         return certificationRepository.save(feedPost);
-    }
-
-    @Transactional(readOnly = true)
-    public Certification findByRoundIdAndMemberId(Long roundId, Long memberId) {
-        return certificationRepository.findByRoundIdAndAuthorId(roundId, memberId)
-                                      .orElseThrow(() -> new NoCertificationException("인증을 찾을 수 없습니다", String.valueOf(memberId)));
     }
 }

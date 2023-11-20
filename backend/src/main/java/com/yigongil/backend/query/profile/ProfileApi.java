@@ -1,4 +1,4 @@
-package com.yigongil.backend.query.profile.ui;
+package com.yigongil.backend.query.profile;
 
 import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.response.MyProfileResponse;

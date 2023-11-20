@@ -1,25 +1,19 @@
 package com.yigongil.backend.domain.study;
 
-import com.yigongil.backend.domain.certification.Certification;
-import com.yigongil.backend.domain.certification.CertificationService;
 import com.yigongil.backend.domain.feedpost.FeedService;
 import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
-import com.yigongil.backend.domain.roundofmember.RoundOfMember;
 import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.domain.studymember.StudyMemberRepository;
 import com.yigongil.backend.domain.studymember.StudyResult;
 import com.yigongil.backend.exception.ApplicantNotFoundException;
 import com.yigongil.backend.exception.StudyNotFoundException;
-import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.StudyStartRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
-import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
-import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
@@ -41,19 +35,17 @@ public class StudyService {
 
     private final StudyRepository studyRepository;
     private final StudyMemberRepository studyMemberRepository;
-    private final CertificationService certificationService;
     private final FeedService feedService;
     private final RoundRepository roundRepository;
 
     public StudyService(
             StudyRepository studyRepository,
             StudyMemberRepository studyMemberRepository,
-            CertificationService certificationService,
             FeedService feedService,
-            final RoundRepository roundRepository) {
+            RoundRepository roundRepository
+    ) {
         this.studyRepository = studyRepository;
         this.studyMemberRepository = studyMemberRepository;
-        this.certificationService = certificationService;
         this.feedService = feedService;
         this.roundRepository = roundRepository;
     }
@@ -132,12 +124,6 @@ public class StudyService {
     public void createFeedPost(Member member, Long studyId, FeedPostCreateRequest request) {
         final Study study = findStudyById(studyId);
         feedService.createFeedPost(member, study, request);
-    }
-
-    @Transactional
-    public Long createCertification(Member member, Long id, CertificationCreateRequest request) {
-        Study study = findStudyById(id);
-        return certificationService.createCertification(study, member, request).getId();
     }
 
     public Study findStudyById(Long studyId) {
@@ -265,19 +251,6 @@ public class StudyService {
                                          .orElse(Role.NO_ROLE);
 
         return StudyMemberRoleResponse.from(role);
-    }
-
-    @Transactional(readOnly = true)
-    public MembersCertificationResponse findAllMembersCertification(Member member, Long studyId) {
-        Study study = findStudyById(studyId);
-        final List<RoundOfMember> roundOfMembers = study.getCurrentRoundOfMembers();
-        return MembersCertificationResponse.of(study.getName(), study.getCurrentRound(), member, roundOfMembers);
-    }
-
-    @Transactional(readOnly = true)
-    public CertificationResponse findCertification(Long roundId, Long memberId) {
-        Certification certification = certificationService.findByRoundIdAndMemberId(roundId, memberId);
-        return CertificationResponse.from(certification);
     }
 
     @Transactional(readOnly = true)

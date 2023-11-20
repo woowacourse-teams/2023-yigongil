@@ -3,6 +3,7 @@ package com.yigongil.backend.domain.study;
 import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.study.studyquery.StudyQueryRepository;
 import com.yigongil.backend.domain.studymember.Role;
+import com.yigongil.backend.exception.StudyNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -49,4 +50,8 @@ public interface StudyRepository extends Repository<Study, Long>, StudyQueryRepo
             where s in :studies
             """)
     void deleteAll(@Param("studies") Iterable<Study> studies);
+
+    default Study getById(Long studyId) {
+        return findById(studyId).orElseThrow(() -> new StudyNotFoundException("해당 스터디를 찾을 수 없습니다", studyId));
+    }
 }

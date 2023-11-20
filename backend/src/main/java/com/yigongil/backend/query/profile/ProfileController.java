@@ -1,8 +1,7 @@
-package com.yigongil.backend.query.profile.ui;
+package com.yigongil.backend.query.profile;
 
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.domain.Member;
-import com.yigongil.backend.query.profile.ProfileService;
 import com.yigongil.backend.response.MyProfileResponse;
 import com.yigongil.backend.response.ProfileResponse;
 import org.springframework.http.ResponseEntity;

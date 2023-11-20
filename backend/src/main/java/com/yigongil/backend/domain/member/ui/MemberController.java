@@ -29,8 +29,8 @@ public class MemberController implements MemberApi {
 
     @PatchMapping
     public ResponseEntity<Void> updateProfile(
-            @Authorization Member member,
-            @RequestBody @Valid ProfileUpdateRequest request
+        @Authorization Member member,
+        @RequestBody @Valid ProfileUpdateRequest request
     ) {
         memberService.update(member, request);
         return ResponseEntity.ok().build();

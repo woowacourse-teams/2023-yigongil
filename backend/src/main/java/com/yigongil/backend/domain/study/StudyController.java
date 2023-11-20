@@ -3,13 +3,10 @@ package com.yigongil.backend.domain.study;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.studymember.Role;
-import com.yigongil.backend.request.CertificationCreateRequest;
 import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.StudyStartRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
-import com.yigongil.backend.response.CertificationResponse;
 import com.yigongil.backend.response.FeedPostResponse;
-import com.yigongil.backend.response.MembersCertificationResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
@@ -154,34 +151,6 @@ public class StudyController implements StudyApi {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/{id}/certifications")
-    public ResponseEntity<Void> createCertification(
-            @Authorization Member member,
-            @PathVariable Long id,
-            @RequestBody CertificationCreateRequest request
-    ) {
-        Long certificationId = studyService.createCertification(member, id, request);
-        return ResponseEntity.created(URI.create("/studies/" + id + "/certifications/" + certificationId)).build();
-    }
-
-    @GetMapping("/{id}/certifications")
-    public ResponseEntity<MembersCertificationResponse> findAllMembersCertification(
-            @Authorization Member member,
-            @PathVariable Long id
-    ) {
-        MembersCertificationResponse response = studyService.findAllMembersCertification(member, id);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/{id}/rounds/{roundId}/members/{memberId}")
-    public ResponseEntity<CertificationResponse> findMemberCertification(
-            @PathVariable Long roundId,
-            @PathVariable Long memberId
-    ) {
-        CertificationResponse response = studyService.findCertification(roundId, memberId);
-        return ResponseEntity.ok(response);
-    }
-
     @GetMapping("/{studyId}/members/role")
     public ResponseEntity<StudyMemberRoleResponse> getStudyMemberRole(
             @Authorization Member member,
@@ -229,4 +198,3 @@ public class StudyController implements StudyApi {
         return ResponseEntity.ok().build();
     }
 }
-
