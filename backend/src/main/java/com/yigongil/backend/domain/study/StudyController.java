@@ -3,10 +3,8 @@ package com.yigongil.backend.domain.study;
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.studymember.Role;
-import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.StudyStartRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
-import com.yigongil.backend.response.FeedPostResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
@@ -16,7 +14,6 @@ import com.yigongil.backend.response.StudyMemberRoleResponse;
 import com.yigongil.backend.ui.doc.StudyApi;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -126,28 +123,6 @@ public class StudyController implements StudyApi {
     ) {
         studyService.start(member, id, studyStartRequest);
 
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/{id}/feeds")
-    public ResponseEntity<List<FeedPostResponse>> findFeedPosts(
-            @PathVariable Long id,
-            @RequestParam Optional<Long> oldestFeedPostId
-    ) {
-        List<FeedPostResponse> response = studyService.findFeedPosts(
-                id,
-                oldestFeedPostId.orElse(Long.MAX_VALUE)
-        );
-        return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/{id}/feeds")
-    public ResponseEntity<Void> createFeedPost(
-            @Authorization Member member,
-            @PathVariable Long id,
-            @RequestBody FeedPostCreateRequest request
-    ) {
-        studyService.createFeedPost(member, id, request);
         return ResponseEntity.ok().build();
     }
 

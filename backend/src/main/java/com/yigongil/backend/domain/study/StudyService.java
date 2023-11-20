@@ -1,6 +1,5 @@
 package com.yigongil.backend.domain.study;
 
-import com.yigongil.backend.domain.feedpost.FeedService;
 import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundRepository;
@@ -10,10 +9,8 @@ import com.yigongil.backend.domain.studymember.StudyMemberRepository;
 import com.yigongil.backend.domain.studymember.StudyResult;
 import com.yigongil.backend.exception.ApplicantNotFoundException;
 import com.yigongil.backend.exception.StudyNotFoundException;
-import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.StudyStartRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
-import com.yigongil.backend.response.FeedPostResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
@@ -35,18 +32,15 @@ public class StudyService {
 
     private final StudyRepository studyRepository;
     private final StudyMemberRepository studyMemberRepository;
-    private final FeedService feedService;
     private final RoundRepository roundRepository;
 
     public StudyService(
             StudyRepository studyRepository,
             StudyMemberRepository studyMemberRepository,
-            FeedService feedService,
             RoundRepository roundRepository
     ) {
         this.studyRepository = studyRepository;
         this.studyMemberRepository = studyMemberRepository;
-        this.feedService = feedService;
         this.roundRepository = roundRepository;
     }
 
@@ -118,12 +112,6 @@ public class StudyService {
     public void apply(Member member, Long studyId) {
         Study study = findStudyById(studyId);
         study.apply(member);
-    }
-
-    @Transactional
-    public void createFeedPost(Member member, Long studyId, FeedPostCreateRequest request) {
-        final Study study = findStudyById(studyId);
-        feedService.createFeedPost(member, study, request);
     }
 
     public Study findStudyById(Long studyId) {
@@ -251,14 +239,6 @@ public class StudyService {
                                          .orElse(Role.NO_ROLE);
 
         return StudyMemberRoleResponse.from(role);
-    }
-
-    @Transactional(readOnly = true)
-    public List<FeedPostResponse> findFeedPosts(Long id, Long oldestFeedPostId) {
-        return feedService.findFeedPosts(id, oldestFeedPostId)
-                          .stream()
-                          .map(FeedPostResponse::from)
-                          .toList();
     }
 
     private List<StudyListItemResponse> toRecruitingStudyResponse(Slice<Study> studies) {

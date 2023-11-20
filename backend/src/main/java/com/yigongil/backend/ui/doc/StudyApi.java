@@ -2,10 +2,8 @@ package com.yigongil.backend.ui.doc;
 
 import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.study.ProcessingStatus;
-import com.yigongil.backend.request.FeedPostCreateRequest;
 import com.yigongil.backend.request.StudyStartRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
-import com.yigongil.backend.response.FeedPostResponse;
 import com.yigongil.backend.response.MyStudyResponse;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.StudyDetailResponse;
@@ -22,7 +20,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 
 @Tag(name = "스터디", description = "스터디 관련 api")
@@ -168,37 +165,6 @@ public interface StudyApi {
             @Schema(hidden = true) Member member,
             @Parameter(description = "시작할 스터디 id", required = true) Long id,
             StudyStartRequest studyStartRequest
-    );
-
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200"),
-                    @ApiResponse(responseCode = "400", content = @Content),
-                    @ApiResponse(responseCode = "401", content = @Content),
-                    @ApiResponse(responseCode = "404", content = @Content)
-            }
-    )
-    @SecurityRequirement(name = "token")
-    @Operation(summary = "피드 조회")
-    ResponseEntity<List<FeedPostResponse>> findFeedPosts(
-            @Parameter(description = "조회할 스터디 id", required = true) Long id,
-            @Parameter(description = "마지막으로 본 피드의 아이디, 첫 요청에서는 필요 없음", allowEmptyValue = true) Optional<Long> oldestFeedPostId
-    );
-
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200"),
-                    @ApiResponse(responseCode = "400", content = @Content),
-                    @ApiResponse(responseCode = "401", content = @Content),
-                    @ApiResponse(responseCode = "404", content = @Content)
-            }
-    )
-    @SecurityRequirement(name = "token")
-    @Operation(summary = "일반 피드 등록")
-    ResponseEntity<Void> createFeedPost(
-            @Schema(hidden = true) Member member,
-            @Parameter(description = "피드가 등록되는 스터디 id", required = true) Long id,
-            FeedPostCreateRequest request
     );
 
     @ApiResponses(
