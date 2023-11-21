@@ -44,9 +44,8 @@ public class Round extends BaseEntity {
     @Id
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_id", nullable = false)
-    private Study study;
+    @Column(name = "study_id")
+    private Long studyId;
 
     @Column(length = MAX_TODO_CONTENT_LENGTH)
     private String mustDo;
@@ -58,7 +57,7 @@ public class Round extends BaseEntity {
     @Cascade(CascadeType.PERSIST)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany
-    @JoinColumn(name = "round_id", nullable = false)
+    @JoinColumn(name = "round_id", nullable = false, updatable = false)
     private List<RoundOfMember> roundOfMembers = new ArrayList<>();
 
     @Enumerated(EnumType.ORDINAL)
@@ -76,7 +75,7 @@ public class Round extends BaseEntity {
     @Builder
     public Round(
             Long id,
-            Study study,
+            Long studyId,
             String mustDo,
             Member master,
             List<RoundOfMember> roundOfMembers,
@@ -84,7 +83,7 @@ public class Round extends BaseEntity {
             Integer weekNumber
     ) {
         this.id = id;
-        this.study = study;
+        this.studyId = studyId;
         this.mustDo = mustDo;
         this.master = master;
         this.roundOfMembers = roundOfMembers == null ? new ArrayList<>() : roundOfMembers;
@@ -94,7 +93,7 @@ public class Round extends BaseEntity {
 
     public static Round of(DayOfWeek dayOfWeek, Study study, Integer weekNumber) {
         return Round.builder()
-                    .study(study)
+                    .studyId(study.getId())
                     .dayOfWeek(dayOfWeek)
                     .weekNumber(weekNumber)
                     .master(study.getMaster())
@@ -221,7 +220,21 @@ public class Round extends BaseEntity {
     }
 
     public Round createNextWeekRound() {
-        return of(dayOfWeek, study, weekNumber + 1);
+        List<RoundOfMember> list = roundOfMembers.stream()
+                                                 .map(
+                                                     roundOfMember -> RoundOfMember.builder()
+                                                                                   .member(
+                                                                                       roundOfMember.getMember())
+                                                                                   .isDone(false)
+                                                                                   .build())
+                                                 .toList();
+        return Round.builder()
+                    .studyId(studyId)
+                    .dayOfWeek(dayOfWeek)
+                    .weekNumber(weekNumber + 1)
+                    .master(master)
+                    .roundOfMembers(list)
+                    .build();
     }
 
     @Override

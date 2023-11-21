@@ -12,6 +12,11 @@ import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.request.MustDoUpdateRequest;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.UpcomingStudyResponse;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,6 +24,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.EntityManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
@@ -29,14 +35,17 @@ public class RoundService {
 
     private final RoundRepository roundRepository;
     private final StudyRepository studyRepository;
+    private final EntityManager entityManager;
 
 
     public RoundService(
         RoundRepository roundRepository,
-        StudyRepository studyRepository
+        StudyRepository studyRepository,
+        EntityManager entityManager
     ) {
         this.roundRepository = roundRepository;
         this.studyRepository = studyRepository;
+        this.entityManager = entityManager;
     }
 
     @Transactional(readOnly = true)
@@ -122,6 +131,11 @@ public class RoundService {
 
     @Transactional
     public void proceedRound(LocalDate today) {
+        entityManager.flush();
+        entityManager.clear();
+        System.out.println("StudyService.proceedRound");
+        long from = System.currentTimeMillis();
+        //
         List<Round> rounds = roundRepository.findByRoundStatusAndDayOfWeek(
             RoundStatus.IN_PROGRESS,
             today.minusDays(1).getDayOfWeek()
@@ -130,30 +144,49 @@ public class RoundService {
         for (Round round : rounds) {
             Integer currentWeek = round.getWeekNumber();
             List<Round> upcomingCandidates = roundRepository.findAllByStudyIdAndWeekNumberIn(
-                round.getStudy().getId(),
+                round.getStudyId(),
                 List.of(currentWeek, currentWeek + 1)
             );
 
             Round upcomingRound = upcomingCandidates.stream()
-                              .filter(candidate -> candidate.isSameWeek(currentWeek) && candidate.isNotStarted())
-                              .min(Comparator.comparing(Round::getDayOfWeek))
-                              .orElseGet(() -> upcomingCandidates.stream()
-                                                                 .filter(candidate -> candidate.isSameWeek(currentWeek + 1))
-                                                                 .min(Comparator.comparing(Round::getDayOfWeek))
-                                                                 .orElseThrow(() -> new IllegalStateException("다음 주 라운드를 안 만들어놓음")));
+                                                    .filter(candidate -> candidate.isSameWeek(currentWeek) && candidate.isNotStarted())
+                                                    .min(Comparator.comparing(Round::getDayOfWeek))
+                                                    .orElseGet(() -> upcomingCandidates.stream()
+                                                                                       .filter(candidate -> candidate.isSameWeek(currentWeek + 1))
+                                                                                       .min(Comparator.comparing(Round::getDayOfWeek))
+                                                                                       .orElseThrow(() -> new IllegalStateException("다음 주 라운드를 안 만들어놓음")));
 
             round.finish();
             upcomingRound.proceed();
 
             if (!upcomingRound.isSameWeek(currentWeek)) {
                 List<Round> nextWeekRounds = upcomingCandidates.stream()
-                                                      .filter(candidate -> candidate.isSameWeek(currentWeek + 1))
-                                                      .map(Round::createNextWeekRound)
-                                                      .toList();
+                                                               .filter(candidate -> candidate.isSameWeek(currentWeek + 1))
+                                                               .map(Round::createNextWeekRound)
+                                                               .toList();
 
                 roundRepository.saveAll(nextWeekRounds);
             }
         }
+        //
+        Runtime runtime = Runtime.getRuntime();
+        long totalMemory = runtime.totalMemory();
+        long freeMemory = runtime.freeMemory();
+        long usedMemory = (totalMemory - freeMemory) / 1000000;
+
+        long to = System.currentTimeMillis();
+        Path path = Paths.get("time_test.txt");
+        try {
+            if (Files.exists(path)) {
+                Files.write(path, ("time spent to proceed Round \nstudy size: " + rounds.size() + "\ntotal time spent: " + (to - from) + "\nThe JVM is using " + usedMemory + " MB of memory." + "\n\n").getBytes(), StandardOpenOption.APPEND);
+            } else {
+                Files.createFile(path);
+                Files.write(path, ("time spent to proceed Round \nstudy size: " + rounds.size() + "\ntotal time spent: " + (to - from) + "\n\n").getBytes());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
