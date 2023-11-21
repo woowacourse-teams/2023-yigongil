@@ -15,12 +15,17 @@
         <variable
             name="result"
             type="String" />
+
+        <variable
+            name="isVisible"
+            type="Boolean" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        isVisible="@{isVisible}">
 
         <ImageView
             android:id="@+id/iv_user_study_result_information"

@@ -1,6 +1,6 @@
-package com.created.domain.model
+package com.created.team201.data.model
 
-data class FinishedStudy(
+data class FinishedStudyEntity(
     val id: Long,
     val name: String,
     val averageTier: Int,
