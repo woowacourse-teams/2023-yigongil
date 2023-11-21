@@ -36,8 +36,8 @@ class CreateStudyActivity :
         super.onCreate(savedInstanceState)
 
         initActionBar()
-        setupCollectCreateStudyState()
-        setupCollectCreateStudyUiState()
+        collectCreateStudyState()
+        collectCreateStudyUiState()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -75,7 +75,7 @@ class CreateStudyActivity :
         }
     }
 
-    private fun setupCollectCreateStudyUiState() {
+    private fun collectCreateStudyUiState() {
         createStudyViewModel.createStudyUiState
             .collectLatestOnStarted(this) { createStudyUiState ->
                 when (createStudyUiState) {
@@ -105,7 +105,7 @@ class CreateStudyActivity :
         Toast.makeText(this, getString(messageRes), Toast.LENGTH_SHORT).show()
     }
 
-    private fun setupCollectCreateStudyState() {
+    private fun collectCreateStudyState() {
         createStudyViewModel.fragmentState.collectOnStarted(this) { fragmentState ->
             showFragment(fragmentState.type)
         }

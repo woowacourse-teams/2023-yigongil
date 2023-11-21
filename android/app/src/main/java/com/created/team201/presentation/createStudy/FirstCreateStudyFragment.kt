@@ -26,7 +26,7 @@ class FirstCreateStudyFragment :
         setupStudyDate()
         setupStudyCycle()
         setupNextClick()
-        setupCollectEnableNext()
+        collectEnableNext()
     }
 
     private fun setupPeopleCount() {
@@ -99,7 +99,7 @@ class FirstCreateStudyFragment :
         }
     }
 
-    private fun setupCollectEnableNext() {
+    private fun collectEnableNext() {
         createStudyViewModel.isEnableFirstCreateStudyNext.collectOnStarted(viewLifecycleOwner) { isEnable ->
             binding.tvFirstCreateStudyBtnNext.isEnabled = isEnable
         }

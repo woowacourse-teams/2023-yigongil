@@ -16,7 +16,7 @@ class SecondCreateStudyFragment :
         setupStudyNameTitleChanged()
         setupStudyIntroductionChanged()
         setupNextClick()
-        setupCollectEnableNext()
+        collectEnableNext()
     }
 
     private fun setupStudyNameTitleChanged() {
@@ -37,7 +37,7 @@ class SecondCreateStudyFragment :
         }
     }
 
-    private fun setupCollectEnableNext() {
+    private fun collectEnableNext() {
         createStudyViewModel.isEnableSecondCreateStudyNext.collectOnStarted(viewLifecycleOwner) { isEnable ->
             binding.tvSecondCreateStudyBtnNext.isEnabled = isEnable
         }
