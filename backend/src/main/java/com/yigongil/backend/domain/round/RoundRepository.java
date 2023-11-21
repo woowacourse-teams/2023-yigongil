@@ -1,5 +1,6 @@
 package com.yigongil.backend.domain.round;
 
+import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -13,4 +14,13 @@ public interface RoundRepository extends Repository<Round, Long> {
     List<Round> findAllByStudyIdAndWeekNumber(Long studyId, Integer weekNumber);
 
     Round save(Round round);
+
+    List<Round> findByRoundStatusAndDayOfWeek(
+        RoundStatus roundStatus,
+        DayOfWeek dayOfWeek
+    );
+
+    List<Round> findAllByStudyIdAndWeekNumberIn(Long studyId, List<Integer> weekNumbers);
+
+    void saveAll(Iterable<Round> rounds);
 }

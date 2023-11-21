@@ -189,6 +189,10 @@ public class Round extends BaseEntity {
         return roundStatus == RoundStatus.IN_PROGRESS;
     }
 
+    public boolean isNotStarted() {
+        return roundStatus == RoundStatus.NOT_STARTED;
+    }
+
     public int calculateLeftDaysFrom(LocalDate date) {
         int gap = dayOfWeek.getValue() - date.getDayOfWeek().getValue();
         if (gap < 0) {
@@ -206,6 +210,10 @@ public class Round extends BaseEntity {
             throw new NotStudyMemberException("스터디장은 스터디를 나갈 수 없습니다.", member.getGithubId());
         }
         roundOfMembers.remove(findRoundOfMemberBy(member));
+    }
+
+    public Round createNextWeekRound() {
+        return of(dayOfWeek, study, weekNumber + 1);
     }
 
     @Override

@@ -209,10 +209,6 @@ public class Study extends BaseRootEntity {
                                  .count();
     }
 
-    public boolean isCurrentRoundEndAt(LocalDate date) {
-        return getCurrentRound().isEndAt(date);
-    }
-
     public void start(Member member, List<DayOfWeek> daysOfTheWeek, LocalDateTime startAt) {
         validateMaster(member);
         if (processingStatus != ProcessingStatus.RECRUITING) {
@@ -246,46 +242,6 @@ public class Study extends BaseRootEntity {
             return;
         }
         throw new NotStudyMasterException(" 머스트두를 수정할 권한이 없습니다.", candidate.getNickname());
-    }
-
-    public void updateToNextRound() {
-        Round nextRound = findUpcomingRoundOf(getCurrentRound().getWeekNumber());
-
-        if (nextRound.isSameWeek(getCurrentRound().getWeekNumber() + 1)) {
-            rounds.addAll(createRoundsOf(nextRound.getWeekNumber() + 1));
-        }
-        updateCurrentRound(nextRound);
-    }
-
-    private List<Round> createRoundsOf(Integer weekNumber) {
-        return dayOfWeeks.stream()
-                         .map(dayOfWeek -> Round.of(dayOfWeek, this, weekNumber))
-                         .toList();
-    }
-
-    private void updateCurrentRound(Round upcomingRound) {
-        upcomingRound.proceed();
-        getCurrentRound().finish();
-    }
-
-    private Round findUpcomingRoundOf(int weekNumber) {
-        return rounds.stream()
-                     .filter(round -> round.isSameWeek(weekNumber) && round.isNextDayOfWeek(getCurrentRound().getDayOfWeek()))
-                     .findFirst()
-                     .orElseGet(() -> findFirstRoundOf(weekNumber + 1));
-    }
-
-    private Round findFirstRoundOf(int nextWeekNumber) {
-        return rounds.stream()
-                     .filter(round -> round.isSameWeek(nextWeekNumber) && round.isSameDayOfWeek(findFirstDayOfTheWeek()))
-                     .findAny()
-                     .orElseThrow(() -> new RoundNotFoundException("다음 주차의 라운드가 존재하지 않습니다.", getCurrentRound().getWeekNumber()));
-    }
-
-    private DayOfWeek findFirstDayOfTheWeek() {
-        return dayOfWeeks.stream()
-                         .min(Comparator.comparing(DayOfWeek::getValue))
-                         .orElseThrow();
     }
 
     public void finishStudy(Member master) {

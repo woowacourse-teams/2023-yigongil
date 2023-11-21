@@ -13,6 +13,7 @@ import com.yigongil.backend.response.UpcomingStudyResponse;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,12 +83,38 @@ public class RoundService {
 
     @Transactional
     public void proceedRound(LocalDate today) {
-        List<Study> studies = studyRepository.findAllByProcessingStatus(
-            ProcessingStatus.PROCESSING);
+        List<Round> rounds = roundRepository.findByRoundStatusAndDayOfWeek(
+            RoundStatus.IN_PROGRESS,
+            today.minusDays(1).getDayOfWeek()
+        );
 
-        studies.stream()
-               .filter(study -> study.isCurrentRoundEndAt(today.minusDays(1)))
-               .forEach(Study::updateToNextRound);
+        for (Round round : rounds) {
+            Integer currentWeek = round.getWeekNumber();
+            List<Round> upcomingCandidates = roundRepository.findAllByStudyIdAndWeekNumberIn(
+                round.getStudy().getId(),
+                List.of(currentWeek, currentWeek + 1)
+            );
+
+            Round upcomingRound = upcomingCandidates.stream()
+                              .filter(candidate -> candidate.isSameWeek(currentWeek) && candidate.isNotStarted())
+                              .min(Comparator.comparing(Round::getDayOfWeek))
+                              .orElseGet(() -> upcomingCandidates.stream()
+                                                                 .filter(candidate -> candidate.isSameWeek(currentWeek + 1))
+                                                                 .min(Comparator.comparing(Round::getDayOfWeek))
+                                                                 .orElseThrow(() -> new IllegalStateException("다음 주 라운드를 안 만들어놓음")));
+
+            round.finish();
+            upcomingRound.proceed();
+
+            if (!upcomingRound.isSameWeek(currentWeek)) {
+                List<Round> nextWeekRounds = upcomingCandidates.stream()
+                                                      .filter(candidate -> candidate.isSameWeek(currentWeek + 1))
+                                                      .map(Round::createNextWeekRound)
+                                                      .toList();
+
+                roundRepository.saveAll(nextWeekRounds);
+            }
+        }
     }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
