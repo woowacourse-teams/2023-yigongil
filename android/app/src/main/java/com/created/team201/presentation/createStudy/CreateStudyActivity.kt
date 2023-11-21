@@ -72,6 +72,27 @@ class CreateStudyActivity :
         }
     }
 
+    private fun collectCreateStudyState() {
+        createStudyViewModel.createStudyState
+            .collectLatestOnStarted(this) { createStudyState ->
+                when (createStudyState) {
+                    is Success -> navigateToStudyDetail(createStudyState.studyId)
+                    Loading -> Unit
+                    Failure -> finish()
+                }
+            }
+    }
+
+    private fun navigateToStudyDetail(studyId: Long) {
+        startActivity(
+            StudyDetailActivity.getIntent(
+                this@CreateStudyActivity,
+                studyId
+            ),
+        )
+        finish()
+    }
+
     private fun collectCreateStudyEvent() {
         createStudyViewModel.createStudyEvent.collectOnStarted(this) { event ->
             when (event) {
@@ -81,6 +102,10 @@ class CreateStudyActivity :
                 is NavigateToNext -> navigateToNext(event.fragmentState)
             }
         }
+    }
+
+    private fun showToast(@StringRes messageRes: Int) {
+        Toast.makeText(this, getString(messageRes), Toast.LENGTH_SHORT).show()
     }
 
     private fun navigateToBefore(fragmentState: FragmentState) {
@@ -95,30 +120,6 @@ class CreateStudyActivity :
             FirstFragment -> showFragment(SecondFragment.type)
             SecondFragment -> Unit
         }
-    }
-
-    private fun collectCreateStudyState() {
-        createStudyViewModel.createStudyState
-            .collectLatestOnStarted(this) { createStudyState ->
-                when (createStudyState) {
-                    is Success -> {
-                        startActivity(
-                            StudyDetailActivity.getIntent(
-                                this@CreateStudyActivity,
-                                createStudyState.studyId
-                            ),
-                        )
-                        finish()
-                    }
-
-                    Loading -> Unit
-                    Failure -> finish()
-                }
-            }
-    }
-
-    private fun showToast(@StringRes messageRes: Int) {
-        Toast.makeText(this, getString(messageRes), Toast.LENGTH_SHORT).show()
     }
 
     private fun showFragment(type: FragmentType) {
