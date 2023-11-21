@@ -15,11 +15,12 @@ class SecondCreateStudyFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupStudyNameTitleChanged()
         setupStudyIntroductionChanged()
+        setupNextClick()
         setupCollectEnableNext()
     }
 
     private fun setupStudyNameTitleChanged() {
-        binding.tvSecondCreateStudyStudyNameTitle.doOnTextChanged { text, _, _, _ ->
+        binding.etSecondCreateStudyStudyName.doOnTextChanged { text, _, _, _ ->
             createStudyViewModel.setStudyName(text.toString())
         }
     }
@@ -27,6 +28,12 @@ class SecondCreateStudyFragment :
     private fun setupStudyIntroductionChanged() {
         binding.etSecondCreateStudyStudyIntroduction.doOnTextChanged { text, _, _, _ ->
             createStudyViewModel.setStudyIntroduction(text.toString())
+        }
+    }
+
+    private fun setupNextClick() {
+        binding.tvSecondCreateStudyBtnNext.setOnClickListener {
+            createStudyViewModel.createStudy()
         }
     }
 
