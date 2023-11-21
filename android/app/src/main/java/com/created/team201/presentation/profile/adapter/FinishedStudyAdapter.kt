@@ -5,8 +5,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.created.domain.model.FinishedStudy
 
-class FinishedStudyAdapter :
-    ListAdapter<FinishedStudy, FinishedStudyViewHolder>(diffCallBack) {
+class FinishedStudyAdapter : ListAdapter<FinishedStudy, FinishedStudyViewHolder>(diffCallBack) {
 
     init {
         setHasStableIds(true)

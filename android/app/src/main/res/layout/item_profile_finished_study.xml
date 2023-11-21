@@ -3,28 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <import type="java.util.List" />
-
-        <variable
-            name="periodStringFormat"
-            type="List&lt;String>" />
-
-        <variable
-            name="finishedStudyStatus"
-            type="com.created.team201.presentation.profile.model.FinishedStudyStatus" />
-
-        <variable
-            name="tier"
-            type="com.created.team201.presentation.studyList.model.TierImage" />
-
-        <variable
-            name="finishedStudy"
-            type="com.created.domain.model.FinishedStudy" />
-
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_finished_study"
         android:layout_width="match_parent"
@@ -40,7 +18,6 @@
             android:layout_height="24dp"
             android:layout_marginBottom="4dp"
             android:src="@drawable/ic_platinum_24"
-            app:glideSrc="@{tier.Companion.valueOf(finishedStudy.averageTier)}"
             app:layout_constraintBottom_toTopOf="@id/tv_finished_study_average_tier_description"
             app:layout_constraintEnd_toEndOf="@id/tv_finished_study_average_tier_description"
             app:layout_constraintStart_toStartOf="@id/tv_finished_study_average_tier_description"
@@ -64,7 +41,6 @@
             android:layout_marginEnd="4dp"
             android:ellipsize="end"
             android:lines="1"
-            android:text="@{finishedStudy.name}"
             android:textAppearance="@style/text_sb14"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -78,7 +54,6 @@
             android:layout_width="40dp"
             android:layout_height="19dp"
             android:layout_marginBottom="8dp"
-            app:glideSrc="@{finishedStudyStatus.Companion.imageOf(finishedStudy.isSucceed)}"
             app:layout_constraintBottom_toTopOf="@id/tv_finished_study_people_count"
             app:layout_constraintEnd_toEndOf="@id/tv_finished_study_people_count"
             app:layout_constraintStart_toStartOf="@id/iv_finished_study_people_count_icon"
@@ -98,7 +73,6 @@
             android:id="@+id/tv_finished_study_people_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{@string/study_list_member_format(finishedStudy.numberOfCurrentMembers,finishedStudy.numberOfMaximumMembers)}"
             android:textAppearance="@style/text_r14"
             android:textColor="@color/grey02_78808B"
             app:layout_constraintBottom_toBottomOf="parent"
