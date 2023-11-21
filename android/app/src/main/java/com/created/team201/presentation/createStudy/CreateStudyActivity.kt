@@ -14,9 +14,14 @@ import androidx.fragment.app.commit
 import com.created.team201.R
 import com.created.team201.databinding.ActivityCreateStudyBinding
 import com.created.team201.presentation.common.BindingViewActivity
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.Event.CreateStudyFailure
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.Event.CreateStudySuccess
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.Event.NavigateToBefore
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.Event.NavigateToNext
 import com.created.team201.presentation.createStudy.model.CreateStudyUiState.Fail
 import com.created.team201.presentation.createStudy.model.CreateStudyUiState.Idle
 import com.created.team201.presentation.createStudy.model.CreateStudyUiState.Success
+import com.created.team201.presentation.createStudy.model.FragmentState
 import com.created.team201.presentation.createStudy.model.FragmentState.FirstFragment
 import com.created.team201.presentation.createStudy.model.FragmentState.SecondFragment
 import com.created.team201.presentation.createStudy.model.FragmentType
@@ -36,8 +41,9 @@ class CreateStudyActivity :
         super.onCreate(savedInstanceState)
 
         initActionBar()
-        collectCreateStudyState()
+        showFragment(createStudyViewModel.fragmentState.value.type)
         collectCreateStudyUiState()
+        collectCreateStudyEvent()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -47,25 +53,16 @@ class CreateStudyActivity :
         return super.dispatchTouchEvent(ev)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        createStudyViewModel.navigateToBefore()
+        return true
+    }
+
     private fun initActionBar() {
         setSupportActionBar(binding.tbCreateStudy)
         supportActionBar?.setHomeActionContentDescription(R.string.toolbar_back_text)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (createStudyViewModel.fragmentState.value) {
-            is FirstFragment -> {
-                finish()
-                true
-            }
-
-            is SecondFragment -> {
-                createStudyViewModel.navigateToBefore()
-                true
-            }
-        }
     }
 
     private fun setProgressIndicator(type: FragmentType) {
@@ -75,12 +72,36 @@ class CreateStudyActivity :
         }
     }
 
+    private fun collectCreateStudyEvent() {
+        createStudyViewModel.createStudyEvent.collectOnStarted(this) { event ->
+            when (event) {
+                CreateStudySuccess -> showToast(R.string.create_study_toast_create_study_success)
+                CreateStudyFailure -> showToast(R.string.create_study_toast_create_study_fail)
+                is NavigateToBefore -> navigateToBefore(event.fragmentState)
+                is NavigateToNext -> navigateToNext(event.fragmentState)
+            }
+        }
+    }
+
+    private fun navigateToBefore(fragmentState: FragmentState) {
+        when (fragmentState) {
+            FirstFragment -> finish()
+            SecondFragment -> showFragment(FirstFragment.type)
+        }
+    }
+
+    private fun navigateToNext(fragmentState: FragmentState) {
+        when (fragmentState) {
+            FirstFragment -> showFragment(SecondFragment.type)
+            SecondFragment -> Unit
+        }
+    }
+
     private fun collectCreateStudyUiState() {
         createStudyViewModel.createStudyUiState
             .collectLatestOnStarted(this) { createStudyUiState ->
                 when (createStudyUiState) {
                     is Success -> {
-                        showToast(R.string.create_study_toast_create_study_success)
                         startActivity(
                             StudyDetailActivity.getIntent(
                                 this@CreateStudyActivity,
@@ -92,7 +113,6 @@ class CreateStudyActivity :
                     }
 
                     is Fail -> {
-                        showToast(R.string.create_study_toast_create_study_fail)
                         finish()
                     }
 
@@ -103,12 +123,6 @@ class CreateStudyActivity :
 
     private fun showToast(@StringRes messageRes: Int) {
         Toast.makeText(this, getString(messageRes), Toast.LENGTH_SHORT).show()
-    }
-
-    private fun collectCreateStudyState() {
-        createStudyViewModel.fragmentState.collectOnStarted(this) { fragmentState ->
-            showFragment(fragmentState.type)
-        }
     }
 
     private fun showFragment(type: FragmentType) {

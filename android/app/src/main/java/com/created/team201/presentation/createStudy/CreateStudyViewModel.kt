@@ -58,6 +58,9 @@ class CreateStudyViewModel @Inject constructor(
     private val _createStudyUiState: MutableSharedFlow<CreateStudyUiState> = MutableSharedFlow()
     val createStudyUiState: SharedFlow<CreateStudyUiState> get() = _createStudyUiState.asSharedFlow()
 
+    private val _createStudyEvent: MutableSharedFlow<Event> = MutableSharedFlow()
+    val createStudyEvent: SharedFlow<Event> get() = _createStudyEvent.asSharedFlow()
+
     private var isOpenStudy: Boolean = false
 
     fun setPeopleCount(peopleCount: Int) {
@@ -81,22 +84,22 @@ class CreateStudyViewModel @Inject constructor(
     }
 
     fun navigateToNext() {
-        when (_fragmentState.value) {
-            is FirstFragment -> {
-                _fragmentState.value = SecondFragment
-            }
+        viewModelScope.launch {
+            when (_fragmentState.value) {
+                is FirstFragment -> {
+                    _createStudyEvent.emit(Event.NavigateToNext(fragmentState.value))
+                    _fragmentState.value = SecondFragment
+                }
 
-            else -> Unit
+                else -> Unit
+            }
         }
     }
 
     fun navigateToBefore() {
-        when (_fragmentState.value) {
-            is SecondFragment -> {
-                _fragmentState.value = FirstFragment
-            }
-
-            else -> Unit
+        viewModelScope.launch {
+            _createStudyEvent.emit(Event.NavigateToBefore(fragmentState.value))
+            _fragmentState.value = FirstFragment
         }
     }
 
@@ -113,15 +116,24 @@ class CreateStudyViewModel @Inject constructor(
             )
             createStudyRepository.createStudy(study)
                 .onSuccess { studyId ->
+                    _createStudyEvent.emit(Event.CreateStudySuccess)
                     _createStudyUiState.emit(CreateStudyUiState.Success(studyId))
                 }
                 .onFailure {
+                    _createStudyEvent.emit(Event.CreateStudyFailure)
                     _createStudyUiState.emit(CreateStudyUiState.Fail)
                 }
         }
     }
 
-    private fun String.isNotBlankAndEmpty(): Boolean = isNotBlank().and(isNotEmpty())
+    private fun String.isNotBlankAndEmpty(): Boolean = isNotBlank() and isNotEmpty()
+
+    sealed interface Event {
+        object CreateStudySuccess : Event
+        object CreateStudyFailure : Event
+        data class NavigateToBefore(val fragmentState: FragmentState) : Event
+        data class NavigateToNext(val fragmentState: FragmentState) : Event
+    }
 
     companion object {
         private const val DEFAULT_INT_VALUE = -1
