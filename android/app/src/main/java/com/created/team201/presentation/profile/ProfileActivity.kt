@@ -18,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ProfileActivity :
     BindingViewActivity<ActivityProfileBinding>(ActivityProfileBinding::inflate) {
+
     private val profileViewModel: ProfileViewModel by viewModels()
     private val finishedStudyAdapter: FinishedStudyAdapter by lazy { FinishedStudyAdapter() }
     private val userId: Long by lazy { intent.getLongExtra(KEY_USER_ID, NON_EXISTENCE_USER_ID) }
@@ -27,9 +28,9 @@ class ProfileActivity :
 
         initBinding()
         initActionBar()
-        profileViewModel.initProfile(getValidatedUserId())
+        initProfile()
         initFinishedStudyAdapter()
-        submitFinishedStudies()
+        observeFinishedStudies()
     }
 
     private fun initBinding() {
@@ -43,13 +44,13 @@ class ProfileActivity :
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
     }
 
+    private fun initProfile() {
+        profileViewModel.initProfile(getValidatedUserId())
+    }
+
     private fun getValidatedUserId(): Long {
         if (userId == NON_EXISTENCE_USER_ID) {
-            Toast.makeText(
-                this,
-                this.getString(R.string.profile_unexpected_user_access_warning),
-                Toast.LENGTH_SHORT,
-            ).show()
+            showToast(getString(R.string.profile_unexpected_user_access_warning))
             finish()
         }
         return userId
@@ -59,7 +60,7 @@ class ProfileActivity :
         binding.rvProfileEndedStudies.adapter = finishedStudyAdapter
     }
 
-    private fun submitFinishedStudies() {
+    private fun observeFinishedStudies() {
         profileViewModel.profile.observe(this) {
             finishedStudyAdapter.submitList(profileViewModel.profile.value?.finishedStudies)
         }
@@ -75,26 +76,21 @@ class ProfileActivity :
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            finish()
-        }
         when (item.itemId) {
             android.R.id.home -> finish()
             R.id.menu_profile_report -> {
                 if (profileViewModel.isGuest) {
-                    Toast.makeText(
-                        this,
-                        getString(R.string.guest_toast_can_not_report),
-                        Toast.LENGTH_SHORT,
-                    ).show()
+                    showToast(getString(R.string.guest_toast_can_not_report))
                     return true
                 }
-
                 startActivity(ReportActivity.getIntent(this, ReportCategory.USER, userId))
             }
         }
         return super.onOptionsItemSelected(item)
     }
+
+    private fun showToast(message: String) =
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
     companion object {
         private const val NON_EXISTENCE_USER_ID = 0L
