@@ -15,6 +15,7 @@ import com.created.team201.R
 import com.created.team201.databinding.ActivityCreateStudyBinding
 import com.created.team201.presentation.common.BindingViewActivity
 import com.created.team201.presentation.createStudy.CreateStudyViewModel.CreateStudyState.Failure
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.CreateStudyState.Idle
 import com.created.team201.presentation.createStudy.CreateStudyViewModel.CreateStudyState.Loading
 import com.created.team201.presentation.createStudy.CreateStudyViewModel.CreateStudyState.Success
 import com.created.team201.presentation.createStudy.CreateStudyViewModel.Event.CreateStudyFailure
@@ -78,6 +79,7 @@ class CreateStudyActivity :
                 when (createStudyState) {
                     is Success -> navigateToStudyDetail(createStudyState.studyId)
                     Loading -> Unit
+                    Idle -> Unit
                     Failure -> finish()
                 }
             }

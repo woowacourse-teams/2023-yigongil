@@ -55,7 +55,7 @@ class CreateStudyViewModel @Inject constructor(
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 
     private val _createStudyState: MutableStateFlow<CreateStudyState> =
-        MutableStateFlow(CreateStudyState.Loading)
+        MutableStateFlow(CreateStudyState.Idle)
     val createStudyState: StateFlow<CreateStudyState> get() = _createStudyState.asStateFlow()
 
     private val _createStudyEvent: MutableSharedFlow<Event> = MutableSharedFlow()
@@ -102,6 +102,9 @@ class CreateStudyViewModel @Inject constructor(
     }
 
     fun createStudy() {
+        if (createStudyState.value == CreateStudyState.Loading)
+            return
+        _createStudyState.value = CreateStudyState.Loading
         viewModelScope.launch {
             val study = CreateStudy(
                 name = studyName.value.trim(),
@@ -137,6 +140,8 @@ class CreateStudyViewModel @Inject constructor(
         object Loading : CreateStudyState
 
         object Failure : CreateStudyState
+
+        object Idle : CreateStudyState
     }
 
     companion object {
