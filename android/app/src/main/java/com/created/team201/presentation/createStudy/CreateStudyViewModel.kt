@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.created.domain.model.CreateStudy
 import com.created.team201.data.repository.CreateStudyRepository
-import com.created.team201.presentation.createStudy.model.CreateStudyUiState
 import com.created.team201.presentation.createStudy.model.FragmentState
 import com.created.team201.presentation.createStudy.model.FragmentState.FirstFragment
 import com.created.team201.presentation.createStudy.model.FragmentState.SecondFragment
@@ -55,13 +54,12 @@ class CreateStudyViewModel @Inject constructor(
             return@combine studyName.isNotBlankAndEmpty() && studyIntroduction.isNotBlankAndEmpty()
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 
-    private val _createStudyUiState: MutableSharedFlow<CreateStudyUiState> = MutableSharedFlow()
-    val createStudyUiState: SharedFlow<CreateStudyUiState> get() = _createStudyUiState.asSharedFlow()
+    private val _createStudyState: MutableStateFlow<CreateStudyState> =
+        MutableStateFlow(CreateStudyState.Loading)
+    val createStudyState: StateFlow<CreateStudyState> get() = _createStudyState.asStateFlow()
 
     private val _createStudyEvent: MutableSharedFlow<Event> = MutableSharedFlow()
     val createStudyEvent: SharedFlow<Event> get() = _createStudyEvent.asSharedFlow()
-
-    private var isOpenStudy: Boolean = false
 
     fun setPeopleCount(peopleCount: Int) {
         _peopleCount.value = peopleCount
@@ -104,8 +102,6 @@ class CreateStudyViewModel @Inject constructor(
     }
 
     fun createStudy() {
-        if (isOpenStudy) return
-        isOpenStudy = true
         viewModelScope.launch {
             val study = CreateStudy(
                 name = studyName.value.trim(),
@@ -117,11 +113,11 @@ class CreateStudyViewModel @Inject constructor(
             createStudyRepository.createStudy(study)
                 .onSuccess { studyId ->
                     _createStudyEvent.emit(Event.CreateStudySuccess)
-                    _createStudyUiState.emit(CreateStudyUiState.Success(studyId))
+                    _createStudyState.emit(CreateStudyState.Success(studyId))
                 }
                 .onFailure {
                     _createStudyEvent.emit(Event.CreateStudyFailure)
-                    _createStudyUiState.emit(CreateStudyUiState.Fail)
+                    _createStudyState.emit(CreateStudyState.Failure)
                 }
         }
     }
@@ -133,6 +129,14 @@ class CreateStudyViewModel @Inject constructor(
         object CreateStudyFailure : Event
         data class NavigateToBefore(val fragmentState: FragmentState) : Event
         data class NavigateToNext(val fragmentState: FragmentState) : Event
+    }
+
+    sealed interface CreateStudyState {
+        class Success(val studyId: Long) : CreateStudyState
+
+        object Loading : CreateStudyState
+
+        object Failure : CreateStudyState
     }
 
     companion object {

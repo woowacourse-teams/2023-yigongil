@@ -14,13 +14,13 @@ import androidx.fragment.app.commit
 import com.created.team201.R
 import com.created.team201.databinding.ActivityCreateStudyBinding
 import com.created.team201.presentation.common.BindingViewActivity
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.CreateStudyState.Failure
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.CreateStudyState.Loading
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.CreateStudyState.Success
 import com.created.team201.presentation.createStudy.CreateStudyViewModel.Event.CreateStudyFailure
 import com.created.team201.presentation.createStudy.CreateStudyViewModel.Event.CreateStudySuccess
 import com.created.team201.presentation.createStudy.CreateStudyViewModel.Event.NavigateToBefore
 import com.created.team201.presentation.createStudy.CreateStudyViewModel.Event.NavigateToNext
-import com.created.team201.presentation.createStudy.model.CreateStudyUiState.Fail
-import com.created.team201.presentation.createStudy.model.CreateStudyUiState.Idle
-import com.created.team201.presentation.createStudy.model.CreateStudyUiState.Success
 import com.created.team201.presentation.createStudy.model.FragmentState
 import com.created.team201.presentation.createStudy.model.FragmentState.FirstFragment
 import com.created.team201.presentation.createStudy.model.FragmentState.SecondFragment
@@ -42,7 +42,7 @@ class CreateStudyActivity :
 
         initActionBar()
         showFragment(createStudyViewModel.fragmentState.value.type)
-        collectCreateStudyUiState()
+        collectCreateStudyState()
         collectCreateStudyEvent()
     }
 
@@ -97,26 +97,22 @@ class CreateStudyActivity :
         }
     }
 
-    private fun collectCreateStudyUiState() {
-        createStudyViewModel.createStudyUiState
-            .collectLatestOnStarted(this) { createStudyUiState ->
-                when (createStudyUiState) {
+    private fun collectCreateStudyState() {
+        createStudyViewModel.createStudyState
+            .collectLatestOnStarted(this) { createStudyState ->
+                when (createStudyState) {
                     is Success -> {
                         startActivity(
                             StudyDetailActivity.getIntent(
                                 this@CreateStudyActivity,
-                                createStudyUiState.studyId
+                                createStudyState.studyId
                             ),
                         )
-
                         finish()
                     }
 
-                    is Fail -> {
-                        finish()
-                    }
-
-                    is Idle -> throw IllegalArgumentException()
+                    Loading -> Unit
+                    Failure -> finish()
                 }
             }
     }
