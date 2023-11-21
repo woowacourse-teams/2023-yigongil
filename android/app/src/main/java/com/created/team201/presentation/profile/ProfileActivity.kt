@@ -5,14 +5,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
+import com.bumptech.glide.Glide
 import com.created.team201.R
+import com.created.team201.data.model.UserProfileEntity
 import com.created.team201.databinding.ActivityProfileBinding
 import com.created.team201.presentation.common.BindingViewActivity
 import com.created.team201.presentation.profile.adapter.FinishedStudyAdapter
 import com.created.team201.presentation.report.ReportActivity
 import com.created.team201.presentation.report.model.ReportCategory
+import com.created.team201.util.collectOnStarted
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,7 +38,6 @@ class ProfileActivity :
     }
 
     private fun initBinding() {
-        binding.viewModel = profileViewModel
         binding.lifecycleOwner = this
     }
 
@@ -45,12 +48,12 @@ class ProfileActivity :
     }
 
     private fun initProfile() {
-        profileViewModel.initProfile(getValidatedUserId())
+        profileViewModel.loadProfile(getValidatedUserId())
     }
 
     private fun getValidatedUserId(): Long {
         if (userId == NON_EXISTENCE_USER_ID) {
-            showToast(getString(R.string.profile_unexpected_user_access_warning))
+            showToast(getString(R.string.profile_unexpected_user_warning))
             finish()
         }
         return userId
@@ -61,15 +64,39 @@ class ProfileActivity :
     }
 
     private fun observeFinishedStudies() {
-        profileViewModel.profile.observe(this) {
-            finishedStudyAdapter.submitList(profileViewModel.profile.value?.finishedStudies)
+        profileViewModel.uiState.collectOnStarted(this) { uiState ->
+            when (uiState) {
+                is ProfileUiState.Success -> updateProfile(uiState.userProfile)
+                is ProfileUiState.Failure -> Unit
+                is ProfileUiState.Loading -> Unit
+            }
+        }
+    }
+
+    private fun updateProfile(userProfile: UserProfileEntity) {
+        binding.ivProfileImage.setImage(userProfile.profile.profileImageUrl)
+        binding.tvProfileUserName.text = userProfile.profile.profileInformation.nickname.nickname
+        binding.tvProfileUserGithubId.text = userProfile.profile.githubId
+        binding.layoutProfileStudySuccessRate.result =
+            getString(R.string.profile_success_rate_format).format(userProfile.profile.successRate)
+        binding.layoutProfileTodoSuccessRate.result =
+            getString(R.string.profile_mustdo_success_rate_format).format(userProfile.profile.successfulRoundCount)
+        binding.tvProfileUserDescription.text = userProfile.profile.profileInformation.introduction
+        finishedStudyAdapter.submitList(userProfile.finishedStudies)
+    }
+
+    private fun ImageView.setImage(imageUrl: String?) {
+        imageUrl?.let {
+            Glide.with(context)
+                .load(it)
+                .into(this)
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val isMyProfile = intent.getBooleanExtra(KEY_MY_PROFILE, false)
         when (isMyProfile) {
-            true -> binding.tbProfile.setTitle(R.string.myPage_toolbar_title)
+            true -> binding.tbProfile.setTitle(R.string.profile_my_title)
             false -> menuInflater.inflate(R.menu.menu_profile, menu)
         }
         return true

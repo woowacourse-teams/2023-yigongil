@@ -245,9 +245,11 @@
     <!-- 프로필 뷰 -->
     <string name="profile_report_button_menu">신고</string>
     <string name="profile_title">프로필</string>
+    <string name="profile_my_title">내 프로필</string>
     <string name="profile_study_success_rate">스터디 성공률</string>
     <string name="profile_todo_success_rate">Must Do 완료횟수</string>
-    <string name="profile_unexpected_user_access_warning">존재하지 않는 사용자입니다.</string>
+    <string name="profile_unexpected_user_name">존재하지 않는 사용자</string>
+    <string name="profile_unexpected_user_warning">존재하지 않는 사용자입니다.</string>
     <string name="item_profile_finished_study_information_format">시작일 %s</string>
 
     <!-- 설정 뷰 -->
