@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View.INVISIBLE
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -67,7 +68,7 @@ class ProfileActivity :
         profileViewModel.uiState.collectOnStarted(this) { uiState ->
             when (uiState) {
                 is ProfileUiState.Success -> updateProfile(uiState.userProfile)
-                is ProfileUiState.Failure -> Unit
+                is ProfileUiState.Failure -> updateNonFoundProfile()
                 is ProfileUiState.Loading -> Unit
             }
         }
@@ -83,6 +84,19 @@ class ProfileActivity :
             getString(R.string.profile_mustdo_success_rate_format).format(userProfile.profile.successfulRoundCount)
         binding.tvProfileUserDescription.text = userProfile.profile.profileInformation.introduction
         finishedStudyAdapter.submitList(userProfile.finishedStudies)
+        binding.layoutProfileTodoSuccessRate.isVisible = true
+        binding.layoutProfileStudySuccessRate.isVisible = true
+    }
+
+    private fun updateNonFoundProfile() {
+        binding.ivProfileImage.setImage(R.drawable.ic_my_page)
+        binding.tvProfileUserName.text = getString(R.string.profile_unexpected_user_name)
+        binding.viewProfileBorderLine.visibility = INVISIBLE
+        binding.viewProfileRateBoardBorderLine.visibility = INVISIBLE
+        binding.tvProfileUserDescription.visibility = INVISIBLE
+        binding.layoutProfileTodoSuccessRate.isVisible = false
+        binding.layoutProfileStudySuccessRate.isVisible = false
+        binding.tbProfile.menu.removeItem(R.id.menu_profile_report)
     }
 
     private fun ImageView.setImage(imageUrl: String?) {
@@ -91,6 +105,12 @@ class ProfileActivity :
                 .load(it)
                 .into(this)
         }
+    }
+
+    private fun ImageView.setImage(image: Int) {
+        Glide.with(context)
+            .load(image)
+            .into(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
