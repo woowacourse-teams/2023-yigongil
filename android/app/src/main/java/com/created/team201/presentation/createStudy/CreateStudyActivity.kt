@@ -16,7 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.created.team201.R
 import com.created.team201.databinding.ActivityCreateStudyBinding
-import com.created.team201.presentation.common.BindingActivity
+import com.created.team201.presentation.common.BindingViewActivity
 import com.created.team201.presentation.createStudy.model.CreateStudyUiState.Fail
 import com.created.team201.presentation.createStudy.model.CreateStudyUiState.Idle
 import com.created.team201.presentation.createStudy.model.CreateStudyUiState.Success
@@ -32,13 +32,12 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CreateStudyActivity :
-    BindingActivity<ActivityCreateStudyBinding>(R.layout.activity_create_study) {
+    BindingViewActivity<ActivityCreateStudyBinding>(ActivityCreateStudyBinding::inflate) {
     private val createStudyViewModel: CreateStudyViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initBinding()
         initActionBar()
         setupCollectCreateStudyState()
         setupCollectCreateStudyUiState()
@@ -49,10 +48,6 @@ class CreateStudyActivity :
             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
         return super.dispatchTouchEvent(ev)
-    }
-
-    private fun initBinding() {
-        binding.lifecycleOwner = this
     }
 
     private fun initActionBar() {
