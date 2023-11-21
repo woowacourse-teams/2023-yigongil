@@ -1,6 +1,5 @@
-package com.yigongil.backend.application;
+package com.yigongil.backend.config.auth;
 
-import com.yigongil.backend.config.auth.JwtTokenProvider;
 import com.yigongil.backend.config.oauth.GithubOauth;
 import com.yigongil.backend.config.oauth.GithubProfileResponse;
 import com.yigongil.backend.domain.member.domain.Member;

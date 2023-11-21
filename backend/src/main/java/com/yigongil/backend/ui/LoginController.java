@@ -1,6 +1,6 @@
 package com.yigongil.backend.ui;
 
-import com.yigongil.backend.application.AuthService;
+import com.yigongil.backend.config.auth.AuthService;
 import com.yigongil.backend.request.TokenRequest;
 import com.yigongil.backend.response.TokenResponse;
 import com.yigongil.backend.ui.doc.LoginApi;
