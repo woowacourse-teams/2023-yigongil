@@ -169,6 +169,7 @@ public class RoundService {
             }
         }
         //
+        entityManager.flush();
         Runtime runtime = Runtime.getRuntime();
         long totalMemory = runtime.totalMemory();
         long freeMemory = runtime.freeMemory();

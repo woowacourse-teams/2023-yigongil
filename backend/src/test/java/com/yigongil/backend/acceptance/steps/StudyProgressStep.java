@@ -29,12 +29,14 @@ public class StudyProgressStep {
 
     @Given("{int}일이 지난다.")
     public void 시간_소요(int days) {
-        given().log().all().when()
-               .put("/fake/proceed?days=" + days)
-               .then()
-               .log()
-               .all()
-               .extract();
+        for (int i = 1; i <= days; i++) {
+            given().log().all().when()
+                   .put("/fake/proceed?days=" + i)
+                   .then()
+                   .log()
+                   .all()
+                   .extract();
+        }
     }
 
     @Given("이번주 일요일이 됐다.")
