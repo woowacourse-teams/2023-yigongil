@@ -21,7 +21,7 @@
 
         <variable
             name="finishedStudy"
-            type="com.created.team201.presentation.profile.model.FinishedStudyUiModel" />
+            type="com.created.domain.model.FinishedStudy" />
 
     </data>
 
