@@ -2,27 +2,35 @@ package com.created.team201.presentation.createStudy
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.created.team201.R
 import com.created.team201.databinding.FragmentSecondCreateStudyBinding
-import com.created.team201.presentation.common.BindingFragment
+import com.created.team201.presentation.common.BindingViewFragment
 import kotlinx.coroutines.launch
 
 class SecondCreateStudyFragment :
-    BindingFragment<FragmentSecondCreateStudyBinding>(R.layout.fragment_second_create_study) {
+    BindingViewFragment<FragmentSecondCreateStudyBinding>(FragmentSecondCreateStudyBinding::inflate) {
     private val createStudyViewModel: CreateStudyViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initBinding()
+        setupStudyNameTitleChanged()
+        setupStudyIntroductionChanged()
         setupCollectEnableNext()
     }
 
-    private fun initBinding() {
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewModel = createStudyViewModel
+    private fun setupStudyNameTitleChanged() {
+        binding.tvSecondCreateStudyStudyNameTitle.doOnTextChanged { text, _, _, _ ->
+            createStudyViewModel.setStudyName(text.toString())
+        }
+    }
+
+    private fun setupStudyIntroductionChanged() {
+        binding.etSecondCreateStudyStudyIntroduction.doOnTextChanged { text, _, _, _ ->
+            createStudyViewModel.setStudyIntroduction(text.toString())
+        }
     }
 
     private fun setupCollectEnableNext() {
