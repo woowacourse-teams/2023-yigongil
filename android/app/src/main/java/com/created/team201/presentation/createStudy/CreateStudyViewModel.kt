@@ -9,14 +9,15 @@ import com.created.team201.presentation.createStudy.model.FragmentState
 import com.created.team201.presentation.createStudy.model.FragmentState.FirstFragment
 import com.created.team201.presentation.createStudy.model.FragmentState.SecondFragment
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -44,15 +45,15 @@ class CreateStudyViewModel @Inject constructor(
         MutableStateFlow(DEFAULT_STRING_VALUE)
     val studyIntroduction: StateFlow<String> get() = _studyIntroduction.asStateFlow()
 
-    val isEnableFirstCreateStudyNext: Flow<Boolean> =
+    val isEnableFirstCreateStudyNext: StateFlow<Boolean> =
         combine(peopleCount, studyDate, cycle) { peopleCount, studyDate, cycle ->
             return@combine peopleCount != DEFAULT_INT_VALUE && studyDate != DEFAULT_INT_VALUE && cycle != DEFAULT_INT_VALUE
-        }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 
-    val isEnableSecondCreateStudyNext: Flow<Boolean> =
+    val isEnableSecondCreateStudyNext: StateFlow<Boolean> =
         combine(studyName, studyIntroduction) { studyName, studyIntroduction ->
             return@combine studyName.isNotBlankAndEmpty() && studyIntroduction.isNotBlankAndEmpty()
-        }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 
     private val _createStudyUiState: MutableSharedFlow<CreateStudyUiState> = MutableSharedFlow()
     val createStudyUiState: SharedFlow<CreateStudyUiState> get() = _createStudyUiState.asSharedFlow()
