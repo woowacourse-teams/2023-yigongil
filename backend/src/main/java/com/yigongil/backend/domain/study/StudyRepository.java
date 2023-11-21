@@ -1,12 +1,11 @@
 package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.domain.member.domain.Member;
+import com.yigongil.backend.domain.study.studymember.Role;
 import com.yigongil.backend.domain.study.studyquery.StudyQueryRepository;
-import com.yigongil.backend.domain.studymember.Role;
 import com.yigongil.backend.exception.StudyNotFoundException;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
@@ -16,16 +15,12 @@ public interface StudyRepository extends Repository<Study, Long>, StudyQueryRepo
 
     Study save(Study study);
 
-    @EntityGraph(attributePaths = {"rounds"})
     Optional<Study> findById(Long studyId);
-
-    List<Study> findAllByProcessingStatus(ProcessingStatus processingStatus);
 
     @Query("""
                 select distinct s from Study s
                 join StudyMember sm
                 on s = sm.study
-                join fetch s.rounds
                 where sm.member = :member
                 and s.processingStatus = :processingStatus
             """)

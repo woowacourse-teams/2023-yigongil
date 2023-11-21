@@ -1,6 +1,5 @@
-package com.yigongil.backend.domain.study;
+package com.yigongil.backend.domain.round;
 
-import com.yigongil.backend.domain.round.RoundService;
 import java.time.LocalDate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;

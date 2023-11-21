@@ -7,6 +7,7 @@ import com.yigongil.backend.domain.study.StudyExitedEvent;
 import com.yigongil.backend.domain.study.StudyFinishedEvent;
 import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.domain.study.StudyStartedEvent;
+import com.yigongil.backend.exception.CannotEndException;
 import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.request.MustDoUpdateRequest;
 import com.yigongil.backend.response.RoundResponse;
@@ -54,7 +55,7 @@ public class RoundService {
                     study.getName(),
                     currentRound.getMustDo(),
                     leftDays,
-                    calculateExperience(study.getId(), study.getRoundExperience()).get(member),
+                    calculateExperience(study.getId(), study.calculateRoundExperience()).get(member),
                     study.isMaster(member)
                 )
             );
@@ -64,11 +65,19 @@ public class RoundService {
     }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-    public void addExperience(StudyFinishedEvent event) {
+    public void finishRounds(StudyFinishedEvent event) {
+        validateCanFinish(event);
         Map<Member, Integer> memberToExperience = calculateExperience(event.studyId(), event.roundExperience());
 
         for (Member member : memberToExperience.keySet()) {
             member.addExperience(memberToExperience.get(member));
+        }
+    }
+
+    private void validateCanFinish(StudyFinishedEvent event) {
+        Round currentRound = roundRepository.getByStudyIdAndRoundStatus(event.studyId(), RoundStatus.IN_PROGRESS);
+        if (currentRound.isBeforeOrSame(event.minimumWeeks())) {
+            throw new CannotEndException("최소 진행 주차를 채우지 못했습니다.", String.valueOf(event.studyId()));
         }
     }
 

@@ -2,7 +2,7 @@ package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.config.auth.Authorization;
 import com.yigongil.backend.domain.member.domain.Member;
-import com.yigongil.backend.domain.studymember.Role;
+import com.yigongil.backend.domain.study.studymember.Role;
 import com.yigongil.backend.request.StudyStartRequest;
 import com.yigongil.backend.request.StudyUpdateRequest;
 import com.yigongil.backend.response.MyStudyResponse;

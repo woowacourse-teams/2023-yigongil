@@ -1,4 +1,4 @@
-package com.yigongil.backend.domain.studymember;
+package com.yigongil.backend.domain.study.studymember;
 
 public enum StudyResult {
 

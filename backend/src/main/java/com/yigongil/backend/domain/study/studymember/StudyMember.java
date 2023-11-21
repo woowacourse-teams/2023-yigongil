@@ -1,4 +1,4 @@
-package com.yigongil.backend.domain.studymember;
+package com.yigongil.backend.domain.study.studymember;
 
 import com.yigongil.backend.domain.base.BaseEntity;
 import com.yigongil.backend.domain.member.domain.Member;

@@ -4,7 +4,7 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-import com.yigongil.backend.domain.studymember.Role;
+import com.yigongil.backend.domain.study.studymember.Role;
 import com.yigongil.backend.response.MyStudyResponse;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;

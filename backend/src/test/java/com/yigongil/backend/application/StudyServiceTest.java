@@ -7,7 +7,7 @@ import static org.mockito.Mockito.mock;
 import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.domain.study.StudyService;
-import com.yigongil.backend.domain.studymember.StudyMemberRepository;
+import com.yigongil.backend.domain.study.studymember.StudyMemberRepository;
 import com.yigongil.backend.exception.StudyNotFoundException;
 import com.yigongil.backend.fixture.MemberFixture;
 import java.util.Optional;

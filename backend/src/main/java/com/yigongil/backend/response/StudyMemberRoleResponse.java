@@ -1,6 +1,6 @@
 package com.yigongil.backend.response;
 
-import com.yigongil.backend.domain.studymember.Role;
+import com.yigongil.backend.domain.study.studymember.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record StudyMemberRoleResponse(

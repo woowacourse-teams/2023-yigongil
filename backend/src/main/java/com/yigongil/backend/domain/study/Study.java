@@ -2,11 +2,9 @@ package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.domain.base.BaseRootEntity;
 import com.yigongil.backend.domain.member.domain.Member;
-import com.yigongil.backend.domain.round.Round;
-import com.yigongil.backend.domain.round.RoundOfMember;
-import com.yigongil.backend.domain.studymember.Role;
-import com.yigongil.backend.domain.studymember.StudyMember;
-import com.yigongil.backend.domain.studymember.StudyResult;
+import com.yigongil.backend.domain.study.studymember.Role;
+import com.yigongil.backend.domain.study.studymember.StudyMember;
+import com.yigongil.backend.domain.study.studymember.StudyResult;
 import com.yigongil.backend.exception.ApplicantAlreadyExistException;
 import com.yigongil.backend.exception.CannotEndException;
 import com.yigongil.backend.exception.CannotStartException;
@@ -16,12 +14,9 @@ import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.exception.InvalidStudyNameLengthException;
 import com.yigongil.backend.exception.NotStudyMasterException;
 import com.yigongil.backend.exception.NotStudyMemberException;
-import com.yigongil.backend.exception.RoundNotFoundException;
 import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -38,8 +33,6 @@ import lombok.Builder;
 import lombok.Getter;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Entity
@@ -91,12 +84,6 @@ public class Study extends BaseRootEntity {
     @OneToMany(mappedBy = "study", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<StudyMember> studyMembers = new ArrayList<>();
 
-//
-//    @Cascade(CascadeType.PERSIST)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    @OneToMany(mappedBy = "study", orphanRemoval = true, fetch = FetchType.LAZY)
-//    private List<Round> rounds = new ArrayList<>();
-
     protected Study() {
     }
 
@@ -111,8 +98,7 @@ public class Study extends BaseRootEntity {
             Member master,
             Integer minimumWeeks,
             Integer meetingDaysCountPerWeek,
-            Long currentRoundNumber,
-            List<Round> rounds
+            Long currentRoundNumber
     ) {
         name = name.strip();
         validateNumberOfMaximumMembers(numberOfMaximumMembers);
@@ -130,7 +116,6 @@ public class Study extends BaseRootEntity {
                                          .member(master)
                                          .studyResult(StudyResult.NONE)
                                          .build());
-//        this.rounds = rounds == null ? new ArrayList<>() : rounds;
         this.minimumWeeks = minimumWeeks;
         this.meetingDaysCountPerWeek = meetingDaysCountPerWeek;
     }
@@ -248,12 +233,12 @@ public class Study extends BaseRootEntity {
     public void finishStudy(Member master) {
         validateMaster(master);
         validateStudyCanFinish();
-        registerEvent(new StudyFinishedEvent(id, getRoundExperience()));
+        registerEvent(new StudyFinishedEvent(id, calculateRoundExperience(), minimumWeeks));
         studyMembers.forEach(StudyMember::completeSuccessfully);
         this.processingStatus = ProcessingStatus.END;
     }
 
-    public Integer getRoundExperience() {
+    public Integer calculateRoundExperience() {
         int defaultRoundExperience = EXPERIENCE_BASE_UNIT * 2;
         int additionalExperienceOfPeriodLength = EXPERIENCE_BASE_UNIT * 3 / meetingDaysCountPerWeek + 1;
         return defaultRoundExperience + additionalExperienceOfPeriodLength;
@@ -263,9 +248,6 @@ public class Study extends BaseRootEntity {
         if (isEnd()) {
             throw new CannotEndException("이미 종료된 스터디입니다.", String.valueOf(id));
         }
-//        if (getCurrentRound().isBeforeOrSame(minimumWeeks)) {
-//            throw new CannotEndException("최소 진행 주차를 채우지 못했습니다.", String.valueOf(id));
-//        }
     }
 
     public Member getMaster() {
@@ -290,13 +272,6 @@ public class Study extends BaseRootEntity {
     public boolean isEnd() {
         return this.processingStatus == ProcessingStatus.END;
     }
-
-//    public Round getCurrentRound() {
-//        return rounds.stream()
-//                     .filter(Round::isInProgress)
-//                     .findAny()
-//                     .orElseThrow(() -> new RoundNotFoundException("현재 진행중인 라운드가 없습니다.", -1));
-//    }
 
     public boolean isMaster(Member member) {
         return getMaster().getId().equals(member.getId());

@@ -1,10 +1,10 @@
 package com.yigongil.backend.domain.study;
 
 import com.yigongil.backend.domain.member.domain.Member;
-import com.yigongil.backend.domain.studymember.Role;
-import com.yigongil.backend.domain.studymember.StudyMember;
-import com.yigongil.backend.domain.studymember.StudyMemberRepository;
-import com.yigongil.backend.domain.studymember.StudyResult;
+import com.yigongil.backend.domain.study.studymember.Role;
+import com.yigongil.backend.domain.study.studymember.StudyMember;
+import com.yigongil.backend.domain.study.studymember.StudyMemberRepository;
+import com.yigongil.backend.domain.study.studymember.StudyResult;
 import com.yigongil.backend.exception.ApplicantNotFoundException;
 import com.yigongil.backend.exception.StudyNotFoundException;
 import com.yigongil.backend.request.StudyStartRequest;
