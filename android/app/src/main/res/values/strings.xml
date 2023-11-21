@@ -170,10 +170,6 @@
     <string name="create_study_toast_create_study_success">스터디 개설에 성공했습니다</string>
     <string name="create_study_toast_create_study_fail">스터디 개설에 실패했습니다</string>
 
-    <string name="create_study_tag_people_count">TAG_CREATE_STUDY_PEOPLE_COUNT</string>
-    <string name="create_study_tag_study_date">TAG_CREATE_STUDY_STUDY_DATE</string>
-    <string name="create_study_tag_cycle">TAG_CREATE_STUDY_CYCLE</string>
-
     <!-- 스터디 개설 첫번째 프래그먼트 -->
     <string name="first_create_study_people_count_title">스터디는 몇 명과 함께하시나요?</string>
     <string name="first_create_study_people_count_information">모집인원을 알려주세요!\n최소 2명, 최대 8명까지 함께할 수 있습니다.</string>
