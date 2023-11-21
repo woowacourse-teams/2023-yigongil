@@ -1,112 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp">
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/tv_second_create_study_study_name_title"
-        android:layout_width="0dp"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="@string/second_create_study_study_name_title"
-        android:textAppearance="@style/title_sb22"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:padding="20dp">
 
-    <TextView
-        android:id="@+id/tv_second_create_study_study_name_information"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/second_create_study_study_name_information"
-        android:textAppearance="@style/subtitle_r16"
-        android:textColor="@color/grey02_78808B"
-        app:layout_constraintEnd_toEndOf="@id/tv_second_create_study_study_name_title"
-        app:layout_constraintStart_toStartOf="@id/tv_second_create_study_study_name_title"
-        app:layout_constraintTop_toBottomOf="@id/tv_second_create_study_study_name_title" />
+        <TextView
+            android:id="@+id/tv_second_create_study_study_name_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/second_create_study_study_name_title"
+            android:textAppearance="@style/title_sb22"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_second_create_study_study_name_information"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/second_create_study_study_name_information"
+            android:textAppearance="@style/subtitle_r16"
+            android:textColor="@color/grey02_78808B"
+            app:layout_constraintEnd_toEndOf="@id/tv_second_create_study_study_name_title"
+            app:layout_constraintStart_toStartOf="@id/tv_second_create_study_study_name_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_second_create_study_study_name_title" />
 
 
-    <EditText
-        android:id="@+id/et_second_create_study_study_name"
-        android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/bg_rectangle_radius_5dp"
-        android:gravity="top"
-        android:hint="@string/second_create_study_study_name_hint"
-        android:importantForAutofill="no"
-        android:inputType="textMultiLine|textNoSuggestions"
-        android:maxLength="30"
-        android:maxLines="3"
-        android:padding="12dp"
-        android:textAppearance="@style/text_r16"
-        android:textColor="@color/white"
-        android:textColorHint="@color/grey02_78808B"
-        app:layout_constraintEnd_toEndOf="@id/tv_second_create_study_study_name_information"
-        app:layout_constraintStart_toStartOf="@id/tv_second_create_study_study_name_information"
-        app:layout_constraintTop_toBottomOf="@id/tv_second_create_study_study_name_information" />
+        <EditText
+            android:id="@+id/et_second_create_study_study_name"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            android:gravity="top"
+            android:hint="@string/second_create_study_study_name_hint"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine|textNoSuggestions"
+            android:maxLength="30"
+            android:maxLines="3"
+            android:padding="12dp"
+            android:textAppearance="@style/text_r16"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey02_78808B"
+            app:layout_constraintEnd_toEndOf="@id/tv_second_create_study_study_name_information"
+            app:layout_constraintStart_toStartOf="@id/tv_second_create_study_study_name_information"
+            app:layout_constraintTop_toBottomOf="@id/tv_second_create_study_study_name_information" />
 
-    <TextView
-        android:id="@+id/tv_second_create_study_study_introduction_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="@string/second_create_study_study_introduction_title"
-        android:textAppearance="@style/title_sb22"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_second_create_study_study_name" />
+        <TextView
+            android:id="@+id/tv_second_create_study_study_introduction_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:text="@string/second_create_study_study_introduction_title"
+            android:textAppearance="@style/title_sb22"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_second_create_study_study_name" />
 
-    <TextView
-        android:id="@+id/tv_second_create_study_study_introduction_information"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/second_create_study_study_introduction_information"
-        android:textAppearance="@style/subtitle_r16"
-        android:textColor="@color/grey02_78808B"
-        app:layout_constraintEnd_toEndOf="@id/tv_second_create_study_study_introduction_title"
-        app:layout_constraintStart_toStartOf="@id/tv_second_create_study_study_introduction_title"
-        app:layout_constraintTop_toBottomOf="@id/tv_second_create_study_study_introduction_title" />
+        <TextView
+            android:id="@+id/tv_second_create_study_study_introduction_information"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/second_create_study_study_introduction_information"
+            android:textAppearance="@style/subtitle_r16"
+            android:textColor="@color/grey02_78808B"
+            app:layout_constraintEnd_toEndOf="@id/tv_second_create_study_study_introduction_title"
+            app:layout_constraintStart_toStartOf="@id/tv_second_create_study_study_introduction_title"
+            app:layout_constraintTop_toBottomOf="@id/tv_second_create_study_study_introduction_title" />
 
-    <EditText
-        android:id="@+id/et_second_create_study_study_introduction"
-        android:layout_width="0dp"
-        android:layout_height="180dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/bg_rectangle_radius_5dp"
-        android:gravity="top"
-        android:hint="@string/second_create_study_study_introduction_hint"
-        android:importantForAutofill="no"
-        android:inputType="textMultiLine|textNoSuggestions"
-        android:maxLength="200"
-        android:maxLines="7"
-        android:padding="12dp"
-        android:textAppearance="@style/text_r16"
-        android:textColor="@color/white"
-        android:textColorHint="@color/grey02_78808B"
-        app:layout_constraintEnd_toEndOf="@id/tv_second_create_study_study_introduction_information"
-        app:layout_constraintStart_toStartOf="@id/tv_second_create_study_study_introduction_information"
-        app:layout_constraintTop_toBottomOf="@id/tv_second_create_study_study_introduction_information" />
+        <EditText
+            android:id="@+id/et_second_create_study_study_introduction"
+            android:layout_width="0dp"
+            android:layout_height="180dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_rectangle_radius_5dp"
+            android:gravity="top"
+            android:hint="@string/second_create_study_study_introduction_hint"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine|textNoSuggestions"
+            android:maxLength="200"
+            android:maxLines="7"
+            android:padding="12dp"
+            android:textAppearance="@style/text_r16"
+            android:textColor="@color/white"
+            android:textColorHint="@color/grey02_78808B"
+            app:layout_constraintBottom_toTopOf="@id/tv_second_create_study_btn_next"
+            app:layout_constraintEnd_toEndOf="@id/tv_second_create_study_study_introduction_information"
+            app:layout_constraintStart_toStartOf="@id/tv_second_create_study_study_introduction_information"
+            app:layout_constraintTop_toBottomOf="@id/tv_second_create_study_study_introduction_information"
+            app:layout_constraintVertical_chainStyle="spread_inside" />
 
-    <TextView
-        android:id="@+id/tv_second_create_study_btn_next"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
-        android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
-        android:paddingVertical="14dp"
-        android:text="@string/create_study_button_done"
-        android:textAlignment="center"
-        android:textAppearance="@style/button_sb20"
-        android:textColor="@color/tv_color_disabled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/tv_second_create_study_btn_next"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="28dp"
+            android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
+            android:paddingVertical="14dp"
+            android:text="@string/create_study_button_done"
+            android:textAlignment="center"
+            android:textAppearance="@style/button_sb20"
+            android:textColor="@color/tv_color_disabled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_second_create_study_study_introduction" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
