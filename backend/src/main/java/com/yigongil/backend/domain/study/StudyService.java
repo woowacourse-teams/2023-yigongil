@@ -236,11 +236,13 @@ public class StudyService {
     public void finish(Member member, Long studyId) {
         Study study = findStudyById(studyId);
         study.finishStudy(member);
+        studyRepository.save(study);
     }
 
     @Transactional
     public void exit(Member member, Long studyId) {
         Study study = findStudyById(studyId);
         study.exit(member);
+        studyRepository.save(study);
     }
 }

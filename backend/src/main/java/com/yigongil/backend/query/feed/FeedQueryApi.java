@@ -26,7 +26,7 @@ public interface FeedQueryApi {
         @SecurityRequirement(name = "token")
         @Operation(summary = "피드 조회")
         ResponseEntity<List<FeedPostResponse>> findFeedPosts(
-            @Parameter(description = "조회할 스터디 id", required = true) Long id,
+            @Parameter(description = "조회할 스터디 studyId", required = true) Long id,
             @Parameter(description = "마지막으로 본 피드의 아이디, 첫 요청에서는 필요 없음", allowEmptyValue = true) Optional<Long> oldestFeedPostId
         );
 }

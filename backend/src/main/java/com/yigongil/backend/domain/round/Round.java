@@ -1,5 +1,7 @@
 package com.yigongil.backend.domain.round;
 
+import static java.util.stream.Collectors.toMap;
+
 import com.yigongil.backend.domain.base.BaseEntity;
 import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.study.Study;
@@ -11,6 +13,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -129,23 +132,23 @@ public class Round extends BaseEntity {
         if (mustDo == null) {
             throw new NecessaryTodoNotExistException(" 머스트두가 생성되지 않았습니다.", String.valueOf(id));
         }
-        findRoundOfMemberBy(member).completeRound();
+        findRoundOfMemberBy(member.getId()).completeRound();
     }
 
     public boolean isMustDoDone(Member member) {
-        return findRoundOfMemberBy(member).isDone();
+        return findRoundOfMemberBy(member.getId()).isDone();
     }
 
     public boolean isEndAt(LocalDate date) {
         return dayOfWeek == date.getDayOfWeek();
     }
 
-    public RoundOfMember findRoundOfMemberBy(Member member) {
+    public RoundOfMember findRoundOfMemberBy(Long memberId) {
         return roundOfMembers.stream()
-                             .filter(roundOfMember -> roundOfMember.isMemberEquals(member))
+                             .filter(roundOfMember -> roundOfMember.isMemberEquals(memberId))
                              .findAny()
                              .orElseThrow(
-                                     () -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", member.getGithubId())
+                                     () -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", memberId.toString())
                              );
     }
 
@@ -166,11 +169,11 @@ public class Round extends BaseEntity {
     }
 
     public boolean isSuccess(Member member) {
-        return findRoundOfMemberBy(member).isDone();
+        return findRoundOfMemberBy(member.getId()).isDone();
     }
 
-    public boolean isMaster(Member member) {
-        return master.equals(member);
+    public boolean isMaster(Long memberId) {
+        return master.equals(memberId);
     }
 
     public boolean isSameWeek(Integer weekNumber) {
@@ -205,11 +208,16 @@ public class Round extends BaseEntity {
         return weekNumber <= minimumWeeks;
     }
 
-    public void exit(Member member) {
-        if (isMaster(member)) {
-            throw new NotStudyMemberException("스터디장은 스터디를 나갈 수 없습니다.", member.getGithubId());
+    public Map<Member, Integer> calculateExperience(Integer roundScore) {
+        return roundOfMembers.stream()
+                      .collect(toMap(RoundOfMember::getMember, roundOfMember -> roundOfMember.isDone() ? roundScore : 0));
+    }
+
+    public void exit(Long memberId) {
+        if (isMaster(memberId)) {
+            throw new NotStudyMemberException("스터디장은 스터디를 나갈 수 없습니다.", memberId.toString());
         }
-        roundOfMembers.remove(findRoundOfMemberBy(member));
+        roundOfMembers.remove(findRoundOfMemberBy(memberId));
     }
 
     public Round createNextWeekRound() {

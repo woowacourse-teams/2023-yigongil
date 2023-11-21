@@ -15,7 +15,7 @@ public record MembersCertificationResponse(
 
     public static MembersCertificationResponse of(String studyName, Round upcomingRound, Member requestingMember, List<RoundOfMember> roundOfMembers) {
         List<MemberCertificationResponse> others = roundOfMembers.stream()
-                                                                 .filter(roundOfMember -> !roundOfMember.isMemberEquals(requestingMember))
+                                                                 .filter(roundOfMember -> !roundOfMember.isMemberEquals(requestingMember.getId()))
                                                                  .map(roundOfMember -> new MemberCertificationResponse(
                                                                          roundOfMember.getMember().getId(),
                                                                          roundOfMember.getMember().getNickname(),
@@ -23,7 +23,7 @@ public record MembersCertificationResponse(
                                                                          roundOfMember.isDone()))
                                                                  .toList();
         MemberCertificationResponse me = roundOfMembers.stream()
-                                                       .filter(roundOfMember -> roundOfMember.isMemberEquals(requestingMember))
+                                                       .filter(roundOfMember -> roundOfMember.isMemberEquals(requestingMember.getId()))
                                                        .findAny()
                                                        .map(roundOfMember -> new MemberCertificationResponse(
                                                                roundOfMember.getMember().getId(),

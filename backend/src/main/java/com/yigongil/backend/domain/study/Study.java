@@ -52,6 +52,7 @@ public class Study extends BaseRootEntity {
     private static final int MAX_MEMBER_SIZE = 8;
     private static final int INITIAL_ROUND_COUNT = 2;
     private static final int FIRST_WEEK = 1;
+    private static final int EXPERIENCE_BASE_UNIT = 1;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -90,11 +91,11 @@ public class Study extends BaseRootEntity {
     @OneToMany(mappedBy = "study", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<StudyMember> studyMembers = new ArrayList<>();
 
-
-    @Cascade(CascadeType.PERSIST)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "study", orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Round> rounds = new ArrayList<>();
+//
+//    @Cascade(CascadeType.PERSIST)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @OneToMany(mappedBy = "study", orphanRemoval = true, fetch = FetchType.LAZY)
+//    private List<Round> rounds = new ArrayList<>();
 
     protected Study() {
     }
@@ -129,7 +130,7 @@ public class Study extends BaseRootEntity {
                                          .member(master)
                                          .studyResult(StudyResult.NONE)
                                          .build());
-        this.rounds = rounds == null ? new ArrayList<>() : rounds;
+//        this.rounds = rounds == null ? new ArrayList<>() : rounds;
         this.minimumWeeks = minimumWeeks;
         this.meetingDaysCountPerWeek = meetingDaysCountPerWeek;
     }
@@ -247,17 +248,24 @@ public class Study extends BaseRootEntity {
     public void finishStudy(Member master) {
         validateMaster(master);
         validateStudyCanFinish();
+        registerEvent(new StudyFinishedEvent(id, getRoundExperience()));
         studyMembers.forEach(StudyMember::completeSuccessfully);
         this.processingStatus = ProcessingStatus.END;
+    }
+
+    public Integer getRoundExperience() {
+        int defaultRoundExperience = EXPERIENCE_BASE_UNIT * 2;
+        int additionalExperienceOfPeriodLength = EXPERIENCE_BASE_UNIT * 3 / meetingDaysCountPerWeek + 1;
+        return defaultRoundExperience + additionalExperienceOfPeriodLength;
     }
 
     private void validateStudyCanFinish() {
         if (isEnd()) {
             throw new CannotEndException("이미 종료된 스터디입니다.", String.valueOf(id));
         }
-        if (getCurrentRound().isBeforeOrSame(minimumWeeks)) {
-            throw new CannotEndException("최소 진행 주차를 채우지 못했습니다.", String.valueOf(id));
-        }
+//        if (getCurrentRound().isBeforeOrSame(minimumWeeks)) {
+//            throw new CannotEndException("최소 진행 주차를 채우지 못했습니다.", String.valueOf(id));
+//        }
     }
 
     public Member getMaster() {
@@ -283,29 +291,15 @@ public class Study extends BaseRootEntity {
         return this.processingStatus == ProcessingStatus.END;
     }
 
-    public void completeRound(Member member) {
-        getCurrentRound().completeRound(member);
-    }
-
-    public List<RoundOfMember> getCurrentRoundOfMembers() {
-        return getCurrentRound().getRoundOfMembers();
-    }
-
-    public int calculateSuccessfulRoundCount(Member member) {
-        return (int) rounds.stream()
-                           .filter(round -> round.isSuccess(member))
-                           .count();
-    }
-
-    public Round getCurrentRound() {
-        return rounds.stream()
-                     .filter(Round::isInProgress)
-                     .findAny()
-                     .orElseThrow(() -> new RoundNotFoundException("현재 진행중인 라운드가 없습니다.", -1));
-    }
+//    public Round getCurrentRound() {
+//        return rounds.stream()
+//                     .filter(Round::isInProgress)
+//                     .findAny()
+//                     .orElseThrow(() -> new RoundNotFoundException("현재 진행중인 라운드가 없습니다.", -1));
+//    }
 
     public boolean isMaster(Member member) {
-        return getCurrentRound().isMaster(member);
+        return getMaster().getId().equals(member.getId());
     }
 
     public void updateInformation(
@@ -350,18 +344,11 @@ public class Study extends BaseRootEntity {
     }
 
     public void exit(Member member) {
-        rounds.forEach(round -> round.exit(member));
         findStudyMemberBy(member).failStudy();
+        registerEvent(new StudyExitedEvent(id, member.getId()));
     }
 
     private StudyMember findStudyMemberBy(Member member) {
-        return studyMembers.stream()
-                           .filter(studyMember -> studyMember.getMember().equals(member))
-                           .findAny()
-                           .orElseThrow(() -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", member.getGithubId()));
-    }
-
-    public StudyMember getStudyMemberByMember(Member member) {
         return studyMembers.stream()
                            .filter(studyMember -> studyMember.getMember().equals(member))
                            .findAny()

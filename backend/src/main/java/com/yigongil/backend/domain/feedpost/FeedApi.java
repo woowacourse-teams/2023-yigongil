@@ -27,7 +27,7 @@ public interface FeedApi {
     @Operation(summary = "일반 피드 등록")
     ResponseEntity<Void> createFeedPost(
         @Schema(hidden = true) Member member,
-        @Parameter(description = "피드가 등록되는 스터디 id", required = true) Long id,
+        @Parameter(description = "피드가 등록되는 스터디 studyId", required = true) Long id,
         FeedPostCreateRequest request
     );
 }

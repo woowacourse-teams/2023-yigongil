@@ -56,7 +56,7 @@ public class RoundOfMember extends BaseEntity {
         this.isDone = true;
     }
 
-    public boolean isMemberEquals(Member member) {
-        return this.member.equals(member);
+    public boolean isMemberEquals(Long memberId) {
+        return this.member.getId().equals(memberId);
     }
 }

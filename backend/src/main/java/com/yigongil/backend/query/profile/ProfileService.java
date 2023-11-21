@@ -2,6 +2,7 @@ package com.yigongil.backend.query.profile;
 
 import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.member.domain.MemberRepository;
+import com.yigongil.backend.domain.round.RoundRepository;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyService;
 import com.yigongil.backend.domain.studymember.StudyMember;
@@ -19,12 +20,15 @@ public class ProfileService {
     private final StudyMemberRepository studyMemberRepository;
     private final StudyService studyService;
     private final MemberRepository memberRepository;
+    private final RoundRepository roundRepository;
+
 
     public ProfileService(StudyMemberRepository studyMemberRepository, StudyService studyService,
-        MemberRepository memberRepository) {
+        MemberRepository memberRepository, RoundRepository roundRepository) {
         this.studyMemberRepository = studyMemberRepository;
         this.studyService = studyService;
         this.memberRepository = memberRepository;
+        this.roundRepository = roundRepository;
     }
 
     public ProfileResponse findById(Long id) {
@@ -69,7 +73,7 @@ public class ProfileService {
                                                    .toList();
 
         return (int) studies.stream()
-                            .map(Study::getRounds)
+                            .map(study -> roundRepository.findAllByStudyId(study.getId()))
                             .flatMap(List::stream)
                             .filter(round -> round.isMustDoDone(member))
                             .count();

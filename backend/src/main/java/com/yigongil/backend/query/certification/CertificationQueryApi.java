@@ -26,7 +26,7 @@ public interface CertificationQueryApi {
     @Operation(summary = "스터디 멤버 전체 인증 정보 조회")
     ResponseEntity<MembersCertificationResponse> findAllMembersCertification(
         @Schema(hidden = true) Member member,
-        @Parameter(description = "조회하려는 스터디 id", required = true) Long id
+        @Parameter(description = "조회하려는 스터디 studyId", required = true) Long id
     );
 
     @ApiResponses(
@@ -38,7 +38,7 @@ public interface CertificationQueryApi {
     @SecurityRequirement(name = "token")
     @Operation(summary = "스터디 멤버 단일 인증 게시글 조회")
     ResponseEntity<CertificationResponse> findMemberCertification(
-        @Parameter(description = "인증 게시 회차 id") Long roundId,
-        @Parameter(description = "작성자 id") Long memberId
+        @Parameter(description = "인증 게시 회차 studyId") Long roundId,
+        @Parameter(description = "작성자 studyId") Long memberId
     );
 }

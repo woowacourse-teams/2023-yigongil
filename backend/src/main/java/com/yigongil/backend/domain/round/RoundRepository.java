@@ -1,5 +1,6 @@
 package com.yigongil.backend.domain.round;
 
+import com.yigongil.backend.exception.RoundNotFoundException;
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Optional;
@@ -23,4 +24,12 @@ public interface RoundRepository extends Repository<Round, Long> {
     List<Round> findAllByStudyIdAndWeekNumberIn(Long studyId, List<Integer> weekNumbers);
 
     void saveAll(Iterable<Round> rounds);
+
+    List<Round> findAllByStudyId(Long studyId);
+
+    Optional<Round> findByStudyIdAndRoundStatus(Long studyId, RoundStatus roundStatus);
+
+    default Round getByStudyIdAndRoundStatus(Long studyId, RoundStatus roundStatus) {
+        return findByStudyIdAndRoundStatus(studyId, roundStatus).orElseThrow(() -> new RoundNotFoundException("", -1));
+    }
 }

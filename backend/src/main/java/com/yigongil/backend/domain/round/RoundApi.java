@@ -19,7 +19,7 @@ public interface RoundApi {
     @SecurityRequirement(name = "token")
     @Operation(summary = "주별 회차 정보 조회")
     ResponseEntity<List<RoundResponse>> findRoundDetailsOfWeek(
-        @Parameter(description = "조회할 스터디 id", required = true) Long studyId,
+        @Parameter(description = "조회할 스터디 studyId", required = true) Long studyId,
         @Parameter(description = "조회할 주차", required = true) Integer weekNumber
     );
 
@@ -35,7 +35,7 @@ public interface RoundApi {
     @Operation(summary = " 머스트두 생성")
     ResponseEntity<Void> updateMustDo(
         @Schema(hidden = true) Member member,
-        @Parameter(description = " 머스트두를 생성할 라운드 id", required = true) Long roundId,
+        @Parameter(description = " 머스트두를 생성할 라운드 studyId", required = true) Long roundId,
         MustDoUpdateRequest request
     );
 }

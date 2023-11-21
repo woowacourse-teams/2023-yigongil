@@ -3,7 +3,10 @@ package com.yigongil.backend.query.certification;
 import com.yigongil.backend.domain.certification.Certification;
 import com.yigongil.backend.domain.certification.CertificationRepository;
 import com.yigongil.backend.domain.member.domain.Member;
+import com.yigongil.backend.domain.round.Round;
 import com.yigongil.backend.domain.round.RoundOfMember;
+import com.yigongil.backend.domain.round.RoundRepository;
+import com.yigongil.backend.domain.round.RoundStatus;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.response.CertificationResponse;
@@ -18,13 +21,17 @@ public class CertificationQueryService {
 
     private final CertificationRepository certificationRepository;
     private final StudyRepository studyRepository;
+    private final RoundRepository roundRepository;
+
 
     public CertificationQueryService(
         CertificationRepository certificationRepository,
-        StudyRepository studyRepository
+        StudyRepository studyRepository,
+        RoundRepository roundRepository
     ) {
         this.certificationRepository = certificationRepository;
         this.studyRepository = studyRepository;
+        this.roundRepository = roundRepository;
     }
 
     public CertificationResponse findCertification(Long roundId, Long memberId) {
@@ -34,7 +41,8 @@ public class CertificationQueryService {
 
     public MembersCertificationResponse findAllMembersCertification(Member member, Long studyId) {
         Study study = studyRepository.getById(studyId);
-        final List<RoundOfMember> roundOfMembers = study.getCurrentRoundOfMembers();
-        return MembersCertificationResponse.of(study.getName(), study.getCurrentRound(), member, roundOfMembers);
+        Round round = roundRepository.getByStudyIdAndRoundStatus(studyId, RoundStatus.IN_PROGRESS);
+        final List<RoundOfMember> roundOfMembers = round.getRoundOfMembers();
+        return MembersCertificationResponse.of(study.getName(), round, member, roundOfMembers);
     }
 }

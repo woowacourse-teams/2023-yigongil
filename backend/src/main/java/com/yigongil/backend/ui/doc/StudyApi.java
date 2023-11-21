@@ -49,7 +49,7 @@ public interface StudyApi {
     @Operation(summary = "스터디 정보 수정")
     ResponseEntity<Void> updateStudy(
             @Schema(hidden = true) Member member,
-            @Parameter(description = "수정할 스터디 id", required = true) Long studyId,
+            @Parameter(description = "수정할 스터디 studyId", required = true) Long studyId,
             StudyUpdateRequest request
     );
 
@@ -65,7 +65,7 @@ public interface StudyApi {
     @Operation(summary = "스터디 지원")
     ResponseEntity<Void> applyStudy(
             @Schema(hidden = true) Member member,
-            @Parameter(description = "지원할 스터디 id", required = true) Long studyId
+            @Parameter(description = "지원할 스터디 studyId", required = true) Long studyId
     );
 
     @ApiResponses(
@@ -80,8 +80,8 @@ public interface StudyApi {
     @Operation(summary = "스터디 지원 수락")
     ResponseEntity<Void> permitApplicant(
             @Schema(hidden = true) Member master,
-            @Parameter(description = "수락할 스터디 id", required = true) Long studyId,
-            @Parameter(description = "지원한 회원 id", required = true) Long memberId
+            @Parameter(description = "수락할 스터디 studyId", required = true) Long studyId,
+            @Parameter(description = "지원한 회원 studyId", required = true) Long memberId
     );
 
     @ApiResponses(
@@ -96,7 +96,7 @@ public interface StudyApi {
     @Operation(summary = "스터디 지원 취소")
     ResponseEntity<Void> deleteApplicant(
             @Schema(hidden = true) Member member,
-            @Parameter(description = "지원 취소할 스터디 id", required = true) Long studyId
+            @Parameter(description = "지원 취소할 스터디 studyId", required = true) Long studyId
     );
 
     @ApiResponses(
@@ -109,7 +109,7 @@ public interface StudyApi {
     @SecurityRequirement(name = "token")
     @Operation(summary = "스터디 상세 조회")
     ResponseEntity<StudyDetailResponse> viewStudyDetail(
-            @Parameter(description = "조회할 스터디 id", required = true) Long id
+            @Parameter(description = "조회할 스터디 studyId", required = true) Long id
     );
 
     @ApiResponses(
@@ -135,7 +135,7 @@ public interface StudyApi {
     @SecurityRequirement(name = "token")
     @Operation(summary = "스터디 지원자 조회")
     ResponseEntity<List<StudyMemberResponse>> findApplicantOfStudy(
-            @Parameter(description = "조회할 스터디 id", required = true) Long id,
+            @Parameter(description = "조회할 스터디 studyId", required = true) Long id,
             @Schema(hidden = true) Member master
     );
 
@@ -162,7 +162,7 @@ public interface StudyApi {
     @Operation(summary = "스터디 시작")
     ResponseEntity<Void> startStudy(
             @Schema(hidden = true) Member member,
-            @Parameter(description = "시작할 스터디 id", required = true) Long id,
+            @Parameter(description = "시작할 스터디 studyId", required = true) Long id,
             StudyStartRequest studyStartRequest
     );
 
@@ -176,6 +176,6 @@ public interface StudyApi {
     @Operation(summary = "스터디 멤버 역할 조회")
     ResponseEntity<StudyMemberRoleResponse> getStudyMemberRole(
             @Schema(hidden = true) Member member,
-            @Parameter(description = "멤버가 속해 있는 스터디 id", required = true) Long studyId
+            @Parameter(description = "멤버가 속해 있는 스터디 studyId", required = true) Long studyId
     );
 }

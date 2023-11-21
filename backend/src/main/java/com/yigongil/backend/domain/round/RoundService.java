@@ -3,9 +3,10 @@ package com.yigongil.backend.domain.round;
 import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
+import com.yigongil.backend.domain.study.StudyExitedEvent;
+import com.yigongil.backend.domain.study.StudyFinishedEvent;
 import com.yigongil.backend.domain.study.StudyRepository;
 import com.yigongil.backend.domain.study.StudyStartedEvent;
-import com.yigongil.backend.domain.studymember.StudyMember;
 import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.request.MustDoUpdateRequest;
 import com.yigongil.backend.response.RoundResponse;
@@ -14,7 +15,9 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
@@ -26,6 +29,7 @@ public class RoundService {
     private final RoundRepository roundRepository;
     private final StudyRepository studyRepository;
 
+
     public RoundService(
         RoundRepository roundRepository,
         StudyRepository studyRepository
@@ -36,13 +40,11 @@ public class RoundService {
 
     @Transactional(readOnly = true)
     public List<UpcomingStudyResponse> findCurrentRoundOfStudies(Member member) {
-        List<Study> studies = studyRepository.findByMemberAndProcessingStatus(member,
-            ProcessingStatus.PROCESSING);
+        List<Study> studies = studyRepository.findByMemberAndProcessingStatus(member, ProcessingStatus.PROCESSING);
         List<UpcomingStudyResponse> upcomingStudyResponses = new ArrayList<>();
 
         for (Study study : studies) {
-            Round currentRound = study.getCurrentRound();
-            StudyMember studyMember = study.getStudyMemberByMember(member);
+            Round currentRound = roundRepository.getByStudyIdAndRoundStatus(study.getId(), RoundStatus.IN_PROGRESS);
 
             int leftDays = currentRound.calculateLeftDaysFrom(LocalDate.now());
 
@@ -52,13 +54,41 @@ public class RoundService {
                     study.getName(),
                     currentRound.getMustDo(),
                     leftDays,
-                    studyMember.calculateAccumulatedExperience(),
+                    calculateExperience(study.getId(), study.getRoundExperience()).get(member),
                     study.isMaster(member)
                 )
             );
         }
 
         return upcomingStudyResponses;
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    public void addExperience(StudyFinishedEvent event) {
+        Map<Member, Integer> memberToExperience = calculateExperience(event.studyId(), event.roundExperience());
+
+        for (Member member : memberToExperience.keySet()) {
+            member.addExperience(memberToExperience.get(member));
+        }
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    public void exit(StudyExitedEvent event) {
+        List<Round> rounds = roundRepository.findAllByStudyId(event.studyId());
+        for (Round round : rounds) {
+            round.exit(event.memberId());
+        }
+    }
+
+    private Map<Member, Integer> calculateExperience(Long studyId, Integer roundExperience) {
+        List<Round> rounds = roundRepository.findAllByStudyId(studyId);
+
+        Map<Member, Integer> memberToExperience = new HashMap<>();
+        for (Round round : rounds) {
+             round.calculateExperience(roundExperience)
+                  .forEach(((member, experience) -> memberToExperience.merge(member, experience, Integer::sum)));
+        }
+        return memberToExperience;
     }
 
     @Transactional
