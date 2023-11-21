@@ -11,9 +11,6 @@ import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.created.team201.R
 import com.created.team201.databinding.ActivityCreateStudyBinding
 import com.created.team201.presentation.common.BindingViewActivity
@@ -26,9 +23,9 @@ import com.created.team201.presentation.createStudy.model.FragmentType
 import com.created.team201.presentation.createStudy.model.FragmentType.FIRST
 import com.created.team201.presentation.createStudy.model.FragmentType.SECOND
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
+import com.created.team201.util.collectLatestOnStarted
+import com.created.team201.util.collectOnStarted
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CreateStudyActivity :
@@ -79,32 +76,29 @@ class CreateStudyActivity :
     }
 
     private fun setupCollectCreateStudyUiState() {
-        lifecycleScope.launch {
-            createStudyViewModel.createStudyUiState.collectLatest { createStudyUiState ->
-                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    when (createStudyUiState) {
-                        is Success -> {
-                            showToast(R.string.create_study_toast_create_study_success)
-                            startActivity(
-                                StudyDetailActivity.getIntent(
-                                    this@CreateStudyActivity,
-                                    createStudyUiState.studyId
-                                ),
-                            )
+        createStudyViewModel.createStudyUiState
+            .collectLatestOnStarted(this) { createStudyUiState ->
+                when (createStudyUiState) {
+                    is Success -> {
+                        showToast(R.string.create_study_toast_create_study_success)
+                        startActivity(
+                            StudyDetailActivity.getIntent(
+                                this@CreateStudyActivity,
+                                createStudyUiState.studyId
+                            ),
+                        )
 
-                            finish()
-                        }
-
-                        is Fail -> {
-                            showToast(R.string.create_study_toast_create_study_fail)
-                            finish()
-                        }
-
-                        is Idle -> throw IllegalArgumentException()
+                        finish()
                     }
+
+                    is Fail -> {
+                        showToast(R.string.create_study_toast_create_study_fail)
+                        finish()
+                    }
+
+                    is Idle -> throw IllegalArgumentException()
                 }
             }
-        }
     }
 
     private fun showToast(@StringRes messageRes: Int) {
@@ -112,12 +106,8 @@ class CreateStudyActivity :
     }
 
     private fun setupCollectCreateStudyState() {
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                createStudyViewModel.fragmentState.collect { fragmentState ->
-                    showFragment(fragmentState.type)
-                }
-            }
+        createStudyViewModel.fragmentState.collectOnStarted(this) { fragmentState ->
+            showFragment(fragmentState.type)
         }
     }
 
