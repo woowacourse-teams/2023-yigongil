@@ -4,9 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.created.team201.R
 import com.created.team201.databinding.FragmentFirstCreateStudyBinding
 import com.created.team201.presentation.common.BindingViewFragment
@@ -16,7 +13,6 @@ import com.created.team201.presentation.createStudy.bottomSheet.StudyDateBottomS
 import com.created.team201.util.collectOnStarted
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class FirstCreateStudyFragment :
@@ -104,12 +100,8 @@ class FirstCreateStudyFragment :
     }
 
     private fun setupCollectEnableNext() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                createStudyViewModel.isEnableFirstCreateStudyNext.collect { isEnable ->
-                    binding.tvFirstCreateStudyBtnNext.isEnabled = isEnable
-                }
-            }
+        createStudyViewModel.isEnableFirstCreateStudyNext.collectOnStarted(viewLifecycleOwner) { isEnable ->
+            binding.tvFirstCreateStudyBtnNext.isEnabled = isEnable
         }
     }
 

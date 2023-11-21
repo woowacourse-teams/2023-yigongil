@@ -4,12 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.created.team201.databinding.FragmentSecondCreateStudyBinding
 import com.created.team201.presentation.common.BindingViewFragment
-import kotlinx.coroutines.launch
+import com.created.team201.util.collectOnStarted
 
 class SecondCreateStudyFragment :
     BindingViewFragment<FragmentSecondCreateStudyBinding>(FragmentSecondCreateStudyBinding::inflate) {
@@ -34,12 +31,8 @@ class SecondCreateStudyFragment :
     }
 
     private fun setupCollectEnableNext() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                createStudyViewModel.isEnableSecondCreateStudyNext.collect { isEnable ->
-                    binding.tvSecondCreateStudyBtnNext.isEnabled = isEnable
-                }
-            }
+        createStudyViewModel.isEnableSecondCreateStudyNext.collectOnStarted(viewLifecycleOwner) { isEnable ->
+            binding.tvSecondCreateStudyBtnNext.isEnabled = isEnable
         }
     }
 }
