@@ -61,23 +61,20 @@ class ProfileViewModel @Inject constructor(
     private fun ProfileInformation.toUiModel(): ProfileInformationUiModel =
         ProfileInformationUiModel(
             nickname = nickname.toUiModel(),
-            introduction = introduction
+            introduction = introduction,
         )
 
     private fun Nickname.toUiModel(): NicknameUiModel = NicknameUiModel(
-        nickname = nickname
+        nickname = nickname,
     )
 
     private fun FinishedStudy.toUiModel(): FinishedStudyUiModel = FinishedStudyUiModel(
         id = id,
-        averageTier = averageTier,
-        isSucceed = isSucceed,
         name = name,
+        averageTier = averageTier,
         numberOfCurrentMembers = numberOfCurrentMembers,
         numberOfMaximumMembers = numberOfMaximumMembers,
-        periodOfRound = periodOfRound.toUiModel(),
-        startAt = startAt,
-        totalRoundCount = totalRoundCount,
+        isSucceed = isSucceed,
     )
 
     private fun Period.toUiModel(): PeriodUiModel = PeriodUiModel(number = date, unit = unit)

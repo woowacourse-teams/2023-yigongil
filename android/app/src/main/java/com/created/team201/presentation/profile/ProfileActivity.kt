@@ -5,11 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.created.team201.R
 import com.created.team201.databinding.ActivityProfileBinding
 import com.created.team201.presentation.common.BindingViewActivity
@@ -60,17 +57,6 @@ class ProfileActivity :
 
     private fun initFinishedStudyAdapter() {
         binding.rvProfileEndedStudies.adapter = finishedStudyAdapter
-        binding.rvProfileEndedStudies.setHasFixedSize(true)
-        val dividerItemDecoration = getDividerItemDecoration()
-        binding.rvProfileEndedStudies.addItemDecoration(dividerItemDecoration)
-    }
-
-    private fun getDividerItemDecoration(): DividerItemDecoration {
-        val dividerItemDecoration = DividerItemDecoration(this, LinearLayout.VERTICAL)
-        ContextCompat.getDrawable(this, R.drawable.divider_recyclerview_line)?.let {
-            dividerItemDecoration.setDrawable(it)
-        }
-        return dividerItemDecoration
     }
 
     private fun submitFinishedStudies() {

@@ -32,7 +32,7 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/bg_rectangle_radius_5dp_transparent"
         android:paddingHorizontal="12dp"
-        android:paddingVertical="24dp">
+        android:paddingVertical="16dp">
 
         <ImageView
             android:id="@+id/iv_finished_study_tier"
@@ -65,25 +65,13 @@
             android:ellipsize="end"
             android:lines="1"
             android:text="@{finishedStudy.name}"
-            android:textAppearance="@style/button_sb18"
+            android:textAppearance="@style/text_sb14"
             android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_finished_study_people_count_icon"
             app:layout_constraintStart_toEndOf="@id/tv_finished_study_average_tier_description"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="자바 스터디 2명 타세요 ~" />
-
-        <TextView
-            android:id="@+id/tv_finished_study_description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:text="@{@string/item_profile_finished_study_information_format(finishedStudy.startAt)}"
-            android:textAppearance="@style/description_r12"
-            android:textColor="@color/grey02_78808B"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tv_finished_study_title"
-            app:layout_constraintTop_toBottomOf="@id/tv_finished_study_title"
-            tools:text="예상시작일 2023.07.02" />
 
         <ImageView
             android:id="@+id/iv_finished_study_tag"

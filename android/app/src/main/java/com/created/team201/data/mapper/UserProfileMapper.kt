@@ -2,8 +2,6 @@ package com.created.team201.data.mapper
 
 import com.created.domain.model.FinishedStudy
 import com.created.domain.model.Nickname
-import com.created.domain.model.Period
-import com.created.domain.model.PeriodUnit
 import com.created.domain.model.Profile
 import com.created.domain.model.ProfileInformation
 import com.created.domain.model.UserProfile
@@ -26,15 +24,9 @@ fun ProfileResponseDto.toDomain(): UserProfile = UserProfile(
 
 fun FinishedStudyResponseDto.toDomain(): FinishedStudy = FinishedStudy(
     id = id,
-    averageTier = averageTier,
-    isSucceed = isSucceed,
     name = name,
+    averageTier = averageTier,
     numberOfCurrentMembers = numberOfCurrentMembers,
     numberOfMaximumMembers = numberOfMaximumMembers,
-    periodOfRound = periodOfRound.toPeriod(),
-    startAt = startAt,
-    totalRoundCount = totalRoundCount,
+    isSucceed = isSucceed,
 )
-
-private fun String.toPeriod(): Period =
-    Period(Character.getNumericValue(first()), PeriodUnit.valueOf(last()))
