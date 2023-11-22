@@ -26,10 +26,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.TableGenerator;
 import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -40,7 +39,10 @@ public class Round extends BaseEntity {
     private static final int MAX_TODO_CONTENT_LENGTH = 20;
     private static final int MIN_TODO_CONTENT_LENGTH = 1;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "sequence_generator")
+    @TableGenerator(name = "sequence_generator", table = "round_sequence",
+        pkColumnName = "sequence_name", pkColumnValue = "id",
+        initialValue = 1, allocationSize=500)
     @Id
     private Long id;
 

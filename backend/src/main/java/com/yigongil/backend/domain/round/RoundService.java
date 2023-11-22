@@ -135,23 +135,23 @@ public class RoundService {
     public void proceedRound(LocalDate today) {
         entityManager.flush();
         entityManager.clear();
-        System.out.println("StudyService.proceedRound");
         long from = System.currentTimeMillis();
         //
         List<Round> rounds = roundRepository.findByRoundStatusAndDayOfWeek(
             RoundStatus.IN_PROGRESS,
             today.minusDays(1).getDayOfWeek()
         );
+        List<Long> todayDoneStudyIds = rounds.stream().map(Round::getStudyId).toList();
+        Map<Long, List<Round>> collect = roundRepository.findByStudyIdInAndRoundStatus(
+                                                            todayDoneStudyIds, RoundStatus.NOT_STARTED)
+                                                        .stream().collect(Collectors.groupingBy(Round::getStudyId));
 
         List<Round> nextWeekRoundsAll = new ArrayList<>();
         List<Round> willBeFinished = new ArrayList<>();
         List<Round> willProgress = new ArrayList<>();
         for (Round round : rounds) {
             Integer currentWeek = round.getWeekNumber();
-            List<Round> upcomingCandidates = roundRepository.findAllByStudyIdAndWeekNumberIn(
-                round.getStudyId(),
-                List.of(currentWeek, currentWeek + 1)
-            );
+            List<Round> upcomingCandidates = collect.get(round.getStudyId());
 
             Round upcomingRound = upcomingCandidates.stream()
                                                     .filter(candidate -> candidate.isSameWeek(currentWeek) && candidate.isNotStarted())

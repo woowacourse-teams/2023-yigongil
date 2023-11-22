@@ -21,9 +21,6 @@ public interface RoundRepository extends Repository<Round, Long> {
         DayOfWeek dayOfWeek
     );
 
-    @EntityGraph(attributePaths = "roundOfMembers")
-    List<Round> findAllByStudyIdAndWeekNumberIn(Long studyId, List<Integer> weekNumbers);
-
     void saveAll(Iterable<Round> rounds);
 
     List<Round> findAllByStudyId(Long studyId);
@@ -33,4 +30,8 @@ public interface RoundRepository extends Repository<Round, Long> {
     default Round getByStudyIdAndRoundStatus(Long studyId, RoundStatus roundStatus) {
         return findByStudyIdAndRoundStatus(studyId, roundStatus).orElseThrow(() -> new RoundNotFoundException("", -1));
     }
+
+    @EntityGraph(attributePaths = "roundOfMembers")
+
+    List<Round> findByStudyIdInAndRoundStatus(Iterable<Long> todayDoneStudyIds, RoundStatus roundStatus);
 }
