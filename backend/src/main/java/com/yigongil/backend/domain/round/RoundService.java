@@ -140,6 +140,11 @@ public class RoundService {
             RoundStatus.IN_PROGRESS,
             today.minusDays(1).getDayOfWeek()
         );
+//        roundRepository.findCurrentRoundAndUpcomingRound();
+//        List<Round> rounds = roundRepository.findByRoundStatusAndDayOfWeek(
+//            RoundStatus.IN_PROGRESS,
+//            today.minusDays(1).getDayOfWeek()
+//        );
 
         for (Round round : rounds) {
             Integer currentWeek = round.getWeekNumber();

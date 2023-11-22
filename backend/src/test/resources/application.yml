@@ -17,8 +17,14 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
+        jdbc:
+          batch_size: 500
+        order_inserts: true
+        order_updates: true
+        batch_versioned_data: true
     hibernate:
       ddl-auto: update
+
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   flyway:
     enabled: false
