@@ -21,6 +21,7 @@ public interface RoundRepository extends Repository<Round, Long> {
         DayOfWeek dayOfWeek
     );
 
+    @EntityGraph(attributePaths = "roundOfMembers")
     List<Round> findAllByStudyIdAndWeekNumberIn(Long studyId, List<Integer> weekNumbers);
 
     void saveAll(Iterable<Round> rounds);

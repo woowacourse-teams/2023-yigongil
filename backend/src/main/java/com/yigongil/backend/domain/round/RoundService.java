@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,16 +37,17 @@ public class RoundService {
     private final RoundRepository roundRepository;
     private final StudyRepository studyRepository;
     private final EntityManager entityManager;
-
+    private final RoundOfMemberBatchRepository roundOfMemberBatchRepository;
 
     public RoundService(
         RoundRepository roundRepository,
         StudyRepository studyRepository,
-        EntityManager entityManager
-    ) {
+        EntityManager entityManager,
+        RoundOfMemberBatchRepository roundOfMemberBatchRepository) {
         this.roundRepository = roundRepository;
         this.studyRepository = studyRepository;
         this.entityManager = entityManager;
+        this.roundOfMemberBatchRepository = roundOfMemberBatchRepository;
     }
 
     @Transactional(readOnly = true)
@@ -140,12 +142,10 @@ public class RoundService {
             RoundStatus.IN_PROGRESS,
             today.minusDays(1).getDayOfWeek()
         );
-//        roundRepository.findCurrentRoundAndUpcomingRound();
-//        List<Round> rounds = roundRepository.findByRoundStatusAndDayOfWeek(
-//            RoundStatus.IN_PROGRESS,
-//            today.minusDays(1).getDayOfWeek()
-//        );
 
+        List<Round> nextWeekRoundsAll = new ArrayList<>();
+        List<Round> willBeFinished = new ArrayList<>();
+        List<Round> willProgress = new ArrayList<>();
         for (Round round : rounds) {
             Integer currentWeek = round.getWeekNumber();
             List<Round> upcomingCandidates = roundRepository.findAllByStudyIdAndWeekNumberIn(
@@ -161,20 +161,29 @@ public class RoundService {
                                                                                        .min(Comparator.comparing(Round::getDayOfWeek))
                                                                                        .orElseThrow(() -> new IllegalStateException("다음 주 라운드를 안 만들어놓음")));
 
-            round.finish();
-            upcomingRound.proceed();
+            willBeFinished.add(round);
+            willProgress.add(upcomingRound);
 
             if (!upcomingRound.isSameWeek(currentWeek)) {
                 List<Round> nextWeekRounds = upcomingCandidates.stream()
                                                                .filter(candidate -> candidate.isSameWeek(currentWeek + 1))
                                                                .map(Round::createNextWeekRound)
                                                                .toList();
+                nextWeekRoundsAll.addAll(nextWeekRounds);
 
-                roundRepository.saveAll(nextWeekRounds);
             }
+
+
         }
-        //
+        willBeFinished.forEach(Round::finish);
+        willProgress.forEach(Round::proceed);
+        roundRepository.saveAll(nextWeekRoundsAll);
         entityManager.flush();
+
+        Map<Long, List<RoundOfMember>> map = nextWeekRoundsAll.stream().collect(
+            Collectors.toMap(Round::getId, Round::getRoundOfMembers));
+        roundOfMemberBatchRepository.batchSaveAll(map);
+        //
         Runtime runtime = Runtime.getRuntime();
         long totalMemory = runtime.totalMemory();
         long freeMemory = runtime.freeMemory();
@@ -205,6 +214,10 @@ public class RoundService {
         for (Round round : rounds) {
             roundRepository.save(round);
         }
+        entityManager.flush();
+        Map<Long, List<RoundOfMember>> map = rounds.stream().collect(
+            Collectors.toMap(Round::getId, Round::getRoundOfMembers));
+        roundOfMemberBatchRepository.batchSaveAll(map);
     }
 
     private List<Round> createRoundsOfFirstWeek(Study study, List<DayOfWeek> dayOfWeeks, LocalDate startAt) {

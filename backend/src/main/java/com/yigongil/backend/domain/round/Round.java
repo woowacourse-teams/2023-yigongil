@@ -54,7 +54,6 @@ public class Round extends BaseEntity {
     @JoinColumn(name = "master_id", nullable = false)
     private Member master;
 
-    @Cascade(CascadeType.PERSIST)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany
     @JoinColumn(name = "round_id", nullable = false, updatable = false)
