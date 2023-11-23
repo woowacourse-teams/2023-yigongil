@@ -116,11 +116,11 @@ class CreateStudyViewModel @Inject constructor(
             createStudyRepository.createStudy(study)
                 .onSuccess { studyId ->
                     _createStudyEvent.emit(Event.CreateStudySuccess)
-                    _createStudyState.emit(CreateStudyState.Success(studyId))
+                    _createStudyState.value = CreateStudyState.Success(studyId)
                 }
                 .onFailure {
                     _createStudyEvent.emit(Event.CreateStudyFailure)
-                    _createStudyState.emit(CreateStudyState.Failure)
+                    _createStudyState.value = CreateStudyState.Failure
                 }
         }
     }
