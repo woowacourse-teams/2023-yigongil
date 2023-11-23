@@ -145,7 +145,7 @@ class CreateStudyViewModel @Inject constructor(
     }
 
     companion object {
-        private const val DEFAULT_INT_VALUE = -1
+        const val DEFAULT_INT_VALUE = -1
         private const val DEFAULT_STRING_VALUE = ""
     }
 }

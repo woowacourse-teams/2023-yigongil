@@ -7,6 +7,7 @@ import androidx.fragment.app.commit
 import com.created.team201.R
 import com.created.team201.databinding.FragmentFirstCreateStudyBinding
 import com.created.team201.presentation.common.BindingViewFragment
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.Companion.DEFAULT_INT_VALUE
 import com.created.team201.presentation.createStudy.bottomSheet.CycleBottomSheetFragment
 import com.created.team201.presentation.createStudy.bottomSheet.PeopleCountBottomSheetFragment
 import com.created.team201.presentation.createStudy.bottomSheet.StudyDateBottomSheetFragment
@@ -31,7 +32,7 @@ class FirstCreateStudyFragment :
 
     private fun setupPeopleCount() {
         createStudyViewModel.peopleCount.collectOnStarted(viewLifecycleOwner) { peopleCount ->
-            if (peopleCount == -1) return@collectOnStarted
+            if (peopleCount == DEFAULT_INT_VALUE) return@collectOnStarted
 
             binding.tvFirstCreateStudyPeopleCount.text =
                 getString(
@@ -47,7 +48,7 @@ class FirstCreateStudyFragment :
 
     private fun setupStudyDate() {
         createStudyViewModel.studyDate.collectOnStarted(viewLifecycleOwner) { studyDate ->
-            if (studyDate == -1) return@collectOnStarted
+            if (studyDate == DEFAULT_INT_VALUE) return@collectOnStarted
 
             binding.tvFirstCreateStudyStudyDate.text =
                 getString(R.string.first_create_study_formatter_information_study_date, studyDate)
@@ -60,7 +61,7 @@ class FirstCreateStudyFragment :
 
     private fun setupStudyCycle() {
         createStudyViewModel.cycle.collectOnStarted(viewLifecycleOwner) { cycle ->
-            if (cycle == -1) return@collectOnStarted
+            if (cycle == DEFAULT_INT_VALUE) return@collectOnStarted
 
             binding.tvFirstCreateStudyCycle.text =
                 getString(R.string.first_create_study_formatter_information_cycle, cycle)
