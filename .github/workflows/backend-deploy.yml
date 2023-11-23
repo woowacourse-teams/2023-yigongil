@@ -3,10 +3,6 @@ name: 백엔드 배포
 on:
   push:
     branches: [BE/chore/docker-test-2]
-
-defaults:
-  run:
-    working-directory: backend
     
 permissions:
   checks: write
@@ -14,6 +10,9 @@ permissions:
 jobs:
   build-and-push:
 
+    defaults:
+      run:
+        working-directory: backend
     runs-on: ubuntu-latest
 
     steps:
@@ -60,6 +59,7 @@ jobs:
           push: true                            
           tags: ${{ steps.docker_meta.outputs.tags }}      
           labels: ${{ steps.docker_meta.outputs.labels }}  
+          
   deploy:
     runs-on: self-hosted
     if: ${{ needs.build-and-push.result == 'success' }}
