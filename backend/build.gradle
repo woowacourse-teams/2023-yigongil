@@ -77,8 +77,6 @@ dependencies {
     annotationProcessor "javax.annotation:javax.annotation-api"
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
 
-    // datadog
-    runtimeOnly 'io.micrometer:micrometer-registry-datadog'
 }
 
 tasks.named('test') {
