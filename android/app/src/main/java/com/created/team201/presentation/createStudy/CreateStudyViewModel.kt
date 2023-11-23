@@ -46,12 +46,12 @@ class CreateStudyViewModel @Inject constructor(
 
     val isEnableFirstCreateStudyNext: StateFlow<Boolean> =
         combine(peopleCount, studyDate, cycle) { peopleCount, studyDate, cycle ->
-            return@combine peopleCount != DEFAULT_INT_VALUE && studyDate != DEFAULT_INT_VALUE && cycle != DEFAULT_INT_VALUE
+            peopleCount != DEFAULT_INT_VALUE && studyDate != DEFAULT_INT_VALUE && cycle != DEFAULT_INT_VALUE
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 
     val isEnableSecondCreateStudyNext: StateFlow<Boolean> =
         combine(studyName, studyIntroduction) { studyName, studyIntroduction ->
-            return@combine studyName.isNotBlankAndEmpty() && studyIntroduction.isNotBlankAndEmpty()
+            studyName.isNotBlankAndEmpty() && studyIntroduction.isNotBlankAndEmpty()
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), false)
 
     private val _createStudyState: MutableStateFlow<CreateStudyState> =
