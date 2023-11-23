@@ -66,7 +66,8 @@ jobs:
     needs: [ build-and-push ]
     steps:
       - name: 도커 풀 / 파일 실행
-        run: sudo ./deploy.sh
-        working-directory: ~/
+        run: |
+          cd ~
+          sudo ./deploy.sh
 
           
