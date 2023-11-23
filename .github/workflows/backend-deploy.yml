@@ -62,7 +62,7 @@ jobs:
           labels: ${{ steps.docker_meta.outputs.labels }}  
   deploy:
     runs-on: self-hosted
-    if: ${{ needs.docker-build.result == 'success' }}
+    if: ${{ needs.build-and-push.result == 'success' }}
     needs: [ build-and-push ]
     steps:
       - name: 도커 풀 / 파일 실행
