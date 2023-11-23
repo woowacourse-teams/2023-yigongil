@@ -54,6 +54,13 @@ oauth2:
       token-uri: http://localhost:8080/fakeToken
       user-info-uri: http://localhost:8080/fakeInfo
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: metrics, health
+      base-path: /actuator
+
 jwt:
   expiration: 60
   key: qkljwnqdjnqjkdnqdwkdkm31i4j1dasksmd
