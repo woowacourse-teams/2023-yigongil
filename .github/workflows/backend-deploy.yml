@@ -68,6 +68,6 @@ jobs:
       - name: 도커 풀 / 파일 실행
         run: |
           cd ~
-          sudo sh ./deploy.sh
+          sudo bash ./deploy.sh
 
           
