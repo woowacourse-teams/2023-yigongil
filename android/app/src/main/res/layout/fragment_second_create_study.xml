@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.created.team201.presentation.createStudy.CreateStudyViewModel" />
-    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="20dp">
 
         <TextView
@@ -51,9 +48,7 @@
             android:inputType="textMultiLine|textNoSuggestions"
             android:maxLength="30"
             android:maxLines="3"
-            android:onTextChanged="@{(text, start, before, count) -> viewModel.setStudyName(text.toString())}"
             android:padding="12dp"
-            android:text="@{viewModel.studyName}"
             android:textAppearance="@style/text_r16"
             android:textColor="@color/white"
             android:textColorHint="@color/grey02_78808B"
@@ -97,23 +92,22 @@
             android:inputType="textMultiLine|textNoSuggestions"
             android:maxLength="200"
             android:maxLines="7"
-            android:onTextChanged="@{(text, start, before, count) -> viewModel.setStudyIntroduction(text.toString())}"
             android:padding="12dp"
-            android:text="@{viewModel.studyIntroduction}"
             android:textAppearance="@style/text_r16"
             android:textColor="@color/white"
             android:textColorHint="@color/grey02_78808B"
+            app:layout_constraintBottom_toTopOf="@id/tv_second_create_study_btn_next"
             app:layout_constraintEnd_toEndOf="@id/tv_second_create_study_study_introduction_information"
             app:layout_constraintStart_toStartOf="@id/tv_second_create_study_study_introduction_information"
-            app:layout_constraintTop_toBottomOf="@id/tv_second_create_study_study_introduction_information" />
+            app:layout_constraintTop_toBottomOf="@id/tv_second_create_study_study_introduction_information"
+            app:layout_constraintVertical_chainStyle="spread_inside" />
 
         <TextView
             android:id="@+id/tv_second_create_study_btn_next"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="28dp"
+            android:layout_marginVertical="28dp"
             android:background="@drawable/bg_btn_color_and_radius_10dp_disabled"
-            android:onClick="@{() -> viewModel.createStudy()}"
             android:paddingVertical="14dp"
             android:text="@string/create_study_button_done"
             android:textAlignment="center"
@@ -121,7 +115,9 @@
             android:textColor="@color/tv_color_disabled"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_second_create_study_study_introduction" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+
+</ScrollView>

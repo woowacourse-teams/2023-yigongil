@@ -11,37 +11,40 @@ import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.created.team201.R
 import com.created.team201.databinding.ActivityCreateStudyBinding
-import com.created.team201.presentation.common.BindingActivity
-import com.created.team201.presentation.createStudy.model.CreateStudyUiState.Fail
-import com.created.team201.presentation.createStudy.model.CreateStudyUiState.Idle
-import com.created.team201.presentation.createStudy.model.CreateStudyUiState.Success
+import com.created.team201.presentation.common.BindingViewActivity
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.CreateStudyState.Failure
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.CreateStudyState.Idle
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.CreateStudyState.Loading
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.CreateStudyState.Success
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.Event.CreateStudyFailure
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.Event.CreateStudySuccess
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.Event.NavigateToBefore
+import com.created.team201.presentation.createStudy.CreateStudyViewModel.Event.NavigateToNext
+import com.created.team201.presentation.createStudy.model.FragmentState
 import com.created.team201.presentation.createStudy.model.FragmentState.FirstFragment
 import com.created.team201.presentation.createStudy.model.FragmentState.SecondFragment
 import com.created.team201.presentation.createStudy.model.FragmentType
 import com.created.team201.presentation.createStudy.model.FragmentType.FIRST
 import com.created.team201.presentation.createStudy.model.FragmentType.SECOND
 import com.created.team201.presentation.studyDetail.StudyDetailActivity
+import com.created.team201.util.collectLatestOnStarted
+import com.created.team201.util.collectOnStarted
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CreateStudyActivity :
-    BindingActivity<ActivityCreateStudyBinding>(R.layout.activity_create_study) {
+    BindingViewActivity<ActivityCreateStudyBinding>(ActivityCreateStudyBinding::inflate) {
     private val createStudyViewModel: CreateStudyViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initBinding()
         initActionBar()
-        setupCollectCreateStudyState()
-        setupCollectCreateStudyUiState()
+        showFragment(createStudyViewModel.fragmentState.value.type)
+        collectCreateStudyState()
+        collectCreateStudyEvent()
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
@@ -51,8 +54,9 @@ class CreateStudyActivity :
         return super.dispatchTouchEvent(ev)
     }
 
-    private fun initBinding() {
-        binding.lifecycleOwner = this
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        createStudyViewModel.navigateToBefore()
+        return true
     }
 
     private fun initActionBar() {
@@ -62,20 +66,6 @@ class CreateStudyActivity :
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_back)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (createStudyViewModel.fragmentState.value) {
-            is FirstFragment -> {
-                finish()
-                true
-            }
-
-            is SecondFragment -> {
-                createStudyViewModel.navigateToBefore()
-                true
-            }
-        }
-    }
-
     private fun setProgressIndicator(type: FragmentType) {
         binding.lpiCreateStudyProgress.progress = when (type) {
             FIRST -> PROGRESS_FIRST
@@ -83,31 +73,35 @@ class CreateStudyActivity :
         }
     }
 
-    private fun setupCollectCreateStudyUiState() {
-        lifecycleScope.launch {
-            createStudyViewModel.createStudyUiState.collectLatest { createStudyUiState ->
-                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    when (createStudyUiState) {
-                        is Success -> {
-                            showToast(R.string.create_study_toast_create_study_success)
-                            startActivity(
-                                StudyDetailActivity.getIntent(
-                                    this@CreateStudyActivity,
-                                    createStudyUiState.studyId
-                                ),
-                            )
-
-                            finish()
-                        }
-
-                        is Fail -> {
-                            showToast(R.string.create_study_toast_create_study_fail)
-                            finish()
-                        }
-
-                        is Idle -> throw IllegalArgumentException()
-                    }
+    private fun collectCreateStudyState() {
+        createStudyViewModel.createStudyState
+            .collectLatestOnStarted(this) { createStudyState ->
+                when (createStudyState) {
+                    is Success -> navigateToStudyDetail(createStudyState.studyId)
+                    Loading -> Unit
+                    Idle -> Unit
+                    Failure -> finish()
                 }
+            }
+    }
+
+    private fun navigateToStudyDetail(studyId: Long) {
+        startActivity(
+            StudyDetailActivity.getIntent(
+                this@CreateStudyActivity,
+                studyId
+            ),
+        )
+        finish()
+    }
+
+    private fun collectCreateStudyEvent() {
+        createStudyViewModel.createStudyEvent.collectOnStarted(this) { event ->
+            when (event) {
+                CreateStudySuccess -> showToast(R.string.create_study_toast_create_study_success)
+                CreateStudyFailure -> showToast(R.string.create_study_toast_create_study_fail)
+                is NavigateToBefore -> navigateToBefore(event.fragmentState)
+                is NavigateToNext -> navigateToNext(event.fragmentState)
             }
         }
     }
@@ -116,13 +110,17 @@ class CreateStudyActivity :
         Toast.makeText(this, getString(messageRes), Toast.LENGTH_SHORT).show()
     }
 
-    private fun setupCollectCreateStudyState() {
-        lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                createStudyViewModel.fragmentState.collect { fragmentState ->
-                    showFragment(fragmentState.type)
-                }
-            }
+    private fun navigateToBefore(fragmentState: FragmentState) {
+        when (fragmentState) {
+            FirstFragment -> finish()
+            SecondFragment -> showFragment(FirstFragment.type)
+        }
+    }
+
+    private fun navigateToNext(fragmentState: FragmentState) {
+        when (fragmentState) {
+            FirstFragment -> showFragment(SecondFragment.type)
+            SecondFragment -> Unit
         }
     }
 
