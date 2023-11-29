@@ -1,5 +1,4 @@
 FROM amazoncorretto:17-alpine-jdk
-
 ENV SPRING_PROFILE=${SPRING_PROFILE}
 
 ARG JAR_FILE=./backend/build/libs/*.jar
