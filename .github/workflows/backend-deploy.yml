@@ -24,7 +24,6 @@ jobs:
         
     - name: 서브모듈 업데이트
       run: |
-        git pull --recurse-submodules
         git submodule update --remote --recursive
 
     - name: 서브모듈 커밋
