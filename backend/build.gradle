@@ -47,8 +47,8 @@ dependencies {
     testImplementation 'io.cucumber:cucumber-spring:7.12.1'
     testImplementation 'org.junit.vintage:junit-vintage-engine'
 
-    // mariaDB
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    // MySQL
+    runtimeOnly 'mysql:mysql-connector-java'
 
     // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
