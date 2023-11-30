@@ -16,7 +16,7 @@ import java.util.List;
 import static org.springframework.boot.actuate.metrics.MetricsEndpoint.MetricResponse;
 import static org.springframework.boot.actuate.metrics.MetricsEndpoint.Sample;
 
-@Profile(value = {"prod"})
+@Profile(value = {"proz"})
 @Service
 public class CloudWatchMetricsService {
 
