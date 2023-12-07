@@ -1,8 +1,8 @@
-name: 백엔드 배포
+name: 백엔드 개발서버 배포
 
 on:
   push:
-    branches: [BE/chore/docker-test-2]
+    branches: [BE/chore/docker-test-3]
     
 permissions:
   checks: write
@@ -79,6 +79,6 @@ jobs:
       - name: 도커 풀 / 파일 실행
         run: |
           cd ~
-          sudo bash ./deploy.sh
+          sudo bash ./dev-deploy.sh
 
           
