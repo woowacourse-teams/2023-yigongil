@@ -13,21 +13,21 @@
         </root>
     </springProfile>
 
-    <!-- 개발 환경 -->
-    <!-- <springProfile name="dev">
-        <include resource="dev-file-appender.xml"/>
+    <!-- 개발 환경-->
+    <!-- <springProfile name="dev">-->
+    <!--    <include resource="dev-file-appender.xml"/>-->
 
-        <root level="INFO">
-            <appender-ref ref="FILE-ERROR"/>
-            <appender-ref ref="FILE-WARN"/>
-            <appender-ref ref="FILE-INFO"/>
+    <!--    <root level="INFO"> -->
+    <!--        <appender-ref ref="FILE-ERROR"/>-->
+    <!--        <appender-ref ref="FILE-WARN"/>-->
+    <!--        <appender-ref ref="FILE-INFO"/>-->
 
-        </root>
+    <!--    </root>-->
 
-        <root level="ERROR">
-            <appender-ref ref="ASYNC_SLACK"/>
-        </root>
-    </springProfile> -->
+    <!--    <root level="ERROR">-->
+     <!--       <appender-ref ref="ASYNC_SLACK"/>-->
+     <!--   </root>-->
+  <!--  </springProfile>--> 
 
     <!-- 프로덕션 환경 -->
 <!--    <springProfile name="prod">-->
