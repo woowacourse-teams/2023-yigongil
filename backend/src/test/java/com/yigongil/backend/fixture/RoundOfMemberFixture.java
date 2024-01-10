@@ -1,7 +1,7 @@
 package com.yigongil.backend.fixture;
 
-import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.roundofmember.RoundOfMember;
+import com.yigongil.backend.domain.member.domain.Member;
+import com.yigongil.backend.domain.round.RoundOfMember;
 
 public enum RoundOfMemberFixture {
 

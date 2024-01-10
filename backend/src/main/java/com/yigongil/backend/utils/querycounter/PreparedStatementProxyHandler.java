@@ -25,7 +25,7 @@ public class PreparedStatementProxyHandler implements InvocationHandler {
 
     private boolean isExecuteQuery(Method method) {
         String methodName = method.getName();
-        return methodName.equals("executeQuery") || methodName.equals("execute") || methodName.equals("executeUpdate");
+        return methodName.startsWith("execute");
     }
 
     private boolean isInRequestScope() {

@@ -2,7 +2,7 @@ package com.yigongil.backend.domain.report;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.exception.InvalidReportContentLengthException;
 import com.yigongil.backend.exception.InvalidReportException;
 import com.yigongil.backend.exception.InvalidReportTitleLengthException;

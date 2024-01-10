@@ -1,6 +1,6 @@
 package com.yigongil.backend.response;
 
-import com.yigongil.backend.domain.roundofmember.RoundOfMember;
+import com.yigongil.backend.domain.round.RoundOfMember;
 import java.util.List;
 
 public record MemberCertificationResponse(

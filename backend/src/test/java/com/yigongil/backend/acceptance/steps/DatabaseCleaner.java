@@ -23,7 +23,10 @@ public class DatabaseCleaner {
         this.tables = entityManager.getMetamodel().getEntities().stream()
                                    .filter(entityType -> entityType.getJavaType().getSuperclass()
                                                                    .getSimpleName()
-                                                                   .equals("BaseEntity"))
+                                                                   .equals("BaseEntity")
+                                   || entityType.getJavaType().getSuperclass()
+                                                .getSimpleName()
+                                                .equals("BaseRootEntity"))
                                    .map(EntityType::getName)
                                    .map(this::toSnake)
                                    .toList();
@@ -48,6 +51,7 @@ public class DatabaseCleaner {
         for (String table : tables) {
             entityManager.createNativeQuery("truncate table " + table).executeUpdate();
         }
+        entityManager.createNativeQuery("truncate table day_of_week").executeUpdate();
 
         entityManager.createNativeQuery("set foreign_key_checks = 1").executeUpdate();
     }

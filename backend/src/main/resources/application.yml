@@ -47,7 +47,7 @@ logging:
 oauth2:
   github:
     client:
-      id: github-client-id
+      id: github-client-studyId
       secret: github-secret
       github-login-uri: https://github.com/login/oauth/authorize
     provider:

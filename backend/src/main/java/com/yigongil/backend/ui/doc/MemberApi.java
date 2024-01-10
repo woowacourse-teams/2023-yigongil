@@ -1,11 +1,9 @@
 package com.yigongil.backend.ui.doc;
 
-import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.request.ProfileUpdateRequest;
-import com.yigongil.backend.response.MyProfileResponse;
 import com.yigongil.backend.response.NicknameValidationResponse;
 import com.yigongil.backend.response.OnboardingCheckResponse;
-import com.yigongil.backend.response.ProfileResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,27 +16,6 @@ import org.springframework.http.ResponseEntity;
 
 @Tag(name = "회원", description = "회원 관련 api")
 public interface MemberApi {
-
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200"),
-                    @ApiResponse(responseCode = "404", content = @Content)
-            }
-    )
-    @Operation(summary = "프로필을 조회")
-    ResponseEntity<ProfileResponse> findProfile(
-            @Parameter(description = "조회할 회원의 식별자", required = true) Long id
-    );
-
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200"),
-                    @ApiResponse(responseCode = "401", content = @Content)
-            }
-    )
-    @SecurityRequirement(name = "token")
-    @Operation(summary = "내 프로필을 조회")
-    ResponseEntity<MyProfileResponse> findMyProfile(@Schema(hidden = true) Member member);
 
     @ApiResponses(
             value = {

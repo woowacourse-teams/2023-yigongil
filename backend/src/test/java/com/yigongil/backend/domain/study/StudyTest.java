@@ -3,8 +3,7 @@ package com.yigongil.backend.domain.study;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.round.Round;
+import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.exception.InvalidMemberSizeException;
 import com.yigongil.backend.exception.InvalidProcessingStatusException;
 import com.yigongil.backend.fixture.MemberFixture;
@@ -61,39 +60,6 @@ class StudyTest {
             }
 
             @Test
-            void 현재_주차의_라운드가_끝이나면_다음_주차의_첫_번째_라운드가_현재_주차가_된다() {
-                // given
-                Round previousRound = study.getCurrentRound();
-
-                // when
-                study.updateToNextRound();
-                Round currentRound = study.getCurrentRound();
-
-                // then
-                assertThat(currentRound.isSameWeek(previousRound.getWeekNumber() + 1)).isTrue();
-            }
-
-            @Test
-            void 스터디의_현재_라운드가_종료되는_날이면_true를_반환한다() {
-                // given
-                // when
-                boolean actual1 = study.isCurrentRoundEndAt(LOCAL_DATE_OF_MONDAY);
-
-                // then
-                assertThat(actual1).isTrue();
-            }
-
-            @Test
-            void 스터디의_현재_라운드가_종료되는_날이_아니면_false를_반환한다() {
-                // given
-                // when
-                boolean actual = study.isCurrentRoundEndAt(LOCAL_DATE_OF_MONDAY.plusDays(1));
-
-                // then
-                assertThat(actual).isFalse();
-            }
-
-            @Test
             void 모집중이지_않은_스터디에_Member를_추가하면_예외가_발생한다() {
                 // given
                 Member member = MemberFixture.폰노이만.toMember();
@@ -121,21 +87,6 @@ class StudyTest {
                 assertThatThrownBy(throwable)
                         .isInstanceOf(InvalidProcessingStatusException.class);
             }
-        }
-
-        @Test
-        void 스터디를_다음_라운드로_넘기면_현재_라운드가_다음_라운드로_변한다() {
-            // given
-            study.start(study.getMaster(), List.of(DayOfWeek.TUESDAY, DayOfWeek.THURSDAY),
-                    LOCAL_DATE_OF_MONDAY.atStartOfDay());
-            Round currentRound = study.getCurrentRound();
-
-            // when
-            study.updateToNextRound();
-            Round nextRound = study.getCurrentRound();
-
-            // then
-            assertThat(nextRound.isNextDayOfWeek(currentRound.getDayOfWeek())).isTrue();
         }
     }
 

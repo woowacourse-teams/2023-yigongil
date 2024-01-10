@@ -1,8 +1,8 @@
 package com.yigongil.backend.response;
 
-import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.round.Round;
-import com.yigongil.backend.domain.roundofmember.RoundOfMember;
+import com.yigongil.backend.domain.round.RoundOfMember;
 import com.yigongil.backend.exception.NotStudyMemberException;
 import java.util.List;
 
@@ -15,7 +15,7 @@ public record MembersCertificationResponse(
 
     public static MembersCertificationResponse of(String studyName, Round upcomingRound, Member requestingMember, List<RoundOfMember> roundOfMembers) {
         List<MemberCertificationResponse> others = roundOfMembers.stream()
-                                                                 .filter(roundOfMember -> !roundOfMember.isMemberEquals(requestingMember))
+                                                                 .filter(roundOfMember -> !roundOfMember.isMemberEquals(requestingMember.getId()))
                                                                  .map(roundOfMember -> new MemberCertificationResponse(
                                                                          roundOfMember.getMember().getId(),
                                                                          roundOfMember.getMember().getNickname(),
@@ -23,7 +23,7 @@ public record MembersCertificationResponse(
                                                                          roundOfMember.isDone()))
                                                                  .toList();
         MemberCertificationResponse me = roundOfMembers.stream()
-                                                       .filter(roundOfMember -> roundOfMember.isMemberEquals(requestingMember))
+                                                       .filter(roundOfMember -> roundOfMember.isMemberEquals(requestingMember.getId()))
                                                        .findAny()
                                                        .map(roundOfMember -> new MemberCertificationResponse(
                                                                roundOfMember.getMember().getId(),

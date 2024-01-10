@@ -75,6 +75,43 @@ public class StudySteps {
         sharedContext.setParameter(name, studyId);
     }
 
+    @Given("{string}가 제목-{string}, 정원-{string}명, 최소 주차-{string}주, 주당 진행 횟수-{string}회, 소개-{string}로 스터디를 {int}개 개설한다.")
+    public void 스터디를_개설한다(
+        String masterGithubId,
+        String name,
+        String numberOfMaximumMembers,
+        String minimumWeeks,
+        String meetingDaysCountPerWeek,
+        String introduction,
+        Integer count
+    ) throws JsonProcessingException {
+        for (int i = 0; i < count; i++) {
+            String realName = name + i;
+            StudyUpdateRequest request = new StudyUpdateRequest(
+                realName,
+                Integer.parseInt(numberOfMaximumMembers),
+                Integer.parseInt(minimumWeeks),
+                Integer.parseInt(meetingDaysCountPerWeek),
+                introduction
+            );
+            String token = sharedContext.getToken(masterGithubId);
+
+            String location = given().log().all()
+                                     .header(HttpHeaders.AUTHORIZATION, token)
+                                     .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                     .body(objectMapper.writeValueAsString(request))
+                                     .when()
+                                     .post("/studies")
+                                     .then().log().all()
+                                     .extract()
+                                     .header(HttpHeaders.LOCATION);
+
+            String studyId = location.substring(location.lastIndexOf("/") + 1);
+
+            sharedContext.setParameter(realName, studyId);
+        }
+    }
+
     @When("모집 중인 스터디 탭을 클릭한다.")
     public void 모집_중인_스터디를_요청한다() {
         ExtractableResponse<Response> response = given().log().all()
@@ -223,6 +260,24 @@ public class StudySteps {
                .when()
                .patch("/studies/" + studyId + "/start")
                .then().log().all();
+    }
+
+    @Given("{string}가 이름이 {string}인 스터디 {int}개를 {string}에 진행되도록 하여 시작한다.")
+    public void 스터디_시작(String memberGithubId, String studyName, Integer count, String days) {
+        String token = sharedContext.getToken(memberGithubId);
+        for (int i = 0; i < count; i++) {
+            String realName = studyName + i;
+            String studyId = (String) sharedContext.getParameter(realName);
+            StudyStartRequest request = new StudyStartRequest(Arrays.stream(days.split(",")).map(String::strip).toList());
+
+            given().log().all()
+                   .header(HttpHeaders.AUTHORIZATION, token)
+                   .contentType(MediaType.APPLICATION_JSON_VALUE)
+                   .body(request)
+                   .when()
+                   .patch("/studies/" + studyId + "/start")
+                   .then().log().all();
+        }
     }
 
     @Given("{string}가 이름이 {string}인 스터디를 내일에 해당하는 요일에 진행되도록 하여 시작한다.")

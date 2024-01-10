@@ -13,12 +13,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yigongil.backend.application.MemberService;
 import com.yigongil.backend.config.AuthConfig;
 import com.yigongil.backend.config.auth.AuthContext;
 import com.yigongil.backend.config.auth.JwtTokenProvider;
-import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.member.MemberRepository;
+import com.yigongil.backend.domain.member.domain.Member;
+import com.yigongil.backend.domain.member.ui.MemberController;
+import com.yigongil.backend.domain.member.domain.MemberRepository;
+import com.yigongil.backend.domain.member.application.MemberService;
 import com.yigongil.backend.fixture.MemberFixture;
 import com.yigongil.backend.request.ProfileUpdateRequest;
 import com.yigongil.backend.response.NicknameValidationResponse;
@@ -63,34 +64,6 @@ class MemberControllerTest {
 
     @MockBean
     private InternalServerErrorMessageConverter internalServerErrorMessageConverter;
-
-
-
-    @Test
-    void 프로필_정보를_조회한다() throws Exception {
-        Member member = MemberFixture.김진우.toMember();
-        given(memberRepository.findByIdAndDeletedFalse(1L)).willReturn(Optional.of(member));
-        given(memberService.findById(1L)).willReturn(
-                new ProfileResponse(
-                        member.getId(),
-                        member.getNickname(),
-                        member.getGithubId(),
-                        member.getProfileImageUrl(),
-                        0.0,
-                        0,
-                        0,
-                        member.getExperience(),
-                        member.getIntroduction(),
-                        Collections.emptyList()
-                )
-        );
-
-        mockMvc.perform(get("/members/1"))
-               .andDo(print())
-               .andExpect(status().isOk())
-               .andExpect(jsonPath("$.nickname").value(member.getNickname()))
-               .andExpect(jsonPath("$.githubId").value(member.getGithubId()));
-    }
 
     @Test
     void 프로필_정보를_업데이트_한다() throws Exception {

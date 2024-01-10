@@ -1,9 +1,9 @@
 package com.yigongil.backend.domain.round;
 
-import com.yigongil.backend.domain.BaseEntity;
-import com.yigongil.backend.domain.meetingdayoftheweek.MeetingDayOfTheWeek;
-import com.yigongil.backend.domain.member.Member;
-import com.yigongil.backend.domain.roundofmember.RoundOfMember;
+import static java.util.stream.Collectors.toMap;
+
+import com.yigongil.backend.domain.base.BaseEntity;
+import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.domain.study.Study;
 import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NecessaryTodoNotExistException;
@@ -13,6 +13,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,10 +26,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.TableGenerator;
 import lombok.Builder;
 import lombok.Getter;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -39,13 +39,15 @@ public class Round extends BaseEntity {
     private static final int MAX_TODO_CONTENT_LENGTH = 20;
     private static final int MIN_TODO_CONTENT_LENGTH = 1;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "sequence_generator")
+    @TableGenerator(name = "sequence_generator", table = "round_sequence",
+        pkColumnName = "sequence_name", pkColumnValue = "id",
+        initialValue = 1, allocationSize=500)
     @Id
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_id", nullable = false)
-    private Study study;
+    @Column(name = "study_id")
+    private Long studyId;
 
     @Column(length = MAX_TODO_CONTENT_LENGTH)
     private String mustDo;
@@ -54,15 +56,13 @@ public class Round extends BaseEntity {
     @JoinColumn(name = "master_id", nullable = false)
     private Member master;
 
-    @Cascade(CascadeType.PERSIST)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany
-    @JoinColumn(name = "round_id", nullable = false)
+    @JoinColumn(name = "round_id", nullable = false, updatable = false)
     private List<RoundOfMember> roundOfMembers = new ArrayList<>();
 
-    @Cascade(CascadeType.PERSIST)
-    @ManyToOne(fetch = FetchType.LAZY)
-    private MeetingDayOfTheWeek meetingDayOfTheWeek;
+    @Enumerated(EnumType.ORDINAL)
+    private DayOfWeek dayOfWeek;
 
     @Column(nullable = false)
     private Integer weekNumber;
@@ -76,26 +76,26 @@ public class Round extends BaseEntity {
     @Builder
     public Round(
             Long id,
-            Study study,
+            Long studyId,
             String mustDo,
             Member master,
             List<RoundOfMember> roundOfMembers,
-            MeetingDayOfTheWeek meetingDayOfTheWeek,
+            DayOfWeek dayOfWeek,
             Integer weekNumber
     ) {
         this.id = id;
-        this.study = study;
+        this.studyId = studyId;
         this.mustDo = mustDo;
         this.master = master;
         this.roundOfMembers = roundOfMembers == null ? new ArrayList<>() : roundOfMembers;
-        this.meetingDayOfTheWeek = meetingDayOfTheWeek;
+        this.dayOfWeek = dayOfWeek;
         this.weekNumber = weekNumber;
     }
 
-    public static Round of(MeetingDayOfTheWeek meetingDayOfTheWeek, Study study, Integer weekNumber) {
+    public static Round of(DayOfWeek dayOfWeek, Study study, Integer weekNumber) {
         return Round.builder()
-                    .study(study)
-                    .meetingDayOfTheWeek(meetingDayOfTheWeek)
+                    .studyId(study.getId())
+                    .dayOfWeek(dayOfWeek)
                     .weekNumber(weekNumber)
                     .master(study.getMaster())
                     .roundOfMembers(RoundOfMember.from(study))
@@ -132,23 +132,23 @@ public class Round extends BaseEntity {
         if (mustDo == null) {
             throw new NecessaryTodoNotExistException(" 머스트두가 생성되지 않았습니다.", String.valueOf(id));
         }
-        findRoundOfMemberBy(member).completeRound();
+        findRoundOfMemberBy(member.getId()).completeRound();
     }
 
     public boolean isMustDoDone(Member member) {
-        return findRoundOfMemberBy(member).isDone();
+        return findRoundOfMemberBy(member.getId()).isDone();
     }
 
     public boolean isEndAt(LocalDate date) {
-        return meetingDayOfTheWeek.isSameDayOfWeek(date.getDayOfWeek());
+        return dayOfWeek == date.getDayOfWeek();
     }
 
-    public RoundOfMember findRoundOfMemberBy(Member member) {
+    public RoundOfMember findRoundOfMemberBy(Long memberId) {
         return roundOfMembers.stream()
-                             .filter(roundOfMember -> roundOfMember.isMemberEquals(member))
+                             .filter(roundOfMember -> roundOfMember.isMemberEquals(memberId))
                              .findAny()
                              .orElseThrow(
-                                     () -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", member.getGithubId())
+                                     () -> new NotStudyMemberException("해당 스터디의 멤버가 아닙니다.", memberId.toString())
                              );
     }
 
@@ -169,50 +169,73 @@ public class Round extends BaseEntity {
     }
 
     public boolean isSuccess(Member member) {
-        return findRoundOfMemberBy(member).isDone();
+        return findRoundOfMemberBy(member.getId()).isDone();
     }
 
-    public boolean isMaster(Member member) {
-        return master.equals(member);
+    public boolean isMaster(Long memberId) {
+        return master.equals(memberId);
     }
 
     public boolean isSameWeek(Integer weekNumber) {
         return this.weekNumber == weekNumber;
     }
 
-    public boolean isSameDayOfWeek(MeetingDayOfTheWeek meetingDayOfTheWeek) {
-        return this.meetingDayOfTheWeek.equals(meetingDayOfTheWeek);
+    public boolean isSameDayOfWeek(DayOfWeek dayOfWeek) {
+        return this.dayOfWeek.equals(dayOfWeek);
     }
 
     public boolean isNextDayOfWeek(DayOfWeek dayOfWeek) {
-        return this.meetingDayOfTheWeek.comesNext(dayOfWeek);
+        return this.dayOfWeek.getValue() > dayOfWeek.getValue();
     }
 
     public boolean isInProgress() {
         return roundStatus == RoundStatus.IN_PROGRESS;
     }
 
+    public boolean isNotStarted() {
+        return roundStatus == RoundStatus.NOT_STARTED;
+    }
+
     public int calculateLeftDaysFrom(LocalDate date) {
-        int gap = meetingDayOfTheWeek.getDayOfWeek().getValue() - date.getDayOfWeek().getValue();
+        int gap = dayOfWeek.getValue() - date.getDayOfWeek().getValue();
         if (gap < 0) {
             return gap + DayOfWeek.values().length;
         }
         return gap;
     }
 
-    public DayOfWeek getDayOfWeek() {
-        return meetingDayOfTheWeek.getDayOfWeek();
-    }
-
     public boolean isBeforeOrSame(Integer minimumWeeks) {
         return weekNumber <= minimumWeeks;
     }
 
-    public void exit(Member member) {
-        if (isMaster(member)) {
-            throw new NotStudyMemberException("스터디장은 스터디를 나갈 수 없습니다.", member.getGithubId());
+    public Map<Member, Integer> calculateExperience(Integer roundScore) {
+        return roundOfMembers.stream()
+                      .collect(toMap(RoundOfMember::getMember, roundOfMember -> roundOfMember.isDone() ? roundScore : 0));
+    }
+
+    public void exit(Long memberId) {
+        if (isMaster(memberId)) {
+            throw new NotStudyMemberException("스터디장은 스터디를 나갈 수 없습니다.", memberId.toString());
         }
-        roundOfMembers.remove(findRoundOfMemberBy(member));
+        roundOfMembers.remove(findRoundOfMemberBy(memberId));
+    }
+
+    public Round createNextWeekRound() {
+        List<RoundOfMember> list = roundOfMembers.stream()
+                                                 .map(
+                                                     roundOfMember -> RoundOfMember.builder()
+                                                                                   .member(
+                                                                                       roundOfMember.getMember())
+                                                                                   .isDone(false)
+                                                                                   .build())
+                                                 .toList();
+        return Round.builder()
+                    .studyId(studyId)
+                    .dayOfWeek(dayOfWeek)
+                    .weekNumber(weekNumber + 1)
+                    .master(master)
+                    .roundOfMembers(list)
+                    .build();
     }
 
     @Override

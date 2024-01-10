@@ -7,7 +7,7 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Positive;
 
 public record MemberReportCreateRequest(
-        @Schema(description = "신고할 회원 id", example = "1")
+        @Schema(description = "신고할 회원 studyId", example = "1")
         @Positive(message = "피신고자 식별자는 양수만 입력 가능합니다.")
         Long reportedMemberId,
 

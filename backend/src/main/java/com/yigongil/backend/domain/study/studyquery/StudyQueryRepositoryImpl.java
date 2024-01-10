@@ -1,7 +1,8 @@
 package com.yigongil.backend.domain.study.studyquery;
 
+
 import static com.yigongil.backend.domain.study.QStudy.study;
-import static com.yigongil.backend.domain.studymember.QStudyMember.studyMember;
+import static com.yigongil.backend.domain.study.studymember.QStudyMember.studyMember;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
@@ -10,7 +11,7 @@ import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yigongil.backend.domain.study.ProcessingStatus;
 import com.yigongil.backend.domain.study.Study;
-import com.yigongil.backend.domain.studymember.Role;
+import com.yigongil.backend.domain.study.studymember.Role;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.domain.Pageable;

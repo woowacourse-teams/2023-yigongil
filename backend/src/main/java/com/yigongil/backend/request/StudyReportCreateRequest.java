@@ -7,7 +7,7 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Positive;
 
 public record StudyReportCreateRequest(
-        @Schema(description = "신고할 스터디 id", example = "1")
+        @Schema(description = "신고할 스터디 studyId", example = "1")
         @Positive(message = "신고할 스터디의 식별자는 양수만 입력 가능합니다.")
         Long reportedStudyId,
 

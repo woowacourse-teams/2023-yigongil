@@ -3,7 +3,7 @@ package com.yigongil.backend.domain.round;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.yigongil.backend.domain.member.Member;
+import com.yigongil.backend.domain.member.domain.Member;
 import com.yigongil.backend.exception.InvalidTodoLengthException;
 import com.yigongil.backend.exception.NotStudyMasterException;
 import com.yigongil.backend.fixture.RoundFixture;
