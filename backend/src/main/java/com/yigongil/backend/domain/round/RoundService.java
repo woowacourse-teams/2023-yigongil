@@ -12,11 +12,6 @@ import com.yigongil.backend.exception.RoundNotFoundException;
 import com.yigongil.backend.request.MustDoUpdateRequest;
 import com.yigongil.backend.response.RoundResponse;
 import com.yigongil.backend.response.UpcomingStudyResponse;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -133,10 +128,6 @@ public class RoundService {
 
     @Transactional
     public void proceedRound(LocalDate today) {
-        entityManager.flush();
-        entityManager.clear();
-        long from = System.currentTimeMillis();
-        //
         List<Round> rounds = roundRepository.findByRoundStatusAndDayOfWeek(
             RoundStatus.IN_PROGRESS,
             today.minusDays(1).getDayOfWeek()
@@ -172,8 +163,6 @@ public class RoundService {
                 nextWeekRoundsAll.addAll(nextWeekRounds);
 
             }
-
-
         }
         willBeFinished.forEach(Round::finish);
         willProgress.forEach(Round::proceed);
@@ -183,25 +172,6 @@ public class RoundService {
         Map<Long, List<RoundOfMember>> map = nextWeekRoundsAll.stream().collect(
             Collectors.toMap(Round::getId, Round::getRoundOfMembers));
         roundOfMemberBatchRepository.batchSaveAll(map);
-        //
-        Runtime runtime = Runtime.getRuntime();
-        long totalMemory = runtime.totalMemory();
-        long freeMemory = runtime.freeMemory();
-        long usedMemory = (totalMemory - freeMemory) / 1000000;
-
-        long to = System.currentTimeMillis();
-        Path path = Paths.get("time_test.txt");
-        try {
-            if (Files.exists(path)) {
-                Files.write(path, ("time spent to proceed Round \nstudy size: " + rounds.size() + "\ntotal time spent: " + (to - from) + "\nThe JVM is using " + usedMemory + " MB of memory." + "\n\n").getBytes(), StandardOpenOption.APPEND);
-            } else {
-                Files.createFile(path);
-                Files.write(path, ("time spent to proceed Round \nstudy size: " + rounds.size() + "\ntotal time spent: " + (to - from) + "\n\n").getBytes());
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
